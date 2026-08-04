@@ -14,7 +14,7 @@ const whatsappOrder = "https://wa.me/79166751452";
 
 const socialLinks = [
   {
-    label: "Telegram",
+    label: "телеграм",
     href: "https://t.me/kapitanseledkin",
     mark: "➤",
     icon: null,
@@ -84,6 +84,8 @@ export default function Home() {
   const asset = (path: string) => `${basePath}${path}`;
   const fishSchoolImage = asset("/images/fish-school.svg");
   const logoImage = asset("/images/logo-redrawn.svg");
+  const heroVideo = asset("/video/hero-sea-sora-draft-01.web.mp4");
+  const heroPoster = asset("/video/hero-sea-sora-draft-01.webp");
   const siteUrl = basePath
     ? `https://anton-gorokhovatsky.github.io${basePath}`
     : "https://ks.fish";
@@ -94,7 +96,7 @@ export default function Home() {
     name: "Рыбная лавка капитана Селедкина",
     url: `${siteUrl}/`,
     telephone: "+79166751452",
-    image: `${siteUrl}/images/hero-ocean.jpg`,
+    image: `${siteUrl}/video/hero-sea-sora-draft-01.webp`,
     address: {
       "@type": "PostalAddress",
       streetAddress: "ул. Строителей, д. 7, корп. 1",
@@ -115,77 +117,69 @@ export default function Home() {
         Перейти к содержанию
       </a>
 
-      <header className="desktop-header">
-        <div className="desktop-header__top">
-          <div className="header-address">
-            <p>
-              Адрес магазина: ул. Строителей, д. 7, корп. 1 (метро
-              «Вавиловская», метро «Университет»)
-            </p>
-            <SocialLinks />
-          </div>
+      <header className="site-header">
+        <div className="site-header__meta">
+          <p>Москва · ул. Строителей, 7, корп. 1</p>
+          <a href={phoneHref}>{phoneLabel}</a>
+        </div>
 
-          <a className="header-logo" href="#top" aria-label="На главную">
+        <div className="site-header__main">
+          <a className="site-header__brand" href="#top" aria-label="На главную">
             <img
               src={logoImage}
               alt="Рыбная лавка капитана Селедкина"
             />
           </a>
 
-          <div className="header-order">
-            <p>
-              Качественная рыба на каждый день, морепродукты и рыбные
-              деликатесы в Москве!
-            </p>
-            <a className="order-pill order-pill--telegram" href={telegramOrder}>
-              Заказать в Telegram
-            </a>
-          </div>
-        </div>
+          <nav className="site-header__nav" aria-label="Основная навигация">
+            <a href="#chto-prodaem">Что продаем</a>
+            <a href="#o-nas">О лавке</a>
+            <a href="#catalog">Каталог</a>
+            <a href="#zakaz-i-dostavka">Доставка</a>
+            <a href="#kontakty">Контакты</a>
+          </nav>
 
-        <nav className="desktop-header__nav" aria-label="Основная навигация">
-          <a href="#chto-prodaem">Что продаем</a>
-          <a href="#o-nas">О нас</a>
-          <a href="#catalog">Продукты и цены <span aria-hidden="true">⌄</span></a>
-          <a href="#novosti">Новости</a>
-          <a href="#zakaz-i-dostavka">Доставка</a>
-          <a href="#kontakty">Контакты</a>
-        </nav>
+          <a className="site-header__order" href={telegramOrder}>
+            <span>Заказать</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </header>
 
       <MobileNav />
 
       <main id="content">
-        <section className="tilda-hero" id="top" aria-labelledby="hero-title">
-          <img
-            className="tilda-hero__image"
-            src={asset("/images/hero-ocean.jpg")}
-            alt="Темное море с волнами"
-          />
-          <HeroVideo />
-          <div className="tilda-hero__shade" />
+        <section className="hero" id="top" aria-labelledby="hero-title">
+          <HeroVideo src={heroVideo} poster={heroPoster} />
+          <div className="hero__shade" />
 
-          <div className="tilda-hero__desktop-copy">
-            <h1 id="hero-title">«Рыбная лавка капитана Селедкина»</h1>
-            <p>
-              Качественная рыба на каждый день, морепродукты
-              <br />и рыбные деликатесы в Москве
+          <div className="hero__content">
+            <p className="hero__kicker">Рыба и морепродукты · Москва</p>
+            <h1 id="hero-title">
+              <span className="hero__title-main">Рыбная лавка</span>
+              <span className="hero__title-captain">капитана Селедкина</span>
+            </h1>
+            <p className="hero__lead">
+              Качественная рыба на каждый день, морепродукты и деликатесы —
+              выбираем сами и рассказываем, как приготовить.
             </p>
+            <div className="hero__actions">
+              <a className="hero-button hero-button--primary" href={telegramOrder}>
+                Заказать в телеграме
+              </a>
+              <a className="hero-button hero-button--secondary" href="#catalog">
+                Смотреть цены
+              </a>
+            </div>
           </div>
 
-          <div className="tilda-hero__mobile-copy">
-            <img
-              src={logoImage}
-              alt="Рыбная лавка капитана Селедкина"
-            />
-            <p>
-              Качественная рыба на каждый день,
-              <br />морепродукты и рыбные деликатесы
-            </p>
+          <div className="hero__status">
+            <span>Сегодня</span>
+            <strong>11:00—20:00</strong>
           </div>
 
-          <a className="down-link" href="#chto-prodaem" aria-label="Листать к товарам">
-            <span aria-hidden="true" />
+          <a className="hero__scroll" href="#chto-prodaem" aria-label="Листать к товарам">
+            <span aria-hidden="true">↓</span>
           </a>
         </section>
 
@@ -206,7 +200,7 @@ export default function Home() {
               <p>Цена: 3500 ₽ за 250 граммов.</p>
               <p>
                 Заказы принимаются в <a className="whatsapp-link" href={whatsappOrder}>WhatsApp</a>{" "}
-                и <a className="telegram-link" href={telegramOrder}>Telegram</a>.
+                и <a className="telegram-link" href={telegramOrder}>телеграме</a>.
               </p>
             </div>
             <img
@@ -353,17 +347,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="news-source" id="novosti" aria-labelledby="news-title">
-          <h2 id="news-title">Наши новости</h2>
-          <div className="source-shell news-placeholder" role="status">
-            <span className="visually-hidden">Лента новостей временно недоступна.</span>
-            <span lang="en" aria-hidden="true">Feed not found.</span>
-          </div>
-          <div className="fish-school fish-school--news" aria-hidden="true">
-            <img src={fishSchoolImage} alt="" />
-          </div>
-        </section>
-
         <Catalog />
 
         <div className="catalog-tail" aria-hidden="true">
@@ -385,7 +368,7 @@ export default function Home() {
               </p>
               <p>
                 Заказы принимаются в <a className="whatsapp-link" href={whatsappOrder}>WhatsApp</a>{" "}
-                и <a className="telegram-link" href={telegramOrder}>Telegram</a>.
+                и <a className="telegram-link" href={telegramOrder}>телеграме</a>.
               </p>
             </div>
           </div>
@@ -435,7 +418,7 @@ export default function Home() {
             </p>
             <div className="source-footer__actions">
               <a className="order-pill source-footer__channel" href="https://t.me/kapitanseledkin">
-                Читать Telegram-канал
+                Читать телеграм-канал
               </a>
               <SocialLinks light />
             </div>

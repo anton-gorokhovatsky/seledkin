@@ -5,21 +5,28 @@ import test from "node:test";
 const projectRoot = new URL("../", import.meta.url);
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-test("exports the faithful Russian Tilda baseline", async () => {
+test("exports the preserved Russian storefront content", async () => {
   const html = await readFile(new URL("out/index.html", projectRoot), "utf8");
 
   assert.match(html, /<html lang="ru">/);
   assert.match(html, /Рыбная лавка/);
   assert.match(html, /капитана Селедкина/);
-  assert.match(html, /Заказать в Telegram/);
+  assert.match(html, /Заказать в телеграме/);
   assert.match(html, /Красная икра премиум-качества/);
   assert.ok(html.includes("Почему о\u00a0нас говорят?"));
   assert.match(html, /Олег Гугунава/);
-  assert.match(html, /Feed not found\./);
+  assert.doesNotMatch(html, /Feed not found\.|id="novosti"|>Новости</);
   assert.match(html, /Друзья!/);
   assert.match(html, /ул\. Строителей/);
   assert.match(html, /application\/ld\+json/);
-  assert.match(html, new RegExp(`src="${basePath}/images/hero-ocean\\.jpg"`));
+  assert.match(
+    html,
+    new RegExp(`src="${basePath}/video/hero-sea-sora-draft-01\\.web\\.mp4"`),
+  );
+  assert.match(
+    html,
+    new RegExp(`poster="${basePath}/video/hero-sea-sora-draft-01\\.webp"`),
+  );
   assert.match(html, new RegExp(`href="${basePath}/images/logo\\.png"`));
   assert.match(
     html,
@@ -53,7 +60,7 @@ test("keeps the accessibility and motion gates in the stylesheet", async () => {
   assert.match(css, /font-size:\s*clamp\(/);
 });
 
-test("restores the source hero video and complete contact widget", async () => {
+test("keeps the local sea video and complete contact widget", async () => {
   const heroVideo = await readFile(new URL("app/hero-video.tsx", projectRoot), "utf8");
   const contactWidget = await readFile(
     new URL("app/contact-widget.tsx", projectRoot),
@@ -61,9 +68,11 @@ test("restores the source hero video and complete contact widget", async () => {
   );
   const page = await readFile(new URL("app/page.tsx", projectRoot), "utf8");
 
-  assert.match(heroVideo, /AsD5u6k6dKI/);
+  assert.match(heroVideo, /className="hero__video"/);
   assert.match(heroVideo, /prefers-reduced-motion:\s*reduce/);
-  assert.match(heroVideo, /min-width:\s*761px/);
+  assert.match(heroVideo, /aria-hidden="true"/);
+  assert.match(heroVideo, /preload="metadata"/);
+  assert.doesNotMatch(page, /AsD5u6k6dKI|youtube-nocookie/);
   assert.match(contactWidget, /Открыть способы связи/);
   assert.match(contactWidget, /https:\/\/t\.me\/\+79166751452/);
   assert.match(contactWidget, /https:\/\/wa\.me\/79166751452/);

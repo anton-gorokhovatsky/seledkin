@@ -106,7 +106,7 @@ export function Catalog() {
           Заказать в WhatsApp
         </a>
         <a className="order-pill order-pill--telegram" href="https://t.me/+79166751452">
-          Заказать в Telegram
+          Заказать в телеграме
         </a>
       </div>
     </section>

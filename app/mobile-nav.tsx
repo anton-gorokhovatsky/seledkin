@@ -4,9 +4,8 @@ import { useEffect, useRef } from "react";
 
 const links = [
   ["#chto-prodaem", "Что продаем"],
-  ["#o-nas", "О нас"],
-  ["#catalog", "Продукты и цены"],
-  ["#novosti", "Новости"],
+  ["#o-nas", "О лавке"],
+  ["#catalog", "Каталог"],
   ["#zakaz-i-dostavka", "Доставка"],
   ["#kontakty", "Контакты"],
 ] as const;
@@ -51,7 +50,7 @@ export function MobileNav() {
           </a>
         ))}
         <a className="floating-nav__order" href="https://t.me/+79166751452">
-          Заказать в Telegram
+          Заказать в телеграме
         </a>
       </nav>
     </details>

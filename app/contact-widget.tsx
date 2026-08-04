@@ -51,7 +51,7 @@ function PhoneIcon() {
 }
 
 const actions = [
-  { label: "Telegram", slug: "telegram", href: telegramHref, icon: <TelegramIcon /> },
+  { label: "телеграм", slug: "telegram", href: telegramHref, icon: <TelegramIcon /> },
   { label: "WhatsApp", slug: "whatsapp", href: whatsappHref, icon: <WhatsAppIcon /> },
   { label: "Телефон", slug: "phone", href: phoneHref, icon: <PhoneIcon /> },
 ] as const;
