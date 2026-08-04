@@ -1,13 +1,52 @@
-/* Static export keeps the original Tilda assets as plain files. */
+/* The baseline deliberately keeps the original Tilda composition and assets. */
 /* eslint-disable @next/next/no-img-element */
 import { Catalog } from "./catalog";
 import { MobileNav } from "./mobile-nav";
+import { PriceNotice } from "./price-notice";
 import { Typographed } from "./typography";
 
 const phoneLabel = "+7 916 675-14-52";
 const phoneHref = "tel:+79166751452";
 const telegramOrder = "https://t.me/+79166751452";
 const whatsappOrder = "https://wa.me/79166751452";
+
+const socialLinks = [
+  {
+    label: "Telegram",
+    href: "https://t.me/kapitanseledkin",
+    mark: "➤",
+  },
+  {
+    label: "X (Twitter)",
+    href: "https://twitter.com/kapitanseledkin",
+    mark: "𝕏",
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos",
+    mark: "▶",
+  },
+  {
+    label: "SoundCloud",
+    href: "https://soundcloud.com/kapitanseledkin",
+    mark: "◒",
+  },
+] as const;
+
+function SocialLinks({ light = false }: { light?: boolean }) {
+  return (
+    <nav
+      className={`social-links${light ? " social-links--light" : ""}`}
+      aria-label="Социальные сети"
+    >
+      {socialLinks.map((link) => (
+        <a href={link.href} key={link.label} aria-label={link.label}>
+          <span aria-hidden="true">{link.mark}</span>
+        </a>
+      ))}
+    </nav>
+  );
+}
 
 export default function Home() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -39,308 +78,332 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <header className="site-header">
-        <div className="header-meta">
-          <p>Москва · ул. Строителей, 7, корп. 1</p>
-          <a href={phoneHref}>{phoneLabel}</a>
-        </div>
-        <div className="header-main">
-          <a className="brand" href="#top" aria-label="На главную">
+      <a className="skip-link" href="#content">
+        Перейти к содержанию
+      </a>
+
+      <header className="desktop-header">
+        <div className="desktop-header__top">
+          <div className="header-address">
+            <p>
+              Адрес магазина: ул. Строителей, д. 7, корп. 1 (метро
+              «Вавиловская», метро «Университет»)
+            </p>
+            <SocialLinks />
+          </div>
+
+          <a className="header-logo" href="#top" aria-label="На главную">
             <img
               src={asset("/images/logo.png")}
               alt="Рыбная лавка капитана Селедкина"
             />
           </a>
-          <nav className="desktop-nav" aria-label="Основная навигация">
-            <a href="#fish">Что продаем</a>
-            <a href="#about">О лавке</a>
-            <a href="#catalog">Каталог</a>
-            <a href="#delivery">Доставка</a>
-            <a href="#contacts">Контакты</a>
-          </nav>
-          <a className="header-order" href={telegramOrder}>
-            Заказать
-            <span aria-hidden="true">↗</span>
-          </a>
-          <MobileNav />
+
+          <div className="header-order">
+            <p>
+              Качественная рыба на каждый день, морепродукты и рыбные
+              деликатесы в Москве!
+            </p>
+            <a className="order-pill order-pill--telegram" href={telegramOrder}>
+              Заказать в Telegram
+            </a>
+          </div>
         </div>
+
+        <nav className="desktop-header__nav" aria-label="Основная навигация">
+          <a href="#chto-prodaem">Что продаем</a>
+          <a href="#o-nas">О нас</a>
+          <a href="#catalog">Продукты и цены <span aria-hidden="true">⌄</span></a>
+          <a href="#novosti">Новости</a>
+          <a href="#zakaz-i-dostavka">Доставка</a>
+          <a href="#kontakty">Контакты</a>
+        </nav>
       </header>
 
-      <main>
-        <section className="hero" id="top">
+      <MobileNav />
+
+      <main id="content">
+        <section className="tilda-hero" id="top" aria-labelledby="hero-title">
           <img
-            className="hero-image"
+            className="tilda-hero__image"
             src={asset("/images/hero-ocean.jpg")}
             alt="Темное море с волнами"
           />
-          <div className="hero-shade" />
-          <div className="hero-content">
-            <p className="hero-kicker">Рыба и морепродукты · Москва</p>
-            <h1>
-              Рыбная лавка
-              <span>капитана Селедкина</span>
-            </h1>
-            <p className="hero-lead">
-              Качественная рыба на каждый день, морепродукты и деликатесы —
-              выбираем сами и рассказываем, как приготовить.
+          <div className="tilda-hero__shade" />
+
+          <div className="tilda-hero__desktop-copy">
+            <h1 id="hero-title">«Рыбная лавка капитана Селедкина»</h1>
+            <p>
+              Качественная рыба на каждый день, морепродукты
+              <br />и рыбные деликатесы в Москве
             </p>
-            <div className="button-row hero-actions">
-              <a className="button button-primary" href={telegramOrder}>
-                Заказать в Telegram
-              </a>
-              <a className="button button-ghost" href="#catalog">
-                Смотреть цены
-              </a>
-            </div>
           </div>
-          <div className="hero-status">
-            <span>Сегодня</span>
-            <strong>11:00—20:00</strong>
+
+          <div className="tilda-hero__mobile-copy">
+            <img
+              src={asset("/images/logo.png")}
+              alt="Рыбная лавка капитана Селедкина"
+            />
+            <p>
+              Качественная рыба на каждый день,
+              <br />морепродукты и рыбные деликатесы
+            </p>
           </div>
-          <a className="hero-scroll" href="#fish" aria-label="Листать к ассортименту">
-            <span aria-hidden="true">↓</span>
+
+          <a className="down-link" href="#chto-prodaem" aria-label="Листать к товарам">
+            <span aria-hidden="true" />
           </a>
         </section>
 
-        <div className="marquee" aria-label="Главное о лавке">
-          <div>
-            <span>Без повторной заморозки</span>
-            <span aria-hidden="true">◆</span>
-            <span>Свежий завоз</span>
-            <span aria-hidden="true">◆</span>
-            <span>Подскажем, как приготовить</span>
-            <span aria-hidden="true">◆</span>
-            <span>Доставка по Москве</span>
+        <section className="caviar-promo" id="chto-prodaem" aria-labelledby="caviar-title">
+          <div className="source-shell promo-pair" aria-hidden="true">
+            <img src={asset("/images/caviar.jpg")} alt="" />
+            <img src={asset("/images/salmon-table.jpg")} alt="" />
           </div>
+
+          <div className="source-shell caviar-promo__content">
+            <div>
+              <h2 id="caviar-title">Красная икра премиум-качества</h2>
+              <p>
+                Мы получаем икру с завода в куботейнерах и сами фасуем её в
+                пластиковые контейнеры по 250 граммов и 500 граммов. Если вам
+                нужен какой-то другой объем, просто дайте нам знать.
+              </p>
+              <p>Цена: 3500 ₽ за 250 граммов.</p>
+              <p>
+                Заказы принимаются в <a className="whatsapp-link" href={whatsappOrder}>WhatsApp</a>{" "}
+                и <a className="telegram-link" href={telegramOrder}>Telegram</a>.
+              </p>
+            </div>
+            <img
+              src={asset("/images/fish-01.jpg")}
+              alt="Красная икра в стеклянной вазочке"
+            />
+          </div>
+        </section>
+
+        <div className="fish-school fish-school--after-caviar" aria-hidden="true">
+          <img src={asset("/images/frame-27.png")} alt="" />
         </div>
 
-        <section className="feature section" id="fish" aria-labelledby="feature-title">
-          <div className="section-shell">
-            <div className="section-heading feature-heading">
-              <div>
-                <p className="eyebrow">Что продаем</p>
-                <h2 id="feature-title">И на каждый день, и к особому случаю</h2>
-              </div>
-              <p className="section-intro">
-                В небольшом магазине уживаются северная рыба, морепродукты,
-                свежие стейки, собственная слабосоленая сельдь и икра.
+        <figure className="panorama" aria-label="Рыба и продукты лавки">
+          <img src={asset("/images/photo.png")} alt="Рыба и продукты лавки на столе" />
+        </figure>
+
+        <section className="about-source" id="o-nas" aria-labelledby="about-title">
+          <div className="source-shell about-row">
+            <img
+              src={asset("/images/fish-02.jpg")}
+              alt="Камбала и нож для разделки рыбы"
+            />
+            <div className="about-row__copy">
+              <h2 id="about-title">
+                Еще одно место в Москве, где продается хорошая рыба
+              </h2>
+              <p>
+                «Рыбная лавка капитана Селедкина» — небольшой магазин в
+                нескольких минутах ходьбы от метро «Университет».
+              </p>
+              <p>
+                Казалось бы, обычная торговая точка, но нас уже знают не только
+                жители окрестных домов — к нам приезжают из других районов
+                Москвы, а потом благодарят у себя в блогах.
               </p>
             </div>
+          </div>
 
-            <div className="feature-grid">
-              <figure className="feature-photo feature-photo-caviar">
-                <img src={asset("/images/caviar.jpg")} alt="Красная икра крупным планом" />
-                <figcaption>Красная икра · фасуем сами</figcaption>
-              </figure>
-              <article className="feature-card">
-                <p className="feature-number">01</p>
-                <div>
-                  <p className="eyebrow">Сейчас в центре внимания</p>
-                  <h3>Красная икра премиум-качества</h3>
-                  <p>
-                    Получаем икру с завода в куботейнерах и фасуем в лавке по
-                    250 и 500 граммов. Другой объем тоже можно попросить.
-                  </p>
-                </div>
-                <div className="feature-price">
-                  <span>от</span>
-                  <strong>3500 ₽</strong>
-                  <span>за 250 г</span>
-                </div>
-                <a className="text-link" href={telegramOrder}>
-                  Уточнить наличие <span aria-hidden="true">↗</span>
-                </a>
-              </article>
-              <figure className="feature-photo feature-photo-salmon">
-                <img
-                  src={asset("/images/salmon-table.jpg")}
-                  alt="Стейк лосося с лимоном и травами"
-                />
-                <figcaption>Рыбу разделываем в лавке</figcaption>
-              </figure>
+          <div className="source-shell about-row about-row--reverse">
+            <div className="about-row__copy">
+              <h2>Икра</h2>
+              <p>
+                Кроме рыбы, мы продаем черную, красную, икру сига, щуки и
+                морского ежа. Только заводская икра, замороженная без
+                консерванта, или с «человеческим» консервантом — сорбатом калия.
+              </p>
+            </div>
+            <img
+              src={asset("/images/fish-03.jpg")}
+              alt="Икра внутри свежей рыбы"
+            />
+          </div>
+        </section>
+
+        <section className="principles-source" aria-labelledby="principles-title">
+          <div className="source-shell principles-source__grid">
+            <div className="principles-collage" aria-label="Фотографии рыбы и лавки">
+              <img src={asset("/images/fish-04.jpg")} alt="Рыба на разделочной доске" />
+              <img src={asset("/images/fish-05.jpg")} alt="Морские гребешки на листьях" />
+              <img src={asset("/images/fish-06.jpg")} alt="Полки с продуктами в лавке" />
+            </div>
+
+            <div className="principles-source__copy">
+              <h2 id="principles-title">Почему о нас говорят?</h2>
+              <p>
+                <strong>Во-первых, это качество.</strong> Мы изучаем предложения
+                поставщиков и выбираем только рыбу свежего завоза и не
+                вымороженную. Мы закупаем рыбу, быстро замороженную после поимки
+                прямо на промысле, и ни разу с тех пор не размораживавшуюся:
+                покупатель разморозит её сам уже дома. В лавке её быстро
+                разбирают, а склада у нас нет, весь наш товар лежит в
+                прилавках-холодильниках. Поэтому рыба не залеживается, мы
+                постоянно подвозим свежемороженую продукцию.
+              </p>
+              <p>
+                <strong>Во-вторых, ассортимент.</strong> Хоть магазин и невелик,
+                мы предлагаем и достаточно обычную рыбу для повседневного
+                приготовления, и интересные деликатесы. При этом настоящим
+                деликатесом могут стать и самые простые, казалось бы, виды —
+                например, купленная у нас мороженая сельдь, если посолить её
+                грамотно и правильно.
+              </p>
+              <p>
+                И это наша <strong>третья фирменная фишка</strong> — от слова
+                «fish», разумеется. Наши продавцы и консультанты всегда делятся
+                советами — или подскажут, где их прочитать.
+              </p>
             </div>
           </div>
         </section>
 
-        <section className="about section" id="about" aria-labelledby="about-title">
+        <section className="source-gallery" aria-label="Фотографии рыбной лавки">
+          <div className="source-gallery__grid">
+            <img src={asset("/images/fish-07.jpg")} alt="Соусы и приправы на полках" />
+            <img src={asset("/images/fish-08.jpg")} alt="Филе судовой заморозки" />
+            <img src={asset("/images/fish-09.jpg")} alt="Скумбрия и специи" />
+            <img src={asset("/images/fish-10.jpg")} alt="Форель на упаковочной бумаге" />
+            <img src={asset("/images/fish-11.jpg")} alt="Тунец в кунжуте" />
+            <img src={asset("/images/fish-12.jpg")} alt="Разделка филе тунца" />
+          </div>
+        </section>
+
+        <section className="source-statement" aria-label="Принцип лавки">
           <img
-            className="about-school"
-            src={asset("/images/frame-27.png")}
-            alt=""
-            aria-hidden="true"
+            src={asset("/images/statement-bg.jpg")}
+            alt="Стейк лосося на сковороде"
           />
-          <div className="section-shell about-shell">
-            <div className="about-copy">
-              <p className="eyebrow">Еще одно хорошее место в Москве</p>
-              <h2 id="about-title">Маленькая лавка с большим вниманием к рыбе</h2>
-              <p className="about-lead">
-                Мы изучаем поставщиков, выбираем свежий завоз и не держим
-                склад: весь товар лежит в прилавках-холодильниках и быстро
-                разбирается.
-              </p>
-              <div className="principles">
-                <article>
-                  <span>01</span>
-                  <h3>Качество</h3>
-                  <p>Рыба промысловой заморозки, которая не размораживалась в дороге.</p>
-                </article>
-                <article>
-                  <span>02</span>
-                  <h3>Ассортимент</h3>
-                  <p>Понятная рыба для ужина и редкие продукты для эксперимента.</p>
-                </article>
-                <article>
-                  <span>03</span>
-                  <h3>Совет</h3>
-                  <p>Подскажем, что выбрать, как разделать, посолить и приготовить.</p>
-                </article>
-              </div>
-            </div>
+          <p>
+            Мы убеждены, что вкус блюда определяется
+            <br />не только навыками повара, но и качеством
+            <br />ингредиентов
+          </p>
+        </section>
 
-            <figure className="owner-card">
-              <img src={asset("/images/oleg.jpg")} alt="Олег Гугунава, владелец лавки" />
-              <blockquote>
-                «У нас весь бизнес основан на качестве товара и на нормах
-                работы с продуктом. Поэтому мы можем гарантировать хорошую рыбу
-                и морепродукты».
-              </blockquote>
-              <figcaption>
-                <strong>Олег Гугунава</strong>
-                <span>владелец лавки</span>
-              </figcaption>
-            </figure>
+        <section className="founder-source" aria-labelledby="founder-title">
+          <img src={asset("/images/oleg.jpg")} alt="Олег Гугунава с рыбой" />
+          <div className="founder-source__copy">
+            <h2 id="founder-title">Олег Гугунава</h2>
+            <p className="founder-role">Владелец «Рыбной лавки капитана Селедкина»</p>
+            <blockquote>
+              <p>
+                «Когда моя жена была беременна, врач посоветовал есть больше
+                рыбы и морепродуктов. Я прошелся по местным лавочкам и магазинам
+                и ужаснулся. В Москве нормальную рыбу сложно найти.
+              </p>
+              <p>
+                Некоторые мороженную рыбу заливают водой — для веса, у других с
+                весом все «ок», но неправильно везут, либо неправильно
+                замораживают — если продукт и не испорчен, то точно не первого
+                качества. Свою семью я этим кормить не хотел.
+              </p>
+              <p>
+                Я позвонил знакомому во Владивосток, спросил можно ли доставить
+                нормальной рыбы. Оказалось, что можно, но относительно большими
+                партиями — нам столько не съесть. Походил по знакомым и соседям
+                — оказалось, что спрос есть, поэтому решили скинуться и взять на
+                всех. Через какое-то время открыл «лавку Капитана Селедкина».
+              </p>
+              <p>
+                У нас весь бизнес основан на качестве товара и на нормах работы
+                с продуктом. Забудешь, например заморозку включить — рыба
+                испортится, неправильно примешь от поставщика — старая рыба
+                будет лежать месяца и портится. Мы следим за такими вещами,
+                поэтому можем гарантировать хорошую рыбу и морепродукты.
+              </p>
+            </blockquote>
           </div>
         </section>
 
-        <section className="gallery section" aria-labelledby="gallery-title">
-          <div className="section-shell">
-            <div className="section-heading gallery-heading">
-              <div>
-                <p className="eyebrow">Внутри лавки</p>
-                <h2 id="gallery-title">Рыба, люди и немного хороших соусов</h2>
-              </div>
-              <a className="text-link" href="https://t.me/kapitanseledkin">
-                Новости в Telegram <span aria-hidden="true">↗</span>
-              </a>
-            </div>
-            <div className="gallery-grid">
-              <figure className="gallery-wide">
-                <img src={asset("/images/fish-04.jpg")} alt="Свежая рыба на разделочной доске" />
-              </figure>
-              <figure>
-                <img src={asset("/images/fish-03.jpg")} alt="Разделка рыбы" />
-              </figure>
-              <figure>
-                <img src={asset("/images/fish-08.jpg")} alt="Филе рыбы судовой заморозки" />
-              </figure>
-              <figure>
-                <img src={asset("/images/fish-07.jpg")} alt="Соусы и приправы на полках лавки" />
-              </figure>
-              <figure>
-                <img src={asset("/images/fish-11.jpg")} alt="Подготовка стейков тунца" />
-              </figure>
-            </div>
+        <section className="news-source" id="novosti" aria-labelledby="news-title">
+          <h2 id="news-title">Наши новости</h2>
+          <div className="source-shell news-placeholder" role="status">
+            <span className="visually-hidden">Лента новостей временно недоступна.</span>
+            <span lang="en" aria-hidden="true">Feed not found.</span>
+          </div>
+          <div className="fish-school fish-school--news" aria-hidden="true">
+            <img src={asset("/images/frame-27.png")} alt="" />
           </div>
         </section>
 
         <Catalog />
 
-        <section className="delivery section" id="delivery" aria-labelledby="delivery-title">
-          <div className="section-shell delivery-shell">
-            <div className="delivery-image-wrap">
-              <img
-                src={asset("/images/statement-bg.jpg")}
-                alt="Стейк лосося на сковороде"
-              />
-              <p>из лавки — на вашу кухню</p>
-            </div>
-            <div className="delivery-copy">
-              <p className="eyebrow">Доставка</p>
-              <h2 id="delivery-title">По Москве — обычно в течение двух часов</h2>
+        <div className="catalog-tail" aria-hidden="true">
+          <img src={asset("/images/frame-27.png")} alt="" />
+        </div>
+
+        <figure className="panorama panorama--before-delivery" aria-label="Ассортимент лавки">
+          <img src={asset("/images/photo.png")} alt="Ассортимент рыбной лавки" />
+        </figure>
+
+        <section className="delivery-source" id="zakaz-i-dostavka" aria-labelledby="delivery-title">
+          <div className="source-shell delivery-source__grid">
+            <img
+              src={asset("/images/contact.jpg")}
+              alt="Корзина с рыбой и продуктами для доставки"
+            />
+            <div>
+              <h2 id="delivery-title">Доставка</h2>
+              <p>Мы доставляем нашу продукцию домой или в офис в течение двух часов.</p>
               <p>
-                Доставка в пределах МКАД стоит 490 ₽. Минимальной суммы заказа
-                нет: можно попросить и рыбу на ужин, и большой праздничный набор.
+                Стоимость доставки в пределах МКАД — 490 ₽. Минимальной суммы
+                заказа нет, это удобно.
               </p>
-              <dl>
-                <div>
-                  <dt>Стоимость</dt>
-                  <dd>490 ₽ в пределах МКАД</dd>
-                </div>
-                <div>
-                  <dt>Срок</dt>
-                  <dd>обычно до 2 часов</dd>
-                </div>
-                <div>
-                  <dt>Заказ</dt>
-                  <dd>Telegram или WhatsApp</dd>
-                </div>
-              </dl>
-              <div className="button-row">
-                <a className="button button-primary" href={telegramOrder}>
-                  Заказать в Telegram
-                </a>
-                <a className="button button-outline" href={whatsappOrder}>
-                  WhatsApp
-                </a>
-              </div>
+              <p>
+                Заказы принимаются в <a className="whatsapp-link" href={whatsappOrder}>WhatsApp</a>{" "}
+                и <a className="telegram-link" href={telegramOrder}>Telegram</a>.
+              </p>
             </div>
           </div>
         </section>
 
-        <section className="contacts section" id="contacts" aria-labelledby="contacts-title">
-          <div className="section-shell">
-            <div className="contacts-grid">
-              <div className="contacts-title">
-                <p className="eyebrow">Заходите в гости</p>
-                <h2 id="contacts-title">Лавка на улице Строителей</h2>
-              </div>
-              <address>
-                <p>
-                  Москва, ул. Строителей,
-                  <br />д. 7, корп. 1
-                </p>
-                <span>метро «Вавиловская» · «Университет»</span>
-              </address>
-              <div className="contact-line">
-                <span>Ежедневно</span>
-                <strong>11:00—20:00</strong>
-              </div>
-              <div className="contact-line">
-                <span>Телефон</span>
-                <a href={phoneHref}>{phoneLabel}</a>
-              </div>
-            </div>
-            <div className="social-row">
-              <p>Новости, завозы и советы по приготовлению:</p>
-              <div>
-                <a href="https://t.me/kapitanseledkin">Telegram</a>
-                <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
-                  YouTube
-                </a>
-                <a href="https://soundcloud.com/kapitanseledkin">SoundCloud</a>
-              </div>
-            </div>
+        <section className="contacts-source" id="kontakty" aria-labelledby="contacts-title">
+          <iframe
+            className="contacts-source__map"
+            title="Карта проезда к магазину на улице Строителей"
+            src="https://yandex.ru/map-widget/v1/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%A1%D1%82%D1%80%D0%BE%D0%B8%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%2C%207%D0%BA1&z=15"
+            loading="lazy"
+          />
+          <div className="contacts-source__card">
+            <h2 id="contacts-title">Магазин на улице Строителей</h2>
+            <address>
+              <p><strong>Телефон:</strong> <a href={phoneHref}>{phoneLabel}</a></p>
+              <p>
+                <strong>Адрес лавки:</strong> Москва, ул. Строителей, д. 7,
+                корп. 1. Метро «Вавиловская», метро «Университет»
+              </p>
+              <p><strong>Время работы:</strong><br />Ежедневно с 11:00 до 20:00</p>
+            </address>
+            <SocialLinks />
           </div>
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="section-shell footer-grid">
-          <img
-            className="footer-logo"
-            src={asset("/images/logo.png")}
-            alt="Рыбная лавка капитана Селедкина"
-          />
-          <p>Качественная рыба на каждый день.</p>
-          <a href="#top">Наверх <span aria-hidden="true">↑</span></a>
-          <p className="copyright">© Рыбная лавка капитана Селедкина, 2026</p>
-        </div>
+      <footer className="source-footer">
+        <img className="source-footer__cat" src={asset("/images/salmon.png")} alt="Рыжий кот" />
+        <p>
+          P. S.: а еще мы публикуем советы по приготовлению и обработке рыбы,
+          все наши новости, в т. ч. об ассортименте, в наших социальных сетях.
+          <br />Подписывайтесь!
+        </p>
+        <SocialLinks light />
+        <div className="source-footer__rule" />
+        <small>© «Рыбная лавка капитана Селедкина», 2026</small>
       </footer>
 
-      <nav className="mobile-order-bar" aria-label="Быстрый заказ">
-        <a href={phoneHref}>Позвонить</a>
-        <a href={telegramOrder}>Заказать в Telegram</a>
-      </nav>
+      <a className="chat-bubble" href={telegramOrder} aria-label="Заказать в Telegram">
+        <span aria-hidden="true">☰</span>
+      </a>
+
+      <PriceNotice whatsappOrder={whatsappOrder} fishImage={asset("/images/frame-27.png")} />
     </Typographed>
   );
 }

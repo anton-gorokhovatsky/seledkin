@@ -75,7 +75,7 @@ export const catalog: CatalogCategory[] = [
   {
     slug: "frozen-fish",
     label: "Свежемороженая рыба",
-    shortLabel: "Мороженая рыба",
+    shortLabel: "Свежемороженая рыба",
     items: [
       item("Барабуля", "2300 ₽/кг", "Черноморская, Севастополь и Керченский пролив"),
       item("Луфарь", "1800 ₽/кг", "Черноморский, Севастополь и Керченский пролив"),
@@ -131,7 +131,7 @@ export const catalog: CatalogCategory[] = [
   {
     slug: "steaks",
     label: "Рыбные стейки",
-    shortLabel: "Стейки",
+    shortLabel: "Рыбные стейки",
     items: [
       item("Стейк лосося", "2800 ₽/кг", "Пилим сами, глазировка 0%"),
       item("Стейк белуги", "4500 ₽/кг", "Пилим сами, глазировка 0%"),
@@ -143,7 +143,7 @@ export const catalog: CatalogCategory[] = [
   {
     slug: "prepared-fish",
     label: "Слабосоленая и копченая рыба",
-    shortLabel: "Соленая и копченая",
+    shortLabel: "Рыба сл/с, гк и хк",
     items: [
       item("Форель слабосоленая", "3400 ₽/кг"),
       item("Омуль холодного копчения", "2100 ₽/кг", "Красноярск"),
@@ -166,7 +166,7 @@ export const catalog: CatalogCategory[] = [
   {
     slug: "other",
     label: "Новинки и прочее",
-    shortLabel: "Прочее",
+    shortLabel: "Новинки и прочее",
     items: [
       item("Корюшка", "3200 ₽/кг", "Вяленая, Камчатка"),
       item("Лещ", "450 ₽/кг", "Вяленый"),

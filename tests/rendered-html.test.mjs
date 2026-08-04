@@ -5,13 +5,18 @@ import test from "node:test";
 const projectRoot = new URL("../", import.meta.url);
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-test("exports the finished Russian storefront", async () => {
+test("exports the faithful Russian Tilda baseline", async () => {
   const html = await readFile(new URL("out/index.html", projectRoot), "utf8");
 
   assert.match(html, /<html lang="ru">/);
   assert.match(html, /Рыбная лавка/);
   assert.match(html, /капитана Селедкина/);
   assert.match(html, /Заказать в Telegram/);
+  assert.match(html, /Красная икра премиум-качества/);
+  assert.ok(html.includes("Почему о\u00a0нас говорят?"));
+  assert.match(html, /Олег Гугунава/);
+  assert.match(html, /Feed not found\./);
+  assert.match(html, /Друзья!/);
   assert.match(html, /ул\. Строителей/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, new RegExp(`src="${basePath}/images/hero-ocean\\.jpg"`));
@@ -24,6 +29,7 @@ test("exports the finished Russian storefront", async () => {
   );
   assert.match(html, /aria-live="polite"/);
   assert.ok(html.includes("15\u202f000\u00a0₽"), "expected typographed catalog prices");
+  assert.doesNotMatch(html, /Найти, например/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|SkeletonPreview/);
   assert.doesNotMatch(html, /qa-mobile/);
 });
