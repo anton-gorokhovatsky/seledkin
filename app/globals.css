@@ -1,7 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 :root {
-  --source-blue: #235d9c;
+  --source-blue: #004f91;
   --telegram: #55a7d5;
   --whatsapp: #63ce72;
   --orange: #ef845c;
@@ -10,8 +10,9 @@
   --line: #dedede;
   --paper: #ffffff;
   --footer: #171717;
-  --sans: "PT Sans", Arial, sans-serif;
-  --serif: "PT Serif", Georgia, serif;
+  --sans: "Golos Text", "Helvetica Neue", Arial, sans-serif;
+  --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "PT Serif",
+    Georgia, serif;
   --source-shell: 1160px;
   --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
@@ -86,6 +87,7 @@ h2,
 h3,
 h4 {
   font-family: var(--serif);
+  font-weight: 400;
   text-wrap: balance;
 }
 
@@ -256,7 +258,7 @@ address {
   border-radius: 50%;
   background: #050505;
   color: white;
-  font-family: Arial, sans-serif;
+  font-family: var(--sans);
   font-size: 15px;
   line-height: 1;
   place-items: center;
@@ -384,7 +386,7 @@ address {
 .floating-nav > nav > a {
   font-family: var(--serif);
   font-size: clamp(1.8rem, calc(1.1rem + 2vw), 3.8rem);
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.15;
   text-decoration: none;
 }
@@ -459,9 +461,9 @@ address {
 .tilda-hero__desktop-copy h1 {
   margin-bottom: 30px;
   font-size: clamp(3rem, calc(2rem + 2vw), 4rem);
-  font-weight: 700;
-  letter-spacing: 0.005em;
-  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.18;
 }
 
 .tilda-hero__desktop-copy p {
@@ -523,7 +525,7 @@ address {
 .news-source h2 {
   margin-bottom: 38px;
   font-size: clamp(2.2rem, calc(1.7rem + 1vw), 3rem);
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.15;
 }
 
@@ -563,18 +565,13 @@ address {
 }
 
 .fish-school--after-caviar {
-  height: 250px;
-}
-
-.panorama {
-  width: 100%;
-  margin: 0;
-  overflow: hidden;
-}
-
-.panorama img {
-  width: 100%;
   height: auto;
+}
+
+.fish-school--after-caviar img,
+.catalog-tail img {
+  height: auto;
+  object-fit: contain;
 }
 
 .about-source {
@@ -781,7 +778,7 @@ address {
   height: 345px;
   border: 1px solid #c9c9c9;
   color: #b3b3b3;
-  font-family: Georgia, serif;
+  font-family: var(--serif);
   place-items: center;
 }
 
@@ -803,12 +800,13 @@ address {
 .catalog-source__heading h2 {
   margin-bottom: 42px;
   font-size: clamp(2.3rem, calc(1.8rem + 1vw), 3.1rem);
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.17;
 }
 
 .catalog-source__heading h2 span {
   display: block;
+  font-style: italic;
 }
 
 .catalog-source__heading p {
@@ -918,12 +916,8 @@ address {
 
 .catalog-tail {
   width: 100%;
-  height: 430px;
+  height: auto;
   overflow: hidden;
-}
-
-.panorama--before-delivery {
-  margin-bottom: 0;
 }
 
 .delivery-source {
@@ -996,29 +990,93 @@ address {
 }
 
 .source-footer {
-  display: flex;
   min-height: 805px;
-  padding: 45px 20px 38px;
-  background: var(--footer);
-  color: #bdbdbd;
+  padding: clamp(36px, 5vw, 76px) 40px 38px;
+  background: var(--source-blue);
+  color: white;
+}
+
+.source-footer__feature {
+  display: grid;
+  width: min(100%, 1320px);
+  min-height: 620px;
+  margin-inline: auto;
+  grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.22fr);
+  gap: clamp(54px, 8vw, 128px);
+  align-items: stretch;
+}
+
+.source-footer__salmon {
+  display: flex;
+  margin: 0;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  gap: 14px;
 }
 
-.source-footer__cat {
-  width: 200px;
-  height: 295px;
-  margin-bottom: 20px;
-  object-fit: contain;
+.source-footer__salmon img {
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  object-fit: cover;
+  object-position: center 28%;
 }
 
-.source-footer > p {
-  max-width: 910px;
-  margin-bottom: 80px;
-  font-size: 25px;
-  letter-spacing: 0.05em;
+.source-footer__salmon figcaption,
+.source-footer__eyebrow {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.source-footer__copy {
+  display: flex;
+  padding-block: clamp(20px, 4vw, 64px);
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.source-footer__eyebrow {
+  margin-bottom: 24px;
+}
+
+.source-footer h2 {
+  max-width: 800px;
+  margin-bottom: clamp(32px, 4vw, 54px);
+  font-size: clamp(3.2rem, 5.8vw, 6.6rem);
+  font-style: italic;
+  letter-spacing: -0.045em;
+  line-height: 0.93;
+}
+
+.source-footer__postscript {
+  max-width: 690px;
+  margin-bottom: 40px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(1.05rem, calc(0.9rem + 0.45vw), 1.4rem);
   line-height: 1.55;
+}
+
+.source-footer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+
+.source-footer__channel {
+  min-width: 0;
+  background: white;
+  color: var(--source-blue);
+}
+
+.source-footer__channel:hover,
+.source-footer__channel:focus-visible {
+  background: #e9f1f7;
 }
 
 .social-links--light {
@@ -1037,15 +1095,17 @@ address {
 }
 
 .source-footer__rule {
-  width: min(calc(100% - 40px), 1160px);
+  width: min(100%, 1320px);
   height: 1px;
-  margin-top: auto;
-  margin-bottom: 42px;
-  background: #2f2f2f;
+  margin: clamp(48px, 6vw, 76px) auto 32px;
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .source-footer small {
-  color: #dddddd;
+  display: block;
+  width: min(100%, 1320px);
+  margin-inline: auto;
+  color: rgba(255, 255, 255, 0.78);
   font-size: 13px;
 }
 
@@ -1413,10 +1473,6 @@ address {
     line-height: 1.45;
   }
 
-  .fish-school--after-caviar {
-    height: 170px;
-  }
-
   .about-source {
     padding: 72px 0 52px;
   }
@@ -1658,10 +1714,6 @@ address {
     min-width: 0;
   }
 
-  .catalog-tail {
-    height: 300px;
-  }
-
   .delivery-source {
     padding: 62px 0 44px;
   }
@@ -1710,22 +1762,42 @@ address {
   }
 
   .source-footer {
-    min-height: 844px;
-    padding: 0 20px 40px;
+    min-height: 0;
+    padding: 20px 20px 36px;
   }
 
-  .source-footer__cat {
-    width: 200px;
-    height: 250px;
-    margin: -2px 0 8px;
+  .source-footer__feature {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    gap: 44px;
   }
 
-  .source-footer > p {
-    max-width: 300px;
-    margin-bottom: 68px;
-    font-size: 24px;
-    letter-spacing: 0.03em;
-    line-height: 1.62;
+  .source-footer__salmon img {
+    height: min(118vw, 540px);
+    flex: none;
+  }
+
+  .source-footer__copy {
+    padding: 0;
+  }
+
+  .source-footer h2 {
+    font-size: clamp(3.1rem, 15vw, 5rem);
+  }
+
+  .source-footer__postscript {
+    margin-bottom: 34px;
+  }
+
+  .source-footer__actions {
+    width: 100%;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .source-footer__channel {
+    width: 100%;
   }
 
   .social-links--light {
@@ -1734,7 +1806,7 @@ address {
 
   .source-footer__rule {
     width: 100%;
-    margin-bottom: 40px;
+    margin: 54px 0 28px;
   }
 
   .source-footer small {
@@ -1776,8 +1848,8 @@ address {
     font-size: 14px;
   }
 
-  .source-footer > p {
-    font-size: 24px;
+  .source-footer h2 {
+    font-size: clamp(2.85rem, 14.5vw, 4rem);
   }
 }
 

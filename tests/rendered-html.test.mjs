@@ -70,3 +70,16 @@ test("restores the source hero video and complete contact widget", async () => {
   assert.match(contactWidget, /tel:\+79166751452/);
   assert.match(page, /social-icon--soundcloud/);
 });
+
+test("keeps the new identity assets and the Losos footer", async () => {
+  const html = await readFile(new URL("out/index.html", projectRoot), "utf8");
+  const css = await readFile(new URL("app/globals.css", projectRoot), "utf8");
+
+  assert.match(html, new RegExp(`src="${basePath}/images/logo-redrawn\\.svg"`));
+  assert.match(html, new RegExp(`src="${basePath}/images/fish-school\\.svg"`));
+  assert.match(html, new RegExp(`src="${basePath}/images/salmon-cat\\.jpg"`));
+  assert.match(html, /Лосось, кот рыбной лавки/);
+  assert.match(html, /Ничего не\s*рекламирует, просто напоминает\./);
+  assert.match(css, /--serif:\s*"Iowan Old Style"/);
+  assert.match(css, /--sans:\s*"Golos Text"/);
+});

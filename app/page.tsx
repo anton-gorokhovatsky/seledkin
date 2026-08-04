@@ -82,6 +82,8 @@ function SocialLinks({ light = false }: { light?: boolean }) {
 export default function Home() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const asset = (path: string) => `${basePath}${path}`;
+  const fishSchoolImage = asset("/images/fish-school.svg");
+  const logoImage = asset("/images/logo-redrawn.svg");
   const siteUrl = basePath
     ? `https://anton-gorokhovatsky.github.io${basePath}`
     : "https://ks.fish";
@@ -125,7 +127,7 @@ export default function Home() {
 
           <a className="header-logo" href="#top" aria-label="На главную">
             <img
-              src={asset("/images/logo.png")}
+              src={logoImage}
               alt="Рыбная лавка капитана Селедкина"
             />
           </a>
@@ -173,7 +175,7 @@ export default function Home() {
 
           <div className="tilda-hero__mobile-copy">
             <img
-              src={asset("/images/logo.png")}
+              src={logoImage}
               alt="Рыбная лавка капитана Селедкина"
             />
             <p>
@@ -215,12 +217,8 @@ export default function Home() {
         </section>
 
         <div className="fish-school fish-school--after-caviar" aria-hidden="true">
-          <img src={asset("/images/frame-27.png")} alt="" />
+          <img src={fishSchoolImage} alt="" />
         </div>
-
-        <figure className="panorama" aria-label="Рыба и продукты лавки">
-          <img src={asset("/images/photo.png")} alt="Рыба и продукты лавки на столе" />
-        </figure>
 
         <section className="about-source" id="o-nas" aria-labelledby="about-title">
           <div className="source-shell about-row">
@@ -362,19 +360,15 @@ export default function Home() {
             <span lang="en" aria-hidden="true">Feed not found.</span>
           </div>
           <div className="fish-school fish-school--news" aria-hidden="true">
-            <img src={asset("/images/frame-27.png")} alt="" />
+            <img src={fishSchoolImage} alt="" />
           </div>
         </section>
 
         <Catalog />
 
         <div className="catalog-tail" aria-hidden="true">
-          <img src={asset("/images/frame-27.png")} alt="" />
+          <img src={fishSchoolImage} alt="" />
         </div>
-
-        <figure className="panorama panorama--before-delivery" aria-label="Ассортимент лавки">
-          <img src={asset("/images/photo.png")} alt="Ассортимент рыбной лавки" />
-        </figure>
 
         <section className="delivery-source" id="zakaz-i-dostavka" aria-labelledby="delivery-title">
           <div className="source-shell delivery-source__grid">
@@ -420,20 +414,40 @@ export default function Home() {
       </main>
 
       <footer className="source-footer">
-        <img className="source-footer__cat" src={asset("/images/salmon.png")} alt="Рыжий кот" />
-        <p>
-          P. S.: а еще мы публикуем советы по приготовлению и обработке рыбы,
-          все наши новости, в т. ч. об ассортименте, в наших социальных сетях.
-          <br />Подписывайтесь!
-        </p>
-        <SocialLinks light />
+        <div className="source-footer__feature">
+          <figure className="source-footer__salmon">
+            <img
+              src={asset("/images/salmon-cat.jpg")}
+              alt="Кот Лосось греется на солнце с закрытыми глазами"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>Лосось, кот рыбной лавки</figcaption>
+          </figure>
+
+          <div className="source-footer__copy">
+            <p className="source-footer__eyebrow">Кот Лосось</p>
+            <h2>Ничего не рекламирует, просто напоминает.</h2>
+            <p className="source-footer__postscript">
+              P. S.: а еще мы публикуем советы по приготовлению и обработке рыбы,
+              все наши новости, в т. ч. об ассортименте, в наших социальных сетях.
+              <br />Подписывайтесь!
+            </p>
+            <div className="source-footer__actions">
+              <a className="order-pill source-footer__channel" href="https://t.me/kapitanseledkin">
+                Читать Telegram-канал
+              </a>
+              <SocialLinks light />
+            </div>
+          </div>
+        </div>
         <div className="source-footer__rule" />
         <small>© «Рыбная лавка капитана Селедкина», 2026</small>
       </footer>
 
       <ContactWidget />
 
-      <PriceNotice whatsappOrder={whatsappOrder} fishImage={asset("/images/frame-27.png")} />
+      <PriceNotice whatsappOrder={whatsappOrder} fishImage={fishSchoolImage} />
     </Typographed>
   );
 }
