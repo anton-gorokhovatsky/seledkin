@@ -1,6 +1,8 @@
 /* The baseline deliberately keeps the original Tilda composition and assets. */
 /* eslint-disable @next/next/no-img-element */
 import { Catalog } from "./catalog";
+import { ContactWidget } from "./contact-widget";
+import { HeroVideo } from "./hero-video";
 import { MobileNav } from "./mobile-nav";
 import { PriceNotice } from "./price-notice";
 import { Typographed } from "./typography";
@@ -15,23 +17,43 @@ const socialLinks = [
     label: "Telegram",
     href: "https://t.me/kapitanseledkin",
     mark: "➤",
+    icon: null,
   },
   {
     label: "X (Twitter)",
     href: "https://twitter.com/kapitanseledkin",
     mark: "𝕏",
+    icon: null,
   },
   {
     label: "YouTube",
     href: "https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos",
     mark: "▶",
+    icon: null,
   },
   {
     label: "SoundCloud",
     href: "https://soundcloud.com/kapitanseledkin",
-    mark: "◒",
+    mark: null,
+    icon: "soundcloud",
   },
 ] as const;
+
+function SoundCloudIcon() {
+  return (
+    <svg
+      className="social-icon social-icon--soundcloud"
+      aria-hidden="true"
+      viewBox="0 0 100 100"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50Zm19.701-52.297c-1.137 0-2.222.23-3.212.644C65.83 40.867 59.555 35 51.906 35c-1.873 0-3.7.366-5.312.99-.627.242-.792.492-.799.976V63.31a.976.976 0 0 0 .897.952h23.009c4.586 0 8.3-3.673 8.3-8.259a8.3 8.3 0 0 0-8.3-8.3Zm-27-10.759a.927.927 0 0 1 .915.91l.403 18.699-.404 6.787a.924.924 0 0 1-.915.905.92.92 0 0 1-.912-.904l-.376-6.787.373-18.605.003-.095a.917.917 0 0 1 .914-.91Zm-7.13 4.26a.69.69 0 0 0-.684-.68c-.374 0-.675.3-.683.68l-.428 15.345.428 7.044a.684.684 0 0 0 .683.676.69.69 0 0 0 .683-.68l.48-7.04-.48-15.344Zm-5.09 1.679a.579.579 0 0 1 .57-.565.58.58 0 0 1 .567.565l.56 13.702-.56 7.16a.58.58 0 0 1-.567.561.578.578 0 0 1-.57-.561l-.492-7.16.493-13.702Zm-6.49 5.881a.404.404 0 0 0-.395.39L23 56.54l.596 7.148a.403.403 0 0 0 .394.388c.21 0 .38-.168.397-.389l.676-7.147-.676-7.39a.406.406 0 0 0-.397-.387Zm3.846.92a.458.458 0 0 0-.452-.442.458.458 0 0 0-.453.449l-.562 6.85.562 7.207a.46.46 0 0 0 .453.449c.24 0 .436-.194.451-.449l.64-7.206-.64-6.857Zm10.93-8.335a.802.802 0 0 0-.8.797l-.355 14.405.358 6.932a.798.798 0 0 0 1.596-.005l.401-6.925-.401-14.408a.8.8 0 0 0-.8-.796Z"
+      />
+    </svg>
+  );
+}
 
 function SocialLinks({ light = false }: { light?: boolean }) {
   return (
@@ -40,8 +62,17 @@ function SocialLinks({ light = false }: { light?: boolean }) {
       aria-label="Социальные сети"
     >
       {socialLinks.map((link) => (
-        <a href={link.href} key={link.label} aria-label={link.label}>
-          <span aria-hidden="true">{link.mark}</span>
+        <a
+          className={link.icon ? "social-link--icon" : undefined}
+          href={link.href}
+          key={link.label}
+          aria-label={link.label}
+        >
+          {link.icon === "soundcloud" ? (
+            <SoundCloudIcon />
+          ) : (
+            <span aria-hidden="true">{link.mark}</span>
+          )}
         </a>
       ))}
     </nav>
@@ -129,6 +160,7 @@ export default function Home() {
             src={asset("/images/hero-ocean.jpg")}
             alt="Темное море с волнами"
           />
+          <HeroVideo />
           <div className="tilda-hero__shade" />
 
           <div className="tilda-hero__desktop-copy">
@@ -399,9 +431,7 @@ export default function Home() {
         <small>© «Рыбная лавка капитана Селедкина», 2026</small>
       </footer>
 
-      <a className="chat-bubble" href={telegramOrder} aria-label="Заказать в Telegram">
-        <span aria-hidden="true">☰</span>
-      </a>
+      <ContactWidget />
 
       <PriceNotice whatsappOrder={whatsappOrder} fishImage={asset("/images/frame-27.png")} />
     </Typographed>

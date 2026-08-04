@@ -52,3 +52,21 @@ test("keeps the accessibility and motion gates in the stylesheet", async () => {
   assert.match(css, /text-wrap:\s*balance/);
   assert.match(css, /font-size:\s*clamp\(/);
 });
+
+test("restores the source hero video and complete contact widget", async () => {
+  const heroVideo = await readFile(new URL("app/hero-video.tsx", projectRoot), "utf8");
+  const contactWidget = await readFile(
+    new URL("app/contact-widget.tsx", projectRoot),
+    "utf8",
+  );
+  const page = await readFile(new URL("app/page.tsx", projectRoot), "utf8");
+
+  assert.match(heroVideo, /AsD5u6k6dKI/);
+  assert.match(heroVideo, /prefers-reduced-motion:\s*reduce/);
+  assert.match(heroVideo, /min-width:\s*761px/);
+  assert.match(contactWidget, /Открыть способы связи/);
+  assert.match(contactWidget, /https:\/\/t\.me\/\+79166751452/);
+  assert.match(contactWidget, /https:\/\/wa\.me\/79166751452/);
+  assert.match(contactWidget, /tel:\+79166751452/);
+  assert.match(page, /social-icon--soundcloud/);
+});
