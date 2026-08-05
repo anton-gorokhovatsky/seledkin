@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CurrentMonth } from "./current-month";
 import {
   catalog,
   catalogUpdated,
@@ -75,9 +76,11 @@ export function Catalog() {
       <div className="catalog-source__heading">
         <h2 id="catalog-title">
           Наши товары и цены
+          {" "}
           <span>
-            по прайс-листу от{" "}
-            <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>
+            источник — прайс-лист от{" "}
+            <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>; наличие и
+            стоимость на <CurrentMonth /> уточняйте
           </span>
         </h2>
         <aside className="catalog-source__notice" aria-label="Актуальность цен">
@@ -154,7 +157,11 @@ export function Catalog() {
       {visibleCount > 0 ? (
         <div className="source-shell catalog-products">
           {visibleCategories.map((category) => (
-            <section className="catalog-category" key={category.slug}>
+            <section
+              className="catalog-category"
+              id={`category-${category.slug}`}
+              key={category.slug}
+            >
               <h3>{category.label}</h3>
               <div className="catalog-product-grid">
                 {category.items.map((product, index) => (

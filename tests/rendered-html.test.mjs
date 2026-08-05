@@ -5,7 +5,7 @@ import test from "node:test";
 const projectRoot = new URL("../", import.meta.url);
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-test("exports the preserved Russian storefront content", async () => {
+test("exports the preserved Russian storefront as an editorial home page", async () => {
   const html = await readFile(new URL("out/index.html", projectRoot), "utf8");
 
   assert.match(html, /<html lang="ru">/);
@@ -15,13 +15,14 @@ test("exports the preserved Russian storefront content", async () => {
   assert.match(html, /Красная икра премиум-качества/);
   assert.ok(html.includes("Почему о\u00a0нас говорят?"));
   assert.match(html, /Олег Гугунава/);
+  assert.match(html, /Судовой журнал/);
+  assert.match(html, /Филе каспийского залома/);
+  assert.match(html, /ППП\s*—\s*предельно простая паста/);
+  assert.match(html, /И\s+пусть никто не\s+уйдет обиженным!/);
+  assert.match(html, /Выбрать, заказать, получить/);
   assert.doesNotMatch(html, /Feed not found\.|id="novosti"|>Новости</);
-  assert.match(html, /Друзья!/);
-  assert.match(html, /по прайс-листу от/);
-  assert.match(html, /type="search"/);
-  assert.match(html, /Найти, например, нерку/);
-  assert.match(html, /Уточнить наличие/);
-  assert.doesNotMatch(html, /<dialog/);
+  assert.doesNotMatch(html, /id="catalog"/);
+  assert.match(html, new RegExp(`href="${basePath}/catalog/"`));
   assert.match(html, /ул\. Строителей/);
   assert.match(html, /application\/ld\+json/);
   assert.match(
@@ -39,10 +40,28 @@ test("exports the preserved Russian storefront content", async () => {
       ? /https:\/\/anton-gorokhovatsky\.github\.io\/seledkin\//
       : /https:\/\/ks\.fish\//,
   );
-  assert.match(html, /aria-live="polite"/);
-  assert.ok(html.includes("15\u202f000\u00a0₽"), "expected typographed catalog prices");
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|SkeletonPreview/);
   assert.doesNotMatch(html, /qa-mobile/);
+});
+
+test("exports the full working catalog on its own page", async () => {
+  const html = await readFile(
+    new URL("out/catalog/index.html", projectRoot),
+    "utf8",
+  );
+
+  assert.match(html, /<h1[^>]*>Каталог<\/h1>/);
+  assert.match(html, /Друзья!/);
+  assert.match(html, /data-current-month="true"/);
+  assert.match(html, /прайс-лист(?:а)? от/);
+  assert.match(html, /type="search"/);
+  assert.match(html, /Найти, например, нерку/);
+  assert.match(html, /Уточнить наличие/);
+  assert.doesNotMatch(html, /<dialog/);
+  assert.match(html, /aria-live="polite"/);
+  assert.ok(html.includes("15\u202f000\u00a0₽"), "expected typographed catalog prices");
+  assert.match(html, new RegExp(`src="${basePath}/images/fish-school\\.svg"`));
+  assert.match(html, /Лосось, кот рыбной лавки/);
 });
 
 test("keeps the full migrated catalog in a dedicated data file", async () => {
@@ -72,6 +91,10 @@ test("keeps the local sea video and complete contact widget", async () => {
     "utf8",
   );
   const page = await readFile(new URL("app/page.tsx", projectRoot), "utf8");
+  const siteComponents = await readFile(
+    new URL("app/site-components.tsx", projectRoot),
+    "utf8",
+  );
 
   assert.match(heroVideo, /className="hero__video"/);
   assert.match(heroVideo, /prefers-reduced-motion:\s*reduce/);
@@ -82,16 +105,24 @@ test("keeps the local sea video and complete contact widget", async () => {
   assert.match(contactWidget, /https:\/\/t\.me\/\+79166751452/);
   assert.match(contactWidget, /https:\/\/wa\.me\/79166751452/);
   assert.match(contactWidget, /tel:\+79166751452/);
-  assert.match(page, /social-icon--soundcloud/);
+  assert.match(siteComponents, /social-icon--soundcloud/);
 });
 
 test("keeps the new identity assets and the Losos footer", async () => {
   const html = await readFile(new URL("out/index.html", projectRoot), "utf8");
+  const catalogHtml = await readFile(
+    new URL("out/catalog/index.html", projectRoot),
+    "utf8",
+  );
   const css = await readFile(new URL("app/globals.css", projectRoot), "utf8");
 
   assert.match(html, new RegExp(`src="${basePath}/images/logo-redrawn\\.svg"`));
-  assert.match(html, new RegExp(`src="${basePath}/images/fish-school\\.svg"`));
+  assert.match(catalogHtml, new RegExp(`src="${basePath}/images/fish-school\\.svg"`));
   assert.match(html, new RegExp(`src="${basePath}/images/salmon-cat\\.jpg"`));
+  assert.match(
+    html,
+    new RegExp(`src="${basePath}/images/journal/caspian-zalom\\.jpg"`),
+  );
   assert.match(html, /Лосось, кот рыбной лавки/);
   assert.match(html, /Ничего не\s*рекламирует, просто напоминает\./);
   assert.match(css, /--serif:\s*"Iowan Old Style"/);

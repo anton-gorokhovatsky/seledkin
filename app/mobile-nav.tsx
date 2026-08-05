@@ -2,15 +2,27 @@
 
 import { useEffect, useRef } from "react";
 
-const links = [
-  ["#chto-prodaem", "Что продаем"],
-  ["#o-nas", "О лавке"],
-  ["#catalog", "Каталог"],
-  ["#zakaz-i-dostavka", "Доставка"],
-  ["#kontakty", "Контакты"],
-] as const;
+type MobileNavLink = {
+  href: string;
+  label: string;
+  current?: boolean;
+};
 
-export function MobileNav() {
+const fallbackLinks: MobileNavLink[] = [
+  { href: "#chto-prodaem", label: "Что продаем" },
+  { href: "#o-nas", label: "О лавке" },
+  { href: "#catalog", label: "Каталог" },
+  { href: "#zakaz-i-dostavka", label: "Доставка" },
+  { href: "#kontakty", label: "Контакты" },
+];
+
+export function MobileNav({
+  homeHref = "#top",
+  links = fallbackLinks,
+}: {
+  homeHref?: string;
+  links?: MobileNavLink[];
+} = {}) {
   const detailsRef = useRef<HTMLDetailsElement>(null);
   const summaryRef = useRef<HTMLElement>(null);
 
@@ -41,12 +53,17 @@ export function MobileNav() {
         </span>
       </summary>
       <nav aria-label="Меню сайта">
-        <a className="floating-nav__logo" href="#top" onClick={closeMenu}>
-          Рыбная лавка<br />капитана Селедкина
+        <a className="floating-nav__logo" href={homeHref} onClick={closeMenu}>
+          Рыбная лавка<br />{" "}капитана Селедкина
         </a>
-        {links.map(([href, label]) => (
-          <a href={href} key={href} onClick={closeMenu}>
-            {label}
+        {links.map((link) => (
+          <a
+            href={link.href}
+            key={`${link.href}-${link.label}`}
+            aria-current={link.current ? "page" : undefined}
+            onClick={closeMenu}
+          >
+            {link.label}
           </a>
         ))}
         <a className="floating-nav__order" href="https://t.me/+79166751452">
