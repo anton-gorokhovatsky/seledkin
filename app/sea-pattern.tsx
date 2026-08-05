@@ -1,6 +1,7 @@
 type SeaPatternProps = {
   id: string;
   tone?: "paper" | "blue";
+  variant?: "default" | "purchase";
 };
 
 const fieldWidth = 1428;
@@ -24,7 +25,7 @@ function boundaryY(boundary: number, x: number) {
   return boundary * (fieldHeight / rowCount) + amplitudes[index] * Math.sin(angle);
 }
 
-function makeMarksPath() {
+function makeMarksPath(variant: "default" | "purchase" = "default") {
   const marks: string[] = [];
   const columnCount = fieldWidth / step;
 
@@ -33,8 +34,19 @@ function makeMarksPath() {
 
     for (let column = 0; column < columnCount; column += 1) {
       const x = column * step + phaseShift;
-      const y1 = boundaryY(row, x) + gap / 2;
-      const y2 = boundaryY(row + 1, x) - gap / 2;
+      const clearsHeader = variant === "purchase" && row === 1;
+      const stepsEdge = 660 + Math.sin(row * 1.7) * 42;
+      const clearsSteps =
+        variant === "purchase" && row >= 3 && row <= 8 && x > stepsEdge;
+
+      if (clearsHeader || clearsSteps) continue;
+
+      const headerClearance = variant === "purchase" ? 42 : 0;
+      const y1 =
+        boundaryY(row, x) + gap / 2 + (row === 2 ? headerClearance : 0);
+      const y2 =
+        boundaryY(row + 1, x) - gap / 2 -
+        (row === 0 ? headerClearance : 0);
 
       marks.push(
         `M${(x - markHalfWidth).toFixed(1)} ${y1.toFixed(1)}` +
@@ -48,9 +60,16 @@ function makeMarksPath() {
 }
 
 const marksPath = makeMarksPath();
+const purchaseMarksPath = makeMarksPath("purchase");
 
-export function SeaPattern({ id, tone = "paper" }: SeaPatternProps) {
+export function SeaPattern({
+  id,
+  tone = "paper",
+  variant = "default",
+}: SeaPatternProps) {
   const fieldId = `sea-pattern-field-${id}`;
+  const patternPath = variant === "purchase" ? purchaseMarksPath : marksPath;
+  const patternHeight = variant === "purchase" ? 2200 : fieldHeight;
 
   return (
     <svg
@@ -64,10 +83,10 @@ export function SeaPattern({ id, tone = "paper" }: SeaPatternProps) {
         <pattern
           id={fieldId}
           width={fieldWidth}
-          height={fieldHeight}
+          height={patternHeight}
           patternUnits="userSpaceOnUse"
         >
-          <path className="sea-pattern__mark" d={marksPath} />
+          <path className="sea-pattern__mark" d={patternPath} />
         </pattern>
       </defs>
 

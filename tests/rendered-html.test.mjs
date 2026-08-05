@@ -147,6 +147,12 @@ test("keeps the new identity assets and the Losos footer", async () => {
   assert.match(css, /--serif:\s*"Iowan Old Style"/);
   assert.match(css, /--sans:\s*"Golos Text"/);
   assert.match(css, /--pattern-gold:\s*#ffd700/);
+  assert.match(
+    css,
+    /\.purchase-story\s*\{[^}]*color:\s*var\(--pattern-gold\)/s,
+  );
   assert.match(seaPattern, /sea-pattern__mark/);
   assert.match(seaPattern, /markHalfWidth/);
+  assert.match(seaPattern, /clearsHeader/);
+  assert.match(seaPattern, /clearsSteps/);
 });

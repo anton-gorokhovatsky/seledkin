@@ -1504,6 +1504,11 @@ address {
   margin: 0;
 }
 
+.purchase-story__image {
+  position: relative;
+  background: #061d7e;
+}
+
 .assortment-story__hero-image img {
   width: 100%;
   aspect-ratio: 4 / 5;
@@ -2013,41 +2018,26 @@ address {
 
 .sea-pattern--blue {
   color: var(--pattern-gold);
-  opacity: 0.38;
+  opacity: 0.16;
 }
 
 .purchase-story > .sea-pattern--blue {
-  z-index: 1;
   opacity: 1;
 }
 
 .source-footer > .sea-pattern--blue {
-  opacity: 0.2;
+  opacity: 0.12;
 }
 
 .purchase-story {
   padding: clamp(105px, 11vw, 176px) 0;
   background: #061d7e;
-  color: white;
-}
-
-.purchase-story::after {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(2, 20, 88, 0.52),
-    rgba(2, 29, 112, 0.3) 52%,
-    rgba(2, 20, 88, 0.48)
-  );
-  content: "";
-  pointer-events: none;
+  color: var(--pattern-gold);
 }
 
 .purchase-story > .story-shell {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 .purchase-story__header {
@@ -2059,7 +2049,7 @@ address {
 
 .purchase-story__header .section-kicker {
   margin-bottom: 12px;
-  color: var(--sun-flash);
+  color: var(--pattern-gold);
 }
 
 .purchase-story__header h2 {
@@ -2086,10 +2076,14 @@ address {
 }
 
 .purchase-story__image figcaption {
-  color: rgba(255, 255, 255, 0.82);
+  display: block;
+  margin-top: 0;
+  padding-top: 14px;
+  color: var(--pattern-gold);
 }
 
 .purchase-steps {
+  position: relative;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -2098,7 +2092,7 @@ address {
 .purchase-steps > li {
   display: grid;
   padding: 36px 0 44px;
-  border-top: 1px solid rgba(255, 241, 168, 0.36);
+  border-top: 1px solid rgb(255 215 0 / 42%);
   grid-template-columns: 56px minmax(0, 1fr);
   gap: 20px;
 }
@@ -2110,7 +2104,7 @@ address {
 
 .purchase-steps > li > span {
   padding-top: 7px;
-  color: var(--sun-gold);
+  color: var(--pattern-gold);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -2133,7 +2127,7 @@ address {
 .purchase-story .story-link,
 .purchase-story .telegram-link,
 .purchase-story .whatsapp-link {
-  color: var(--sun-flash);
+  color: var(--pattern-gold);
 }
 
 .purchase-steps__actions {
@@ -2151,14 +2145,14 @@ address {
 }
 
 .purchase-steps__actions .order-pill--whatsapp {
-  border: 1px solid rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--pattern-gold);
   background: transparent;
-  color: white;
+  color: var(--pattern-gold);
 }
 
 .purchase-steps__actions .order-pill--telegram {
-  background: white;
-  color: var(--deep-sea);
+  background: var(--pattern-gold);
+  color: #061d7e;
 }
 
 .contacts-source {
@@ -3364,6 +3358,12 @@ address {
 
   .purchase-story {
     padding: 92px 0 98px;
+  }
+
+  .purchase-story > .sea-pattern--blue {
+    right: auto;
+    left: -720px;
+    width: calc(100% + 720px);
   }
 
   .purchase-story__header {

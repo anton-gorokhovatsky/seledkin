@@ -482,7 +482,7 @@ export default function Home() {
           id="zakaz-i-dostavka"
           aria-labelledby="purchase-title"
         >
-          <SeaPattern id="purchase" tone="blue" />
+          <SeaPattern id="purchase" tone="blue" variant="purchase" />
           <div className="story-shell purchase-story__header">
             <p className="section-kicker">Как купить</p>
             <h2 id="purchase-title">Выбрать, заказать, получить</h2>
