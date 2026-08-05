@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { ContactWidget } from "./contact-widget";
 import { HarpoonIcon } from "./harpoon-icon";
+import { SeaPattern } from "./sea-pattern";
 import { HeroVideo } from "./hero-video";
 import {
   ContactsSection,
@@ -113,69 +114,6 @@ function SunGlint() {
   );
 }
 
-function SeaPattern() {
-  return (
-    <svg
-      className="sea-pattern"
-      viewBox="0 0 1440 900"
-      preserveAspectRatio="none"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <defs>
-        <pattern
-          id="sea-pattern-bars"
-          width="30"
-          height="900"
-          patternUnits="userSpaceOnUse"
-        >
-          <rect width="2.4" height="900" fill="#d6a33f" />
-          <rect x="10" width="1.1" height="900" fill="#fff1a8" opacity="0.72" />
-        </pattern>
-        <mask id="sea-pattern-waves">
-          <rect width="1440" height="900" fill="black" />
-          <path
-            d="M-140 92C72-24 242 214 470 92S834-28 1048 98s374 98 548-22"
-            fill="none"
-            stroke="white"
-            strokeWidth="82"
-          />
-          <path
-            d="M-188 286C58 142 268 420 522 278s416-90 622 38 350 98 500-40"
-            fill="none"
-            stroke="white"
-            strokeWidth="78"
-          />
-          <path
-            d="M-126 486c230-126 392 96 610-18s392-110 596 18 374 116 546-18"
-            fill="none"
-            stroke="white"
-            strokeWidth="84"
-          />
-          <path
-            d="M-174 684c236-146 430 116 674-18s382-92 578 28 360 104 530-30"
-            fill="none"
-            stroke="white"
-            strokeWidth="80"
-          />
-          <path
-            d="M-124 862c218-108 382 64 590-38s390-82 594 32 368 82 548-36"
-            fill="none"
-            stroke="white"
-            strokeWidth="76"
-          />
-        </mask>
-      </defs>
-      <rect
-        width="1440"
-        height="900"
-        fill="url(#sea-pattern-bars)"
-        mask="url(#sea-pattern-waves)"
-      />
-    </svg>
-  );
-}
-
 export default function Home() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const asset = (path: string) => `${basePath}${path}`;
@@ -256,10 +194,11 @@ export default function Home() {
         </section>
 
         <section
-          className="assortment-story"
+          className="assortment-story wave-backed"
           id="chto-prodaem"
           aria-labelledby="assortment-title"
         >
+          <SeaPattern id="assortment" />
           <div className="story-shell assortment-story__intro">
             <div className="assortment-story__copy">
               <p className="section-kicker">Что продаем</p>
@@ -346,10 +285,11 @@ export default function Home() {
         </section>
 
         <section
-          className="principles-story"
+          className="principles-story wave-backed"
           id="o-nas"
           aria-labelledby="principles-title"
         >
+          <SeaPattern id="principles" />
           <header className="story-shell principles-story__header">
             <p className="section-kicker">О лавке</p>
             <h2 id="principles-title">Почему о нас говорят?</h2>
@@ -439,7 +379,8 @@ export default function Home() {
           </p>
         </section>
 
-        <section className="founder-story" aria-labelledby="founder-title">
+        <section className="founder-story wave-backed" aria-labelledby="founder-title">
+          <SeaPattern id="founder" />
           <div className="story-shell founder-story__inner">
             <div className="founder-story__opening">
               <figure className="founder-story__portrait">
@@ -488,10 +429,11 @@ export default function Home() {
         </section>
 
         <section
-          className="ship-log"
+          className="ship-log wave-backed"
           id="sudovoy-zhurnal"
           aria-labelledby="ship-log-title"
         >
+          <SeaPattern id="ship-log" />
           <header className="story-shell ship-log__header">
             <div>
               <p className="section-kicker">Из телеграм-канала Олега</p>
@@ -536,11 +478,11 @@ export default function Home() {
         </section>
 
         <section
-          className="purchase-story"
+          className="purchase-story wave-backed"
           id="zakaz-i-dostavka"
           aria-labelledby="purchase-title"
         >
-          <SeaPattern />
+          <SeaPattern id="purchase" tone="blue" />
           <div className="story-shell purchase-story__header">
             <p className="section-kicker">Как купить</p>
             <h2 id="purchase-title">Выбрать, заказать, получить</h2>

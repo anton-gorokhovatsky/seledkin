@@ -8,6 +8,7 @@ import {
   telegramOrder,
 } from "../site-components";
 import { Typographed } from "../typography";
+import { SeaPattern } from "../sea-pattern";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const siteUrl = basePath
@@ -35,7 +36,8 @@ export default function CatalogPage() {
       <SiteHeader basePath={basePath} page="catalog" />
 
       <main className="catalog-page" id="content">
-        <section className="catalog-page__hero" id="top" aria-labelledby="catalog-page-title">
+        <section className="catalog-page__hero wave-backed" id="top" aria-labelledby="catalog-page-title">
+          <SeaPattern id="catalog-hero" tone="blue" />
           <div className="story-shell catalog-page__hero-copy">
             <p className="section-kicker">Рыба и морепродукты · Москва</p>
             <h1 id="catalog-page-title">Каталог</h1>
@@ -51,7 +53,8 @@ export default function CatalogPage() {
 
         <Catalog />
 
-        <aside className="catalog-page__closing" aria-label="Помощь с выбором">
+        <aside className="catalog-page__closing wave-backed" aria-label="Помощь с выбором">
+          <SeaPattern id="catalog-closing" tone="blue" />
           <div className="story-shell catalog-page__closing-inner">
             <p className="section-kicker">Не нашли нужное?</p>
             <p>

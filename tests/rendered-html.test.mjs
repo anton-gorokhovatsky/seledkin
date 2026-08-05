@@ -34,7 +34,8 @@ test("exports the preserved Russian storefront as an editorial home page", async
   assert.match(html, /harpoon-icon__head/);
   assert.match(html, /harpoon-icon__rope/);
   assert.match(html, /sun-glint/);
-  assert.match(html, /sea-pattern/);
+  assert.match(html, /sea-pattern-field-assortment/);
+  assert.match(html, /sea-pattern-field-purchase/);
   assert.doesNotMatch(html, /↗|↓/);
   assert.match(html, /application\/ld\+json/);
   assert.match(
@@ -75,6 +76,8 @@ test("exports the full working catalog on its own page", async () => {
   assert.match(html, /aria-live="polite"/);
   assert.ok(html.includes("15\u202f000\u00a0₽"), "expected typographed catalog prices");
   assert.match(html, new RegExp(`src="${basePath}/images/fish-school\\.svg"`));
+  assert.match(html, /sea-pattern-field-catalog-hero/);
+  assert.match(html, /sea-pattern-field-catalog-products/);
   assert.match(html, /Лосось, кот рыбной лавки/);
 });
 

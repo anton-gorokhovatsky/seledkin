@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { HarpoonIcon } from "./harpoon-icon";
+import { SeaPattern } from "./sea-pattern";
 import {
   catalog,
   type CatalogItem,
@@ -70,7 +71,8 @@ export function Catalog() {
   );
 
   return (
-    <section className="catalog-source" id="catalog" aria-labelledby="catalog-title">
+    <section className="catalog-source wave-backed" id="catalog" aria-labelledby="catalog-title">
+      <SeaPattern id="catalog-products" />
       <div className="catalog-source__heading">
         <h2 id="catalog-title">Наши товары и цены</h2>
       </div>
