@@ -2016,6 +2016,10 @@ address {
   fill: currentColor;
 }
 
+.sea-pattern__mark--purchase-mobile {
+  display: none;
+}
+
 .sea-pattern--blue {
   color: var(--pattern-gold);
   opacity: 0.16;
@@ -3112,6 +3116,14 @@ address {
     font-size: 0.66rem;
   }
 
+  .sea-pattern__mark--purchase-desktop {
+    display: none;
+  }
+
+  .sea-pattern__mark--purchase-mobile {
+    display: block;
+  }
+
   .assortment-story {
     padding: 76px 0 96px;
   }
@@ -3372,6 +3384,7 @@ address {
 
   .purchase-story__header {
     margin-bottom: 0;
+    padding-left: 20px;
   }
 
   .purchase-story__layout {

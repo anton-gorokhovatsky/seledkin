@@ -35,7 +35,8 @@ test("exports the preserved Russian storefront as an editorial home page", async
   assert.match(html, /harpoon-icon__rope/);
   assert.match(html, /sun-glint/);
   assert.match(html, /sea-pattern-field-assortment/);
-  assert.match(html, /sea-pattern-field-purchase/);
+  assert.match(html, /sea-pattern__mark--purchase-desktop/);
+  assert.match(html, /sea-pattern__mark--purchase-mobile/);
   assert.doesNotMatch(html, /↗|↓/);
   assert.match(html, /application\/ld\+json/);
   assert.match(
@@ -155,8 +156,12 @@ test("keeps the new identity assets and the Losos footer", async () => {
   assert.match(seaPattern, /markHalfWidth/);
   assert.match(seaPattern, /purchaseBandHeight\s*=\s*620/);
   assert.match(seaPattern, /makePurchaseMarksPath/);
+  assert.match(seaPattern, /smoothWindow/);
+  assert.match(seaPattern, /titleIsland/);
+  assert.match(seaPattern, /kickerIsland/);
   assert.match(seaPattern, /topEnd/);
   assert.match(seaPattern, /bottomStart/);
+  assert.match(css, /\.sea-pattern__mark--purchase-mobile/);
   assert.match(css, /\.purchase-story__poster\s*\{/);
   assert.match(css, /\.purchase-story__layout\s*\{[^}]*padding-top:/s);
 });

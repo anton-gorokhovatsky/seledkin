@@ -6,6 +6,7 @@ type SeaPatternProps = {
 
 const fieldWidth = 1428;
 const fieldHeight = 1350;
+const purchaseFieldWidth = 1000;
 const purchaseBandHeight = 620;
 const step = 42;
 const rowCount = 9;
@@ -49,28 +50,58 @@ function makeMarksPath() {
   return marks.join("");
 }
 
-function makePurchaseMarksPath() {
+function smoothWindow(
+  x: number,
+  left: number,
+  right: number,
+  feather: number,
+) {
+  if (x >= left && x <= right) return 1;
+  if (x < left - feather || x > right + feather) return 0;
+
+  const distance = x < left ? left - x : x - right;
+  return (1 + Math.cos((distance / feather) * Math.PI)) / 2;
+}
+
+function makePurchaseMarksPath(layout: "desktop" | "mobile") {
   const marks: string[] = [];
-  const columnCount = fieldWidth / step;
+  const columnCount = layout === "desktop" ? 30 : 18;
+  const purchaseStep = purchaseFieldWidth / columnCount;
+  const purchaseMarkHalfWidth = layout === "desktop" ? 2.4 : 4;
 
   for (let column = 0; column < columnCount; column += 1) {
-    const topX = column * step + step / 2;
-    const bottomX = column * step;
-    const topEnd =
-      150 +
-      42 * Math.sin((topX / fieldWidth) * Math.PI * 4 + 0.35) +
-      18 * Math.sin((topX / fieldWidth) * Math.PI * 10 + 1.2);
+    const topX = column * purchaseStep + purchaseStep / 2;
+    const bottomX = column * purchaseStep;
+    const topWave =
+      270 +
+      34 * Math.sin((topX / purchaseFieldWidth) * Math.PI * 4 + 0.35) +
+      15 * Math.sin((topX / purchaseFieldWidth) * Math.PI * 10 + 1.2);
+    const bottomWave =
+      350 +
+      30 * Math.sin((bottomX / purchaseFieldWidth) * Math.PI * 6 + 1.45) +
+      12 * Math.sin((bottomX / purchaseFieldWidth) * Math.PI * 12 + 0.2);
+    const titleIsland =
+      layout === "desktop"
+        ? smoothWindow(topX, 285, 825, 80)
+        : smoothWindow(topX, 70, 700, 55);
+    const titleIslandBottom =
+      layout === "desktop"
+        ? smoothWindow(bottomX, 285, 825, 80)
+        : smoothWindow(bottomX, 70, 700, 55);
+    const kickerIsland =
+      layout === "desktop" ? smoothWindow(topX, 105, 210, 46) : 0;
+    const kickerIslandBottom =
+      layout === "desktop" ? smoothWindow(bottomX, 105, 210, 46) : 0;
+    const topEnd = topWave - 120 * titleIsland - 12 * kickerIsland;
     const bottomStart =
-      480 +
-      34 * Math.sin((bottomX / fieldWidth) * Math.PI * 6 + 1.45) +
-      14 * Math.sin((bottomX / fieldWidth) * Math.PI * 12 + 0.2);
+      bottomWave + 120 * titleIslandBottom + 130 * kickerIslandBottom;
 
     marks.push(
-      `M${(topX - markHalfWidth).toFixed(1)} 0` +
-        `H${(topX + markHalfWidth).toFixed(1)}` +
+      `M${(topX - purchaseMarkHalfWidth).toFixed(1)} 0` +
+        `H${(topX + purchaseMarkHalfWidth).toFixed(1)}` +
         `L${topX.toFixed(1)} ${topEnd.toFixed(1)}Z`,
-      `M${(bottomX - markHalfWidth).toFixed(1)} ${bottomStart.toFixed(1)}` +
-        `H${(bottomX + markHalfWidth).toFixed(1)}` +
+      `M${(bottomX - purchaseMarkHalfWidth).toFixed(1)} ${bottomStart.toFixed(1)}` +
+        `H${(bottomX + purchaseMarkHalfWidth).toFixed(1)}` +
         `L${bottomX.toFixed(1)} ${purchaseBandHeight.toFixed(1)}Z`,
     );
   }
@@ -79,16 +110,38 @@ function makePurchaseMarksPath() {
 }
 
 const marksPath = makeMarksPath();
-const purchaseMarksPath = makePurchaseMarksPath();
+const purchaseDesktopMarksPath = makePurchaseMarksPath("desktop");
+const purchaseMobileMarksPath = makePurchaseMarksPath("mobile");
 
 export function SeaPattern({
   id,
   tone = "paper",
   variant = "default",
 }: SeaPatternProps) {
+  if (variant === "purchase") {
+    return (
+      <svg
+        className={`sea-pattern sea-pattern--${tone}`}
+        width="100%"
+        height="100%"
+        viewBox={`0 0 ${purchaseFieldWidth} ${purchaseBandHeight}`}
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <path
+          className="sea-pattern__mark sea-pattern__mark--purchase-desktop"
+          d={purchaseDesktopMarksPath}
+        />
+        <path
+          className="sea-pattern__mark sea-pattern__mark--purchase-mobile"
+          d={purchaseMobileMarksPath}
+        />
+      </svg>
+    );
+  }
+
   const fieldId = `sea-pattern-field-${id}`;
-  const patternPath = variant === "purchase" ? purchaseMarksPath : marksPath;
-  const patternHeight = variant === "purchase" ? purchaseBandHeight : fieldHeight;
 
   return (
     <svg
@@ -102,10 +155,10 @@ export function SeaPattern({
         <pattern
           id={fieldId}
           width={fieldWidth}
-          height={patternHeight}
+          height={fieldHeight}
           patternUnits="userSpaceOnUse"
         >
-          <path className="sea-pattern__mark" d={patternPath} />
+          <path className="sea-pattern__mark" d={marksPath} />
         </pattern>
       </defs>
 
