@@ -17,6 +17,11 @@ test("exports the preserved Russian storefront content", async () => {
   assert.match(html, /Олег Гугунава/);
   assert.doesNotMatch(html, /Feed not found\.|id="novosti"|>Новости</);
   assert.match(html, /Друзья!/);
+  assert.match(html, /по прайс-листу от/);
+  assert.match(html, /type="search"/);
+  assert.match(html, /Найти, например, нерку/);
+  assert.match(html, /Уточнить наличие/);
+  assert.doesNotMatch(html, /<dialog/);
   assert.match(html, /ул\. Строителей/);
   assert.match(html, /application\/ld\+json/);
   assert.match(
@@ -36,7 +41,6 @@ test("exports the preserved Russian storefront content", async () => {
   );
   assert.match(html, /aria-live="polite"/);
   assert.ok(html.includes("15\u202f000\u00a0₽"), "expected typographed catalog prices");
-  assert.doesNotMatch(html, /Найти, например/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|SkeletonPreview/);
   assert.doesNotMatch(html, /qa-mobile/);
 });
@@ -46,7 +50,8 @@ test("keeps the full migrated catalog in a dedicated data file", async () => {
   const itemCount = (source.match(/\bitem\(/g) ?? []).length;
 
   assert.ok(itemCount > 100, `expected more than 100 products, found ${itemCount}`);
-  assert.match(source, /catalogUpdated = "январь 2026"/);
+  assert.match(source, /catalogUpdatedAt = "2026-01"/);
+  assert.match(source, /formatCatalogUpdated\(catalogUpdatedAt\)/);
   assert.match(source, /Свежемороженая рыба/);
   assert.match(source, /Сельдь слабосоленая/);
 });

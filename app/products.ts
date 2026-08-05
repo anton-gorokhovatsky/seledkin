@@ -23,7 +23,35 @@ const item = (
   description: description ? typograph(description) : undefined,
 });
 
-export const catalogUpdated = "январь 2026";
+export const catalogUpdatedAt = "2026-01";
+
+const catalogMonthNames = [
+  "января",
+  "февраля",
+  "марта",
+  "апреля",
+  "мая",
+  "июня",
+  "июля",
+  "августа",
+  "сентября",
+  "октября",
+  "ноября",
+  "декабря",
+] as const;
+
+function formatCatalogUpdated(value: string) {
+  const [year, month] = value.split("-").map(Number);
+  const monthName = catalogMonthNames[month - 1];
+
+  if (!year || !monthName) {
+    throw new Error(`Некорректная дата прайс-листа: ${value}`);
+  }
+
+  return `${monthName} ${year} года`;
+}
+
+export const catalogUpdated = formatCatalogUpdated(catalogUpdatedAt);
 
 export const catalog: CatalogCategory[] = [
   {

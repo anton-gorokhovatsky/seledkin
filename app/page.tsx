@@ -4,7 +4,7 @@ import { Catalog } from "./catalog";
 import { ContactWidget } from "./contact-widget";
 import { HeroVideo } from "./hero-video";
 import { MobileNav } from "./mobile-nav";
-import { PriceNotice } from "./price-notice";
+import { catalogUpdated, catalogUpdatedAt } from "./products";
 import { Typographed } from "./typography";
 
 const phoneLabel = "+7 916 675-14-52";
@@ -197,7 +197,14 @@ export default function Home() {
                 пластиковые контейнеры по 250 граммов и 500 граммов. Если вам
                 нужен какой-то другой объем, просто дайте нам знать.
               </p>
-              <p>Цена: 3500 ₽ за 250 граммов.</p>
+              <p>
+                Цена: 3500 ₽ за 250 граммов.
+                <span className="price-context">
+                  По прайс-листу от{" "}
+                  <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>;
+                  актуальную цену уточняйте.
+                </span>
+              </p>
               <p>
                 Заказы принимаются в <a className="whatsapp-link" href={whatsappOrder}>WhatsApp</a>{" "}
                 и <a className="telegram-link" href={telegramOrder}>телеграме</a>.
@@ -365,6 +372,11 @@ export default function Home() {
               <p>
                 Стоимость доставки в пределах МКАД — 490 ₽. Минимальной суммы
                 заказа нет, это удобно.
+                <span className="price-context">
+                  Стоимость указана по информации от{" "}
+                  <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>;
+                  подтвердите её при заказе.
+                </span>
               </p>
               <p>
                 Заказы принимаются в <a className="whatsapp-link" href={whatsappOrder}>WhatsApp</a>{" "}
@@ -429,8 +441,6 @@ export default function Home() {
       </footer>
 
       <ContactWidget />
-
-      <PriceNotice whatsappOrder={whatsappOrder} fishImage={fishSchoolImage} />
     </Typographed>
   );
 }

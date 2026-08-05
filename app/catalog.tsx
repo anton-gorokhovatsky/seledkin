@@ -1,19 +1,68 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { catalog } from "./products";
+import {
+  catalog,
+  catalogUpdated,
+  catalogUpdatedAt,
+  type CatalogItem,
+} from "./products";
 
 const allCategories = "all";
+const telegramOrder = "https://t.me/+79166751452";
+
+function normalize(value: string) {
+  return value
+    .toLocaleLowerCase("ru-RU")
+    .replaceAll("ё", "е")
+    .replaceAll("\u00a0", " ")
+    .replaceAll("\u202f", " ")
+    .trim();
+}
+
+function positionCount(value: number) {
+  const lastTwo = value % 100;
+  const last = value % 10;
+
+  if (lastTwo >= 11 && lastTwo <= 14) return `${value} позиций`;
+  if (last === 1) return `${value} позиция`;
+  if (last >= 2 && last <= 4) return `${value} позиции`;
+  return `${value} позиций`;
+}
+
+function telegramProductHref(product: CatalogItem) {
+  const details = product.description ? ` (${product.description})` : "";
+  const message = `Здравствуйте! Подскажите, пожалуйста, есть ли сейчас «${product.name}»${details} и какая актуальная цена?`;
+
+  return `${telegramOrder}?text=${encodeURIComponent(message)}`;
+}
 
 export function Catalog() {
   const [activeCategory, setActiveCategory] = useState(allCategories);
+  const [query, setQuery] = useState("");
 
   const visibleCategories = useMemo(
-    () =>
-      activeCategory === allCategories
-        ? catalog
-        : catalog.filter((category) => category.slug === activeCategory),
-    [activeCategory],
+    () => {
+      const normalizedQuery = normalize(query);
+
+      return catalog
+        .filter(
+          (category) =>
+            activeCategory === allCategories || category.slug === activeCategory,
+        )
+        .map((category) => ({
+          ...category,
+          items: category.items.filter((product) => {
+            if (!normalizedQuery) return true;
+
+            return normalize(
+              `${product.name} ${product.description ?? ""}`,
+            ).includes(normalizedQuery);
+          }),
+        }))
+        .filter((category) => category.items.length > 0);
+    },
+    [activeCategory, query],
   );
 
   const visibleCount = visibleCategories.reduce(
@@ -26,17 +75,40 @@ export function Catalog() {
       <div className="catalog-source__heading">
         <h2 id="catalog-title">
           Наши товары и цены
-          <span>в январе 2026 года</span>
+          <span>
+            по прайс-листу от{" "}
+            <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>
+          </span>
         </h2>
-        <p>
-          Цены на некоторые позиции могут меняться в большую или меньшую
-          сторону. Пожалуйста, уточняйте перед поездкой в магазин наличие и
-          стоимость интересующих позиций по телефону:{" "}
-          <a href="tel:+79166751452">+7 916 675-14-52</a>
-        </p>
+        <aside className="catalog-source__notice" aria-label="Актуальность цен">
+          <p>
+            <strong>Друзья!</strong> Из-за изменения курса валют поставщики
+            меняют цены ежедневно. Пожалуйста, уточняйте актуальные цены перед
+            заказом.
+          </p>
+          <p>
+            Цены на некоторые позиции могут меняться в большую или меньшую
+            сторону. Пожалуйста, уточняйте перед поездкой в магазин наличие и
+            стоимость интересующих позиций по телефону:{" "}
+            <a href="tel:+79166751452">+7 916 675-14-52</a>
+          </p>
+        </aside>
       </div>
 
       <div className="source-shell catalog-source__controls">
+        <label className="catalog-search">
+          <span className="visually-hidden">Поиск по каталогу</span>
+          <input
+            type="search"
+            placeholder="Найти, например, нерку"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+          <span className="catalog-search__mark" aria-hidden="true">
+            Поиск
+          </span>
+        </label>
+
         <div className="catalog-tabs" role="group" aria-label="Категории каталога">
           <button
             type="button"
@@ -75,38 +147,63 @@ export function Catalog() {
         </label>
       </div>
 
-      <p className="visually-hidden" aria-live="polite">
-        Показано позиций: {visibleCount}
+      <p className="source-shell catalog-source__result" aria-live="polite" aria-atomic="true">
+        {visibleCount === 0 ? "Ничего не найдено" : positionCount(visibleCount)}
       </p>
 
-      <div className="source-shell catalog-products">
-        {visibleCategories.map((category) => (
-          <section className="catalog-category" key={category.slug}>
-            <h3 className="visually-hidden">{category.label}</h3>
-            <div className="catalog-product-grid">
-              {category.items.map((product, index) => (
-                <article
-                  className="catalog-product"
-                  key={`${category.slug}-${product.name}-${product.price}-${index}`}
-                >
-                  <div>
-                    <h4>{product.name}</h4>
-                    <strong>{product.price}</strong>
-                  </div>
-                  {product.description ? <p>{product.description}</p> : null}
-                </article>
-              ))}
-            </div>
-          </section>
-        ))}
-      </div>
+      {visibleCount > 0 ? (
+        <div className="source-shell catalog-products">
+          {visibleCategories.map((category) => (
+            <section className="catalog-category" key={category.slug}>
+              <h3>{category.label}</h3>
+              <div className="catalog-product-grid">
+                {category.items.map((product, index) => (
+                  <article
+                    className="catalog-product"
+                    key={`${category.slug}-${product.name}-${product.price}-${index}`}
+                  >
+                    <div className="catalog-product__line">
+                      <h4>{product.name}</h4>
+                      <strong>{product.price}</strong>
+                    </div>
+                    <div className="catalog-product__details">
+                      {product.description ? <p>{product.description}</p> : null}
+                      <a
+                        className="catalog-product__action"
+                        href={telegramProductHref(product)}
+                        aria-label={`Уточнить наличие: ${product.name}`}
+                      >
+                        Уточнить наличие
+                        <span aria-hidden="true">↗</span>
+                      </a>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <div className="source-shell catalog-empty">
+          <p>Попробуйте другое название или откройте все категории.</p>
+          <button
+            type="button"
+            onClick={() => {
+              setQuery("");
+              setActiveCategory(allCategories);
+            }}
+          >
+            Сбросить поиск
+          </button>
+        </div>
+      )}
 
       <div className="catalog-source__order">
-        <a className="order-pill order-pill--whatsapp" href="https://wa.me/79166751452">
-          Заказать в WhatsApp
-        </a>
         <a className="order-pill order-pill--telegram" href="https://t.me/+79166751452">
           Заказать в телеграме
+        </a>
+        <a className="order-pill order-pill--whatsapp" href="https://wa.me/79166751452">
+          Заказать в WhatsApp
         </a>
       </div>
     </section>
