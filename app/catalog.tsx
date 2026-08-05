@@ -1,11 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CurrentMonth } from "./current-month";
+import { HarpoonIcon } from "./harpoon-icon";
 import {
   catalog,
-  catalogUpdated,
-  catalogUpdatedAt,
   type CatalogItem,
 } from "./products";
 
@@ -33,7 +31,7 @@ function positionCount(value: number) {
 
 function telegramProductHref(product: CatalogItem) {
   const details = product.description ? ` (${product.description})` : "";
-  const message = `Здравствуйте! Подскажите, пожалуйста, есть ли сейчас «${product.name}»${details} и какая актуальная цена?`;
+  const message = `Здравствуйте! Подскажите, пожалуйста, есть ли сейчас «${product.name}»${details}?`;
 
   return `${telegramOrder}?text=${encodeURIComponent(message)}`;
 }
@@ -74,28 +72,7 @@ export function Catalog() {
   return (
     <section className="catalog-source" id="catalog" aria-labelledby="catalog-title">
       <div className="catalog-source__heading">
-        <h2 id="catalog-title">
-          Наши товары и цены
-          {" "}
-          <span>
-            источник — прайс-лист от{" "}
-            <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>; наличие и
-            стоимость на <CurrentMonth /> уточняйте
-          </span>
-        </h2>
-        <aside className="catalog-source__notice" aria-label="Актуальность цен">
-          <p>
-            <strong>Друзья!</strong> Из-за изменения курса валют поставщики
-            меняют цены ежедневно. Пожалуйста, уточняйте актуальные цены перед
-            заказом.
-          </p>
-          <p>
-            Цены на некоторые позиции могут меняться в большую или меньшую
-            сторону. Пожалуйста, уточняйте перед поездкой в магазин наличие и
-            стоимость интересующих позиций по телефону:{" "}
-            <a href="tel:+79166751452">+7 916 675-14-52</a>
-          </p>
-        </aside>
+        <h2 id="catalog-title">Наши товары и цены</h2>
       </div>
 
       <div className="source-shell catalog-source__controls">
@@ -181,7 +158,7 @@ export function Catalog() {
                         aria-label={`Уточнить наличие: ${product.name}`}
                       >
                         Уточнить наличие
-                        <span aria-hidden="true">↗</span>
+                        <HarpoonIcon />
                       </a>
                     </div>
                   </article>

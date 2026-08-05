@@ -20,10 +20,21 @@ test("exports the preserved Russian storefront as an editorial home page", async
   assert.match(html, /ППП\s*—\s*предельно простая паста/);
   assert.match(html, /И\s+пусть никто не\s+уйдет обиженным!/);
   assert.match(html, /Выбрать, заказать, получить/);
+  assert.match(html, /весь ассортимент и\s+действующие цены/);
+  assert.doesNotMatch(html, /ориентировочные цены|актуальную цену|стоимость на/);
   assert.doesNotMatch(html, /Feed not found\.|id="novosti"|>Новости</);
   assert.doesNotMatch(html, /id="catalog"/);
   assert.match(html, new RegExp(`href="${basePath}/catalog/"`));
-  assert.match(html, /ул\. Строителей/);
+  assert.ok(html.includes("ул.\u00a0Строителей"));
+  assert.ok(html.includes("д.\u00a07"));
+  assert.ok(html.includes("+7\u00a0916\u00a0675\u201114\u201152"));
+  assert.match(html, /метро\s+«Вавиловская»/);
+  assert.match(html, /11:00—20:00/);
+  assert.match(html, /harpoon-icon/);
+  assert.match(html, /harpoon-icon__barb/);
+  assert.match(html, /harpoon-icon__rope/);
+  assert.match(html, /sun-glint/);
+  assert.doesNotMatch(html, /↗|↓/);
   assert.match(html, /application\/ld\+json/);
   assert.match(
     html,
@@ -51,9 +62,11 @@ test("exports the full working catalog on its own page", async () => {
   );
 
   assert.match(html, /<h1[^>]*>Каталог<\/h1>/);
-  assert.match(html, /Друзья!/);
-  assert.match(html, /data-current-month="true"/);
-  assert.match(html, /прайс-лист(?:а)? от/);
+  assert.match(html, /Полный ассортимент и\s+действующие цены/);
+  assert.doesNotMatch(
+    html,
+    /ориентировочные цены|уточняйте актуальные цены|меняют цены ежедневно/,
+  );
   assert.match(html, /type="search"/);
   assert.match(html, /Найти, например, нерку/);
   assert.match(html, /Уточнить наличие/);
@@ -69,8 +82,6 @@ test("keeps the full migrated catalog in a dedicated data file", async () => {
   const itemCount = (source.match(/\bitem\(/g) ?? []).length;
 
   assert.ok(itemCount > 100, `expected more than 100 products, found ${itemCount}`);
-  assert.match(source, /catalogUpdatedAt = "2026-01"/);
-  assert.match(source, /formatCatalogUpdated\(catalogUpdatedAt\)/);
   assert.match(source, /Свежемороженая рыба/);
   assert.match(source, /Сельдь слабосоленая/);
 });

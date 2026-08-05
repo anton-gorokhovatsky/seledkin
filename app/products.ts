@@ -23,6 +23,8 @@ const item = (
   description: description ? typograph(description) : undefined,
 });
 
+// Служебный экспорт оставлен для совместимости с рабочими черновиками.
+// В опубликованном интерфейсе дата не показывается: цены считаются действующими.
 export const catalogUpdatedAt = "2026-01";
 
 const catalogMonthNames = [

@@ -2,8 +2,6 @@
 import type { Metadata } from "next";
 import { Catalog } from "../catalog";
 import { ContactWidget } from "../contact-widget";
-import { CurrentMonth } from "../current-month";
-import { catalogUpdated, catalogUpdatedAt } from "../products";
 import {
   SiteFooter,
   SiteHeader,
@@ -41,11 +39,7 @@ export default function CatalogPage() {
           <div className="story-shell catalog-page__hero-copy">
             <p className="section-kicker">Рыба и морепродукты · Москва</p>
             <h1 id="catalog-page-title">Каталог</h1>
-            <p>
-              Полный ассортимент и ориентировочные цены из прайс-листа от{" "}
-              <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>. На{" "}
-              <CurrentMonth /> стоимость и наличие уточняйте.
-            </p>
+            <p>Полный ассортимент и действующие цены.</p>
           </div>
           <img
             className="catalog-page__fish-school"
@@ -61,8 +55,7 @@ export default function CatalogPage() {
           <div className="story-shell catalog-page__closing-inner">
             <p className="section-kicker">Не нашли нужное?</p>
             <p>
-              Напишите в лавку: уточним наличие, актуальную цену и подскажем,
-              что выбрать.
+              Напишите в лавку: уточним наличие и подскажем, что выбрать.
             </p>
             <a className="hero-button hero-button--primary" href={telegramOrder}>
               Спросить в телеграме

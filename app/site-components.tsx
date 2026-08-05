@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 import { MobileNav } from "./mobile-nav";
+import { HarpoonIcon } from "./harpoon-icon";
+import { Typographed } from "./typography";
 
-export const phoneLabel = "+7 916 675-14-52";
+export const phoneLabel = "+7\u00a0916\u00a0675\u201114\u201152";
 export const phoneHref = "tel:+79166751452";
 export const telegramOrder = "https://t.me/+79166751452";
 export const whatsappOrder = "https://wa.me/79166751452";
@@ -93,10 +95,10 @@ export function SiteHeader({
   ];
 
   return (
-    <>
+    <Typographed>
       <header className="site-header">
         <div className="site-header__meta">
-          <p>Москва · ул. Строителей, 7, корп. 1</p>
+          <p>Москва · м. «Вавиловская» · ул. Строителей, 7, корп. 1</p>
           <a href={phoneHref}>{phoneLabel}</a>
         </div>
 
@@ -122,82 +124,86 @@ export function SiteHeader({
 
           <a className="site-header__order" href={telegramOrder}>
             <span>Заказать</span>
-            <span aria-hidden="true">↗</span>
+            <HarpoonIcon />
           </a>
         </div>
       </header>
 
       <MobileNav homeHref={rootHref} links={links} />
-    </>
+    </Typographed>
   );
 }
 
 export function ContactsSection() {
   return (
-    <section className="contacts-source" id="kontakty" aria-labelledby="contacts-title">
-      <iframe
-        className="contacts-source__map"
-        title="Карта проезда к магазину на улице Строителей"
-        src="https://yandex.ru/map-widget/v1/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%A1%D1%82%D1%80%D0%BE%D0%B8%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%2C%207%D0%BA1&z=15"
-        loading="lazy"
-      />
-      <div className="contacts-source__card">
-        <p className="section-kicker">Приехать в лавку</p>
-        <h2 id="contacts-title">Магазин на улице Строителей</h2>
-        <address>
-          <p>
-            <strong>Телефон:</strong> <a href={phoneHref}>{phoneLabel}</a>
-          </p>
-          <p>
-            <strong>Адрес лавки:</strong> Москва, ул. Строителей, д. 7, корп. 1.
-            Метро «Вавиловская», метро «Университет»
-          </p>
-          <p>
-            <strong>Время работы:</strong>
-            <br />Ежедневно с 11:00 до 20:00
-          </p>
-        </address>
-        <SocialLinks />
-      </div>
-    </section>
+    <Typographed>
+      <section className="contacts-source" id="kontakty" aria-labelledby="contacts-title">
+        <iframe
+          className="contacts-source__map"
+          title="Карта проезда к магазину на улице Строителей"
+          src="https://yandex.ru/map-widget/v1/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%A1%D1%82%D1%80%D0%BE%D0%B8%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%2C%207%D0%BA1&z=15"
+          loading="lazy"
+        />
+        <div className="contacts-source__card">
+          <p className="section-kicker">Приехать в лавку</p>
+          <h2 id="contacts-title">Магазин на улице Строителей</h2>
+          <address>
+            <p>
+              <strong>Телефон:</strong> <a href={phoneHref}>{phoneLabel}</a>
+            </p>
+            <p>
+              <strong>Адрес лавки:</strong> Москва, ул. Строителей, д. 7, корп. 1.
+              Около 300 м от метро «Вавиловская».
+            </p>
+            <p>
+              <strong>Время работы:</strong>
+              <br />Ежедневно, 11:00—20:00
+            </p>
+          </address>
+          <SocialLinks />
+        </div>
+      </section>
+    </Typographed>
   );
 }
 
 export function SiteFooter({ basePath }: { basePath: string }) {
   return (
-    <footer className="source-footer">
-      <div className="source-footer__feature">
-        <figure className="source-footer__salmon">
-          <img
-            src={`${basePath}/images/salmon-cat.jpg`}
-            alt="Кот Лосось греется на солнце с закрытыми глазами"
-            loading="lazy"
-            decoding="async"
-          />
-          <figcaption>Лосось, кот рыбной лавки</figcaption>
-        </figure>
+    <Typographed>
+      <footer className="source-footer">
+        <div className="source-footer__feature">
+          <figure className="source-footer__salmon">
+            <img
+              src={`${basePath}/images/salmon-cat.jpg`}
+              alt="Кот Лосось греется на солнце с закрытыми глазами"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>Лосось, кот рыбной лавки</figcaption>
+          </figure>
 
-        <div className="source-footer__copy">
-          <p className="source-footer__eyebrow">Кот Лосось</p>
-          <h2>Ничего не рекламирует, просто напоминает.</h2>
-          <p className="source-footer__postscript">
-            P. S.: а еще мы публикуем советы по приготовлению и обработке рыбы,
-            все наши новости, в т. ч. об ассортименте, в наших социальных сетях.
-            <br />Подписывайтесь!
-          </p>
-          <div className="source-footer__actions">
-            <a
-              className="order-pill source-footer__channel"
-              href="https://t.me/kapitanseledkin"
-            >
-              Читать в телеграме
-            </a>
-            <SocialLinks light />
+          <div className="source-footer__copy">
+            <p className="source-footer__eyebrow">Кот Лосось</p>
+            <h2>Ничего не рекламирует, просто напоминает.</h2>
+            <p className="source-footer__postscript">
+              P. S.: а еще мы публикуем советы по приготовлению и обработке рыбы,
+              все наши новости, в т. ч. об ассортименте, в наших социальных сетях.
+              <br />Подписывайтесь!
+            </p>
+            <div className="source-footer__actions">
+              <a
+                className="order-pill source-footer__channel"
+                href="https://t.me/kapitanseledkin"
+              >
+                Читать в телеграме
+              </a>
+              <SocialLinks light />
+            </div>
           </div>
         </div>
-      </div>
-      <div className="source-footer__rule" />
-      <small>© «Рыбная лавка капитана Селедкина», 2026</small>
-    </footer>
+        <div className="source-footer__rule" />
+        <small>© «Рыбная лавка капитана Селедкина», 2026</small>
+      </footer>
+    </Typographed>
   );
 }

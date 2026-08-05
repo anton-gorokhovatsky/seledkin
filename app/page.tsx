@@ -1,8 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { ContactWidget } from "./contact-widget";
-import { CurrentMonth } from "./current-month";
+import { HarpoonIcon } from "./harpoon-icon";
 import { HeroVideo } from "./hero-video";
-import { catalogUpdated, catalogUpdatedAt } from "./products";
 import {
   ContactsSection,
   SiteFooter,
@@ -73,6 +72,46 @@ const journalEntries = [
     alt: "Рыба и готовые блюда рыбной лавки",
   },
 ] as const;
+
+function SunGlint() {
+  return (
+    <svg
+      className="sun-glint"
+      viewBox="0 0 240 92"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <linearGradient
+          id="sun-glint-gold"
+          x1="82"
+          y1="46"
+          x2="225"
+          y2="46"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0" stopColor="#8d5a1f" />
+          <stop offset="0.31" stopColor="#d6a33f" />
+          <stop offset="0.5" stopColor="#fff1a8" />
+          <stop offset="0.67" stopColor="#d0942f" />
+          <stop offset="1" stopColor="#99601d" />
+        </linearGradient>
+      </defs>
+      <circle
+        className="sun-glint__sun"
+        cx="190"
+        cy="18"
+        r="15"
+        fill="url(#sun-glint-gold)"
+      />
+      <path
+        className="sun-glint__water"
+        d="M142 49h83M104 61h81M154 73h68M82 84h55"
+        stroke="url(#sun-glint-gold)"
+      />
+    </svg>
+  );
+}
 
 export default function Home() {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -149,7 +188,7 @@ export default function Home() {
             href="#chto-prodaem"
             aria-label="Листать к товарам"
           >
-            <span aria-hidden="true">↓</span>
+            <HarpoonIcon direction="south" />
           </a>
         </section>
 
@@ -166,7 +205,7 @@ export default function Home() {
               </h2>
               <p>
                 «Рыбная лавка капитана Селедкина» — небольшой магазин в
-                нескольких минутах ходьбы от метро «Университет».
+                нескольких минутах ходьбы от метро «Вавиловская».
               </p>
               <p>
                 Казалось бы, обычная торговая точка, но нас уже знают не только
@@ -175,12 +214,8 @@ export default function Home() {
               </p>
               <a className="story-link" href={catalogHref}>
                 Открыть каталог и цены
-                <span aria-hidden="true">↗</span>
+                <HarpoonIcon />
               </a>
-              <p className="assortment-story__date">
-                Прайс-лист от{" "}
-                <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>
-              </p>
             </div>
 
             <figure className="assortment-story__hero-image">
@@ -205,7 +240,7 @@ export default function Home() {
                 </span>
                 <span className="assortment-card__label">{category.label}</span>
                 <span className="assortment-card__arrow" aria-hidden="true">
-                  ↗
+                  <HarpoonIcon />
                 </span>
               </a>
             ))}
@@ -230,12 +265,7 @@ export default function Home() {
                 консерванта, или с «человеческим» консервантом — сорбатом калия.
               </p>
               <p className="caviar-note__price">
-                Цена в исходном прайс-листе: 3500 ₽ за 250 граммов.
-                <span className="price-context">
-                  Источник — прайс-лист от{" "}
-                  <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>;
-                  актуальную цену на <CurrentMonth /> уточняйте.
-                </span>
+                Цена: 3500 ₽ за 250 граммов.
               </p>
               <p>
                 Заказы принимаются в{" "}
@@ -260,9 +290,23 @@ export default function Home() {
           <header className="story-shell principles-story__header">
             <p className="section-kicker">О лавке</p>
             <h2 id="principles-title">Почему о нас говорят?</h2>
+            <SunGlint />
           </header>
 
           <article className="story-shell principle-story">
+            <span className="principle-story__number" aria-hidden="true">
+              01
+            </span>
+            <h3>Во-первых, это качество.</h3>
+            <p className="principle-story__body">
+              Мы изучаем предложения поставщиков и выбираем только рыбу
+              свежего завоза и не вымороженную. Мы закупаем рыбу, быстро
+              замороженную после поимки прямо на промысле, и ни разу с тех пор
+              не размораживавшуюся: покупатель разморозит её сам уже дома. В
+              лавке её быстро разбирают, а склада у нас нет, весь наш товар
+              лежит в прилавках-холодильниках. Поэтому рыба не залеживается, мы
+              постоянно подвозим свежемороженую продукцию.
+            </p>
             <div className="principle-story__images">
               <img
                 src={asset("/images/fish-08.jpg")}
@@ -273,24 +317,20 @@ export default function Home() {
                 alt="Форель на упаковочной бумаге"
               />
             </div>
-            <div className="principle-story__copy">
-              <span className="principle-story__number" aria-hidden="true">
-                01
-              </span>
-              <h3>Во-первых, это качество.</h3>
-              <p>
-                Мы изучаем предложения поставщиков и выбираем только рыбу
-                свежего завоза и не вымороженную. Мы закупаем рыбу, быстро
-                замороженную после поимки прямо на промысле, и ни разу с тех
-                пор не размораживавшуюся: покупатель разморозит её сам уже дома.
-                В лавке её быстро разбирают, а склада у нас нет, весь наш товар
-                лежит в прилавках-холодильниках. Поэтому рыба не залеживается,
-                мы постоянно подвозим свежемороженую продукцию.
-              </p>
-            </div>
           </article>
 
           <article className="story-shell principle-story principle-story--reverse">
+            <span className="principle-story__number" aria-hidden="true">
+              02
+            </span>
+            <h3>Во-вторых, ассортимент.</h3>
+            <p className="principle-story__body">
+              Хоть магазин и невелик, мы предлагаем и достаточно обычную рыбу
+              для повседневного приготовления, и интересные деликатесы. При
+              этом настоящим деликатесом могут стать и самые простые, казалось
+              бы, виды — например, купленная у нас мороженая сельдь, если
+              посолить её грамотно и правильно.
+            </p>
             <div className="principle-story__images">
               <img
                 src={asset("/images/fish-07.jpg")}
@@ -298,22 +338,19 @@ export default function Home() {
               />
               <img src={asset("/images/fish-11.jpg")} alt="Тунец в кунжуте" />
             </div>
-            <div className="principle-story__copy">
-              <span className="principle-story__number" aria-hidden="true">
-                02
-              </span>
-              <h3>Во-вторых, ассортимент.</h3>
-              <p>
-                Хоть магазин и невелик, мы предлагаем и достаточно обычную
-                рыбу для повседневного приготовления, и интересные деликатесы.
-                При этом настоящим деликатесом могут стать и самые простые,
-                казалось бы, виды — например, купленная у нас мороженая сельдь,
-                если посолить её грамотно и правильно.
-              </p>
-            </div>
           </article>
 
           <article className="story-shell principle-story">
+            <span className="principle-story__number" aria-hidden="true">
+              03
+            </span>
+            <h3>
+              И это наша третья фирменная фишка — от слова «fish», разумеется.
+            </h3>
+            <p className="principle-story__body">
+              Наши продавцы и консультанты всегда делятся советами — или
+              подскажут, где их прочитать.
+            </p>
             <div className="principle-story__images">
               <img
                 src={asset("/images/fish-12.jpg")}
@@ -323,18 +360,6 @@ export default function Home() {
                 src={asset("/images/fish-09.jpg")}
                 alt="Скумбрия и специи"
               />
-            </div>
-            <div className="principle-story__copy">
-              <span className="principle-story__number" aria-hidden="true">
-                03
-              </span>
-              <h3>
-                И это наша третья фирменная фишка — от слова «fish», разумеется.
-              </h3>
-              <p>
-                Наши продавцы и консультанты всегда делятся советами — или
-                подскажут, где их прочитать.
-              </p>
             </div>
           </article>
         </section>
@@ -352,46 +377,49 @@ export default function Home() {
         </section>
 
         <section className="founder-story" aria-labelledby="founder-title">
-          <div className="founder-story__portrait">
-            <img src={asset("/images/oleg.jpg")} alt="Олег Гугунава с рыбой" />
-            <p>Олег Гугунава, владелец лавки</p>
-          </div>
-          <div className="founder-story__copy">
-            <p className="section-kicker">Капитан</p>
-            <h2 id="founder-title">Олег Гугунава</h2>
-            <p className="founder-role">
-              Владелец «Рыбной лавки капитана Селедкина»
-            </p>
-            <blockquote>
-              <p className="founder-story__lead">
-                «Когда моя жена была беременна, врач посоветовал есть больше
-                рыбы и морепродуктов. Я прошелся по местным лавочкам и магазинам
-                и ужаснулся. В Москве нормальную рыбу сложно найти.
-              </p>
-              <div className="founder-story__columns">
-                <p>
-                  Некоторые мороженную рыбу заливают водой — для веса, у других
-                  с весом все «ок», но неправильно везут, либо неправильно
-                  замораживают — если продукт и не испорчен, то точно не первого
-                  качества. Свою семью я этим кормить не хотел.
+          <div className="story-shell founder-story__inner">
+            <div className="founder-story__opening">
+              <figure className="founder-story__portrait">
+                <img src={asset("/images/oleg.jpg")} alt="Олег Гугунава с рыбой" />
+                <figcaption>Олег Гугунава, владелец лавки</figcaption>
+              </figure>
+              <div className="founder-story__copy">
+                <p className="section-kicker">Капитан</p>
+                <h2 id="founder-title">Олег Гугунава</h2>
+                <p className="founder-role">
+                  Владелец «Рыбной лавки капитана Селедкина»
                 </p>
-                <p>
-                  Я позвонил знакомому во Владивосток, спросил можно ли доставить
-                  нормальной рыбы. Оказалось, что можно, но относительно
-                  большими партиями — нам столько не съесть. Походил по знакомым
-                  и соседям — оказалось, что спрос есть, поэтому решили
-                  скинуться и взять на всех. Через какое-то время открыл «лавку
-                  Капитана Селедкина».
-                </p>
-                <p>
-                  У нас весь бизнес основан на качестве товара и на нормах
-                  работы с продуктом. Забудешь, например заморозку включить —
-                  рыба испортится, неправильно примешь от поставщика — старая
-                  рыба будет лежать месяца и портится. Мы следим за такими
-                  вещами, поэтому можем гарантировать хорошую рыбу и
-                  морепродукты.
-                </p>
+                <blockquote>
+                  <p className="founder-story__lead">
+                    «Когда моя жена была беременна, врач посоветовал есть больше
+                    рыбы и морепродуктов. Я прошелся по местным лавочкам и
+                    магазинам и ужаснулся. В Москве нормальную рыбу сложно найти.
+                  </p>
+                </blockquote>
               </div>
+            </div>
+            <blockquote className="founder-story__columns">
+              <p>
+                Некоторые мороженную рыбу заливают водой — для веса, у других с
+                весом все «ок», но неправильно везут, либо неправильно
+                замораживают — если продукт и не испорчен, то точно не первого
+                качества. Свою семью я этим кормить не хотел.
+              </p>
+              <p>
+                Я позвонил знакомому во Владивосток, спросил можно ли доставить
+                нормальной рыбы. Оказалось, что можно, но относительно большими
+                партиями — нам столько не съесть. Походил по знакомым и соседям
+                — оказалось, что спрос есть, поэтому решили скинуться и взять
+                на всех. Через какое-то время открыл «лавку Капитана
+                Селедкина».
+              </p>
+              <p>
+                У нас весь бизнес основан на качестве товара и на нормах работы
+                с продуктом. Забудешь, например заморозку включить — рыба
+                испортится, неправильно примешь от поставщика — старая рыба
+                будет лежать месяца и портится. Мы следим за такими вещами,
+                поэтому можем гарантировать хорошую рыбу и морепродукты.
+              </p>
             </blockquote>
           </div>
         </section>
@@ -407,8 +435,8 @@ export default function Home() {
               <h2 id="ship-log-title">Судовой журнал</h2>
             </div>
             <p>
-              Избранные записи о рыбе, еде и жизни маленькой лавки на
-              Университете.
+              Избранные записи о рыбе, еде и жизни маленькой лавки у метро
+              «Вавиловская».
             </p>
           </header>
 
@@ -432,7 +460,7 @@ export default function Home() {
                 <p>{entry.excerpt}</p>
                 <a className="story-link" href={entry.href}>
                   Читать запись
-                  <span aria-hidden="true">↗</span>
+                  <HarpoonIcon />
                 </a>
               </article>
             ))}
@@ -440,7 +468,7 @@ export default function Home() {
 
           <a className="ship-log__all" href="https://t.me/kapitanseledkin">
             Читать весь судовой журнал в телеграме
-            <span aria-hidden="true">↗</span>
+            <HarpoonIcon />
           </a>
         </section>
 
@@ -469,13 +497,11 @@ export default function Home() {
                 <div>
                   <h3>Выбрать</h3>
                   <p>
-                    В каталоге — весь перенесенный ассортимент и ориентировочные
-                    цены. Наличие и стоимость на <CurrentMonth /> нужно
-                    уточнить.
+                    В каталоге — весь ассортимент и действующие цены.
                   </p>
                   <a className="story-link" href={catalogHref}>
                     Открыть каталог
-                    <span aria-hidden="true">↗</span>
+                    <HarpoonIcon />
                   </a>
                 </div>
               </li>
@@ -515,11 +541,6 @@ export default function Home() {
                   <p>
                     Стоимость доставки в пределах МКАД — 490 ₽. Минимальной
                     суммы заказа нет, это удобно.
-                    <span className="price-context">
-                      Стоимость перенесена из материалов от{" "}
-                      <time dateTime={catalogUpdatedAt}>{catalogUpdated}</time>;
-                      на <CurrentMonth /> подтвердите её при заказе.
-                    </span>
                   </p>
                 </div>
               </li>
