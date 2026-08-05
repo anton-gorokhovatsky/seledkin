@@ -31,9 +31,10 @@ test("exports the preserved Russian storefront as an editorial home page", async
   assert.match(html, /метро\s+«Вавиловская»/);
   assert.match(html, /11:00—20:00/);
   assert.match(html, /harpoon-icon/);
-  assert.match(html, /harpoon-icon__barb/);
+  assert.match(html, /harpoon-icon__head/);
   assert.match(html, /harpoon-icon__rope/);
   assert.match(html, /sun-glint/);
+  assert.match(html, /sea-pattern/);
   assert.doesNotMatch(html, /↗|↓/);
   assert.match(html, /application\/ld\+json/);
   assert.match(

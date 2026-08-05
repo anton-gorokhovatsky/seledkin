@@ -22,12 +22,11 @@ export function HarpoonIcon({
       aria-hidden="true"
       focusable="false"
     >
-      <path className="harpoon-icon__shaft" d="M10.8 33.2 31.3 12.8" />
+      <path className="harpoon-icon__shaft" d="M10.8 33.2 32.6 13.4" />
       <path
         className="harpoon-icon__head"
-        d="M43 4 35 18 27 9Z"
+        d="M43 4 35.3 16.4 29.9 10.4Z"
       />
-      <path className="harpoon-icon__barb" d="m31.4 13.2-7.1 2.2 4.9 4.8Z" />
       <circle className="harpoon-icon__eye" cx="10.8" cy="33.2" r="2.55" />
       <path
         className="harpoon-icon__rope"
