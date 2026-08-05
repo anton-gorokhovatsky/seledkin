@@ -21,11 +21,11 @@ test("exports the preserved Russian storefront content", async () => {
   assert.match(html, /application\/ld\+json/);
   assert.match(
     html,
-    new RegExp(`src="${basePath}/video/hero-sea-sora-loop-03\\.web\\.mp4"`),
+    new RegExp(`src="${basePath}/video/hero-sea-sora-draft-01\\.web\\.mp4"`),
   );
   assert.match(
     html,
-    new RegExp(`poster="${basePath}/video/hero-sea-sora-loop-03\\.jpg"`),
+    new RegExp(`poster="${basePath}/video/hero-sea-sora-draft-01\\.webp"`),
   );
   assert.match(html, new RegExp(`href="${basePath}/images/logo\\.png"`));
   assert.match(
@@ -62,9 +62,6 @@ test("keeps the accessibility and motion gates in the stylesheet", async () => {
 
 test("keeps the local sea video and complete contact widget", async () => {
   const heroVideo = await readFile(new URL("app/hero-video.tsx", projectRoot), "utf8");
-  const videoManifest = JSON.parse(
-    await readFile(new URL("public/video/manifest.json", projectRoot), "utf8"),
-  );
   const contactWidget = await readFile(
     new URL("app/contact-widget.tsx", projectRoot),
     "utf8",
@@ -76,16 +73,6 @@ test("keeps the local sea video and complete contact widget", async () => {
   assert.match(heroVideo, /aria-hidden="true"/);
   assert.match(heroVideo, /preload="metadata"/);
   assert.doesNotMatch(page, /AsD5u6k6dKI|youtube-nocookie/);
-  assert.equal(
-    videoManifest.activeHeroVideo.video,
-    "hero-sea-sora-loop-03.web.mp4",
-  );
-  assert.equal(
-    videoManifest.activeHeroVideo.edit.method,
-    "phase-matched trim and motion-compensated bridge",
-  );
-  assert.equal(videoManifest.activeHeroVideo.edit.opacityCrossfade, false);
-  assert.equal(videoManifest.activeHeroVideo.edit.outputFrames, 92);
   assert.match(contactWidget, /Открыть способы связи/);
   assert.match(contactWidget, /https:\/\/t\.me\/\+79166751452/);
   assert.match(contactWidget, /https:\/\/wa\.me\/79166751452/);

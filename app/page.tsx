@@ -84,8 +84,8 @@ export default function Home() {
   const asset = (path: string) => `${basePath}${path}`;
   const fishSchoolImage = asset("/images/fish-school.svg");
   const logoImage = asset("/images/logo-redrawn.svg");
-  const heroVideo = asset("/video/hero-sea-sora-loop-03.web.mp4");
-  const heroPoster = asset("/video/hero-sea-sora-loop-03.jpg");
+  const heroVideo = asset("/video/hero-sea-sora-draft-01.web.mp4");
+  const heroPoster = asset("/video/hero-sea-sora-draft-01.webp");
   const siteUrl = basePath
     ? `https://anton-gorokhovatsky.github.io${basePath}`
     : "https://ks.fish";
@@ -96,7 +96,7 @@ export default function Home() {
     name: "Рыбная лавка капитана Селедкина",
     url: `${siteUrl}/`,
     telephone: "+79166751452",
-    image: `${siteUrl}/video/hero-sea-sora-loop-03.jpg`,
+    image: `${siteUrl}/video/hero-sea-sora-draft-01.webp`,
     address: {
       "@type": "PostalAddress",
       streetAddress: "ул. Строителей, д. 7, корп. 1",
