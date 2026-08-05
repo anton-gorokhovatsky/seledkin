@@ -153,8 +153,10 @@ test("keeps the new identity assets and the Losos footer", async () => {
   );
   assert.match(seaPattern, /sea-pattern__mark/);
   assert.match(seaPattern, /markHalfWidth/);
-  assert.match(seaPattern, /clearsHeader/);
-  assert.match(seaPattern, /clearsSteps/);
-  assert.match(seaPattern, /purchaseFieldWidth\s*=\s*fieldWidth\s*\*\s*2/);
-  assert.match(seaPattern, /row\s*===\s*1\s*\|\|\s*row\s*===\s*2/);
+  assert.match(seaPattern, /purchaseBandHeight\s*=\s*620/);
+  assert.match(seaPattern, /makePurchaseMarksPath/);
+  assert.match(seaPattern, /topEnd/);
+  assert.match(seaPattern, /bottomStart/);
+  assert.match(css, /\.purchase-story__poster\s*\{/);
+  assert.match(css, /\.purchase-story__layout\s*\{[^}]*padding-top:/s);
 });
