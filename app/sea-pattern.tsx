@@ -5,6 +5,7 @@ type SeaPatternProps = {
 };
 
 const fieldWidth = 1428;
+const purchaseFieldWidth = fieldWidth * 2;
 const fieldHeight = 1350;
 const step = 42;
 const rowCount = 9;
@@ -27,26 +28,24 @@ function boundaryY(boundary: number, x: number) {
 
 function makeMarksPath(variant: "default" | "purchase" = "default") {
   const marks: string[] = [];
-  const columnCount = fieldWidth / step;
+  const patternWidth = variant === "purchase" ? purchaseFieldWidth : fieldWidth;
+  const columnCount = patternWidth / step;
 
   for (let row = 0; row < rowCount; row += 1) {
     const phaseShift = row % 2 === 0 ? step / 2 : 0;
 
     for (let column = 0; column < columnCount; column += 1) {
       const x = column * step + phaseShift;
-      const clearsHeader = variant === "purchase" && row === 1;
+      const clearsHeader =
+        variant === "purchase" && (row === 1 || row === 2);
       const stepsEdge = 660 + Math.sin(row * 1.7) * 42;
       const clearsSteps =
         variant === "purchase" && row >= 3 && row <= 8 && x > stepsEdge;
 
       if (clearsHeader || clearsSteps) continue;
 
-      const headerClearance = variant === "purchase" ? 42 : 0;
-      const y1 =
-        boundaryY(row, x) + gap / 2 + (row === 2 ? headerClearance : 0);
-      const y2 =
-        boundaryY(row + 1, x) - gap / 2 -
-        (row === 0 ? headerClearance : 0);
+      const y1 = boundaryY(row, x) + gap / 2;
+      const y2 = boundaryY(row + 1, x) - gap / 2;
 
       marks.push(
         `M${(x - markHalfWidth).toFixed(1)} ${y1.toFixed(1)}` +
@@ -69,6 +68,7 @@ export function SeaPattern({
 }: SeaPatternProps) {
   const fieldId = `sea-pattern-field-${id}`;
   const patternPath = variant === "purchase" ? purchaseMarksPath : marksPath;
+  const patternWidth = variant === "purchase" ? purchaseFieldWidth : fieldWidth;
   const patternHeight = variant === "purchase" ? 2200 : fieldHeight;
 
   return (
@@ -82,7 +82,7 @@ export function SeaPattern({
       <defs>
         <pattern
           id={fieldId}
-          width={fieldWidth}
+          width={patternWidth}
           height={patternHeight}
           patternUnits="userSpaceOnUse"
         >
