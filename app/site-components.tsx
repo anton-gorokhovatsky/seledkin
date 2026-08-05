@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { MobileNav } from "./mobile-nav";
 import { HarpoonIcon } from "./harpoon-icon";
+import { SeaPattern } from "./sea-pattern";
 import { Typographed } from "./typography";
 
 export const phoneLabel = "+7\u00a0916\u00a0675\u201114\u201152";
@@ -10,42 +11,71 @@ export const whatsappOrder = "https://wa.me/79166751452";
 
 const socialLinks = [
   {
-    label: "телеграм",
+    label: "Телеграм",
     href: "https://t.me/kapitanseledkin",
-    mark: "➤",
-    icon: null,
+    icon: "telegram",
   },
   {
     label: "X (Twitter)",
     href: "https://twitter.com/kapitanseledkin",
-    mark: "𝕏",
-    icon: null,
+    icon: "x",
   },
   {
     label: "YouTube",
     href: "https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos",
-    mark: "▶",
-    icon: null,
+    icon: "youtube",
   },
   {
     label: "SoundCloud",
     href: "https://soundcloud.com/kapitanseledkin",
-    mark: null,
     icon: "soundcloud",
   },
 ] as const;
 
-function SoundCloudIcon() {
+function SocialIcon({ name }: { name: (typeof socialLinks)[number]["icon"] }) {
+  if (name === "telegram") {
+    return (
+      <svg className="social-icon" aria-hidden="true" viewBox="0 0 24 24">
+        <path d="M21.5 3.2 2.9 10.3c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.7c.2.7.8.9 1.4.4l2.7-2.2 4.8 3.5c.9.5 1.5.2 1.7-.8L23 4.7c.3-1.3-.5-1.9-1.5-1.5ZM8.8 12.9l9.2-5.8c.5-.3.9-.1.5.2l-7.6 6.9-.3 3.2-1.8-4.5Z" />
+      </svg>
+    );
+  }
+
+  if (name === "x") {
+    return (
+      <svg className="social-icon" aria-hidden="true" viewBox="0 0 24 24">
+        <path d="M18.2 2.3h3.3l-7.2 8.2 8.5 11.2h-6.7l-5.2-6.8-6 6.8H1.7l7.7-8.8L1.3 2.3h6.8l4.7 6.2 5.4-6.2Zm-1.1 17.5h1.8L7.1 4.1h-2l12 15.7Z" />
+      </svg>
+    );
+  }
+
+  if (name === "youtube") {
+    return (
+      <svg className="social-icon" aria-hidden="true" viewBox="0 0 24 24">
+        <rect
+          x="2.3"
+          y="5.5"
+          width="19.4"
+          height="13"
+          rx="4"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.7"
+        />
+        <path d="m10 8.7 5.4 3.3-5.4 3.3Z" />
+      </svg>
+    );
+  }
+
   return (
     <svg
-      className="social-icon social-icon--soundcloud"
+      className="social-icon"
       aria-hidden="true"
-      viewBox="0 0 100 100"
+      viewBox="0 0 24 24"
     >
       <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M50 100c27.614 0 50-22.386 50-50S77.614 0 50 0 0 22.386 0 50s22.386 50 50 50Zm19.701-52.297c-1.137 0-2.222.23-3.212.644C65.83 40.867 59.555 35 51.906 35c-1.873 0-3.7.366-5.312.99-.627.242-.792.492-.799.976V63.31a.976.976 0 0 0 .897.952h23.009c4.586 0 8.3-3.673 8.3-8.259a8.3 8.3 0 0 0-8.3-8.3Zm-27-10.759a.927.927 0 0 1 .915.91l.403 18.699-.404 6.787a.924.924 0 0 1-.915.905.92.92 0 0 1-.912-.904l-.376-6.787.373-18.605.003-.095a.917.917 0 0 1 .914-.91Zm-7.13 4.26a.69.69 0 0 0-.684-.68c-.374 0-.675.3-.683.68l-.428 15.345.428 7.044a.684.684 0 0 0 .683.676.69.69 0 0 0 .683-.68l.48-7.04-.48-15.344Zm-5.09 1.679a.579.579 0 0 1 .57-.565.58.58 0 0 1 .567.565l.56 13.702-.56 7.16a.58.58 0 0 1-.567.561.578.578 0 0 1-.57-.561l-.492-7.16.493-13.702Zm-6.49 5.881a.404.404 0 0 0-.395.39L23 56.54l.596 7.148a.403.403 0 0 0 .394.388c.21 0 .38-.168.397-.389l.676-7.147-.676-7.39a.406.406 0 0 0-.397-.387Zm3.846.92a.458.458 0 0 0-.452-.442.458.458 0 0 0-.453.449l-.562 6.85.562 7.207a.46.46 0 0 0 .453.449c.24 0 .436-.194.451-.449l.64-7.206-.64-6.857Zm10.93-8.335a.802.802 0 0 0-.8.797l-.355 14.405.358 6.932a.798.798 0 0 0 1.596-.005l.401-6.925-.401-14.408a.8.8 0 0 0-.8-.796Z"
+        className="social-icon__soundcloud"
+        d="M3 12.2v4.3m2.5-6.2v6.2M8 8.1v8.4m2.5-10.2v10.2M13 9.5a4.2 4.2 0 0 1 7.8 2.1 2.6 2.6 0 0 1-.2 5.2H13"
       />
     </svg>
   );
@@ -59,16 +89,11 @@ export function SocialLinks({ light = false }: { light?: boolean }) {
     >
       {socialLinks.map((link) => (
         <a
-          className={link.icon ? "social-link--icon" : undefined}
           href={link.href}
           key={link.label}
           aria-label={link.label}
         >
-          {link.icon === "soundcloud" ? (
-            <SoundCloudIcon />
-          ) : (
-            <span aria-hidden="true">{link.mark}</span>
-          )}
+          <SocialIcon name={link.icon} />
         </a>
       ))}
     </nav>
@@ -170,18 +195,9 @@ export function ContactsSection() {
 export function SiteFooter({ basePath }: { basePath: string }) {
   return (
     <Typographed>
-      <footer className="source-footer">
+      <footer className="source-footer wave-backed">
+        <SeaPattern id="footer" tone="blue" />
         <div className="source-footer__feature">
-          <figure className="source-footer__salmon">
-            <img
-              src={`${basePath}/images/salmon-cat.jpg`}
-              alt="Кот Лосось греется на солнце с закрытыми глазами"
-              loading="lazy"
-              decoding="async"
-            />
-            <figcaption>Лосось, кот рыбной лавки</figcaption>
-          </figure>
-
           <div className="source-footer__copy">
             <p className="source-footer__eyebrow">Кот Лосось</p>
             <h2>Ничего не рекламирует, просто напоминает.</h2>
@@ -195,14 +211,27 @@ export function SiteFooter({ basePath }: { basePath: string }) {
                 className="order-pill source-footer__channel"
                 href="https://t.me/kapitanseledkin"
               >
-                Читать в телеграме
+                Читать в Телеграме
               </a>
               <SocialLinks light />
             </div>
           </div>
+
+          <figure className="source-footer__salmon">
+            <img
+              src={`${basePath}/images/salmon-cat.jpg`}
+              alt="Кот Лосось греется на солнце с закрытыми глазами"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>Лосось, кот рыбной лавки</figcaption>
+          </figure>
         </div>
-        <div className="source-footer__rule" />
-        <small>© «Рыбная лавка капитана Селедкина», 2026</small>
+        <div className="source-footer__base">
+          <small>© «Рыбная лавка капитана Селедкина», 2026</small>
+          <p>Москва · м. «Вавиловская»</p>
+          <p>Ежедневно, 11:00—20:00</p>
+        </div>
       </footer>
     </Typographed>
   );

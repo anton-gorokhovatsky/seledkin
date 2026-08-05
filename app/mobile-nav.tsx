@@ -67,7 +67,7 @@ export function MobileNav({
           </a>
         ))}
         <a className="floating-nav__order" href="https://t.me/+79166751452">
-          Заказать в телеграме
+          Заказать в Телеграме
         </a>
       </nav>
     </details>

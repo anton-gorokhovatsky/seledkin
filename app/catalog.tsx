@@ -186,7 +186,7 @@ export function Catalog() {
 
       <div className="catalog-source__order">
         <a className="order-pill order-pill--telegram" href="https://t.me/+79166751452">
-          Заказать в телеграме
+          Заказать в Телеграме
         </a>
         <a className="order-pill order-pill--whatsapp" href="https://wa.me/79166751452">
           Заказать в WhatsApp

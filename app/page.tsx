@@ -171,7 +171,7 @@ export default function Home() {
             </p>
             <div className="hero__actions">
               <a className="hero-button hero-button--primary" href={telegramOrder}>
-                Заказать в телеграме
+                Заказать в Телеграме
               </a>
               <a className="hero-button hero-button--secondary" href={catalogHref}>
                 Смотреть цены
@@ -472,7 +472,7 @@ export default function Home() {
           </div>
 
           <a className="ship-log__all" href="https://t.me/kapitanseledkin">
-            Читать весь судовой журнал в телеграме
+            Читать весь судовой журнал в Телеграме
             <HarpoonIcon />
           </a>
         </section>
@@ -528,7 +528,7 @@ export default function Home() {
                   </p>
                   <div className="purchase-steps__actions">
                     <a className="order-pill order-pill--telegram" href={telegramOrder}>
-                      Заказать в телеграме
+                      Заказать в Телеграме
                     </a>
                     <a className="order-pill order-pill--whatsapp" href={whatsappOrder}>
                       Заказать в WhatsApp

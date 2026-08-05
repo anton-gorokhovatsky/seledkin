@@ -61,7 +61,7 @@ export default function CatalogPage() {
               Напишите в лавку: уточним наличие и подскажем, что выбрать.
             </p>
             <a className="hero-button hero-button--primary" href={telegramOrder}>
-              Спросить в телеграме
+              Спросить в Телеграме
             </a>
           </div>
         </aside>

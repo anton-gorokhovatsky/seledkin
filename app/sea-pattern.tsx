@@ -3,9 +3,53 @@ type SeaPatternProps = {
   tone?: "paper" | "blue";
 };
 
+const fieldWidth = 1428;
+const fieldHeight = 1350;
+const step = 42;
+const rowCount = 9;
+const gap = 12;
+const markHalfWidth = 3.2;
+const amplitudes = [42, 51, 36, 48, 54, 39, 50, 44] as const;
+const cycles = [2, 3, 4, 2, 3, 4, 2, 3] as const;
+const phases = [0.25, 1.4, 2.35, 0.9, 2.85, 1.65, 0.5, 2.2] as const;
+
+function boundaryY(boundary: number, x: number) {
+  if (boundary === 0) return 0;
+  if (boundary === rowCount) return fieldHeight;
+
+  const index = boundary - 1;
+  const angle =
+    (x / fieldWidth) * Math.PI * 2 * cycles[index] + phases[index];
+
+  return boundary * (fieldHeight / rowCount) + amplitudes[index] * Math.sin(angle);
+}
+
+function makeMarksPath() {
+  const marks: string[] = [];
+  const columnCount = fieldWidth / step;
+
+  for (let row = 0; row < rowCount; row += 1) {
+    const phaseShift = row % 2 === 0 ? step / 2 : 0;
+
+    for (let column = 0; column < columnCount; column += 1) {
+      const x = column * step + phaseShift;
+      const y1 = boundaryY(row, x) + gap / 2;
+      const y2 = boundaryY(row + 1, x) - gap / 2;
+
+      marks.push(
+        `M${(x - markHalfWidth).toFixed(1)} ${y1.toFixed(1)}` +
+          `H${(x + markHalfWidth).toFixed(1)}` +
+          `L${x.toFixed(1)} ${y2.toFixed(1)}Z`,
+      );
+    }
+  }
+
+  return marks.join("");
+}
+
+const marksPath = makeMarksPath();
+
 export function SeaPattern({ id, tone = "paper" }: SeaPatternProps) {
-  const barsId = `sea-pattern-bars-${id}`;
-  const channelsId = `sea-pattern-channels-${id}`;
   const fieldId = `sea-pattern-field-${id}`;
 
   return (
@@ -18,80 +62,12 @@ export function SeaPattern({ id, tone = "paper" }: SeaPatternProps) {
     >
       <defs>
         <pattern
-          id={barsId}
-          width="78"
-          height="900"
-          patternUnits="userSpaceOnUse"
-        >
-          <rect className="sea-pattern__line" width="1.5" height="900" />
-          <rect
-            className="sea-pattern__line sea-pattern__line--warm"
-            x="25"
-            width="1"
-            height="900"
-          />
-          <rect
-            className="sea-pattern__line sea-pattern__line--soft"
-            x="52"
-            width="1.35"
-            height="900"
-          />
-        </pattern>
-
-        <mask
-          id={channelsId}
-          x="0"
-          y="0"
-          width="1440"
-          height="900"
-          maskUnits="userSpaceOnUse"
-          maskContentUnits="userSpaceOnUse"
-        >
-          <rect width="1440" height="900" fill="white" />
-          <path
-            d="M-140 92C72-24 242 214 470 92S834-28 1048 98s374 98 548-22"
-            fill="none"
-            stroke="black"
-            strokeWidth="76"
-          />
-          <path
-            d="M-188 286C58 142 268 420 522 278s416-90 622 38 350 98 500-40"
-            fill="none"
-            stroke="black"
-            strokeWidth="72"
-          />
-          <path
-            d="M-126 486c230-126 392 96 610-18s392-110 596 18 374 116 546-18"
-            fill="none"
-            stroke="black"
-            strokeWidth="78"
-          />
-          <path
-            d="M-174 684c236-146 430 116 674-18s382-92 578 28 360 104 530-30"
-            fill="none"
-            stroke="black"
-            strokeWidth="74"
-          />
-          <path
-            d="M-124 862c218-108 382 64 590-38s390-82 594 32 368 82 548-36"
-            fill="none"
-            stroke="black"
-            strokeWidth="70"
-          />
-        </mask>
-
-        <pattern
           id={fieldId}
-          width="1440"
-          height="900"
+          width={fieldWidth}
+          height={fieldHeight}
           patternUnits="userSpaceOnUse"
         >
-          <rect
-            width="1440"
-            height="900"
-            fill={`url(#${barsId})`}
-            mask={`url(#${channelsId})`}
-          />
+          <path className="sea-pattern__mark" d={marksPath} />
         </pattern>
       </defs>
 

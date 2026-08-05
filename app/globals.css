@@ -10,6 +10,7 @@
   --sun-brass: #a96f23;
   --sun-gold: #d6a33f;
   --sun-flash: #fff1a8;
+  --pattern-gold: #ffd700;
   --sun-brass-soft: rgba(169, 111, 35, 0.24);
   --telegram: #55a7d5;
   --whatsapp: #63ce72;
@@ -256,39 +257,48 @@ address {
 
 .social-links {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
 }
 
 .social-links a {
   display: grid;
-  width: 30px;
-  height: 30px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(0, 79, 145, 0.28);
   border-radius: 50%;
-  background: #050505;
-  color: white;
-  font-family: var(--sans);
-  font-size: 15px;
-  line-height: 1;
+  background: transparent;
+  color: var(--source-blue);
   place-items: center;
   text-decoration: none;
-  transition: transform var(--duration-fast) var(--ease-enter);
+  transition:
+    border-color var(--duration-fast) var(--ease-enter),
+    background var(--duration-fast) var(--ease-enter),
+    color var(--duration-fast) var(--ease-enter),
+    transform var(--duration-fast) var(--ease-enter);
 }
 
-.social-links a:hover {
+.social-links a:hover,
+.social-links a:focus-visible {
+  border-color: var(--source-blue);
+  background: var(--source-blue);
+  color: white;
   transform: translateY(-2px);
-}
-
-.social-links a.social-link--icon {
-  background: transparent;
-  color: #050505;
 }
 
 .social-icon {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 21px;
+  height: 21px;
   fill: currentColor;
+}
+
+.social-icon__soundcloud {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.75;
 }
 
 .site-header__nav {
@@ -1273,35 +1283,31 @@ address {
 }
 
 .source-footer {
-  min-height: 805px;
-  padding: clamp(36px, 5vw, 76px) 40px 38px;
-  background: var(--source-blue);
+  min-height: 0;
+  padding: clamp(72px, 8vw, 118px) 40px 34px;
+  background: #061f34;
   color: white;
 }
 
 .source-footer__feature {
   display: grid;
   width: min(100%, 1320px);
-  min-height: 620px;
   margin-inline: auto;
-  grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.22fr);
-  gap: clamp(54px, 8vw, 128px);
-  align-items: stretch;
+  grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.72fr);
+  gap: clamp(58px, 8vw, 126px);
+  align-items: end;
 }
 
 .source-footer__salmon {
-  display: flex;
   margin: 0;
-  flex-direction: column;
-  gap: 14px;
+  align-self: end;
 }
 
 .source-footer__salmon img {
   width: 100%;
-  min-height: 0;
-  flex: 1;
-  object-fit: cover;
-  object-position: center 28%;
+  height: auto;
+  border: 1px solid rgba(255, 241, 168, 0.22);
+  object-fit: contain;
 }
 
 .source-footer__salmon figcaption,
@@ -1317,7 +1323,8 @@ address {
 
 .source-footer__copy {
   display: flex;
-  padding-block: clamp(20px, 4vw, 64px);
+  max-width: 760px;
+  padding-block: clamp(16px, 3vw, 46px);
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
@@ -1328,9 +1335,9 @@ address {
 }
 
 .source-footer h2 {
-  max-width: 800px;
+  max-width: 740px;
   margin-bottom: clamp(32px, 4vw, 54px);
-  font-size: clamp(3.2rem, 5.8vw, 6.6rem);
+  font-size: clamp(3.2rem, 5.2vw, 6rem);
   font-style: italic;
   letter-spacing: -0.045em;
   line-height: 0.93;
@@ -1363,33 +1370,45 @@ address {
 }
 
 .social-links--light {
-  gap: 26px;
+  gap: 12px;
 }
 
 .social-links--light a {
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
+  border-color: rgba(255, 255, 255, 0.3);
   background: transparent;
-  font-size: 33px;
-}
-
-.social-links--light a.social-link--icon {
   color: white;
 }
 
-.source-footer__rule {
-  width: min(100%, 1320px);
-  height: 1px;
-  margin: clamp(48px, 6vw, 76px) auto 32px;
-  background: rgba(255, 255, 255, 0.28);
+.social-links--light a:hover,
+.social-links--light a:focus-visible {
+  border-color: var(--sun-flash);
+  background: var(--sun-flash);
+  color: #061f34;
 }
 
-.source-footer small {
-  display: block;
+.source-footer__base {
+  display: grid;
   width: min(100%, 1320px);
-  margin-inline: auto;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 13px;
+  margin: clamp(54px, 7vw, 88px) auto 0;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.26);
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.78rem;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: clamp(24px, 4vw, 62px);
+  align-items: baseline;
+}
+
+.source-footer__base p,
+.source-footer__base small {
+  margin: 0;
+  font-size: inherit;
+}
+
+.source-footer__base small {
+  color: white;
 }
 
 /* Editorial story */
@@ -1984,30 +2003,26 @@ address {
   width: 100%;
   height: 100%;
   color: var(--source-blue);
-  opacity: 0.05;
+  opacity: 0.045;
   pointer-events: none;
 }
 
-.sea-pattern__line {
+.sea-pattern__mark {
   fill: currentColor;
 }
 
-.sea-pattern__line--warm {
-  fill: var(--sun-brass);
-}
-
-.sea-pattern__line--soft {
-  opacity: 0.62;
-}
-
 .sea-pattern--blue {
-  color: var(--sun-gold);
-  opacity: 0.16;
+  color: var(--pattern-gold);
+  opacity: 0.38;
 }
 
-.sea-pattern--blue .sea-pattern__line--warm {
-  fill: var(--sun-flash);
-  opacity: 0.72;
+.purchase-story > .sea-pattern--blue {
+  z-index: 1;
+  opacity: 1;
+}
+
+.source-footer > .sea-pattern--blue {
+  opacity: 0.2;
 }
 
 .purchase-story {
@@ -2032,7 +2047,7 @@ address {
 
 .purchase-story > .story-shell {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .purchase-story__header {
@@ -2926,20 +2941,22 @@ address {
   }
 
   .source-footer {
-    min-height: 0;
-    padding: 20px 20px 36px;
+    padding: 58px 20px 28px;
   }
 
   .source-footer__feature {
     display: flex;
-    min-height: 0;
     flex-direction: column;
-    gap: 44px;
+    gap: 48px;
+  }
+
+  .source-footer__salmon {
+    order: -1;
   }
 
   .source-footer__salmon img {
-    height: min(118vw, 540px);
-    flex: none;
+    width: 100%;
+    height: auto;
   }
 
   .source-footer__copy {
@@ -2965,15 +2982,19 @@ address {
   }
 
   .social-links--light {
-    gap: 16px;
+    gap: 12px;
   }
 
-  .source-footer__rule {
-    width: 100%;
-    margin: 54px 0 28px;
+  .source-footer__base {
+    display: grid;
+    margin-top: 54px;
+    padding-top: 24px;
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
-  .source-footer small {
+  .source-footer__base,
+  .source-footer__base small {
     font-size: 11px;
   }
 

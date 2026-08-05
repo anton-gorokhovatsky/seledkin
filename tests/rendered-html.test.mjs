@@ -11,7 +11,7 @@ test("exports the preserved Russian storefront as an editorial home page", async
   assert.match(html, /<html lang="ru">/);
   assert.match(html, /Рыбная лавка/);
   assert.match(html, /капитана Селедкина/);
-  assert.match(html, /Заказать в телеграме/);
+  assert.match(html, /Заказать в Телеграме/);
   assert.match(html, /Красная икра премиум-качества/);
   assert.ok(html.includes("Почему о\u00a0нас говорят?"));
   assert.match(html, /Олег Гугунава/);
@@ -120,7 +120,7 @@ test("keeps the local sea video and complete contact widget", async () => {
   assert.match(contactWidget, /https:\/\/t\.me\/\+79166751452/);
   assert.match(contactWidget, /https:\/\/wa\.me\/79166751452/);
   assert.match(contactWidget, /tel:\+79166751452/);
-  assert.match(siteComponents, /social-icon--soundcloud/);
+  assert.match(siteComponents, /social-icon__soundcloud/);
 });
 
 test("keeps the new identity assets and the Losos footer", async () => {
@@ -130,6 +130,10 @@ test("keeps the new identity assets and the Losos footer", async () => {
     "utf8",
   );
   const css = await readFile(new URL("app/globals.css", projectRoot), "utf8");
+  const seaPattern = await readFile(
+    new URL("app/sea-pattern.tsx", projectRoot),
+    "utf8",
+  );
 
   assert.match(html, new RegExp(`src="${basePath}/images/logo-redrawn\\.svg"`));
   assert.match(catalogHtml, new RegExp(`src="${basePath}/images/fish-school\\.svg"`));
@@ -142,4 +146,7 @@ test("keeps the new identity assets and the Losos footer", async () => {
   assert.match(html, /Ничего не\s*рекламирует, просто напоминает\./);
   assert.match(css, /--serif:\s*"Iowan Old Style"/);
   assert.match(css, /--sans:\s*"Golos Text"/);
+  assert.match(css, /--pattern-gold:\s*#ffd700/);
+  assert.match(seaPattern, /sea-pattern__mark/);
+  assert.match(seaPattern, /markHalfWidth/);
 });
