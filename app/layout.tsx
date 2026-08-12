@@ -6,6 +6,15 @@ const siteUrl = basePath
   ? `https://anton-gorokhovatsky.github.io${basePath}`
   : "https://ks.fish";
 const heroUrl = `${siteUrl}/images/fish-02.jpg`;
+const themeStorageScript = `
+(() => {
+  try {
+    const theme = window.localStorage.getItem("seledkin-theme");
+    if (theme === "light" || theme === "dark") {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch {}
+})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -51,7 +60,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#ffffff",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3efe4" },
+    { media: "(prefers-color-scheme: dark)", color: "#071b24" },
+  ],
 };
 
 export default function RootLayout({
@@ -60,7 +72,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
+    <html lang="ru" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeStorageScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );

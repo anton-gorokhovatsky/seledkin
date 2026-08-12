@@ -33,6 +33,57 @@
   --ease-move: cubic-bezier(0.65, 0, 0.35, 1);
   --duration-fast: 160ms;
   --duration-medium: 260ms;
+  --page-surface: var(--paper);
+  --page-surface: light-dark(var(--paper), #071b24);
+  --page-ink: var(--ink);
+  --page-ink: light-dark(var(--ink), #eee7da);
+  --catalog-surface: var(--paper-warm);
+  --catalog-surface: light-dark(var(--paper-warm), #071b24);
+  --catalog-ink: var(--ink);
+  --catalog-ink: light-dark(var(--ink), #eee7da);
+  --catalog-muted: #777777;
+  --catalog-muted: light-dark(#777777, #afbec0);
+  --catalog-tab: #8d8d8d;
+  --catalog-tab: light-dark(#8d8d8d, #9fb0b3);
+  --catalog-line: #dedede;
+  --catalog-line: light-dark(#dedede, rgba(226, 230, 217, 0.22));
+  --catalog-line-soft: #ededed;
+  --catalog-line-soft: light-dark(#ededed, rgba(226, 230, 217, 0.16));
+  --catalog-field-line: #b9b9b9;
+  --catalog-field-line: light-dark(#b9b9b9, rgba(226, 230, 217, 0.4));
+  --catalog-control-bg: white;
+  --catalog-control-bg: light-dark(white, #102c35);
+  --catalog-accent: var(--source-blue);
+  --catalog-accent: light-dark(var(--source-blue), #82b4be);
+  --catalog-active: var(--orange);
+  --catalog-active: light-dark(var(--orange), #d0a360);
+  --catalog-pattern: var(--source-blue);
+  --catalog-pattern: light-dark(var(--source-blue), #82b4be);
+  --catalog-whatsapp-bg: white;
+  --catalog-whatsapp-bg: light-dark(white, #e6dece);
+  --catalog-whatsapp-ink: #277c36;
+  --catalog-whatsapp-ink: light-dark(#277c36, #071b24);
+  --catalog-whatsapp-border: var(--whatsapp);
+  --catalog-whatsapp-border: light-dark(var(--whatsapp), #e6dece);
+  --catalog-hover-bg: #202020;
+  --catalog-hover-bg: light-dark(#202020, #e6dece);
+  --catalog-hover-ink: white;
+  --catalog-hover-ink: light-dark(white, #071b24);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 * {
@@ -47,8 +98,8 @@ html {
 body {
   margin: 0;
   overflow-x: hidden;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--page-surface);
+  color: var(--page-ink);
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.55;
@@ -172,6 +223,13 @@ address {
   margin-inline: auto;
 }
 
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 18px;
+}
+
 .site-header__meta {
   display: flex;
   min-height: 32px;
@@ -216,6 +274,70 @@ address {
   width: 100%;
   height: 66px;
   object-fit: contain;
+  filter: invert(1) sepia(0.78) saturate(1.35) hue-rotate(347deg)
+    brightness(0.96);
+  mix-blend-mode: screen;
+  opacity: 0.94;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.54);
+  border-radius: 0;
+  appearance: none;
+  background: rgba(3, 19, 27, 0.2);
+  color: white;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.075em;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-fast) var(--ease-enter),
+    border-color var(--duration-fast) var(--ease-enter),
+    color var(--duration-fast) var(--ease-enter),
+    transform var(--duration-fast) var(--ease-enter);
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  border-color: currentColor;
+  background: rgba(3, 19, 27, 0.48);
+  transform: translateY(-1px);
+}
+
+.theme-toggle__icon {
+  width: 20px;
+  height: 20px;
+  overflow: visible;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.25;
+}
+
+.theme-toggle__night {
+  fill: currentColor;
+  stroke: none;
+  opacity: 0.24;
+}
+
+.theme-toggle__rivet {
+  fill: currentColor;
+  stroke: none;
+}
+
+.theme-toggle__label {
+  white-space: nowrap;
 }
 
 .order-pill {
@@ -994,21 +1116,21 @@ address {
   padding: 12px 78px 12px 2px;
   appearance: none;
   border: 0;
-  border-bottom: 1px solid #b9b9b9;
+  border-bottom: 1px solid var(--catalog-field-line);
   border-radius: 0;
   background: transparent;
-  color: var(--ink);
+  color: var(--catalog-ink);
   font-family: var(--serif);
   font-size: 21px;
 }
 
 .catalog-search input::placeholder {
-  color: #777777;
+  color: var(--catalog-muted);
   opacity: 1;
 }
 
 .catalog-search input:focus-visible {
-  border-bottom-color: var(--source-blue);
+  border-bottom-color: var(--catalog-accent);
   outline: 3px solid #1685c1;
   outline-offset: 4px;
 }
@@ -1017,7 +1139,7 @@ address {
   position: absolute;
   top: 50%;
   right: 2px;
-  color: var(--source-blue);
+  color: var(--catalog-accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -1029,7 +1151,7 @@ address {
 .catalog-tabs {
   display: grid;
   grid-template-columns: 1.2fr repeat(7, minmax(0, 1fr));
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--catalog-line-soft);
 }
 
 .catalog-tabs button {
@@ -1038,7 +1160,7 @@ address {
   border: 0;
   border-bottom: 1px solid transparent;
   background: transparent;
-  color: #8d8d8d;
+  color: var(--catalog-tab);
   font-size: 12px;
   line-height: 1.25;
   cursor: pointer;
@@ -1046,8 +1168,8 @@ address {
 
 .catalog-tabs button:hover,
 .catalog-tabs button.is-active {
-  border-bottom-color: var(--orange);
-  color: var(--orange);
+  border-bottom-color: var(--catalog-active);
+  color: var(--catalog-active);
 }
 
 .catalog-select {
@@ -1056,7 +1178,7 @@ address {
 
 .catalog-source__result {
   margin-bottom: 28px;
-  color: #777777;
+  color: var(--catalog-muted);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -1073,7 +1195,7 @@ address {
 
 .catalog-category h3 {
   margin-bottom: 22px;
-  color: var(--source-blue);
+  color: var(--catalog-accent);
   font-size: clamp(1.8rem, calc(1.35rem + 0.8vw), 2.4rem);
   font-style: italic;
   line-height: 1.15;
@@ -1096,7 +1218,7 @@ address {
   display: flex;
   min-width: 0;
   padding-bottom: 9px;
-  border-bottom: 1px solid #dedede;
+  border-bottom: 1px solid var(--catalog-line);
   align-items: baseline;
   justify-content: space-between;
   gap: 18px;
@@ -1145,7 +1267,7 @@ address {
   padding: 10px 0 8px 8px;
   flex: 0 0 auto;
   align-items: center;
-  color: var(--source-blue);
+  color: var(--catalog-accent);
   font-size: 11px;
   font-weight: 700;
   gap: 6px;
@@ -1182,7 +1304,7 @@ address {
   border: 0;
   border-bottom: 1px solid currentColor;
   background: transparent;
-  color: var(--source-blue);
+  color: var(--catalog-accent);
   cursor: pointer;
   font-weight: 700;
 }
@@ -1195,16 +1317,16 @@ address {
 }
 
 .catalog-source__order .order-pill--whatsapp {
-  border: 1px solid var(--whatsapp);
-  background: white;
-  color: #277c36;
+  border: 1px solid var(--catalog-whatsapp-border);
+  background: var(--catalog-whatsapp-bg);
+  color: var(--catalog-whatsapp-ink);
 }
 
 .catalog-source__order .order-pill--whatsapp:hover,
 .catalog-source__order .order-pill--whatsapp:focus-visible {
-  border-color: #202020;
-  background: #202020;
-  color: white;
+  border-color: var(--catalog-hover-bg);
+  background: var(--catalog-hover-bg);
+  color: var(--catalog-hover-ink);
 }
 
 .catalog-tail {
@@ -2182,7 +2304,8 @@ address {
 /* Catalog page */
 
 .catalog-page {
-  background: var(--paper-warm);
+  background: var(--catalog-surface);
+  color: var(--catalog-ink);
 }
 
 .catalog-page__hero {
@@ -2233,7 +2356,11 @@ address {
 
 .catalog-page .catalog-source {
   padding: clamp(94px, 9vw, 148px) 0 0;
-  background: var(--paper-warm);
+  background: var(--catalog-surface);
+}
+
+.catalog-page .catalog-source > .sea-pattern {
+  color: var(--catalog-pattern);
 }
 
 .catalog-page .catalog-source__heading {
@@ -2454,7 +2581,7 @@ address {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 940px) {
   .site-header__meta {
     display: none;
   }
@@ -2475,6 +2602,14 @@ address {
 
   .site-header__nav,
   .site-header__order {
+    display: none;
+  }
+
+  .site-header__actions {
+    margin-right: 68px;
+  }
+
+  .theme-toggle__label {
     display: none;
   }
 
@@ -2815,7 +2950,7 @@ address {
     position: absolute;
     top: 50%;
     right: 19px;
-    color: var(--orange);
+    color: var(--catalog-active);
     content: "⌄";
     pointer-events: none;
     transform: translateY(-56%);
@@ -2826,10 +2961,10 @@ address {
     min-height: 54px;
     padding: 12px 48px 12px 18px;
     appearance: none;
-    border: 1px solid var(--orange);
+    border: 1px solid var(--catalog-active);
     border-radius: 0;
-    background: white;
-    color: var(--orange);
+    background: var(--catalog-control-bg);
+    color: var(--catalog-active);
     font-weight: 700;
   }
 

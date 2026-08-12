@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { HarpoonIcon } from "../harpoon-icon";
 import { catalog, type CatalogItem } from "../products";
 import { SeaPattern } from "../sea-pattern";
+import { ThemeToggle } from "../theme-toggle";
 import {
   phoneHref,
   phoneLabel,
@@ -116,10 +117,13 @@ export default function ConceptPage() {
               <a href="#journal">Судовой журнал</a>
               <a href="#contacts">Контакты</a>
             </nav>
-            <a className={styles.headerOrder} href={telegramOrder}>
-              Заказать
-              <HarpoonIcon />
-            </a>
+            <div className={styles.headerActions}>
+              <ThemeToggle className={styles.themeToggle} />
+              <a className={styles.headerOrder} href={telegramOrder}>
+                Заказать
+                <HarpoonIcon />
+              </a>
+            </div>
           </div>
         </header>
 

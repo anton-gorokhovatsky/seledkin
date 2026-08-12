@@ -108,6 +108,41 @@ test("keeps the accessibility and motion gates in the stylesheet", async () => {
   assert.match(css, /font-size:\s*clamp\(/);
 });
 
+test("exports the system-aware Night Shift theme and its accessible toggle", async () => {
+  const html = await readFile(new URL("out/index.html", projectRoot), "utf8");
+  const catalogHtml = await readFile(
+    new URL("out/catalog/index.html", projectRoot),
+    "utf8",
+  );
+  const css = await readFile(new URL("app/globals.css", projectRoot), "utf8");
+  const conceptCss = await readFile(
+    new URL("app/concept/concept.module.css", projectRoot),
+    "utf8",
+  );
+  const layout = await readFile(new URL("app/layout.tsx", projectRoot), "utf8");
+  const toggle = await readFile(
+    new URL("app/theme-toggle.tsx", projectRoot),
+    "utf8",
+  );
+
+  for (const page of [html, catalogHtml]) {
+    assert.match(page, /Ночная смена/);
+    assert.match(
+      page,
+      /aria-label="Ночная смена — включить тёмную тему"/,
+    );
+    assert.doesNotMatch(page, /<html[^>]+data-theme=/);
+  }
+
+  assert.match(css, /prefers-color-scheme:\s*dark/);
+  assert.match(css, /:root\[data-theme="dark"\]/);
+  assert.match(css, /min-(?:width|height):\s*44px/);
+  assert.match(conceptCss, /light-dark\(#f3efe4,\s*#071b24\)/);
+  assert.match(layout, /seledkin-theme/);
+  assert.match(toggle, /window\.localStorage\.setItem\(storageKey, theme\)/);
+  assert.match(toggle, /window\.matchMedia\(darkThemeQuery\)/);
+});
+
 test("keeps ordering and contact routes complete without floating controls", async () => {
   const html = await readFile(new URL("out/index.html", projectRoot), "utf8");
 
@@ -147,6 +182,10 @@ test("keeps the new identity assets and the Losos footer", async () => {
   assert.match(css, /--serif:\s*"Iowan Old Style"/);
   assert.match(css, /--sans:\s*"Golos Text"/);
   assert.match(css, /--pattern-gold:\s*#ffd700/);
+  assert.match(
+    css,
+    /\.site-header__brand img\s*\{[^}]*mix-blend-mode:\s*screen/s,
+  );
   assert.match(conceptCss, /--concept-yellow:\s*#ffd700/);
   assert.match(conceptCss, /\.order\s*\{[^}]*color:\s*var\(--concept-yellow\)/s);
   assert.match(seaPattern, /sea-pattern__mark/);

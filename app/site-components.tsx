@@ -2,6 +2,7 @@
 import { MobileNav } from "./mobile-nav";
 import { HarpoonIcon } from "./harpoon-icon";
 import { SeaPattern } from "./sea-pattern";
+import { ThemeToggle } from "./theme-toggle";
 import { Typographed } from "./typography";
 
 export const phoneLabel = "+7\u00a0916\u00a0675\u201114\u201152";
@@ -147,10 +148,13 @@ export function SiteHeader({
             ))}
           </nav>
 
-          <a className="site-header__order" href={telegramOrder}>
-            <span>Заказать</span>
-            <HarpoonIcon />
-          </a>
+          <div className="site-header__actions">
+            <ThemeToggle />
+            <a className="site-header__order" href={telegramOrder}>
+              <span>Заказать</span>
+              <HarpoonIcon />
+            </a>
+          </div>
         </div>
       </header>
 

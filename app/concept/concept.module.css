@@ -1,16 +1,67 @@
 .site {
   --concept-navy: #062d46;
+  --concept-navy: light-dark(#062d46, #0d3441);
   --concept-navy-dark: #041f33;
+  --concept-navy-dark: light-dark(#041f33, #03131b);
   --concept-blue: #0d5274;
+  --concept-blue: light-dark(#0d5274, #82b4be);
   --concept-paper: #f3efe4;
+  --concept-paper: light-dark(#f3efe4, #071b24);
   --concept-paper-light: #faf8f1;
+  --concept-paper-light: light-dark(#faf8f1, #0b242d);
   --concept-ice: #dce8ea;
+  --concept-ice: light-dark(#dce8ea, #102c35);
   --concept-yellow: #ffd700;
   --concept-brass: #9d6727;
+  --concept-brass: light-dark(#9d6727, #d0a360);
   --concept-line: rgba(6, 45, 70, 0.2);
+  --concept-line: light-dark(rgba(6, 45, 70, 0.2), rgba(226, 230, 217, 0.18));
+  --concept-ink: var(--concept-navy-dark);
+  --concept-ink: light-dark(var(--concept-navy-dark), #eee7da);
+  --concept-muted: #52616a;
+  --concept-muted: light-dark(#52616a, #afbec0);
+  --concept-muted-cool: #52656b;
+  --concept-muted-cool: light-dark(#52656b, #afbec0);
+  --concept-muted-deep: #42575f;
+  --concept-muted-deep: light-dark(#42575f, #afbec0);
+  --concept-on-dark: white;
+  --concept-on-dark: light-dark(white, #eee7da);
+  --concept-skip-bg: white;
+  --concept-skip-bg: light-dark(white, #eee7da);
+  --concept-skip-ink: var(--concept-navy-dark);
+  --concept-skip-ink: light-dark(var(--concept-navy-dark), #071b24);
+  --concept-meta-bg: var(--concept-navy-dark);
+  --concept-meta-bg: light-dark(var(--concept-navy-dark), #020d13);
+  --concept-meta-ink: white;
+  --concept-meta-ink: light-dark(white, #eee7da);
+  --concept-primary-bg: var(--concept-navy);
+  --concept-primary-bg: light-dark(var(--concept-navy), #e6dece);
+  --concept-primary-ink: white;
+  --concept-primary-ink: light-dark(white, #071b24);
+  --concept-primary-border: var(--concept-navy);
+  --concept-primary-border: light-dark(var(--concept-navy), #e6dece);
+  --concept-primary-mark: white;
+  --concept-primary-mark: light-dark(white, #c99851);
+  --concept-secondary-ink: var(--concept-navy);
+  --concept-secondary-ink: light-dark(var(--concept-navy), #eee7da);
+  --concept-secondary-border: var(--concept-navy);
+  --concept-secondary-border: light-dark(var(--concept-navy), rgba(230, 222, 206, 0.56));
+  --concept-secondary-hover: white;
+  --concept-secondary-hover: light-dark(white, #142f39);
+  --concept-header-mark: var(--concept-navy-dark);
+  --concept-header-mark: light-dark(var(--concept-navy-dark), #c99851);
+  --concept-strong-rule: var(--concept-navy);
+  --concept-strong-rule: light-dark(var(--concept-navy), rgba(226, 230, 217, 0.52));
+  --concept-soft-rule: rgba(6, 45, 70, 0.3);
+  --concept-soft-rule: light-dark(rgba(6, 45, 70, 0.3), rgba(226, 230, 217, 0.2));
+  --concept-footer-action-bg: white;
+  --concept-footer-action-bg: light-dark(white, #e6dece);
+  --concept-footer-action-ink: var(--concept-navy-dark);
+  --concept-footer-action-ink: light-dark(var(--concept-navy-dark), #071b24);
   overflow: clip;
   background: var(--concept-paper);
-  color: var(--concept-navy-dark);
+  color: var(--concept-ink);
+  color-scheme: inherit;
 }
 
 .site h1,
@@ -30,6 +81,7 @@
 }
 
 .site a:focus-visible,
+.site button:focus-visible,
 .site summary:focus-visible {
   outline: 3px solid #1685c1;
   outline-offset: 4px;
@@ -41,8 +93,8 @@
   top: 12px;
   left: 12px;
   padding: 12px 16px;
-  background: white;
-  color: var(--concept-navy-dark);
+  background: var(--concept-skip-bg);
+  color: var(--concept-skip-ink);
   transform: translateY(-160%);
 }
 
@@ -65,8 +117,8 @@
   display: flex;
   min-height: 32px;
   padding: 7px 32px;
-  background: var(--concept-navy-dark);
-  color: white;
+  background: var(--concept-meta-bg);
+  color: var(--concept-meta-ink);
   align-items: center;
   justify-content: space-between;
   font-size: 0.68rem;
@@ -81,7 +133,7 @@
   min-height: 86px;
   padding: 14px 32px;
   border-bottom: 1px solid var(--concept-line);
-  grid-template-columns: minmax(150px, 0.8fr) minmax(460px, 1.7fr) minmax(150px, 0.8fr);
+  grid-template-columns: minmax(150px, 0.8fr) minmax(440px, 1.7fr) auto;
   gap: 32px;
   align-items: center;
 }
@@ -96,7 +148,9 @@
 .brand img {
   width: clamp(138px, 12vw, 178px);
   height: auto;
+  filter: none;
   mix-blend-mode: multiply;
+  opacity: 1;
 }
 
 .navigation {
@@ -141,12 +195,31 @@
 
 .headerOrder {
   gap: 12px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
   justify-self: end;
+  gap: 16px;
+}
+
+.headerActions .themeToggle {
+  border-color: var(--concept-line);
+  background: transparent;
+  color: var(--concept-ink);
+}
+
+.headerActions .themeToggle:hover,
+.headerActions .themeToggle:focus-visible {
+  border-color: var(--concept-secondary-border);
+  background: var(--concept-secondary-hover);
 }
 
 .headerOrder :global(.harpoon-icon) {
   width: 28px;
   height: 28px;
+  color: var(--concept-header-mark);
 }
 
 .hero {
@@ -227,7 +300,7 @@
   display: inline-flex;
   min-height: 54px;
   padding: 14px 20px;
-  border: 1px solid var(--concept-navy);
+  border: 1px solid transparent;
   align-items: center;
   justify-content: center;
   font-size: 0.78rem;
@@ -237,17 +310,20 @@
 }
 
 .primaryAction {
-  background: var(--concept-navy);
-  color: white;
+  border-color: var(--concept-primary-border);
+  background: var(--concept-primary-bg);
+  color: var(--concept-primary-ink);
 }
 
 .primaryAction :global(.harpoon-icon) {
   width: 26px;
   height: 26px;
+  color: var(--concept-primary-mark);
 }
 
 .secondaryAction {
-  color: var(--concept-navy);
+  border-color: var(--concept-secondary-border);
+  color: var(--concept-secondary-ink);
 }
 
 .primaryAction:hover,
@@ -259,7 +335,7 @@
 
 .secondaryAction:hover,
 .secondaryAction:focus-visible {
-  background: white;
+  background: var(--concept-secondary-hover);
 }
 
 .heroFacts {
@@ -297,7 +373,7 @@
   min-width: 0;
   padding: clamp(36px, 4.7vw, 76px);
   background: var(--concept-navy);
-  color: white;
+  color: var(--concept-on-dark);
   flex-direction: column;
   justify-content: center;
 }
@@ -395,7 +471,7 @@
 }
 
 .priceBoard {
-  border-top: 2px solid var(--concept-navy);
+  border-top: 2px solid var(--concept-strong-rule);
 }
 
 .productRow {
@@ -437,7 +513,7 @@
 
 .productCopy small {
   max-width: 520px;
-  color: #52616a;
+  color: var(--concept-muted);
   font-size: 0.82rem;
   line-height: 1.45;
 }
@@ -508,7 +584,7 @@
 
 .founderRole {
   margin-top: 12px !important;
-  color: #52656b;
+  color: var(--concept-muted-cool);
   font-size: 0.82rem;
 }
 
@@ -526,7 +602,7 @@
   display: grid;
   margin-top: clamp(84px, 9vw, 132px);
   padding-top: 34px;
-  border-top: 1px solid rgba(6, 45, 70, 0.3);
+  border-top: 1px solid var(--concept-soft-rule);
   grid-template-columns: minmax(260px, 0.58fr) minmax(0, 1.42fr);
   gap: clamp(50px, 8vw, 130px);
 }
@@ -542,17 +618,17 @@
 .principlesIntro > p:last-child {
   max-width: 390px;
   margin-top: 28px !important;
-  color: #42575f;
+  color: var(--concept-muted-deep);
   font-size: 0.94rem;
   line-height: 1.65;
 }
 
 .principleList {
-  border-top: 2px solid var(--concept-navy);
+  border-top: 2px solid var(--concept-strong-rule);
 }
 
 .principleList details {
-  border-bottom: 1px solid rgba(6, 45, 70, 0.3);
+  border-bottom: 1px solid var(--concept-soft-rule);
 }
 
 .principleList summary {
@@ -767,7 +843,7 @@
 .footer {
   padding: clamp(90px, 10vw, 150px) 0 26px;
   background: var(--concept-navy-dark);
-  color: white;
+  color: var(--concept-on-dark);
 }
 
 .footerGrid {
@@ -827,9 +903,9 @@
 }
 
 .footerActions a:first-child {
-  border-color: white;
-  background: white;
-  color: var(--concept-navy-dark);
+  border-color: var(--concept-footer-action-bg);
+  background: var(--concept-footer-action-bg);
+  color: var(--concept-footer-action-ink);
 }
 
 .footerLinks {
@@ -877,6 +953,22 @@
 .footerBase a {
   min-height: 44px;
   padding-block: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme])) .brand img {
+    filter: invert(1) sepia(0.78) saturate(1.35) hue-rotate(347deg)
+      brightness(0.96);
+    mix-blend-mode: screen;
+    opacity: 0.94;
+  }
+}
+
+:global(html[data-theme="dark"]) .brand img {
+  filter: invert(1) sepia(0.78) saturate(1.35) hue-rotate(347deg)
+    brightness(0.96);
+  mix-blend-mode: screen;
+  opacity: 0.94;
 }
 
 @media (max-width: 1080px) {
@@ -973,6 +1065,15 @@
     min-height: 46px;
     padding: 0 12px;
     border: 1px solid var(--concept-navy);
+  }
+
+  .headerActions {
+    gap: 8px;
+  }
+
+  .themeToggle {
+    width: 46px;
+    padding: 0;
   }
 
   .headerOrder :global(.harpoon-icon) {
