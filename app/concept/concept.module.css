@@ -96,6 +96,7 @@
 .brand img {
   width: clamp(138px, 12vw, 178px);
   height: auto;
+  mix-blend-mode: multiply;
 }
 
 .navigation {
