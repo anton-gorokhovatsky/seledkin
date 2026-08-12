@@ -5,25 +5,32 @@ import test from "node:test";
 const projectRoot = new URL("../", import.meta.url);
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
-test("exports the preserved Russian storefront as an editorial home page", async () => {
+test("exports the accepted product-first storefront as the home page", async () => {
   const html = await readFile(new URL("out/index.html", projectRoot), "utf8");
 
   assert.match(html, /<html lang="ru">/);
   assert.match(html, /Рыбная лавка/);
   assert.match(html, /капитана Селедкина/);
-  assert.match(html, /Заказать в Телеграме/);
-  assert.match(html, /Красная икра премиум-качества/);
+  assert.match(html, /Каталог и\s+цены/);
+  assert.match(html, /Заказать в\s+Телеграме/);
+  assert.match(html, /Нерка/);
+  assert.match(html, /Гребешок/);
+  assert.match(html, /Красная икра/);
+  assert.match(html, /Сельдь слабосоленая/);
+  assert.match(
+    html,
+    /Смотреть все\s*(?:<!-- -->)?114(?:<!-- -->)?\s*позиций/,
+  );
   assert.ok(html.includes("Почему о\u00a0нас говорят?"));
   assert.match(html, /Олег Гугунава/);
   assert.match(html, /Судовой журнал/);
   assert.match(html, /Филе каспийского залома/);
-  assert.match(html, /ППП\s*—\s*предельно простая паста/);
-  assert.match(html, /И\s+пусть никто не\s+уйдет обиженным!/);
   assert.match(html, /Выбрать, заказать, получить/);
   assert.match(html, /весь ассортимент и\s+действующие цены/);
   assert.doesNotMatch(html, /ориентировочные цены|актуальную цену|стоимость на/);
   assert.doesNotMatch(html, /Feed not found\.|id="novosti"|>Новости</);
   assert.doesNotMatch(html, /id="catalog"/);
+  assert.match(html, /id="assortment"/);
   assert.match(html, new RegExp(`href="${basePath}/catalog/"`));
   assert.ok(html.includes("ул.\u00a0Строителей"));
   assert.ok(html.includes("д.\u00a07"));
@@ -33,20 +40,12 @@ test("exports the preserved Russian storefront as an editorial home page", async
   assert.match(html, /harpoon-icon/);
   assert.match(html, /harpoon-icon__head/);
   assert.match(html, /harpoon-icon__rope/);
-  assert.match(html, /sun-glint/);
-  assert.match(html, /sea-pattern-field-assortment/);
   assert.match(html, /sea-pattern__mark--purchase-desktop/);
   assert.match(html, /sea-pattern__mark--purchase-mobile/);
   assert.doesNotMatch(html, /↗|↓/);
   assert.match(html, /application\/ld\+json/);
-  assert.match(
-    html,
-    new RegExp(`src="${basePath}/video/hero-sea-sora-draft-01\\.web\\.mp4"`),
-  );
-  assert.match(
-    html,
-    new RegExp(`poster="${basePath}/video/hero-sea-sora-draft-01\\.webp"`),
-  );
+  assert.doesNotMatch(html, /<video/);
+  assert.doesNotMatch(html, /Открыть способы связи/);
   assert.match(html, new RegExp(`href="${basePath}/images/logo\\.png"`));
   assert.match(
     html,
@@ -54,6 +53,7 @@ test("exports the preserved Russian storefront as an editorial home page", async
       ? /https:\/\/anton-gorokhovatsky\.github\.io\/seledkin\//
       : /https:\/\/ks\.fish\//,
   );
+  assert.doesNotMatch(html, /<meta name="robots" content="noindex/);
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|SkeletonPreview/);
   assert.doesNotMatch(html, /qa-mobile/);
 });
@@ -100,28 +100,15 @@ test("keeps the accessibility and motion gates in the stylesheet", async () => {
   assert.match(css, /font-size:\s*clamp\(/);
 });
 
-test("keeps the local sea video and complete contact widget", async () => {
-  const heroVideo = await readFile(new URL("app/hero-video.tsx", projectRoot), "utf8");
-  const contactWidget = await readFile(
-    new URL("app/contact-widget.tsx", projectRoot),
-    "utf8",
-  );
-  const page = await readFile(new URL("app/page.tsx", projectRoot), "utf8");
-  const siteComponents = await readFile(
-    new URL("app/site-components.tsx", projectRoot),
-    "utf8",
-  );
+test("keeps ordering and contact routes complete without floating controls", async () => {
+  const html = await readFile(new URL("out/index.html", projectRoot), "utf8");
 
-  assert.match(heroVideo, /className="hero__video"/);
-  assert.match(heroVideo, /prefers-reduced-motion:\s*reduce/);
-  assert.match(heroVideo, /aria-hidden="true"/);
-  assert.match(heroVideo, /preload="metadata"/);
-  assert.doesNotMatch(page, /AsD5u6k6dKI|youtube-nocookie/);
-  assert.match(contactWidget, /Открыть способы связи/);
-  assert.match(contactWidget, /https:\/\/t\.me\/\+79166751452/);
-  assert.match(contactWidget, /https:\/\/wa\.me\/79166751452/);
-  assert.match(contactWidget, /tel:\+79166751452/);
-  assert.match(siteComponents, /social-icon__soundcloud/);
+  assert.match(html, /https:\/\/t\.me\/\+79166751452/);
+  assert.match(html, /https:\/\/wa\.me\/79166751452/);
+  assert.match(html, /tel:\+79166751452/);
+  assert.match(html, /Открыть в\s+Яндекс Картах/);
+  assert.doesNotMatch(html, /Открыть способы связи|contact-widget|contact-fab/);
+  assert.doesNotMatch(html, /<video/);
 });
 
 test("keeps the new identity assets and the Losos footer", async () => {
@@ -131,6 +118,10 @@ test("keeps the new identity assets and the Losos footer", async () => {
     "utf8",
   );
   const css = await readFile(new URL("app/globals.css", projectRoot), "utf8");
+  const conceptCss = await readFile(
+    new URL("app/concept/concept.module.css", projectRoot),
+    "utf8",
+  );
   const seaPattern = await readFile(
     new URL("app/sea-pattern.tsx", projectRoot),
     "utf8",
@@ -148,10 +139,8 @@ test("keeps the new identity assets and the Losos footer", async () => {
   assert.match(css, /--serif:\s*"Iowan Old Style"/);
   assert.match(css, /--sans:\s*"Golos Text"/);
   assert.match(css, /--pattern-gold:\s*#ffd700/);
-  assert.match(
-    css,
-    /\.purchase-story\s*\{[^}]*color:\s*var\(--pattern-gold\)/s,
-  );
+  assert.match(conceptCss, /--concept-yellow:\s*#ffd700/);
+  assert.match(conceptCss, /\.order\s*\{[^}]*color:\s*var\(--concept-yellow\)/s);
   assert.match(seaPattern, /sea-pattern__mark/);
   assert.match(seaPattern, /markHalfWidth/);
   assert.match(seaPattern, /purchaseBandHeight\s*=\s*620/);
@@ -161,7 +150,7 @@ test("keeps the new identity assets and the Losos footer", async () => {
   assert.match(seaPattern, /kickerIsland/);
   assert.match(seaPattern, /topEnd/);
   assert.match(seaPattern, /bottomStart/);
-  assert.match(css, /\.sea-pattern__mark--purchase-mobile/);
-  assert.match(css, /\.purchase-story__poster\s*\{/);
-  assert.match(css, /\.purchase-story__layout\s*\{[^}]*padding-top:/s);
+  assert.match(conceptCss, /\.orderPoster\s*\{/);
+  assert.match(conceptCss, /\.orderGrid\s*\{[^}]*padding-top:/s);
+  assert.match(conceptCss, /prefers-reduced-motion:\s*reduce/);
 });

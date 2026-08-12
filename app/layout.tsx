@@ -5,7 +5,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const siteUrl = basePath
   ? `https://anton-gorokhovatsky.github.io${basePath}`
   : "https://ks.fish";
-const heroUrl = `${siteUrl}/images/hero-ocean.jpg`;
+const heroUrl = `${siteUrl}/images/fish-02.jpg`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
       {
         url: heroUrl,
         width: 1680,
-        height: 1120,
-        alt: "Темное море — Рыбная лавка капитана Селедкина",
+        height: 1680,
+        alt: "Камбала и нож для разделки рыбы — Рыбная лавка капитана Селедкина",
       },
     ],
   },
