@@ -77,6 +77,14 @@ test("exports the full working catalog on its own page", async () => {
   assert.match(html, /aria-live="polite"/);
   assert.ok(html.includes("15\u202f000\u00a0₽"), "expected typographed catalog prices");
   assert.match(html, new RegExp(`src="${basePath}/images/fish-school\\.svg"`));
+  assert.match(html, new RegExp(`href="${basePath}/#assortment"`));
+  assert.match(html, new RegExp(`href="${basePath}/#about"`));
+  assert.match(html, new RegExp(`href="${basePath}/#order"`));
+  assert.match(html, new RegExp(`href="${basePath}/#contacts"`));
+  assert.doesNotMatch(
+    html,
+    /#chto-prodaem|#o-nas|#zakaz-i-dostavka|#kontakty/,
+  );
   assert.match(html, /sea-pattern-field-catalog-hero/);
   assert.match(html, /sea-pattern-field-catalog-products/);
   assert.match(html, /Лосось, кот рыбной лавки/);

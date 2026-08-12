@@ -112,11 +112,11 @@ export function SiteHeader({
     page === "home" ? `#${id}` : `${rootHref}#${id}`;
   const catalogHref = page === "catalog" ? "#catalog" : `${basePath}/catalog/`;
   const links = [
-    { href: homeAnchor("chto-prodaem"), label: "Что продаем" },
-    { href: homeAnchor("o-nas"), label: "О лавке" },
+    { href: homeAnchor("assortment"), label: "Что продаем" },
+    { href: homeAnchor("about"), label: "О лавке" },
     { href: catalogHref, label: "Каталог", current: page === "catalog" },
-    { href: homeAnchor("zakaz-i-dostavka"), label: "Доставка" },
-    { href: homeAnchor("kontakty"), label: "Контакты" },
+    { href: homeAnchor("order"), label: "Доставка" },
+    { href: homeAnchor("contacts"), label: "Контакты" },
   ];
 
   return (
