@@ -28,6 +28,11 @@
   --wide: 87.5rem;
   --focus: #a35d00;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --text-reading: 1.125rem;
+  --text-body: 1.0625rem;
+  --text-catalog: 1rem;
+  --text-interface: 0.875rem;
+  --text-meta: 0.8125rem;
 }
 
 :root[data-theme="dark"] {
@@ -106,7 +111,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 1rem;
+  font-size: var(--text-body);
   line-height: 1.55;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -271,7 +276,7 @@ p {
   border: 1px solid transparent;
   border-radius: 999px;
   color: var(--on-color);
-  font-size: 0.8rem;
+  font-size: var(--text-interface);
   font-weight: 600;
   letter-spacing: 0.04em;
   line-height: 1.2;
@@ -371,7 +376,7 @@ p {
 
 .source-hero__content p {
   margin-bottom: 0;
-  font-size: 1.08rem;
+  font-size: clamp(1.125rem, 1.15vw, 1.25rem);
   line-height: 1.52;
   text-shadow: 0 0.1rem 0.8rem rgb(0 0 0 / 30%);
 }
@@ -427,8 +432,8 @@ p {
 
 .source-copy p {
   margin-bottom: 1.4rem;
-  font-size: 0.98rem;
-  line-height: 1.7;
+  font-size: var(--text-reading);
+  line-height: 1.68;
 }
 
 .source-copy p:last-child {
@@ -490,7 +495,7 @@ p {
 }
 
 .why-copy p {
-  font-size: 0.91rem;
+  font-size: var(--text-reading);
   line-height: 1.68;
 }
 
@@ -598,13 +603,13 @@ p {
 .founder-source__copy .source-caption {
   margin-bottom: 2.2rem;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-meta);
 }
 
 .founder-source__copy p {
   margin-bottom: 1.35rem;
-  font-size: 0.91rem;
-  line-height: 1.7;
+  font-size: var(--text-reading);
+  line-height: 1.68;
 }
 
 .fish-divider--prices {
@@ -629,7 +634,7 @@ p {
 
 .price-preview__header p {
   margin-bottom: 0;
-  font-size: 1.1rem;
+  font-size: clamp(1.125rem, 1.35vw, 1.25rem);
   line-height: 1.6;
 }
 
@@ -652,7 +657,7 @@ p {
   justify-content: center;
   padding-block: 0.8rem;
   color: var(--muted);
-  font-size: 0.78rem;
+  font-size: var(--text-interface);
   text-decoration: none;
 }
 
@@ -677,12 +682,12 @@ p {
 .price-preview__grid h3 {
   margin: 0;
   font-family: var(--sans);
-  font-size: 0.92rem;
+  font-size: var(--text-catalog);
   font-weight: 600;
 }
 
 .price-preview__grid strong {
-  font-size: 0.9rem;
+  font-size: var(--text-catalog);
   white-space: nowrap;
 }
 
@@ -690,7 +695,7 @@ p {
   grid-column: 1 / -1;
   margin: 0;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
 }
 
 .price-preview__actions {
@@ -739,7 +744,7 @@ p {
 .ship-log__kicker {
   margin-bottom: 1rem;
   color: var(--brass);
-  font-size: 0.75rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -759,7 +764,7 @@ p {
 .ship-log__introduction p {
   margin-bottom: 1.15rem;
   color: var(--muted);
-  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  font-size: clamp(1.0625rem, 1.4vw, 1.2rem);
   line-height: 1.65;
 }
 
@@ -812,7 +817,7 @@ p {
   margin-bottom: 1rem;
   color: var(--muted);
   flex-wrap: wrap;
-  font-size: 0.7rem;
+  font-size: var(--text-meta);
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.07em;
   line-height: 1.4;
@@ -827,8 +832,8 @@ p {
 }
 
 .ship-log-entry__body {
-  font-size: 0.94rem;
-  line-height: 1.67;
+  font-size: var(--text-body);
+  line-height: 1.65;
 }
 
 .ship-log-entry__body p {
@@ -840,7 +845,7 @@ p {
 }
 
 .ship-log-entry__link {
-  font-size: 0.83rem;
+  font-size: var(--text-interface);
 }
 
 .fish-divider--delivery img {
@@ -901,7 +906,7 @@ p {
 
 .contacts-source__card p {
   margin-bottom: 1.35rem;
-  font-size: 0.92rem;
+  font-size: var(--text-body);
 }
 
 .contacts-source__card .source-button {
@@ -954,7 +959,7 @@ p {
 .source-footer__kicker {
   margin-bottom: 1rem;
   color: var(--footer-muted);
-  font-size: 0.75rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -972,7 +977,7 @@ p {
   max-width: 38rem;
   margin-bottom: clamp(2.5rem, 4vw, 4rem);
   color: var(--footer-muted);
-  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  font-size: clamp(1.125rem, 1.6vw, 1.3rem);
   line-height: 1.6;
 }
 
@@ -1002,7 +1007,7 @@ p {
 .source-footer__facts dt {
   margin-bottom: 0.45rem;
   color: var(--footer-base);
-  font-size: 0.7rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -1011,7 +1016,7 @@ p {
 .source-footer__facts dd {
   margin: 0;
   color: var(--footer-text);
-  font-size: 0.96rem;
+  font-size: var(--text-body);
   line-height: 1.55;
 }
 
@@ -1066,7 +1071,7 @@ p {
   padding-top: 1rem;
   color: var(--footer-muted);
   font-family: var(--serif);
-  font-size: 1rem;
+  font-size: var(--text-body);
   font-style: italic;
   line-height: 1.45;
 }
@@ -1086,8 +1091,8 @@ p {
   max-width: 46rem;
   margin-bottom: 0;
   color: var(--footer-muted);
-  font-size: 0.92rem;
-  line-height: 1.7;
+  font-size: var(--text-body);
+  line-height: 1.65;
 }
 
 .source-footer__channels {
@@ -1104,7 +1109,7 @@ p {
   gap: 0.65rem;
   padding-block: 0.3rem;
   color: var(--footer-text);
-  font-size: 0.82rem;
+  font-size: var(--text-interface);
   font-weight: 600;
   letter-spacing: 0.015em;
   text-decoration: none;
@@ -1115,7 +1120,7 @@ p {
 }
 
 .source-footer__channels .source-footer__channel--primary {
-  font-size: 0.9rem;
+  font-size: 0.9375rem;
 }
 
 .source-footer__channel--primary .source-footer__channel-icon {
@@ -1151,7 +1156,7 @@ p {
   justify-content: space-between;
   border-top: 1px solid var(--footer-line);
   color: var(--footer-base);
-  font-size: 0.78rem;
+  font-size: var(--text-meta);
 }
 
 .source-footer__base a {
@@ -1243,7 +1248,7 @@ p {
 }
 
 .floating-menu__label {
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.08em;
   line-height: 1;
@@ -1301,7 +1306,7 @@ p {
 .site-menu__deck {
   margin: 0;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.09em;
   text-align: center;
@@ -1322,7 +1327,7 @@ p {
 .site-menu__kicker {
   margin-bottom: 0.8rem;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -1360,7 +1365,7 @@ p {
 .site-menu__routes nav a > span:first-child {
   color: var(--brass);
   font-family: var(--sans);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   font-weight: 600;
   letter-spacing: 0.06em;
 }
@@ -1431,7 +1436,7 @@ p {
 .site-menu__service address {
   margin-bottom: 0.35rem;
   color: var(--footer-muted);
-  font-size: 0.9rem;
+  font-size: var(--text-body);
   font-style: normal;
   line-height: 1.6;
 }
@@ -1494,13 +1499,13 @@ p {
 }
 
 .site-menu__channel-copy strong {
-  font-size: 0.9rem;
+  font-size: 0.9375rem;
   letter-spacing: 0.01em;
 }
 
 .site-menu__channel-copy > span {
   color: var(--footer-muted);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   line-height: 1.35;
 }
 
@@ -1518,7 +1523,7 @@ p {
   align-items: center;
   gap: 0.45rem;
   color: var(--footer-muted);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   text-decoration: none;
 }
 
@@ -1571,7 +1576,7 @@ p {
 .catalog-intro p {
   width: min(100%, 43rem);
   margin: 0 auto;
-  font-size: 1.05rem;
+  font-size: var(--text-reading);
   line-height: 1.65;
 }
 
@@ -1595,7 +1600,7 @@ p {
 .catalog-search {
   display: grid;
   gap: 0.4rem;
-  font-size: 0.75rem;
+  font-size: var(--text-meta);
   font-weight: 600;
 }
 
@@ -1625,7 +1630,7 @@ p {
   border-bottom: 1px solid transparent;
   background: transparent;
   cursor: pointer;
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
 }
 
 .catalog-filters button[aria-pressed="true"] {
@@ -1653,7 +1658,7 @@ p {
 
 .catalog-result-line p {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: var(--text-interface);
 }
 
 .reset-button {
@@ -1687,7 +1692,7 @@ p {
 .catalog-category-count {
   margin: 0;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
 }
 
 .catalog-product-grid {
@@ -1712,13 +1717,13 @@ p {
 .catalog-product h4 {
   margin: 0;
   font-family: var(--sans);
-  font-size: 0.93rem;
+  font-size: var(--text-catalog);
   font-weight: 600;
   line-height: 1.35;
 }
 
 .catalog-product strong {
-  font-size: 0.9rem;
+  font-size: var(--text-catalog);
   white-space: nowrap;
 }
 
@@ -1727,8 +1732,8 @@ p {
   margin: 0;
   padding-right: 8rem;
   color: var(--muted);
-  font-size: 0.71rem;
-  line-height: 1.45;
+  font-size: var(--text-interface);
+  line-height: 1.5;
 }
 
 .catalog-product > a {
@@ -1739,7 +1744,7 @@ p {
   justify-self: start;
   margin-top: 0.55rem;
   color: var(--blue-deep);
-  font-size: 0.75rem;
+  font-size: var(--text-interface);
   text-decoration: none;
 }
 
@@ -1834,7 +1839,7 @@ p {
 .not-found-source__label {
   margin-bottom: 0.8rem;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: var(--text-meta);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1868,7 +1873,7 @@ p {
   background: transparent;
   color: var(--ink);
   cursor: pointer;
-  font-size: 0.78rem;
+  font-size: var(--text-interface);
   font-weight: 600;
   letter-spacing: 0.035em;
   line-height: 1.25;
@@ -2011,7 +2016,7 @@ p {
   }
 
   .source-hero__content p {
-    font-size: 0.85rem;
+    font-size: 0.9375rem;
     letter-spacing: 0.04em;
     line-height: 1.65;
     text-transform: uppercase;
@@ -2041,7 +2046,7 @@ p {
   }
 
   .source-copy p {
-    font-size: 0.95rem;
+    font-size: var(--text-reading);
   }
 
   .source-section--story {
@@ -2117,7 +2122,7 @@ p {
   }
 
   .founder-source__copy p {
-    font-size: 0.9rem;
+    font-size: var(--text-reading);
   }
 
   .fish-divider {
@@ -2152,7 +2157,7 @@ p {
   }
 
   .price-preview__header p {
-    font-size: 1rem;
+    font-size: var(--text-reading);
   }
 
   .price-categories {
@@ -2316,7 +2321,7 @@ p {
   .catalog-select {
     display: grid;
     gap: 0.4rem;
-    font-size: 0.75rem;
+    font-size: var(--text-meta);
     font-weight: 600;
   }
 
@@ -2364,10 +2369,6 @@ p {
 }
 
 @media (max-width: 34rem) {
-  body {
-    font-size: 0.96rem;
-  }
-
   .source-shell {
     width: min(calc(100% - 1.7rem), var(--shell));
   }
@@ -2497,12 +2498,12 @@ p {
 
   .price-preview__grid h3,
   .catalog-product h4 {
-    font-size: 0.86rem;
+    font-size: var(--text-catalog);
   }
 
   .price-preview__grid strong,
   .catalog-product strong {
-    font-size: 0.82rem;
+    font-size: var(--text-catalog);
   }
 
   .ship-log {

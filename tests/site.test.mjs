@@ -153,6 +153,48 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
   assert.match(styles, /"Iowan Old Style"/);
 });
 
+test("the typographic scale protects reading and interface text", () => {
+  for (const token of [
+    "--text-reading: 1.125rem",
+    "--text-body: 1.0625rem",
+    "--text-catalog: 1rem",
+    "--text-interface: 0.875rem",
+    "--text-meta: 0.8125rem",
+  ]) {
+    assert.ok(styles.includes(token), `Нет обязательного токена ${token}`);
+  }
+
+  const escapeSelector = (selector) =>
+    selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  for (const [selector, token] of [
+    ["body", "--text-body"],
+    [".source-copy p", "--text-reading"],
+    [".why-copy p", "--text-reading"],
+    [".founder-source__copy p", "--text-reading"],
+    [".ship-log-entry__body", "--text-body"],
+    [".contacts-source__card p", "--text-body"],
+    [".source-button", "--text-interface"],
+    [".catalog-product p", "--text-interface"],
+  ]) {
+    const rule =
+      styles.match(
+        new RegExp(`${escapeSelector(selector)}\\s*\\{([^}]*)\\}`, "s"),
+      )?.[1] ?? "";
+    assert.match(rule, new RegExp(`font-size:\\s*var\\(${token}\\)`));
+  }
+
+  assert.doesNotMatch(
+    styles,
+    /font-size:\s*0\.(?:[0-7]\d*|8[0-6]?)rem/,
+    "Не возвращать локальные кегли меньше интерфейсного шага",
+  );
+  assert.doesNotMatch(
+    styles,
+    /@media \(max-width: 34rem\)[\s\S]*?\n\s+body\s*\{/,
+    "На мобильном основной кегль не должен уменьшаться",
+  );
+});
+
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(home, /id="journal"/);
   assert.match(home, /<h2 id="journal-title">Судовой журнал<\/h2>/);
