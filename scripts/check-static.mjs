@@ -59,6 +59,10 @@ const requiredFiles = [
   "assets/quote-pan.jpg",
   "assets/oleg-gugunava.jpg",
   "assets/delivery-basket.jpg",
+  "assets/journal-679.jpg",
+  "assets/journal-680.jpg",
+  "assets/journal-681.jpg",
+  "assets/journal-682.jpg",
   "assets/fish-pattern.svg",
 ];
 
@@ -263,6 +267,24 @@ for (const required of ['role="status"', 'aria-live="polite"', 'role="group"']) 
   if (!catalogPage.includes(required)) fail(`catalog/index.html: нет обязательной семантики ${required}`);
 }
 
+const homePage = readFileSync(join(root, "index.html"), "utf8");
+if ((homePage.match(/<article class="ship-log-entry">/g) ?? []).length !== 4) {
+  fail("index.html: «Судовой журнал» должен содержать четыре отобранные записи");
+}
+for (const id of [682, 681, 680, 679]) {
+  for (const required of [
+    `assets/journal-${id}.jpg`,
+    `https://t.me/kapitanseledkin/${id}`,
+  ]) {
+    if (!homePage.includes(required)) {
+      fail(`index.html: в «Судовом журнале» нет ${required}`);
+    }
+  }
+}
+if (!homePage.includes("https://t.me/kapitanseledkin")) {
+  fail("index.html: нет ссылки на весь авторский телеграм-канал");
+}
+
 const accessibility = readFileSync(join(root, "ACCESSIBILITY.md"), "utf8");
 for (const required of [
   "WCAG 2.2 AA",
@@ -304,6 +326,22 @@ const expectedHashes = new Map([
   [
     "assets/fish-pattern.svg",
     "31e51adac566e3b0d5cb43858e6e3d4cf1bcd464be08ff629f49fc1ca707625b",
+  ],
+  [
+    "assets/journal-679.jpg",
+    "68d2d55db0dc116bf94c58d99d56b306aec7dae77b9e6b899aa09ff2c0e2f166",
+  ],
+  [
+    "assets/journal-680.jpg",
+    "4c585dfc8d94f59a135ce44bce88e1d461dd6df8b75b1bceb6890e6b6df266e7",
+  ],
+  [
+    "assets/journal-681.jpg",
+    "0e48aaa7c67d2a6687cbe5d4ab6a8f56f2f18536811ddae40d7cd13565fbee2c",
+  ],
+  [
+    "assets/journal-682.jpg",
+    "ce166cf12eb8616f7e0777ef042d71882fe0f56f809b7162aac3c32a32f9a277",
   ],
 ]);
 

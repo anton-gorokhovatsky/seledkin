@@ -88,6 +88,7 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     "source-quote",
     "founder-source",
     "price-preview",
+    "ship-log",
     "delivery-source",
     "contacts-source",
     "source-footer",
@@ -119,6 +120,31 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
   assert.doesNotMatch(home + catalogPage + styles, /fish-divider\.png/i);
   assert.match(styles, /fish-pattern\.svg/);
   assert.match(styles, /"Iowan Old Style"/);
+});
+
+test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
+  assert.match(home, /id="journal"/);
+  assert.match(home, /<h2 id="journal-title">Судовой журнал<\/h2>/);
+  assert.equal((home.match(/<article class="ship-log-entry">/g) ?? []).length, 4);
+  assert.match(home, /https:\/\/t\.me\/kapitanseledkin"/);
+
+  let cursor = -1;
+  for (const id of [682, 681, 680, 679]) {
+    const next = home.indexOf(`https://t.me/kapitanseledkin/${id}`, cursor + 1);
+    assert.ok(next > cursor, `Запись ${id} должна идти в обратной хронологии`);
+    assert.match(home, new RegExp(`assets/journal-${id}\\.jpg`));
+    cursor = next;
+  }
+
+  for (const excerpt of [
+    "У&nbsp;нас новый завоз царского малосольного тугунка.",
+    "Первая икра дикого кижуча сезона 2026",
+    "Нежнейшая малосольная черноморская барабуля",
+    "Куриные котлетки тоже есть.",
+  ]) {
+    assert.ok(home.includes(excerpt), `Не сохранена авторская формулировка: ${excerpt}`);
+  }
+  assert.doesNotMatch(home, /telegram-widget|tgme_widget|Feed not found/i);
 });
 
 test("the complete catalog has stable categories and 114 priced items", () => {
@@ -279,7 +305,7 @@ test("WCAG 2.2 AA is a mechanical project contract", () => {
   }
 });
 
-test("the agreed logo, fish pattern and Salmon portrait stay unchanged", async () => {
+test("the agreed source assets stay unchanged", async () => {
   const files = [
     [
       "../assets/logo-redrawn.svg",
@@ -292,6 +318,22 @@ test("the agreed logo, fish pattern and Salmon portrait stay unchanged", async (
     [
       "../assets/fish-pattern.svg",
       "31e51adac566e3b0d5cb43858e6e3d4cf1bcd464be08ff629f49fc1ca707625b",
+    ],
+    [
+      "../assets/journal-679.jpg",
+      "68d2d55db0dc116bf94c58d99d56b306aec7dae77b9e6b899aa09ff2c0e2f166",
+    ],
+    [
+      "../assets/journal-680.jpg",
+      "4c585dfc8d94f59a135ce44bce88e1d461dd6df8b75b1bceb6890e6b6df266e7",
+    ],
+    [
+      "../assets/journal-681.jpg",
+      "0e48aaa7c67d2a6687cbe5d4ab6a8f56f2f18536811ddae40d7cd13565fbee2c",
+    ],
+    [
+      "../assets/journal-682.jpg",
+      "ce166cf12eb8616f7e0777ef042d71882fe0f56f809b7162aac3c32a32f9a277",
     ],
   ];
 
