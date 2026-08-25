@@ -1,4 +1,5 @@
 import { catalog } from "../assets/catalog-data.js";
+import { typographPrice, typographText } from "../assets/typography.js";
 
 const allCategories = "all";
 const telegramOrder = "https://t.me/+79166751452";
@@ -26,13 +27,6 @@ function normalize(value) {
     .replaceAll("\u00a0", " ")
     .replaceAll("\u202f", " ")
     .trim();
-}
-
-function typograph(value) {
-  return value
-    .replace(/(\d) (?=\d{3}(?:\D|$))/g, "$1\u202f")
-    .replace(/(\d) ₽/g, "$1\u00a0₽")
-    .replace(/(\d) (кг|г|л|мл)\b/g, "$1\u00a0$2");
 }
 
 function positionCount(value) {
@@ -63,15 +57,18 @@ function makeElement(tag, className, text) {
 function makeProduct(product) {
   const article = makeElement("article", "catalog-product");
   const head = makeElement("div", "catalog-product-head");
-  const title = makeElement("h4", "", product.name);
-  const price = makeElement("strong", "", typograph(product.price));
+  const title = makeElement("h4", "", typographText(product.name));
+  const price = makeElement("strong", "", typographPrice(product.price));
   const description = product.description
-    ? makeElement("p", "", product.description)
+    ? makeElement("p", "", typographText(product.description))
     : makeElement("span", "visually-hidden", "Без дополнительного описания");
   const action = makeElement("a", "", "Уточнить наличие");
 
   action.href = productMessage(product);
-  action.setAttribute("aria-label", `Уточнить наличие: ${product.name}`);
+  action.setAttribute(
+    "aria-label",
+    typographText(`Уточнить наличие: ${product.name}`),
+  );
   head.append(title, price);
   article.append(head, description, action);
   return article;
@@ -80,7 +77,7 @@ function makeProduct(product) {
 function makeCategory(category) {
   const section = makeElement("section", "catalog-category");
   const header = makeElement("div", "catalog-category-header");
-  const title = makeElement("h3", "", category.label);
+  const title = makeElement("h3", "", typographText(category.label));
   const categoryCount = makeElement(
     "p",
     "catalog-category-count",
@@ -164,8 +161,9 @@ function render() {
 }
 
 function addFilter(label, value) {
-  const button = makeElement("button", "", label);
-  const option = makeElement("option", "", label);
+  const typedLabel = typographText(label);
+  const button = makeElement("button", "", typedLabel);
+  const option = makeElement("option", "", typedLabel);
 
   option.value = value;
   button.type = "button";

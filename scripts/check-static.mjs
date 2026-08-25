@@ -35,6 +35,7 @@ const requiredFiles = [
   "catalog/catalog.js",
   "assets/styles.css",
   "assets/site.js",
+  "assets/typography.js",
   "assets/catalog-data.js",
   "assets/logo-redrawn.svg",
   "assets/salmon-cat.jpg",
@@ -78,6 +79,7 @@ const publicSourcePaths = [
   "catalog/catalog.js",
   "assets/styles.css",
   "assets/site.js",
+  "assets/typography.js",
   "assets/catalog-data.js",
   "package.json",
 ];

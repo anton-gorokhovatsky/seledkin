@@ -1,3 +1,5 @@
+import "./typography.js";
+
 const menuButton = document.querySelector("[data-menu-toggle]");
 const menu = document.querySelector("[data-menu]");
 const menuClose = document.querySelector("[data-menu-close]");

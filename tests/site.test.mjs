@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
+import { typographPrice, typographText } from "../assets/typography.js";
 
 const home = await readFile(new URL("../index.html", import.meta.url), "utf8");
 const catalogPage = await readFile(
@@ -114,6 +115,26 @@ test("the complete catalog has stable categories and 114 priced items", () => {
       assert.match(product.price, /₽/);
     }
   }
+});
+
+test("published Russian text uses the shared typographic rules", () => {
+  assert.equal(
+    typographText("И в лавке от 11:00 до 20:00"),
+    "И\u00a0в\u00a0лавке от\u00a011:00 до\u00a020:00",
+  );
+  assert.equal(
+    typographText("Цена 15 000 ₽ за 0,5 кг"),
+    "Цена 15\u202f000\u00a0₽ за\u00a00,5\u00a0кг",
+  );
+  assert.equal(
+    typographPrice("15000 ₽/0,125 кг"),
+    "15\u202f000\u00a0₽/0,125\u00a0кг",
+  );
+  assert.equal(typographText("всё „ок“"), "всё «ок»");
+  assert.equal(
+    typographText("ул. Строителей, д. 7, корп. 1"),
+    "ул.\u00a0Строителей, д.\u00a07, корп.\u00a01",
+  );
 });
 
 test("catalog search and filters expose accessible state", () => {
