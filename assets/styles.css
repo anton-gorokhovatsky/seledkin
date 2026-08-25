@@ -24,7 +24,7 @@
   --pattern-opacity: 1;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --sans: "Golos Text", Arial, Helvetica, sans-serif;
-  --shell: 72.5rem;
+  --shell: 84rem;
   --wide: 87.5rem;
   --focus: #a35d00;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -709,7 +709,7 @@ p {
 .ship-log {
   position: relative;
   overflow: hidden;
-  padding: clamp(6rem, 9vw, 9rem) 0;
+  padding: clamp(4.5rem, 7vw, 7rem) 0;
   border-top: 1px solid var(--line);
 }
 
@@ -734,10 +734,10 @@ p {
 
 .ship-log__header {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(20rem, 0.8fr);
+  grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.7fr);
   align-items: end;
-  gap: clamp(3rem, 8vw, 8rem);
-  padding-bottom: clamp(3rem, 5vw, 5rem);
+  gap: clamp(3rem, 6vw, 6rem);
+  padding-bottom: clamp(2.5rem, 4vw, 4rem);
   border-bottom: 1px solid var(--line);
 }
 
@@ -779,26 +779,17 @@ p {
 
 .ship-log__grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .ship-log-entry {
   display: grid;
   min-width: 0;
-  grid-template-columns: minmax(9rem, 0.72fr) minmax(0, 1.28fr);
+  grid-template-columns: clamp(10rem, 14vw, 12.5rem) minmax(0, 1fr);
   align-items: start;
-  gap: clamp(1.5rem, 3vw, 2.75rem);
-  padding-block: clamp(3rem, 5vw, 5rem);
+  gap: clamp(2rem, 4vw, 4.5rem);
+  padding-block: clamp(2.25rem, 3.5vw, 3.5rem);
   border-bottom: 1px solid var(--line);
-}
-
-.ship-log-entry:nth-child(odd) {
-  padding-right: clamp(2rem, 4vw, 4rem);
-  border-right: 1px solid var(--line);
-}
-
-.ship-log-entry:nth-child(even) {
-  padding-left: clamp(2rem, 4vw, 4rem);
 }
 
 .ship-log-entry > img {
@@ -825,8 +816,9 @@ p {
 }
 
 .ship-log-entry h3 {
+  max-width: 31ch;
   margin-bottom: 1.35rem;
-  font-size: clamp(1.55rem, 2.2vw, 2.2rem);
+  font-size: clamp(1.8rem, 2.6vw, 2.65rem);
   font-weight: 500;
   line-height: 1.08;
 }
@@ -838,6 +830,8 @@ p {
 
 .ship-log-entry__body p {
   margin-bottom: 1rem;
+  orphans: 3;
+  widows: 3;
 }
 
 .ship-log-entry__body p:last-child {
@@ -846,6 +840,18 @@ p {
 
 .ship-log-entry__link {
   font-size: var(--text-interface);
+}
+
+.ship-log-entry:first-child .ship-log-entry__body,
+.ship-log-entry:last-child .ship-log-entry__body {
+  columns: 2 18rem;
+  column-gap: clamp(2rem, 4vw, 4rem);
+  column-rule: 1px solid var(--line);
+}
+
+.ship-log-entry:nth-child(2) .ship-log-entry__body,
+.ship-log-entry:nth-child(3) .ship-log-entry__body {
+  max-width: 48rem;
 }
 
 .fish-divider--delivery img {
@@ -2037,7 +2043,7 @@ p {
   }
 
   .source-copy {
-    max-width: none;
+    max-width: 42rem;
     padding: 3rem 0;
   }
 
@@ -2064,6 +2070,7 @@ p {
   }
 
   .why-copy {
+    max-width: 37rem;
     padding-bottom: 1rem;
   }
 
@@ -2117,7 +2124,7 @@ p {
   }
 
   .founder-source__copy {
-    max-width: none;
+    max-width: 43rem;
     padding: 3.5rem 1.25rem 4.5rem;
   }
 
@@ -2212,6 +2219,12 @@ p {
   .ship-log-entry:nth-child(n) {
     padding-inline: 0;
     border-right: 0;
+  }
+
+  .ship-log-entry:first-child .ship-log-entry__body,
+  .ship-log-entry:last-child .ship-log-entry__body {
+    columns: auto;
+    column-rule: 0;
   }
 
   .delivery-source {

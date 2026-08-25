@@ -220,6 +220,31 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.doesNotMatch(home, /telegram-widget|tgme_widget|Feed not found/i);
 });
 
+test("the wide shell and linear Ship's Log avoid narrow nested cards", () => {
+  assert.match(styles, /--shell:\s*84rem/);
+
+  const gridRule =
+    styles.match(/\.ship-log__grid\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(gridRule, /grid-template-columns:\s*1fr/);
+  assert.doesNotMatch(gridRule, /repeat\(2/);
+
+  const entryRule =
+    styles.match(/\.ship-log-entry\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(
+    entryRule,
+    /grid-template-columns:\s*clamp\(10rem, 14vw, 12\.5rem\) minmax\(0, 1fr\)/,
+  );
+  assert.match(entryRule, /padding-block:\s*clamp\(2\.25rem, 3\.5vw, 3\.5rem\)/);
+  assert.match(
+    styles,
+    /\.ship-log-entry:first-child \.ship-log-entry__body,[\s\S]*?columns:\s*2 18rem/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.ship-log-entry:first-child \.ship-log-entry__body,[\s\S]*?columns:\s*auto/,
+  );
+});
+
 test("the footer ends both customer journeys with a useful, human invitation", () => {
   for (const page of [home, catalogPage]) {
     assert.match(page, /<footer class="source-footer" aria-labelledby="[^"]+">/);
