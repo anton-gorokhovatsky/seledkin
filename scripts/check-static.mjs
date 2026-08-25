@@ -40,6 +40,7 @@ const requiredFiles = [
   "assets/typography.js",
   "assets/catalog-data.js",
   "assets/logo-redrawn.svg",
+  "assets/logo-redrawn-night.svg",
   "assets/salmon-cat.jpg",
   "assets/hero-ocean.jpg",
   "assets/caviar-slab.jpg",
@@ -376,6 +377,10 @@ const expectedHashes = new Map([
     "49c8d097b56bd670cf46541b19e34f9c89398b7e566110acddd09067c223cc55",
   ],
   [
+    "assets/logo-redrawn-night.svg",
+    "1fd06e2289e0fe75705d040a333867b6980c5ed7be415837674432d6d40c2991",
+  ],
+  [
     "assets/salmon-cat.jpg",
     "b12d7f749f2bffbfc1ee92dc10d18f050badaaebd8b851708e2b7dd9a625f1bd",
   ],
@@ -405,6 +410,11 @@ for (const [path, expected] of expectedHashes) {
   if (existsSync(join(root, path)) && sha256(join(root, path)) !== expected) {
     fail(`${path}: файл отличается от согласованного оригинала`);
   }
+}
+
+const nightLogo = readFileSync(join(root, "assets/logo-redrawn-night.svg"), "utf8");
+if (!nightLogo.includes('fill="#f3ede2"') || /#fff(?:fff)?|<rect\b/i.test(nightLogo)) {
+  fail("Ночной логотип должен оставаться прозрачным одноцветным контуром без белых плашек");
 }
 
 if (failures.length) {

@@ -12,6 +12,7 @@ function initTheme() {
   const root = document.documentElement;
   const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
   const toggles = [...document.querySelectorAll("[data-theme-toggle]")];
+  const themeLogos = [...document.querySelectorAll("[data-theme-logo]")];
   const themeColor = document.querySelector('meta[name="theme-color"]');
 
   function currentTheme() {
@@ -28,6 +29,13 @@ function initTheme() {
 
     root.style.colorScheme = theme;
     if (themeColor) themeColor.content = isDark ? "#0e202b" : "#ffffff";
+
+    for (const logo of themeLogos) {
+      const source = isDark ? logo.dataset.logoDark : logo.dataset.logoLight;
+      if (source && logo.getAttribute("src") !== source) {
+        logo.setAttribute("src", source);
+      }
+    }
 
     for (const toggle of toggles) {
       toggle.dataset.currentTheme = theme;

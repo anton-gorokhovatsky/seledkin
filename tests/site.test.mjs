@@ -31,6 +31,10 @@ const siteScript = await readFile(
   new URL("../assets/site.js", import.meta.url),
   "utf8",
 );
+const themeScript = await readFile(
+  new URL("../assets/theme.js", import.meta.url),
+  "utf8",
+);
 const catalogScript = await readFile(
   new URL("../catalog/catalog.js", import.meta.url),
   "utf8",
@@ -332,6 +336,30 @@ test("theme follows the system and a deliberate choice persists across pages", (
       `${foreground} on ${background} must reach ${minimum}:1`,
     );
   }
+});
+
+test("Night Watch uses a transparent single-color logo without changing the source artwork", async () => {
+  for (const page of [home, catalogPage, notFoundPage]) {
+    assert.match(page, /data-theme-logo/);
+    assert.match(page, /data-logo-light="(?:\.\.\/)?assets\/logo-redrawn\.svg"/);
+    assert.match(page, /data-logo-dark="(?:\.\.\/)?assets\/logo-redrawn-night\.svg"/);
+  }
+
+  assert.match(themeScript, /document\.querySelectorAll\("\[data-theme-logo\]"\)/);
+  assert.match(themeScript, /logo\.dataset\.logoDark/);
+  assert.match(themeScript, /logo\.dataset\.logoLight/);
+  assert.match(styles, /content:\s*url\("logo-redrawn-night\.svg"\)/);
+
+  const nightLogo = await readFile(
+    new URL("../assets/logo-redrawn-night.svg", import.meta.url),
+    "utf8",
+  );
+  assert.match(nightLogo, /fill="#f3ede2"/);
+  assert.doesNotMatch(nightLogo, /#fff(?:fff)?|<rect\b/i);
+  assert.equal(
+    createHash("sha256").update(nightLogo).digest("hex"),
+    "1fd06e2289e0fe75705d040a333867b6980c5ed7be415837674432d6d40c2991",
+  );
 });
 
 test("WCAG 2.2 AA is a mechanical project contract", () => {

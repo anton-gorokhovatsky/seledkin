@@ -78,6 +78,16 @@
   }
 }
 
+:root[data-theme="dark"] [data-theme-logo] {
+  content: url("logo-redrawn-night.svg");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [data-theme-logo] {
+    content: url("logo-redrawn-night.svg");
+  }
+}
+
 *,
 *::before,
 *::after {
