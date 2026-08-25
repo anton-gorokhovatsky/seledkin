@@ -879,26 +879,60 @@ p {
 
 .contacts-source {
   position: relative;
-  min-height: 64.375rem;
+  height: clamp(36rem, 68svh, 43rem);
+  min-height: 0;
+  overflow: hidden;
   background: var(--map-fallback);
 }
 
-.contacts-source__map,
-.contacts-source__map iframe {
+.contacts-source__map {
   position: absolute;
   inset: 0;
+}
+
+.contacts-source__map iframe {
   width: 100%;
   height: 100%;
   border: 0;
+  pointer-events: none;
+}
+
+.contacts-source__map.is-interactive iframe {
+  pointer-events: auto;
+}
+
+.contacts-source__map-toggle {
+  position: absolute;
+  z-index: 2;
+  right: max(1.5rem, calc((100vw - var(--shell)) / 2));
+  bottom: 2rem;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.15rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 0.4rem 1.5rem rgb(0 0 0 / 16%);
+  cursor: pointer;
+  font-size: var(--text-interface);
+  font-weight: 600;
+}
+
+.contacts-source__map-toggle[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .contacts-source__card {
   position: absolute;
   z-index: 1;
-  top: 8rem;
+  top: clamp(2rem, 5vh, 3rem);
   left: max(3rem, calc((100vw - var(--shell)) / 2));
   width: min(28rem, calc(100% - 6rem));
-  padding: 3rem;
+  padding: clamp(1.75rem, 2.4vw, 2.25rem) clamp(2rem, 3vw, 2.75rem);
   background: var(--paper);
   box-shadow: 0 1rem 3rem rgb(0 0 0 / 12%);
   font-style: normal;
@@ -2240,13 +2274,14 @@ p {
 
   .contacts-source {
     display: flex;
+    height: auto;
     min-height: 0;
     flex-direction: column-reverse;
   }
 
   .contacts-source__map {
     position: relative;
-    min-height: 37rem;
+    min-height: clamp(24rem, 60svh, 28rem);
   }
 
   .contacts-source__map iframe {
@@ -2258,8 +2293,13 @@ p {
     top: auto;
     left: auto;
     width: 100%;
-    padding: 3.5rem 1.25rem;
+    padding: 3rem 1.25rem;
     box-shadow: none;
+  }
+
+  .contacts-source__map-toggle {
+    right: 1rem;
+    bottom: 1rem;
   }
 
   .contacts-source__card h2 {

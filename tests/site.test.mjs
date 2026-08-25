@@ -245,6 +245,42 @@ test("the wide shell and linear Ship's Log avoid narrow nested cards", () => {
   );
 });
 
+test("the compact map keeps page scrolling until deliberate activation", () => {
+  for (const required of [
+    'class="contacts-source__map" data-map',
+    'id="store-map-frame"',
+    'tabindex="-1"',
+    'aria-hidden="true"',
+    'data-map-toggle',
+    'aria-controls="store-map-frame"',
+    'aria-pressed="false"',
+    'data-map-toggle-label>Включить карту',
+  ]) {
+    assert.ok(home.includes(required), `Карта не содержит ${required}`);
+  }
+
+  const sectionRule =
+    styles.match(/\.contacts-source\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(sectionRule, /height:\s*clamp\(36rem, 68svh, 43rem\)/);
+
+  const frameRule =
+    styles.match(/\.contacts-source__map iframe\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(frameRule, /pointer-events:\s*none/);
+  assert.match(
+    styles,
+    /\.contacts-source__map\.is-interactive iframe\s*\{[^}]*pointer-events:\s*auto/,
+  );
+
+  for (const required of [
+    'map.classList.toggle("is-interactive", enabled)',
+    'mapFrame.tabIndex = enabled ? 0 : -1',
+    'mapFrame.setAttribute("aria-hidden", String(!enabled))',
+    'enabled ? "Отключить карту" : "Включить карту"',
+  ]) {
+    assert.ok(siteScript.includes(required), `Нет поведения карты ${required}`);
+  }
+});
+
 test("the footer ends both customer journeys with a useful, human invitation", () => {
   for (const page of [home, catalogPage]) {
     assert.match(page, /<footer class="source-footer" aria-labelledby="[^"]+">/);

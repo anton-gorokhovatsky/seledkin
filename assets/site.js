@@ -6,6 +6,10 @@ const menuButtonLabel = menuButton?.querySelector(".floating-menu__label");
 const menu = document.querySelector("[data-menu]");
 const menuPanel = menu?.querySelector(".site-menu__panel");
 const heroVideo = document.querySelector("[data-hero-video]");
+const map = document.querySelector("[data-map]");
+const mapToggle = map?.querySelector("[data-map-toggle]");
+const mapToggleLabel = mapToggle?.querySelector("[data-map-toggle-label]");
+const mapFrame = map?.querySelector("iframe");
 
 function focusableMenuItems() {
   if (!menu) return [];
@@ -135,4 +139,42 @@ if (heroVideo instanceof HTMLIFrameElement) {
   });
   reducedMotion.addEventListener("change", syncHeroVideo);
   syncHeroVideo();
+}
+
+if (
+  map instanceof HTMLElement &&
+  mapToggle instanceof HTMLButtonElement &&
+  mapFrame instanceof HTMLIFrameElement
+) {
+  const setMapInteractive = (enabled) => {
+    map.classList.toggle("is-interactive", enabled);
+    mapToggle.setAttribute("aria-pressed", String(enabled));
+    mapToggle.setAttribute(
+      "aria-label",
+      enabled ? "Отключить карту" : "Включить карту",
+    );
+    mapFrame.tabIndex = enabled ? 0 : -1;
+    mapFrame.setAttribute("aria-hidden", String(!enabled));
+    if (mapToggleLabel) {
+      mapToggleLabel.textContent = enabled
+        ? "Отключить карту"
+        : "Включить карту";
+    }
+  };
+
+  mapToggle.addEventListener("click", () => {
+    setMapInteractive(mapToggle.getAttribute("aria-pressed") !== "true");
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || mapToggle.getAttribute("aria-pressed") !== "true") {
+      return;
+    }
+
+    event.preventDefault();
+    setMapInteractive(false);
+    mapToggle.focus();
+  });
+
+  setMapInteractive(false);
 }
