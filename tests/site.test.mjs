@@ -532,6 +532,31 @@ test("Night Watch uses a transparent single-color logo without changing the sour
   );
 });
 
+test("Night Watch keeps bioluminescence in a restrained, static wake", () => {
+  const lightRoot = styles.match(/:root\s*\{([^}]*)\}/s)?.[1] ?? "";
+  const explicitDark =
+    styles.match(/:root\[data-theme="dark"\]\s*\{([^}]*)\}/s)?.[1] ?? "";
+
+  assert.match(lightRoot, /--bioluminescence-opacity:\s*0;/);
+  assert.match(lightRoot, /--bioluminescence-display:\s*none;/);
+  assert.match(explicitDark, /--bioluminescence-opacity:\s*0\.72;/);
+  assert.match(explicitDark, /--bioluminescence-display:\s*block;/);
+  assert.match(
+    explicitDark,
+    /--bioluminescence-wake:\s*rgb\(82 190 191 \/ 14%\);/,
+  );
+  assert.match(
+    styles,
+    /\.fish-divider::after\s*\{[\s\S]*?mix-blend-mode:\s*screen;[\s\S]*?opacity:\s*var\(--bioluminescence-opacity\);/,
+  );
+  assert.match(
+    styles,
+    /\.source-footer::after,[\s\S]*?\.site-menu__service::after\s*\{[\s\S]*?var\(--bioluminescence-spark\)/,
+  );
+  assert.doesNotMatch(styles, /@keyframes\s+(?:bio|glow|spark|plankton)/i);
+  assert.doesNotMatch(styles, /\.source-button[^}]*bioluminescence/s);
+});
+
 test("WCAG 2.2 AA is a mechanical project contract", () => {
   for (const requirement of [
     "WCAG 2.2 AA",

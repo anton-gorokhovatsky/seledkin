@@ -22,6 +22,13 @@
   --sticky-surface: rgb(255 255 255 / 96%);
   --pattern-filter: none;
   --pattern-opacity: 1;
+  --surface-water: var(--paper);
+  --hero-shade: linear-gradient(rgb(0 10 16 / 56%), rgb(0 8 13 / 64%));
+  --bioluminescence-display: none;
+  --bioluminescence-opacity: 0;
+  --bioluminescence-wake: transparent;
+  --bioluminescence-wake-soft: transparent;
+  --bioluminescence-spark: transparent;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --sans: "Golos Text", Arial, Helvetica, sans-serif;
   --shell: 84rem;
@@ -53,8 +60,18 @@
   --map-fallback: #243843;
   --sticky-surface: rgb(14 32 43 / 96%);
   --pattern-filter: brightness(0) saturate(100%) invert(94%) sepia(12%)
-    saturate(243%) hue-rotate(344deg) brightness(101%) contrast(89%);
+    saturate(243%) hue-rotate(344deg) brightness(101%) contrast(89%)
+    drop-shadow(0 0 0.65rem rgb(108 221 210 / 14%));
   --pattern-opacity: 0.78;
+  --surface-water:
+    radial-gradient(ellipse at 14% 0%, rgb(74 158 171 / 7%), transparent 34rem),
+    var(--paper);
+  --hero-shade: linear-gradient(rgb(0 15 24 / 52%), rgb(0 8 14 / 74%));
+  --bioluminescence-display: block;
+  --bioluminescence-opacity: 0.72;
+  --bioluminescence-wake: rgb(82 190 191 / 14%);
+  --bioluminescence-wake-soft: rgb(102 214 203 / 8%);
+  --bioluminescence-spark: rgb(187 241 222 / 62%);
   --focus: #ffc15c;
 }
 
@@ -77,8 +94,18 @@
     --map-fallback: #243843;
     --sticky-surface: rgb(14 32 43 / 96%);
     --pattern-filter: brightness(0) saturate(100%) invert(94%) sepia(12%)
-      saturate(243%) hue-rotate(344deg) brightness(101%) contrast(89%);
+      saturate(243%) hue-rotate(344deg) brightness(101%) contrast(89%)
+      drop-shadow(0 0 0.65rem rgb(108 221 210 / 14%));
     --pattern-opacity: 0.78;
+    --surface-water:
+      radial-gradient(ellipse at 14% 0%, rgb(74 158 171 / 7%), transparent 34rem),
+      var(--paper);
+    --hero-shade: linear-gradient(rgb(0 15 24 / 52%), rgb(0 8 14 / 74%));
+    --bioluminescence-display: block;
+    --bioluminescence-opacity: 0.72;
+    --bioluminescence-wake: rgb(82 190 191 / 14%);
+    --bioluminescence-wake-soft: rgb(102 214 203 / 8%);
+    --bioluminescence-spark: rgb(187 241 222 / 62%);
     --focus: #ffc15c;
   }
 }
@@ -108,7 +135,7 @@ body {
   min-width: 320px;
   margin: 0;
   overflow-x: clip;
-  background: var(--paper);
+  background: var(--surface-water);
   color: var(--ink);
   font-family: var(--sans);
   font-size: var(--text-body);
@@ -223,7 +250,7 @@ p {
 }
 
 .source-section {
-  background: var(--paper);
+  background: var(--surface-water);
 }
 
 .source-header {
@@ -354,7 +381,7 @@ p {
   position: absolute;
   z-index: 1;
   inset: 0;
-  background: linear-gradient(rgb(0 10 16 / 56%), rgb(0 8 13 / 64%));
+  background: var(--hero-shade);
 }
 
 .source-hero__content {
@@ -447,7 +474,7 @@ p {
 .fish-divider {
   position: relative;
   overflow: hidden;
-  background: var(--paper);
+  background: var(--surface-water);
 }
 
 .fish-divider img {
@@ -455,6 +482,30 @@ p {
   height: auto;
   filter: var(--pattern-filter);
   opacity: var(--pattern-opacity);
+}
+
+.fish-divider::after {
+  position: absolute;
+  inset: 0;
+  display: var(--bioluminescence-display);
+  background:
+    radial-gradient(circle at 7% 63%, var(--bioluminescence-spark) 0 0.06rem, transparent 0.12rem),
+    radial-gradient(circle at 15% 48%, var(--bioluminescence-spark) 0 0.045rem, transparent 0.1rem),
+    radial-gradient(circle at 24% 72%, var(--bioluminescence-spark) 0 0.07rem, transparent 0.13rem),
+    radial-gradient(circle at 36% 39%, var(--bioluminescence-spark) 0 0.05rem, transparent 0.11rem),
+    radial-gradient(circle at 44% 65%, var(--bioluminescence-spark) 0 0.075rem, transparent 0.14rem),
+    radial-gradient(circle at 57% 31%, var(--bioluminescence-spark) 0 0.045rem, transparent 0.1rem),
+    radial-gradient(circle at 66% 59%, var(--bioluminescence-spark) 0 0.065rem, transparent 0.12rem),
+    radial-gradient(circle at 78% 45%, var(--bioluminescence-spark) 0 0.05rem, transparent 0.11rem),
+    radial-gradient(circle at 88% 67%, var(--bioluminescence-spark) 0 0.075rem, transparent 0.14rem),
+    radial-gradient(circle at 95% 36%, var(--bioluminescence-spark) 0 0.045rem, transparent 0.1rem),
+    radial-gradient(ellipse 25% 48% at 18% 60%, var(--bioluminescence-wake), transparent 72%),
+    radial-gradient(ellipse 30% 42% at 52% 48%, var(--bioluminescence-wake-soft), transparent 74%),
+    radial-gradient(ellipse 24% 46% at 84% 57%, var(--bioluminescence-wake), transparent 72%);
+  content: "";
+  mix-blend-mode: screen;
+  opacity: var(--bioluminescence-opacity);
+  pointer-events: none;
 }
 
 .source-section--story {
@@ -578,7 +629,7 @@ p {
   display: grid;
   min-height: 62.5rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  background: var(--paper);
+  background: var(--surface-water);
 }
 
 .founder-source > img {
@@ -977,6 +1028,24 @@ p {
   transform: rotate(-4deg);
 }
 
+.source-footer::after,
+.site-menu__service::after {
+  position: absolute;
+  inset: 0;
+  display: var(--bioluminescence-display);
+  background:
+    radial-gradient(circle at 67% 18%, var(--bioluminescence-spark) 0 0.055rem, transparent 0.12rem),
+    radial-gradient(circle at 74% 35%, var(--bioluminescence-spark) 0 0.075rem, transparent 0.14rem),
+    radial-gradient(circle at 81% 12%, var(--bioluminescence-spark) 0 0.045rem, transparent 0.1rem),
+    radial-gradient(circle at 88% 46%, var(--bioluminescence-spark) 0 0.065rem, transparent 0.12rem),
+    radial-gradient(circle at 95% 27%, var(--bioluminescence-spark) 0 0.045rem, transparent 0.1rem),
+    radial-gradient(ellipse 42% 42% at 84% 28%, var(--bioluminescence-wake), transparent 74%);
+  content: "";
+  mix-blend-mode: screen;
+  opacity: var(--bioluminescence-opacity);
+  pointer-events: none;
+}
+
 .source-footer :focus-visible {
   outline-color: var(--footer-text);
 }
@@ -1305,14 +1374,14 @@ p {
   z-index: 90;
   inset: 0;
   overflow: hidden;
-  background: var(--paper);
+  background: var(--surface-water);
 }
 
 .site-menu__panel {
   width: 100%;
   height: 100dvh;
   min-height: 100%;
-  background: var(--paper);
+  background: var(--surface-water);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -1586,7 +1655,7 @@ p {
 /* Catalog */
 
 .catalog-page {
-  background: var(--paper);
+  background: var(--surface-water);
 }
 
 .catalog-intro {
@@ -2609,6 +2678,8 @@ p {
   :root {
     --line: #757575;
     --muted: #3a3a3a;
+    --bioluminescence-opacity: 0;
+    --bioluminescence-display: none;
   }
 
   .source-button,
@@ -2621,6 +2692,8 @@ p {
   :root[data-theme="dark"] {
     --line: #91a0a8;
     --muted: #ffffff;
+    --bioluminescence-opacity: 0;
+    --bioluminescence-display: none;
   }
 }
 
@@ -2628,10 +2701,18 @@ p {
   :root:not([data-theme="light"]) {
     --line: #91a0a8;
     --muted: #ffffff;
+    --bioluminescence-opacity: 0;
+    --bioluminescence-display: none;
   }
 }
 
 @media (forced-colors: active) {
+  .fish-divider::after,
+  .source-footer::after,
+  .site-menu__service::after {
+    display: none;
+  }
+
   .source-hero__shade,
   .source-quote::after {
     background: Canvas;
