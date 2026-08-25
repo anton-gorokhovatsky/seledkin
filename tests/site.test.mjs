@@ -147,6 +147,31 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.doesNotMatch(home, /telegram-widget|tgme_widget|Feed not found/i);
 });
 
+test("the footer ends both customer journeys with a useful, human invitation", () => {
+  for (const page of [home, catalogPage]) {
+    assert.match(page, /<footer class="source-footer" aria-labelledby="[^"]+">/);
+    assert.match(page, /Лосось на вахте — заходите в лавку/);
+    assert.match(page, /<dl class="source-footer__facts">/);
+    assert.match(page, /Ежедневно, с&nbsp;11:00 до&nbsp;20:00/);
+    assert.match(page, /метро\s+«Вавиловская»/);
+    assert.match(page, /href="tel:\+79166751452"/);
+    assert.match(page, /class="source-footer__portrait"/);
+    assert.match(page, /salmon-cat\.jpg/);
+    for (const label of ["Телеграм", "WhatsApp", "YouTube", "SoundCloud"]) {
+      assert.ok(page.includes(`<span>${label}</span>`), `В подвале нет подписи ${label}`);
+    }
+  }
+
+  const catRule =
+    styles.match(/\.source-footer__portrait\s+img\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(catRule, /height:\s*auto/);
+  assert.doesNotMatch(catRule, /object-fit:\s*cover/);
+  assert.match(siteScript, /IntersectionObserver/);
+  assert.match(siteScript, /is-suppressed/);
+  assert.match(siteScript, /floatingChat\.inert = isSuppressed/);
+  assert.match(styles, /\.floating-chat\.is-suppressed/);
+});
+
 test("the complete catalog has stable categories and 114 priced items", () => {
   assert.equal(catalog.length, 7);
   assert.equal(
@@ -286,17 +311,27 @@ test("WCAG 2.2 AA is a mechanical project contract", () => {
   assert.match(styles, /--whatsapp:\s*#137a3d/);
   assert.match(styles, /--text-link:\s*#246f55/);
   assert.match(styles, /--focus:\s*#a35d00/);
+  assert.match(styles, /--footer:\s*#073d55/);
+  assert.match(styles, /--footer-surface:\s*#0b6a84/);
+  assert.match(styles, /--footer-text:\s*#fff8ed/);
+  assert.match(styles, /--footer-muted:\s*#dce9e8/);
+  assert.match(styles, /--footer:\s*#061a26/);
+  assert.match(styles, /--footer-surface:\s*#0a4053/);
 
   for (const [foreground, background, minimum] of [
     ["#006d9d", "#ffffff", 4.5],
     ["#137a3d", "#ffffff", 4.5],
     ["#246f55", "#ffffff", 4.5],
     ["#696969", "#ffffff", 4.5],
-    ["#a8a8a8", "#171717", 4.5],
     ["#a35d00", "#ffffff", 3],
-    ["#a35d00", "#171717", 3],
+    ["#ffc15c", "#0e202b", 3],
     ["#8a6b2f", "#ffffff", 3],
     ["#ffffff", "#707070", 4.5],
+    ["#fff8ed", "#0b6a84", 4.5],
+    ["#dce9e8", "#0b6a84", 4.5],
+    ["#f3ede2", "#0a4053", 4.5],
+    ["#d3ccc0", "#0a4053", 4.5],
+    ["#b8c2c8", "#0a4053", 4.5],
   ]) {
     assert.ok(
       contrast(foreground, background) >= minimum,

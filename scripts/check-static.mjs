@@ -235,6 +235,12 @@ for (const required of [
   "--whatsapp: #137a3d",
   "--text-link: #246f55",
   "--focus: #a35d00",
+  "--footer: #073d55",
+  "--footer-surface: #0b6a84",
+  "--footer-text: #fff8ed",
+  "--footer-muted: #dce9e8",
+  "--footer: #061a26",
+  "--footer-surface: #0a4053",
 ]) {
   if (!css.includes(required)) fail(`assets/styles.css: нет обязательного правила ${required}`);
 }
@@ -285,6 +291,29 @@ if (!homePage.includes("https://t.me/kapitanseledkin")) {
   fail("index.html: нет ссылки на весь авторский телеграм-канал");
 }
 
+for (const [file, page] of [
+  ["index.html", homePage],
+  ["catalog/index.html", catalogPage],
+]) {
+  for (const required of [
+    'class="source-footer__portrait"',
+    "Лосось на вахте — заходите в лавку",
+    "Ежедневно, с&nbsp;11:00 до&nbsp;20:00",
+    "метро",
+    "«Вавиловская»",
+    "Заказать в Телеграме",
+    "Заказать в WhatsApp",
+    "<span>Телеграм</span>",
+    "<span>WhatsApp</span>",
+    "<span>YouTube</span>",
+    "<span>SoundCloud</span>",
+  ]) {
+    if (!page.includes(required)) {
+      fail(`${file}: содержательный подвал не содержит ${required}`);
+    }
+  }
+}
+
 const accessibility = readFileSync(join(root, "ACCESSIBILITY.md"), "utf8");
 for (const required of [
   "WCAG 2.2 AA",
@@ -309,7 +338,7 @@ for (const match of css.matchAll(/url\(["']?([^"'()]+)["']?\)/g)) {
 }
 
 const catRule =
-  css.match(/\.source-footer__content\s*>\s*img\s*\{([^}]*)\}/s)?.[1] ?? "";
+  css.match(/\.source-footer__portrait\s+img\s*\{([^}]*)\}/s)?.[1] ?? "";
 if (!/height\s*:\s*auto/i.test(catRule) || /object-fit\s*:\s*cover/i.test(catRule)) {
   fail("Портрет кота Лосося в подвале должен сохранять исходную композицию");
 }

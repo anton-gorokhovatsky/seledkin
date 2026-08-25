@@ -5,6 +5,8 @@ const menuButton = document.querySelector("[data-menu-toggle]");
 const menu = document.querySelector("[data-menu]");
 const menuClose = document.querySelector("[data-menu-close]");
 const hero = document.querySelector(".source-hero");
+const footer = document.querySelector(".source-footer");
+const floatingChat = document.querySelector(".floating-chat");
 const mobileQuery = window.matchMedia("(max-width: 61.1875rem)");
 
 let scrollFrame = 0;
@@ -127,6 +129,19 @@ if (menuButton && menu) {
       first.focus();
     }
   });
+}
+
+if (footer && floatingChat && "IntersectionObserver" in window) {
+  const footerObserver = new IntersectionObserver(
+    ([entry]) => {
+      const isSuppressed = entry.isIntersecting;
+      floatingChat.classList.toggle("is-suppressed", isSuppressed);
+      floatingChat.inert = isSuppressed;
+    },
+    { rootMargin: "0px 0px -15% 0px" },
+  );
+
+  footerObserver.observe(footer);
 }
 
 window.addEventListener("scroll", requestMenuUpdate, { passive: true });
