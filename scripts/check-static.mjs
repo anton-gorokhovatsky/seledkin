@@ -41,6 +41,7 @@ const requiredFiles = [
   "assets/catalog-data.js",
   "assets/logo-redrawn.svg",
   "assets/logo-redrawn-night.svg",
+  "assets/social-icons.svg",
   "assets/salmon-cat.jpg",
   "assets/hero-ocean.jpg",
   "assets/caviar-slab.jpg",
@@ -341,11 +342,15 @@ for (const [file, page] of [
     "«Вавиловская»",
     "Заказать в Телеграме",
     "Заказать в WhatsApp",
-    "<span>Телеграм</span>",
+    "<span>Телеграм-канал</span>",
     "<span>WhatsApp</span>",
     "<span>YouTube</span>",
     "<span>SoundCloud</span>",
     'class="site-menu__actions"',
+    'class="site-menu__networks"',
+    "<strong>Телеграм-канал</strong>",
+    "social-icons.svg#youtube",
+    "social-icons.svg#soundcloud",
     "https://t.me/+79166751452",
     "https://wa.me/79166751452",
   ]) {
@@ -401,6 +406,10 @@ const expectedHashes = new Map([
     "9510ad1b7dd08ace5ce88d0b5684a841442175c10aaea11a876670f2187ca18f",
   ],
   [
+    "assets/social-icons.svg",
+    "4134ef4ba0dd886fc675c76441ba241bdeb3453c7b9d4f1b453b981f7ebb3eb9",
+  ],
+  [
     "assets/salmon-cat.jpg",
     "b12d7f749f2bffbfc1ee92dc10d18f050badaaebd8b851708e2b7dd9a625f1bd",
   ],
@@ -438,6 +447,13 @@ if (!nightLogo.includes('fill="#f3ede2"') || /#fff(?:fff)?|<rect\b/i.test(nightL
 }
 if (!nightLogo.includes('clipPath id="logo-cutout"')) {
   fail("Ночной логотип должен скрывать исходную надпись перед наложением перерисованной");
+}
+
+const socialIcons = readFileSync(join(root, "assets/social-icons.svg"), "utf8");
+for (const id of ["telegram", "whatsapp", "youtube", "soundcloud"]) {
+  if (!socialIcons.includes(`<symbol id="${id}" viewBox="0 0 24 24">`)) {
+    fail(`В локальном SVG-спрайте нет значка ${id}`);
+  }
 }
 
 if (failures.length) {

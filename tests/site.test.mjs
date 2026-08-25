@@ -188,7 +188,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     assert.match(page, /href="tel:\+79166751452"/);
     assert.match(page, /class="source-footer__portrait"/);
     assert.match(page, /salmon-cat\.jpg/);
-    for (const label of ["Телеграм", "WhatsApp", "YouTube", "SoundCloud"]) {
+    for (const label of ["Телеграм-канал", "WhatsApp", "YouTube", "SoundCloud"]) {
       assert.ok(page.includes(`<span>${label}</span>`), `В подвале нет подписи ${label}`);
     }
   }
@@ -198,6 +198,53 @@ test("the footer ends both customer journeys with a useful, human invitation", (
   assert.match(catRule, /height:\s*auto/);
   assert.doesNotMatch(catRule, /object-fit:\s*cover/);
   assert.doesNotMatch(home + catalogPage + siteScript + styles, /floating-chat|floatingChat/);
+});
+
+test("menu and footer channels use one precise local SVG set with Telegram first", async () => {
+  const symbols = ["telegram", "whatsapp", "youtube", "soundcloud"];
+  for (const page of [home, catalogPage]) {
+    const navigation =
+      page.match(/<nav class="source-footer__channels"[\s\S]*?<\/nav>/)?.[0] ?? "";
+    assert.ok(navigation);
+    assert.match(navigation, /class="source-footer__channel--primary"[^>]*href="https:\/\/t\.me\/kapitanseledkin"/);
+    assert.equal(
+      (navigation.match(/class="source-footer__channel-icon"/g) ?? []).length,
+      symbols.length,
+    );
+    assert.doesNotMatch(navigation, /<path\b/);
+    for (const symbol of symbols) {
+      assert.match(
+        navigation,
+        new RegExp(`<use href="(?:\\.\\.\\/)?assets/social-icons\\.svg#${symbol}"><\\/use>`),
+      );
+    }
+
+    const menuNetworks =
+      page.match(/<div class="site-menu__networks">[\s\S]*?<\/nav>\s*<\/div>/)?.[0] ?? "";
+    assert.match(menuNetworks, /<strong>Телеграм-канал<\/strong>/);
+    assert.match(menuNetworks, /Судовой журнал капитана/);
+    assert.match(menuNetworks, /social-icons\.svg#telegram/);
+    assert.match(menuNetworks, /social-icons\.svg#youtube/);
+    assert.match(menuNetworks, /social-icons\.svg#soundcloud/);
+    assert.doesNotMatch(menuNetworks, /social-icons\.svg#whatsapp/);
+  }
+
+  const channelRule =
+    styles.match(/\.source-footer__channels\s+a\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.doesNotMatch(channelRule, /border-radius|background(?:-color)?\s*:/);
+  assert.match(styles, /\.source-footer__channel-icon\s*\{[\s\S]*?width:\s*1\.35rem;/);
+
+  const sprite = await readFile(
+    new URL("../assets/social-icons.svg", import.meta.url),
+    "utf8",
+  );
+  for (const symbol of symbols) {
+    assert.match(sprite, new RegExp(`<symbol id="${symbol}" viewBox="0 0 24 24">`));
+  }
+  assert.equal(
+    createHash("sha256").update(sprite).digest("hex"),
+    "4134ef4ba0dd886fc675c76441ba241bdeb3453c7b9d4f1b453b981f7ebb3eb9",
+  );
 });
 
 test("the complete catalog has stable categories and 114 priced items", () => {
