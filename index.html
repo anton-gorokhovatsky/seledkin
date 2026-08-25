@@ -143,7 +143,8 @@
       aria-label="Открыть меню"
       data-menu-toggle
     >
-      <span aria-hidden="true"></span>
+      <span class="floating-menu__mark" aria-hidden="true"></span>
+      <span class="floating-menu__label">Меню</span>
     </button>
 
     <div
@@ -156,48 +157,93 @@
       hidden
     >
       <div class="site-menu__panel">
-        <h2 class="visually-hidden" id="menu-title">Меню сайта</h2>
-        <button class="site-menu__close" type="button" data-menu-close>
-          <span aria-hidden="true">×</span>
-          <span class="visually-hidden">Закрыть меню</span>
-        </button>
-        <a class="site-menu__brand" href="./">
-          <img
-            src="assets/logo-redrawn.svg"
-            alt="Рыбная лавка капитана Селедкина"
-            width="3600"
-            height="1784"
-          />
-        </a>
-        <nav aria-label="Меню сайта">
-          <a href="#assortment">Что продаём</a>
-          <a href="#about">О нас</a>
-          <a href="catalog/">Продукты и цены</a>
-          <a href="#delivery">Доставка</a>
-          <a href="#contacts">Контакты</a>
-        </nav>
-        <p><a href="tel:+79166751452">+7&nbsp;916&nbsp;675‑14‑52</a></p>
-        <p>
-          Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
-          Метро «Вавиловская»
-        </p>
-        <div class="site-menu__actions">
-          <a class="source-button source-button--whatsapp" href="https://wa.me/79166751452">
-            Заказать в WhatsApp
+        <header class="site-menu__topbar">
+          <a class="site-menu__brand" href="./">
+            <img
+              src="assets/logo-redrawn.svg"
+              alt="Рыбная лавка капитана Селедкина"
+              width="3600"
+              height="1784"
+            />
           </a>
-          <a class="source-button source-button--telegram" href="https://t.me/+79166751452">
-            Заказать в Телеграме
-          </a>
+          <p class="site-menu__deck">Навигационный мостик</p>
+          <button
+            class="site-menu__close"
+            type="button"
+            aria-label="Закрыть меню"
+            data-menu-close
+          >
+            <span class="site-menu__close-mark" aria-hidden="true"></span>
+            <span>Закрыть</span>
+          </button>
+        </header>
+
+        <div class="site-menu__layout">
+          <section class="site-menu__routes">
+            <p class="site-menu__kicker">По сайту</p>
+            <h2 id="menu-title">Куда держим курс?</h2>
+            <nav aria-label="Меню сайта">
+              <a href="#assortment">
+                <span aria-hidden="true">01</span>
+                <span>Что продаём</span>
+              </a>
+              <a href="catalog/">
+                <span aria-hidden="true">02</span>
+                <span>Продукты и цены</span>
+              </a>
+              <a href="#about">
+                <span aria-hidden="true">03</span>
+                <span>О нас</span>
+              </a>
+              <a href="#journal">
+                <span aria-hidden="true">04</span>
+                <span>Судовой журнал</span>
+              </a>
+              <a href="#delivery">
+                <span aria-hidden="true">05</span>
+                <span>Доставка</span>
+              </a>
+              <a href="#contacts">
+                <span aria-hidden="true">06</span>
+                <span>Контакты</span>
+              </a>
+            </nav>
+          </section>
+
+          <section class="site-menu__service" aria-labelledby="menu-service-title">
+            <div class="site-menu__service-inner">
+              <p class="site-menu__kicker">Лавка на Вавиловской</p>
+              <h3 id="menu-service-title">Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
+              <address>
+                Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
+                Метро «Вавиловская»
+              </address>
+              <a class="site-menu__phone" href="tel:+79166751452">
+                +7&nbsp;916&nbsp;675‑14‑52
+              </a>
+              <div class="site-menu__actions">
+                <a class="source-button source-button--menu-primary" href="https://t.me/+79166751452">
+                  Заказать в Телеграме
+                </a>
+                <a class="source-button source-button--menu-secondary" href="https://wa.me/79166751452">
+                  Заказать в WhatsApp
+                </a>
+              </div>
+              <a class="site-menu__channel" href="https://t.me/kapitanseledkin">
+                Читать капитана в Телеграме
+              </a>
+              <button
+                class="theme-toggle theme-toggle--menu"
+                type="button"
+                aria-label="Включить ночную вахту"
+                data-theme-toggle
+              >
+                <span class="theme-toggle__mark" aria-hidden="true"></span>
+                <span data-theme-label>Ночная вахта</span>
+              </button>
+            </div>
+          </section>
         </div>
-        <button
-          class="theme-toggle theme-toggle--menu"
-          type="button"
-          aria-label="Включить ночную вахту"
-          data-theme-toggle
-        >
-          <span class="theme-toggle__mark" aria-hidden="true"></span>
-          <span data-theme-label>Ночная вахта</span>
-        </button>
       </div>
     </div>
 
@@ -828,13 +874,5 @@
       </div>
     </footer>
 
-    <aside class="floating-chat-region" aria-label="Быстрая связь">
-      <a class="floating-chat" href="https://t.me/+79166751452" aria-label="Спросить в Телеграме">
-        <svg viewBox="0 0 32 32" aria-hidden="true">
-          <path d="M7.5 8.5h17v12h-9l-5.5 4v-4H7.5v-12Z" />
-          <path d="M11 13h10M11 16.5h7" />
-        </svg>
-      </a>
-    </aside>
   </body>
 </html>

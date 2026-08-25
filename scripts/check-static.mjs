@@ -171,6 +171,11 @@ for (const file of htmlFiles) {
       'aria-modal="true"',
       'aria-labelledby="menu-title"',
       'tabindex="-1"',
+      'class="site-menu__layout"',
+      'class="site-menu__close-mark"',
+      "Навигационный мостик",
+      "Куда держим курс?",
+      "Судовой журнал",
     ]) {
       if (!html.includes(required)) fail(`${file}: меню или skip-target не содержит ${required}`);
     }
@@ -241,6 +246,9 @@ for (const required of [
   "--footer-muted: #dce9e8",
   "--footer: #061a26",
   "--footer-surface: #0a4053",
+  ".site-menu__layout",
+  "height: 100dvh",
+  "grid-template-columns: minmax(0, 1.45fr) minmax(22rem, 0.75fr)",
 ]) {
   if (!css.includes(required)) fail(`assets/styles.css: нет обязательного правила ${required}`);
 }
@@ -250,6 +258,7 @@ for (const required of [
   "element.inert = value",
   'event.key === "Escape"',
   "menuClose?.focus()",
+  "menuPanel.scrollTop = 0",
   'import "./theme.js"',
 ]) {
   if (!siteScript.includes(required)) fail(`assets/site.js: нет обязательного поведения ${required}`);
@@ -307,11 +316,21 @@ for (const [file, page] of [
     "<span>WhatsApp</span>",
     "<span>YouTube</span>",
     "<span>SoundCloud</span>",
+    'class="site-menu__actions"',
+    "https://t.me/+79166751452",
+    "https://wa.me/79166751452",
   ]) {
     if (!page.includes(required)) {
       fail(`${file}: содержательный подвал не содержит ${required}`);
     }
   }
+  if (/floating-chat|floatingChat/.test(page)) {
+    fail(`${file}: отдельный чат-виджет дублирует контакты в меню`);
+  }
+}
+
+if (/floating-chat|floatingChat/.test(siteScript + css)) {
+  fail("CSS или JavaScript всё ещё содержит удалённый чат-виджет");
 }
 
 const accessibility = readFileSync(join(root, "ACCESSIBILITY.md"), "utf8");

@@ -166,10 +166,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     styles.match(/\.source-footer__portrait\s+img\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.match(catRule, /height:\s*auto/);
   assert.doesNotMatch(catRule, /object-fit:\s*cover/);
-  assert.match(siteScript, /IntersectionObserver/);
-  assert.match(siteScript, /is-suppressed/);
-  assert.match(siteScript, /floatingChat\.inert = isSuppressed/);
-  assert.match(styles, /\.floating-chat\.is-suppressed/);
+  assert.doesNotMatch(home + catalogPage + siteScript + styles, /floating-chat|floatingChat/);
 });
 
 test("the complete catalog has stable categories and 114 priced items", () => {
@@ -232,14 +229,45 @@ test("catalog search and filters expose accessible state", () => {
 });
 
 test("menu, focus and reduced motion remain accessible", () => {
-  assert.match(home, /aria-controls="primary-navigation"/);
-  assert.match(home, /data-menu-close/);
+  for (const [page, journalPath] of [
+    [home, "#journal"],
+    [catalogPage, "../#journal"],
+  ]) {
+    assert.match(page, /aria-controls="primary-navigation"/);
+    assert.match(page, /data-menu-close/);
+    assert.match(page, /class="site-menu__close-mark"/);
+    assert.match(page, />Закрыть</);
+    assert.match(page, /Навигационный мостик/);
+    assert.ok(page.includes('<h2 id="menu-title">Куда держим курс?</h2>'));
+    assert.match(page, /class="site-menu__layout"/);
+    assert.match(page, /class="site-menu__service"/);
+    assert.match(page, /class="site-menu__actions"/);
+    assert.match(page, /https:\/\/t\.me\/\+79166751452/);
+    assert.match(page, /https:\/\/wa\.me\/79166751452/);
+    assert.ok(page.includes(`href="${journalPath}"`));
+    assert.doesNotMatch(page, />×</);
+
+    const routes = page.match(
+      /<section class="site-menu__routes">([\s\S]*?)<\/section>/,
+    )?.[1] ?? "";
+    assert.equal((routes.match(/<a\s/g) ?? []).length, 6);
+  }
+
   assert.match(siteScript, /event\.key === "Escape"/);
   assert.match(siteScript, /event\.key !== "Tab"/);
   assert.match(siteScript, /menuClose\?\.focus/);
+  assert.match(siteScript, /menuPanel\.scrollTop = 0/);
   assert.match(siteScript, /element\.inert = value/);
   assert.match(home, /role="dialog"/);
   assert.match(home, /aria-modal="true"/);
+  assert.match(styles, /\.floating-menu\s*\{[\s\S]*?position:\s*fixed;/);
+  assert.match(styles, /\.site-menu\s*\{[\s\S]*?inset:\s*0;/);
+  assert.match(styles, /\.site-menu__panel\s*\{[\s\S]*?height:\s*100dvh;/);
+  assert.match(
+    styles,
+    /grid-template-columns:\s*minmax\(0, 1\.45fr\) minmax\(22rem, 0\.75fr\)/,
+  );
+  assert.match(styles, /\.site-menu__service::before[\s\S]*?fish-pattern\.svg/);
   assert.match(styles, /:focus-visible/);
   assert.match(styles, /prefers-reduced-motion:\s*reduce/);
   assert.match(styles, /prefers-contrast:\s*more/);

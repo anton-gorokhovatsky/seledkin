@@ -3,10 +3,9 @@ import "./theme.js";
 
 const menuButton = document.querySelector("[data-menu-toggle]");
 const menu = document.querySelector("[data-menu]");
+const menuPanel = menu?.querySelector(".site-menu__panel");
 const menuClose = document.querySelector("[data-menu-close]");
 const hero = document.querySelector(".source-hero");
-const footer = document.querySelector(".source-footer");
-const floatingChat = document.querySelector(".floating-chat");
 const mobileQuery = window.matchMedia("(max-width: 61.1875rem)");
 
 let scrollFrame = 0;
@@ -35,6 +34,7 @@ function openMenu() {
   if (!menuButton || !menu) return;
 
   menu.hidden = false;
+  if (menuPanel instanceof HTMLElement) menuPanel.scrollTop = 0;
   menuButton.setAttribute("aria-expanded", "true");
   menuButton.setAttribute("aria-label", "Закрыть меню");
   document.body.classList.add("menu-open");
@@ -65,10 +65,6 @@ function updateFloatingMenu() {
   const shouldShow = isMobile || !hero || window.scrollY > revealAt;
 
   menuButton.classList.toggle("is-visible", shouldShow);
-  menuButton.classList.toggle(
-    "is-past-hero",
-    isMobile && Boolean(hero) && window.scrollY > hero.offsetHeight - 96,
-  );
 }
 
 function requestMenuUpdate() {
@@ -129,19 +125,6 @@ if (menuButton && menu) {
       first.focus();
     }
   });
-}
-
-if (footer && floatingChat && "IntersectionObserver" in window) {
-  const footerObserver = new IntersectionObserver(
-    ([entry]) => {
-      const isSuppressed = entry.isIntersecting;
-      floatingChat.classList.toggle("is-suppressed", isSuppressed);
-      floatingChat.inert = isSuppressed;
-    },
-    { rootMargin: "0px 0px -15% 0px" },
-  );
-
-  footerObserver.observe(footer);
 }
 
 window.addEventListener("scroll", requestMenuUpdate, { passive: true });
