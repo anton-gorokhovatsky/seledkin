@@ -1,61 +1,14 @@
-import { typograph } from "./typograph";
-
-export type CatalogItem = {
-  name: string;
-  price: string;
-  description?: string;
-};
-
-export type CatalogCategory = {
-  slug: string;
-  label: string;
-  shortLabel: string;
-  items: CatalogItem[];
-};
-
 const item = (
-  name: string,
-  price: string,
-  description?: string,
-): CatalogItem => ({
-  name: typograph(name),
-  price: typograph(price),
-  description: description ? typograph(description) : undefined,
+  name,
+  price,
+  description,
+) => ({
+  name,
+  price,
+  description,
 });
 
-// Служебный экспорт оставлен для совместимости с рабочими черновиками.
-// В опубликованном интерфейсе дата не показывается: цены считаются действующими.
-export const catalogUpdatedAt = "2026-01";
-
-const catalogMonthNames = [
-  "января",
-  "февраля",
-  "марта",
-  "апреля",
-  "мая",
-  "июня",
-  "июля",
-  "августа",
-  "сентября",
-  "октября",
-  "ноября",
-  "декабря",
-] as const;
-
-function formatCatalogUpdated(value: string) {
-  const [year, month] = value.split("-").map(Number);
-  const monthName = catalogMonthNames[month - 1];
-
-  if (!year || !monthName) {
-    throw new Error(`Некорректная дата прайс-листа: ${value}`);
-  }
-
-  return `${monthName} ${year} года`;
-}
-
-export const catalogUpdated = formatCatalogUpdated(catalogUpdatedAt);
-
-export const catalog: CatalogCategory[] = [
+export const catalog = [
   {
     slug: "caviar",
     label: "Икра",

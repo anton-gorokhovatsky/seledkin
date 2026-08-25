@@ -1,0 +1,191 @@
+import { catalog } from "../assets/catalog-data.js";
+
+const allCategories = "all";
+const telegramOrder = "https://t.me/+79166751452";
+const search = document.querySelector("[data-catalog-search]");
+const filters = document.querySelector("[data-catalog-filters]");
+const list = document.querySelector("[data-catalog-list]");
+const count = document.querySelector("[data-catalog-count]");
+const reset = document.querySelector("[data-catalog-reset]");
+
+const categoryFromHash = window.location.hash.startsWith("#category-")
+  ? window.location.hash.replace("#category-", "")
+  : null;
+
+let activeCategory = catalog.some((category) => category.slug === categoryFromHash)
+  ? categoryFromHash
+  : allCategories;
+let query = "";
+let initialHashHandled = false;
+
+function normalize(value) {
+  return value
+    .toLocaleLowerCase("ru-RU")
+    .replaceAll("ё", "е")
+    .replaceAll("\u00a0", " ")
+    .replaceAll("\u202f", " ")
+    .trim();
+}
+
+function typograph(value) {
+  return value
+    .replace(/(\d) (?=\d{3}(?:\D|$))/g, "$1\u202f")
+    .replace(/(\d) ₽/g, "$1\u00a0₽")
+    .replace(/(\d) (кг|г|л|мл)\b/g, "$1\u00a0$2");
+}
+
+function positionCount(value) {
+  const lastTwo = value % 100;
+  const last = value % 10;
+
+  if (lastTwo >= 11 && lastTwo <= 14) return `${value} позиций`;
+  if (last === 1) return `${value} позиция`;
+  if (last >= 2 && last <= 4) return `${value} позиции`;
+  return `${value} позиций`;
+}
+
+function productMessage(product) {
+  const details = product.description ? ` (${product.description})` : "";
+  const message =
+    `Здравствуйте! Подскажите, пожалуйста, есть ли сейчас «${product.name}»${details}?`;
+
+  return `${telegramOrder}?text=${encodeURIComponent(message)}`;
+}
+
+function makeElement(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
+}
+
+function makeProduct(product) {
+  const article = makeElement("article", "catalog-product");
+  const head = makeElement("div", "catalog-product-head");
+  const title = makeElement("h4", "", product.name);
+  const price = makeElement("strong", "", typograph(product.price));
+  const description = product.description
+    ? makeElement("p", "", product.description)
+    : makeElement("span", "visually-hidden", "Без дополнительного описания");
+  const action = makeElement("a", "", "Уточнить наличие");
+
+  action.href = productMessage(product);
+  action.setAttribute("aria-label", `Уточнить наличие: ${product.name}`);
+  head.append(title, price);
+  article.append(head, description, action);
+  return article;
+}
+
+function makeCategory(category) {
+  const section = makeElement("section", "catalog-category");
+  const header = makeElement("div", "catalog-category-header");
+  const title = makeElement("h3", "", category.label);
+  const categoryCount = makeElement(
+    "p",
+    "catalog-category-count",
+    positionCount(category.items.length),
+  );
+  const grid = makeElement("div", "catalog-product-grid");
+
+  section.id = `category-${category.slug}`;
+  title.id = `category-title-${category.slug}`;
+  section.setAttribute("aria-labelledby", title.id);
+  category.items.forEach((product) => grid.append(makeProduct(product)));
+  header.append(title, categoryCount);
+  section.append(header, grid);
+  return section;
+}
+
+function visibleCatalog() {
+  const normalizedQuery = normalize(query);
+
+  return catalog
+    .filter(
+      (category) =>
+        activeCategory === allCategories || category.slug === activeCategory,
+    )
+    .map((category) => ({
+      ...category,
+      items: category.items.filter((product) => {
+        if (!normalizedQuery) return true;
+
+        return normalize(
+          `${product.name} ${product.description ?? ""}`,
+        ).includes(normalizedQuery);
+      }),
+    }))
+    .filter((category) => category.items.length > 0);
+}
+
+function syncFilterButtons() {
+  filters.querySelectorAll("button").forEach((button) => {
+    button.setAttribute(
+      "aria-pressed",
+      String(button.dataset.category === activeCategory),
+    );
+  });
+}
+
+function render() {
+  const visible = visibleCatalog();
+  const visibleCount = visible.reduce(
+    (total, category) => total + category.items.length,
+    0,
+  );
+
+  list.replaceChildren();
+  visible.forEach((category) => list.append(makeCategory(category)));
+
+  if (visibleCount === 0) {
+    const empty = makeElement(
+      "p",
+      "catalog-empty",
+      "Ничего не найдено. Попробуйте другое название или откройте весь ассортимент.",
+    );
+    list.append(empty);
+    count.textContent = "Ничего не найдено";
+  } else {
+    count.textContent = positionCount(visibleCount);
+  }
+
+  reset.hidden = activeCategory === allCategories && query === "";
+  list.setAttribute("aria-busy", "false");
+  syncFilterButtons();
+
+  if (!initialHashHandled && categoryFromHash && activeCategory !== allCategories) {
+    initialHashHandled = true;
+    requestAnimationFrame(() => {
+      document.getElementById(`category-${activeCategory}`)?.scrollIntoView();
+    });
+  }
+}
+
+function addFilter(label, value) {
+  const button = makeElement("button", "", label);
+  button.type = "button";
+  button.dataset.category = value;
+  button.setAttribute("aria-pressed", String(value === activeCategory));
+  button.addEventListener("click", () => {
+    activeCategory = value;
+    render();
+  });
+  filters.append(button);
+}
+
+addFilter("Весь ассортимент", allCategories);
+catalog.forEach((category) => addFilter(category.shortLabel, category.slug));
+
+search.addEventListener("input", (event) => {
+  query = event.currentTarget.value;
+  render();
+});
+
+reset.addEventListener("click", () => {
+  activeCategory = allCategories;
+  query = "";
+  search.value = "";
+  render();
+  search.focus();
+});
+
+render();

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Полный каталог Рыбной лавки капитана Селедкина: рыба, морепродукты, икра и деликатесы с действующими ценами."
+    />
+    <meta name="theme-color" content="#f4efe3" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#071f2a" media="(prefers-color-scheme: dark)" />
+    <link rel="canonical" href="https://ks.fish/catalog/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="../assets/logo-redrawn.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script>
+      document.documentElement.classList.add("js");
+      try {
+        const savedTheme = localStorage.getItem("seledkin-theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+          document.documentElement.dataset.theme = savedTheme;
+        }
+      } catch {}
+    </script>
+    <script type="module" src="../assets/site.js"></script>
+    <script type="module" src="catalog.js"></script>
+    <title>Каталог и цены — Рыбная лавка капитана Селедкина</title>
+  </head>
+  <body class="catalog-page">
+    <a class="skip-link" href="#main">Перейти к каталогу</a>
+
+    <header class="site-header" id="top">
+      <div class="header-note shell">
+        <p>Москва · 300&nbsp;м от метро «Вавиловская»</p>
+        <p>Ежедневно, 11:00—20:00</p>
+      </div>
+      <div class="header-main shell">
+        <a class="brand" href="../" aria-label="Рыбная лавка капитана Селедкина — на главную">
+          <img
+            src="../assets/logo-redrawn.svg"
+            alt="Рыбная лавка капитана Селедкина"
+            width="3600"
+            height="1784"
+          />
+        </a>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="primary-navigation"
+          data-menu-toggle
+        >
+          <span>Меню</span>
+        </button>
+
+        <nav class="site-nav" id="primary-navigation" aria-label="Основная навигация" data-menu>
+          <a href="../#assortment">Что продаём</a>
+          <a href="../#about">О лавке</a>
+          <a href="./" aria-current="page">Каталог</a>
+          <a href="../#delivery">Доставка</a>
+          <a href="../#contacts">Контакты</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="theme-toggle" type="button" data-theme-toggle>
+            Ночная смена
+          </button>
+          <a class="button button--compact" href="https://t.me/+79166751452">
+            Заказать
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="catalog-hero shell" aria-labelledby="catalog-title">
+        <div>
+          <p class="eyebrow">Полный ассортимент</p>
+          <h1 id="catalog-title">Каталог и цены.</h1>
+        </div>
+        <p>
+          Здесь опубликованы действующие цены. Наличие конкретной позиции можно
+          уточнить у лавки перед заказом или поездкой.
+        </p>
+      </section>
+
+      <section class="catalog-controls" aria-label="Поиск и фильтры каталога">
+        <div class="shell controls-grid">
+          <label class="catalog-search">
+            <span>Найти товар</span>
+            <input
+              type="search"
+              inputmode="search"
+              autocomplete="off"
+              placeholder="Например, нерка"
+              data-catalog-search
+            />
+          </label>
+          <div class="catalog-filters" aria-label="Категории" data-catalog-filters></div>
+        </div>
+      </section>
+
+      <section class="catalog-results shell" aria-labelledby="catalog-results-title">
+        <div class="catalog-result-line">
+          <h2 id="catalog-results-title" class="visually-hidden">Товары</h2>
+          <p aria-live="polite" aria-atomic="true" data-catalog-count>
+            Загружаем каталог…
+          </p>
+          <button type="button" class="reset-button" data-catalog-reset hidden>
+            Сбросить поиск
+          </button>
+        </div>
+
+        <div class="catalog-list" data-catalog-list aria-busy="true"></div>
+
+        <noscript>
+          <p class="catalog-noscript">
+            Для поиска по каталогу нужен JavaScript. Позвоните
+            <a href="tel:+79166751452">+7&nbsp;916&nbsp;675‑14‑52</a> или
+            <a href="https://t.me/+79166751452">напишите в Телеграме</a> — в лавке
+            подскажут цену и наличие нужной позиции.
+          </p>
+        </noscript>
+      </section>
+
+      <section class="catalog-order">
+        <div class="shell catalog-order-grid">
+          <div>
+            <p class="eyebrow">Следующий шаг</p>
+            <h2>Нашли нужное?</h2>
+          </div>
+          <p>Спросите о наличии конкретной позиции или сразу оформите заказ.</p>
+          <div class="catalog-order-actions">
+            <a class="button button--paper" href="https://t.me/+79166751452">
+              Заказать в Телеграме
+            </a>
+            <a class="text-link text-link--light" href="https://wa.me/79166751452">
+              Заказать в WhatsApp
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="catalog-footer">
+      <div class="shell footer-base">
+        <small>© «Рыбная лавка капитана Селедкина», 2026</small>
+        <p>Москва · м. «Вавиловская» · ежедневно, 11:00—20:00</p>
+        <a href="../#contacts">Контакты и маршрут</a>
+      </div>
+    </footer>
+  </body>
+</html>
