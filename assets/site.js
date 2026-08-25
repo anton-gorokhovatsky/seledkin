@@ -18,6 +18,16 @@ function focusableMenuItems() {
   ];
 }
 
+function setPageInert(value) {
+  if (!menu) return;
+
+  for (const element of document.body.children) {
+    if (!(element instanceof HTMLElement) || element === menu) continue;
+    if (element.tagName === "SCRIPT") continue;
+    element.inert = value;
+  }
+}
+
 function openMenu() {
   if (!menuButton || !menu) return;
 
@@ -26,11 +36,13 @@ function openMenu() {
   menuButton.setAttribute("aria-label", "Закрыть меню");
   document.body.classList.add("menu-open");
   menuClose?.focus();
+  setPageInert(true);
 }
 
 function closeMenu({ returnFocus = false } = {}) {
   if (!menuButton || !menu) return;
 
+  setPageInert(false);
   menu.hidden = true;
   menuButton.setAttribute("aria-expanded", "false");
   menuButton.setAttribute("aria-label", "Открыть меню");

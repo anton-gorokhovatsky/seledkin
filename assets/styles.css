@@ -5,14 +5,16 @@
   --line: #dedede;
   --blue: #0879bd;
   --blue-deep: #0668a3;
-  --telegram: #2ca9df;
-  --whatsapp: #25d366;
+  --telegram: #006d9d;
+  --whatsapp: #137a3d;
+  --text-link: #246f55;
+  --brass: #8a6b2f;
   --footer: #171717;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --sans: "Golos Text", Arial, Helvetica, sans-serif;
   --shell: 72.5rem;
   --wide: 87.5rem;
-  --focus: #ffb000;
+  --focus: #a35d00;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -28,7 +30,7 @@ html {
 }
 
 body {
-  min-width: 20rem;
+  min-width: 320px;
   margin: 0;
   overflow-x: clip;
   background: var(--paper);
@@ -94,10 +96,16 @@ h4,
 blockquote {
   font-family: var(--serif);
   font-weight: 600;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   text-wrap: balance;
 }
 
 p {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   text-wrap: pretty;
 }
 
@@ -135,6 +143,7 @@ p {
 
 .source-shell {
   width: min(calc(100% - 5rem), var(--shell));
+  min-width: 0;
   margin-inline: auto;
 }
 
@@ -159,7 +168,7 @@ p {
 
 .source-header__address,
 .source-header__action {
-  font-size: 0.74rem;
+  font-size: 0.8rem;
   line-height: 1.45;
 }
 
@@ -223,20 +232,22 @@ p {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
 .social-icons a {
   display: grid;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
   place-items: center;
   border-radius: 50%;
   text-decoration: none;
 }
 
 .social-icons svg {
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 18px;
+  height: 18px;
 }
 
 .social-icons--dark a {
@@ -262,17 +273,20 @@ p {
   min-height: 2.75rem;
   align-items: center;
   justify-content: center;
+  min-width: 0;
+  max-width: 100%;
   padding: 0.75rem 1.6rem;
   border: 1px solid transparent;
   border-radius: 999px;
   color: var(--paper);
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   line-height: 1.2;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
   transition:
     transform 180ms var(--ease),
     background-color 180ms ease-out,
@@ -288,7 +302,7 @@ p {
 }
 
 .source-button--telegram:hover {
-  background: #1698d2;
+  background: #005c86;
 }
 
 .source-button--whatsapp {
@@ -296,11 +310,11 @@ p {
 }
 
 .source-button--whatsapp:hover {
-  background: #18b957;
+  background: #0f6532;
 }
 
 .source-button--outline {
-  border-color: #bda36c;
+  border-color: var(--brass);
   background: transparent;
   color: var(--ink);
 }
@@ -324,7 +338,7 @@ p {
 .source-hero__shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(rgb(0 10 16 / 15%), rgb(0 8 13 / 36%));
+  background: linear-gradient(rgb(0 10 16 / 56%), rgb(0 8 13 / 64%));
 }
 
 .source-hero__content {
@@ -402,6 +416,16 @@ p {
   margin-top: 2.5rem;
 }
 
+.source-split > *,
+.why-layout > *,
+.why-collage > *,
+.founder-source > *,
+.delivery-source > *,
+.controls-grid > *,
+.catalog-order-grid > * {
+  min-width: 0;
+}
+
 .source-copy {
   max-width: 33rem;
   padding: clamp(2rem, 5vw, 5rem) clamp(0rem, 2vw, 1.5rem);
@@ -424,7 +448,7 @@ p {
 }
 
 .source-copy a {
-  color: #4b9f81;
+  color: var(--text-link);
 }
 
 .fish-divider {
@@ -526,7 +550,12 @@ p {
 .source-quote::after {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgb(0 0 0 / 58%), rgb(0 0 0 / 2%) 68%);
+  background: linear-gradient(
+    to top,
+    rgb(0 0 0 / 72%),
+    rgb(0 0 0 / 56%) 72%,
+    rgb(0 0 0 / 20%)
+  );
   content: "";
 }
 
@@ -579,7 +608,7 @@ p {
 .founder-source__copy .source-caption {
   margin-bottom: 2.2rem;
   color: var(--muted);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
 }
 
 .founder-source__copy p {
@@ -632,8 +661,8 @@ p {
   align-items: center;
   justify-content: center;
   padding-block: 0.8rem;
-  color: #969696;
-  font-size: 0.7rem;
+  color: var(--muted);
+  font-size: 0.78rem;
   text-decoration: none;
 }
 
@@ -785,8 +814,8 @@ p {
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid rgb(255 255 255 / 10%);
-  color: #828282;
-  font-size: 0.68rem;
+  color: #a8a8a8;
+  font-size: 0.78rem;
 }
 
 .source-footer__base a {
@@ -801,8 +830,8 @@ p {
   top: 1.875rem;
   left: 1.25rem;
   display: grid;
-  width: 4.875rem;
-  height: 4.875rem;
+  width: 78px;
+  height: 78px;
   padding: 0;
   place-items: center;
   transform: translateY(-8rem);
@@ -813,33 +842,37 @@ p {
   box-shadow: 0 0.4rem 1.8rem rgb(0 0 0 / 18%);
   cursor: pointer;
   opacity: 0;
+  pointer-events: none;
   transition:
     transform 260ms var(--ease),
     opacity 180ms ease-out;
+  visibility: hidden;
 }
 
 .floating-menu.is-visible,
 .floating-menu[aria-expanded="true"] {
   transform: translateY(0);
   opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
 }
 
 .floating-menu span,
 .floating-menu span::before,
 .floating-menu span::after {
   position: absolute;
-  width: 1.75rem;
-  height: 0.13rem;
+  width: 28px;
+  height: 2px;
   background: currentcolor;
   content: "";
 }
 
 .floating-menu span::before {
-  transform: translateY(-0.48rem);
+  transform: translateY(-8px);
 }
 
 .floating-menu span::after {
-  transform: translateY(0.48rem);
+  transform: translateY(8px);
 }
 
 .site-menu[hidden] {
@@ -869,19 +902,20 @@ p {
   top: 1rem;
   right: 1rem;
   display: grid;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 44px;
+  height: 44px;
   padding: 0;
   place-items: center;
   border: 0;
   background: transparent;
   cursor: pointer;
-  font-size: 2rem;
+  font-size: 32px;
   line-height: 1;
 }
 
 .site-menu__brand {
   width: 13rem;
+  max-width: 100%;
   margin-bottom: 3rem;
 }
 
@@ -903,12 +937,19 @@ p {
   border-bottom: 1px solid var(--line);
   font-family: var(--serif);
   font-size: 1.35rem;
+  overflow-wrap: anywhere;
   text-decoration: none;
 }
 
 .site-menu p {
   max-width: 23rem;
   font-size: 0.86rem;
+}
+
+.site-menu p a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
 }
 
 .site-menu__actions {
@@ -924,10 +965,10 @@ p {
   right: 1.6rem;
   bottom: 1.6rem;
   display: grid;
-  width: 3.75rem;
-  height: 3.75rem;
+  width: 60px;
+  height: 60px;
   place-items: center;
-  border: 0.2rem solid var(--paper);
+  border: 3px solid var(--paper);
   border-radius: 50%;
   background: var(--blue);
   color: var(--paper);
@@ -935,7 +976,7 @@ p {
 }
 
 .floating-chat svg {
-  width: 2rem;
+  width: 32px;
   fill: none;
   stroke: currentcolor;
   stroke-linecap: round;
@@ -1006,7 +1047,7 @@ p {
   width: 100%;
   min-height: 3rem;
   padding: 0.65rem 0.85rem;
-  border: 1px solid #bda36c;
+  border: 1px solid var(--brass);
   border-radius: 0;
   background: var(--paper);
 }
@@ -1032,7 +1073,7 @@ p {
 }
 
 .catalog-filters button[aria-pressed="true"] {
-  border-bottom-color: #bda36c;
+  border-bottom-color: var(--brass);
   color: var(--blue-deep);
 }
 
@@ -1139,10 +1180,10 @@ p {
   min-height: 2.75rem;
   align-items: center;
   grid-column: 1 / -1;
-  justify-self: end;
-  margin-top: -1.2rem;
+  justify-self: start;
+  margin-top: 0.55rem;
   color: var(--blue-deep);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   text-decoration: none;
 }
 
@@ -1268,10 +1309,12 @@ p {
     top: 1.4rem;
     right: 1.1rem;
     left: auto;
-    width: 4rem;
-    height: 4rem;
+    width: 64px;
+    height: 64px;
     transform: none;
     opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
   }
 
   .floating-menu.is-past-hero {
@@ -1310,7 +1353,7 @@ p {
   }
 
   .source-hero__content p {
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     letter-spacing: 0.04em;
     line-height: 1.65;
     text-transform: uppercase;
@@ -1551,8 +1594,8 @@ p {
   .floating-chat {
     right: 1rem;
     bottom: 1rem;
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 56px;
+    height: 56px;
   }
 
   .catalog-intro {
@@ -1588,7 +1631,7 @@ p {
     width: 100%;
     min-height: 3rem;
     padding: 0.65rem 2.5rem 0.65rem 0.85rem;
-    border: 1px solid #bda36c;
+    border: 1px solid var(--brass);
     border-radius: 0;
     background: var(--paper);
   }
@@ -1659,7 +1702,20 @@ p {
 
   .price-preview__grid article,
   .catalog-product {
+    grid-template-columns: 1fr;
     gap: 0.35rem 0.75rem;
+  }
+
+  .catalog-product-head {
+    display: grid;
+    min-width: 0;
+    gap: 0.25rem;
+    grid-column: 1;
+  }
+
+  .price-preview__grid strong,
+  .catalog-product strong {
+    white-space: normal;
   }
 
   .price-preview__grid h3,
@@ -1701,5 +1757,29 @@ p {
   .floating-chat,
   .floating-menu {
     border: 2px solid currentcolor;
+  }
+}
+
+@media (forced-colors: active) {
+  .source-hero__shade,
+  .source-quote::after {
+    background: Canvas;
+    opacity: 0.88;
+  }
+
+  .catalog-controls {
+    background: Canvas;
+    backdrop-filter: none;
+  }
+
+  .catalog-filters button[aria-pressed="true"],
+  .source-button,
+  .floating-chat,
+  .floating-menu {
+    border: 2px solid CanvasText;
+  }
+
+  :focus-visible {
+    outline: 0.2rem solid Highlight;
   }
 }

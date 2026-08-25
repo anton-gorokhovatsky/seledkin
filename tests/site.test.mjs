@@ -10,6 +10,14 @@ const catalogPage = await readFile(
   new URL("../catalog/index.html", import.meta.url),
   "utf8",
 );
+const notFoundPage = await readFile(
+  new URL("../404.html", import.meta.url),
+  "utf8",
+);
+const accessibility = await readFile(
+  new URL("../ACCESSIBILITY.md", import.meta.url),
+  "utf8",
+);
 const styles = await readFile(
   new URL("../assets/styles.css", import.meta.url),
   "utf8",
@@ -22,6 +30,26 @@ const catalogScript = await readFile(
   new URL("../catalog/catalog.js", import.meta.url),
   "utf8",
 );
+
+function relativeLuminance(hex) {
+  const channels = hex
+    .replace("#", "")
+    .match(/../g)
+    .map((channel) => Number.parseInt(channel, 16) / 255)
+    .map((channel) =>
+      channel <= 0.04045
+        ? channel / 12.92
+        : ((channel + 0.055) / 1.055) ** 2.4,
+    );
+
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+function contrast(foreground, background) {
+  const first = relativeLuminance(foreground);
+  const second = relativeLuminance(background);
+  return (Math.max(first, second) + 0.05) / (Math.min(first, second) + 0.05);
+}
 
 test("the site is plain HTML, CSS and JavaScript", () => {
   assert.match(home, /^<!doctype html>/i);
@@ -153,9 +181,61 @@ test("menu, focus and reduced motion remain accessible", () => {
   assert.match(siteScript, /event\.key === "Escape"/);
   assert.match(siteScript, /event\.key !== "Tab"/);
   assert.match(siteScript, /menuClose\?\.focus/);
+  assert.match(siteScript, /element\.inert = value/);
+  assert.match(home, /role="dialog"/);
+  assert.match(home, /aria-modal="true"/);
   assert.match(styles, /:focus-visible/);
   assert.match(styles, /prefers-reduced-motion:\s*reduce/);
+  assert.match(styles, /prefers-contrast:\s*more/);
+  assert.match(styles, /forced-colors:\s*active/);
   assert.doesNotMatch(siteScript + home + catalogPage, /seledkin-theme|data-theme-toggle/);
+});
+
+test("WCAG 2.2 AA is a mechanical project contract", () => {
+  for (const requirement of [
+    "WCAG 2.2 AA",
+    "4.5:1",
+    "3:1",
+    "44 × 44",
+    "200%",
+    "320 CSS-пикселей",
+    "forced-colors",
+  ]) {
+    assert.match(accessibility, new RegExp(requirement.replace(".", "\\.")));
+  }
+
+  for (const page of [home, catalogPage, notFoundPage]) {
+    assert.match(page, /<html lang="ru">/);
+    assert.equal((page.match(/<main\b/g) ?? []).length, 1);
+    assert.equal((page.match(/<h1\b/g) ?? []).length, 1);
+    for (const image of page.match(/<img\b[^>]*>/gs) ?? []) {
+      assert.match(image, /\salt="[^"]*"/);
+    }
+  }
+
+  assert.match(catalogPage, /role="status"/);
+  assert.match(catalogPage, /role="group"/);
+  assert.match(styles, /--telegram:\s*#006d9d/);
+  assert.match(styles, /--whatsapp:\s*#137a3d/);
+  assert.match(styles, /--text-link:\s*#246f55/);
+  assert.match(styles, /--focus:\s*#a35d00/);
+
+  for (const [foreground, background, minimum] of [
+    ["#006d9d", "#ffffff", 4.5],
+    ["#137a3d", "#ffffff", 4.5],
+    ["#246f55", "#ffffff", 4.5],
+    ["#696969", "#ffffff", 4.5],
+    ["#a8a8a8", "#171717", 4.5],
+    ["#a35d00", "#ffffff", 3],
+    ["#a35d00", "#171717", 3],
+    ["#8a6b2f", "#ffffff", 3],
+    ["#ffffff", "#707070", 4.5],
+  ]) {
+    assert.ok(
+      contrast(foreground, background) >= minimum,
+      `${foreground} on ${background} must reach ${minimum}:1`,
+    );
+  }
 });
 
 test("the agreed logo, fish pattern and Salmon portrait stay unchanged", async () => {

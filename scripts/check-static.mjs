@@ -33,6 +33,7 @@ const requiredFiles = [
   ".nojekyll",
   "catalog/index.html",
   "catalog/catalog.js",
+  "ACCESSIBILITY.md",
   "assets/styles.css",
   "assets/site.js",
   "assets/typography.js",
@@ -94,6 +95,7 @@ for (const forbidden of ["next/", "next.js", "react-dom", "from \"react\"", "til
 }
 
 const htmlFiles = ["index.html", "catalog/index.html", "404.html"];
+const pageTitles = new Map();
 for (const file of htmlFiles) {
   const path = join(root, file);
   const html = readFileSync(path, "utf8");
@@ -101,6 +103,63 @@ for (const file of htmlFiles) {
   if (!/<html\s+lang="ru"/i.test(html)) fail(`${file}: не задан lang="ru"`);
   if (!/<meta\s+name="viewport"/i.test(html)) fail(`${file}: нет viewport`);
   if (/user-scalable\s*=\s*no/i.test(html)) fail(`${file}: запрещено масштабирование`);
+
+  const title = html.match(/<title>([^<]+)<\/title>/i)?.[1]?.trim();
+  if (!title) {
+    fail(`${file}: нет содержательного title`);
+  } else if (pageTitles.has(title)) {
+    fail(`${file}: title повторяет ${pageTitles.get(title)}`);
+  } else {
+    pageTitles.set(title, file);
+  }
+
+  if ((html.match(/<main\b/gi) ?? []).length !== 1) {
+    fail(`${file}: должен быть ровно один main`);
+  }
+  if ((html.match(/<h1\b/gi) ?? []).length !== 1) {
+    fail(`${file}: должен быть ровно один h1`);
+  }
+  if (/<header\b/i.test(html) && !/class="skip-link"/i.test(html)) {
+    fail(`${file}: повторяющийся интерфейс требует ссылку пропуска`);
+  }
+  if (/<(?:input|select|textarea)\b[^>]*aria-label=""/i.test(html)) {
+    fail(`${file}: у поля пустое доступное имя`);
+  }
+  if (/tabindex="[1-9][0-9]*"/i.test(html)) {
+    fail(`${file}: запрещён положительный tabindex`);
+  }
+  if (/\saccesskey=/i.test(html)) {
+    fail(`${file}: accesskey может конфликтовать с пользовательскими командами`);
+  }
+
+  for (const image of html.match(/<img\b[^>]*>/gis) ?? []) {
+    if (!/\salt=(?:"[^"]*"|'[^']*')/i.test(image)) {
+      fail(`${file}: изображение без alt`);
+    }
+  }
+
+  for (const frame of html.match(/<iframe\b[^>]*>/gis) ?? []) {
+    if (!/\stitle=(?:"[^"]+"|'[^']+')/i.test(frame)) {
+      fail(`${file}: iframe без содержательного title`);
+    }
+  }
+
+  for (const navigation of html.match(/<nav\b[^>]*>/gis) ?? []) {
+    if (!/\saria-(?:label|labelledby)=(?:"[^"]+"|'[^']+')/i.test(navigation)) {
+      fail(`${file}: nav без уникального доступного имени`);
+    }
+  }
+
+  if (file !== "404.html") {
+    for (const required of [
+      'role="dialog"',
+      'aria-modal="true"',
+      'aria-labelledby="menu-title"',
+      'tabindex="-1"',
+    ]) {
+      if (!html.includes(required)) fail(`${file}: меню или skip-target не содержит ${required}`);
+    }
+  }
 
   const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
   const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
@@ -127,7 +186,12 @@ for (const file of htmlFiles) {
   }
 }
 
-for (const script of ["assets/site.js", "assets/catalog-data.js", "catalog/catalog.js"]) {
+for (const script of [
+  "assets/site.js",
+  "assets/typography.js",
+  "assets/catalog-data.js",
+  "catalog/catalog.js",
+]) {
   const result = spawnSync(process.execPath, ["--check", join(root, script)], {
     encoding: "utf8",
   });
@@ -141,6 +205,41 @@ const openingBraces = css.match(/{/g)?.length ?? 0;
 const closingBraces = css.match(/}/g)?.length ?? 0;
 if (openingBraces !== closingBraces) {
   fail(`assets/styles.css: несбалансированные скобки (${openingBraces}/${closingBraces})`);
+}
+
+for (const required of [
+  "@media (prefers-reduced-motion: reduce)",
+  "@media (prefers-contrast: more)",
+  "@media (forced-colors: active)",
+  "--telegram: #006d9d",
+  "--whatsapp: #137a3d",
+  "--text-link: #246f55",
+  "--focus: #a35d00",
+]) {
+  if (!css.includes(required)) fail(`assets/styles.css: нет обязательного правила ${required}`);
+}
+
+const siteScript = readFileSync(join(root, "assets/site.js"), "utf8");
+for (const required of ["element.inert = value", 'event.key === "Escape"', "menuClose?.focus()"]) {
+  if (!siteScript.includes(required)) fail(`assets/site.js: нет обязательного поведения ${required}`);
+}
+
+const catalogPage = readFileSync(join(root, "catalog/index.html"), "utf8");
+for (const required of ['role="status"', 'aria-live="polite"', 'role="group"']) {
+  if (!catalogPage.includes(required)) fail(`catalog/index.html: нет обязательной семантики ${required}`);
+}
+
+const accessibility = readFileSync(join(root, "ACCESSIBILITY.md"), "utf8");
+for (const required of [
+  "WCAG 2.2 AA",
+  "4.5:1",
+  "3:1",
+  "44 × 44",
+  "200%",
+  "320 CSS-пикселей",
+  "forced-colors",
+]) {
+  if (!accessibility.includes(required)) fail(`ACCESSIBILITY.md: нет обязательного правила ${required}`);
 }
 
 for (const match of css.matchAll(/url\(["']?([^"'()]+)["']?\)/g)) {

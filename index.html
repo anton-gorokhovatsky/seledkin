@@ -58,7 +58,7 @@
             Адрес магазина: ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1
             <span>(метро «Вавиловская», метро «Университет»)</span>
           </p>
-          <nav class="social-icons social-icons--dark" aria-label="Социальные сети">
+          <nav class="social-icons social-icons--dark" aria-label="Социальные сети лавки">
             <a href="https://t.me/kapitanseledkin" aria-label="Телеграм">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M20.6 3.7 3.8 10.2c-1.1.4-1.1 1.1-.2 1.4l4.3 1.3 1.7 5.2c.2.7.1.9.8.9.5 0 .8-.2 1-.4l2.1-2 4.4 3.2c.8.4 1.4.2 1.6-.8l2.8-13.4c.3-1.2-.5-1.8-1.7-1.4ZM9.1 12.6l8.4-5.3c.4-.2.7-.1.4.2l-6.9 6.2-.3 3.3-1.6-4.4Z" />
@@ -122,8 +122,17 @@
       <span aria-hidden="true"></span>
     </button>
 
-    <div class="site-menu" id="primary-navigation" data-menu hidden>
+    <div
+      class="site-menu"
+      id="primary-navigation"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="menu-title"
+      data-menu
+      hidden
+    >
       <div class="site-menu__panel">
+        <h2 class="visually-hidden" id="menu-title">Меню сайта</h2>
         <button class="site-menu__close" type="button" data-menu-close>
           <span aria-hidden="true">×</span>
           <span class="visually-hidden">Закрыть меню</span>
@@ -159,7 +168,7 @@
       </div>
     </div>
 
-    <main id="main">
+    <main id="main" tabindex="-1">
       <section class="source-hero" aria-labelledby="hero-title">
         <div class="source-hero__shade"></div>
         <div class="source-hero__content">
@@ -269,7 +278,11 @@
           </div>
 
           <div class="why-layout">
-            <div class="why-collage" aria-label="Фотографии продуктов и лавки">
+            <div
+              class="why-collage"
+              role="group"
+              aria-label="Фотографии продуктов и лавки"
+            >
               <img
                 class="why-collage__main"
                 src="assets/about-main.jpg"
@@ -449,7 +462,11 @@
             <a href="catalog/#category-prepared-fish">Слабосоленая и копчёная рыба</a>
           </nav>
 
-          <div class="price-preview__grid" aria-label="Примеры товаров и цен">
+          <div
+            class="price-preview__grid"
+            role="group"
+            aria-label="Примеры товаров и цен"
+          >
             <article><h3>Чёрная икра</h3><strong>6&#8239;000&nbsp;₽/0,05&nbsp;кг</strong><p>Осетровая, забойная, высшего качества</p></article>
             <article><h3>Красная икра</h3><strong>3&#8239;500&nbsp;₽/0,250&nbsp;кг</strong><p>Форель, кижуч, нерка, кета, горбуша</p></article>
             <article><h3>Клешни краба в/м</h3><strong>6&#8239;500&nbsp;₽/кг</strong><p>Камчатка</p></article>
@@ -548,7 +565,10 @@
           рыбы, все наши новости, в&nbsp;т.&nbsp;ч. об ассортименте, в наших
           социальных сетях. Подписывайтесь!
         </p>
-        <nav class="social-icons social-icons--light" aria-label="Социальные сети">
+        <nav
+          class="social-icons social-icons--light"
+          aria-label="Социальные сети и каналы лавки"
+        >
           <a href="https://t.me/kapitanseledkin" aria-label="Телеграм">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 3.7 3.8 10.2c-1.1.4-1.1 1.1-.2 1.4l4.3 1.3 1.7 5.2c.2.7.1.9.8.9.5 0 .8-.2 1-.4l2.1-2 4.4 3.2c.8.4 1.4.2 1.6-.8l2.8-13.4c.3-1.2-.5-1.8-1.7-1.4ZM9.1 12.6l8.4-5.3c.4-.2.7-.1.4.2l-6.9 6.2-.3 3.3-1.6-4.4Z" /></svg>
           </a>
@@ -569,11 +589,13 @@
       </div>
     </footer>
 
-    <a class="floating-chat" href="https://t.me/+79166751452" aria-label="Спросить в Телеграме">
-      <svg viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M7.5 8.5h17v12h-9l-5.5 4v-4H7.5v-12Z" />
-        <path d="M11 13h10M11 16.5h7" />
-      </svg>
-    </a>
+    <aside class="floating-chat-region" aria-label="Быстрая связь">
+      <a class="floating-chat" href="https://t.me/+79166751452" aria-label="Спросить в Телеграме">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M7.5 8.5h17v12h-9l-5.5 4v-4H7.5v-12Z" />
+          <path d="M11 13h10M11 16.5h7" />
+        </svg>
+      </a>
+    </aside>
   </body>
 </html>
