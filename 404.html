@@ -11,8 +11,27 @@
       href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <script>
+      (() => {
+        document.documentElement.classList.add("js");
+        let theme = null;
+        try {
+          const stored = localStorage.getItem("seledkin-theme");
+          if (stored === "light" || stored === "dark") theme = stored;
+        } catch {}
+        const isDark =
+          theme === "dark" ||
+          (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        if (theme) document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+        document.querySelector('meta[name="theme-color"]').content = isDark
+          ? "#0e202b"
+          : "#ffffff";
+      })();
+    </script>
     <link rel="stylesheet" href="assets/styles.css" />
     <link rel="icon" href="assets/logo-redrawn.svg" type="image/svg+xml" />
+    <script type="module" src="assets/theme.js"></script>
     <script type="module" src="assets/typography.js"></script>
     <title>Страница не найдена — Рыбная лавка капитана Селедкина</title>
   </head>
@@ -39,6 +58,15 @@
           Открыть каталог
         </a>
       </div>
+      <button
+        class="theme-toggle theme-toggle--not-found"
+        type="button"
+        aria-label="Включить ночную вахту"
+        data-theme-toggle
+      >
+        <span class="theme-toggle__mark" aria-hidden="true"></span>
+        <span data-theme-label>Ночная вахта</span>
+      </button>
     </main>
   </body>
 </html>

@@ -3,6 +3,11 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
+import {
+  effectiveTheme,
+  normalizeTheme,
+  themeStorageKey,
+} from "../assets/theme.js";
 import { typographPrice, typographText } from "../assets/typography.js";
 
 const home = await readFile(new URL("../index.html", import.meta.url), "utf8");
@@ -188,7 +193,43 @@ test("menu, focus and reduced motion remain accessible", () => {
   assert.match(styles, /prefers-reduced-motion:\s*reduce/);
   assert.match(styles, /prefers-contrast:\s*more/);
   assert.match(styles, /forced-colors:\s*active/);
-  assert.doesNotMatch(siteScript + home + catalogPage, /seledkin-theme|data-theme-toggle/);
+});
+
+test("theme follows the system and a deliberate choice persists across pages", () => {
+  assert.equal(themeStorageKey, "seledkin-theme");
+  assert.equal(normalizeTheme("light"), "light");
+  assert.equal(normalizeTheme("dark"), "dark");
+  assert.equal(normalizeTheme("sepia"), null);
+  assert.equal(effectiveTheme(null, false), "light");
+  assert.equal(effectiveTheme(null, true), "dark");
+  assert.equal(effectiveTheme("light", true), "light");
+  assert.equal(effectiveTheme("dark", false), "dark");
+
+  assert.match(siteScript, /import "\.\/theme\.js"/);
+  for (const page of [home, catalogPage, notFoundPage]) {
+    assert.match(page, /localStorage\.getItem\("seledkin-theme"\)/);
+    assert.match(page, /data-theme-toggle/);
+    assert.match(page, /Ночная вахта/);
+    assert.doesNotMatch(page, /data-theme-toggle[^>]*aria-pressed/);
+  }
+  assert.match(notFoundPage, /assets\/theme\.js/);
+  assert.match(styles, /:root\[data-theme="dark"\]/);
+  assert.match(styles, /prefers-color-scheme:\s*dark/);
+
+  for (const [foreground, background, minimum] of [
+    ["#f3ede2", "#0e202b", 4.5],
+    ["#b8c2c8", "#0e202b", 4.5],
+    ["#7dccf2", "#0e202b", 4.5],
+    ["#83d8b8", "#0e202b", 4.5],
+    ["#d6b46c", "#0e202b", 4.5],
+    ["#ffc15c", "#0e202b", 3],
+    ["#5d707b", "#0e202b", 3],
+  ]) {
+    assert.ok(
+      contrast(foreground, background) >= minimum,
+      `${foreground} on ${background} must reach ${minimum}:1`,
+    );
+  }
 });
 
 test("WCAG 2.2 AA is a mechanical project contract", () => {

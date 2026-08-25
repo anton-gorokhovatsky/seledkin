@@ -36,6 +36,7 @@ const requiredFiles = [
   "ACCESSIBILITY.md",
   "assets/styles.css",
   "assets/site.js",
+  "assets/theme.js",
   "assets/typography.js",
   "assets/catalog-data.js",
   "assets/logo-redrawn.svg",
@@ -80,6 +81,7 @@ const publicSourcePaths = [
   "catalog/catalog.js",
   "assets/styles.css",
   "assets/site.js",
+  "assets/theme.js",
   "assets/typography.js",
   "assets/catalog-data.js",
   "package.json",
@@ -130,6 +132,15 @@ for (const file of htmlFiles) {
   }
   if (/\saccesskey=/i.test(html)) {
     fail(`${file}: accesskey может конфликтовать с пользовательскими командами`);
+  }
+  for (const required of [
+    'localStorage.getItem("seledkin-theme")',
+    "data-theme-toggle",
+    'aria-label="Включить ночную вахту"',
+  ]) {
+    if (!html.includes(required)) {
+      fail(`${file}: нет обязательного поведения темы ${required}`);
+    }
   }
 
   for (const image of html.match(/<img\b[^>]*>/gis) ?? []) {
@@ -188,6 +199,7 @@ for (const file of htmlFiles) {
 
 for (const script of [
   "assets/site.js",
+  "assets/theme.js",
   "assets/typography.js",
   "assets/catalog-data.js",
   "catalog/catalog.js",
@@ -209,8 +221,12 @@ if (openingBraces !== closingBraces) {
 
 for (const required of [
   "@media (prefers-reduced-motion: reduce)",
+  "@media (prefers-color-scheme: dark)",
   "@media (prefers-contrast: more)",
   "@media (forced-colors: active)",
+  ':root[data-theme="dark"]',
+  "--paper: #0e202b",
+  "--ink: #f3ede2",
   "--telegram: #006d9d",
   "--whatsapp: #137a3d",
   "--text-link: #246f55",
@@ -220,8 +236,26 @@ for (const required of [
 }
 
 const siteScript = readFileSync(join(root, "assets/site.js"), "utf8");
-for (const required of ["element.inert = value", 'event.key === "Escape"', "menuClose?.focus()"]) {
+for (const required of [
+  "element.inert = value",
+  'event.key === "Escape"',
+  "menuClose?.focus()",
+  'import "./theme.js"',
+]) {
   if (!siteScript.includes(required)) fail(`assets/site.js: нет обязательного поведения ${required}`);
+}
+
+const themeScript = readFileSync(join(root, "assets/theme.js"), "utf8");
+for (const required of [
+  'export const themeStorageKey = "seledkin-theme"',
+  'window.matchMedia("(prefers-color-scheme: dark)")',
+  "localStorage.setItem(themeStorageKey, theme)",
+  '"Дневная вахта"',
+  '"Ночная вахта"',
+]) {
+  if (!themeScript.includes(required)) {
+    fail(`assets/theme.js: нет обязательного поведения ${required}`);
+  }
 }
 
 const catalogPage = readFileSync(join(root, "catalog/index.html"), "utf8");

@@ -1,4 +1,5 @@
 import "./typography.js";
+import "./theme.js";
 
 const menuButton = document.querySelector("[data-menu-toggle]");
 const menu = document.querySelector("[data-menu]");
