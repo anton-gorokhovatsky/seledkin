@@ -378,7 +378,7 @@ const expectedHashes = new Map([
   ],
   [
     "assets/logo-redrawn-night.svg",
-    "1fd06e2289e0fe75705d040a333867b6980c5ed7be415837674432d6d40c2991",
+    "9510ad1b7dd08ace5ce88d0b5684a841442175c10aaea11a876670f2187ca18f",
   ],
   [
     "assets/salmon-cat.jpg",
@@ -415,6 +415,9 @@ for (const [path, expected] of expectedHashes) {
 const nightLogo = readFileSync(join(root, "assets/logo-redrawn-night.svg"), "utf8");
 if (!nightLogo.includes('fill="#f3ede2"') || /#fff(?:fff)?|<rect\b/i.test(nightLogo)) {
   fail("Ночной логотип должен оставаться прозрачным одноцветным контуром без белых плашек");
+}
+if (!nightLogo.includes('clipPath id="logo-cutout"')) {
+  fail("Ночной логотип должен скрывать исходную надпись перед наложением перерисованной");
 }
 
 if (failures.length) {

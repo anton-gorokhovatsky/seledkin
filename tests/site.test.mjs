@@ -356,9 +356,10 @@ test("Night Watch uses a transparent single-color logo without changing the sour
   );
   assert.match(nightLogo, /fill="#f3ede2"/);
   assert.doesNotMatch(nightLogo, /#fff(?:fff)?|<rect\b/i);
+  assert.match(nightLogo, /<clipPath id="logo-cutout"/);
   assert.equal(
     createHash("sha256").update(nightLogo).digest("hex"),
-    "1fd06e2289e0fe75705d040a333867b6980c5ed7be415837674432d6d40c2991",
+    "9510ad1b7dd08ace5ce88d0b5684a841442175c10aaea11a876670f2187ca18f",
   );
 });
 
