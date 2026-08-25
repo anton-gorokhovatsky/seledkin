@@ -173,18 +173,34 @@ for (const file of htmlFiles) {
       'aria-labelledby="menu-title"',
       'tabindex="-1"',
       'class="site-menu__layout"',
-      'class="site-menu__close-mark"',
+      'class="floating-menu__mark"',
+      '<span class="floating-menu__label">Меню</span>',
       "Навигационный мостик",
       "Куда держим курс?",
       "Судовой журнал",
       'class="source-header__bar"',
-      'class="source-header__note"',
-      "Метро «Вавиловская» — ежедневно, с&nbsp;11:00 до&nbsp;20:00",
     ]) {
       if (!html.includes(required)) fail(`${file}: меню или skip-target не содержит ${required}`);
     }
+    if ((html.match(/data-menu-toggle/g) ?? []).length !== 1) {
+      fail(`${file}: должна быть ровно одна закреплённая кнопка меню`);
+    }
+    if (/data-menu-close|site-menu__close/.test(html)) {
+      fail(`${file}: отдельная кнопка закрытия дублирует управление меню`);
+    }
     if (/source-header__top|source-header__address|source-header__action|source-navigation|theme-toggle--header/.test(html)) {
       fail(`${file}: компактная шапка содержит старую дублирующую навигацию`);
+    }
+  }
+
+  if (file === "index.html") {
+    for (const required of [
+      "data-hero-video",
+      "www.youtube-nocookie.com/embed/AsD5u6k6dKI",
+      'src="assets/logo-redrawn-night.svg"',
+      'class="source-header source-header--over-media"',
+    ]) {
+      if (!html.includes(required)) fail(`${file}: первый экран не содержит ${required}`);
     }
   }
 
@@ -257,7 +273,8 @@ for (const required of [
   "height: 100dvh",
   "grid-template-columns: minmax(0, 1.45fr) minmax(22rem, 0.75fr)",
   ".source-header__bar",
-  "grid-template-columns: 10rem minmax(0, 1fr) 10rem",
+  "width: 8.35rem",
+  '.floating-menu[aria-expanded="true"] .floating-menu__mark::before',
 ]) {
   if (!css.includes(required)) fail(`assets/styles.css: нет обязательного правила ${required}`);
 }
@@ -266,8 +283,11 @@ const siteScript = readFileSync(join(root, "assets/site.js"), "utf8");
 for (const required of [
   "element.inert = value",
   'event.key === "Escape"',
-  "menuClose?.focus()",
+  'menuButtonLabel.textContent = "Закрыть"',
+  'menuButtonLabel.textContent = "Меню"',
   "menuPanel.scrollTop = 0",
+  'window.matchMedia("(prefers-reduced-motion: reduce)")',
+  'heroVideo.removeAttribute("src")',
   'import "./theme.js"',
 ]) {
   if (!siteScript.includes(required)) fail(`assets/site.js: нет обязательного поведения ${required}`);

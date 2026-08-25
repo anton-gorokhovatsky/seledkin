@@ -78,25 +78,24 @@ test("home exposes the core customer jobs", () => {
   assert.match(home, /метро «Вавиловская»/);
   assert.ok(home.indexOf("Вавиловская") < home.indexOf("Университет"));
   assert.match(home, /Ежедневно с 11:00 до 20:00/);
+  assert.doesNotMatch(home + styles, /source-hero__down/);
 });
 
-test("the desktop header is compact, edge-to-edge and leaves navigation to the menu", () => {
+test("the header floats lightly over the source video and leaves service details to the menu", () => {
   for (const page of [home, catalogPage]) {
     assert.match(page, /class="source-header__bar"/);
-    assert.match(page, /class="source-header__note"/);
-    assert.match(page, /Метро «Вавиловская» — ежедневно, с&nbsp;11:00 до&nbsp;20:00/);
+    assert.doesNotMatch(page, /source-header__note/);
     assert.doesNotMatch(
       page,
       /source-header__top|source-header__address|source-header__action|source-navigation|theme-toggle--header/,
     );
   }
 
-  assert.match(styles, /\.source-header\s*\{[\s\S]*?min-height:\s*7rem;/);
+  assert.match(home, /class="source-header source-header--over-media"/);
+  assert.match(styles, /\.source-header\s*\{[\s\S]*?min-height:\s*5\.5rem;/);
   assert.match(styles, /\.source-header__bar\s*\{[\s\S]*?width:\s*100%;/);
-  assert.match(
-    styles,
-    /grid-template-columns:\s*10rem minmax\(0, 1fr\) 10rem/,
-  );
+  assert.match(styles, /\.source-header--over-media\s*\{[\s\S]*?position:\s*absolute;/);
+  assert.match(styles, /\.source-header\s*\{[\s\S]*?background:\s*transparent;/);
   assert.doesNotMatch(
     styles,
     /\.source-header__top|\.source-header__address|\.source-header__action|\.source-navigation|\.theme-toggle--header/,
@@ -145,6 +144,11 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
   assert.doesNotMatch(home, /Feed not found|уточняйте цены|Друзья!/i);
   assert.doesNotMatch(home + catalogPage + styles, /tildacdn\.com/i);
   assert.doesNotMatch(home + catalogPage + styles, /fish-divider\.png/i);
+  assert.match(home, /www\.youtube-nocookie\.com\/embed\/AsD5u6k6dKI/);
+  assert.match(home, /data-hero-video/);
+  assert.match(siteScript, /prefers-reduced-motion: reduce/);
+  assert.match(siteScript, /heroVideo\.removeAttribute\("src"\)/);
+  assert.match(styles, /translate\(-50%, -50%\) scale\(1\.22\)/);
   assert.match(styles, /fish-pattern\.svg/);
   assert.match(styles, /"Iowan Old Style"/);
 });
@@ -261,16 +265,23 @@ test("menu, focus and reduced motion remain accessible", () => {
     [catalogPage, "../#journal"],
   ]) {
     assert.match(page, /aria-controls="primary-navigation"/);
-    assert.match(page, /data-menu-close/);
-    assert.match(page, /class="site-menu__close-mark"/);
-    assert.match(page, />Закрыть</);
+    assert.equal((page.match(/data-menu-toggle/g) ?? []).length, 1);
+    assert.doesNotMatch(page, /data-menu-close|site-menu__close/);
     assert.match(page, /Навигационный мостик/);
     assert.ok(page.includes('<h2 id="menu-title">Куда держим курс?</h2>'));
     assert.match(page, /class="site-menu__layout"/);
     assert.match(page, /class="site-menu__service"/);
     assert.match(page, /class="site-menu__actions"/);
+    assert.match(page, /href="tel:\+79166751452"/);
+    assert.match(page, />\s*Позвонить\s*</);
     assert.match(page, /https:\/\/t\.me\/\+79166751452/);
     assert.match(page, /https:\/\/wa\.me\/79166751452/);
+    assert.doesNotMatch(page, /site-menu__phone/);
+    const contactActions =
+      page.match(/<div class="site-menu__actions">([\s\S]*?)<\/div>/)?.[1] ?? "";
+    assert.equal((contactActions.match(/class="source-button/g) ?? []).length, 3);
+    assert.match(page, /class="theme-toggle__moon"/);
+    assert.match(page, /class="theme-toggle__sun"/);
     assert.ok(page.includes(`href="${journalPath}"`));
     assert.doesNotMatch(page, />×</);
 
@@ -282,12 +293,20 @@ test("menu, focus and reduced motion remain accessible", () => {
 
   assert.match(siteScript, /event\.key === "Escape"/);
   assert.match(siteScript, /event\.key !== "Tab"/);
-  assert.match(siteScript, /menuClose\?\.focus/);
+  assert.match(siteScript, /menuButtonLabel\.textContent = "Закрыть"/);
+  assert.match(siteScript, /menuButtonLabel\.textContent = "Меню"/);
+  assert.doesNotMatch(siteScript, /menuClose/);
   assert.match(siteScript, /menuPanel\.scrollTop = 0/);
   assert.match(siteScript, /element\.inert = value/);
   assert.match(home, /role="dialog"/);
   assert.match(home, /aria-modal="true"/);
   assert.match(styles, /\.floating-menu\s*\{[\s\S]*?position:\s*fixed;/);
+  assert.match(styles, /\.floating-menu\s*\{[\s\S]*?z-index:\s*110;/);
+  assert.match(styles, /\.floating-menu\s*\{[\s\S]*?width:\s*8\.35rem;/);
+  assert.match(
+    styles,
+    /\.floating-menu\[aria-expanded="true"\] \.floating-menu__mark::before\s*\{[\s\S]*?rotate\(45deg\)/,
+  );
   assert.match(styles, /\.site-menu\s*\{[\s\S]*?inset:\s*0;/);
   assert.match(styles, /\.site-menu__panel\s*\{[\s\S]*?height:\s*100dvh;/);
   assert.match(

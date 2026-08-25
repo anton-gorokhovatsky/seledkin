@@ -55,9 +55,6 @@
             height="1784"
           />
         </a>
-        <p class="source-header__note">
-          Метро «Вавиловская» — ежедневно, с&nbsp;11:00 до&nbsp;20:00
-        </p>
       </div>
     </header>
 
@@ -96,15 +93,6 @@
             />
           </a>
           <p class="site-menu__deck">Навигационный мостик</p>
-          <button
-            class="site-menu__close"
-            type="button"
-            aria-label="Закрыть меню"
-            data-menu-close
-          >
-            <span class="site-menu__close-mark" aria-hidden="true"></span>
-            <span>Закрыть</span>
-          </button>
         </header>
 
         <div class="site-menu__layout">
@@ -147,10 +135,14 @@
                 Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
                 Метро «Вавиловская»
               </address>
-              <a class="site-menu__phone" href="tel:+79166751452">
-                +7&nbsp;916&nbsp;675‑14‑52
-              </a>
               <div class="site-menu__actions">
+                <a
+                  class="source-button source-button--menu-call"
+                  href="tel:+79166751452"
+                  aria-label="Позвонить в лавку: +7 916 675-14-52"
+                >
+                  Позвонить
+                </a>
                 <a class="source-button source-button--menu-primary" href="https://t.me/+79166751452">
                   Заказать в Телеграме
                 </a>
@@ -167,7 +159,13 @@
                 aria-label="Включить ночную вахту"
                 data-theme-toggle
               >
-                <span class="theme-toggle__mark" aria-hidden="true"></span>
+                <svg class="theme-toggle__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path class="theme-toggle__moon" d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8a8.5 8.5 0 1 0 11.6 11.6Z" />
+                  <g class="theme-toggle__sun">
+                    <circle cx="12" cy="12" r="3.5" />
+                    <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6 6 6M18 18l1.4 1.4M19.4 4.6 18 6M6 18l-1.4 1.4" />
+                  </g>
+                </svg>
                 <span data-theme-label>Ночная вахта</span>
               </button>
             </div>

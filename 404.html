@@ -67,7 +67,13 @@
         aria-label="Включить ночную вахту"
         data-theme-toggle
       >
-        <span class="theme-toggle__mark" aria-hidden="true"></span>
+        <svg class="theme-toggle__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path class="theme-toggle__moon" d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8a8.5 8.5 0 1 0 11.6 11.6Z" />
+          <g class="theme-toggle__sun">
+            <circle cx="12" cy="12" r="3.5" />
+            <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6 6 6M18 18l1.4 1.4M19.4 4.6 18 6M6 18l-1.4 1.4" />
+          </g>
+        </svg>
         <span data-theme-label>Ночная вахта</span>
       </button>
     </main>

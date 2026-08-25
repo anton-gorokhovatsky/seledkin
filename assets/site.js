@@ -2,14 +2,16 @@ import "./typography.js";
 import "./theme.js";
 
 const menuButton = document.querySelector("[data-menu-toggle]");
+const menuButtonLabel = menuButton?.querySelector(".floating-menu__label");
 const menu = document.querySelector("[data-menu]");
 const menuPanel = menu?.querySelector(".site-menu__panel");
-const menuClose = document.querySelector("[data-menu-close]");
+const heroVideo = document.querySelector("[data-hero-video]");
 
 function focusableMenuItems() {
   if (!menu) return [];
 
   return [
+    ...(menuButton ? [menuButton] : []),
     ...menu.querySelectorAll(
       'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
     ),
@@ -20,7 +22,13 @@ function setPageInert(value) {
   if (!menu) return;
 
   for (const element of document.body.children) {
-    if (!(element instanceof HTMLElement) || element === menu) continue;
+    if (
+      !(element instanceof HTMLElement) ||
+      element === menu ||
+      element === menuButton
+    ) {
+      continue;
+    }
     if (element.tagName === "SCRIPT") continue;
     element.inert = value;
   }
@@ -33,8 +41,9 @@ function openMenu() {
   if (menuPanel instanceof HTMLElement) menuPanel.scrollTop = 0;
   menuButton.setAttribute("aria-expanded", "true");
   menuButton.setAttribute("aria-label", "Закрыть меню");
+  if (menuButtonLabel) menuButtonLabel.textContent = "Закрыть";
   document.body.classList.add("menu-open");
-  menuClose?.focus();
+  menuButton.focus();
   setPageInert(true);
 }
 
@@ -45,6 +54,7 @@ function closeMenu({ returnFocus = false } = {}) {
   menu.hidden = true;
   menuButton.setAttribute("aria-expanded", "false");
   menuButton.setAttribute("aria-label", "Открыть меню");
+  if (menuButtonLabel) menuButtonLabel.textContent = "Меню";
   document.body.classList.remove("menu-open");
 
   if (returnFocus) {
@@ -59,10 +69,6 @@ if (menuButton && menu) {
     } else {
       openMenu();
     }
-  });
-
-  menuClose?.addEventListener("click", () => {
-    closeMenu({ returnFocus: true });
   });
 
   menu.addEventListener("click", (event) => {
@@ -105,4 +111,28 @@ if (menuButton && menu) {
       first.focus();
     }
   });
+}
+
+if (heroVideo instanceof HTMLIFrameElement) {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const syncHeroVideo = () => {
+    if (reducedMotion.matches) {
+      heroVideo.classList.remove("is-ready");
+      heroVideo.removeAttribute("src");
+      return;
+    }
+
+    if (!heroVideo.hasAttribute("src") && heroVideo.dataset.src) {
+      heroVideo.src = heroVideo.dataset.src;
+    }
+  };
+
+  heroVideo.addEventListener("load", () => {
+    if (heroVideo.hasAttribute("src") && !reducedMotion.matches) {
+      heroVideo.classList.add("is-ready");
+    }
+  });
+  reducedMotion.addEventListener("change", syncHeroVideo);
+  syncHeroVideo();
 }
