@@ -214,37 +214,25 @@ p {
 .source-header {
   position: relative;
   z-index: 10;
-  height: 16.875rem;
+  min-height: 7rem;
+  border-bottom: 1px solid var(--line);
   background: var(--paper);
 }
 
-.source-header__top {
+.source-header__bar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 20rem minmax(0, 1fr);
+  width: 100%;
+  min-height: 7rem;
   align-items: center;
-  min-height: 11.75rem;
-  gap: clamp(1.5rem, 3vw, 4rem);
-}
-
-.source-header__address,
-.source-header__action {
-  font-size: 0.8rem;
-  line-height: 1.45;
-}
-
-.source-header__address p {
-  max-width: 24rem;
-  margin-bottom: 1rem;
-}
-
-.source-header__address span {
-  white-space: nowrap;
+  grid-template-columns: 10rem minmax(0, 1fr) 10rem;
+  gap: clamp(1.25rem, 3vw, 3rem);
+  padding: 0.75rem clamp(1.25rem, 3vw, 3rem);
 }
 
 .source-brand {
   display: block;
-  width: 18.75rem;
-  justify-self: center;
+  width: 10rem;
+  max-width: 100%;
 }
 
 .source-brand img {
@@ -252,80 +240,18 @@ p {
   height: auto;
 }
 
-.source-header__action {
-  justify-self: end;
-  max-width: 25rem;
-  text-align: right;
-}
-
-.source-header__action p {
-  margin-bottom: 1rem;
-}
-
-.source-navigation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 5.125rem;
-  gap: clamp(1.5rem, 3vw, 3.25rem);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-
-.source-navigation a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  color: var(--ink);
-  font-size: 0.83rem;
+.source-header__note {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.055em;
-  text-decoration: none;
+  grid-column: 2;
+  justify-self: center;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  text-align: center;
   text-transform: uppercase;
-}
-
-.source-navigation a:hover {
-  color: var(--blue-deep);
-}
-
-.social-icons {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-}
-
-.social-icons a {
-  display: grid;
-  width: 44px;
-  height: 44px;
-  flex: 0 0 44px;
-  place-items: center;
-  border-radius: 50%;
-  text-decoration: none;
-}
-
-.social-icons svg {
-  width: 18px;
-  height: 18px;
-}
-
-.social-icons--dark a {
-  background: var(--ink);
-  color: var(--paper);
-}
-
-.social-icons--dark svg,
-.social-icons--light svg {
-  fill: currentcolor;
-}
-
-.social-icons--light {
-  justify-content: center;
-}
-
-.social-icons--light a {
-  color: var(--footer-text);
 }
 
 .source-button {
@@ -1218,8 +1144,8 @@ p {
 .floating-menu {
   position: fixed;
   z-index: 80;
-  top: 1.25rem;
-  right: 1.25rem;
+  top: 1.75rem;
+  right: clamp(1.25rem, 3vw, 3rem);
   left: auto;
   display: inline-flex;
   min-width: 7rem;
@@ -1228,7 +1154,7 @@ p {
   justify-content: center;
   gap: 0.65rem;
   padding: 0.65rem 1rem;
-  transform: translateY(-6rem);
+  transform: none;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--sticky-surface);
@@ -1236,12 +1162,12 @@ p {
   box-shadow: 0 0.35rem 1.5rem rgb(0 0 0 / 16%);
   backdrop-filter: blur(0.7rem);
   cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
+  opacity: 1;
+  pointer-events: auto;
   transition:
     transform 260ms var(--ease),
     opacity 180ms ease-out;
-  visibility: hidden;
+  visibility: visible;
 }
 
 .floating-menu.is-visible,
@@ -1923,10 +1849,6 @@ p {
 .theme-toggle[data-current-theme="dark"] .theme-toggle__mark {
   box-shadow: inset -5px -3px 0 0 currentcolor;
   transform: rotate(-20deg);
-}
-
-.theme-toggle--header {
-  margin-top: 0.65rem;
 }
 
 .theme-toggle--menu {

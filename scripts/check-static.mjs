@@ -176,8 +176,14 @@ for (const file of htmlFiles) {
       "Навигационный мостик",
       "Куда держим курс?",
       "Судовой журнал",
+      'class="source-header__bar"',
+      'class="source-header__note"',
+      "Метро «Вавиловская» — ежедневно, с&nbsp;11:00 до&nbsp;20:00",
     ]) {
       if (!html.includes(required)) fail(`${file}: меню или skip-target не содержит ${required}`);
+    }
+    if (/source-header__top|source-header__address|source-header__action|source-navigation|theme-toggle--header/.test(html)) {
+      fail(`${file}: компактная шапка содержит старую дублирующую навигацию`);
     }
   }
 
@@ -249,6 +255,8 @@ for (const required of [
   ".site-menu__layout",
   "height: 100dvh",
   "grid-template-columns: minmax(0, 1.45fr) minmax(22rem, 0.75fr)",
+  ".source-header__bar",
+  "grid-template-columns: 10rem minmax(0, 1fr) 10rem",
 ]) {
   if (!css.includes(required)) fail(`assets/styles.css: нет обязательного правила ${required}`);
 }

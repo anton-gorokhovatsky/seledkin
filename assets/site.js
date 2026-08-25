@@ -5,10 +5,6 @@ const menuButton = document.querySelector("[data-menu-toggle]");
 const menu = document.querySelector("[data-menu]");
 const menuPanel = menu?.querySelector(".site-menu__panel");
 const menuClose = document.querySelector("[data-menu-close]");
-const hero = document.querySelector(".source-hero");
-const mobileQuery = window.matchMedia("(max-width: 61.1875rem)");
-
-let scrollFrame = 0;
 
 function focusableMenuItems() {
   if (!menu) return [];
@@ -54,22 +50,6 @@ function closeMenu({ returnFocus = false } = {}) {
   if (returnFocus) {
     menuButton.focus();
   }
-}
-
-function updateFloatingMenu() {
-  scrollFrame = 0;
-  if (!menuButton) return;
-
-  const isMobile = mobileQuery.matches;
-  const revealAt = document.querySelector(".source-header")?.offsetHeight ?? 0;
-  const shouldShow = isMobile || !hero || window.scrollY > revealAt;
-
-  menuButton.classList.toggle("is-visible", shouldShow);
-}
-
-function requestMenuUpdate() {
-  if (scrollFrame) return;
-  scrollFrame = window.requestAnimationFrame(updateFloatingMenu);
 }
 
 if (menuButton && menu) {
@@ -126,9 +106,3 @@ if (menuButton && menu) {
     }
   });
 }
-
-window.addEventListener("scroll", requestMenuUpdate, { passive: true });
-window.addEventListener("resize", requestMenuUpdate, { passive: true });
-mobileQuery.addEventListener("change", requestMenuUpdate);
-
-updateFloatingMenu();

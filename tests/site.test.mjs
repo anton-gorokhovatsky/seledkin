@@ -76,6 +76,29 @@ test("home exposes the core customer jobs", () => {
   assert.match(home, /Ежедневно с 11:00 до 20:00/);
 });
 
+test("the desktop header is compact, edge-to-edge and leaves navigation to the menu", () => {
+  for (const page of [home, catalogPage]) {
+    assert.match(page, /class="source-header__bar"/);
+    assert.match(page, /class="source-header__note"/);
+    assert.match(page, /Метро «Вавиловская» — ежедневно, с&nbsp;11:00 до&nbsp;20:00/);
+    assert.doesNotMatch(
+      page,
+      /source-header__top|source-header__address|source-header__action|source-navigation|theme-toggle--header/,
+    );
+  }
+
+  assert.match(styles, /\.source-header\s*\{[\s\S]*?min-height:\s*7rem;/);
+  assert.match(styles, /\.source-header__bar\s*\{[\s\S]*?width:\s*100%;/);
+  assert.match(
+    styles,
+    /grid-template-columns:\s*10rem minmax\(0, 1fr\) 10rem/,
+  );
+  assert.doesNotMatch(
+    styles,
+    /\.source-header__top|\.source-header__address|\.source-header__action|\.source-navigation|\.theme-toggle--header/,
+  );
+});
+
 test("home keeps the source ks.fish visual sequence and local imagery", () => {
   const sequence = [
     "source-header",
