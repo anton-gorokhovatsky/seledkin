@@ -56,7 +56,7 @@ const requiredFiles = [
   "assets/quote-pan.jpg",
   "assets/oleg-gugunava.jpg",
   "assets/delivery-basket.jpg",
-  "assets/fish-divider.png",
+  "assets/fish-pattern.svg",
 ];
 
 for (const path of requiredFiles) {
@@ -165,6 +165,10 @@ const expectedHashes = new Map([
   [
     "assets/salmon-cat.jpg",
     "b12d7f749f2bffbfc1ee92dc10d18f050badaaebd8b851708e2b7dd9a625f1bd",
+  ],
+  [
+    "assets/fish-pattern.svg",
+    "31e51adac566e3b0d5cb43858e6e3d4cf1bcd464be08ff629f49fc1ca707625b",
   ],
 ]);
 

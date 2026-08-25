@@ -70,7 +70,7 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     "hero-ocean.jpg",
     "caviar-slab.jpg",
     "salmon-dish.jpg",
-    "fish-divider.png",
+    "fish-pattern.svg",
     "about-main.jpg",
     "cutting-tuna.jpg",
     "quote-pan.jpg",
@@ -82,6 +82,8 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
 
   assert.doesNotMatch(home, /Feed not found|уточняйте цены|Друзья!/i);
   assert.doesNotMatch(home + catalogPage + styles, /tildacdn\.com/i);
+  assert.doesNotMatch(home + catalogPage + styles, /fish-divider\.png/i);
+  assert.match(styles, /fish-pattern\.svg/);
   assert.match(styles, /"Iowan Old Style"/);
 });
 
@@ -135,7 +137,7 @@ test("menu, focus and reduced motion remain accessible", () => {
   assert.doesNotMatch(siteScript + home + catalogPage, /seledkin-theme|data-theme-toggle/);
 });
 
-test("the agreed logo and Salmon portrait are byte-identical", async () => {
+test("the agreed logo, fish pattern and Salmon portrait stay unchanged", async () => {
   const files = [
     [
       "../assets/logo-redrawn.svg",
@@ -144,6 +146,10 @@ test("the agreed logo and Salmon portrait are byte-identical", async () => {
     [
       "../assets/salmon-cat.jpg",
       "b12d7f749f2bffbfc1ee92dc10d18f050badaaebd8b851708e2b7dd9a625f1bd",
+    ],
+    [
+      "../assets/fish-pattern.svg",
+      "31e51adac566e3b0d5cb43858e6e3d4cf1bcd464be08ff629f49fc1ca707625b",
     ],
   ];
 

@@ -959,9 +959,9 @@ p {
 .catalog-intro::before {
   display: block;
   width: min(100%, 52rem);
-  aspect-ratio: 1680 / 527;
+  aspect-ratio: 7940 / 2494;
   margin: -2rem auto 2rem;
-  background: url("fish-divider.png") center / contain no-repeat;
+  background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
 }
 
@@ -1161,9 +1161,9 @@ p {
 .catalog-order::before {
   display: block;
   width: min(100%, 70rem);
-  aspect-ratio: 1680 / 527;
+  aspect-ratio: 7940 / 2494;
   margin: 0 auto 2.5rem;
-  background: url("fish-divider.png") center / contain no-repeat;
+  background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
   transform: scaleX(-1);
 }
@@ -1214,9 +1214,9 @@ p {
 
 .not-found-source::before {
   width: min(100%, 36rem);
-  aspect-ratio: 1680 / 527;
+  aspect-ratio: 7940 / 2494;
   margin-bottom: 1.5rem;
-  background: url("fish-divider.png") center / contain no-repeat;
+  background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
 }
 
