@@ -4,6 +4,7 @@ const allCategories = "all";
 const telegramOrder = "https://t.me/+79166751452";
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");
+const select = document.querySelector("[data-catalog-select]");
 const list = document.querySelector("[data-catalog-list]");
 const count = document.querySelector("[data-catalog-count]");
 const reset = document.querySelector("[data-catalog-reset]");
@@ -124,6 +125,8 @@ function syncFilterButtons() {
       String(button.dataset.category === activeCategory),
     );
   });
+
+  select.value = activeCategory;
 }
 
 function render() {
@@ -162,6 +165,9 @@ function render() {
 
 function addFilter(label, value) {
   const button = makeElement("button", "", label);
+  const option = makeElement("option", "", label);
+
+  option.value = value;
   button.type = "button";
   button.dataset.category = value;
   button.setAttribute("aria-pressed", String(value === activeCategory));
@@ -170,6 +176,7 @@ function addFilter(label, value) {
     render();
   });
   filters.append(button);
+  select.append(option);
 }
 
 addFilter("Весь ассортимент", allCategories);
@@ -177,6 +184,11 @@ catalog.forEach((category) => addFilter(category.shortLabel, category.slug));
 
 search.addEventListener("input", (event) => {
   query = event.currentTarget.value;
+  render();
+});
+
+select.addEventListener("change", (event) => {
+  activeCategory = event.currentTarget.value;
   render();
 });
 

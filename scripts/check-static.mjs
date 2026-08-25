@@ -38,9 +38,25 @@ const requiredFiles = [
   "assets/catalog-data.js",
   "assets/logo-redrawn.svg",
   "assets/salmon-cat.jpg",
-  "assets/hero-fish.jpg",
+  "assets/hero-ocean.jpg",
+  "assets/caviar-slab.jpg",
+  "assets/salmon-dish.jpg",
+  "assets/caviar-close.jpg",
+  "assets/flounder.jpg",
+  "assets/salmon-fillet.jpg",
+  "assets/about-main.jpg",
+  "assets/about-small-1.jpg",
+  "assets/about-small-2.jpg",
+  "assets/gallery-large.jpg",
+  "assets/gallery-small-1.jpg",
+  "assets/gallery-small-2.jpg",
+  "assets/gallery-small-3.jpg",
+  "assets/gallery-small-4.jpg",
+  "assets/cutting-tuna.jpg",
+  "assets/quote-pan.jpg",
   "assets/oleg-gugunava.jpg",
   "assets/delivery-basket.jpg",
+  "assets/fish-divider.png",
 ];
 
 for (const path of requiredFiles) {
@@ -73,10 +89,6 @@ for (const forbidden of ["next/", "next.js", "react-dom", "from \"react\"", "til
   if (source.toLowerCase().includes(forbidden.toLowerCase())) {
     fail(`Найдена запрещённая зависимость или внешний исходник: ${forbidden}`);
   }
-}
-
-if (/object-fit\s*:\s*cover/i.test(source)) {
-  fail("Найден object-fit: cover — авторские фотографии нельзя произвольно обрезать");
 }
 
 const htmlFiles = ["index.html", "catalog/index.html", "404.html"];
@@ -127,6 +139,22 @@ const openingBraces = css.match(/{/g)?.length ?? 0;
 const closingBraces = css.match(/}/g)?.length ?? 0;
 if (openingBraces !== closingBraces) {
   fail(`assets/styles.css: несбалансированные скобки (${openingBraces}/${closingBraces})`);
+}
+
+for (const match of css.matchAll(/url\(["']?([^"'()]+)["']?\)/g)) {
+  const reference = match[1];
+  if (/^(?:https?:|data:)/.test(reference)) continue;
+
+  const target = resolve(join(root, "assets"), reference);
+  if (!existsSync(target)) {
+    fail(`assets/styles.css: не найден локальный ресурс ${reference}`);
+  }
+}
+
+const catRule =
+  css.match(/\.source-footer__content\s*>\s*img\s*\{([^}]*)\}/s)?.[1] ?? "";
+if (!/height\s*:\s*auto/i.test(catRule) || /object-fit\s*:\s*cover/i.test(catRule)) {
+  fail("Портрет кота Лосося в подвале должен сохранять исходную композицию");
 }
 
 const expectedHashes = new Map([

@@ -35,11 +35,54 @@ test("home exposes the core customer jobs", () => {
     assert.match(home, new RegExp(`id="${id}"`));
   }
 
-  assert.match(home, /Смотреть каталог и цены/);
+  assert.match(home, /Продукты и цены/);
   assert.match(home, /Заказать в Телеграме/);
   assert.match(home, /метро «Вавиловская»/);
-  assert.doesNotMatch(home, /метро «Университет»/);
-  assert.match(home, /Ежедневно, 11:00—20:00/);
+  assert.ok(home.indexOf("Вавиловская") < home.indexOf("Университет"));
+  assert.match(home, /Ежедневно с 11:00 до 20:00/);
+});
+
+test("home keeps the source ks.fish visual sequence and local imagery", () => {
+  const sequence = [
+    "source-header",
+    "source-hero",
+    "opening-story",
+    "fish-divider",
+    "source-section--story",
+    "source-gallery",
+    "full-photo",
+    "source-quote",
+    "founder-source",
+    "price-preview",
+    "delivery-source",
+    "contacts-source",
+    "source-footer",
+  ];
+
+  let cursor = -1;
+  for (const marker of sequence) {
+    const next = home.indexOf(marker, cursor + 1);
+    assert.ok(next > cursor, `Секция ${marker} должна идти в исходном порядке`);
+    cursor = next;
+  }
+
+  for (const asset of [
+    "hero-ocean.jpg",
+    "caviar-slab.jpg",
+    "salmon-dish.jpg",
+    "fish-divider.png",
+    "about-main.jpg",
+    "cutting-tuna.jpg",
+    "quote-pan.jpg",
+    "oleg-gugunava.jpg",
+    "delivery-basket.jpg",
+  ]) {
+    assert.match(home, new RegExp(`assets/${asset.replace(".", "\\.")}`));
+  }
+
+  assert.doesNotMatch(home, /Feed not found|уточняйте цены|Друзья!/i);
+  assert.doesNotMatch(home + catalogPage + styles, /tildacdn\.com/i);
+  assert.match(styles, /"Iowan Old Style"/);
 });
 
 test("the complete catalog has stable categories and 114 priced items", () => {
@@ -74,18 +117,22 @@ test("the complete catalog has stable categories and 114 priced items", () => {
 test("catalog search and filters expose accessible state", () => {
   assert.match(catalogPage, /aria-live="polite"/);
   assert.match(catalogPage, /data-catalog-search/);
+  assert.match(catalogPage, /data-catalog-select/);
   assert.match(catalogScript, /aria-pressed/);
+  assert.match(catalogScript, /select\.value = activeCategory/);
   assert.match(catalogScript, /Ничего не найдено/);
   assert.match(catalogScript, /Уточнить наличие/);
 });
 
-test("theme follows the system and persists the explicit choice", () => {
-  assert.match(styles, /prefers-color-scheme:\s*dark/);
+test("menu, focus and reduced motion remain accessible", () => {
+  assert.match(home, /aria-controls="primary-navigation"/);
+  assert.match(home, /data-menu-close/);
+  assert.match(siteScript, /event\.key === "Escape"/);
+  assert.match(siteScript, /event\.key !== "Tab"/);
+  assert.match(siteScript, /menuClose\?\.focus/);
+  assert.match(styles, /:focus-visible/);
   assert.match(styles, /prefers-reduced-motion:\s*reduce/);
-  assert.match(siteScript, /seledkin-theme/);
-  assert.match(siteScript, /matchMedia\("\(prefers-color-scheme: dark\)"\)/);
-  assert.match(siteScript, /Дневная смена — включить светлую тему/);
-  assert.match(siteScript, /Ночная смена — включить тёмную тему/);
+  assert.doesNotMatch(siteScript + home + catalogPage, /seledkin-theme|data-theme-toggle/);
 });
 
 test("the agreed logo and Salmon portrait are byte-identical", async () => {

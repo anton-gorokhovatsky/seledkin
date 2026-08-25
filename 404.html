@@ -4,13 +4,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="assets/styles.css" />
     <link rel="icon" href="assets/logo-redrawn.svg" type="image/svg+xml" />
     <title>Страница не найдена — Рыбная лавка капитана Селедкина</title>
   </head>
-  <body>
-    <main class="not-found shell">
-      <a class="brand" href="./" aria-label="Рыбная лавка капитана Селедкина — на главную">
+  <body class="not-found-page">
+    <main class="not-found-source">
+      <a
+        class="not-found-source__brand"
+        href="./"
+        aria-label="Рыбная лавка капитана Селедкина — на главную"
+      >
         <img
           src="assets/logo-redrawn.svg"
           alt="Рыбная лавка капитана Селедкина"
@@ -18,12 +29,14 @@
           height="1784"
         />
       </a>
-      <p class="eyebrow">Ошибка 404</p>
+      <p class="not-found-source__label">Ошибка 404</p>
       <h1>Такой страницы в лавке нет.</h1>
       <p>Вернитесь на главную или откройте полный каталог с ценами.</p>
-      <div class="hero-actions">
-        <a class="button" href="./">На главную</a>
-        <a class="text-link" href="catalog/">Открыть каталог</a>
+      <div class="not-found-source__actions">
+        <a class="source-button source-button--telegram" href="./">На главную</a>
+        <a class="source-button source-button--outline" href="catalog/">
+          Открыть каталог
+        </a>
       </div>
     </main>
   </body>
