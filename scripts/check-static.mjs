@@ -46,6 +46,10 @@ const requiredFiles = [
   "assets/hero-ocean.jpg",
   "assets/hero-sea.mp4",
   "assets/hero-sea-poster.webp",
+  "assets/hero-sea-night.mp4",
+  "assets/hero-sea-night-poster.jpg",
+  "assets/hero-sea-night.manifest.json",
+  "assets/hero-sea-night.provenance.md",
   "assets/caviar-slab.jpg",
   "assets/salmon-dish.jpg",
   "assets/caviar-close.jpg",
@@ -199,8 +203,11 @@ for (const file of htmlFiles) {
   if (file === "index.html") {
     for (const required of [
       "data-hero-video",
+      "data-theme-video",
       'poster="assets/hero-sea-poster.webp"',
+      'data-poster-dark="assets/hero-sea-night-poster.jpg"',
       'src="assets/hero-sea.mp4"',
+      'data-src-dark="assets/hero-sea-night.mp4"',
       'data-logo-light="assets/logo-redrawn.svg"',
       'data-logo-dark="assets/logo-redrawn-night.svg"',
       'class="source-header source-header--over-media"',

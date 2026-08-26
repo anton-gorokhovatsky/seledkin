@@ -1,0 +1,15 @@
+{
+  "source": "hero-sea.mp4",
+  "output": "hero-sea-night.mp4",
+  "poster": "hero-sea-night-poster.jpg",
+  "sourceSha256": "4bd39c26bc86951039361f50508b9b5e2c486460c1ea6b2a919a502097baf232",
+  "outputSha256": "8c27339ac3f6d07cf9b119931bdff8b1d6119f3f732077b6314b5e318b40f18e",
+  "posterSha256": "7bf95c02504a5f201fd9415cfa078120f08094f5127ffe0e25e66756cb928eda",
+  "durationSeconds": 8,
+  "width": 1280,
+  "height": 720,
+  "frameRate": 30,
+  "videoCodec": "h264",
+  "pixelFormat": "yuv420p",
+  "created": "2026-08-26"
+}

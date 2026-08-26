@@ -143,6 +143,9 @@
           <video
             class="site-menu__service-video"
             poster="assets/hero-sea-poster.webp"
+            data-poster-light="assets/hero-sea-poster.webp"
+            data-poster-dark="assets/hero-sea-night-poster.jpg"
+            data-theme-video
             data-menu-sea-video
             muted
             loop
@@ -151,7 +154,13 @@
             aria-hidden="true"
             tabindex="-1"
           >
-            <source src="assets/hero-sea.mp4" type="video/mp4" />
+            <source
+              src="assets/hero-sea.mp4"
+              data-src-light="assets/hero-sea.mp4"
+              data-src-dark="assets/hero-sea-night.mp4"
+              data-theme-video-source
+              type="video/mp4"
+            />
           </video>
           <section class="site-menu__routes">
             <p class="site-menu__kicker">По сайту</p>
@@ -257,6 +266,9 @@
         <video
           class="source-hero__video"
           poster="assets/hero-sea-poster.webp"
+          data-poster-light="assets/hero-sea-poster.webp"
+          data-poster-dark="assets/hero-sea-night-poster.jpg"
+          data-theme-video
           data-hero-video
           muted
           loop
@@ -265,7 +277,13 @@
           aria-hidden="true"
           tabindex="-1"
         >
-          <source src="assets/hero-sea.mp4" type="video/mp4" />
+          <source
+            src="assets/hero-sea.mp4"
+            data-src-light="assets/hero-sea.mp4"
+            data-src-dark="assets/hero-sea-night.mp4"
+            data-theme-video-source
+            type="video/mp4"
+          />
         </video>
         <div class="source-hero__shade"></div>
         <div class="source-hero__content">

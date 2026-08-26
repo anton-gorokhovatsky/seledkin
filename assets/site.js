@@ -94,6 +94,21 @@ function syncMenuSeaVideo() {
   menuSeaVideo.play().catch(() => {});
 }
 
+function syncHeroVideo() {
+  if (!(heroVideo instanceof HTMLVideoElement)) return;
+
+  if (reducedMotion.matches) {
+    heroVideo.pause();
+    heroVideo.currentTime = 0;
+    heroVideo.classList.add("is-ready");
+    return;
+  }
+
+  heroVideo.play().catch(() => {
+    heroVideo.classList.add("is-ready");
+  });
+}
+
 function openMenu() {
   if (!menuButton || !menu) return;
 
@@ -175,19 +190,6 @@ if (menuButton && menu) {
 }
 
 if (heroVideo instanceof HTMLVideoElement) {
-  const syncHeroVideo = () => {
-    if (reducedMotion.matches) {
-      heroVideo.pause();
-      heroVideo.currentTime = 0;
-      heroVideo.classList.add("is-ready");
-      return;
-    }
-
-    heroVideo.play().catch(() => {
-      heroVideo.classList.add("is-ready");
-    });
-  };
-
   heroVideo.addEventListener("loadeddata", () => {
     heroVideo.classList.add("is-ready");
   });
@@ -314,6 +316,10 @@ if (
 }
 
 reducedMotion.addEventListener("change", syncMenuSeaVideo);
+document.addEventListener("seledkin:themechange", () => {
+  syncHeroVideo();
+  syncMenuSeaVideo();
+});
 syncMenuSeaVideo();
 
 if (

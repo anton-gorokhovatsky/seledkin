@@ -52,6 +52,16 @@ const sourceLogo = await readFile(
   new URL("../assets/logo-redrawn.svg", import.meta.url),
   "utf8",
 );
+const nightSeaManifest = JSON.parse(
+  await readFile(
+    new URL("../assets/hero-sea-night.manifest.json", import.meta.url),
+    "utf8",
+  ),
+);
+const nightSeaProvenance = await readFile(
+  new URL("../assets/hero-sea-night.provenance.md", import.meta.url),
+  "utf8",
+);
 
 function relativeLuminance(hex) {
   const channels = hex
@@ -223,7 +233,7 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
   assert.doesNotMatch(home + catalogPage + styles, /fish-divider\.png/i);
   assert.match(home, /<video[\s\S]*?class="source-hero__video"/);
   assert.match(home, /poster="assets\/hero-sea-poster\.webp"/);
-  assert.match(home, /<source src="assets\/hero-sea\.mp4" type="video\/mp4"/);
+  assert.match(home, /<source[\s\S]*?src="assets\/hero-sea\.mp4"[\s\S]*?type="video\/mp4"/);
   assert.doesNotMatch(home, /youtube-nocookie\.com/);
   assert.match(home, /data-hero-video/);
   assert.match(siteScript, /prefers-reduced-motion: reduce/);
@@ -693,7 +703,7 @@ test("menu, focus and reduced motion remain accessible", () => {
     assert.match(page, /poster="(?:\.\.\/)?assets\/hero-sea-poster\.webp"/);
     assert.match(
       page,
-      /<source src="(?:\.\.\/)?assets\/hero-sea\.mp4" type="video\/mp4"/,
+      /<source[\s\S]*?src="(?:\.\.\/)?assets\/hero-sea\.mp4"[\s\S]*?type="video\/mp4"/,
     );
     assert.doesNotMatch(
       page.match(/<video[\s\S]*?data-menu-sea-video[\s\S]*?<\/video>/)?.[0] ?? "",
@@ -891,6 +901,62 @@ test("theme follows store hours and a deliberate choice persists across pages", 
   }
 });
 
+test("Night Watch switches the hero and menu to a dedicated night sea file", async () => {
+  assert.equal((home.match(/data-theme-video(?:\s|>)/g) ?? []).length, 2);
+  assert.equal((catalogPage.match(/data-theme-video(?:\s|>)/g) ?? []).length, 1);
+
+  for (const page of [home, catalogPage]) {
+    assert.match(page, /data-poster-light="(?:\.\.\/)?assets\/hero-sea-poster\.webp"/);
+    assert.match(page, /data-poster-dark="(?:\.\.\/)?assets\/hero-sea-night-poster\.jpg"/);
+    assert.match(page, /data-src-light="(?:\.\.\/)?assets\/hero-sea\.mp4"/);
+    assert.match(page, /data-src-dark="(?:\.\.\/)?assets\/hero-sea-night\.mp4"/);
+    assert.match(page, /data-theme-video-source/);
+  }
+
+  assert.match(themeScript, /document\.querySelectorAll\("\[data-theme-video\]"\)/);
+  assert.match(themeScript, /source\?\.dataset\.srcDark/);
+  assert.match(themeScript, /source\?\.dataset\.srcLight/);
+  assert.match(themeScript, /video\.load\(\)/);
+  assert.match(themeScript, /seledkin:themechange/);
+  assert.match(siteScript, /document\.addEventListener\("seledkin:themechange"/);
+  assert.match(projectRules, /Ночное море — отдельный медиавариант/);
+  assert.match(nightSeaProvenance, /ничего не дорисовано и не сгенерировано/);
+
+  assert.deepEqual(
+    {
+      source: nightSeaManifest.source,
+      output: nightSeaManifest.output,
+      poster: nightSeaManifest.poster,
+      durationSeconds: nightSeaManifest.durationSeconds,
+      width: nightSeaManifest.width,
+      height: nightSeaManifest.height,
+      frameRate: nightSeaManifest.frameRate,
+      videoCodec: nightSeaManifest.videoCodec,
+      pixelFormat: nightSeaManifest.pixelFormat,
+    },
+    {
+      source: "hero-sea.mp4",
+      output: "hero-sea-night.mp4",
+      poster: "hero-sea-night-poster.jpg",
+      durationSeconds: 8,
+      width: 1280,
+      height: 720,
+      frameRate: 30,
+      videoCodec: "h264",
+      pixelFormat: "yuv420p",
+    },
+  );
+
+  for (const [path, expected] of [
+    ["../assets/hero-sea.mp4", nightSeaManifest.sourceSha256],
+    ["../assets/hero-sea-night.mp4", nightSeaManifest.outputSha256],
+    ["../assets/hero-sea-night-poster.jpg", nightSeaManifest.posterSha256],
+  ]) {
+    const binary = await readFile(new URL(path, import.meta.url));
+    assert.equal(createHash("sha256").update(binary).digest("hex"), expected);
+  }
+});
+
 test("Night Watch uses a dedicated reverse-polarity logo without changing its geometry", async () => {
   for (const page of [home, catalogPage, notFoundPage]) {
     assert.match(page, /data-theme-logo/);
@@ -1026,6 +1092,10 @@ test("the agreed source assets stay unchanged", async () => {
     [
       "../assets/fish-pattern.svg",
       "31e51adac566e3b0d5cb43858e6e3d4cf1bcd464be08ff629f49fc1ca707625b",
+    ],
+    [
+      "../assets/hero-sea.mp4",
+      "4bd39c26bc86951039361f50508b9b5e2c486460c1ea6b2a919a502097baf232",
     ],
     [
       "../assets/journal-679.jpg",

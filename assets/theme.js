@@ -84,6 +84,7 @@ function initTheme() {
   const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
   const toggles = [...document.querySelectorAll("[data-theme-toggle]")];
   const themeLogos = [...document.querySelectorAll("[data-theme-logo]")];
+  const themeVideos = [...document.querySelectorAll("[data-theme-video]")];
   const themeColor = document.querySelector('meta[name="theme-color"]');
   let explicitTheme =
     root.dataset.themeSource === "explicit"
@@ -97,6 +98,33 @@ function initTheme() {
       colorScheme.matches,
       scheduledTheme(new Date()),
     );
+  }
+
+  function renderThemeMedia(isDark) {
+    for (const video of themeVideos) {
+      if (!(video instanceof HTMLVideoElement)) continue;
+
+      const source = video.querySelector("[data-theme-video-source]");
+      const nextPoster = isDark
+        ? video.dataset.posterDark
+        : video.dataset.posterLight;
+      const nextSource = isDark
+        ? source?.dataset.srcDark
+        : source?.dataset.srcLight;
+      let sourceChanged = false;
+
+      if (nextPoster && video.getAttribute("poster") !== nextPoster) {
+        video.setAttribute("poster", nextPoster);
+      }
+      if (source && nextSource && source.getAttribute("src") !== nextSource) {
+        source.setAttribute("src", nextSource);
+        sourceChanged = true;
+      }
+      if (sourceChanged) {
+        video.classList.remove("is-ready");
+        video.load();
+      }
+    }
   }
 
   function renderThemeControls() {
@@ -123,12 +151,18 @@ function initTheme() {
       }
     }
 
+    renderThemeMedia(isDark);
+
     for (const toggle of toggles) {
       toggle.dataset.currentTheme = theme;
       toggle.setAttribute("aria-label", accessibleAction);
       const label = toggle.querySelector("[data-theme-label]");
       if (label) label.textContent = action;
     }
+
+    document.dispatchEvent(
+      new CustomEvent("seledkin:themechange", { detail: { theme } }),
+    );
   }
 
   function scheduleNextShift() {

@@ -94,7 +94,7 @@
   --surface-water:
     radial-gradient(ellipse at 14% 0%, rgb(74 158 171 / 7%), transparent 34rem),
     var(--paper);
-  --hero-shade: linear-gradient(rgb(0 15 24 / 52%), rgb(0 8 14 / 74%));
+  --hero-shade: linear-gradient(rgb(0 15 24 / 24%), rgb(0 8 14 / 44%));
   --bioluminescence-display: block;
   --bioluminescence-opacity: 0.72;
   --bioluminescence-wake: rgb(82 190 191 / 14%);
@@ -136,7 +136,7 @@
     --surface-water:
       radial-gradient(ellipse at 14% 0%, rgb(74 158 171 / 7%), transparent 34rem),
       var(--paper);
-    --hero-shade: linear-gradient(rgb(0 15 24 / 52%), rgb(0 8 14 / 74%));
+    --hero-shade: linear-gradient(rgb(0 15 24 / 24%), rgb(0 8 14 / 44%));
     --bioluminescence-display: block;
     --bioluminescence-opacity: 0.72;
     --bioluminescence-wake: rgb(82 190 191 / 14%);
