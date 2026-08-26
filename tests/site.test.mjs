@@ -39,6 +39,10 @@ const catalogScript = await readFile(
   new URL("../catalog/catalog.js", import.meta.url),
   "utf8",
 );
+const sourceLogo = await readFile(
+  new URL("../assets/logo-redrawn.svg", import.meta.url),
+  "utf8",
+);
 
 function relativeLuminance(hex) {
   const channels = hex
@@ -695,6 +699,7 @@ test("theme follows the system and a deliberate choice persists across pages", (
   for (const [foreground, background, minimum] of [
     ["#f3ede2", "#0e202b", 4.5],
     ["#b8c2c8", "#0e202b", 4.5],
+    ["#0e202b", "#b8c2c8", 4.5],
     ["#7dccf2", "#0e202b", 4.5],
     ["#83d8b8", "#0e202b", 4.5],
     ["#d6b46c", "#0e202b", 4.5],
@@ -708,7 +713,7 @@ test("theme follows the system and a deliberate choice persists across pages", (
   }
 });
 
-test("Night Watch uses a transparent single-color logo without changing the source artwork", async () => {
+test("Night Watch uses a dedicated reverse-polarity logo without changing its geometry", async () => {
   for (const page of [home, catalogPage, notFoundPage]) {
     assert.match(page, /data-theme-logo/);
     assert.match(page, /data-logo-light="(?:\.\.\/)?assets\/logo-redrawn\.svg"/);
@@ -724,13 +729,20 @@ test("Night Watch uses a transparent single-color logo without changing the sour
     new URL("../assets/logo-redrawn-night.svg", import.meta.url),
     "utf8",
   );
-  assert.match(nightLogo, /fill="#f3ede2"/);
+  assert.match(nightLogo, /id="logo-night-base"[^>]*fill="#b8c2c8"/);
+  assert.match(nightLogo, /id="logo-night-shadows"[^>]*fill="#0e202b"/);
+  assert.match(nightLogo, /id="logo-night-wordmark-1" fill="#f3ede2"/);
+  assert.match(nightLogo, /id="logo-night-wordmark-2" fill="#f3ede2"/);
   assert.doesNotMatch(nightLogo, /#fff(?:fff)?|<rect\b/i);
+  assert.doesNotMatch(nightLogo, /filter=|invert\(/i);
   assert.match(nightLogo, /<clipPath id="logo-cutout"/);
-  assert.equal(
-    createHash("sha256").update(nightLogo).digest("hex"),
-    "9510ad1b7dd08ace5ce88d0b5684a841442175c10aaea11a876670f2187ca18f",
+  const sourcePathData = [...sourceLogo.matchAll(/<path d="([^"]*)"/g)].map(
+    (match) => match[1],
   );
+  const nightPathData = [...nightLogo.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"/g)].map(
+    (match) => match[1],
+  );
+  assert.deepEqual(nightPathData.slice(1), sourcePathData);
 });
 
 test("Night Watch keeps bioluminescence in a restrained, static wake", () => {

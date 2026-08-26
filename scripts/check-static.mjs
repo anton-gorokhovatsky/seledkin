@@ -410,10 +410,6 @@ const expectedHashes = new Map([
     "49c8d097b56bd670cf46541b19e34f9c89398b7e566110acddd09067c223cc55",
   ],
   [
-    "assets/logo-redrawn-night.svg",
-    "9510ad1b7dd08ace5ce88d0b5684a841442175c10aaea11a876670f2187ca18f",
-  ],
-  [
     "assets/social-icons.svg",
     "4134ef4ba0dd886fc675c76441ba241bdeb3453c7b9d4f1b453b981f7ebb3eb9",
   ],
@@ -449,12 +445,37 @@ for (const [path, expected] of expectedHashes) {
   }
 }
 
+const sourceLogo = readFileSync(join(root, "assets/logo-redrawn.svg"), "utf8");
 const nightLogo = readFileSync(join(root, "assets/logo-redrawn-night.svg"), "utf8");
-if (!nightLogo.includes('fill="#f3ede2"') || /#fff(?:fff)?|<rect\b/i.test(nightLogo)) {
-  fail("Ночной логотип должен оставаться прозрачным одноцветным контуром без белых плашек");
+for (const layer of [
+  'id="logo-night-base"',
+  'fill="#b8c2c8"',
+  'id="logo-night-shadows"',
+  'fill="#0e202b"',
+  'id="logo-night-wordmark-1" fill="#f3ede2"',
+  'id="logo-night-wordmark-2" fill="#f3ede2"',
+]) {
+  if (!nightLogo.includes(layer)) {
+    fail(`В ночном логотипе отсутствует слой обратной полярности: ${layer}`);
+  }
+}
+if (/#fff(?:fff)?|<rect\b|filter=|invert\(/i.test(nightLogo)) {
+  fail("Ночной логотип должен быть прозрачным и не использовать белые плашки или фильтр-инверсию");
 }
 if (!nightLogo.includes('clipPath id="logo-cutout"')) {
   fail("Ночной логотип должен скрывать исходную надпись перед наложением перерисованной");
+}
+const sourceLogoPaths = [...sourceLogo.matchAll(/<path d="([^"]*)"/g)].map(
+  (match) => match[1],
+);
+const nightLogoPaths = [...nightLogo.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"/g)].map(
+  (match) => match[1],
+);
+if (
+  sourceLogoPaths.length !== nightLogoPaths.length - 1 ||
+  sourceLogoPaths.some((path, index) => path !== nightLogoPaths[index + 1])
+) {
+  fail("Ночной логотип должен сохранять всю исходную векторную геометрию");
 }
 
 const socialIcons = readFileSync(join(root, "assets/social-icons.svg"), "utf8");
