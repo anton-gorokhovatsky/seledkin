@@ -2,7 +2,6 @@ import { catalog } from "../assets/catalog-data.js";
 import { typographPrice, typographText } from "../assets/typography.js";
 
 const allCategories = "all";
-const telegramOrder = "https://t.me/+79166751452";
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");
 const select = document.querySelector("[data-catalog-select]");
@@ -39,14 +38,6 @@ function positionCount(value) {
   return `${value} позиций`;
 }
 
-function productMessage(product) {
-  const details = product.description ? ` (${product.description})` : "";
-  const message =
-    `Здравствуйте! Подскажите, пожалуйста, есть ли сейчас «${product.name}»${details}?`;
-
-  return `${telegramOrder}?text=${encodeURIComponent(message)}`;
-}
-
 function makeElement(tag, className, text) {
   const element = document.createElement(tag);
   if (className) element.className = className;
@@ -61,16 +52,11 @@ function makeProduct(product) {
   const price = makeElement("strong", "", typographPrice(product.price));
   const description = product.description
     ? makeElement("p", "", typographText(product.description))
-    : makeElement("span", "visually-hidden", "Без дополнительного описания");
-  const action = makeElement("a", "", "Уточнить наличие");
+    : null;
 
-  action.href = productMessage(product);
-  action.setAttribute(
-    "aria-label",
-    typographText(`Уточнить наличие: ${product.name}`),
-  );
   head.append(title, price);
-  article.append(head, description, action);
+  article.append(head);
+  if (description) article.append(description);
   return article;
 }
 

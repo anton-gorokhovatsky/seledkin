@@ -343,7 +343,6 @@ for (const [file, page] of [
     "Заказать в Телеграме",
     "Заказать в WhatsApp",
     "<span>Телеграм-канал</span>",
-    "<span>WhatsApp</span>",
     "<span>YouTube</span>",
     "<span>SoundCloud</span>",
     'class="site-menu__actions"',
@@ -360,6 +359,11 @@ for (const [file, page] of [
   }
   if (/floating-chat|floatingChat/.test(page)) {
     fail(`${file}: отдельный чат-виджет дублирует контакты в меню`);
+  }
+  const socialNavigation =
+    page.match(/<nav class="source-footer__channels"[\s\S]*?<\/nav>/)?.[0] ?? "";
+  if (/WhatsApp|social-icons\.svg#whatsapp/.test(socialNavigation)) {
+    fail(`${file}: WhatsApp ошибочно показан как социальная сеть`);
   }
 }
 

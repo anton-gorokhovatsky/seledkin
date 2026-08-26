@@ -278,7 +278,7 @@ test("the page and fullscreen menu share one stable outer content axis", () => {
   );
   assert.match(
     styles,
-    /\.contacts-source__card\s*\{[\s\S]*?left:\s*var\(--content-edge\);/,
+    /\.contacts-source\s*\{[\s\S]*?width:\s*min\(calc\(100% - var\(--page-outer\)\), var\(--shell\)\);[\s\S]*?margin-inline:\s*auto;/,
   );
 });
 
@@ -298,7 +298,19 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
 
   const sectionRule =
     styles.match(/\.contacts-source\s*\{([^}]*)\}/s)?.[1] ?? "";
-  assert.match(sectionRule, /height:\s*clamp\(36rem, 68svh, 43rem\)/);
+  assert.match(sectionRule, /height:\s*clamp\(31rem, 54svh, 36rem\)/);
+  assert.match(
+    sectionRule,
+    /grid-template-columns:\s*minmax\(20rem, 0\.72fr\) minmax\(0, 1\.28fr\)/,
+  );
+  assert.match(sectionRule, /grid-template-rows:\s*minmax\(0, 1fr\)/);
+  assert.match(home, /map-widget\/v1\/\?ll=37\.535850%2C55\.686220/);
+  assert.match(home, /pt=37\.535850%2C55\.686220%2Cpm2rdm/);
+  assert.doesNotMatch(home, /map-widget\/v1\/\?[^"\s]*text=/);
+  const mapRule =
+    styles.match(/\.contacts-source__map\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(mapRule, /min-height:\s*0/);
+  assert.match(mapRule, /overflow:\s*hidden/);
 
   const frameRule =
     styles.match(/\.contacts-source__map iframe\s*\{([^}]*)\}/s)?.[1] ?? "";
@@ -328,9 +340,13 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     assert.match(page, /href="tel:\+79166751452"/);
     assert.match(page, /class="source-footer__portrait"/);
     assert.match(page, /salmon-cat\.jpg/);
-    for (const label of ["Телеграм-канал", "WhatsApp", "YouTube", "SoundCloud"]) {
+    for (const label of ["Телеграм-канал", "YouTube", "SoundCloud"]) {
       assert.ok(page.includes(`<span>${label}</span>`), `В подвале нет подписи ${label}`);
     }
+    const channels =
+      page.match(/<nav class="source-footer__channels"[\s\S]*?<\/nav>/)?.[0] ?? "";
+    assert.doesNotMatch(channels, /WhatsApp|social-icons\.svg#whatsapp/);
+    assert.match(page, /Заказать в WhatsApp/);
   }
 
   const catRule =
@@ -341,7 +357,8 @@ test("the footer ends both customer journeys with a useful, human invitation", (
 });
 
 test("menu and footer channels use one precise local SVG set with Telegram first", async () => {
-  const symbols = ["telegram", "whatsapp", "youtube", "soundcloud"];
+  const footerSymbols = ["telegram", "youtube", "soundcloud"];
+  const spriteSymbols = ["telegram", "whatsapp", "youtube", "soundcloud"];
   for (const page of [home, catalogPage]) {
     const navigation =
       page.match(/<nav class="source-footer__channels"[\s\S]*?<\/nav>/)?.[0] ?? "";
@@ -349,15 +366,16 @@ test("menu and footer channels use one precise local SVG set with Telegram first
     assert.match(navigation, /class="source-footer__channel--primary"[^>]*href="https:\/\/t\.me\/kapitanseledkin"/);
     assert.equal(
       (navigation.match(/class="source-footer__channel-icon"/g) ?? []).length,
-      symbols.length,
+      footerSymbols.length,
     );
     assert.doesNotMatch(navigation, /<path\b/);
-    for (const symbol of symbols) {
+    for (const symbol of footerSymbols) {
       assert.match(
         navigation,
         new RegExp(`<use href="(?:\\.\\.\\/)?assets/social-icons\\.svg#${symbol}"><\\/use>`),
       );
     }
+    assert.doesNotMatch(navigation, /social-icons\.svg#whatsapp/);
 
     const menuNetworks =
       page.match(/<div class="site-menu__networks">[\s\S]*?<\/nav>\s*<\/div>/)?.[0] ?? "";
@@ -378,7 +396,7 @@ test("menu and footer channels use one precise local SVG set with Telegram first
     new URL("../assets/social-icons.svg", import.meta.url),
     "utf8",
   );
-  for (const symbol of symbols) {
+  for (const symbol of spriteSymbols) {
     assert.match(sprite, new RegExp(`<symbol id="${symbol}" viewBox="0 0 24 24">`));
   }
   assert.equal(
@@ -443,7 +461,68 @@ test("catalog search and filters expose accessible state", () => {
   assert.match(catalogScript, /aria-pressed/);
   assert.match(catalogScript, /select\.value = activeCategory/);
   assert.match(catalogScript, /Ничего не найдено/);
-  assert.match(catalogScript, /Уточнить наличие/);
+  assert.doesNotMatch(catalogScript, /Уточнить наличие|productMessage|catalog-product__action/);
+  for (const category of catalog) {
+    for (const product of category.items) {
+      assert.doesNotMatch(product.description ?? "", /уточн(?:ить|яйте) наличие/iu);
+    }
+  }
+});
+
+test("catalog controls reserve the fixed menu zone and product rows stay quiet", () => {
+  assert.match(
+    styles,
+    /\.controls-grid\s*\{[\s\S]*?padding-right:\s*calc\(8\.35rem \+ 1\.5rem\);/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.controls-grid\s*\{[\s\S]*?padding-right:\s*4rem;/,
+  );
+  assert.match(
+    styles,
+    /\.catalog-category\s*\{[\s\S]*?scroll-margin-top:\s*10rem;/,
+  );
+  const productRule =
+    styles.match(/\.catalog-product\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.doesNotMatch(productRule, /border(?:-bottom)?:/);
+  assert.match(
+    styles,
+    /\.catalog-category \+ \.catalog-category\s*\{[^}]*border-top:\s*1px solid var\(--ink\);/,
+  );
+});
+
+test("one restrained jelly material serves translucent controls", () => {
+  const lightRoot = styles.match(/:root\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(lightRoot, /--jelly-glass-surface:/);
+  assert.match(lightRoot, /--jelly-glass-filter:\s*blur\(0\.85rem\) saturate\(106%\);/);
+  for (const selector of [
+    "floating-menu",
+    "site-menu__topbar",
+    "catalog-controls",
+    "contacts-source__map-toggle",
+  ]) {
+    assert.match(
+      styles,
+      new RegExp(`\\.${selector}\\s*\\{[\\s\\S]*?backdrop-filter:\\s*var\\(--jelly-glass-filter\\);`),
+    );
+  }
+  assert.match(
+    styles,
+    /\.source-button--footer-primary,[\s\S]*?\.source-button--menu-primary\s*\{[\s\S]*?background:\s*var\(--jelly-glass-on-blue-strong\);/,
+  );
+  assert.doesNotMatch(lightRoot, /--jelly-glass-(?:surface|on-blue)[^;]*gradient\(/);
+});
+
+test("fish shoals keep one direction and two deliberate scale tokens", () => {
+  assert.match(styles, /--fish-shoal-width:\s*min\(100%, 52rem\);/);
+  assert.match(styles, /--fish-shoal-backdrop-width:\s*clamp\(42rem, 58vw, 62rem\);/);
+  assert.match(styles, /\.catalog-intro::before\s*\{[\s\S]*?width:\s*var\(--fish-shoal-width\);/);
+  assert.match(styles, /\.catalog-order::before\s*\{[\s\S]*?width:\s*var\(--fish-shoal-width\);/);
+  const patternRules = [...styles.matchAll(/([^{}]+)\{([^{}]*fish-pattern\.svg[^{}]*)\}/g)];
+  assert.ok(patternRules.length >= 5);
+  for (const [, selector, declarations] of patternRules) {
+    assert.doesNotMatch(declarations, /scaleX\(-1\)|transform:\s*rotate\(/, selector.trim());
+  }
 });
 
 test("menu, focus and reduced motion remain accessible", () => {
@@ -485,6 +564,21 @@ test("menu, focus and reduced motion remain accessible", () => {
   assert.doesNotMatch(siteScript, /menuClose/);
   assert.match(siteScript, /menuPanel\.scrollTop = 0/);
   assert.match(siteScript, /element\.inert = value/);
+  assert.equal((siteScript.match(/menuButton\.focus\(\)/g) ?? []).length, 1);
+  const openMenuBody =
+    siteScript.match(/function openMenu\(\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? "";
+  assert.doesNotMatch(openMenuBody, /\.focus\(/);
+  assert.match(siteScript, /closeMenu\(\{ returnFocus: true \}\)/);
+  assert.match(styles, /--masthead-top:\s*0\.625rem/);
+  assert.match(styles, /\.floating-menu\s*\{[\s\S]*?top:\s*var\(--masthead-top\);/);
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.floating-menu\s*\{[\s\S]*?width:\s*52px;[\s\S]*?border-radius:\s*50%;/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.floating-menu__label\s*\{[\s\S]*?clip-path:\s*inset\(50%\);/,
+  );
   assert.match(home, /role="dialog"/);
   assert.match(home, /aria-modal="true"/);
   assert.match(styles, /\.floating-menu\s*\{[\s\S]*?position:\s*fixed;/);

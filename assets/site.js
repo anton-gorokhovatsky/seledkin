@@ -47,7 +47,6 @@ function openMenu() {
   menuButton.setAttribute("aria-label", "Закрыть меню");
   if (menuButtonLabel) menuButtonLabel.textContent = "Закрыть";
   document.body.classList.add("menu-open");
-  menuButton.focus();
   setPageInert(true);
 }
 
@@ -69,7 +68,7 @@ function closeMenu({ returnFocus = false } = {}) {
 if (menuButton && menu) {
   menuButton.addEventListener("click", () => {
     if (menuButton.getAttribute("aria-expanded") === "true") {
-      closeMenu({ returnFocus: true });
+      closeMenu();
     } else {
       openMenu();
     }
@@ -77,7 +76,7 @@ if (menuButton && menu) {
 
   menu.addEventListener("click", (event) => {
     if (event.target === menu) {
-      closeMenu({ returnFocus: true });
+      closeMenu();
       return;
     }
 

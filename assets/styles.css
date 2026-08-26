@@ -19,7 +19,23 @@
   --footer-base: #dce9e8;
   --footer-line: rgb(255 248 237 / 32%);
   --map-fallback: #e8e5dd;
-  --sticky-surface: rgb(255 255 255 / 96%);
+  --map-filter: saturate(0.78) contrast(0.96);
+  --jelly-glass-surface: rgb(255 255 255 / 78%);
+  --jelly-glass-surface-strong: rgb(255 255 255 / 90%);
+  --jelly-glass-border: rgb(17 17 17 / 16%);
+  --jelly-glass-highlight: rgb(255 255 255 / 78%);
+  --jelly-glass-shadow:
+    0 0.45rem 1.4rem rgb(0 20 28 / 14%),
+    inset 0 1px 0 var(--jelly-glass-highlight);
+  --jelly-glass-filter: blur(0.85rem) saturate(106%);
+  --jelly-glass-on-blue: rgb(255 248 237 / 8%);
+  --jelly-glass-on-blue-hover: rgb(255 248 237 / 16%);
+  --jelly-glass-on-blue-strong: rgb(255 248 237 / 88%);
+  --jelly-glass-on-blue-strong-hover: rgb(255 248 237 / 96%);
+  --jelly-glass-on-blue-border: rgb(255 248 237 / 68%);
+  --jelly-glass-on-blue-shadow:
+    0 0.45rem 1.4rem rgb(0 18 29 / 18%),
+    inset 0 1px 0 rgb(255 248 237 / 32%);
   --pattern-filter: none;
   --pattern-opacity: 1;
   --surface-water: var(--paper);
@@ -37,7 +53,10 @@
   --page-outer: 5rem;
   --content-edge: max(var(--page-inset), calc((100vw - var(--shell)) / 2));
   --masthead-height: 8rem;
+  --masthead-top: 0.625rem;
   --brand-width-desktop: 13.5rem;
+  --fish-shoal-width: min(100%, 52rem);
+  --fish-shoal-backdrop-width: clamp(42rem, 58vw, 62rem);
   --focus: #a35d00;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --text-reading: 1.125rem;
@@ -63,7 +82,14 @@
   --footer-base: #b8c2c8;
   --footer-line: rgb(243 237 226 / 34%);
   --map-fallback: #243843;
-  --sticky-surface: rgb(14 32 43 / 96%);
+  --map-filter: brightness(0.72) saturate(0.68) contrast(1.04);
+  --jelly-glass-surface: rgb(8 28 40 / 76%);
+  --jelly-glass-surface-strong: rgb(14 32 43 / 91%);
+  --jelly-glass-border: rgb(243 237 226 / 26%);
+  --jelly-glass-highlight: rgb(243 237 226 / 24%);
+  --jelly-glass-shadow:
+    0 0.45rem 1.4rem rgb(0 12 20 / 32%),
+    inset 0 1px 0 var(--jelly-glass-highlight);
   --pattern-filter: brightness(0) saturate(100%) invert(94%) sepia(12%)
     saturate(243%) hue-rotate(344deg) brightness(101%) contrast(89%)
     drop-shadow(0 0 0.65rem rgb(108 221 210 / 14%));
@@ -97,7 +123,14 @@
     --footer-base: #b8c2c8;
     --footer-line: rgb(243 237 226 / 34%);
     --map-fallback: #243843;
-    --sticky-surface: rgb(14 32 43 / 96%);
+    --map-filter: brightness(0.72) saturate(0.68) contrast(1.04);
+    --jelly-glass-surface: rgb(8 28 40 / 76%);
+    --jelly-glass-surface-strong: rgb(14 32 43 / 91%);
+    --jelly-glass-border: rgb(243 237 226 / 26%);
+    --jelly-glass-highlight: rgb(243 237 226 / 24%);
+    --jelly-glass-shadow:
+      0 0.45rem 1.4rem rgb(0 12 20 / 32%),
+      inset 0 1px 0 var(--jelly-glass-highlight);
     --pattern-filter: brightness(0) saturate(100%) invert(94%) sepia(12%)
       saturate(243%) hue-rotate(344deg) brightness(101%) contrast(89%)
       drop-shadow(0 0 0.65rem rgb(108 221 210 / 14%));
@@ -773,14 +806,13 @@ p {
   position: absolute;
   top: clamp(1.5rem, 4vw, 4rem);
   right: max(-10rem, -9vw);
-  width: min(43rem, 52vw);
+  width: var(--fish-shoal-backdrop-width);
   aspect-ratio: 7940 / 2494;
   background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
   filter: var(--pattern-filter);
   opacity: 0.08;
   pointer-events: none;
-  transform: rotate(-5deg);
 }
 
 .ship-log__inner {
@@ -910,10 +942,6 @@ p {
   max-width: 48rem;
 }
 
-.fish-divider--delivery img {
-  transform: scaleX(-1);
-}
-
 .delivery-source {
   display: grid;
   width: min(calc(100% - var(--page-outer)), var(--shell));
@@ -935,43 +963,58 @@ p {
 
 .contacts-source {
   position: relative;
-  height: clamp(36rem, 68svh, 43rem);
+  display: grid;
+  width: min(calc(100% - var(--page-outer)), var(--shell));
+  height: clamp(31rem, 54svh, 36rem);
   min-height: 0;
+  grid-template-columns: minmax(20rem, 0.72fr) minmax(0, 1.28fr);
+  grid-template-rows: minmax(0, 1fr);
+  margin-inline: auto;
   overflow: hidden;
+  border: 1px solid var(--line);
   background: var(--map-fallback);
 }
 
 .contacts-source__map {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  grid-column: 2;
+  grid-row: 1;
 }
 
 .contacts-source__map iframe {
   width: 100%;
   height: 100%;
   border: 0;
+  filter: var(--map-filter);
   pointer-events: none;
+  transition: filter 180ms ease-out;
 }
 
 .contacts-source__map.is-interactive iframe {
+  filter: none;
   pointer-events: auto;
 }
 
 .contacts-source__map-toggle {
   position: absolute;
   z-index: 2;
-  right: var(--content-edge);
-  bottom: 2rem;
+  right: 1rem;
+  bottom: 1rem;
   display: inline-flex;
   min-height: 44px;
   align-items: center;
   justify-content: center;
   padding: 0.75rem 1.15rem;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--jelly-glass-border);
   border-radius: 999px;
-  background: var(--paper);
+  background: var(--jelly-glass-surface-strong);
   color: var(--ink);
-  box-shadow: 0 0.4rem 1.5rem rgb(0 0 0 / 16%);
+  box-shadow: var(--jelly-glass-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
   cursor: pointer;
   font-size: var(--text-interface);
   font-weight: 600;
@@ -983,19 +1026,22 @@ p {
 }
 
 .contacts-source__card {
-  position: absolute;
+  position: relative;
   z-index: 1;
-  top: clamp(2rem, 5vh, 3rem);
-  left: var(--content-edge);
-  width: min(28rem, calc(100% - 6rem));
-  padding: clamp(1.75rem, 2.4vw, 2.25rem) clamp(2rem, 3vw, 2.75rem);
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  grid-column: 1;
+  grid-row: 1;
+  padding: clamp(2rem, 4vw, 3.5rem);
   background: var(--paper);
-  box-shadow: 0 1rem 3rem rgb(0 0 0 / 12%);
+  flex-direction: column;
+  justify-content: center;
   font-style: normal;
 }
 
 .contacts-source__card h2 {
-  margin-bottom: 2rem;
+  margin-bottom: 1.75rem;
   font-size: clamp(2rem, 3vw, 2.75rem);
   line-height: 1.08;
 }
@@ -1006,6 +1052,7 @@ p {
 }
 
 .contacts-source__card .source-button {
+  align-self: flex-start;
   margin-top: 1rem;
 }
 
@@ -1023,14 +1070,13 @@ p {
   position: absolute;
   top: clamp(1rem, 4vw, 4rem);
   right: min(-8rem, -5vw);
-  width: min(62rem, 72vw);
+  width: var(--fish-shoal-backdrop-width);
   aspect-ratio: 7940 / 2494;
   background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
   filter: brightness(0) invert(1);
   opacity: 0.12;
   pointer-events: none;
-  transform: rotate(-4deg);
 }
 
 .source-footer::after,
@@ -1148,22 +1194,40 @@ p {
   flex-wrap: wrap;
 }
 
-.source-button--footer-primary {
-  background: var(--footer-text);
+.source-button--footer-primary,
+.source-button--menu-primary {
+  border-color: var(--jelly-glass-on-blue-border);
+  background: var(--jelly-glass-on-blue-strong);
   color: var(--footer);
+  box-shadow: var(--jelly-glass-on-blue-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
 }
 
-.source-button--footer-secondary {
-  border-color: var(--footer-text);
-  background: transparent;
+.source-button--footer-secondary,
+.source-button--menu-call,
+.source-button--menu-secondary {
+  border-color: var(--jelly-glass-on-blue-border);
+  background: var(--jelly-glass-on-blue);
   color: var(--footer-text);
+  box-shadow: var(--jelly-glass-on-blue-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
 }
 
 .source-button--footer-primary:hover,
-.source-button--footer-secondary:hover {
+.source-button--menu-primary:hover {
   border-color: var(--footer-text);
-  background: var(--footer-text);
+  background: var(--jelly-glass-on-blue-strong-hover);
   color: var(--footer);
+}
+
+.source-button--footer-secondary:hover,
+.source-button--menu-call:hover,
+.source-button--menu-secondary:hover {
+  border-color: var(--footer-text);
+  background: var(--jelly-glass-on-blue-hover);
+  color: var(--footer-text);
 }
 
 .source-footer__portrait {
@@ -1282,7 +1346,7 @@ p {
 .floating-menu {
   position: fixed;
   z-index: 110;
-  top: calc((var(--masthead-height) - 54px) / 2);
+  top: var(--masthead-top);
   right: var(--content-edge);
   left: auto;
   display: flex;
@@ -1293,12 +1357,13 @@ p {
   gap: 0.65rem;
   padding: 0.6rem 0.7rem;
   transform: none;
-  border: 1px solid var(--line);
+  border: 1px solid var(--jelly-glass-border);
   border-radius: 999px;
-  background: var(--sticky-surface);
+  background: var(--jelly-glass-surface);
   color: var(--ink);
-  box-shadow: 0 0.2rem 0.9rem rgb(0 0 0 / 12%);
-  backdrop-filter: blur(0.7rem);
+  box-shadow: var(--jelly-glass-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
   cursor: pointer;
   opacity: 1;
   pointer-events: auto;
@@ -1401,9 +1466,11 @@ p {
   grid-template-columns: var(--brand-width-desktop) minmax(0, 1fr) 8.35rem;
   gap: 2rem;
   padding: 0.5rem var(--content-edge);
-  border-bottom: 1px solid var(--line);
-  background: var(--sticky-surface);
-  backdrop-filter: blur(0.7rem);
+  border-bottom: 1px solid var(--jelly-glass-border);
+  background: var(--jelly-glass-surface-strong);
+  box-shadow: var(--jelly-glass-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
 }
 
 .site-menu__brand {
@@ -1520,13 +1587,12 @@ p {
   position: absolute;
   right: -22%;
   bottom: 7%;
-  width: 150%;
+  width: var(--fish-shoal-backdrop-width);
   aspect-ratio: 7940 / 2494;
   background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
   filter: brightness(0) invert(1);
   opacity: 0.14;
-  transform: rotate(-7deg);
 }
 
 .site-menu__service-inner {
@@ -1565,27 +1631,6 @@ p {
   gap: 0.75rem;
   margin-top: 1.5rem;
   flex-direction: column;
-}
-
-.source-button--menu-primary {
-  border-color: var(--footer-text);
-  background: var(--footer-text);
-  color: var(--footer);
-}
-
-.source-button--menu-call,
-.source-button--menu-secondary {
-  border-color: var(--footer-text);
-  background: transparent;
-  color: var(--footer-text);
-}
-
-.source-button--menu-primary:hover,
-.source-button--menu-call:hover,
-.source-button--menu-secondary:hover {
-  border-color: var(--footer-text);
-  background: var(--footer-text);
-  color: var(--footer);
 }
 
 .site-menu__networks {
@@ -1676,7 +1721,7 @@ p {
 
 .catalog-intro::before {
   display: block;
-  width: min(100%, 52rem);
+  width: var(--fish-shoal-width);
   aspect-ratio: 7940 / 2494;
   margin: -2rem auto 2rem;
   background: url("fish-pattern.svg") center / contain no-repeat;
@@ -1703,9 +1748,11 @@ p {
   z-index: 20;
   top: 0;
   padding: 1.2rem 0;
-  border-block: 1px solid var(--line);
-  background: var(--sticky-surface);
-  backdrop-filter: blur(0.7rem);
+  border-block: 1px solid var(--jelly-glass-border);
+  background: var(--jelly-glass-surface-strong);
+  box-shadow: var(--jelly-glass-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
 }
 
 .controls-grid {
@@ -1713,6 +1760,7 @@ p {
   grid-template-columns: minmax(15rem, 23rem) minmax(0, 1fr);
   align-items: end;
   gap: 2.5rem;
+  padding-right: calc(8.35rem + 1.5rem);
 }
 
 .catalog-search {
@@ -1770,7 +1818,6 @@ p {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  border-bottom: 1px solid var(--line);
   color: var(--muted);
 }
 
@@ -1785,6 +1832,7 @@ p {
 
 .catalog-category {
   padding: 4.5rem 0 2rem;
+  scroll-margin-top: 10rem;
 }
 
 .catalog-category + .catalog-category {
@@ -1816,7 +1864,7 @@ p {
 .catalog-product-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 5rem;
+  gap: 1.15rem 5rem;
 }
 
 .catalog-product {
@@ -1824,8 +1872,7 @@ p {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.35rem 1.25rem;
-  padding: 1.3rem 0 1.1rem;
-  border-bottom: 1px solid var(--line);
+  padding: 1.1rem 0;
 }
 
 .catalog-product-head {
@@ -1848,22 +1895,9 @@ p {
 .catalog-product p {
   grid-column: 1 / -1;
   margin: 0;
-  padding-right: 8rem;
   color: var(--muted);
   font-size: var(--text-interface);
   line-height: 1.5;
-}
-
-.catalog-product > a {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  grid-column: 1 / -1;
-  justify-self: start;
-  margin-top: 0.55rem;
-  color: var(--blue-deep);
-  font-size: var(--text-interface);
-  text-decoration: none;
 }
 
 .catalog-empty,
@@ -1875,19 +1909,19 @@ p {
 }
 
 .catalog-order {
+  overflow: hidden;
   padding: 3rem 0 5rem;
 }
 
 .catalog-order::before {
   display: block;
-  width: min(100%, 70rem);
+  width: var(--fish-shoal-width);
   aspect-ratio: 7940 / 2494;
   margin: 0 auto 2.5rem;
   background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
   filter: var(--pattern-filter);
   opacity: var(--pattern-opacity);
-  transform: scaleX(-1);
 }
 
 .catalog-order-grid {
@@ -2038,13 +2072,16 @@ p {
   align-self: flex-start;
   margin-top: 1.25rem;
   border-color: var(--footer-line);
-  background: rgb(6 26 38 / 18%);
+  background: var(--jelly-glass-on-blue);
   color: var(--footer-text);
+  box-shadow: var(--jelly-glass-on-blue-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
 }
 
 .theme-toggle--menu:hover {
   border-color: var(--footer-text);
-  background: rgb(6 26 38 / 32%);
+  background: var(--jelly-glass-on-blue-hover);
 }
 
 .theme-toggle--not-found {
@@ -2055,6 +2092,7 @@ p {
   :root {
     --page-inset: 1.1rem;
     --page-outer: 2.2rem;
+    --masthead-top: 0.9rem;
   }
 
   .source-shell {
@@ -2066,21 +2104,37 @@ p {
   }
 
   .floating-menu {
-    top: 1rem;
+    top: var(--masthead-top);
     right: 1rem;
     left: auto;
     height: 52px;
+    width: 52px;
+    gap: 0;
+    padding: 0;
+    border-radius: 50%;
     transform: none;
     opacity: 1;
     pointer-events: auto;
     visibility: visible;
   }
 
+  .floating-menu__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
   .site-menu__topbar {
     min-height: 6rem;
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
-    padding: 0.9rem 9.25rem 0.9rem var(--page-inset);
+    padding: 0.9rem 5.25rem 0.9rem var(--page-inset);
   }
 
   .site-menu__brand {
@@ -2260,10 +2314,6 @@ p {
     transform: translateX(-15.52%);
   }
 
-  .fish-divider--delivery img {
-    transform: translateX(-15.52%) scaleX(-1);
-  }
-
   .fish-divider--prices {
     padding-top: 0;
   }
@@ -2356,32 +2406,33 @@ p {
   }
 
   .contacts-source {
-    display: flex;
     height: auto;
     min-height: 0;
-    flex-direction: column-reverse;
+    grid-template-columns: 1fr;
   }
 
   .contacts-source__map {
     position: relative;
-    min-height: clamp(24rem, 60svh, 28rem);
+    min-height: clamp(18rem, 48svh, 22rem);
+    grid-column: 1;
+    grid-row: 2;
   }
 
   .contacts-source__map iframe {
     position: absolute;
+    inset: 0;
   }
 
   .contacts-source__card {
-    position: relative;
-    top: auto;
-    left: auto;
     width: 100%;
+    height: auto;
+    grid-column: 1;
+    grid-row: 1;
     padding: 3rem var(--page-inset);
-    box-shadow: none;
   }
 
   .contacts-source__map-toggle {
-    right: var(--page-inset);
+    right: 1rem;
     bottom: 1rem;
   }
 
@@ -2436,11 +2487,6 @@ p {
     padding: 2rem 0 3.5rem;
   }
 
-  .catalog-intro::before {
-    width: 135%;
-    margin-left: -17.5%;
-  }
-
   .catalog-controls {
     position: relative;
   }
@@ -2448,6 +2494,7 @@ p {
   .controls-grid {
     grid-template-columns: 1fr;
     gap: 0.8rem;
+    padding-right: 4rem;
   }
 
   .catalog-filters {
@@ -2486,15 +2533,6 @@ p {
   .catalog-product-grid {
     grid-template-columns: 1fr;
     gap: 0;
-  }
-
-  .catalog-product p {
-    padding-right: 0;
-  }
-
-  .catalog-product > a {
-    justify-self: start;
-    margin-top: 0.35rem;
   }
 
   .catalog-order-actions {
@@ -2697,6 +2735,13 @@ p {
   :root {
     --line: #757575;
     --muted: #3a3a3a;
+    --jelly-glass-surface: var(--paper);
+    --jelly-glass-surface-strong: var(--paper);
+    --jelly-glass-on-blue: transparent;
+    --jelly-glass-on-blue-hover: transparent;
+    --jelly-glass-on-blue-strong: var(--footer-text);
+    --jelly-glass-on-blue-strong-hover: var(--footer-text);
+    --jelly-glass-filter: none;
     --bioluminescence-opacity: 0;
     --bioluminescence-display: none;
   }
@@ -2738,16 +2783,29 @@ p {
     opacity: 0.88;
   }
 
-  .catalog-controls {
+  .catalog-controls,
+  .contacts-source__map-toggle,
+  .floating-menu,
+  .site-menu__topbar {
     background: Canvas;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
 
+  .contacts-source__map iframe {
+    filter: none;
+  }
+
   .catalog-filters button[aria-pressed="true"],
+  .contacts-source__map-toggle,
   .source-button,
   .floating-menu,
   .theme-toggle {
     border: 2px solid CanvasText;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
   :focus-visible {
