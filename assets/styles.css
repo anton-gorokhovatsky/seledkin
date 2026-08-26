@@ -1769,9 +1769,9 @@ p {
 
 .controls-grid {
   display: grid;
-  grid-template-columns: minmax(15rem, 23rem) minmax(0, 1fr);
+  grid-template-columns: minmax(13rem, 16rem) minmax(0, 1fr);
   align-items: end;
-  gap: 2.5rem;
+  gap: clamp(1rem, 1.5vw, 1.5rem);
   padding-right: calc(8.35rem + 1.5rem);
 }
 
@@ -1794,13 +1794,17 @@ p {
 .catalog-filters {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 0.35rem 1rem;
-  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding-bottom: 0.15rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
 }
 
 .catalog-filters button,
 .reset-button {
+  flex: 0 0 auto;
   min-width: 2.75rem;
   min-height: 2.75rem;
   padding: 0.6rem 0.25rem;
@@ -1809,6 +1813,7 @@ p {
   background: transparent;
   cursor: pointer;
   font-size: var(--text-meta);
+  white-space: nowrap;
 }
 
 .catalog-filters button[aria-pressed="true"] {
@@ -1821,7 +1826,7 @@ p {
 }
 
 .catalog-results {
-  padding: 3rem 0 6rem;
+  padding: 3rem 0;
 }
 
 .catalog-result-line {
@@ -1881,17 +1886,29 @@ p {
 
 .catalog-product {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.35rem 1.25rem;
+  display: block;
   padding: 1.1rem 0;
 }
 
 .catalog-product-head {
-  display: contents;
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 0.65rem;
+}
+
+.catalog-product-head::after {
+  min-width: 1.25rem;
+  flex: 1 1 auto;
+  order: 1;
+  border-bottom: 1px dotted var(--muted);
+  content: "";
+  opacity: 0.55;
+  transform: translateY(-0.22em);
 }
 
 .catalog-product h4 {
+  min-width: 0;
   margin: 0;
   font-family: var(--sans);
   font-size: var(--text-catalog);
@@ -1900,13 +1917,14 @@ p {
 }
 
 .catalog-product strong {
+  flex: 0 0 auto;
+  order: 2;
   font-size: var(--text-catalog);
   white-space: nowrap;
 }
 
 .catalog-product p {
-  grid-column: 1 / -1;
-  margin: 0;
+  margin: 0.35rem 0 0;
   color: var(--muted);
   font-size: var(--text-interface);
   line-height: 1.5;
@@ -1921,41 +1939,58 @@ p {
 }
 
 .catalog-order {
+  position: relative;
   overflow: hidden;
-  padding: 3rem 0 5rem;
+  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+  border-top: 1px solid var(--line);
 }
 
 .catalog-order::before {
-  display: block;
-  width: var(--fish-shoal-width);
+  position: absolute;
+  top: 50%;
+  right: -10rem;
+  width: var(--fish-shoal-backdrop-width);
   aspect-ratio: 7940 / 2494;
-  margin: 0 auto 2.5rem;
   background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
   filter: var(--pattern-filter);
-  opacity: var(--pattern-opacity);
+  opacity: 0.12;
+  pointer-events: none;
+  transform: translateY(-50%);
 }
 
 .catalog-order-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
-  justify-items: center;
-  gap: 1.25rem;
-  text-align: center;
+  grid-template-areas:
+    "title actions"
+    "copy actions";
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  justify-items: start;
+  gap: 0.75rem clamp(3rem, 7vw, 7rem);
+  text-align: left;
 }
 
 .catalog-order h2 {
+  grid-area: title;
   margin-bottom: 0;
   font-size: clamp(2.4rem, 4vw, 3.5rem);
 }
 
 .catalog-order p {
+  grid-area: copy;
+  max-width: 38rem;
   margin-bottom: 0;
 }
 
 .catalog-order-actions {
   display: flex;
+  grid-area: actions;
+  justify-self: end;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 0;
   flex-wrap: wrap;
 }
 
@@ -2565,6 +2600,21 @@ p {
     align-items: stretch;
     flex-direction: column;
   }
+
+  .catalog-order-grid {
+    grid-template-areas:
+      "title"
+      "copy"
+      "actions";
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .catalog-order-actions {
+    justify-self: stretch;
+    margin-top: 1rem;
+  }
 }
 
 @media (max-width: 34rem) {
@@ -2691,17 +2741,13 @@ p {
     width: 100%;
   }
 
-  .price-preview__grid article,
-  .catalog-product {
+  .price-preview__grid article {
     grid-template-columns: 1fr;
     gap: 0.35rem 0.75rem;
   }
 
   .catalog-product-head {
-    display: grid;
-    min-width: 0;
-    gap: 0.25rem;
-    grid-column: 1;
+    gap: 0.5rem;
   }
 
   .price-preview__grid strong,

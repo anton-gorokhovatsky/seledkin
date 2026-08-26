@@ -485,6 +485,10 @@ test("catalog search and filters expose accessible state", () => {
 test("catalog controls reserve the fixed menu zone and product rows stay quiet", () => {
   assert.match(
     styles,
+    /\.controls-grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(13rem, 16rem\) minmax\(0, 1fr\);/,
+  );
+  assert.match(
+    styles,
     /\.controls-grid\s*\{[\s\S]*?padding-right:\s*calc\(8\.35rem \+ 1\.5rem\);/,
   );
   assert.match(
@@ -498,6 +502,14 @@ test("catalog controls reserve the fixed menu zone and product rows stay quiet",
   const productRule =
     styles.match(/\.catalog-product\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.doesNotMatch(productRule, /border(?:-bottom)?:/);
+  assert.match(
+    styles,
+    /\.catalog-filters\s*\{[\s\S]*?overflow-x:\s*auto;[\s\S]*?scrollbar-width:\s*thin;/,
+  );
+  assert.match(
+    styles,
+    /\.catalog-product-head::after\s*\{[\s\S]*?border-bottom:\s*1px dotted var\(--muted\);/,
+  );
   assert.match(
     styles,
     /\.catalog-category \+ \.catalog-category\s*\{[^}]*border-top:\s*1px solid var\(--ink\);/,
@@ -530,7 +542,7 @@ test("fish shoals keep one direction and two deliberate scale tokens", () => {
   assert.match(styles, /--fish-shoal-width:\s*min\(100%, 52rem\);/);
   assert.match(styles, /--fish-shoal-backdrop-width:\s*clamp\(42rem, 58vw, 62rem\);/);
   assert.match(styles, /\.catalog-intro::before\s*\{[\s\S]*?width:\s*var\(--fish-shoal-width\);/);
-  assert.match(styles, /\.catalog-order::before\s*\{[\s\S]*?width:\s*var\(--fish-shoal-width\);/);
+  assert.match(styles, /\.catalog-order::before\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?width:\s*var\(--fish-shoal-backdrop-width\);/);
   const patternRules = [...styles.matchAll(/([^{}]+)\{([^{}]*fish-pattern\.svg[^{}]*)\}/g)];
   assert.ok(patternRules.length >= 5);
   for (const [, selector, declarations] of patternRules) {
