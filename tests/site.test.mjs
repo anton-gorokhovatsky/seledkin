@@ -83,6 +83,11 @@ test("home exposes the core customer jobs", () => {
 
   assert.match(home, /Продукты и цены/);
   assert.match(home, /Заказать в Телеграме/);
+  const hero = home.match(/<section class="source-hero"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(hero, /href="catalog\/"/);
+  assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
+  assert.match(hero, /class="source-hero__proof"/);
+  assert.match(hero, /src="assets\/about-main\.jpg"/);
   assert.match(home, /метро «Вавиловская»/);
   const contacts =
     home.match(/<section class="contacts-source"[\s\S]*?<\/section>/)?.[0] ?? "";
