@@ -538,6 +538,41 @@ test("one restrained jelly material serves translucent controls", () => {
   assert.doesNotMatch(lightRoot, /--jelly-glass-(?:surface|on-blue)[^;]*gradient\(/);
 });
 
+test("pointer hover and keyboard focus stay visibly distinct", () => {
+  const hoverStart = styles.indexOf("@media (hover: hover) and (pointer: fine)");
+  const hoverEnd = styles.indexOf(
+    "@media (prefers-reduced-motion: reduce)",
+    hoverStart,
+  );
+  assert.ok(hoverStart >= 0 && hoverEnd > hoverStart);
+  const hoverMedia = styles.slice(hoverStart, hoverEnd);
+
+  for (const selector of [
+    ".source-brand:hover img",
+    ".floating-menu:hover",
+    ".price-categories a:hover",
+    ".catalog-search input:hover",
+    ".catalog-filters button:hover",
+    ".contacts-source__map-toggle:hover",
+    ".theme-toggle:not(.theme-toggle--menu):hover",
+  ]) {
+    assert.ok(
+      hoverMedia.includes(selector),
+      `Нет явного pointer-hover для ${selector}`,
+    );
+  }
+
+  assert.match(styles, /:focus-visible\s*\{[^}]*outline:\s*0\.2rem solid var\(--focus\);/s);
+  assert.match(
+    styles,
+    /:root\[data-input-modality="pointer"\] \.floating-menu:focus-visible\s*\{[^}]*outline:\s*none;/s,
+  );
+  assert.doesNotMatch(
+    styles,
+    /:root\[data-input-modality="keyboard"\][^{]*:focus-visible\s*\{[^}]*outline:\s*none;/s,
+  );
+});
+
 test("fish shoals keep one direction and two deliberate scale tokens", () => {
   assert.match(styles, /--fish-shoal-width:\s*min\(100%, 52rem\);/);
   assert.match(styles, /--fish-shoal-backdrop-width:\s*clamp\(42rem, 58vw, 62rem\);/);

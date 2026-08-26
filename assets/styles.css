@@ -1018,6 +1018,11 @@ p {
   cursor: pointer;
   font-size: var(--text-interface);
   font-weight: 600;
+  transition:
+    border-color 180ms ease-out,
+    background-color 180ms ease-out,
+    color 180ms ease-out,
+    box-shadow 180ms ease-out;
 }
 
 .contacts-source__map-toggle[aria-pressed="true"] {
@@ -1377,7 +1382,9 @@ p {
   pointer-events: auto;
   transition:
     border-color 180ms ease-out,
-    background-color 180ms ease-out;
+    background-color 180ms ease-out,
+    color 180ms ease-out,
+    box-shadow 180ms ease-out;
   visibility: visible;
 }
 
@@ -1789,6 +1796,9 @@ p {
   border: 1px solid var(--brass);
   border-radius: 0;
   background: var(--paper);
+  transition:
+    border-color 180ms ease-out,
+    background-color 180ms ease-out;
 }
 
 .catalog-filters {
@@ -1813,6 +1823,10 @@ p {
   background: transparent;
   cursor: pointer;
   font-size: var(--text-meta);
+  transition:
+    border-color 180ms ease-out,
+    background-color 180ms ease-out,
+    color 180ms ease-out;
   white-space: nowrap;
 }
 
@@ -2077,6 +2091,10 @@ p {
   letter-spacing: 0.035em;
   line-height: 1.25;
   text-transform: uppercase;
+  transition:
+    border-color 180ms ease-out,
+    background-color 180ms ease-out,
+    color 180ms ease-out;
 }
 
 .theme-toggle__mark {
@@ -2575,6 +2593,9 @@ p {
     border: 1px solid var(--brass);
     border-radius: 0;
     background: var(--paper);
+    transition:
+      border-color 180ms ease-out,
+      background-color 180ms ease-out;
   }
 
   .catalog-results {
@@ -2794,6 +2815,72 @@ p {
 
   .delivery-source {
     width: min(calc(100% - var(--page-outer)), var(--shell));
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .source-brand img,
+  .site-menu__brand img,
+  .not-found-source__brand img {
+    transition:
+      opacity 180ms ease-out,
+      transform 180ms var(--ease);
+  }
+
+  .source-brand:hover img,
+  .site-menu__brand:hover img,
+  .not-found-source__brand:hover img {
+    transform: translateY(-0.08rem);
+    opacity: 0.82;
+  }
+
+  .floating-menu:hover {
+    border-color: var(--brass);
+    background: var(--jelly-glass-surface-strong);
+    color: var(--blue-deep);
+    box-shadow:
+      var(--jelly-glass-shadow),
+      0 0 0 1px var(--brass);
+  }
+
+  .price-categories a:hover {
+    border-radius: 0.25rem;
+    background: var(--jelly-glass-surface);
+    text-decoration: underline;
+    text-decoration-thickness: 0.12em;
+  }
+
+  .catalog-search input:hover,
+  .catalog-select select:hover {
+    border-color: var(--ink);
+    background: var(--jelly-glass-surface-strong);
+  }
+
+  .catalog-filters button:hover,
+  .reset-button:hover {
+    border-bottom-color: var(--brass);
+    background: var(--jelly-glass-surface);
+    color: var(--blue-deep);
+  }
+
+  .contacts-source__map-toggle:hover {
+    border-color: var(--brass);
+    background: var(--paper);
+    box-shadow:
+      var(--jelly-glass-shadow),
+      0 0 0 1px var(--brass);
+  }
+
+  .contacts-source__map-toggle[aria-pressed="true"]:hover {
+    border-color: var(--brass);
+    background: var(--blue-deep);
+    color: var(--paper);
+  }
+
+  .theme-toggle:not(.theme-toggle--menu):hover {
+    border-color: var(--brass);
+    background: var(--jelly-glass-surface);
+    color: var(--blue-deep);
   }
 }
 
