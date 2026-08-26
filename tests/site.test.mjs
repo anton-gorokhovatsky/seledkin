@@ -141,6 +141,8 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
 
   for (const asset of [
     "hero-ocean.jpg",
+    "hero-sea-poster.webp",
+    "hero-sea.mp4",
     "caviar-slab.jpg",
     "salmon-dish.jpg",
     "fish-pattern.svg",
@@ -156,11 +158,15 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
   assert.doesNotMatch(home, /Feed not found|уточняйте цены|Друзья!/i);
   assert.doesNotMatch(home + catalogPage + styles, /tildacdn\.com/i);
   assert.doesNotMatch(home + catalogPage + styles, /fish-divider\.png/i);
-  assert.match(home, /www\.youtube-nocookie\.com\/embed\/AsD5u6k6dKI/);
+  assert.match(home, /<video[\s\S]*?class="source-hero__video"/);
+  assert.match(home, /poster="assets\/hero-sea-poster\.webp"/);
+  assert.match(home, /<source src="assets\/hero-sea\.mp4" type="video\/mp4"/);
+  assert.doesNotMatch(home, /youtube-nocookie\.com/);
   assert.match(home, /data-hero-video/);
   assert.match(siteScript, /prefers-reduced-motion: reduce/);
-  assert.match(siteScript, /heroVideo\.removeAttribute\("src"\)/);
-  assert.match(styles, /translate\(-50%, -50%\) scale\(1\.22\)/);
+  assert.match(siteScript, /heroVideo\.pause\(\)/);
+  assert.match(siteScript, /heroVideo\.currentTime = 0/);
+  assert.match(styles, /object-fit:\s*cover/);
   assert.match(styles, /fish-pattern\.svg/);
   assert.match(styles, /"Iowan Old Style"/);
 });
@@ -568,11 +574,15 @@ test("menu, focus and reduced motion remain accessible", () => {
     siteScript.match(/function openMenu\(\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? "";
   assert.doesNotMatch(openMenuBody, /\.focus\(/);
   assert.match(siteScript, /closeMenu\(\{ returnFocus: true \}\)/);
-  assert.match(styles, /--masthead-top:\s*0\.625rem/);
-  assert.match(styles, /\.floating-menu\s*\{[\s\S]*?top:\s*var\(--masthead-top\);/);
+  assert.match(styles, /--masthead-control-size:\s*3\.375rem/);
+  assert.match(styles, /--brand-width-desktop:\s*15rem/);
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.floating-menu\s*\{[\s\S]*?width:\s*52px;[\s\S]*?border-radius:\s*50%;/,
+    /\.floating-menu\s*\{[\s\S]*?top:\s*calc\(\(var\(--masthead-height\) - var\(--masthead-control-size\)\) \/ 2 \+ 0\.2rem\);/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.floating-menu\s*\{[\s\S]*?width:\s*var\(--masthead-control-size\);[\s\S]*?border-radius:\s*50%;/,
   );
   assert.match(
     styles,
@@ -594,6 +604,12 @@ test("menu, focus and reduced motion remain accessible", () => {
     /grid-template-columns:\s*minmax\(0, 1\.45fr\) minmax\(22rem, 0\.75fr\)/,
   );
   assert.match(styles, /\.site-menu__service::before[\s\S]*?fish-pattern\.svg/);
+  assert.match(siteScript, /document\.documentElement\.dataset\.inputModality = "pointer"/);
+  assert.match(siteScript, /document\.documentElement\.dataset\.inputModality = "keyboard"/);
+  assert.match(
+    styles,
+    /:root\[data-input-modality="pointer"\] \.floating-menu:focus-visible\s*\{[\s\S]*?outline:\s*none/,
+  );
   assert.match(styles, /:focus-visible/);
   assert.match(styles, /prefers-reduced-motion:\s*reduce/);
   assert.match(styles, /prefers-contrast:\s*more/);

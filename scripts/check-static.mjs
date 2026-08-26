@@ -44,6 +44,8 @@ const requiredFiles = [
   "assets/social-icons.svg",
   "assets/salmon-cat.jpg",
   "assets/hero-ocean.jpg",
+  "assets/hero-sea.mp4",
+  "assets/hero-sea-poster.webp",
   "assets/caviar-slab.jpg",
   "assets/salmon-dish.jpg",
   "assets/caviar-close.jpg",
@@ -197,7 +199,8 @@ for (const file of htmlFiles) {
   if (file === "index.html") {
     for (const required of [
       "data-hero-video",
-      "www.youtube-nocookie.com/embed/AsD5u6k6dKI",
+      'poster="assets/hero-sea-poster.webp"',
+      'src="assets/hero-sea.mp4"',
       'src="assets/logo-redrawn-night.svg"',
       'class="source-header source-header--over-media"',
     ]) {
@@ -288,7 +291,8 @@ for (const required of [
   'menuButtonLabel.textContent = "Меню"',
   "menuPanel.scrollTop = 0",
   'window.matchMedia("(prefers-reduced-motion: reduce)")',
-  'heroVideo.removeAttribute("src")',
+  "heroVideo.pause()",
+  "heroVideo.currentTime = 0",
   'import "./theme.js"',
 ]) {
   if (!siteScript.includes(required)) fail(`assets/site.js: нет обязательного поведения ${required}`);

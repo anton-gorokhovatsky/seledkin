@@ -219,16 +219,19 @@
 
     <main id="main" tabindex="-1">
       <section class="source-hero" aria-labelledby="hero-title">
-        <iframe
+        <video
           class="source-hero__video"
-          title="Фоновое видео моря"
-          data-src="https://www.youtube-nocookie.com/embed/AsD5u6k6dKI?autoplay=1&amp;mute=1&amp;controls=0&amp;loop=1&amp;playlist=AsD5u6k6dKI&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3&amp;disablekb=1&amp;fs=0"
+          poster="assets/hero-sea-poster.webp"
           data-hero-video
+          muted
+          loop
+          playsinline
+          preload="metadata"
           aria-hidden="true"
           tabindex="-1"
-          allow="autoplay; encrypted-media; picture-in-picture"
-          referrerpolicy="strict-origin-when-cross-origin"
-        ></iframe>
+        >
+          <source src="assets/hero-sea.mp4" type="video/mp4" />
+        </video>
         <div class="source-hero__shade"></div>
         <div class="source-hero__content">
           <img

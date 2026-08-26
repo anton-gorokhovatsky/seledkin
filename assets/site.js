@@ -10,6 +10,36 @@ const map = document.querySelector("[data-map]");
 const mapToggle = map?.querySelector("[data-map-toggle]");
 const mapToggleLabel = mapToggle?.querySelector("[data-map-toggle-label]");
 const mapFrame = map?.querySelector("iframe");
+const keyboardNavigationKeys = new Set([
+  "Tab",
+  "Enter",
+  " ",
+  "Escape",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "Home",
+  "End",
+]);
+
+document.addEventListener(
+  "keydown",
+  (event) => {
+    if (keyboardNavigationKeys.has(event.key)) {
+      document.documentElement.dataset.inputModality = "keyboard";
+    }
+  },
+  true,
+);
+
+document.addEventListener(
+  "pointerdown",
+  () => {
+    document.documentElement.dataset.inputModality = "pointer";
+  },
+  { capture: true, passive: true },
+);
 
 function focusableMenuItems() {
   if (!menu) return [];
@@ -116,26 +146,28 @@ if (menuButton && menu) {
   });
 }
 
-if (heroVideo instanceof HTMLIFrameElement) {
+if (heroVideo instanceof HTMLVideoElement) {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const syncHeroVideo = () => {
     if (reducedMotion.matches) {
-      heroVideo.classList.remove("is-ready");
-      heroVideo.removeAttribute("src");
+      heroVideo.pause();
+      heroVideo.currentTime = 0;
+      heroVideo.classList.add("is-ready");
       return;
     }
 
-    if (!heroVideo.hasAttribute("src") && heroVideo.dataset.src) {
-      heroVideo.src = heroVideo.dataset.src;
-    }
+    heroVideo.play().catch(() => {
+      heroVideo.classList.add("is-ready");
+    });
   };
 
-  heroVideo.addEventListener("load", () => {
-    if (heroVideo.hasAttribute("src") && !reducedMotion.matches) {
-      heroVideo.classList.add("is-ready");
-    }
+  heroVideo.addEventListener("loadeddata", () => {
+    heroVideo.classList.add("is-ready");
   });
+  if (heroVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+    heroVideo.classList.add("is-ready");
+  }
   reducedMotion.addEventListener("change", syncHeroVideo);
   syncHeroVideo();
 }

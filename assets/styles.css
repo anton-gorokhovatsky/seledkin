@@ -53,8 +53,8 @@
   --page-outer: 5rem;
   --content-edge: max(var(--page-inset), calc((100vw - var(--shell)) / 2));
   --masthead-height: 8rem;
-  --masthead-top: 0.625rem;
-  --brand-width-desktop: 13.5rem;
+  --masthead-control-size: 3.375rem;
+  --brand-width-desktop: 15rem;
   --fish-shoal-width: min(100%, 52rem);
   --fish-shoal-backdrop-width: clamp(42rem, 58vw, 62rem);
   --focus: #a35d00;
@@ -400,12 +400,12 @@ p {
 .source-hero__video {
   position: absolute;
   z-index: 0;
-  top: 50%;
-  left: 50%;
-  width: max(100%, 177.78vh);
-  height: max(100%, 56.25vw);
-  transform: translate(-50%, -50%) scale(1.22);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   border: 0;
+  object-fit: cover;
+  object-position: 56% center;
   opacity: 0;
   pointer-events: none;
   transition: opacity 420ms ease-out;
@@ -1364,12 +1364,12 @@ p {
 .floating-menu {
   position: fixed;
   z-index: 110;
-  top: var(--masthead-top);
+  top: calc((var(--masthead-height) - var(--masthead-control-size)) / 2 + 0.2rem);
   right: var(--content-edge);
   left: auto;
   display: flex;
   width: 8.35rem;
-  height: 54px;
+  height: var(--masthead-control-size);
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
@@ -1389,6 +1389,10 @@ p {
     border-color 180ms ease-out,
     background-color 180ms ease-out;
   visibility: visible;
+}
+
+:root[data-input-modality="pointer"] .floating-menu:focus-visible {
+  outline: none;
 }
 
 .floating-menu.is-visible,
@@ -2110,7 +2114,7 @@ p {
   :root {
     --page-inset: 1.1rem;
     --page-outer: 2.2rem;
-    --masthead-top: 0.9rem;
+    --masthead-control-size: 3.25rem;
   }
 
   .source-shell {
@@ -2122,11 +2126,11 @@ p {
   }
 
   .floating-menu {
-    top: var(--masthead-top);
+    top: calc((6rem - var(--masthead-control-size)) / 2);
     right: 1rem;
     left: auto;
-    height: 52px;
-    width: 52px;
+    height: var(--masthead-control-size);
+    width: var(--masthead-control-size);
     gap: 0;
     padding: 0;
     border-radius: 50%;
