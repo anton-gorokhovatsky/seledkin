@@ -622,7 +622,7 @@ p {
   position: absolute;
   z-index: 1;
   bottom: 8rem;
-  left: max(3rem, calc((100vw - var(--shell)) / 2));
+  left: var(--content-edge);
   width: min(36rem, calc(100% - 6rem));
   margin: 0;
   font-size: clamp(2rem, 3.4vw, 3.65rem);
@@ -916,7 +916,7 @@ p {
 
 .delivery-source {
   display: grid;
-  width: min(calc(100% - 5rem), var(--shell));
+  width: min(calc(100% - var(--page-outer)), var(--shell));
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
   gap: 2.5rem;
@@ -960,7 +960,7 @@ p {
 .contacts-source__map-toggle {
   position: absolute;
   z-index: 2;
-  right: max(1.5rem, calc((100vw - var(--shell)) / 2));
+  right: var(--content-edge);
   bottom: 2rem;
   display: inline-flex;
   min-height: 44px;
@@ -986,7 +986,7 @@ p {
   position: absolute;
   z-index: 1;
   top: clamp(2rem, 5vh, 3rem);
-  left: max(3rem, calc((100vw - var(--shell)) / 2));
+  left: var(--content-edge);
   width: min(28rem, calc(100% - 6rem));
   padding: clamp(1.75rem, 2.4vw, 2.25rem) clamp(2rem, 3vw, 2.75rem);
   background: var(--paper);
@@ -1435,7 +1435,11 @@ p {
 
 .site-menu__routes {
   min-width: 0;
-  padding: clamp(3rem, 5vw, 5rem) clamp(2rem, 6vw, 6rem);
+  padding:
+    clamp(3rem, 5vw, 5rem)
+    clamp(2rem, 6vw, 6rem)
+    clamp(3rem, 5vw, 5rem)
+    var(--content-edge);
 }
 
 .site-menu__kicker {
@@ -2093,7 +2097,7 @@ p {
   }
 
   .site-menu__routes {
-    padding: 3.5rem 1.25rem 4rem;
+    padding: 3.5rem var(--page-inset) 4rem;
   }
 
   .site-menu__service {
@@ -2101,7 +2105,7 @@ p {
   }
 
   .site-menu__service-inner {
-    padding: 4rem 1.25rem;
+    padding: 4rem var(--page-inset);
   }
 
   .source-hero {
@@ -2219,9 +2223,9 @@ p {
   }
 
   .source-quote blockquote {
-    right: 1.3rem;
+    right: var(--page-inset);
     bottom: 4rem;
-    left: 1.3rem;
+    left: var(--page-inset);
     width: auto;
     font-size: clamp(2rem, 9vw, 3rem);
   }
@@ -2341,7 +2345,7 @@ p {
   }
 
   .delivery-source {
-    width: min(calc(100% - 2.2rem), var(--shell));
+    width: min(calc(100% - var(--page-outer)), var(--shell));
     grid-template-columns: 1fr;
     gap: 0;
     padding-top: 1rem;
@@ -2372,12 +2376,12 @@ p {
     top: auto;
     left: auto;
     width: 100%;
-    padding: 3rem 1.25rem;
+    padding: 3rem var(--page-inset);
     box-shadow: none;
   }
 
   .contacts-source__map-toggle {
-    right: 1rem;
+    right: var(--page-inset);
     bottom: 1rem;
   }
 
@@ -2587,7 +2591,7 @@ p {
   }
 
   .site-menu__routes {
-    padding: 2.75rem 0.85rem 3.5rem;
+    padding: 2.75rem var(--page-inset) 3.5rem;
   }
 
   .site-menu__routes h2 {
@@ -2604,7 +2608,7 @@ p {
   }
 
   .site-menu__service-inner {
-    padding: 4rem 0.85rem;
+    padding: 4rem var(--page-inset);
   }
 
   .site-menu__service h3 {
@@ -2671,7 +2675,7 @@ p {
   }
 
   .delivery-source {
-    width: min(calc(100% - 1.7rem), var(--shell));
+    width: min(calc(100% - var(--page-outer)), var(--shell));
   }
 }
 

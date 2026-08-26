@@ -257,6 +257,31 @@ test("the wide shell and linear Ship's Log avoid narrow nested cards", () => {
   );
 });
 
+test("the page and fullscreen menu share one stable outer content axis", () => {
+  assert.match(styles, /--page-inset:\s*2\.5rem/);
+  assert.match(styles, /--page-outer:\s*5rem/);
+  assert.match(
+    styles,
+    /--content-edge:\s*max\(var\(--page-inset\), calc\(\(100vw - var\(--shell\)\) \/ 2\)\)/,
+  );
+  assert.match(
+    styles,
+    /\.source-shell\s*\{[\s\S]*?width:\s*min\(calc\(100% - var\(--page-outer\)\), var\(--shell\)\)/,
+  );
+  assert.match(
+    styles,
+    /\.site-menu__routes\s*\{[\s\S]*?padding:[\s\S]*?var\(--content-edge\);/,
+  );
+  assert.match(
+    styles,
+    /\.source-quote blockquote\s*\{[\s\S]*?left:\s*var\(--content-edge\);/,
+  );
+  assert.match(
+    styles,
+    /\.contacts-source__card\s*\{[\s\S]*?left:\s*var\(--content-edge\);/,
+  );
+});
+
 test("the compact map keeps page scrolling until deliberate activation", () => {
   for (const required of [
     'class="contacts-source__map" data-map',
