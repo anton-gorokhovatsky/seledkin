@@ -23,6 +23,10 @@ const accessibility = await readFile(
   new URL("../ACCESSIBILITY.md", import.meta.url),
   "utf8",
 );
+const projectRules = await readFile(
+  new URL("../AGENTS.md", import.meta.url),
+  "utf8",
+);
 const styles = await readFile(
   new URL("../assets/styles.css", import.meta.url),
   "utf8",
@@ -101,12 +105,12 @@ test("the header floats lightly over the source video and leaves service details
   assert.match(home, /class="source-header source-header--over-media"/);
   assert.match(
     styles,
-    /\.source-header\s*\{[\s\S]*?min-height:\s*var\(--masthead-height\);/,
+    /\.source-header\s*\{[\s\S]*?min-height:\s*var\(--masthead-panel-height\);/,
   );
   assert.match(styles, /\.source-header__bar\s*\{[\s\S]*?width:\s*100%;/);
   assert.match(
     styles,
-    /\.source-header__bar\s*\{[\s\S]*?padding:\s*0\.5rem var\(--content-edge\);/,
+    /\.source-header__bar\s*\{[\s\S]*?padding:\s*var\(--masthead-top-inset\) var\(--content-edge\) 1rem;/,
   );
   assert.match(styles, /\.source-brand\s*\{[\s\S]*?width:\s*var\(--brand-width-desktop\);/);
   assert.match(
@@ -684,10 +688,12 @@ test("menu, focus and reduced motion remain accessible", () => {
   assert.doesNotMatch(openMenuBody, /\.focus\(/);
   assert.match(siteScript, /closeMenu\(\{ returnFocus: true \}\)/);
   assert.match(styles, /--masthead-control-size:\s*3\.375rem/);
+  assert.match(styles, /--masthead-panel-height:\s*11rem/);
+  assert.match(styles, /--masthead-top-inset:\s*2\.5rem/);
   assert.match(styles, /--brand-width-desktop:\s*15rem/);
   assert.match(
     styles,
-    /\.floating-menu\s*\{[\s\S]*?top:\s*calc\(\(var\(--masthead-height\) - var\(--masthead-control-size\)\) \/ 2 \+ 0\.2rem\);/,
+    /\.floating-menu\s*\{[\s\S]*?top:\s*var\(--masthead-top-inset\);/,
   );
   assert.match(
     styles,
@@ -708,6 +714,14 @@ test("menu, focus and reduced motion remain accessible", () => {
   );
   assert.match(styles, /\.site-menu\s*\{[\s\S]*?inset:\s*0;/);
   assert.match(styles, /\.site-menu__panel\s*\{[\s\S]*?height:\s*100dvh;/);
+  assert.match(
+    styles,
+    /\.site-menu__topbar\s*\{[\s\S]*?min-height:\s*var\(--masthead-panel-height\);[\s\S]*?padding:\s*var\(--masthead-top-inset\) var\(--content-edge\) 1rem;/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?--masthead-top-inset:\s*1\.375rem;[\s\S]*?\.floating-menu\s*\{[\s\S]*?top:\s*var\(--masthead-top-inset\);/,
+  );
   assert.match(
     styles,
     /grid-template-columns:\s*minmax\(0, 1\.45fr\) minmax\(22rem, 0\.75fr\)/,
@@ -738,6 +752,18 @@ test("menu, focus and reduced motion remain accessible", () => {
   assert.match(styles, /prefers-reduced-motion:\s*reduce/);
   assert.match(styles, /prefers-contrast:\s*more/);
   assert.match(styles, /forced-colors:\s*active/);
+});
+
+test("menu dividers express structure instead of filling space", () => {
+  const networks =
+    styles.match(/\.site-menu__networks\s*\{([^}]*)\}/s)?.[1] ?? "";
+
+  assert.doesNotMatch(networks, /border-(?:top|bottom|block)/);
+  assert.doesNotMatch(networks, /padding-top/);
+  assert.match(
+    projectRules,
+    /Разделители не запрещены, но каждый должен обозначать реальную границу/,
+  );
 });
 
 test("theme follows the system and a deliberate choice persists across pages", () => {

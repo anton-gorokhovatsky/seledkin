@@ -55,6 +55,8 @@
   --page-outer: 5rem;
   --content-edge: max(var(--page-inset), calc((100vw - var(--shell)) / 2));
   --masthead-height: 8rem;
+  --masthead-panel-height: 11rem;
+  --masthead-top-inset: 2.5rem;
   --masthead-control-size: 3.375rem;
   --brand-width-desktop: 15rem;
   --fish-shoal-width: min(100%, 52rem);
@@ -302,7 +304,7 @@ p {
 .source-header {
   position: relative;
   z-index: 30;
-  min-height: var(--masthead-height);
+  min-height: var(--masthead-panel-height);
   background: transparent;
 }
 
@@ -317,9 +319,9 @@ p {
 .source-header__bar {
   display: flex;
   width: 100%;
-  min-height: var(--masthead-height);
-  align-items: center;
-  padding: 0.5rem var(--content-edge);
+  min-height: var(--masthead-panel-height);
+  align-items: flex-start;
+  padding: var(--masthead-top-inset) var(--content-edge) 1rem;
 }
 
 .source-brand {
@@ -1366,7 +1368,7 @@ p {
 .floating-menu {
   position: fixed;
   z-index: 110;
-  top: calc((var(--masthead-height) - var(--masthead-control-size)) / 2 + 0.2rem);
+  top: var(--masthead-top-inset);
   right: var(--content-edge);
   left: auto;
   display: flex;
@@ -1487,11 +1489,11 @@ p {
   z-index: 3;
   top: 0;
   display: grid;
-  min-height: var(--masthead-height);
-  align-items: center;
+  min-height: var(--masthead-panel-height);
+  align-items: start;
   grid-template-columns: var(--brand-width-desktop) minmax(0, 1fr) 8.35rem;
   gap: 2rem;
-  padding: 0.5rem var(--content-edge);
+  padding: var(--masthead-top-inset) var(--content-edge) 1rem;
   border-bottom: 1px solid var(--jelly-glass-border);
   background: var(--jelly-glass-surface-strong);
   box-shadow: var(--jelly-glass-shadow);
@@ -1512,6 +1514,7 @@ p {
 
 .site-menu__deck {
   margin: 0;
+  padding-top: calc((var(--masthead-control-size) - 1em) / 2);
   color: var(--muted);
   font-size: var(--text-meta);
   font-weight: 600;
@@ -1522,7 +1525,7 @@ p {
 
 .site-menu__layout {
   display: grid;
-  min-height: calc(100dvh - var(--masthead-height));
+  min-height: calc(100dvh - var(--masthead-panel-height));
   grid-template-columns: minmax(0, 1.45fr) minmax(22rem, 0.75fr);
 }
 
@@ -1672,9 +1675,7 @@ p {
 
 .site-menu__networks {
   width: min(100%, 23rem);
-  margin-top: 1.25rem;
-  padding-top: 1.15rem;
-  border-top: 1px solid var(--footer-line);
+  margin-top: 2rem;
 }
 
 .site-menu__channel {
@@ -2175,6 +2176,8 @@ p {
   :root {
     --page-inset: 1.1rem;
     --page-outer: 2.2rem;
+    --masthead-panel-height: 6.5rem;
+    --masthead-top-inset: 1.375rem;
     --masthead-control-size: 3.25rem;
   }
 
@@ -2187,7 +2190,7 @@ p {
   }
 
   .floating-menu {
-    top: calc((6rem - var(--masthead-control-size)) / 2);
+    top: var(--masthead-top-inset);
     right: 1rem;
     left: auto;
     height: var(--masthead-control-size);
@@ -2214,10 +2217,10 @@ p {
   }
 
   .site-menu__topbar {
-    min-height: 6rem;
+    min-height: var(--masthead-panel-height);
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
-    padding: 0.9rem 5.25rem 0.9rem var(--page-inset);
+    padding: var(--masthead-top-inset) 5.25rem 0.9rem var(--page-inset);
   }
 
   .site-menu__brand {
