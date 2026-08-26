@@ -121,6 +121,19 @@ test("the header floats lightly over the source video and leaves service details
   );
 });
 
+test("the home brand marks the current page without linking to itself", () => {
+  const homeHeader =
+    home.match(/<header class="source-header[\s\S]*?<\/header>/)?.[0] ?? "";
+  const homeMenuTopbar =
+    home.match(/<header class="site-menu__topbar">[\s\S]*?<\/header>/)?.[0] ?? "";
+  const catalogHeader =
+    catalogPage.match(/<header class="source-header[\s\S]*?<\/header>/)?.[0] ?? "";
+
+  assert.doesNotMatch(homeHeader, /<a class="source-brand"/);
+  assert.doesNotMatch(homeMenuTopbar, /<a class="site-menu__brand"/);
+  assert.match(catalogHeader, /<a class="source-brand" href="\.\.\/"/);
+});
+
 test("home keeps the source ks.fish visual sequence and local imagery", () => {
   const sequence = [
     "source-header",
