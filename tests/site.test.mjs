@@ -385,7 +385,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
   );
   assert.match(
     styles,
-    /\.source-footer__channels \.source-footer__channel--primary\s*\{\s*grid-column:\s*1\s*\/\s*-1;/,
+    /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__channels\s*\{[\s\S]*?grid-template-columns:\s*1fr;/,
   );
 });
 
@@ -424,6 +424,10 @@ test("menu and footer channels use one precise local SVG set with Telegram first
     styles.match(/\.source-footer__channels\s+a\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.doesNotMatch(channelRule, /border-radius|background(?:-color)?\s*:/);
   assert.match(styles, /\.source-footer__channel-icon\s*\{[\s\S]*?width:\s*1\.35rem;/);
+  assert.doesNotMatch(
+    styles,
+    /source-footer__channel--primary[^}]*font-size|source-footer__channel--primary[^}]*channel-icon/,
+  );
 
   const sprite = await readFile(
     new URL("../assets/social-icons.svg", import.meta.url),
