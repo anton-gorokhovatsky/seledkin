@@ -18,15 +18,36 @@
     <script>
       (() => {
         document.documentElement.classList.add("js");
-        let theme = null;
+        let explicitTheme = null;
         try {
           const stored = localStorage.getItem("seledkin-theme");
-          if (stored === "light" || stored === "dark") theme = stored;
+          if (stored === "light" || stored === "dark") explicitTheme = stored;
         } catch {}
-        const isDark =
-          theme === "dark" ||
-          (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
-        if (theme) document.documentElement.dataset.theme = theme;
+        let scheduleTheme = null;
+        try {
+          const hourPart = new Intl.DateTimeFormat("en-GB", {
+            timeZone: "Europe/Moscow",
+            hour: "2-digit",
+            hourCycle: "h23",
+          })
+            .formatToParts(new Date())
+            .find(({ type }) => type === "hour");
+          const hour = Number(hourPart?.value);
+          if (Number.isFinite(hour)) {
+            scheduleTheme = hour >= 11 && hour < 20 ? "light" : "dark";
+          }
+        } catch {}
+        const theme =
+          explicitTheme ??
+          scheduleTheme ??
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        const isDark = theme === "dark";
+        document.documentElement.dataset.theme = theme;
+        if (explicitTheme) {
+          document.documentElement.dataset.themeSource = "explicit";
+        }
         document.documentElement.style.colorScheme = isDark ? "dark" : "light";
         document.querySelector('meta[name="theme-color"]').content = isDark
           ? "#0e202b"

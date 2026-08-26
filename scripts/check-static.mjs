@@ -302,8 +302,11 @@ for (const required of [
 const themeScript = readFileSync(join(root, "assets/theme.js"), "utf8");
 for (const required of [
   'export const themeStorageKey = "seledkin-theme"',
+  'export const storeTimeZone = "Europe/Moscow"',
   'window.matchMedia("(prefers-color-scheme: dark)")',
-  "localStorage.setItem(themeStorageKey, theme)",
+  "localStorage.setItem(themeStorageKey, explicitTheme)",
+  "scheduledTheme(new Date())",
+  "scheduleNextShift()",
   '"Дневная вахта"',
   '"Ночная вахта"',
 ]) {

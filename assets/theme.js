@@ -1,11 +1,82 @@
 export const themeStorageKey = "seledkin-theme";
+export const storeTimeZone = "Europe/Moscow";
+export const storeOpenHour = 11;
+export const storeCloseHour = 20;
+
+let moscowClockFormatter = null;
 
 export function normalizeTheme(value) {
   return value === "light" || value === "dark" ? value : null;
 }
 
-export function effectiveTheme(explicitTheme, systemPrefersDark) {
-  return normalizeTheme(explicitTheme) ?? (systemPrefersDark ? "dark" : "light");
+function moscowClock(date) {
+  if (!(date instanceof Date) || !Number.isFinite(date.getTime())) return null;
+
+  try {
+    moscowClockFormatter ??= new Intl.DateTimeFormat("en-GB", {
+      timeZone: storeTimeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+    });
+    const values = Object.fromEntries(
+      moscowClockFormatter
+        .formatToParts(date)
+        .filter(({ type }) => type !== "literal")
+        .map(({ type, value }) => [type, Number(value)]),
+    );
+    if (![values.hour, values.minute, values.second].every(Number.isFinite)) {
+      return null;
+    }
+    return {
+      hour: values.hour % 24,
+      minute: values.minute,
+      second: values.second,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function scheduledTheme(date = new Date()) {
+  const clock = moscowClock(date);
+  if (!clock) return null;
+  return clock.hour >= storeOpenHour && clock.hour < storeCloseHour
+    ? "light"
+    : "dark";
+}
+
+export function millisecondsUntilThemeShift(date = new Date()) {
+  const clock = moscowClock(date);
+  if (!clock) return null;
+
+  const elapsed =
+    ((clock.hour * 60 + clock.minute) * 60 + clock.second) * 1000 +
+    date.getMilliseconds();
+  const opening = storeOpenHour * 60 * 60 * 1000;
+  const closing = storeCloseHour * 60 * 60 * 1000;
+  const day = 24 * 60 * 60 * 1000;
+  const nextBoundary =
+    elapsed < opening
+      ? opening
+      : elapsed < closing
+        ? closing
+        : day + opening;
+
+  return Math.max(50, nextBoundary - elapsed + 50);
+}
+
+export function effectiveTheme(
+  explicitTheme,
+  systemPrefersDark,
+  scheduleTheme = null,
+) {
+  return (
+    normalizeTheme(explicitTheme) ??
+    normalizeTheme(scheduleTheme) ??
+    (systemPrefersDark ? "dark" : "light")
+  );
 }
 
 function initTheme() {
@@ -14,9 +85,18 @@ function initTheme() {
   const toggles = [...document.querySelectorAll("[data-theme-toggle]")];
   const themeLogos = [...document.querySelectorAll("[data-theme-logo]")];
   const themeColor = document.querySelector('meta[name="theme-color"]');
+  let explicitTheme =
+    root.dataset.themeSource === "explicit"
+      ? normalizeTheme(root.dataset.theme)
+      : null;
+  let scheduleTimer = null;
 
   function currentTheme() {
-    return effectiveTheme(root.dataset.theme, colorScheme.matches);
+    return effectiveTheme(
+      explicitTheme,
+      colorScheme.matches,
+      scheduledTheme(new Date()),
+    );
   }
 
   function renderThemeControls() {
@@ -27,6 +107,12 @@ function initTheme() {
       ? "Включить дневную вахту"
       : "Включить ночную вахту";
 
+    root.dataset.theme = theme;
+    if (explicitTheme) {
+      root.dataset.themeSource = "explicit";
+    } else {
+      delete root.dataset.themeSource;
+    }
     root.style.colorScheme = theme;
     if (themeColor) themeColor.content = isDark ? "#0e202b" : "#ffffff";
 
@@ -45,14 +131,28 @@ function initTheme() {
     }
   }
 
+  function scheduleNextShift() {
+    if (scheduleTimer) window.clearTimeout(scheduleTimer);
+    scheduleTimer = null;
+    if (explicitTheme) return;
+
+    const delay = millisecondsUntilThemeShift(new Date());
+    if (!Number.isFinite(delay)) return;
+    scheduleTimer = window.setTimeout(() => {
+      renderThemeControls();
+      scheduleNextShift();
+    }, delay);
+  }
+
   function setExplicitTheme(theme) {
-    root.dataset.theme = theme;
+    explicitTheme = normalizeTheme(theme);
     try {
-      localStorage.setItem(themeStorageKey, theme);
+      localStorage.setItem(themeStorageKey, explicitTheme);
     } catch {
       // The selected theme still applies for this page when storage is blocked.
     }
     renderThemeControls();
+    scheduleNextShift();
   }
 
   for (const toggle of toggles) {
@@ -62,21 +162,24 @@ function initTheme() {
   }
 
   colorScheme.addEventListener?.("change", () => {
-    if (!normalizeTheme(root.dataset.theme)) renderThemeControls();
+    if (!explicitTheme && !scheduledTheme(new Date())) renderThemeControls();
   });
 
   window.addEventListener("storage", (event) => {
     if (event.key !== themeStorageKey) return;
-    const theme = normalizeTheme(event.newValue);
-    if (theme) {
-      root.dataset.theme = theme;
-    } else {
-      delete root.dataset.theme;
-    }
+    explicitTheme = normalizeTheme(event.newValue);
     renderThemeControls();
+    scheduleNextShift();
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden || explicitTheme) return;
+    renderThemeControls();
+    scheduleNextShift();
   });
 
   renderThemeControls();
+  scheduleNextShift();
 }
 
 if (typeof document !== "undefined") {

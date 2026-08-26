@@ -5,7 +5,12 @@ import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
 import {
   effectiveTheme,
+  millisecondsUntilThemeShift,
   normalizeTheme,
+  scheduledTheme,
+  storeCloseHour,
+  storeOpenHour,
+  storeTimeZone,
   themeStorageKey,
 } from "../assets/theme.js";
 import { typographPrice, typographText } from "../assets/typography.js";
@@ -771,23 +776,50 @@ test("menu dividers express structure instead of filling space", () => {
   );
 });
 
-test("theme follows the system and a deliberate choice persists across pages", () => {
+test("theme follows store hours and a deliberate choice persists across pages", () => {
   assert.equal(themeStorageKey, "seledkin-theme");
+  assert.equal(storeTimeZone, "Europe/Moscow");
+  assert.equal(storeOpenHour, 11);
+  assert.equal(storeCloseHour, 20);
   assert.equal(normalizeTheme("light"), "light");
   assert.equal(normalizeTheme("dark"), "dark");
   assert.equal(normalizeTheme("sepia"), null);
   assert.equal(effectiveTheme(null, false), "light");
   assert.equal(effectiveTheme(null, true), "dark");
+  assert.equal(effectiveTheme(null, true, "light"), "light");
+  assert.equal(effectiveTheme(null, false, "dark"), "dark");
   assert.equal(effectiveTheme("light", true), "light");
   assert.equal(effectiveTheme("dark", false), "dark");
+  assert.equal(effectiveTheme("dark", false, "light"), "dark");
+
+  assert.equal(scheduledTheme(new Date("2026-08-26T07:59:59Z")), "dark");
+  assert.equal(scheduledTheme(new Date("2026-08-26T08:00:00Z")), "light");
+  assert.equal(scheduledTheme(new Date("2026-08-26T16:59:59Z")), "light");
+  assert.equal(scheduledTheme(new Date("2026-08-26T17:00:00Z")), "dark");
+  assert.equal(scheduledTheme(new Date("invalid")), null);
+  assert.equal(
+    millisecondsUntilThemeShift(new Date("2026-08-26T07:59:30Z")),
+    30_050,
+  );
+  assert.equal(
+    millisecondsUntilThemeShift(new Date("2026-08-26T16:59:30Z")),
+    30_050,
+  );
 
   assert.match(siteScript, /import "\.\/theme\.js"/);
   for (const page of [home, catalogPage, notFoundPage]) {
     assert.match(page, /localStorage\.getItem\("seledkin-theme"\)/);
+    assert.match(page, /timeZone:\s*"Europe\/Moscow"/);
+    assert.match(page, /hour >= 11 && hour < 20/);
+    assert.match(page, /dataset\.themeSource = "explicit"/);
     assert.match(page, /data-theme-toggle/);
     assert.match(page, /Ночная вахта/);
     assert.doesNotMatch(page, /data-theme-toggle[^>]*aria-pressed/);
   }
+  assert.match(themeScript, /function scheduleNextShift\(\)/);
+  assert.match(themeScript, /document\.addEventListener\("visibilitychange"/);
+  assert.match(themeScript, /root\.dataset\.theme = theme/);
+  assert.match(themeScript, /root\.dataset\.themeSource = "explicit"/);
   assert.match(notFoundPage, /assets\/theme\.js/);
   assert.match(styles, /:root\[data-theme="dark"\]/);
   assert.match(styles, /prefers-color-scheme:\s*dark/);
