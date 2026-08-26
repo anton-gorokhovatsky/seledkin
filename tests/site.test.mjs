@@ -746,6 +746,12 @@ test("Night Watch uses a dedicated reverse-polarity logo without changing its ge
     assert.match(page, /data-logo-dark="(?:\.\.\/)?assets\/logo-redrawn-night\.svg"/);
   }
 
+  assert.equal(
+    (home.match(/data-theme-logo/g) ?? []).length,
+    3,
+    "the desktop brand, menu brand and mobile hero brand must all follow the active watch",
+  );
+
   assert.match(themeScript, /document\.querySelectorAll\("\[data-theme-logo\]"\)/);
   assert.match(themeScript, /logo\.dataset\.logoDark/);
   assert.match(themeScript, /logo\.dataset\.logoLight/);
@@ -757,18 +763,20 @@ test("Night Watch uses a dedicated reverse-polarity logo without changing its ge
   );
   assert.match(nightLogo, /id="logo-night-base"[^>]*fill="#b8c2c8"/);
   assert.match(nightLogo, /id="logo-night-shadows"[^>]*fill="#0e202b"/);
-  assert.match(nightLogo, /id="logo-night-wordmark-1" fill="#f3ede2"/);
-  assert.match(nightLogo, /id="logo-night-wordmark-2" fill="#f3ede2"/);
-  assert.doesNotMatch(nightLogo, /#fff(?:fff)?|<rect\b/i);
+  assert.match(nightLogo, /id="logo-night-board-1"[^>]*fill="#b8c2c8"/);
+  assert.match(nightLogo, /id="logo-night-board-2"[^>]*fill="#b8c2c8"/);
+  assert.match(nightLogo, /id="logo-night-wordmark-1" fill="#0e202b"/);
+  assert.match(nightLogo, /id="logo-night-wordmark-2" fill="#0e202b"/);
+  assert.doesNotMatch(nightLogo, /#fff(?:fff)?/i);
   assert.doesNotMatch(nightLogo, /filter=|invert\(/i);
-  assert.match(nightLogo, /<clipPath id="logo-cutout"/);
+  assert.doesNotMatch(nightLogo, /clipPath|clip-path/i);
   const sourcePathData = [...sourceLogo.matchAll(/<path d="([^"]*)"/g)].map(
     (match) => match[1],
   );
   const nightPathData = [...nightLogo.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"/g)].map(
     (match) => match[1],
   );
-  assert.deepEqual(nightPathData.slice(1), sourcePathData);
+  assert.deepEqual(nightPathData, sourcePathData);
 });
 
 test("Night Watch keeps bioluminescence in a restrained, static wake", () => {

@@ -201,7 +201,8 @@ for (const file of htmlFiles) {
       "data-hero-video",
       'poster="assets/hero-sea-poster.webp"',
       'src="assets/hero-sea.mp4"',
-      'src="assets/logo-redrawn-night.svg"',
+      'data-logo-light="assets/logo-redrawn.svg"',
+      'data-logo-dark="assets/logo-redrawn-night.svg"',
       'class="source-header source-header--over-media"',
     ]) {
       if (!html.includes(required)) fail(`${file}: первый экран не содержит ${required}`);
@@ -452,18 +453,20 @@ for (const layer of [
   'fill="#b8c2c8"',
   'id="logo-night-shadows"',
   'fill="#0e202b"',
-  'id="logo-night-wordmark-1" fill="#f3ede2"',
-  'id="logo-night-wordmark-2" fill="#f3ede2"',
+  'id="logo-night-board-1"',
+  'id="logo-night-board-2"',
+  'id="logo-night-wordmark-1" fill="#0e202b"',
+  'id="logo-night-wordmark-2" fill="#0e202b"',
 ]) {
   if (!nightLogo.includes(layer)) {
     fail(`В ночном логотипе отсутствует слой обратной полярности: ${layer}`);
   }
 }
-if (/#fff(?:fff)?|<rect\b|filter=|invert\(/i.test(nightLogo)) {
-  fail("Ночной логотип должен быть прозрачным и не использовать белые плашки или фильтр-инверсию");
+if (/#fff(?:fff)?|filter=|invert\(/i.test(nightLogo)) {
+  fail("Ночной логотип не должен использовать белые плашки или фильтр-инверсию");
 }
-if (!nightLogo.includes('clipPath id="logo-cutout"')) {
-  fail("Ночной логотип должен скрывать исходную надпись перед наложением перерисованной");
+if (/clipPath|clip-path/i.test(nightLogo)) {
+  fail("Ночной логотип не должен вырезать прямоугольную подложку под надписью");
 }
 const sourceLogoPaths = [...sourceLogo.matchAll(/<path d="([^"]*)"/g)].map(
   (match) => match[1],
@@ -472,8 +475,8 @@ const nightLogoPaths = [...nightLogo.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"
   (match) => match[1],
 );
 if (
-  sourceLogoPaths.length !== nightLogoPaths.length - 1 ||
-  sourceLogoPaths.some((path, index) => path !== nightLogoPaths[index + 1])
+  sourceLogoPaths.length !== nightLogoPaths.length ||
+  sourceLogoPaths.some((path, index) => path !== nightLogoPaths[index])
 ) {
   fail("Ночной логотип должен сохранять всю исходную векторную геометрию");
 }
