@@ -622,6 +622,7 @@ test("menu, focus and reduced motion remain accessible", () => {
     assert.ok(page.includes('<h2 id="menu-title">Куда держим курс?</h2>'));
     assert.match(page, /class="site-menu__layout"/);
     assert.match(page, /class="site-menu__service"/);
+    assert.doesNotMatch(page, /Лавка на Вавиловской/);
     assert.equal((page.match(/data-menu-sea-video/g) ?? []).length, 1);
     assert.match(page, /class="site-menu__service-video"/);
     assert.match(page, /poster="(?:\.\.\/)?assets\/hero-sea-poster\.webp"/);
