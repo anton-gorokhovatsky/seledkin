@@ -91,8 +91,13 @@ test("home exposes the core customer jobs", () => {
   const hero = home.match(/<section class="source-hero"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(hero, /href="catalog\/"/);
   assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
-  assert.match(hero, /class="source-hero__proof"/);
-  assert.match(hero, /src="assets\/about-main\.jpg"/);
+  assert.match(hero, /class="[^"]*source-hero__proof/);
+  assert.match(hero, /href="https:\/\/t\.me\/kapitanseledkin\/682"/);
+  assert.match(hero, /src="assets\/journal-682\.jpg"/);
+  assert.match(hero, /datetime="2026-08-25"/);
+  assert.match(hero, /Запись №&nbsp;682/);
+  assert.doesNotMatch(hero, /src="assets\/about-main\.jpg"/);
+  assert.doesNotMatch(hero, /Из ассортимента лавки/);
   assert.match(home, /метро «Вавиловская»/);
   const contacts =
     home.match(/<section class="contacts-source"[\s\S]*?<\/section>/)?.[0] ?? "";
@@ -100,6 +105,29 @@ test("home exposes the core customer jobs", () => {
   assert.doesNotMatch(contacts, /Университет/);
   assert.match(contacts, /Ежедневно с&nbsp;11:00 до&nbsp;20:00/);
   assert.doesNotMatch(home + styles, /source-hero__down/);
+});
+
+test("the hero uses a manual, accessible journal stack without autoplay", () => {
+  const hero = home.match(/<section class="source-hero"[\s\S]*?<\/section>/)?.[0] ?? "";
+
+  assert.match(hero, /data-hero-journal/);
+  assert.match(hero, /aria-roledescription="карусель"/);
+  assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 3);
+  for (const id of [682, 681, 680]) {
+    assert.match(hero, new RegExp("https://t\\.me/kapitanseledkin/" + id));
+    assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
+  }
+
+  assert.match(hero, /data-hero-journal-previous/);
+  assert.match(hero, /data-hero-journal-next/);
+  assert.match(hero, /aria-live="polite"/);
+  assert.match(styles, /\.source-hero__journal-stack\s*\{[\s\S]*?touch-action:\s*pan-y;/);
+  assert.match(styles, /\.source-hero__journal-card\[aria-hidden="true"\] figcaption/);
+  assert.match(siteScript, /event\.key === "ArrowLeft"/);
+  assert.match(siteScript, /event\.key === "ArrowRight"/);
+  assert.match(siteScript, /Math\.abs\(deltaX\) < 48/);
+  assert.match(siteScript, /card\.inert = !active/);
+  assert.doesNotMatch(siteScript, /setInterval\s*\(/);
 });
 
 test("the header floats lightly over the source video and leaves service details to the menu", () => {

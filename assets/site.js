@@ -12,6 +12,15 @@ const mapToggle = map?.querySelector("[data-map-toggle]");
 const mapToggleLabel = mapToggle?.querySelector("[data-map-toggle-label]");
 const mapFrame = map?.querySelector("iframe");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const heroJournal = document.querySelector("[data-hero-journal]");
+const heroJournalStack = heroJournal?.querySelector("[data-hero-journal-stack]");
+const heroJournalCards = [
+  ...(heroJournal?.querySelectorAll("[data-hero-journal-card]") ?? []),
+];
+const heroJournalPrevious = heroJournal?.querySelector("[data-hero-journal-previous]");
+const heroJournalNext = heroJournal?.querySelector("[data-hero-journal-next]");
+const heroJournalCounter = heroJournal?.querySelector("[data-hero-journal-counter]");
+const heroJournalStatus = heroJournal?.querySelector("[data-hero-journal-status]");
 const keyboardNavigationKeys = new Set([
   "Tab",
   "Enter",
@@ -187,6 +196,121 @@ if (heroVideo instanceof HTMLVideoElement) {
   }
   reducedMotion.addEventListener("change", syncHeroVideo);
   syncHeroVideo();
+}
+
+if (
+  heroJournal instanceof HTMLElement &&
+  heroJournalStack instanceof HTMLElement &&
+  heroJournalCards.length > 0 &&
+  heroJournalPrevious instanceof HTMLButtonElement &&
+  heroJournalNext instanceof HTMLButtonElement
+) {
+  const titles = heroJournalCards.map((card) =>
+    (card.querySelector("strong")?.textContent ?? "")
+      .replace(/\s+/g, " ")
+      .trim(),
+  );
+  let currentIndex = 0;
+  let pointerStart = null;
+  let blockNextClick = false;
+
+  const syncJournal = () => {
+    heroJournalCards.forEach((card, index) => {
+      const active = index === currentIndex;
+      card.dataset.stackPosition = String(index - currentIndex);
+      card.setAttribute("aria-hidden", String(!active));
+      card.tabIndex = active ? 0 : -1;
+      card.inert = !active;
+    });
+
+    const hasPrevious = currentIndex > 0;
+    const hasNext = currentIndex < heroJournalCards.length - 1;
+    heroJournalPrevious.setAttribute("aria-disabled", String(!hasPrevious));
+    heroJournalNext.setAttribute("aria-disabled", String(!hasNext));
+
+    const position = String(currentIndex + 1) + " из " + String(heroJournalCards.length);
+    if (heroJournalCounter) heroJournalCounter.textContent = position;
+    if (heroJournalStatus) {
+      heroJournalStatus.textContent =
+        "Запись " + position + ": " + titles[currentIndex];
+    }
+  };
+
+  const showJournalCard = (index, { focusCard = false } = {}) => {
+    const nextIndex = Math.max(
+      0,
+      Math.min(heroJournalCards.length - 1, index),
+    );
+    if (nextIndex === currentIndex) return;
+    currentIndex = nextIndex;
+    syncJournal();
+    if (focusCard) {
+      requestAnimationFrame(() => heroJournalCards[currentIndex].focus());
+    }
+  };
+
+  heroJournalPrevious.addEventListener("click", () => {
+    if (heroJournalPrevious.getAttribute("aria-disabled") === "true") return;
+    showJournalCard(currentIndex - 1);
+  });
+
+  heroJournalNext.addEventListener("click", () => {
+    if (heroJournalNext.getAttribute("aria-disabled") === "true") return;
+    showJournalCard(currentIndex + 1);
+  });
+
+  heroJournal.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      showJournalCard(currentIndex - 1, { focusCard: true });
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      showJournalCard(currentIndex + 1, { focusCard: true });
+    }
+  });
+
+  heroJournalStack.addEventListener("pointerdown", (event) => {
+    if (!event.isPrimary) return;
+    pointerStart = {
+      id: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+    };
+  });
+
+  heroJournalStack.addEventListener("pointerup", (event) => {
+    if (!pointerStart || pointerStart.id !== event.pointerId) return;
+    const deltaX = event.clientX - pointerStart.x;
+    const deltaY = event.clientY - pointerStart.y;
+    pointerStart = null;
+
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY) * 1.2) {
+      return;
+    }
+
+    blockNextClick = true;
+    event.preventDefault();
+    showJournalCard(currentIndex + (deltaX < 0 ? 1 : -1));
+    setTimeout(() => {
+      blockNextClick = false;
+    }, 0);
+  });
+
+  heroJournalStack.addEventListener("pointercancel", () => {
+    pointerStart = null;
+  });
+
+  heroJournalStack.addEventListener(
+    "click",
+    (event) => {
+      if (!blockNextClick) return;
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    true,
+  );
+
+  syncJournal();
 }
 
 reducedMotion.addEventListener("change", syncMenuSeaVideo);
