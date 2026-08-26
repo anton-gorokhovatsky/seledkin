@@ -28,14 +28,6 @@
     0 0.45rem 1.4rem rgb(0 20 28 / 14%),
     inset 0 1px 0 var(--jelly-glass-highlight);
   --jelly-glass-filter: blur(0.85rem) saturate(106%);
-  --jelly-glass-on-blue: rgb(255 248 237 / 8%);
-  --jelly-glass-on-blue-hover: rgb(255 248 237 / 16%);
-  --jelly-glass-on-blue-strong: rgb(255 248 237 / 88%);
-  --jelly-glass-on-blue-strong-hover: rgb(255 248 237 / 96%);
-  --jelly-glass-on-blue-border: rgb(255 248 237 / 68%);
-  --jelly-glass-on-blue-shadow:
-    0 0.45rem 1.4rem rgb(0 18 29 / 18%),
-    inset 0 1px 0 rgb(255 248 237 / 32%);
   --menu-sea-veil: rgb(4 42 58 / 68%);
   --menu-sea-filter: blur(0.18rem) saturate(82%) contrast(94%);
   --pattern-filter: none;
@@ -484,13 +476,19 @@ p {
 
 .source-hero__journal-stack {
   display: grid;
-  padding: 0 1.15rem 1.15rem 0;
+  padding: 0 0.85rem 0.85rem 0;
   touch-action: pan-y;
 }
 
 .source-hero__journal-card {
   grid-area: 1 / 1;
+  padding: 0.55rem;
+  border: 1px solid var(--jelly-glass-border);
+  background: var(--jelly-glass-surface);
+  box-shadow: var(--jelly-glass-shadow);
   transform-origin: 50% 85%;
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
   transition:
     opacity 220ms ease-out,
     transform 280ms var(--ease);
@@ -504,26 +502,26 @@ p {
 
 .source-hero__journal-card[data-stack-position="1"] {
   z-index: 2;
-  opacity: 0.82;
+  opacity: 0.86;
   pointer-events: none;
-  transform: translate(0.55rem, 0.55rem) rotate(1.2deg);
+  transform: translate(0.4rem, 0.4rem);
 }
 
 .source-hero__journal-card[data-stack-position="2"] {
   z-index: 1;
-  opacity: 0.58;
+  opacity: 0.62;
   pointer-events: none;
-  transform: translate(1rem, 1rem) rotate(-1deg);
+  transform: translate(0.8rem, 0.8rem);
 }
 
 .source-hero__journal-card[data-stack-position^="-"] {
   z-index: 0;
   opacity: 0;
   pointer-events: none;
-  transform: translate(-0.8rem, 0.3rem) rotate(-1.5deg);
+  transform: translate(-0.8rem, 0.3rem);
 }
 
-.source-hero__journal-card[aria-hidden="true"] figcaption {
+.source-hero__journal-card[aria-hidden="true"] figure {
   visibility: hidden;
 }
 
@@ -533,7 +531,7 @@ p {
 
 .js .source-hero__journal-controls {
   display: grid;
-  width: calc(100% - 1.15rem);
+  width: calc(100% - 0.85rem);
   grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
   align-items: center;
   gap: 0.65rem;
@@ -545,12 +543,12 @@ p {
   width: 2.75rem;
   height: 2.75rem;
   padding: 0;
-  border: 1px solid var(--jelly-glass-on-blue-border);
+  border: 1px solid var(--jelly-glass-border);
   border-radius: 50%;
   place-items: center;
-  background: var(--jelly-glass-on-blue);
-  color: var(--footer-text);
-  box-shadow: var(--jelly-glass-on-blue-shadow);
+  background: var(--jelly-glass-surface);
+  color: var(--ink);
+  box-shadow: var(--jelly-glass-shadow);
   cursor: pointer;
   -webkit-backdrop-filter: var(--jelly-glass-filter);
   backdrop-filter: var(--jelly-glass-filter);
@@ -590,28 +588,29 @@ p {
   display: block;
   width: 100%;
   margin: 0;
-  color: var(--on-image);
+  color: var(--ink);
   justify-self: end;
   text-decoration: none;
 }
 
 .source-hero__proof figure {
+  display: grid;
+  grid-template-columns: clamp(7rem, 9vw, 8.5rem) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.85rem;
   margin: 0;
 }
 
 .source-hero__proof img {
   width: 100%;
   height: auto;
-  border: 1px solid rgb(255 248 237 / 58%);
-  box-shadow: 0 0.8rem 2.5rem rgb(0 13 21 / 24%);
 }
 
 .source-hero__proof figcaption {
   display: grid;
-  gap: 0.4rem;
-  margin-top: 0.9rem;
-  color: var(--on-image);
-  text-shadow: 0 0.1rem 0.8rem rgb(0 0 0 / 35%);
+  gap: 0.35rem;
+  margin-top: 0;
+  color: var(--ink);
 }
 
 .source-hero__proof-meta {
@@ -627,7 +626,7 @@ p {
 
 .source-hero__proof strong {
   font-family: var(--serif);
-  font-size: clamp(1.2rem, 1.5vw, 1.45rem);
+  font-size: clamp(1.05rem, 1.35vw, 1.3rem);
   font-weight: 600;
   line-height: 1.22;
   text-wrap: balance;
@@ -1413,22 +1412,19 @@ p {
 .source-button--hero-primary,
 .source-button--footer-primary,
 .source-button--menu-primary {
-  border-color: var(--jelly-glass-on-blue-border);
-  background: var(--jelly-glass-on-blue-strong);
+  border-color: var(--footer-text);
+  background: var(--footer-text);
   color: var(--footer);
-  box-shadow: var(--jelly-glass-on-blue-shadow);
-  -webkit-backdrop-filter: var(--jelly-glass-filter);
-  backdrop-filter: var(--jelly-glass-filter);
 }
 
 .source-button--hero-secondary,
 .source-button--footer-secondary,
 .source-button--menu-call,
 .source-button--menu-secondary {
-  border-color: var(--jelly-glass-on-blue-border);
-  background: var(--jelly-glass-on-blue);
-  color: var(--footer-text);
-  box-shadow: var(--jelly-glass-on-blue-shadow);
+  border-color: var(--jelly-glass-border);
+  background: var(--jelly-glass-surface);
+  color: var(--ink);
+  box-shadow: var(--jelly-glass-shadow);
   -webkit-backdrop-filter: var(--jelly-glass-filter);
   backdrop-filter: var(--jelly-glass-filter);
 }
@@ -1436,8 +1432,8 @@ p {
 .source-button--hero-primary:hover,
 .source-button--footer-primary:hover,
 .source-button--menu-primary:hover {
-  border-color: var(--footer-text);
-  background: var(--jelly-glass-on-blue-strong-hover);
+  border-color: var(--brass);
+  background: var(--footer-text);
   color: var(--footer);
 }
 
@@ -1445,9 +1441,9 @@ p {
 .source-button--footer-secondary:hover,
 .source-button--menu-call:hover,
 .source-button--menu-secondary:hover {
-  border-color: var(--footer-text);
-  background: var(--jelly-glass-on-blue-hover);
-  color: var(--footer-text);
+  border-color: var(--brass);
+  background: var(--jelly-glass-surface-strong);
+  color: var(--ink);
 }
 
 .source-footer__portrait {
@@ -1702,18 +1698,28 @@ p {
 }
 
 .site-menu__layout {
+  position: relative;
   display: grid;
   min-height: 100dvh;
   grid-template-columns: minmax(0, 1.45fr) minmax(22rem, 0.75fr);
+  background: var(--footer);
+  isolation: isolate;
 }
 
 .site-menu__routes {
+  position: relative;
+  z-index: 2;
   min-width: 0;
   padding:
     calc(var(--masthead-top-inset) + 9.75rem)
     clamp(2rem, 6vw, 6rem)
     clamp(3rem, 5vw, 5rem)
     var(--content-edge);
+  border-right: 1px solid var(--jelly-glass-border);
+  background: var(--jelly-glass-surface);
+  box-shadow: var(--jelly-glass-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
 }
 
 .site-menu__kicker {
@@ -1784,9 +1790,10 @@ p {
 
 .site-menu__service {
   position: relative;
+  z-index: 2;
   min-width: 0;
   overflow: hidden;
-  background: var(--footer);
+  background: transparent;
   color: var(--footer-text);
   isolation: isolate;
 }
@@ -2333,17 +2340,17 @@ p {
   justify-content: flex-start;
   align-self: flex-start;
   margin-top: 1.25rem;
-  border-color: var(--footer-line);
-  background: var(--jelly-glass-on-blue);
-  color: var(--footer-text);
-  box-shadow: var(--jelly-glass-on-blue-shadow);
+  border-color: var(--jelly-glass-border);
+  background: var(--jelly-glass-surface);
+  color: var(--ink);
+  box-shadow: var(--jelly-glass-shadow);
   -webkit-backdrop-filter: var(--jelly-glass-filter);
   backdrop-filter: var(--jelly-glass-filter);
 }
 
 .theme-toggle--menu:hover {
-  border-color: var(--footer-text);
-  background: var(--jelly-glass-on-blue-hover);
+  border-color: var(--brass);
+  background: var(--jelly-glass-surface-strong);
 }
 
 .theme-toggle--not-found {
@@ -2489,6 +2496,7 @@ p {
   .source-hero__actions .source-button--hero-secondary {
     border-color: transparent;
     background: transparent;
+    color: var(--on-image);
     box-shadow: none;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
@@ -2521,9 +2529,6 @@ p {
     gap: 0.9rem;
   }
 
-  .source-hero__proof img {
-    border-color: rgb(255 248 237 / 72%);
-  }
 
   .source-hero__proof figcaption {
     gap: 0.25rem;
@@ -3131,8 +3136,8 @@ p {
   }
 
   .source-hero__journal-controls button:not([aria-disabled="true"]):hover {
-    border-color: var(--footer-text);
-    background: var(--jelly-glass-on-blue-hover);
+    border-color: var(--brass);
+    background: var(--jelly-glass-surface-strong);
     transform: translateY(-0.08rem);
   }
 
@@ -3221,10 +3226,6 @@ p {
     --muted: #3a3a3a;
     --jelly-glass-surface: var(--paper);
     --jelly-glass-surface-strong: var(--paper);
-    --jelly-glass-on-blue: transparent;
-    --jelly-glass-on-blue-hover: transparent;
-    --jelly-glass-on-blue-strong: var(--footer-text);
-    --jelly-glass-on-blue-strong-hover: var(--footer-text);
     --jelly-glass-filter: none;
     --bioluminescence-opacity: 0;
     --bioluminescence-display: none;
@@ -3269,7 +3270,11 @@ p {
 
   .catalog-controls,
   .contacts-source__map-toggle,
-  .floating-menu {
+  .floating-menu,
+  .site-menu__routes,
+  .source-hero__journal-card,
+  .source-hero__journal-controls button,
+  .theme-toggle--menu {
     background: Canvas;
     box-shadow: none;
     -webkit-backdrop-filter: none;

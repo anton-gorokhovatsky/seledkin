@@ -122,7 +122,8 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(hero, /data-hero-journal-next/);
   assert.match(hero, /aria-live="polite"/);
   assert.match(styles, /\.source-hero__journal-stack\s*\{[\s\S]*?touch-action:\s*pan-y;/);
-  assert.match(styles, /\.source-hero__journal-card\[aria-hidden="true"\] figcaption/);
+  assert.match(styles, /\.source-hero__journal-card\[aria-hidden="true"\] figure/);
+  assert.equal((hero.match(/Перейти к записи в журнале/g) ?? []).length, 6);
   assert.match(siteScript, /event\.key === "ArrowLeft"/);
   assert.match(siteScript, /event\.key === "ArrowRight"/);
   assert.match(siteScript, /Math\.abs\(deltaX\) < 48/);
@@ -608,6 +609,9 @@ test("one restrained jelly material serves translucent controls", () => {
     "floating-menu",
     "catalog-controls",
     "contacts-source__map-toggle",
+    "source-hero__journal-card",
+    "source-hero__journal-controls button",
+    "site-menu__routes",
   ]) {
     assert.match(
       styles,
@@ -616,9 +620,11 @@ test("one restrained jelly material serves translucent controls", () => {
   }
   assert.match(
     styles,
-    /\.source-button--footer-primary,[\s\S]*?\.source-button--menu-primary\s*\{[\s\S]*?background:\s*var\(--jelly-glass-on-blue-strong\);/,
+    /\.source-button--footer-primary,[\s\S]*?\.source-button--menu-primary\s*\{[\s\S]*?background:\s*var\(--footer-text\);/,
   );
-  assert.doesNotMatch(lightRoot, /--jelly-glass-(?:surface|on-blue)[^;]*gradient\(/);
+  assert.match(projectRules, /один токенизированный материал «медуза»/);
+  assert.doesNotMatch(styles, /--jelly-glass-on-blue/);
+  assert.doesNotMatch(lightRoot, /--jelly-glass-surface[^;]*gradient\(/);
 });
 
 test("pointer hover and keyboard focus stay visibly distinct", () => {
@@ -693,6 +699,10 @@ test("menu, focus and reduced motion remain accessible", () => {
       page.match(/<video[\s\S]*?data-menu-sea-video[\s\S]*?<\/video>/)?.[0] ?? "",
       /\bautoplay\b/,
     );
+    const layoutIndex = page.indexOf('<div class="site-menu__layout">');
+    const seaVideoIndex = page.indexOf('class="site-menu__service-video"', layoutIndex);
+    const routesIndex = page.indexOf('class="site-menu__routes"', layoutIndex);
+    assert.ok(layoutIndex >= 0 && seaVideoIndex > layoutIndex && routesIndex > seaVideoIndex);
     assert.match(page, /class="site-menu__actions"/);
     assert.match(page, /href="tel:\+79166751452"/);
     assert.match(page, />\s*Позвонить\s*</);
@@ -764,6 +774,10 @@ test("menu, focus and reduced motion remain accessible", () => {
   );
   assert.doesNotMatch(styles, /\.site-menu__topbar|\.site-menu__deck/);
   assert.match(styles, /\.site-menu__layout\s*\{[\s\S]*?min-height:\s*100dvh;/);
+  assert.match(
+    styles,
+    /\.site-menu__routes\s*\{[\s\S]*?background:\s*var\(--jelly-glass-surface\);[\s\S]*?backdrop-filter:\s*var\(--jelly-glass-filter\);/,
+  );
   assert.match(
     styles,
     /@media \(max-width: 61\.1875rem\)[\s\S]*?--masthead-top-inset:\s*1\.375rem;[\s\S]*?\.floating-menu\s*\{[\s\S]*?top:\s*var\(--masthead-top-inset\);/,
