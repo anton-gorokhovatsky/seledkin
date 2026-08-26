@@ -298,12 +298,9 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
 
   const sectionRule =
     styles.match(/\.contacts-source\s*\{([^}]*)\}/s)?.[1] ?? "";
-  assert.match(sectionRule, /height:\s*clamp\(31rem, 54svh, 36rem\)/);
-  assert.match(
-    sectionRule,
-    /grid-template-columns:\s*minmax\(20rem, 0\.72fr\) minmax\(0, 1\.28fr\)/,
-  );
-  assert.match(sectionRule, /grid-template-rows:\s*minmax\(0, 1fr\)/);
+  assert.match(sectionRule, /grid-template-columns:\s*1fr/);
+  assert.match(sectionRule, /grid-template-rows:\s*auto clamp\(22rem, 46svh, 30rem\)/);
+  assert.match(sectionRule, /margin-bottom:\s*clamp\(4rem, 7vw, 7rem\)/);
   assert.match(home, /map-widget\/v1\/\?ll=37\.535850%2C55\.686220/);
   assert.match(home, /pt=37\.535850%2C55\.686220%2Cpm2rdm/);
   assert.doesNotMatch(home, /map-widget\/v1\/\?[^"\s]*text=/);
@@ -311,6 +308,8 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
     styles.match(/\.contacts-source__map\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.match(mapRule, /min-height:\s*0/);
   assert.match(mapRule, /overflow:\s*hidden/);
+  assert.match(mapRule, /grid-column:\s*1/);
+  assert.match(mapRule, /grid-row:\s*2/);
 
   const frameRule =
     styles.match(/\.contacts-source__map iframe\s*\{([^}]*)\}/s)?.[1] ?? "";
