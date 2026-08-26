@@ -166,13 +166,13 @@ test("the header floats lightly over the source video and leaves service details
 test("the home brand marks the current page without linking to itself", () => {
   const homeHeader =
     home.match(/<header class="source-header[\s\S]*?<\/header>/)?.[0] ?? "";
-  const homeMenuTopbar =
-    home.match(/<header class="site-menu__topbar">[\s\S]*?<\/header>/)?.[0] ?? "";
+  const homeMenuMasthead =
+    home.match(/<header class="site-menu__masthead">[\s\S]*?<\/header>/)?.[0] ?? "";
   const catalogHeader =
     catalogPage.match(/<header class="source-header[\s\S]*?<\/header>/)?.[0] ?? "";
 
   assert.doesNotMatch(homeHeader, /<a class="source-brand"/);
-  assert.doesNotMatch(homeMenuTopbar, /<a class="site-menu__brand"/);
+  assert.doesNotMatch(homeMenuMasthead, /<a class="site-menu__brand"/);
   assert.match(catalogHeader, /<a class="source-brand" href="\.\.\/"/);
 });
 
@@ -606,7 +606,6 @@ test("one restrained jelly material serves translucent controls", () => {
   assert.match(lightRoot, /--jelly-glass-filter:\s*blur\(0\.85rem\) saturate\(106%\);/);
   for (const selector of [
     "floating-menu",
-    "site-menu__topbar",
     "catalog-controls",
     "contacts-source__map-toggle",
   ]) {
@@ -677,8 +676,9 @@ test("menu, focus and reduced motion remain accessible", () => {
     assert.match(page, /aria-controls="primary-navigation"/);
     assert.equal((page.match(/data-menu-toggle/g) ?? []).length, 1);
     assert.doesNotMatch(page, /data-menu-close|site-menu__close/);
-    assert.match(page, /Навигационный мостик/);
+    assert.doesNotMatch(page, /Навигационный мостик|site-menu__deck/);
     assert.ok(page.includes('<h2 id="menu-title">Куда держим курс?</h2>'));
+    assert.match(page, /class="site-menu__masthead"/);
     assert.match(page, /class="site-menu__layout"/);
     assert.match(page, /class="site-menu__service"/);
     assert.doesNotMatch(page, /Лавка на Вавиловской/);
@@ -754,8 +754,16 @@ test("menu, focus and reduced motion remain accessible", () => {
   assert.match(styles, /\.site-menu__panel\s*\{[\s\S]*?height:\s*100dvh;/);
   assert.match(
     styles,
-    /\.site-menu__topbar\s*\{[\s\S]*?min-height:\s*var\(--masthead-panel-height\);[\s\S]*?padding:\s*var\(--masthead-top-inset\) var\(--content-edge\) 1rem;/,
+    /\.site-menu__masthead\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?padding:\s*var\(--masthead-top-inset\) var\(--content-edge\) 0;[\s\S]*?pointer-events:\s*none;/,
   );
+  const menuMastheadRule =
+    styles.match(/\.site-menu__masthead\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.doesNotMatch(
+    menuMastheadRule,
+    /background|border|box-shadow|backdrop-filter|min-height/,
+  );
+  assert.doesNotMatch(styles, /\.site-menu__topbar|\.site-menu__deck/);
+  assert.match(styles, /\.site-menu__layout\s*\{[\s\S]*?min-height:\s*100dvh;/);
   assert.match(
     styles,
     /@media \(max-width: 61\.1875rem\)[\s\S]*?--masthead-top-inset:\s*1\.375rem;[\s\S]*?\.floating-menu\s*\{[\s\S]*?top:\s*var\(--masthead-top-inset\);/,
