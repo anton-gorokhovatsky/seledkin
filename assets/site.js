@@ -6,10 +6,12 @@ const menuButtonLabel = menuButton?.querySelector(".floating-menu__label");
 const menu = document.querySelector("[data-menu]");
 const menuPanel = menu?.querySelector(".site-menu__panel");
 const heroVideo = document.querySelector("[data-hero-video]");
+const menuSeaVideo = menu?.querySelector("[data-menu-sea-video]");
 const map = document.querySelector("[data-map]");
 const mapToggle = map?.querySelector("[data-map-toggle]");
 const mapToggleLabel = mapToggle?.querySelector("[data-map-toggle-label]");
 const mapFrame = map?.querySelector("iframe");
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const keyboardNavigationKeys = new Set([
   "Tab",
   "Enter",
@@ -68,6 +70,21 @@ function setPageInert(value) {
   }
 }
 
+function syncMenuSeaVideo() {
+  if (!(menuSeaVideo instanceof HTMLVideoElement)) return;
+
+  const menuIsOpen =
+    menuButton?.getAttribute("aria-expanded") === "true" && !menu?.hidden;
+
+  if (reducedMotion.matches || !menuIsOpen) {
+    menuSeaVideo.pause();
+    if (reducedMotion.matches) menuSeaVideo.currentTime = 0;
+    return;
+  }
+
+  menuSeaVideo.play().catch(() => {});
+}
+
 function openMenu() {
   if (!menuButton || !menu) return;
 
@@ -78,6 +95,7 @@ function openMenu() {
   if (menuButtonLabel) menuButtonLabel.textContent = "Закрыть";
   document.body.classList.add("menu-open");
   setPageInert(true);
+  syncMenuSeaVideo();
 }
 
 function closeMenu({ returnFocus = false } = {}) {
@@ -89,6 +107,7 @@ function closeMenu({ returnFocus = false } = {}) {
   menuButton.setAttribute("aria-label", "Открыть меню");
   if (menuButtonLabel) menuButtonLabel.textContent = "Меню";
   document.body.classList.remove("menu-open");
+  syncMenuSeaVideo();
 
   if (returnFocus) {
     menuButton.focus();
@@ -147,8 +166,6 @@ if (menuButton && menu) {
 }
 
 if (heroVideo instanceof HTMLVideoElement) {
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
   const syncHeroVideo = () => {
     if (reducedMotion.matches) {
       heroVideo.pause();
@@ -171,6 +188,9 @@ if (heroVideo instanceof HTMLVideoElement) {
   reducedMotion.addEventListener("change", syncHeroVideo);
   syncHeroVideo();
 }
+
+reducedMotion.addEventListener("change", syncMenuSeaVideo);
+syncMenuSeaVideo();
 
 if (
   map instanceof HTMLElement &&

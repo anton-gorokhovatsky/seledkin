@@ -601,6 +601,17 @@ test("menu, focus and reduced motion remain accessible", () => {
     assert.ok(page.includes('<h2 id="menu-title">Куда держим курс?</h2>'));
     assert.match(page, /class="site-menu__layout"/);
     assert.match(page, /class="site-menu__service"/);
+    assert.equal((page.match(/data-menu-sea-video/g) ?? []).length, 1);
+    assert.match(page, /class="site-menu__service-video"/);
+    assert.match(page, /poster="(?:\.\.\/)?assets\/hero-sea-poster\.webp"/);
+    assert.match(
+      page,
+      /<source src="(?:\.\.\/)?assets\/hero-sea\.mp4" type="video\/mp4"/,
+    );
+    assert.doesNotMatch(
+      page.match(/<video[\s\S]*?data-menu-sea-video[\s\S]*?<\/video>/)?.[0] ?? "",
+      /\bautoplay\b/,
+    );
     assert.match(page, /class="site-menu__actions"/);
     assert.match(page, /href="tel:\+79166751452"/);
     assert.match(page, />\s*Позвонить\s*</);
@@ -662,7 +673,22 @@ test("menu, focus and reduced motion remain accessible", () => {
     styles,
     /grid-template-columns:\s*minmax\(0, 1\.45fr\) minmax\(22rem, 0\.75fr\)/,
   );
-  assert.match(styles, /\.site-menu__service::before[\s\S]*?fish-pattern\.svg/);
+  assert.match(
+    styles,
+    /\.site-menu__service-video\s*\{[\s\S]*?object-fit:\s*cover;/,
+  );
+  assert.match(
+    styles,
+    /\.site-menu__service::before\s*\{[\s\S]*?background:\s*var\(--menu-sea-veil\);[\s\S]*?backdrop-filter:\s*var\(--menu-sea-filter\);/,
+  );
+  assert.doesNotMatch(
+    styles,
+    /\.site-menu__service::before\s*\{[^}]*fish-pattern\.svg/s,
+  );
+  assert.match(siteScript, /const menuSeaVideo = menu\?\.querySelector/);
+  assert.match(siteScript, /function syncMenuSeaVideo\(\)/);
+  assert.match(siteScript, /menuSeaVideo\.play\(\)/);
+  assert.match(siteScript, /menuSeaVideo\.pause\(\)/);
   assert.match(siteScript, /document\.documentElement\.dataset\.inputModality = "pointer"/);
   assert.match(siteScript, /document\.documentElement\.dataset\.inputModality = "keyboard"/);
   assert.match(
