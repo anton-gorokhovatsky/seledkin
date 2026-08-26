@@ -92,8 +92,20 @@ test("the header floats lightly over the source video and leaves service details
   }
 
   assert.match(home, /class="source-header source-header--over-media"/);
-  assert.match(styles, /\.source-header\s*\{[\s\S]*?min-height:\s*5\.5rem;/);
+  assert.match(
+    styles,
+    /\.source-header\s*\{[\s\S]*?min-height:\s*var\(--masthead-height\);/,
+  );
   assert.match(styles, /\.source-header__bar\s*\{[\s\S]*?width:\s*100%;/);
+  assert.match(
+    styles,
+    /\.source-header__bar\s*\{[\s\S]*?padding:\s*0\.5rem var\(--content-edge\);/,
+  );
+  assert.match(styles, /\.source-brand\s*\{[\s\S]*?width:\s*var\(--brand-width-desktop\);/);
+  assert.match(
+    styles,
+    /\.site-menu__brand\s*\{[\s\S]*?width:\s*var\(--brand-width-desktop\);/,
+  );
   assert.match(styles, /\.source-header--over-media\s*\{[\s\S]*?position:\s*absolute;/);
   assert.match(styles, /\.source-header\s*\{[\s\S]*?background:\s*transparent;/);
   assert.doesNotMatch(

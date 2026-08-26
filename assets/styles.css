@@ -33,6 +33,11 @@
   --sans: "Golos Text", Arial, Helvetica, sans-serif;
   --shell: 84rem;
   --wide: 87.5rem;
+  --page-inset: 2.5rem;
+  --page-outer: 5rem;
+  --content-edge: max(var(--page-inset), calc((100vw - var(--shell)) / 2));
+  --masthead-height: 8rem;
+  --brand-width-desktop: 13.5rem;
   --focus: #a35d00;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --text-reading: 1.125rem;
@@ -244,7 +249,7 @@ p {
 }
 
 .source-shell {
-  width: min(calc(100% - 5rem), var(--shell));
+  width: min(calc(100% - var(--page-outer)), var(--shell));
   min-width: 0;
   margin-inline: auto;
 }
@@ -256,7 +261,7 @@ p {
 .source-header {
   position: relative;
   z-index: 30;
-  min-height: 5.5rem;
+  min-height: var(--masthead-height);
   background: transparent;
 }
 
@@ -271,14 +276,14 @@ p {
 .source-header__bar {
   display: flex;
   width: 100%;
-  min-height: 5.5rem;
+  min-height: var(--masthead-height);
   align-items: center;
-  padding: 0.65rem clamp(1rem, 2.2vw, 2.25rem);
+  padding: 0.5rem var(--content-edge);
 }
 
 .source-brand {
   display: block;
-  width: clamp(7.75rem, 9vw, 9.5rem);
+  width: var(--brand-width-desktop);
   max-width: 100%;
   pointer-events: auto;
 }
@@ -1277,16 +1282,15 @@ p {
 .floating-menu {
   position: fixed;
   z-index: 110;
-  top: 1rem;
-  right: clamp(1rem, 2.2vw, 2.25rem);
+  top: calc((var(--masthead-height) - 54px) / 2);
+  right: var(--content-edge);
   left: auto;
-  display: grid;
+  display: flex;
   width: 8.35rem;
   height: 54px;
   align-items: center;
-  grid-template-columns: 1.5rem 4.35rem;
   justify-content: center;
-  gap: 0.45rem;
+  gap: 0.65rem;
   padding: 0.6rem 0.7rem;
   transform: none;
   border: 1px solid var(--line);
@@ -1326,7 +1330,7 @@ p {
 
 .floating-menu__mark {
   position: relative;
-  justify-self: center;
+  flex: 0 0 22px;
 }
 
 .floating-menu__mark::before,
@@ -1361,8 +1365,9 @@ p {
   font-weight: 600;
   letter-spacing: 0.08em;
   line-height: 1;
-  text-align: left;
+  text-align: center;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .site-menu[hidden] {
@@ -1391,18 +1396,18 @@ p {
   z-index: 3;
   top: 0;
   display: grid;
-  min-height: 7rem;
+  min-height: var(--masthead-height);
   align-items: center;
-  grid-template-columns: 12rem minmax(0, 1fr) 8.35rem;
+  grid-template-columns: var(--brand-width-desktop) minmax(0, 1fr) 8.35rem;
   gap: 2rem;
-  padding: 1rem clamp(1.5rem, 4vw, 4rem);
+  padding: 0.5rem var(--content-edge);
   border-bottom: 1px solid var(--line);
   background: var(--sticky-surface);
   backdrop-filter: blur(0.7rem);
 }
 
 .site-menu__brand {
-  width: 12rem;
+  width: var(--brand-width-desktop);
   max-width: 100%;
   margin: 0;
 }
@@ -1424,7 +1429,7 @@ p {
 
 .site-menu__layout {
   display: grid;
-  min-height: calc(100dvh - 7rem);
+  min-height: calc(100dvh - var(--masthead-height));
   grid-template-columns: minmax(0, 1.45fr) minmax(22rem, 0.75fr);
 }
 
@@ -2043,8 +2048,13 @@ p {
 }
 
 @media (max-width: 61.1875rem) {
+  :root {
+    --page-inset: 1.1rem;
+    --page-outer: 2.2rem;
+  }
+
   .source-shell {
-    width: min(calc(100% - 2.2rem), var(--shell));
+    width: min(calc(100% - var(--page-outer)), var(--shell));
   }
 
   .source-header {
@@ -2066,7 +2076,7 @@ p {
     min-height: 6rem;
     grid-template-columns: minmax(0, 1fr);
     gap: 1rem;
-    padding: 0.9rem 9.25rem 0.9rem 1.25rem;
+    padding: 0.9rem 9.25rem 0.9rem var(--page-inset);
   }
 
   .site-menu__brand {
@@ -2491,8 +2501,13 @@ p {
 }
 
 @media (max-width: 34rem) {
+  :root {
+    --page-inset: 0.85rem;
+    --page-outer: 1.7rem;
+  }
+
   .source-shell {
-    width: min(calc(100% - 1.7rem), var(--shell));
+    width: min(calc(100% - var(--page-outer)), var(--shell));
   }
 
   .opening-gallery {
@@ -2563,7 +2578,7 @@ p {
   }
 
   .site-menu__topbar {
-    padding-inline: 0.85rem;
+    padding-inline: var(--page-inset);
   }
 
   .site-menu__brand {
