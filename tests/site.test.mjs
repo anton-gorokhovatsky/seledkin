@@ -76,8 +76,11 @@ test("home exposes the core customer jobs", () => {
   assert.match(home, /Продукты и цены/);
   assert.match(home, /Заказать в Телеграме/);
   assert.match(home, /метро «Вавиловская»/);
-  assert.ok(home.indexOf("Вавиловская") < home.indexOf("Университет"));
-  assert.match(home, /Ежедневно с 11:00 до 20:00/);
+  const contacts =
+    home.match(/<section class="contacts-source"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(contacts, /Метро\s+«Вавиловская»/);
+  assert.doesNotMatch(contacts, /Университет/);
+  assert.match(contacts, /Ежедневно с&nbsp;11:00 до&nbsp;20:00/);
   assert.doesNotMatch(home + styles, /source-hero__down/);
 });
 
@@ -190,7 +193,7 @@ test("the typographic scale protects reading and interface text", () => {
     [".why-copy p", "--text-reading"],
     [".founder-source__copy p", "--text-reading"],
     [".ship-log-entry__body", "--text-body"],
-    [".contacts-source__card p", "--text-body"],
+    [".contacts-source__details p", "--text-body"],
     [".source-button", "--text-interface"],
     [".catalog-product p", "--text-interface"],
   ]) {
@@ -308,8 +311,13 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
   assert.match(sectionRule, /grid-template-rows:\s*auto clamp\(22rem, 46svh, 30rem\)/);
   assert.match(sectionRule, /margin-bottom:\s*clamp\(4rem, 7vw, 7rem\)/);
   assert.match(home, /map-widget\/v1\/\?ll=37\.535850%2C55\.686220/);
-  assert.match(home, /pt=37\.535850%2C55\.686220%2Cpm2rdm/);
+  assert.doesNotMatch(home, /[?&]pt=/);
   assert.doesNotMatch(home, /map-widget\/v1\/\?[^"\s]*text=/);
+  const contactCard =
+    home.match(/<address class="contacts-source__card">([\s\S]*?)<\/address>/)?.[1] ?? "";
+  assert.match(contactCard, /class="contacts-source__details"/);
+  assert.doesNotMatch(contactCard, /<strong>|href="tel:/);
+  assert.doesNotMatch(contactCard, /Телефон:|Адрес лавки:|Время работы:/);
   const mapRule =
     styles.match(/\.contacts-source__map\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.match(mapRule, /min-height:\s*0/);
