@@ -360,6 +360,10 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     for (const label of ["Телеграм-канал", "YouTube", "SoundCloud"]) {
       assert.ok(page.includes(`<span>${label}</span>`), `В подвале нет подписи ${label}`);
     }
+    assert.match(
+      page,
+      /href="https:\/\/anton-gorokhovatsky\.github\.io\/design\/">Дизайн и разработка<\/a>/,
+    );
     const channels =
       page.match(/<nav class="source-footer__channels"[\s\S]*?<\/nav>/)?.[0] ?? "";
     assert.doesNotMatch(channels, /WhatsApp|social-icons\.svg#whatsapp/);
@@ -371,6 +375,18 @@ test("the footer ends both customer journeys with a useful, human invitation", (
   assert.match(catRule, /height:\s*auto/);
   assert.doesNotMatch(catRule, /object-fit:\s*cover/);
   assert.doesNotMatch(home + catalogPage + siteScript + styles, /floating-chat|floatingChat/);
+
+  const footerBaseRule =
+    styles.match(/\.source-footer__base\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(footerBaseRule, /display:\s*grid/);
+  assert.match(
+    footerBaseRule,
+    /grid-template-columns:\s*minmax\(0,\s*1fr\)\s+auto\s+minmax\(0,\s*1fr\)/,
+  );
+  assert.match(
+    styles,
+    /\.source-footer__channels \.source-footer__channel--primary\s*\{\s*grid-column:\s*1\s*\/\s*-1;/,
+  );
 });
 
 test("menu and footer channels use one precise local SVG set with Telegram first", async () => {
@@ -469,6 +485,11 @@ test("published Russian text uses the shared typographic rules", () => {
     typographText("ул. Строителей, д. 7, корп. 1"),
     "ул.\u00a0Строителей, д.\u00a07, корп.\u00a01",
   );
+  assert.equal((home.match(/Заказы принимаются\s*<span class="source-nowrap">в&nbsp;/g) ?? []).length, 2);
+  assert.equal((home.match(/<span class="source-nowrap">и&nbsp;/g) ?? []).length, 2);
+  assert.equal((home.match(/>телеграме<\/a><\/span>\./g) ?? []).length, 2);
+  assert.doesNotMatch(home, /Заказы принимаются[\s\S]{0,180}>Телеграме<\/a>/);
+  assert.match(styles, /\.source-nowrap\s*\{\s*white-space:\s*nowrap;/);
 });
 
 test("catalog search and filters expose accessible state", () => {

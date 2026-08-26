@@ -295,6 +295,10 @@ p {
   background: var(--surface-water);
 }
 
+.source-nowrap {
+  white-space: nowrap;
+}
+
 .source-header {
   position: relative;
   z-index: 30;
@@ -1349,10 +1353,11 @@ p {
 .source-footer__base {
   position: relative;
   z-index: 1;
-  display: flex;
+  display: grid;
   min-height: 6rem;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
+  gap: 1.5rem;
   border-top: 1px solid var(--footer-line);
   color: var(--footer-base);
   font-size: var(--text-meta);
@@ -1362,6 +1367,14 @@ p {
   min-height: 2.75rem;
   align-items: center;
   display: inline-flex;
+}
+
+.source-footer__credit {
+  justify-self: center;
+}
+
+.source-footer__base > a:last-child {
+  justify-self: end;
 }
 
 .floating-menu {
@@ -2574,10 +2587,15 @@ p {
 
   .source-footer__base {
     min-height: 7rem;
+    grid-template-columns: 1fr;
     align-items: flex-start;
+    gap: 0.25rem;
     padding-block: 1.5rem;
-    flex-direction: column;
-    justify-content: center;
+  }
+
+  .source-footer__credit,
+  .source-footer__base > a:last-child {
+    justify-self: start;
   }
 
   .catalog-intro {
@@ -2724,11 +2742,12 @@ p {
   .source-footer__channels {
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(
-      auto-fit,
-      minmax(min(100%, 8.5rem), 1fr)
-    );
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: 0.75rem;
+  }
+
+  .source-footer__channels .source-footer__channel--primary {
+    grid-column: 1 / -1;
   }
 
   .source-footer__channels a {
