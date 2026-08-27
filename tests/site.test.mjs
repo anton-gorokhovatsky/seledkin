@@ -102,7 +102,7 @@ test("home assortment links directly to every catalog section", () => {
   assert.match(section, /id="assortment"/);
   assert.match(section, /id="assortment-title">Что продаём<\/h2>/);
   assert.match(section, /7 разделов · 114 позиций/);
-  assert.match(section, /href="catalog\/"/);
+  assert.doesNotMatch(section, />Весь каталог<\/span>/);
 
   for (const [slug, label, count] of [
     ["caviar", "Икра", 8],
@@ -119,7 +119,12 @@ test("home assortment links directly to every catalog section", () => {
   }
 
   assert.equal((section.match(/catalog\/#category-/g) ?? []).length, 7);
+  assert.equal((section.match(/class="assortment-directory__link"/g) ?? []).length, 7);
   assert.doesNotMatch(section, /WhatsApp|Телеграм|opening-gallery|caviar-title/);
+  assert.match(
+    styles,
+    /\.assortment-directory__list\s*\{[^}]*grid-template-columns:\s*1fr;/s,
+  );
 });
 
 test("home about section keeps Oleg's evidence without the old product longread", () => {
@@ -676,6 +681,10 @@ test("home catalog is a compact projection of the full catalog", () => {
   assert.equal((preview.match(/class="catalog-product"/g) ?? []).length, 6);
   assert.equal((preview.match(/href="catalog\/"/g) ?? []).length, 1);
   assert.match(preview, /class="catalog-product-head"/);
+  assert.match(
+    styles,
+    /\.price-preview__header\s*\{[^}]*align-items:\s*start;/s,
+  );
   assert.doesNotMatch(
     preview,
     /price-categories|price-preview__actions|wa\.me|t\.me/,
