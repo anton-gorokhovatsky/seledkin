@@ -346,23 +346,32 @@ test("the home brand marks the current page without linking to itself", () => {
   assert.match(catalogHeader, /<a class="source-brand" href="\.\.\/"/);
 });
 
-test("every page uses the complete vector fish-and-hand mark as its favicon", () => {
+test("every page uses the complete vector fish head as its favicon", () => {
   assert.match(home, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(notFoundPage, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(catalogPage, /rel="icon" href="\.\.\/assets\/favicon\.svg"/);
   for (const page of [home, notFoundPage, catalogPage]) {
     assert.doesNotMatch(page, /rel="icon"[^>]+logo-redrawn\.svg/);
   }
-  assert.match(favicon, /viewBox="-80 65 1062 1795"/);
+  assert.match(favicon, /viewBox="-80 -60 960 960"/);
   assert.match(
     favicon,
-    /<title id="favicon-title">Рыба в руке капитана — знак лавки<\/title>/,
+    /<title id="favicon-title">Голова рыбы — знак лавки<\/title>/,
   );
   assert.match(favicon, /prefers-color-scheme:\s*dark/);
   assert.equal((favicon.match(/<image /g) ?? []).length, 0);
   assert.doesNotMatch(favicon, /data:image/);
-  assert.ok((favicon.match(/<path /g) ?? []).length >= 70);
-  assert.match(favicon, /<g aria-hidden="true">/);
+  assert.equal((favicon.match(/<path /g) ?? []).length, 1);
+  assert.ok((favicon.match(/\bM\b/g) ?? []).length >= 50);
+  assert.match(favicon, /fill-rule="evenodd"/);
+  assert.match(
+    favicon,
+    /<polygon points="-100,-100 800,-100 800,285[^"]*"\/>/,
+  );
+  assert.match(
+    favicon,
+    /<g aria-hidden="true" clip-path="url\(#fish-crop\)">/,
+  );
   assert.ok(Buffer.byteLength(favicon) < 120_000);
 });
 
