@@ -95,6 +95,33 @@ test("the site is plain HTML, CSS and JavaScript", () => {
   assert.match(catalogPage, /catalog\.js/);
 });
 
+test("home assortment links directly to every catalog section", () => {
+  const section =
+    home.match(/<section\s+class="assortment-overview[\s\S]*?<\/section>/)?.[0] ?? "";
+
+  assert.match(section, /id="assortment"/);
+  assert.match(section, /id="assortment-title">Что продаём<\/h2>/);
+  assert.match(section, /7 разделов · 114 позиций/);
+  assert.match(section, /href="catalog\/"/);
+
+  for (const [slug, label, count] of [
+    ["caviar", "Икра", 8],
+    ["seafood", "Морепродукты", 20],
+    ["frozen-fish", "Свежемороженая рыба", 35],
+    ["fillet", "Филе", 7],
+    ["steaks", "Рыбные стейки", 5],
+    ["prepared-fish", "Слабосоленая и копченая рыба", 12],
+    ["other", "Новинки и прочее", 27],
+  ]) {
+    assert.match(section, new RegExp(`href="catalog\\/#category-${slug}"`));
+    assert.match(section, new RegExp(`>${label}<\\/span>`));
+    assert.match(section, new RegExp(`>${count} позиций<\\/span>`));
+  }
+
+  assert.equal((section.match(/catalog\/#category-/g) ?? []).length, 7);
+  assert.doesNotMatch(section, /WhatsApp|Телеграм|opening-gallery|caviar-title/);
+});
+
 test("home exposes the core customer jobs", () => {
   for (const id of ["assortment", "about", "delivery", "contacts"]) {
     assert.match(home, new RegExp(`id="${id}"`));
@@ -223,7 +250,7 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
   const sequence = [
     "source-header",
     "source-hero",
-    "opening-story",
+    "assortment-overview",
     "fish-divider",
     "source-section--story",
     "source-gallery",
@@ -249,7 +276,6 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     "hero-sea-poster.webp",
     "hero-sea.mp4",
     "caviar-slab.jpg",
-    "salmon-dish.jpg",
     "fish-pattern.svg",
     "about-main.jpg",
     "cutting-tuna.jpg",
@@ -587,9 +613,9 @@ test("published Russian text uses the shared typographic rules", () => {
     typographText("ул. Строителей, д. 7, корп. 1"),
     "ул.\u00a0Строителей, д.\u00a07, корп.\u00a01",
   );
-  assert.equal((home.match(/Заказы принимаются\s*<span class="source-nowrap">в&nbsp;/g) ?? []).length, 2);
-  assert.equal((home.match(/<span class="source-nowrap">и&nbsp;/g) ?? []).length, 2);
-  assert.equal((home.match(/>телеграме<\/a><\/span>\./g) ?? []).length, 2);
+  assert.equal((home.match(/Заказы принимаются\s*<span class="source-nowrap">в&nbsp;/g) ?? []).length, 1);
+  assert.equal((home.match(/<span class="source-nowrap">и&nbsp;/g) ?? []).length, 1);
+  assert.equal((home.match(/>телеграме<\/a><\/span>\./g) ?? []).length, 1);
   assert.doesNotMatch(home, /Заказы принимаются[\s\S]{0,180}>Телеграме<\/a>/);
   assert.match(styles, /\.source-nowrap\s*\{\s*white-space:\s*nowrap;/);
 });

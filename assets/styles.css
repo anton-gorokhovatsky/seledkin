@@ -642,17 +642,132 @@ p {
   display: none;
 }
 
-.opening-story {
-  padding: 2.5rem 0 5rem;
+.assortment-overview {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0;
 }
 
-.opening-gallery {
+.assortment-overview__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 2rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.assortment-overview__header h2 {
+  max-width: 9ch;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(3.7rem, 7.4vw, 6.9rem);
+  font-weight: 400;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.assortment-overview__header p {
+  margin: 0 0 0.45rem;
+  color: var(--muted);
+  font-size: var(--text-body);
+  text-align: right;
+}
+
+.assortment-overview__layout {
+  display: grid;
+  grid-template-columns: minmax(17rem, 0.78fr) minmax(0, 1.5fr);
+  align-items: start;
+  gap: clamp(2.5rem, 5.5vw, 5.5rem);
+}
+
+.assortment-overview__media {
+  margin: 0;
+}
+
+.assortment-overview__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.assortment-directory,
+.assortment-directory__list,
+.assortment-directory__list > li {
+  min-width: 0;
+}
+
+.assortment-directory__list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2.5rem;
+  gap: clamp(2.25rem, 3.8vw, 3.75rem) clamp(2rem, 4.5vw, 4.5rem);
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
-.opening-gallery img,
+.assortment-directory__link {
+  position: relative;
+  display: grid;
+  min-height: 5.75rem;
+  grid-template-areas:
+    "label icon"
+    "meta icon";
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-content: center;
+  align-items: center;
+  column-gap: 1rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.assortment-directory__link::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.65rem;
+  left: 0;
+  height: 1px;
+  background: var(--brass);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms var(--ease);
+}
+
+.assortment-directory__label {
+  grid-area: label;
+  font-family: var(--serif);
+  font-size: clamp(1.85rem, 2.55vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.assortment-directory__meta {
+  grid-area: meta;
+  margin-top: 0.55rem;
+  color: var(--muted);
+  font-size: var(--text-meta);
+}
+
+.assortment-directory__link svg {
+  width: 1.75rem;
+  grid-area: icon;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.45;
+  transition: transform 180ms var(--ease);
+}
+
+.assortment-directory__link:hover::after,
+.assortment-directory__link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.assortment-directory__link:hover svg,
+.assortment-directory__link:focus-visible svg {
+  transform: translateX(0.25rem);
+}
+
 .source-split > img {
   width: 100%;
   height: auto;
@@ -2528,12 +2643,38 @@ p {
     margin-top: 0.3rem;
   }
 
-  .opening-story {
-    padding-top: 0.75rem;
+  .assortment-overview {
+    padding: 3.75rem 0 4.5rem;
   }
 
-  .opening-gallery {
-    gap: 0.7rem;
+  .assortment-overview__header {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .assortment-overview__header h2 {
+    max-width: none;
+    font-size: clamp(3.25rem, 12vw, 5.2rem);
+  }
+
+  .assortment-overview__header p {
+    margin: 0;
+    text-align: left;
+  }
+
+  .assortment-overview__layout {
+    grid-template-columns: 1fr;
+    gap: 2.75rem;
+  }
+
+  .assortment-overview__media {
+    width: min(76%, 30rem);
+    margin-left: auto;
+  }
+
+  .assortment-directory__list {
+    gap: 2.25rem 2rem;
   }
 
   .source-split {
@@ -2907,8 +3048,29 @@ p {
     width: min(calc(100% - var(--page-outer)), var(--shell));
   }
 
-  .opening-gallery {
-    gap: 0.45rem;
+  .assortment-overview {
+    padding-top: 3.25rem;
+  }
+
+  .assortment-overview__header h2 {
+    font-size: clamp(3rem, 16vw, 4.15rem);
+  }
+
+  .assortment-overview__media {
+    width: min(76%, 22rem);
+  }
+
+  .assortment-directory__list {
+    grid-template-columns: 1fr;
+    gap: 1.35rem;
+  }
+
+  .assortment-directory__link {
+    min-height: 4.25rem;
+  }
+
+  .assortment-directory__label {
+    font-size: clamp(1.75rem, 8.8vw, 2.2rem);
   }
 
   .source-copy h2 {
