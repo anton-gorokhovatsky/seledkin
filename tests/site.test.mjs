@@ -576,6 +576,24 @@ test("published Russian text uses the shared typographic rules", () => {
   assert.match(styles, /\.source-nowrap\s*\{\s*white-space:\s*nowrap;/);
 });
 
+test("home catalog is a compact projection of the full catalog", () => {
+  const preview =
+    home.match(/<section class="price-preview[\s\S]*?<\/section>/)?.[0] ?? "";
+
+  assert.match(preview, /<h2 id="prices-title">Продукты и цены<\/h2>/);
+  assert.equal((preview.match(/class="catalog-product"/g) ?? []).length, 6);
+  assert.equal((preview.match(/href="catalog\/"/g) ?? []).length, 1);
+  assert.match(preview, /class="catalog-product-head"/);
+  assert.doesNotMatch(
+    preview,
+    /price-categories|price-preview__actions|wa\.me|t\.me/,
+  );
+  assert.match(
+    styles,
+    /\.price-preview__grid \.catalog-product-head::after|\.catalog-product-head::after/,
+  );
+});
+
 test("catalog search and filters expose accessible state", () => {
   assert.match(catalogPage, /aria-live="polite"/);
   assert.match(catalogPage, /data-catalog-search/);
@@ -663,7 +681,6 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
   for (const selector of [
     ".source-brand:hover img",
     ".floating-menu:hover",
-    ".price-categories a:hover",
     ".catalog-search input:hover",
     ".catalog-filters button:hover",
     ".contacts-source__map-toggle:hover",
