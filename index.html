@@ -537,18 +537,18 @@
         <img src="assets/fish-pattern.svg" alt="" width="7940" height="2494" loading="lazy" />
       </div>
 
-      <section class="source-section source-section--story" id="about" aria-labelledby="about-title">
+      <section
+        class="about-overview source-section"
+        id="about"
+        aria-labelledby="about-title"
+      >
         <div class="source-shell">
-          <div class="source-split source-split--image-first">
-            <img
-              src="assets/flounder.jpg"
-              alt="Камбала, нож и перец на разделочной доске"
-              width="1680"
-              height="1680"
-              loading="lazy"
-            />
-            <div class="source-copy">
-              <h2 id="about-title">Ещё одно место в Москве, где продаётся хорошая рыба</h2>
+          <header class="about-overview__header">
+            <h2 id="about-title">О нас</h2>
+            <div class="about-overview__introduction">
+              <p class="about-overview__lead">
+                Ещё одно место в Москве, где продаётся хорошая рыба
+              </p>
               <p>
                 «Рыбная лавка капитана Селедкина» — небольшой магазин в
                 нескольких минутах ходьбы от метро «Вавиловская».
@@ -559,57 +559,23 @@
                 Москвы, а потом благодарят у себя в блогах.
               </p>
             </div>
-          </div>
+          </header>
 
-          <div class="source-split source-split--text-first">
-            <div class="source-copy">
-              <h2>Икра</h2>
-              <p>
-                Кроме рыбы, мы продаём чёрную, красную, икру сига, щуки и
-                морского ежа. Только заводская икра, замороженная без
-                консерванта, или с «человеческим» консервантом — сорбатом калия.
-              </p>
-            </div>
-            <img
-              src="assets/salmon-fillet.jpg"
-              alt="Филе красной рыбы на разделочной доске"
-              width="1680"
-              height="1680"
-              loading="lazy"
-            />
-          </div>
+          <h3 class="about-overview__reasons-title">Почему о нас говорят?</h3>
 
-          <div class="why-layout">
-            <div
-              class="why-collage"
-              role="group"
-              aria-label="Фотографии продуктов и лавки"
-            >
+          <div class="about-overview__evidence">
+            <figure class="about-overview__media">
               <img
-                class="why-collage__main"
                 src="assets/about-main.jpg"
                 alt="Рыба, зелень и перец на столе"
                 width="1680"
                 height="1680"
                 loading="lazy"
               />
-              <img
-                src="assets/about-small-1.jpg"
-                alt="Продукты рыбной лавки"
-                width="1680"
-                height="1680"
-                loading="lazy"
-              />
-              <img
-                src="assets/about-small-2.jpg"
-                alt="Витрина рыбной лавки"
-                width="1680"
-                height="1680"
-                loading="lazy"
-              />
-            </div>
-            <div class="source-copy why-copy">
-              <h2>Почему о нас говорят?</h2>
+            </figure>
+
+            <article class="about-overview__reason" aria-label="Качество">
+              <span class="about-overview__number" aria-hidden="true">01</span>
               <p>
                 <strong>Во-первых, это качество.</strong> Мы изучаем предложения
                 поставщиков и выбираем только рыбу свежего завоза и не
@@ -620,6 +586,10 @@
                 прилавках-холодильниках. Поэтому рыба не залеживается, мы
                 постоянно подвозим свежемороженую продукцию.
               </p>
+            </article>
+
+            <article class="about-overview__reason" aria-label="Ассортимент">
+              <span class="about-overview__number" aria-hidden="true">02</span>
               <p>
                 <strong>Во-вторых, ассортимент.</strong> Хоть магазин и невелик,
                 мы предлагаем и достаточно обычную рыбу для повседневного
@@ -628,51 +598,16 @@
                 например, купленная у нас мороженая сельдь, если посолить её
                 грамотно и правильно.
               </p>
+            </article>
+
+            <article class="about-overview__reason" aria-label="Советы">
+              <span class="about-overview__number" aria-hidden="true">03</span>
               <p>
                 И это наша <strong>третья фирменная фишка</strong> — от слова
                 «fish», разумеется. Наши продавцы и консультанты всегда делятся
                 советами — или подскажут, где их прочитать.
               </p>
-            </div>
-          </div>
-
-          <div class="source-gallery">
-            <img
-              class="source-gallery__large"
-              src="assets/gallery-large.jpg"
-              alt="Продукты на полках рыбной лавки"
-              width="1680"
-              height="1680"
-              loading="lazy"
-            />
-            <img
-              src="assets/gallery-small-1.jpg"
-              alt="Продукты рыбной лавки"
-              width="1680"
-              height="1680"
-              loading="lazy"
-            />
-            <img
-              src="assets/gallery-small-2.jpg"
-              alt="Разделка рыбы"
-              width="1680"
-              height="1680"
-              loading="lazy"
-            />
-            <img
-              src="assets/gallery-small-3.jpg"
-              alt="Свежая рыба"
-              width="1680"
-              height="1680"
-              loading="lazy"
-            />
-            <img
-              src="assets/gallery-small-4.jpg"
-              alt="Филе красной рыбы"
-              width="1680"
-              height="1680"
-              loading="lazy"
-            />
+            </article>
           </div>
         </div>
       </section>

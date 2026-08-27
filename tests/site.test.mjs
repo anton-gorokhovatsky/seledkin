@@ -122,6 +122,21 @@ test("home assortment links directly to every catalog section", () => {
   assert.doesNotMatch(section, /WhatsApp|Телеграм|opening-gallery|caviar-title/);
 });
 
+test("home about section keeps Oleg's evidence without the old product longread", () => {
+  const section =
+    home.match(/<section\s+class="about-overview[\s\S]*?<\/section>/)?.[0] ?? "";
+
+  assert.match(section, /id="about"/);
+  assert.match(section, /id="about-title">О нас<\/h2>/);
+  assert.match(section, /Ещё одно место в Москве, где продаётся хорошая рыба/);
+  assert.match(section, /Во-первых, это качество/);
+  assert.match(section, /Во-вторых, ассортимент/);
+  assert.match(section, /третья фирменная фишка/);
+  assert.equal((section.match(/class="about-overview__reason"/g) ?? []).length, 3);
+  assert.equal((section.match(/<figure /g) ?? []).length, 1);
+  assert.doesNotMatch(section, /<h2>Икра<\/h2>|source-split|source-gallery|why-collage/);
+});
+
 test("home exposes the core customer jobs", () => {
   for (const id of ["assortment", "about", "delivery", "contacts"]) {
     assert.match(home, new RegExp(`id="${id}"`));
@@ -252,8 +267,7 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     "source-hero",
     "assortment-overview",
     "fish-divider",
-    "source-section--story",
-    "source-gallery",
+    "about-overview",
     "full-photo",
     "source-quote",
     "founder-source",
@@ -318,7 +332,7 @@ test("the typographic scale protects reading and interface text", () => {
   for (const [selector, token] of [
     ["body", "--text-body"],
     [".source-copy p", "--text-reading"],
-    [".why-copy p", "--text-reading"],
+    [".about-overview__reason p", "--text-reading"],
     [".founder-source__copy p", "--text-reading"],
     [".ship-log-entry__body", "--text-body"],
     [".contacts-source__details p", "--text-body"],
