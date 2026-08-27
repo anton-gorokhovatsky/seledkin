@@ -242,7 +242,11 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   const heroImage =
     styles.match(/\.source-hero__proof img\s*\{([^}]*)\}/s)?.[1] ?? "";
-  assert.doesNotMatch(heroImage, /border/);
+  assert.doesNotMatch(heroImage, /border|box-shadow|filter|outline/);
+  assert.doesNotMatch(
+    styles,
+    /\.source-hero__journal-card(?:\:focus-visible|\[data-stack-position="0"\]\:hover) img\s*\{[^}]*box-shadow:/s,
+  );
   assert.match(
     styles,
     /\.source-hero__journal-card\[data-stack-position="0"\]:hover img\s*\{[^}]*transform:\s*translateY\(-0\.12rem\);/s,

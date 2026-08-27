@@ -654,11 +654,8 @@ p {
   width: 100%;
   height: auto;
   aspect-ratio: 647 / 800;
-  box-shadow: 0 0.8rem 2.5rem rgb(0 13 21 / 24%);
   object-fit: contain;
-  transition:
-    box-shadow 180ms ease-out,
-    transform 180ms var(--ease);
+  transition: transform 180ms var(--ease);
 }
 
 .source-hero__proof figcaption {
@@ -696,7 +693,6 @@ p {
 }
 
 .source-hero__journal-card:focus-visible img {
-  box-shadow: 0 1.05rem 3rem rgb(0 13 21 / 38%);
   transform: translateY(-0.12rem);
 }
 
@@ -3420,7 +3416,6 @@ p {
   }
 
   .source-hero__journal-card[data-stack-position="0"]:hover img {
-    box-shadow: 0 1.05rem 3rem rgb(0 13 21 / 38%);
     transform: translateY(-0.12rem);
   }
 
