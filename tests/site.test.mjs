@@ -876,9 +876,16 @@ test("menu, focus and reduced motion remain accessible", () => {
 test("menu dividers express structure instead of filling space", () => {
   const networks =
     styles.match(/\.site-menu__networks\s*\{([^}]*)\}/s)?.[1] ?? "";
+  const routes =
+    styles.match(/\.site-menu__routes nav\s*\{([^}]*)\}/s)?.[1] ?? "";
+  const routeLink =
+    styles.match(/\.site-menu__routes nav a\s*\{([^}]*)\}/s)?.[1] ?? "";
 
   assert.doesNotMatch(networks, /border-(?:top|bottom|block)/);
   assert.doesNotMatch(networks, /padding-top/);
+  assert.match(routes, /gap:/);
+  assert.doesNotMatch(routeLink, /border-(?:top|bottom|block)/);
+  assert.doesNotMatch(styles, /\.site-menu__routes nav a:last-child/);
   assert.match(
     projectRules,
     /Разделители не запрещены, но каждый должен обозначать реальную границу/,

@@ -1706,6 +1706,7 @@ p {
 
 .site-menu__routes nav {
   display: grid;
+  gap: clamp(0.15rem, 0.65vh, 0.5rem);
   margin-top: clamp(2rem, 4vw, 4rem);
 }
 
@@ -1715,15 +1716,11 @@ p {
   min-height: clamp(4.5rem, 8vh, 6.5rem);
   align-items: center;
   grid-template-columns: 3.25rem minmax(0, 1fr);
-  border-top: 1px solid var(--line);
+  padding-inline: 0.1rem 0.75rem;
   text-decoration: none;
   transition:
     color 180ms ease-out,
     padding-left 180ms var(--ease);
-}
-
-.site-menu__routes nav a:last-child {
-  border-bottom: 1px solid var(--line);
 }
 
 .site-menu__routes nav a > span:first-child {
