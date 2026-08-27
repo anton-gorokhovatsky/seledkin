@@ -580,7 +580,12 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     const channels =
       page.match(/<nav class="source-footer__channels"[\s\S]*?<\/nav>/)?.[0] ?? "";
     assert.doesNotMatch(channels, /WhatsApp|social-icons\.svg#whatsapp/);
-    assert.match(page, /Заказать в WhatsApp/);
+    const footerActions =
+      page.match(/<div class="source-footer__actions"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";
+    assert.match(footerActions, /Написать в Телеграме/);
+    assert.match(footerActions, /Написать в WhatsApp/);
+    assert.match(footerActions, /class="source-footer__secondary-action"/);
+    assert.doesNotMatch(footerActions, /Заказать/);
   }
 
   const catRule =
@@ -835,6 +840,7 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
     ".catalog-search input:hover",
     ".catalog-filters button:hover",
     ".contacts-source__map-toggle:hover",
+    ".source-footer__secondary-action:hover",
     ".theme-toggle:not(.theme-toggle--menu):hover",
   ]) {
     assert.ok(
@@ -843,6 +849,10 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
     );
   }
 
+  assert.match(
+    styles,
+    /\.source-footer__secondary-action:hover\s*\{[^}]*color:\s*var\(--footer-text\);/s,
+  );
   assert.match(styles, /:focus-visible\s*\{[^}]*outline:\s*0\.2rem solid var\(--focus\);/s);
   assert.match(
     styles,

@@ -1590,8 +1590,30 @@ p {
 .source-footer__actions {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
+}
+
+.source-footer__secondary-action {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  padding: 0.5rem 0.15rem;
+  color: var(--footer-text);
+  font-size: var(--text-interface);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-decoration-line: underline;
+  text-decoration-color: currentcolor;
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.22em;
+  text-transform: uppercase;
+  transition:
+    color 180ms ease-out,
+    text-decoration-thickness 180ms ease-out,
+    text-underline-offset 180ms ease-out,
+    transform 180ms var(--ease);
 }
 
 .source-button--hero-primary,
@@ -3250,6 +3272,10 @@ p {
     flex-direction: column;
   }
 
+  .source-footer__secondary-action {
+    align-self: flex-start;
+  }
+
   .contacts-source__card {
     grid-template-columns: 1fr;
   }
@@ -3402,6 +3428,13 @@ p {
   .source-hero__journal-card[data-stack-position="0"]:hover strong {
     color: var(--footer-text);
     text-decoration-color: currentcolor;
+  }
+
+  .source-footer__secondary-action:hover {
+    color: var(--footer-text);
+    text-decoration-thickness: 0.13em;
+    text-underline-offset: 0.3em;
+    transform: translateY(-0.08rem);
   }
 
   .floating-menu:hover {
