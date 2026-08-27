@@ -339,18 +339,24 @@ test("the home brand marks the current page without linking to itself", () => {
   assert.match(catalogHeader, /<a class="source-brand" href="\.\.\/"/);
 });
 
-test("every page uses the legible fish fragment as its favicon", () => {
+test("every page uses the complete vector fish-and-hand mark as its favicon", () => {
   assert.match(home, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(notFoundPage, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(catalogPage, /rel="icon" href="\.\.\/assets\/favicon\.svg"/);
   for (const page of [home, notFoundPage, catalogPage]) {
     assert.doesNotMatch(page, /rel="icon"[^>]+logo-redrawn\.svg/);
   }
-  assert.match(favicon, /viewBox="0 0 64 64"/);
+  assert.match(favicon, /viewBox="-80 65 1062 1795"/);
+  assert.match(
+    favicon,
+    /<title id="favicon-title">Рыба в руке капитана — знак лавки<\/title>/,
+  );
   assert.match(favicon, /prefers-color-scheme:\s*dark/);
-  assert.equal((favicon.match(/<image /g) ?? []).length, 1);
-  assert.doesNotMatch(favicon, /<path|<rect|<g[ >]/);
-  assert.ok(Buffer.byteLength(favicon) < 12_000);
+  assert.equal((favicon.match(/<image /g) ?? []).length, 0);
+  assert.doesNotMatch(favicon, /data:image/);
+  assert.ok((favicon.match(/<path /g) ?? []).length >= 70);
+  assert.match(favicon, /<g aria-hidden="true">/);
+  assert.ok(Buffer.byteLength(favicon) < 120_000);
 });
 
 test("home keeps the source ks.fish visual sequence and local imagery", () => {
