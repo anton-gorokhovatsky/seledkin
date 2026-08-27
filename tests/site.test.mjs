@@ -143,13 +143,26 @@ test("home about section keeps Oleg's evidence without the old product longread"
     home.match(/<section\s+class="about-overview[\s\S]*?<\/section>/)?.[0] ?? "";
 
   assert.match(section, /id="about"/);
-  assert.match(section, /id="about-title">О нас<\/h2>/);
-  assert.match(section, /Ещё одно место в Москве, где продаётся хорошая рыба/);
+  assert.match(section, /class="about-overview__eyebrow">О нас<\/p>/);
+  assert.match(
+    section,
+    /id="about-title">\s*Ещё одно место в Москве, где продаётся хорошая рыба\s*<\/h2>/,
+  );
+  assert.match(section, /Почему о нас говорят\?/);
   assert.match(section, /Во-первых, это качество/);
   assert.match(section, /Во-вторых, ассортимент/);
   assert.match(section, /третья фирменная фишка/);
   assert.equal((section.match(/class="about-overview__reason"/g) ?? []).length, 3);
-  assert.equal((section.match(/<figure /g) ?? []).length, 1);
+  assert.equal((section.match(/<article class="about-overview__chapter/g) ?? []).length, 3);
+  assert.equal((section.match(/<figure /g) ?? []).length, 4);
+  for (const asset of [
+    "flounder.jpg",
+    "about-main.jpg",
+    "about-small-2.jpg",
+    "gallery-small-2.jpg",
+  ]) {
+    assert.match(section, new RegExp(`src="assets/${asset.replace(".", "\\.")}"`));
+  }
   assert.doesNotMatch(section, /<h2>Икра<\/h2>|source-split|source-gallery|why-collage/);
 });
 
@@ -370,7 +383,10 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     "hero-sea.mp4",
     "caviar-slab.jpg",
     "fish-pattern.svg",
+    "flounder.jpg",
     "about-main.jpg",
+    "about-small-2.jpg",
+    "gallery-small-2.jpg",
     "cutting-tuna.jpg",
     "quote-pan.jpg",
     "oleg-gugunava.jpg",
@@ -502,10 +518,7 @@ test("the page and fullscreen menu share one stable outer content axis", () => {
     styles,
     /\.site-menu__routes\s*\{[\s\S]*?padding:[\s\S]*?var\(--content-edge\);/,
   );
-  assert.match(
-    styles,
-    /\.source-quote blockquote\s*\{[\s\S]*?left:\s*var\(--content-edge\);/,
-  );
+  assert.match(home, /class="source-quote__inner source-shell"/);
   assert.match(
     styles,
     /\.contacts-source\s*\{[\s\S]*?width:\s*min\(calc\(100% - var\(--page-outer\)\), var\(--shell\)\);[\s\S]*?margin-inline:\s*auto;/,
