@@ -132,7 +132,12 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(hero, /data-hero-journal-next/);
   assert.match(hero, /aria-live="polite"/);
   assert.match(styles, /\.source-hero__journal-stack\s*\{[\s\S]*?touch-action:\s*pan-y;/);
-  assert.match(styles, /\.source-hero__journal-card\[aria-hidden="true"\] figure/);
+  assert.match(styles, /\.source-hero__journal-card\[aria-hidden="true"\] figcaption/);
+  assert.doesNotMatch(styles, /\.source-hero__journal-card\[aria-hidden="true"\] figure/);
+  assert.match(
+    styles,
+    /\.source-hero__journal-card\[data-stack-position="1"\][\s\S]*?rotate\(1\.2deg\)/,
+  );
   assert.equal((hero.match(/Перейти к записи в журнале/g) ?? []).length, 6);
   assert.match(siteScript, /event\.key === "ArrowLeft"/);
   assert.match(siteScript, /event\.key === "ArrowRight"/);
