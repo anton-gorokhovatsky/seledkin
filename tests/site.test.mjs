@@ -95,6 +95,17 @@ test("the site is plain HTML, CSS and JavaScript", () => {
   assert.match(catalogPage, /catalog\.js/);
 });
 
+test("one drawn harpoon marks every directional transition", () => {
+  assert.match(home, /<symbol id="icon-harpoon" viewBox="0 0 32 18">/);
+  assert.match(home, /M23 9H8\.5C4\.6 9 2\.5 10\.8 2\.5 13\.2/);
+  assert.equal((home.match(/href="#icon-harpoon"/g) ?? []).length, 10);
+  assert.doesNotMatch(home, /M2 8h20M16 2l6 6-6 6/);
+  assert.match(
+    styles,
+    /\.assortment-directory__link:hover \.assortment-directory__label[\s\S]*?text-decoration-color:\s*currentcolor;[\s\S]*?translateX\(0\.35rem\)/,
+  );
+});
+
 test("home assortment links directly to every catalog section", () => {
   const section =
     home.match(/<section\s+class="assortment-overview[\s\S]*?<\/section>/)?.[0] ?? "";

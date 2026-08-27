@@ -247,6 +247,14 @@ p {
   text-wrap: pretty;
 }
 
+.site-icon-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 .visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -744,7 +752,15 @@ p {
   font-size: clamp(1.75rem, 2.25vw, 2.5rem);
   font-weight: 400;
   line-height: 1.04;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 0.055em;
+  text-underline-offset: 0.16em;
   text-wrap: balance;
+  transition:
+    color 180ms ease-out,
+    text-decoration-color 180ms ease-out,
+    transform 180ms var(--ease);
 }
 
 .assortment-directory__meta {
@@ -752,6 +768,7 @@ p {
   color: var(--muted);
   font-size: var(--text-meta);
   white-space: nowrap;
+  transition: color 180ms ease-out;
 }
 
 .assortment-directory__link svg {
@@ -765,14 +782,23 @@ p {
   transition: transform 180ms var(--ease);
 }
 
-.assortment-directory__link:hover,
-.assortment-directory__link:focus-visible {
+.assortment-directory__link:hover .assortment-directory__label,
+.assortment-directory__link:focus-visible .assortment-directory__label {
+  color: var(--link);
+  text-decoration-color: currentcolor;
+  transform: translateX(0.35rem);
+}
+
+.assortment-directory__link:hover .assortment-directory__meta,
+.assortment-directory__link:focus-visible .assortment-directory__meta,
+.assortment-directory__link:hover svg,
+.assortment-directory__link:focus-visible svg {
   color: var(--link);
 }
 
 .assortment-directory__link:hover svg,
 .assortment-directory__link:focus-visible svg {
-  transform: translateX(0.25rem);
+  transform: translateX(0.35rem);
 }
 
 .founder-source > *,
