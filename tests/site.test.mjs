@@ -614,6 +614,14 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     styles,
     /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__channels\s*\{[\s\S]*?grid-template-columns:\s*1fr;/,
   );
+  assert.match(
+    styles,
+    /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__content\s*\{[^}]*padding-block:\s*4rem 1\.25rem;/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__postscript\s*\{[^}]*padding-block:\s*1\.25rem 2\.25rem;/,
+  );
 });
 
 test("menu and footer channels use one precise local SVG set with Telegram first", async () => {

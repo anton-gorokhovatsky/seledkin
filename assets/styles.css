@@ -3240,7 +3240,7 @@ p {
 
   .source-footer__content {
     gap: 3rem;
-    padding-block: 4rem;
+    padding-block: 4rem 1.25rem;
   }
 
   .source-footer__details h2 {
@@ -3281,7 +3281,7 @@ p {
   }
 
   .source-footer__postscript {
-    padding-block: 2.75rem 2.25rem;
+    padding-block: 1.25rem 2.25rem;
   }
 
   .source-footer__channels {
