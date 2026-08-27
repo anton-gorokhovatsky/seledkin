@@ -212,7 +212,8 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(hero, /data-hero-journal-next/);
   assert.match(hero, /data-hero-journal-all/);
   assert.match(hero, /href="#journal"/);
-  assert.match(hero, />Весь журнал<\/span>/);
+  assert.match(hero, /aria-label="Открыть весь Судовой журнал"/);
+  assert.match(hero, />Открыть журнал<\/span>/);
   assert.equal(
     (hero.match(/source-hero__journal-control(?:\s|")/g) ?? []).length,
     3,
@@ -237,6 +238,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     styles,
     /\.source-hero__journal-card\[data-stack-position="[12]"\][^}]*translate\([^,]+,[^)]+\)/s,
   );
+  assert.doesNotMatch(styles, /data-stack-position\^="-"/);
   assert.match(styles, /\.source-hero\s*\{[\s\S]*?height:\s*100svh;/);
   const heroFigure =
     styles.match(/\.source-hero__proof figure\s*\{([^}]*)\}/s)?.[1] ?? "";
@@ -281,6 +283,11 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(siteScript, /heroJournalNext\.hidden = !hasNext/);
   assert.match(siteScript, /heroJournalAll\.hidden = hasNext/);
   assert.match(siteScript, /heroJournalCounter\.textContent = position/);
+  assert.match(
+    siteScript,
+    /\(index - currentIndex \+ heroJournalCards\.length\) % heroJournalCards\.length/,
+  );
+  assert.match(siteScript, /position \+\s*" выбранных"/);
   assert.doesNotMatch(siteScript, /Дальше — журнал/);
   assert.match(siteScript, /event\.key === "ArrowLeft"/);
   assert.match(siteScript, /event\.key === "ArrowRight"/);

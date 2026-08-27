@@ -221,7 +221,9 @@ if (
   const syncJournal = () => {
     heroJournalCards.forEach((card, index) => {
       const active = index === currentIndex;
-      card.dataset.stackPosition = String(index - currentIndex);
+      const stackPosition =
+        (index - currentIndex + heroJournalCards.length) % heroJournalCards.length;
+      card.dataset.stackPosition = String(stackPosition);
       card.setAttribute("aria-hidden", String(!active));
       card.tabIndex = active ? 0 : -1;
       card.inert = !active;
@@ -235,7 +237,8 @@ if (
     heroJournalAll.hidden = hasNext;
     heroJournalAll.tabIndex = hasNext ? -1 : 0;
 
-    const position = String(currentIndex + 1) + " из " + String(heroJournalCards.length);
+    const position =
+      String(currentIndex + 1) + " из " + String(heroJournalCards.length);
     if (heroJournalCounter) {
       heroJournalCounter.textContent = position;
     }
@@ -243,9 +246,10 @@ if (
       heroJournalStatus.textContent =
         "Запись " +
         position +
+        " выбранных" +
         ": " +
         titles[currentIndex] +
-        (hasNext ? "" : ". Далее — перейти к Судовому журналу.");
+        (hasNext ? "" : ". Следующее действие — открыть весь Судовой журнал.");
     }
   };
 

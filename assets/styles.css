@@ -525,13 +525,6 @@ p {
   transform: translateX(1rem) rotate(-1deg);
 }
 
-.source-hero__journal-card[data-stack-position^="-"] {
-  z-index: 0;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-0.8rem, 0.3rem) rotate(-1.5deg);
-}
-
 .source-hero__journal-card[aria-hidden="true"] figcaption {
   visibility: hidden;
 }
@@ -634,6 +627,7 @@ p {
   text-align: center;
   text-transform: uppercase;
   text-shadow: 0 0.1rem 0.8rem rgb(0 0 0 / 35%);
+  white-space: nowrap;
 }
 
 .source-hero__proof {
