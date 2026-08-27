@@ -390,7 +390,9 @@ p {
 .source-hero {
   position: relative;
   display: grid;
-  height: clamp(44rem, 92svh, 58rem);
+  min-height: 44rem;
+  height: 100vh;
+  height: 100svh;
   place-items: center;
   overflow: hidden;
   background:
@@ -429,6 +431,7 @@ p {
   z-index: 2;
   display: grid;
   width: min(calc(100% - var(--page-outer)), var(--shell));
+  height: 100%;
   grid-template-columns: minmax(0, 1fr) clamp(18rem, 22vw, 21rem);
   align-items: center;
   gap: clamp(3rem, 6vw, 6rem);
@@ -469,13 +472,19 @@ p {
 }
 
 .source-hero__journal {
+  display: grid;
   width: 100%;
+  height: 100%;
   min-width: 0;
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: center;
+  align-self: stretch;
   justify-self: end;
 }
 
 .source-hero__journal-stack {
   display: grid;
+  align-self: center;
   padding: 0 1.15rem 1.15rem 0;
   touch-action: pan-y;
 }
@@ -496,14 +505,14 @@ p {
 
 .source-hero__journal-card[data-stack-position="1"] {
   z-index: 2;
-  opacity: 0.82;
+  opacity: 1;
   pointer-events: none;
   transform: translate(0.55rem, 0.55rem) rotate(1.2deg);
 }
 
 .source-hero__journal-card[data-stack-position="2"] {
   z-index: 1;
-  opacity: 0.58;
+  opacity: 1;
   pointer-events: none;
   transform: translate(1rem, 1rem) rotate(-1deg);
 }
@@ -626,17 +635,6 @@ p {
   text-wrap: balance;
 }
 
-.source-hero__proof-link {
-  width: fit-content;
-  min-height: 2.75rem;
-  padding-top: 0.55rem;
-  font-size: var(--text-interface);
-  font-weight: 600;
-  line-height: 1.35;
-  text-decoration: underline;
-  text-decoration-thickness: 0.075em;
-  text-underline-offset: 0.22em;
-}
 
 .source-hero__mobile-logo {
   display: none;
@@ -2617,8 +2615,11 @@ p {
   }
 
   .source-hero__journal {
+    display: block;
     width: min(100%, 22rem);
+    height: auto;
     margin-top: 1.35rem;
+    align-self: auto;
     justify-self: center;
   }
 
@@ -2666,10 +2667,6 @@ p {
     font-size: clamp(1rem, 4.8vw, 1.2rem);
   }
 
-  .source-hero__proof-link {
-    min-height: 2.75rem;
-    padding-top: 0.45rem;
-  }
 
   .js .source-hero__journal-controls {
     width: calc(100% - 0.75rem);
@@ -3339,8 +3336,10 @@ p {
     transform: translateY(-0.12rem);
   }
 
-  .source-hero__proof:hover .source-hero__proof-link {
-    text-decoration-thickness: 0.12em;
+  .source-hero__proof:hover strong {
+    text-decoration: underline;
+    text-decoration-thickness: 0.075em;
+    text-underline-offset: 0.18em;
   }
 
   .floating-menu:hover {

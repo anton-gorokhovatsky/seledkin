@@ -151,7 +151,7 @@ test("home exposes the core customer jobs", () => {
   assert.match(hero, /href="https:\/\/t\.me\/kapitanseledkin\/682"/);
   assert.match(hero, /src="assets\/journal-682\.jpg"/);
   assert.match(hero, /datetime="2026-08-25"/);
-  assert.match(hero, /Запись №&nbsp;682/);
+  assert.match(hero, /У&nbsp;нас новый завоз царского малосольного тугунка/);
   assert.doesNotMatch(hero, /src="assets\/about-main\.jpg"/);
   assert.doesNotMatch(hero, /Из ассортимента лавки/);
   assert.match(home, /метро «Вавиловская»/);
@@ -184,6 +184,15 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     styles,
     /\.source-hero__journal-card\[data-stack-position="1"\][\s\S]*?rotate\(1\.2deg\)/,
   );
+  assert.match(
+    styles,
+    /\.source-hero__journal-card\[data-stack-position="1"\][\s\S]*?opacity:\s*1;/,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__journal-card\[data-stack-position="2"\][\s\S]*?opacity:\s*1;/,
+  );
+  assert.match(styles, /\.source-hero\s*\{[\s\S]*?height:\s*100svh;/);
   const heroFigure =
     styles.match(/\.source-hero__proof figure\s*\{([^}]*)\}/s)?.[1] ?? "";
   const heroCaption =
@@ -193,7 +202,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.doesNotMatch(heroFigure, /background|backdrop-filter|box-shadow/);
   assert.doesNotMatch(heroCaption, /background|backdrop-filter|box-shadow|border:/);
   assert.match(heroControl, /background:\s*var\(--jelly-glass-surface\)/);
-  assert.equal((hero.match(/Перейти к записи в журнале/g) ?? []).length, 6);
+  assert.doesNotMatch(hero, /Запись №|source-hero__proof-link|>Перейти к записи в журнале</);
   assert.match(siteScript, /event\.key === "ArrowLeft"/);
   assert.match(siteScript, /event\.key === "ArrowRight"/);
   assert.match(siteScript, /Math\.abs\(deltaX\) < 48/);
