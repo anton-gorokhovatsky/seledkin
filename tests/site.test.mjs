@@ -176,6 +176,9 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
 
   assert.match(hero, /data-hero-journal-previous/);
   assert.match(hero, /data-hero-journal-next/);
+  assert.match(hero, /data-hero-journal-all/);
+  assert.match(hero, /href="#journal"/);
+  assert.equal((hero.match(/class="source-hero__journal-control"/g) ?? []).length, 3);
   assert.match(hero, /aria-live="polite"/);
   assert.match(styles, /\.source-hero__journal-stack\s*\{[\s\S]*?touch-action:\s*pan-y;/);
   assert.match(styles, /\.source-hero__journal-card\[aria-hidden="true"\] figcaption/);
@@ -192,17 +195,39 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     styles,
     /\.source-hero__journal-card\[data-stack-position="2"\][\s\S]*?opacity:\s*1;/,
   );
+  assert.doesNotMatch(
+    styles,
+    /\.source-hero__journal-card\[data-stack-position="[12]"\][^}]*translate\([^,]+,[^)]+\)/s,
+  );
   assert.match(styles, /\.source-hero\s*\{[\s\S]*?height:\s*100svh;/);
   const heroFigure =
     styles.match(/\.source-hero__proof figure\s*\{([^}]*)\}/s)?.[1] ?? "";
   const heroCaption =
     styles.match(/\.source-hero__proof figcaption\s*\{([^}]*)\}/s)?.[1] ?? "";
   const heroControl =
-    styles.match(/\.source-hero__journal-controls button\s*\{([^}]*)\}/s)?.[1] ?? "";
+    styles.match(/\.source-hero__journal-control\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.doesNotMatch(heroFigure, /background|backdrop-filter|box-shadow/);
-  assert.doesNotMatch(heroCaption, /background|backdrop-filter|box-shadow|border:/);
+  assert.doesNotMatch(
+    heroCaption,
+    /background|backdrop-filter|box-shadow|border:|position:\s*absolute/,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__proof img\s*\{[^}]*aspect-ratio:\s*647\s*\/\s*800;[^}]*object-fit:\s*contain;/s,
+  );
   assert.match(heroControl, /background:\s*var\(--jelly-glass-surface\)/);
+  assert.doesNotMatch(
+    styles,
+    /\.source-hero__journal-control\[aria-disabled="true"\]\s*\{[^}]*opacity:/s,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__journal-control\[aria-disabled="true"\] svg\s*\{[^}]*opacity:\s*0\.38;/s,
+  );
   assert.doesNotMatch(hero, /Запись №|source-hero__proof-link|>Перейти к записи в журнале</);
+  assert.match(siteScript, /heroJournalNext\.hidden = !hasNext/);
+  assert.match(siteScript, /heroJournalAll\.hidden = hasNext/);
+  assert.match(siteScript, /\"Дальше — журнал\"/);
   assert.match(siteScript, /event\.key === "ArrowLeft"/);
   assert.match(siteScript, /event\.key === "ArrowRight"/);
   assert.match(siteScript, /Math\.abs\(deltaX\) < 48/);
@@ -718,15 +743,29 @@ test("one restrained jelly material serves translucent controls", () => {
     "floating-menu",
     "catalog-controls",
     "contacts-source__map-toggle",
-    "source-hero__journal-card",
-    "source-hero__journal-controls button",
+    "source-hero__journal-control",
     "site-menu__routes",
   ]) {
+    const rule =
+      styles.match(new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`, "s"))?.[1] ?? "";
     assert.match(
-      styles,
-      new RegExp(`\\.${selector}\\s*\\{[\\s\\S]*?backdrop-filter:\\s*var\\(--jelly-glass-filter\\);`),
+      rule,
+      /backdrop-filter:\s*var\(--jelly-glass-filter\);/,
+      `У .${selector} потерян общий фильтр материала`,
+    );
+    assert.match(
+      rule,
+      /background:\s*var\(--jelly-glass-surface(?:-strong)?\);/,
+      `У .${selector} потеряна общая поверхность материала`,
     );
   }
+  const journalCardRule =
+    styles.match(/\.source-hero__journal-card\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.doesNotMatch(
+    journalCardRule,
+    /background|backdrop-filter|box-shadow/,
+    "У листа журнала не должно быть подложки: материал разрешён только контролам",
+  );
   assert.match(
     styles,
     /\.source-button--footer-primary,[\s\S]*?\.source-button--menu-primary\s*\{[\s\S]*?background:\s*var\(--footer-text\);/,

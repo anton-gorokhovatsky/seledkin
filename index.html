@@ -393,6 +393,7 @@
             </div>
             <div class="source-hero__journal-controls">
               <button
+                class="source-hero__journal-control"
                 type="button"
                 aria-label="Показать более новую запись"
                 aria-disabled="true"
@@ -408,15 +409,30 @@
                   Запись 1 из 3: новый завоз царского малосольного тугунка
                 </span>
               </p>
-              <button
-                type="button"
-                aria-label="Показать более старую запись"
-                data-hero-journal-next
-              >
-                <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
-                  <path d="M2 8h20M16 2l6 6-6 6" />
-                </svg>
-              </button>
+              <span class="source-hero__journal-next-slot">
+                <button
+                  class="source-hero__journal-control"
+                  type="button"
+                  aria-label="Показать более старую запись"
+                  data-hero-journal-next
+                >
+                  <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
+                    <path d="M2 8h20M16 2l6 6-6 6" />
+                  </svg>
+                </button>
+                <a
+                  class="source-hero__journal-control"
+                  href="#journal"
+                  aria-label="Перейти к Судовому журналу"
+                  hidden
+                  tabindex="-1"
+                  data-hero-journal-all
+                >
+                  <svg viewBox="0 0 28 16" aria-hidden="true" focusable="false">
+                    <path d="M2 8h20M16 2l6 6-6 6" />
+                  </svg>
+                </a>
+              </span>
             </div>
           </section>
         </div>

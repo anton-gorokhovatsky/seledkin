@@ -19,6 +19,7 @@ const heroJournalCards = [
 ];
 const heroJournalPrevious = heroJournal?.querySelector("[data-hero-journal-previous]");
 const heroJournalNext = heroJournal?.querySelector("[data-hero-journal-next]");
+const heroJournalAll = heroJournal?.querySelector("[data-hero-journal-all]");
 const heroJournalCounter = heroJournal?.querySelector("[data-hero-journal-counter]");
 const heroJournalStatus = heroJournal?.querySelector("[data-hero-journal-status]");
 const keyboardNavigationKeys = new Set([
@@ -205,7 +206,8 @@ if (
   heroJournalStack instanceof HTMLElement &&
   heroJournalCards.length > 0 &&
   heroJournalPrevious instanceof HTMLButtonElement &&
-  heroJournalNext instanceof HTMLButtonElement
+  heroJournalNext instanceof HTMLButtonElement &&
+  heroJournalAll instanceof HTMLAnchorElement
 ) {
   const titles = heroJournalCards.map((card) =>
     (card.querySelector("strong")?.textContent ?? "")
@@ -229,12 +231,23 @@ if (
     const hasNext = currentIndex < heroJournalCards.length - 1;
     heroJournalPrevious.setAttribute("aria-disabled", String(!hasPrevious));
     heroJournalNext.setAttribute("aria-disabled", String(!hasNext));
+    heroJournalNext.hidden = !hasNext;
+    heroJournalAll.hidden = hasNext;
+    heroJournalAll.tabIndex = hasNext ? -1 : 0;
 
     const position = String(currentIndex + 1) + " из " + String(heroJournalCards.length);
-    if (heroJournalCounter) heroJournalCounter.textContent = position;
+    if (heroJournalCounter) {
+      heroJournalCounter.textContent = hasNext
+        ? position
+        : "Дальше — журнал";
+    }
     if (heroJournalStatus) {
       heroJournalStatus.textContent =
-        "Запись " + position + ": " + titles[currentIndex];
+        "Запись " +
+        position +
+        ": " +
+        titles[currentIndex] +
+        (hasNext ? "" : ". Далее — перейти к Судовому журналу.");
     }
   };
 
@@ -267,7 +280,11 @@ if (
       showJournalCard(currentIndex - 1, { focusCard: true });
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
-      showJournalCard(currentIndex + 1, { focusCard: true });
+      if (currentIndex === heroJournalCards.length - 1) {
+        heroJournalAll.focus();
+      } else {
+        showJournalCard(currentIndex + 1, { focusCard: true });
+      }
     }
   });
 

@@ -507,14 +507,14 @@ p {
   z-index: 2;
   opacity: 1;
   pointer-events: none;
-  transform: translate(0.55rem, 0.55rem) rotate(1.2deg);
+  transform: translateX(0.55rem) rotate(1.2deg);
 }
 
 .source-hero__journal-card[data-stack-position="2"] {
   z-index: 1;
   opacity: 1;
   pointer-events: none;
-  transform: translate(1rem, 1rem) rotate(-1deg);
+  transform: translateX(1rem) rotate(-1deg);
 }
 
 .source-hero__journal-card[data-stack-position^="-"] {
@@ -541,7 +541,7 @@ p {
   margin-top: 0.4rem;
 }
 
-.source-hero__journal-controls button {
+.source-hero__journal-control {
   display: inline-grid;
   width: 2.75rem;
   height: 2.75rem;
@@ -553,16 +553,38 @@ p {
   color: var(--ink);
   box-shadow: var(--jelly-glass-shadow);
   cursor: pointer;
+  text-decoration: none;
+  transition:
+    border-color 180ms ease-out,
+    background-color 180ms ease-out,
+    transform 180ms var(--ease);
   -webkit-backdrop-filter: var(--jelly-glass-filter);
   backdrop-filter: var(--jelly-glass-filter);
 }
 
-.source-hero__journal-controls button:first-child svg {
+.source-hero__journal-next-slot {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.source-hero__journal-next-slot > * {
+  grid-area: 1 / 1;
+}
+
+.source-hero__journal-control[hidden] {
+  display: none;
+}
+
+[data-hero-journal-previous] svg {
   transform: rotate(180deg);
 }
 
-.source-hero__journal-controls button[aria-disabled="true"] {
+.source-hero__journal-control[aria-disabled="true"] {
   cursor: default;
+}
+
+.source-hero__journal-control[aria-disabled="true"] svg {
   opacity: 0.38;
 }
 
@@ -604,8 +626,10 @@ p {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 647 / 800;
   border: 1px solid rgb(255 248 237 / 58%);
   box-shadow: 0 0.8rem 2.5rem rgb(0 13 21 / 24%);
+  object-fit: contain;
 }
 
 .source-hero__proof figcaption {
@@ -3319,7 +3343,7 @@ p {
     opacity: 0.82;
   }
 
-  .source-hero__journal-controls button:not([aria-disabled="true"]):hover {
+  .source-hero__journal-control:not([aria-disabled="true"]):hover {
     border-color: var(--brass);
     background: var(--jelly-glass-surface-strong);
     transform: translateY(-0.08rem);
@@ -3337,9 +3361,7 @@ p {
   }
 
   .source-hero__proof:hover strong {
-    text-decoration: underline;
-    text-decoration-thickness: 0.075em;
-    text-underline-offset: 0.18em;
+    color: var(--footer-text);
   }
 
   .floating-menu:hover {
@@ -3452,7 +3474,7 @@ p {
   .floating-menu,
   .site-menu__routes,
   .source-hero__journal-card,
-  .source-hero__journal-controls button,
+  .source-hero__journal-control,
   .theme-toggle--menu {
     background: Canvas;
     box-shadow: none;
