@@ -543,7 +543,7 @@ p {
 .js .source-hero__journal-controls {
   display: grid;
   width: calc(100% - 1.15rem);
-  grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+  grid-template-columns: 2.75rem minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.65rem;
   margin-top: 0.4rem;
@@ -572,8 +572,9 @@ p {
 
 .source-hero__journal-next-slot {
   display: grid;
-  width: 2.75rem;
+  min-width: 2.75rem;
   height: 2.75rem;
+  justify-items: end;
 }
 
 .source-hero__journal-next-slot > * {
@@ -582,6 +583,24 @@ p {
 
 .source-hero__journal-control[hidden] {
   display: none;
+}
+
+.source-hero__journal-control--all {
+  width: auto;
+  min-width: 8.75rem;
+  padding: 0 0.8rem 0 1rem;
+  border-radius: 999px;
+  grid-auto-flow: column;
+  gap: 0.55rem;
+  font-size: var(--text-meta);
+  font-weight: 700;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.source-hero__journal-control--all svg {
+  width: 1.15rem;
 }
 
 [data-hero-journal-previous] svg {
@@ -635,9 +654,11 @@ p {
   width: 100%;
   height: auto;
   aspect-ratio: 647 / 800;
-  border: 1px solid rgb(255 248 237 / 58%);
   box-shadow: 0 0.8rem 2.5rem rgb(0 13 21 / 24%);
   object-fit: contain;
+  transition:
+    box-shadow 180ms ease-out,
+    transform 180ms var(--ease);
 }
 
 .source-hero__proof figcaption {
@@ -664,7 +685,24 @@ p {
   font-size: clamp(1.2rem, 1.5vw, 1.45rem);
   font-weight: 600;
   line-height: 1.22;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 0.075em;
+  text-underline-offset: 0.18em;
   text-wrap: balance;
+  transition:
+    color 180ms ease-out,
+    text-decoration-color 180ms ease-out;
+}
+
+.source-hero__journal-card:focus-visible img {
+  box-shadow: 0 1.05rem 3rem rgb(0 13 21 / 38%);
+  transform: translateY(-0.12rem);
+}
+
+.source-hero__journal-card:focus-visible strong {
+  color: var(--footer-text);
+  text-decoration-color: currentcolor;
 }
 
 
@@ -2676,10 +2714,6 @@ p {
     gap: 0.9rem;
   }
 
-  .source-hero__proof img {
-    border-color: rgb(255 248 237 / 72%);
-  }
-
   .source-hero__proof figcaption {
     gap: 0.25rem;
     margin-top: 0;
@@ -3360,19 +3394,14 @@ p {
     transform: translateY(-0.08rem);
   }
 
-  .source-hero__proof img {
-    transition:
-      border-color 180ms ease-out,
-      transform 180ms var(--ease);
-  }
-
-  .source-hero__proof:hover img {
-    border-color: var(--footer-text);
+  .source-hero__journal-card[data-stack-position="0"]:hover img {
+    box-shadow: 0 1.05rem 3rem rgb(0 13 21 / 38%);
     transform: translateY(-0.12rem);
   }
 
-  .source-hero__proof:hover strong {
+  .source-hero__journal-card[data-stack-position="0"]:hover strong {
     color: var(--footer-text);
+    text-decoration-color: currentcolor;
   }
 
   .floating-menu:hover {

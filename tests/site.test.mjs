@@ -184,6 +184,11 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
 
   assert.match(hero, /data-hero-journal/);
   assert.match(hero, /aria-roledescription="карусель"/);
+  assert.match(hero, /aria-describedby="hero-journal-instructions"/);
+  assert.match(
+    hero,
+    /Переключайте записи кнопками или клавишами со стрелками влево и вправо\./,
+  );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 3);
   for (const id of [682, 681, 680]) {
     assert.match(hero, new RegExp("https://t\\.me/kapitanseledkin/" + id));
@@ -194,7 +199,11 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(hero, /data-hero-journal-next/);
   assert.match(hero, /data-hero-journal-all/);
   assert.match(hero, /href="#journal"/);
-  assert.equal((hero.match(/class="source-hero__journal-control"/g) ?? []).length, 3);
+  assert.match(hero, />Весь журнал<\/span>/);
+  assert.equal(
+    (hero.match(/source-hero__journal-control(?:\s|")/g) ?? []).length,
+    3,
+  );
   assert.match(hero, /aria-live="polite"/);
   assert.match(styles, /\.source-hero__journal-stack\s*\{[\s\S]*?touch-action:\s*pan-y;/);
   assert.match(styles, /\.source-hero__journal-card\[aria-hidden="true"\] figcaption/);
@@ -231,6 +240,17 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     styles,
     /\.source-hero__proof img\s*\{[^}]*aspect-ratio:\s*647\s*\/\s*800;[^}]*object-fit:\s*contain;/s,
   );
+  const heroImage =
+    styles.match(/\.source-hero__proof img\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.doesNotMatch(heroImage, /border/);
+  assert.match(
+    styles,
+    /\.source-hero__journal-card\[data-stack-position="0"\]:hover img\s*\{[^}]*transform:\s*translateY\(-0\.12rem\);/s,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__journal-card:focus-visible strong\s*\{[^}]*text-decoration-color:\s*currentcolor;/s,
+  );
   assert.match(heroControl, /background:\s*var\(--jelly-glass-surface\)/);
   assert.doesNotMatch(
     styles,
@@ -243,9 +263,14 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.doesNotMatch(hero, /Запись №|source-hero__proof-link|>Перейти к записи в журнале</);
   assert.match(siteScript, /heroJournalNext\.hidden = !hasNext/);
   assert.match(siteScript, /heroJournalAll\.hidden = hasNext/);
-  assert.match(siteScript, /\"Дальше — журнал\"/);
+  assert.match(siteScript, /heroJournalCounter\.textContent = position/);
+  assert.doesNotMatch(siteScript, /Дальше — журнал/);
   assert.match(siteScript, /event\.key === "ArrowLeft"/);
   assert.match(siteScript, /event\.key === "ArrowRight"/);
+  assert.match(
+    siteScript,
+    /heroJournalCards\[currentIndex\]\.focus\(\{ preventScroll: true \}\)/,
+  );
   assert.match(siteScript, /Math\.abs\(deltaX\) < 48/);
   assert.match(siteScript, /card\.inert = !active/);
   assert.doesNotMatch(siteScript, /setInterval\s*\(/);

@@ -331,9 +331,13 @@
           <section
             class="source-hero__journal"
             aria-label="Свежие записи Судового журнала"
+            aria-describedby="hero-journal-instructions"
             aria-roledescription="карусель"
             data-hero-journal
           >
+            <p class="visually-hidden" id="hero-journal-instructions">
+              Переключайте записи кнопками или клавишами со стрелками влево и вправо.
+            </p>
             <div class="source-hero__journal-stack" data-hero-journal-stack>
               <a
                 class="source-hero__proof source-hero__journal-card"
@@ -437,13 +441,13 @@
                   </svg>
                 </button>
                 <a
-                  class="source-hero__journal-control"
+                  class="source-hero__journal-control source-hero__journal-control--all"
                   href="#journal"
-                  aria-label="Перейти к Судовому журналу"
                   hidden
                   tabindex="-1"
                   data-hero-journal-all
                 >
+                  <span>Весь журнал</span>
                   <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
                     <use href="#icon-harpoon" />
                   </svg>

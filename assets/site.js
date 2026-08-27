@@ -237,9 +237,7 @@ if (
 
     const position = String(currentIndex + 1) + " из " + String(heroJournalCards.length);
     if (heroJournalCounter) {
-      heroJournalCounter.textContent = hasNext
-        ? position
-        : "Дальше — журнал";
+      heroJournalCounter.textContent = position;
     }
     if (heroJournalStatus) {
       heroJournalStatus.textContent =
@@ -260,7 +258,7 @@ if (
     currentIndex = nextIndex;
     syncJournal();
     if (focusCard) {
-      requestAnimationFrame(() => heroJournalCards[currentIndex].focus());
+      heroJournalCards[currentIndex].focus({ preventScroll: true });
     }
   };
 
