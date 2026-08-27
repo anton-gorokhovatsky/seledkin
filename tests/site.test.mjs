@@ -52,6 +52,10 @@ const sourceLogo = await readFile(
   new URL("../assets/logo-redrawn.svg", import.meta.url),
   "utf8",
 );
+const favicon = await readFile(
+  new URL("../assets/favicon.svg", import.meta.url),
+  "utf8",
+);
 const nightSeaManifest = JSON.parse(
   await readFile(
     new URL("../assets/hero-sea-night.manifest.json", import.meta.url),
@@ -199,6 +203,20 @@ test("the home brand marks the current page without linking to itself", () => {
   assert.doesNotMatch(homeHeader, /<a class="source-brand"/);
   assert.doesNotMatch(homeMenuMasthead, /<a class="site-menu__brand"/);
   assert.match(catalogHeader, /<a class="source-brand" href="\.\.\/"/);
+});
+
+test("every page uses the legible fish fragment as its favicon", () => {
+  assert.match(home, /rel="icon" href="assets\/favicon\.svg"/);
+  assert.match(notFoundPage, /rel="icon" href="assets\/favicon\.svg"/);
+  assert.match(catalogPage, /rel="icon" href="\.\.\/assets\/favicon\.svg"/);
+  for (const page of [home, notFoundPage, catalogPage]) {
+    assert.doesNotMatch(page, /rel="icon"[^>]+logo-redrawn\.svg/);
+  }
+  assert.match(favicon, /viewBox="0 0 64 64"/);
+  assert.match(favicon, /prefers-color-scheme:\s*dark/);
+  assert.equal((favicon.match(/<image /g) ?? []).length, 1);
+  assert.doesNotMatch(favicon, /<path|<rect|<g[ >]/);
+  assert.ok(Buffer.byteLength(favicon) < 12_000);
 });
 
 test("home keeps the source ks.fish visual sequence and local imagery", () => {
