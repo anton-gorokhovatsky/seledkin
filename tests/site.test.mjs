@@ -596,7 +596,12 @@ test("the footer ends both customer journeys with a useful, human invitation", (
 
   const footerBaseRule =
     styles.match(/\.source-footer__base\s*\{([^}]*)\}/s)?.[1] ?? "";
+  const footerPostscriptRule =
+    styles.match(/\.source-footer__postscript\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.doesNotMatch(footerPostscriptRule, /border-(?:top|bottom)\s*:/);
   assert.match(footerBaseRule, /display:\s*grid/);
+  assert.match(footerBaseRule, /border-top:\s*1px solid var\(--footer-line\)/);
+  assert.doesNotMatch(footerBaseRule, /border-bottom\s*:/);
   assert.match(
     footerBaseRule,
     /grid-template-columns:\s*minmax\(0,\s*1fr\)\s+auto\s+minmax\(0,\s*1fr\)/,
