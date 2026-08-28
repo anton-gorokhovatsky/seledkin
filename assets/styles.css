@@ -1666,7 +1666,6 @@ p {
 }
 
 .source-button--hero-primary,
-.source-button--footer-primary,
 .source-button--menu-primary {
   border-color: var(--footer-text);
   background: var(--footer-text);
@@ -1674,7 +1673,7 @@ p {
 }
 
 .source-button--hero-secondary,
-.source-button--footer-secondary,
+.source-button--footer-contact,
 .source-button--menu-call,
 .source-button--menu-secondary {
   border-color: var(--jelly-glass-border);
@@ -1686,7 +1685,6 @@ p {
 }
 
 .source-button--hero-primary:hover,
-.source-button--footer-primary:hover,
 .source-button--menu-primary:hover {
   border-color: var(--brass);
   background: var(--footer-text);
@@ -1694,12 +1692,19 @@ p {
 }
 
 .source-button--hero-secondary:hover,
-.source-button--footer-secondary:hover,
+.source-button--footer-contact:hover,
 .source-button--menu-call:hover,
 .source-button--menu-secondary:hover {
   border-color: var(--brass);
   background: var(--jelly-glass-surface-strong);
   color: var(--ink);
+}
+
+.source-button--footer-contact:active {
+  border-color: var(--brass);
+  background: var(--jelly-glass-surface-strong);
+  color: var(--ink);
+  transform: translateY(0.04rem) scale(0.98);
 }
 
 .source-footer__portrait {
