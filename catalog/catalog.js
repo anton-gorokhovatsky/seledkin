@@ -8,6 +8,8 @@ const select = document.querySelector("[data-catalog-select]");
 const list = document.querySelector("[data-catalog-list]");
 const count = document.querySelector("[data-catalog-count]");
 const reset = document.querySelector("[data-catalog-reset]");
+const queryFromUrl =
+  new URLSearchParams(window.location.search).get("q")?.trim() ?? "";
 
 const categoryFromHash = window.location.hash.startsWith("#category-")
   ? window.location.hash.replace("#category-", "")
@@ -16,7 +18,7 @@ const categoryFromHash = window.location.hash.startsWith("#category-")
 let activeCategory = catalog.some((category) => category.slug === categoryFromHash)
   ? categoryFromHash
   : allCategories;
-let query = "";
+let query = queryFromUrl;
 let initialHashHandled = false;
 
 function normalize(value) {
@@ -184,4 +186,5 @@ reset.addEventListener("click", () => {
   search.focus();
 });
 
+search.value = query;
 render();
