@@ -852,6 +852,8 @@ test("home catalog is a compact projection of the full catalog", () => {
   assert.equal((preview.match(/class="catalog-product"/g) ?? []).length, 6);
   assert.equal((preview.match(/href="catalog\/"/g) ?? []).length, 1);
   assert.match(preview, /class="catalog-product-head"/);
+  assert.match(styles, /\.catalog-product :is\(h3, h4\)\s*\{/);
+  assert.doesNotMatch(styles, /\.price-preview__grid \.catalog-product\s*\{/);
   assert.match(
     styles,
     /\.price-preview__header\s*\{[^}]*align-items:\s*start;/s,
