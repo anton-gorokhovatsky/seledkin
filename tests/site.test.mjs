@@ -104,6 +104,11 @@ test("one drawn harpoon marks every directional transition", () => {
     styles,
     /\.assortment-directory__link:hover \.assortment-directory__label[\s\S]*?text-decoration-color:\s*currentcolor;[\s\S]*?translateX\(0\.35rem\)/,
   );
+  assert.match(
+    styles,
+    /\.assortment-directory__link:hover,[\s\S]*?box-shadow:\s*inset 0\.18rem 0 0 var\(--blue-deep\);/,
+  );
+  assert.doesNotMatch(styles, /var\(--link\)/);
 });
 
 test("home assortment links directly to every catalog section", () => {
@@ -860,7 +865,7 @@ test("catalog controls reserve the fixed menu zone and product rows stay quiet",
   );
   assert.match(
     styles,
-    /\.catalog-category \+ \.catalog-category\s*\{[^}]*border-top:\s*1px solid var\(--ink\);/,
+    /\.catalog-category \+ \.catalog-category\s*\{[^}]*border-top:\s*1px solid var\(--line\);/,
   );
 });
 
@@ -947,10 +952,11 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
 test("fish shoals keep one direction and two deliberate scale tokens", () => {
   assert.match(styles, /--fish-shoal-width:\s*min\(100%, 52rem\);/);
   assert.match(styles, /--fish-shoal-backdrop-width:\s*clamp\(42rem, 58vw, 62rem\);/);
-  assert.match(styles, /\.catalog-intro::before\s*\{[\s\S]*?width:\s*var\(--fish-shoal-width\);/);
+  assert.match(styles, /\.catalog-intro__shoal\s*\{[\s\S]*?width:\s*var\(--fish-shoal-width\);/);
+  assert.match(catalogPage, /class="catalog-intro__shoal"[\s\S]*?src="\.\.\/assets\/fish-pattern\.svg"/);
   assert.match(styles, /\.catalog-order::before\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?width:\s*var\(--fish-shoal-backdrop-width\);/);
   const patternRules = [...styles.matchAll(/([^{}]+)\{([^{}]*fish-pattern\.svg[^{}]*)\}/g)];
-  assert.ok(patternRules.length >= 5);
+  assert.ok(patternRules.length >= 4);
   for (const [, selector, declarations] of patternRules) {
     assert.doesNotMatch(declarations, /scaleX\(-1\)|transform:\s*rotate\(/, selector.trim());
   }
