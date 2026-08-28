@@ -937,9 +937,9 @@ p {
 
 .about-overview > .source-shell {
   display: grid;
-  grid-template-columns: minmax(0, 0.88fr) minmax(28rem, 1.12fr);
-  align-items: start;
-  column-gap: clamp(3rem, 7vw, 8rem);
+  grid-template-columns: minmax(29rem, 1.02fr) minmax(0, 0.98fr);
+  align-items: center;
+  column-gap: clamp(2.75rem, 5vw, 6rem);
 }
 
 .about-overview__header {
@@ -948,12 +948,12 @@ p {
 }
 
 .about-overview__header h2 {
-  max-width: 11ch;
+  max-width: 15ch;
   margin: 0;
   font-family: var(--serif);
-  font-size: clamp(3.5rem, 5.4vw, 5.75rem);
+  font-size: clamp(3rem, 3.9vw, 4.35rem);
   font-weight: 400;
-  line-height: 0.94;
+  line-height: 0.98;
   text-wrap: balance;
 }
 
@@ -967,8 +967,8 @@ p {
 }
 
 .about-overview__introduction {
-  max-width: 37rem;
-  margin-top: clamp(2.25rem, 4vw, 3.75rem);
+  max-width: 38rem;
+  margin-top: clamp(2rem, 3vw, 3.25rem);
 }
 
 .about-overview__introduction p {
@@ -983,7 +983,7 @@ p {
 }
 
 .about-overview__opening-media {
-  width: min(100%, 43rem);
+  width: 100%;
   margin: 0;
   grid-column: 2;
   grid-row: 1;
@@ -998,28 +998,33 @@ p {
 }
 
 .about-overview__reasons {
-  margin-top: clamp(7rem, 10vw, 9rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(21rem, 0.92fr);
+  column-gap: clamp(2.75rem, 5vw, 5.5rem);
+  margin-top: clamp(5.5rem, 8vw, 8rem);
   grid-column: 1 / -1;
 }
 
 .about-overview__reasons-header {
   display: block;
+  grid-column: 1 / -1;
 }
 
 .about-overview__reasons-header h3 {
-  max-width: 11ch;
+  max-width: 14ch;
   margin: 0;
   font-family: var(--serif);
-  font-size: clamp(3.35rem, 5.8vw, 5.8rem);
+  font-size: clamp(3.1rem, 4.8vw, 5rem);
   font-weight: 400;
-  line-height: 0.96;
+  line-height: 0.98;
   text-wrap: balance;
 }
 
 .about-overview__story-stage {
   display: grid;
   gap: clamp(6rem, 10vw, 9rem);
-  margin-top: clamp(3rem, 5vw, 4.5rem);
+  grid-column: 1 / -1;
+  margin-top: clamp(2.5rem, 3.5vw, 3.5rem);
   touch-action: pan-y;
 }
 
@@ -1029,9 +1034,9 @@ p {
 
 .about-overview__chapter {
   display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(22rem, 0.82fr);
-  align-items: start;
-  gap: clamp(3rem, 6vw, 7rem);
+  grid-template-columns: minmax(0, 1.08fr) minmax(21rem, 0.92fr);
+  align-items: center;
+  gap: clamp(2.75rem, 5vw, 5.5rem);
 }
 
 .js .about-overview__chapter[hidden] {
@@ -1044,9 +1049,9 @@ p {
 }
 
 .about-overview__reason {
-  width: min(100%, 35rem);
+  width: min(100%, 33rem);
   min-width: 0;
-  padding-top: clamp(0.5rem, 2vw, 2rem);
+  padding-top: 0;
 }
 
 .about-overview__number {
@@ -1067,12 +1072,12 @@ p {
 
 .about-overview__reason p > strong:first-child {
   display: block;
-  max-width: 12ch;
-  margin-bottom: 1.35rem;
+  max-width: 14ch;
+  margin-bottom: 1rem;
   font-family: var(--serif);
-  font-size: clamp(2.55rem, 4vw, 4.25rem);
+  font-size: clamp(2.3rem, 3vw, 3.45rem);
   font-weight: 400;
-  line-height: 0.98;
+  line-height: 1.02;
   text-wrap: balance;
 }
 
@@ -1082,11 +1087,14 @@ p {
 
 .js .about-overview__story-controls {
   display: grid;
-  width: min(100%, 24rem);
+  width: min(100%, 21rem);
   grid-template-columns: 3.25rem minmax(0, 1fr) 3.25rem;
   align-items: center;
   gap: 0.8rem;
-  margin: clamp(2rem, 4vw, 3rem) 0 0 auto;
+  grid-column: 2;
+  justify-self: start;
+  align-self: start;
+  margin: clamp(1.5rem, 2.5vw, 2rem) 0 0;
 }
 
 .about-overview__story-control {
@@ -1144,7 +1152,7 @@ p {
 
 .full-photo {
   width: min(calc(100% - var(--page-outer)), var(--shell));
-  margin: 0 auto clamp(7rem, 12vw, 12rem);
+  margin: 0 auto clamp(4.5rem, 8vw, 7rem);
 }
 
 .full-photo img {
@@ -1154,14 +1162,14 @@ p {
 }
 
 .source-quote {
-  padding: 0 0 clamp(7rem, 12vw, 12rem);
+  padding: 0 0 clamp(5rem, 8vw, 7rem);
 }
 
 .source-quote__inner {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.85fr);
-  align-items: end;
-  gap: clamp(3rem, 8vw, 9rem);
+  grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 6rem);
 }
 
 .source-quote img {
@@ -1171,25 +1179,25 @@ p {
 }
 
 .source-quote blockquote {
-  max-width: 14ch;
+  max-width: 16ch;
   margin: 0 0 0.5rem;
   font-family: var(--serif);
-  font-size: clamp(2.35rem, 4.1vw, 4.2rem);
+  font-size: clamp(2.25rem, 3.6vw, 3.8rem);
   font-weight: 400;
-  line-height: 1.06;
+  line-height: 1.08;
   text-wrap: balance;
 }
 
 .founder-source {
-  padding: clamp(6rem, 10vw, 10rem) 0;
+  padding: clamp(5rem, 8vw, 7.5rem) 0;
   background: var(--surface-water);
 }
 
 .founder-source__inner {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(24rem, 1.1fr);
-  align-items: start;
-  gap: clamp(3rem, 8vw, 9rem);
+  grid-template-columns: minmax(0, 0.95fr) minmax(24rem, 1.05fr);
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 6rem);
 }
 
 .founder-source__inner > img {
@@ -1200,7 +1208,7 @@ p {
 
 .founder-source__copy {
   max-width: 43rem;
-  padding-top: clamp(0rem, 2vw, 2rem);
+  padding-top: 0;
 }
 
 .founder-source__copy h2 {
@@ -2874,8 +2882,8 @@ p {
   }
 
   .about-overview__header h2 {
-    max-width: 13ch;
-    font-size: clamp(3.75rem, 10.5vw, 5.75rem);
+    max-width: 16ch;
+    font-size: clamp(3rem, 7.2vw, 4.5rem);
   }
 
   .about-overview__introduction {
@@ -2884,37 +2892,56 @@ p {
   }
 
   .about-overview__opening-media {
-    width: min(88%, 50rem);
-    margin-top: 4rem;
+    width: min(100%, 48rem);
+    margin-top: 3.5rem;
   }
 
   .about-overview__reasons {
-    margin-top: 6.5rem;
+    display: block;
+    margin-top: 5.5rem;
   }
 
   .about-overview__reasons-header h3 {
-    font-size: clamp(3.25rem, 9vw, 5rem);
+    max-width: 14ch;
+    font-size: clamp(3rem, 7vw, 4.4rem);
   }
 
   .about-overview__story-stage {
-    margin-top: 4rem;
+    margin-top: 3rem;
   }
 
   .about-overview__chapter {
     min-height: auto;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
     gap: 2.5rem;
   }
 
   .about-overview__reason {
     justify-self: stretch;
+    padding-top: 0;
   }
+
+  .js .about-overview__story-controls {
+    margin: 1.5rem 0 0 auto;
+  }
+
   .full-photo {
-    margin-bottom: 6.5rem;
+    margin-bottom: 5.5rem;
   }
 
   .source-quote {
-    padding-bottom: 6.5rem;
+    padding-bottom: 5.5rem;
+  }
+
+  .source-quote__inner,
+  .founder-source__inner {
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .founder-source {
+    padding: 5rem 0 6rem;
   }
 
   .source-quote__inner {
@@ -3262,61 +3289,80 @@ p {
   }
 
   .about-overview {
-    padding-top: 3.75rem;
+    padding: 3.75rem 0 5rem;
   }
 
   .about-overview__header h2 {
-    font-size: clamp(3rem, 14vw, 4.2rem);
+    max-width: 13ch;
+    font-size: clamp(2.65rem, 11.5vw, 3.45rem);
+    line-height: 1;
+  }
+
+  .about-overview__introduction {
+    margin-top: 2rem;
   }
 
   .about-overview__opening-media {
     width: 100%;
-    margin-top: 3.25rem;
+    margin-top: 2.75rem;
   }
 
   .about-overview__reasons {
-    margin-top: 5.5rem;
+    margin-top: 4.75rem;
   }
 
   .about-overview__reasons-header h3 {
-    font-size: clamp(2.9rem, 13vw, 3.8rem);
+    max-width: 14ch;
+    font-size: clamp(2.55rem, 11vw, 3.25rem);
+    line-height: 1;
   }
 
   .about-overview__story-stage {
-    margin-top: 2.75rem;
+    margin-top: 2.25rem;
   }
 
   .about-overview__chapter {
     grid-template-columns: 1fr;
-    gap: 1.75rem;
+    gap: 1.5rem;
   }
 
   .about-overview__reason {
     width: 100%;
   }
 
+  .about-overview__reason p > strong:first-child {
+    max-width: 14ch;
+    font-size: clamp(2.1rem, 9vw, 2.8rem);
+    line-height: 1.04;
+  }
+
   .js .about-overview__story-controls {
     width: min(100%, 20rem);
-    margin: 2rem auto 0;
+    margin: 1.5rem auto 0;
   }
+
   .source-quote__inner,
   .founder-source__inner {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.75rem;
   }
 
   .source-quote blockquote {
     max-width: 16ch;
-    font-size: clamp(2.3rem, 11vw, 3.2rem);
+    font-size: clamp(2.1rem, 9.6vw, 2.9rem);
   }
 
-  .full-photo,
+  .full-photo {
+    margin-bottom: 4rem;
+  }
+
   .source-quote {
     margin-bottom: 0;
+    padding-bottom: 4.5rem;
   }
 
   .founder-source {
-    padding: 4.5rem 0 5.5rem;
+    padding: 4rem 0 4.5rem;
   }
 
   .source-copy h2 {
