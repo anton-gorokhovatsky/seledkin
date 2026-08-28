@@ -427,8 +427,13 @@ if (
     }
   });
 
+  aboutStoryStage.addEventListener("dragstart", (event) => {
+    event.preventDefault();
+  });
+
   aboutStoryStage.addEventListener("pointerdown", (event) => {
     if (!event.isPrimary) return;
+    aboutStoryStage.setPointerCapture(event.pointerId);
     pointerStart = {
       id: event.pointerId,
       x: event.clientX,

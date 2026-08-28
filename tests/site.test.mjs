@@ -176,7 +176,9 @@ test("home about section keeps Oleg's evidence without the old product longread"
     /\.about-overview__(?:opening|chapter)-media(?: img)?\s*\{[^}]*object-fit:/s,
   );
   assert.match(siteScript, /aboutStories\.addEventListener\("keydown"/);
+  assert.match(siteScript, /aboutStoryStage\.addEventListener\("dragstart"/);
   assert.match(siteScript, /aboutStoryStage\.addEventListener\("pointerdown"/);
+  assert.match(siteScript, /aboutStoryStage\.setPointerCapture\(event\.pointerId\)/);
   assert.match(siteScript, /aboutStoryStage\.addEventListener\("pointerup"/);
   assert.doesNotMatch(siteScript, /aboutStories[\s\S]*?setInterval\s*\(/);
   for (const asset of [
