@@ -883,18 +883,44 @@ test("catalog search and filters expose accessible state", () => {
   }
 });
 
-test("catalog controls reserve the fixed menu zone and product rows stay quiet", () => {
+test("catalog entry stacks its copy, search and categories without decorative dividers", () => {
   assert.match(
-    styles,
-    /\.controls-grid\s*\{[\s\S]*?grid-template-columns:\s*minmax\(13rem, 16rem\) minmax\(0, 1fr\);/,
+    catalogPage,
+    /class="catalog-intro__stack"[\s\S]*?<h1>Продукты и цены<\/h1>[\s\S]*?class="catalog-controls"[\s\S]*?data-catalog-search[\s\S]*?id="catalog-filter-label">Категории<[\s\S]*?data-catalog-filters/,
   );
   assert.match(
     styles,
-    /\.controls-grid\s*\{[\s\S]*?padding-right:\s*calc\(8\.35rem \+ 1\.5rem\);/,
+    /\.catalog-intro__stack\s*\{[^}]*display:\s*grid;[^}]*width:\s*min\(100%, 47rem\);[^}]*gap:/s,
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.controls-grid\s*\{[\s\S]*?padding-right:\s*4rem;/,
+    /\.catalog-intro h1\s*\{[^}]*overflow-wrap:\s*normal;/s,
+  );
+  assert.match(
+    styles,
+    /\.catalog-intro__copy\s*\{[^}]*width:\s*min\(56vw, 43rem\);/s,
+  );
+  assert.match(
+    styles,
+    /\.controls-grid\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\);/s,
+  );
+  const controlsRule =
+    styles.match(/\.catalog-controls\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.doesNotMatch(
+    controlsRule,
+    /position:\s*sticky|border|background|box-shadow|backdrop-filter/,
+  );
+  assert.match(
+    styles,
+    /\.catalog-filters\s*\{[^}]*flex-wrap:\s*wrap;[^}]*gap:\s*0\.25rem 0\.75rem;/s,
+  );
+  assert.match(
+    styles,
+    /\.catalog-results\s*\{[^}]*padding:\s*1rem 0 3rem;/s,
+  );
+  assert.match(
+    styles,
+    /\.catalog-category:first-child\s*\{[^}]*padding-top:\s*1\.75rem;/s,
   );
   assert.match(
     styles,
@@ -903,10 +929,6 @@ test("catalog controls reserve the fixed menu zone and product rows stay quiet",
   const productRule =
     styles.match(/\.catalog-product\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.doesNotMatch(productRule, /border(?:-bottom)?:/);
-  assert.match(
-    styles,
-    /\.catalog-filters\s*\{[\s\S]*?overflow-x:\s*auto;[\s\S]*?scrollbar-width:\s*thin;/,
-  );
   assert.match(
     styles,
     /\.catalog-product-head::after\s*\{[\s\S]*?border-bottom:\s*1px dotted var\(--muted\);/,
@@ -923,7 +945,6 @@ test("one restrained jelly material serves translucent controls", () => {
   assert.match(lightRoot, /--jelly-glass-filter:\s*blur\(0\.85rem\) saturate\(106%\);/);
   for (const selector of [
     "floating-menu",
-    "catalog-controls",
     "contacts-source__map-toggle",
     "source-hero__journal-control",
     "about-overview__story-control",
@@ -1010,12 +1031,12 @@ test("catalog shoal keeps one fixed scale and exits through the right edge", () 
   assert.match(styles, /\.catalog-intro\s*\{[^}]*overflow:\s*hidden;/s);
   assert.match(
     styles,
-    /\.catalog-intro__shoal\s*\{[^}]*position:\s*absolute;[^}]*right:\s*-26rem;[^}]*width:\s*var\(--fish-shoal-width\);[^}]*max-width:\s*none;[^}]*transform:\s*translateY\(-50%\);[^}]*pointer-events:\s*none;/s,
+    /\.catalog-intro__shoal\s*\{[^}]*position:\s*absolute;[^}]*right:\s*-32rem;[^}]*width:\s*var\(--fish-shoal-width\);[^}]*max-width:\s*none;[^}]*pointer-events:\s*none;/s,
   );
   assert.doesNotMatch(styles, /\.catalog-intro__shoal\s*\{[^}]*width:\s*min/s);
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*right:\s*-39rem;/s,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*right:\s*-37rem;/s,
   );
   assert.match(
     styles,

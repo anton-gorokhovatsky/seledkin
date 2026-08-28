@@ -2190,29 +2190,34 @@ p {
 .catalog-intro {
   position: relative;
   overflow: hidden;
-  padding: clamp(3.25rem, 5vw, 5rem) 0;
+  padding: clamp(3rem, 4.5vw, 4.25rem) 0 clamp(2.5rem, 3.5vw, 3.5rem);
   text-align: left;
 }
 
 .catalog-intro__layout {
-  display: block;
+  position: relative;
+}
+
+.catalog-intro__stack {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: min(100%, 47rem);
+  gap: clamp(2rem, 3vw, 2.75rem);
 }
 
 .catalog-intro__copy {
-  position: relative;
-  z-index: 1;
-  width: min(50vw, 43rem);
+  width: min(56vw, 43rem);
 }
 
 .catalog-intro__shoal {
   position: absolute;
-  top: 50%;
-  right: -26rem;
+  top: clamp(1.5rem, 3vw, 2.75rem);
+  right: -32rem;
   display: block;
   width: var(--fish-shoal-width);
   max-width: none;
   height: auto;
-  transform: translateY(-50%);
   filter: var(--pattern-filter);
   opacity: var(--pattern-opacity);
   pointer-events: none;
@@ -2222,37 +2227,31 @@ p {
   margin: 0 0 1.25rem;
   font-size: clamp(3.25rem, 5.4vw, 5.5rem);
   line-height: 0.96;
+  overflow-wrap: normal;
 }
 
 .catalog-intro p {
-  width: min(100%, 43rem);
+  width: min(100%, 40rem);
   margin: 0;
   font-size: var(--text-reading);
   line-height: 1.65;
 }
 
 .catalog-controls {
-  position: sticky;
-  z-index: 20;
-  top: 0;
-  padding: 1.2rem 0;
-  border-block: 1px solid var(--jelly-glass-border);
-  background: var(--jelly-glass-surface-strong);
-  box-shadow: var(--jelly-glass-shadow);
-  -webkit-backdrop-filter: var(--jelly-glass-filter);
-  backdrop-filter: var(--jelly-glass-filter);
+  position: relative;
+  z-index: 1;
 }
 
 .controls-grid {
   display: grid;
-  grid-template-columns: minmax(13rem, 16rem) minmax(0, 1fr);
-  align-items: end;
-  gap: clamp(1rem, 1.5vw, 1.5rem);
-  padding-right: calc(8.35rem + 1.5rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1rem, 1.5vw, 1.25rem);
 }
 
 .catalog-search {
   display: grid;
+  width: min(100%, 25rem);
   gap: 0.4rem;
   font-size: var(--text-meta);
   font-weight: 600;
@@ -2270,15 +2269,19 @@ p {
     background-color 180ms ease-out;
 }
 
+.catalog-filter-field {
+  display: grid;
+  gap: 0.35rem;
+  font-size: var(--text-meta);
+  font-weight: 600;
+}
+
 .catalog-filters {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 0.5rem;
-  padding-bottom: 0.15rem;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scrollbar-width: thin;
+  gap: 0.25rem 0.75rem;
 }
 
 .catalog-filters button,
@@ -2309,7 +2312,7 @@ p {
 }
 
 .catalog-results {
-  padding: 3rem 0;
+  padding: 1rem 0 3rem;
 }
 
 .catalog-result-line {
@@ -2333,6 +2336,10 @@ p {
 .catalog-category {
   padding: 4.5rem 0 2rem;
   scroll-margin-top: 10rem;
+}
+
+.catalog-category:first-child {
+  padding-top: 1.75rem;
 }
 
 .catalog-category + .catalog-category {
@@ -3156,34 +3163,34 @@ p {
   }
 
   .catalog-intro {
-    padding: 2.5rem 0 3rem;
+    padding: 2.5rem 0;
+  }
+
+  .catalog-intro__stack {
+    width: min(100%, 39rem);
+    gap: 2rem;
   }
 
   .catalog-intro__copy {
-    width: calc(100% - 15rem);
-    max-width: 39rem;
+    width: min(calc(100% - 15rem), 34rem);
   }
 
   .catalog-intro__shoal {
-    right: -39rem;
-  }
-
-  .catalog-controls {
-    position: relative;
+    right: -37rem;
   }
 
   .controls-grid {
     grid-template-columns: 1fr;
-    gap: 0.8rem;
-    padding-right: 4rem;
+    gap: 1rem;
   }
 
-  .catalog-filters {
+  .catalog-filter-field {
     display: none;
   }
 
   .catalog-select {
     display: grid;
+    width: min(100%, 25rem);
     gap: 0.4rem;
     font-size: var(--text-meta);
     font-weight: 600;
@@ -3202,7 +3209,7 @@ p {
   }
 
   .catalog-results {
-    padding-top: 1.5rem;
+    padding-top: 1rem;
   }
 
   .catalog-category {
@@ -3251,12 +3258,36 @@ p {
     width: min(calc(100% - var(--page-outer)), var(--shell));
   }
 
+  .catalog-intro {
+    padding: 2.25rem 0;
+  }
+
+  .catalog-intro__stack {
+    width: 100%;
+    gap: 1.75rem;
+  }
+
   .catalog-intro__copy {
-    width: calc(100% - 5rem);
+    width: calc(100% - 4.5rem);
   }
 
   .catalog-intro__shoal {
+    top: 1rem;
     right: -48rem;
+  }
+
+  .catalog-intro h1 {
+    margin-bottom: 1rem;
+    font-size: clamp(2.65rem, 13vw, 3.25rem);
+  }
+
+  .catalog-intro p {
+    line-height: 1.55;
+  }
+
+  .catalog-search,
+  .catalog-select {
+    width: 100%;
   }
 
   .assortment-overview {

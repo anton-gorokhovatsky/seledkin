@@ -240,12 +240,42 @@
     <main id="main" tabindex="-1">
       <section class="catalog-intro">
         <div class="source-shell catalog-intro__layout">
-          <div class="catalog-intro__copy">
-            <h1>Продукты и цены</h1>
-            <p>
-              В каталоге опубликованы действующие цены. Наличие конкретной позиции
-              можно уточнить у лавки перед заказом или поездкой.
-            </p>
+          <div class="catalog-intro__stack">
+            <div class="catalog-intro__copy">
+              <h1>Продукты и цены</h1>
+              <p>
+                В каталоге опубликованы действующие цены. Наличие конкретной позиции
+                можно уточнить у лавки перед заказом или поездкой.
+              </p>
+            </div>
+
+            <section class="catalog-controls" aria-label="Поиск и фильтры каталога">
+              <div class="controls-grid">
+                <label class="catalog-search">
+                  <span>Найти товар</span>
+                  <input
+                    type="search"
+                    inputmode="search"
+                    autocomplete="off"
+                    placeholder="Например, нерка"
+                    data-catalog-search
+                  />
+                </label>
+                <div class="catalog-filter-field">
+                  <span id="catalog-filter-label">Категории</span>
+                  <div
+                    class="catalog-filters"
+                    role="group"
+                    aria-labelledby="catalog-filter-label"
+                    data-catalog-filters
+                  ></div>
+                </div>
+                <label class="catalog-select">
+                  <span>Категория</span>
+                  <select data-catalog-select></select>
+                </label>
+              </div>
+            </section>
           </div>
           <img
             class="catalog-intro__shoal"
@@ -255,31 +285,6 @@
             alt=""
             aria-hidden="true"
           />
-        </div>
-      </section>
-
-      <section class="catalog-controls" aria-label="Поиск и фильтры каталога">
-        <div class="source-shell controls-grid">
-          <label class="catalog-search">
-            <span>Найти товар</span>
-            <input
-              type="search"
-              inputmode="search"
-              autocomplete="off"
-              placeholder="Например, нерка"
-              data-catalog-search
-            />
-          </label>
-          <div
-            class="catalog-filters"
-            role="group"
-            aria-label="Категории"
-            data-catalog-filters
-          ></div>
-          <label class="catalog-select">
-            <span>Категория</span>
-            <select data-catalog-select></select>
-          </label>
         </div>
       </section>
 
