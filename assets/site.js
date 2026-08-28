@@ -285,6 +285,22 @@ if (
     showJournalCard(currentIndex + 1);
   });
 
+  heroJournalCards.forEach((card) => {
+    card.addEventListener("click", (event) => {
+      const targetId = decodeURIComponent(card.hash.slice(1));
+      const target = document.getElementById(targetId);
+      if (!(target instanceof HTMLElement)) return;
+
+      event.preventDefault();
+      history.pushState(null, "", card.hash);
+      target.scrollIntoView({
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+        block: "start",
+      });
+      target.focus({ preventScroll: true });
+    });
+  });
+
   heroJournal.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft") {
       event.preventDefault();

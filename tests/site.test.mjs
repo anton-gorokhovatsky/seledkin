@@ -201,7 +201,7 @@ test("home exposes the core customer jobs", () => {
   assert.match(hero, /href="catalog\/"/);
   assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
-  assert.match(hero, /href="https:\/\/t\.me\/kapitanseledkin\/682"/);
+  assert.match(hero, /href="#journal-entry-682"/);
   assert.match(hero, /src="assets\/journal-682\.jpg"/);
   assert.match(hero, /datetime="2026-08-25"/);
   assert.match(hero, /У&nbsp;нас новый завоз царского малосольного тугунка/);
@@ -228,16 +228,17 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 3);
   for (const id of [682, 681, 680]) {
-    assert.match(hero, new RegExp("https://t\\.me/kapitanseledkin/" + id));
+    assert.match(hero, new RegExp("href=\"#journal-entry-" + id + "\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }
+  assert.doesNotMatch(hero, /https:\/\/t\.me\/kapitanseledkin\/68[012]/);
 
   assert.match(hero, /data-hero-journal-previous/);
   assert.match(hero, /data-hero-journal-next/);
   assert.match(hero, /data-hero-journal-all/);
   assert.match(hero, /href="#journal"/);
   assert.match(hero, /aria-label="Открыть весь Судовой журнал"/);
-  assert.match(hero, />Открыть журнал<\/span>/);
+  assert.match(hero, />Весь журнал<\/span>/);
   assert.equal(
     (hero.match(/source-hero__journal-control(?:\s|")/g) ?? []).length,
     3,
@@ -321,6 +322,12 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(siteScript, /Math\.abs\(deltaX\) < 48/);
   assert.match(siteScript, /card\.inert = !active/);
+  assert.match(siteScript, /target\.scrollIntoView\(\{/);
+  assert.match(
+    siteScript,
+    /behavior:\s*reducedMotion\.matches \? "auto" : "smooth"/,
+  );
+  assert.match(siteScript, /target\.focus\(\{ preventScroll: true \}\)/);
   assert.doesNotMatch(siteScript, /setInterval\s*\(/);
 });
 
@@ -502,7 +509,15 @@ test("the typographic scale protects reading and interface text", () => {
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(home, /id="journal"/);
   assert.match(home, /<h2 id="journal-title">Судовой журнал<\/h2>/);
-  assert.equal((home.match(/<article class="ship-log-entry">/g) ?? []).length, 4);
+  assert.equal((home.match(/<article class="ship-log-entry"/g) ?? []).length, 4);
+  for (const id of [682, 681, 680]) {
+    assert.match(
+      home,
+      new RegExp(
+        `<article class="ship-log-entry" id="journal-entry-` + id + `" tabindex="-1">`,
+      ),
+    );
+  }
   assert.match(home, /https:\/\/t\.me\/kapitanseledkin"/);
 
   let cursor = -1;
@@ -667,8 +682,18 @@ test("the footer ends both customer journeys with a useful, human invitation", (
 
   const footerBaseRule =
     styles.match(/\.source-footer__base\s*\{([^}]*)\}/s)?.[1] ?? "";
+  const footerContentRule =
+    styles.match(/\.source-footer__content\s*\{([^}]*)\}/s)?.[1] ?? "";
   const footerPostscriptRule =
     styles.match(/\.source-footer__postscript\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(
+    footerContentRule,
+    /padding-block:\s*clamp\(5rem, 9vw, 8rem\) clamp\(2rem, 3vw, 3rem\)/,
+  );
+  assert.match(
+    footerPostscriptRule,
+    /padding-block:\s*0 clamp\(2\.5rem, 4vw, 3\.5rem\)/,
+  );
   assert.doesNotMatch(footerPostscriptRule, /border-(?:top|bottom)\s*:/);
   assert.match(footerBaseRule, /display:\s*grid/);
   assert.match(footerBaseRule, /border-top:\s*1px solid var\(--footer-line\)/);
@@ -687,7 +712,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
   );
   assert.match(
     styles,
-    /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__postscript\s*\{[^}]*padding-block:\s*1\.25rem 2\.25rem;/,
+    /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__postscript\s*\{[^}]*padding-block:\s*0 2\.25rem;/,
   );
 });
 

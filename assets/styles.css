@@ -535,10 +535,10 @@ p {
 
 .js .source-hero__journal-controls {
   display: grid;
-  width: calc(100% - 1.15rem);
-  grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+  width: 100%;
+  grid-template-columns: 2.75rem minmax(3.5rem, 1fr) minmax(2.75rem, auto);
   align-items: center;
-  gap: 0.65rem;
+  gap: clamp(0.65rem, 2vw, 1rem);
   margin-top: 0.4rem;
 }
 
@@ -565,6 +565,7 @@ p {
 
 .source-hero__journal-next-slot {
   display: grid;
+  width: 100%;
   min-width: 2.75rem;
   height: 2.75rem;
   justify-items: end;
@@ -580,7 +581,7 @@ p {
 
 .source-hero__journal-control--all {
   width: auto;
-  min-width: 8.75rem;
+  min-width: 7.75rem;
   padding: 0 0.8rem 0 1rem;
   border-radius: 999px;
   grid-auto-flow: column;
@@ -590,6 +591,10 @@ p {
   letter-spacing: 0.055em;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+.source-hero__journal-all-label--short {
+  display: none;
 }
 
 .source-hero__journal-control--all svg {
@@ -1572,7 +1577,7 @@ p {
   grid-template-columns: minmax(18rem, 0.82fr) minmax(0, 1.18fr);
   align-items: center;
   gap: clamp(4rem, 9vw, 8rem);
-  padding-block: clamp(5rem, 9vw, 8rem);
+  padding-block: clamp(5rem, 9vw, 8rem) clamp(2rem, 3vw, 3rem);
 }
 
 .source-footer__details {
@@ -1700,7 +1705,7 @@ p {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: end;
   gap: clamp(2rem, 6vw, 6rem);
-  padding-block: clamp(3rem, 5vw, 4.5rem) clamp(2.5rem, 4vw, 3.5rem);
+  padding-block: 0 clamp(2.5rem, 4vw, 3.5rem);
 }
 
 .source-footer__postscript > p {
@@ -2785,7 +2790,7 @@ p {
 
 
   .js .source-hero__journal-controls {
-    width: calc(100% - 0.75rem);
+    width: 100%;
     margin-top: 0.3rem;
   }
 
@@ -3057,7 +3062,7 @@ p {
   .source-footer__content {
     grid-template-columns: 1fr;
     gap: 4rem;
-    padding-block: 6rem;
+    padding-block: 6rem 2rem;
   }
 
   .source-footer__details,
@@ -3292,6 +3297,19 @@ p {
     width: 100%;
   }
 
+  .source-hero__journal-control--all {
+    min-width: 6.5rem;
+    padding-inline: 0.75rem;
+  }
+
+  .source-hero__journal-all-label--full {
+    display: none;
+  }
+
+  .source-hero__journal-all-label--short {
+    display: inline;
+  }
+
   .source-footer__content {
     gap: 3rem;
     padding-block: 4rem 1.25rem;
@@ -3315,7 +3333,7 @@ p {
   }
 
   .source-footer__postscript {
-    padding-block: 1.25rem 2.25rem;
+    padding-block: 0 2.25rem;
   }
 
   .source-footer__channels {

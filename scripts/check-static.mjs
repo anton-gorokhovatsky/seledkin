@@ -329,7 +329,7 @@ for (const required of ['role="status"', 'aria-live="polite"', 'role="group"']) 
 }
 
 const homePage = readFileSync(join(root, "index.html"), "utf8");
-if ((homePage.match(/<article class="ship-log-entry">/g) ?? []).length !== 4) {
+if ((homePage.match(/<article class="ship-log-entry"/g) ?? []).length !== 4) {
   fail("index.html: «Судовой журнал» должен содержать четыре отобранные записи");
 }
 for (const id of [682, 681, 680, 679]) {
