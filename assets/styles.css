@@ -605,12 +605,29 @@ p {
   transform: rotate(180deg);
 }
 
-.source-hero__journal-control[aria-disabled="true"] {
+.source-hero__journal-control[aria-disabled="true"],
+.source-hero__journal-control:disabled {
   cursor: default;
 }
 
-.source-hero__journal-control[aria-disabled="true"] svg {
+.source-hero__journal-control[aria-disabled="true"] svg,
+.source-hero__journal-control:disabled svg {
   opacity: 0.38;
+}
+
+.source-hero__journal-control:not([aria-disabled="true"]):not(:disabled):active {
+  border-color: var(--brass);
+  background: var(--jelly-glass-surface-strong);
+  transform: translateY(0.04rem) scale(0.96);
+}
+
+.source-hero__journal-card[data-stack-position="0"]:active img {
+  transform: translateY(-0.04rem) scale(0.995);
+}
+
+.source-hero__journal-card[data-stack-position="0"]:active strong {
+  color: var(--footer-text);
+  text-decoration-color: currentcolor;
 }
 
 .source-hero__journal-controls svg {

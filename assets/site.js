@@ -242,6 +242,8 @@ if (
     const hasNext = currentIndex < heroJournalCards.length - 1;
     heroJournalPrevious.setAttribute("aria-disabled", String(!hasPrevious));
     heroJournalNext.setAttribute("aria-disabled", String(!hasNext));
+    heroJournalPrevious.disabled = !hasPrevious;
+    heroJournalNext.disabled = !hasNext;
     heroJournalNext.hidden = !hasNext;
     heroJournalAll.hidden = hasNext;
     heroJournalAll.tabIndex = hasNext ? -1 : 0;

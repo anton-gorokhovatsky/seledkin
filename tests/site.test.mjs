@@ -316,10 +316,17 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /\.source-hero__journal-control\[aria-disabled="true"\] svg\s*\{[^}]*opacity:\s*0\.38;/s,
+    /\.source-hero__journal-control\[aria-disabled="true"\] svg,\s*\.source-hero__journal-control:disabled svg\s*\{[^}]*opacity:\s*0\.38;/s,
   );
   assert.doesNotMatch(hero, /Запись №|source-hero__proof-link|>Перейти к записи в журнале</);
   assert.match(siteScript, /heroJournalNext\.hidden = !hasNext/);
+  assert.match(hero, /aria-disabled="true"\s+disabled\s+data-hero-journal-previous/);
+  assert.match(siteScript, /heroJournalPrevious\.disabled = !hasPrevious/);
+  assert.match(siteScript, /heroJournalNext\.disabled = !hasNext/);
+  assert.match(
+    styles,
+    /\.source-hero__journal-control:not\(\[aria-disabled="true"\]\):not\(:disabled\):active\s*\{[^}]*background:\s*var\(--jelly-glass-surface-strong\);[^}]*transform:\s*translateY\(0\.04rem\) scale\(0\.96\);/s,
+  );
   assert.match(siteScript, /heroJournalAll\.hidden = hasNext/);
   assert.match(siteScript, /heroJournalCounter\.textContent = position/);
   assert.match(
@@ -965,6 +972,8 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
     ".catalog-filters button:hover",
     ".contacts-source__map-toggle:hover",
     ".about-overview__story-control:not([aria-disabled=\"true\"]):hover",
+    ".source-hero__journal-control:not([aria-disabled=\"true\"]):hover",
+    ".source-hero__journal-card[data-stack-position=\"0\"]:hover img",
     ".theme-toggle:not(.theme-toggle--menu):hover",
   ]) {
     assert.ok(
