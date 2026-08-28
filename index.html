@@ -594,31 +594,14 @@
             />
           </figure>
 
-          <div
-            class="about-overview__reasons"
-            role="region"
-            aria-roledescription="карусель"
-            aria-labelledby="about-reasons-title"
-            data-about-stories
-          >
+          <div class="about-overview__reasons" aria-labelledby="about-reasons-title">
             <header class="about-overview__reasons-header">
-              <div>
-                <p class="about-overview__eyebrow">Три причины</p>
-                <h3 id="about-reasons-title">Почему о нас говорят?</h3>
-              </div>
+              <p class="about-overview__eyebrow">Три причины</p>
+              <h3 id="about-reasons-title">Почему о нас говорят?</h3>
             </header>
 
-            <p class="visually-hidden" id="about-stories-instructions">
-              Переключайте причины кнопками или клавишами со стрелками влево и вправо.
-            </p>
-
-            <div
-              class="about-overview__story-stage"
-              tabindex="0"
-              aria-describedby="about-stories-instructions"
-              data-about-story-stage
-            >
-              <article class="about-overview__chapter" data-about-story>
+            <div class="about-overview__story-stage">
+              <article class="about-overview__chapter">
                 <figure class="about-overview__chapter-media">
                   <img
                     src="assets/about-main.jpg"
@@ -628,22 +611,22 @@
                     loading="lazy"
                   />
                 </figure>
-                <div class="about-overview__reason" aria-label="Качество">
+                <div class="about-overview__reason">
                   <span class="about-overview__number" aria-hidden="true">01</span>
+                  <h4>Во-первых, это качество.</h4>
                   <p>
-                    <strong>Во-первых, это качество.</strong> Мы изучаем предложения
-                    поставщиков и выбираем только рыбу свежего завоза и не
-                    вымороженную. Мы закупаем рыбу, быстро замороженную после поимки
-                    прямо на промысле и ни разу с тех пор не размораживавшуюся:
-                    покупатель разморозит её сам уже дома. В лавке её быстро
-                    разбирают, а склада у нас нет, весь наш товар лежит в
-                    прилавках-холодильниках. Поэтому рыба не залеживается, мы
-                    постоянно подвозим свежемороженую продукцию.
+                    Мы изучаем предложения поставщиков и выбираем только рыбу
+                    свежего завоза и не вымороженную. Мы закупаем рыбу, быстро
+                    замороженную после поимки прямо на промысле и ни разу с тех пор
+                    не размораживавшуюся: покупатель разморозит её сам уже дома. В
+                    лавке её быстро разбирают, а склада у нас нет, весь наш товар
+                    лежит в прилавках-холодильниках. Поэтому рыба не залеживается,
+                    мы постоянно подвозим свежемороженую продукцию.
                   </p>
                 </div>
               </article>
 
-              <article class="about-overview__chapter" data-about-story>
+              <article class="about-overview__chapter about-overview__chapter--reverse">
                 <figure class="about-overview__chapter-media">
                   <img
                     src="assets/about-small-2.jpg"
@@ -653,20 +636,20 @@
                     loading="lazy"
                   />
                 </figure>
-                <div class="about-overview__reason" aria-label="Ассортимент">
+                <div class="about-overview__reason">
                   <span class="about-overview__number" aria-hidden="true">02</span>
+                  <h4>Во-вторых, ассортимент.</h4>
                   <p>
-                    <strong>Во-вторых, ассортимент.</strong> Хоть магазин и невелик,
-                    мы предлагаем и достаточно обычную рыбу для повседневного
-                    приготовления, и интересные деликатесы. При этом настоящим
-                    деликатесом могут стать и самые простые, казалось бы, виды —
-                    например, купленная у нас мороженая сельдь, если посолить её
-                    грамотно и правильно.
+                    Хоть магазин и невелик, мы предлагаем и достаточно обычную
+                    рыбу для повседневного приготовления, и интересные деликатесы.
+                    При этом настоящим деликатесом могут стать и самые простые,
+                    казалось бы, виды — например, купленная у нас мороженая сельдь,
+                    если посолить её грамотно и правильно.
                   </p>
                 </div>
               </article>
 
-              <article class="about-overview__chapter" data-about-story>
+              <article class="about-overview__chapter">
                 <figure class="about-overview__chapter-media">
                   <img
                     src="assets/gallery-small-2.jpg"
@@ -676,44 +659,15 @@
                     loading="lazy"
                   />
                 </figure>
-                <div class="about-overview__reason" aria-label="Советы">
+                <div class="about-overview__reason">
                   <span class="about-overview__number" aria-hidden="true">03</span>
+                  <h4>И это наша третья фирменная фишка</h4>
                   <p>
-                    <strong>И это наша третья фирменная фишка</strong> — от слова
-                    «fish», разумеется. Наши продавцы и консультанты всегда делятся
-                    советами — или подскажут, где их прочитать.
+                    — от слова «fish», разумеется. Наши продавцы и консультанты
+                    всегда делятся советами — или подскажут, где их прочитать.
                   </p>
                 </div>
               </article>
-            </div>
-
-            <div class="about-overview__story-controls" data-about-story-controls>
-              <button
-                class="about-overview__story-control"
-                type="button"
-                aria-label="Предыдущая причина"
-                data-about-story-previous
-              >
-                <svg class="harpoon-mark" aria-hidden="true" viewBox="0 0 64 24">
-                  <use href="#icon-harpoon"></use>
-                </svg>
-              </button>
-              <p class="about-overview__story-status" aria-live="polite" aria-atomic="true">
-                <span aria-hidden="true" data-about-story-counter>1 из 3</span>
-                <span class="visually-hidden" data-about-story-status>
-                  Причина 1 из 3: качество.
-                </span>
-              </p>
-              <button
-                class="about-overview__story-control"
-                type="button"
-                aria-label="Следующая причина"
-                data-about-story-next
-              >
-                <svg class="harpoon-mark" aria-hidden="true" viewBox="0 0 64 24">
-                  <use href="#icon-harpoon"></use>
-                </svg>
-              </button>
             </div>
           </div>
         </div>
