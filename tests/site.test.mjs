@@ -976,10 +976,24 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
   );
 });
 
-test("fish shoals keep one direction and two deliberate scale tokens", () => {
-  assert.match(styles, /--fish-shoal-width:\s*min\(100%, 52rem\);/);
+test("catalog shoal keeps one fixed scale and exits through the right edge", () => {
+  assert.match(styles, /--fish-shoal-width:\s*52rem;/);
   assert.match(styles, /--fish-shoal-backdrop-width:\s*clamp\(42rem, 58vw, 62rem\);/);
   assert.match(styles, /\.catalog-intro__shoal\s*\{[\s\S]*?width:\s*var\(--fish-shoal-width\);/);
+  assert.match(styles, /\.catalog-intro\s*\{[^}]*overflow:\s*hidden;/s);
+  assert.match(
+    styles,
+    /\.catalog-intro__shoal\s*\{[^}]*position:\s*absolute;[^}]*right:\s*-26rem;[^}]*width:\s*var\(--fish-shoal-width\);[^}]*max-width:\s*none;[^}]*transform:\s*translateY\(-50%\);[^}]*pointer-events:\s*none;/s,
+  );
+  assert.doesNotMatch(styles, /\.catalog-intro__shoal\s*\{[^}]*width:\s*min/s);
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*right:\s*-39rem;/s,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 34rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*right:\s*-48rem;/s,
+  );
   assert.match(catalogPage, /class="catalog-intro__shoal"[\s\S]*?src="\.\.\/assets\/fish-pattern\.svg"/);
   assert.match(styles, /\.catalog-order::before\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?width:\s*var\(--fish-shoal-backdrop-width\);/);
   const patternRules = [...styles.matchAll(/([^{}]+)\{([^{}]*fish-pattern\.svg[^{}]*)\}/g)];
