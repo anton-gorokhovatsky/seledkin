@@ -267,6 +267,18 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.doesNotMatch(styles, /data-stack-position\^="-"/);
   assert.match(styles, /\.source-hero\s*\{[\s\S]*?height:\s*100svh;/);
+  assert.match(
+    styles,
+    /\.source-hero__copy\s*\{[^}]*min-height:\s*100dvh;/s,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__actions \.source-button--hero-secondary\s*\{[^}]*display:\s*none;/s,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__journal\s*\{[^}]*min-height:\s*100dvh;/s,
+  );
   const heroFigure =
     styles.match(/\.source-hero__proof figure\s*\{([^}]*)\}/s)?.[1] ?? "";
   const heroCaption =

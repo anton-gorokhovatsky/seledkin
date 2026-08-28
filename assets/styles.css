@@ -2708,8 +2708,8 @@ p {
     display: flex;
     width: 100%;
     min-height: 100vh;
-    min-height: 100svh;
-    padding: clamp(10.5rem, 26svh, 13rem) 0 clamp(2.75rem, 8svh, 4.5rem);
+    min-height: 100dvh;
+    padding: clamp(10.5rem, 26dvh, 13rem) 0 clamp(3rem, 8dvh, 4.5rem);
     flex-direction: column;
     justify-content: center;
   }
@@ -2758,27 +2758,25 @@ p {
   }
 
   .source-hero__actions .source-button--hero-secondary {
-    border-color: transparent;
-    background: transparent;
-    color: var(--on-image);
-    box-shadow: none;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    text-decoration: underline;
-    text-decoration-thickness: 0.075em;
-    text-underline-offset: 0.22em;
+    display: none;
   }
 
   .source-hero__journal {
-    display: block;
+    display: grid;
     width: min(100%, 22rem);
     height: auto;
-    min-height: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-items: center;
+    align-content: stretch;
     margin: 0 auto;
-    padding: clamp(3.5rem, 12vw, 5rem) 0 2.5rem;
+    padding: clamp(4.5rem, 10dvh, 7rem) 0 clamp(2.5rem, 6dvh, 4rem);
   }
 
   .source-hero__journal-stack {
+    width: min(74vw, 18rem);
+    margin-inline: auto;
     padding: 0 0.75rem 0.75rem 0;
   }
 
@@ -2790,15 +2788,12 @@ p {
   }
 
   .source-hero__proof figure {
-    display: grid;
-    grid-template-columns: minmax(8rem, 10rem) minmax(0, 1fr);
-    align-items: center;
-    gap: 0.9rem;
+    display: block;
   }
 
   .source-hero__proof figcaption {
     gap: 0.25rem;
-    margin-top: 0;
+    margin-top: 0.8rem;
   }
 
   .source-hero__proof-meta {
