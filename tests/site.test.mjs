@@ -622,14 +622,17 @@ test("the footer ends both customer journeys with a useful, human invitation", (
   for (const page of [home, catalogPage]) {
     assert.match(page, /<footer class="source-footer" aria-labelledby="[^"]+">/);
     assert.match(page, /Лосось на вахте — заходите в лавку/);
-    assert.match(page, /<dl class="source-footer__facts">/);
-    assert.match(page, /Ежедневно, с&nbsp;11:00 до&nbsp;20:00/);
-    assert.match(page, /метро\s+«Вавиловская»/);
-    assert.match(page, /href="tel:\+79166751452"/);
+    assert.doesNotMatch(page, /<dl class="source-footer__facts">/);
+    assert.match(page, /<div class="source-footer__visit">/);
+    assert.match(page, /Каждый день с&nbsp;11:00 до&nbsp;20:00/);
+    const footerMarkup =
+      page.match(/<footer class="source-footer"[\s\S]*?<\/footer>/)?.[0] ?? "";
+    assert.doesNotMatch(footerMarkup, /Ежедневно с&nbsp;11:00 до&nbsp;20:00/);
+    assert.match(page, /метро «Вавиловская»/);
     assert.match(page, /class="source-footer__portrait"/);
     assert.match(page, /salmon-cat\.jpg/);
     for (const label of ["Телеграм-канал", "YouTube", "SoundCloud"]) {
-      assert.ok(page.includes(`<span>${label}</span>`), `В подвале нет подписи ${label}`);
+      assert.ok(page.includes("<span>" + label + "</span>"), "В подвале нет подписи " + label);
     }
     assert.match(
       page,
@@ -640,10 +643,15 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     assert.doesNotMatch(channels, /WhatsApp|social-icons\.svg#whatsapp/);
     const footerActions =
       page.match(/<div class="source-footer__actions"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? "";
-    assert.match(footerActions, /Написать в Телеграме/);
-    assert.match(footerActions, /Написать в WhatsApp/);
-    assert.match(footerActions, /class="source-footer__secondary-action"/);
+    for (const label of ["Позвонить", "Написать в Телеграме", "Написать в WhatsApp"]) {
+      assert.match(footerActions, new RegExp(label));
+    }
+    assert.equal((footerActions.match(/class="source-button /g) ?? []).length, 3);
+    assert.equal((footerActions.match(/source-button--footer-secondary/g) ?? []).length, 2);
+    assert.equal((footerActions.match(/source-button--footer-primary/g) ?? []).length, 1);
+    assert.match(footerActions, /href="tel:\+79166751452"/);
     assert.doesNotMatch(footerActions, /Заказать/);
+    assert.doesNotMatch(page, /<dt>|<dd>/);
   }
 
   const catRule =
@@ -913,7 +921,6 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
     ".catalog-filters button:hover",
     ".contacts-source__map-toggle:hover",
     ".about-overview__story-control:not([aria-disabled=\"true\"]):hover",
-    ".source-footer__secondary-action:hover",
     ".theme-toggle:not(.theme-toggle--menu):hover",
   ]) {
     assert.ok(
@@ -924,7 +931,7 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
 
   assert.match(
     styles,
-    /\.source-footer__secondary-action:hover\s*\{[^}]*color:\s*var\(--footer-text\);/s,
+    /\.source-button--hero-secondary:hover,[\s\S]*?\.source-button--footer-secondary:hover,[\s\S]*?\{[^}]*background:\s*var\(--jelly-glass-surface-strong\);/s,
   );
   assert.match(styles, /:focus-visible\s*\{[^}]*outline:\s*0\.2rem solid var\(--focus\);/s);
   assert.match(
