@@ -991,6 +991,10 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
   assert.match(styles, /:focus-visible\s*\{[^}]*outline:\s*0\.2rem solid var\(--focus\);/s);
   assert.match(
     styles,
+    /\.skip-link:focus\s*\{[^}]*transform:\s*translateY\(0\);[^}]*transition:\s*none;/s,
+  );
+  assert.match(
+    styles,
     /:root\[data-input-modality="pointer"\] \.floating-menu:focus-visible\s*\{[^}]*outline:\s*none;/s,
   );
   assert.doesNotMatch(

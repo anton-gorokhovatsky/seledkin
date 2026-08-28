@@ -285,6 +285,7 @@ p {
 
 .skip-link:focus {
   transform: translateY(0);
+  transition: none;
 }
 
 .source-shell {
