@@ -2664,24 +2664,29 @@ p {
   }
 
   .source-hero {
-    min-height: 44rem;
-    height: 100svh;
+    min-height: 0;
+    height: auto;
+    place-items: stretch;
     background-position: 50% center;
   }
 
   .source-hero__content {
+    display: block;
     width: min(calc(100% - var(--page-outer)), 26rem);
-    height: 100%;
-    grid-template-columns: 1fr;
-    align-content: center;
-    justify-items: stretch;
-    gap: 0;
-    padding-block: 5.75rem 1.5rem;
+    height: auto;
+    min-height: 0;
+    padding: 0;
     text-align: center;
   }
 
   .source-hero__copy {
+    display: flex;
     width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: clamp(10.5rem, 26svh, 13rem) 0 clamp(2.75rem, 8svh, 4.5rem);
+    flex-direction: column;
+    justify-content: center;
   }
 
   .source-hero h1 {
@@ -2743,9 +2748,9 @@ p {
     display: block;
     width: min(100%, 22rem);
     height: auto;
-    margin-top: 1.35rem;
-    align-self: auto;
-    justify-self: center;
+    min-height: 0;
+    margin: 0 auto;
+    padding: clamp(3.5rem, 12vw, 5rem) 0 2.5rem;
   }
 
   .source-hero__journal-stack {
@@ -2761,7 +2766,7 @@ p {
 
   .source-hero__proof figure {
     display: grid;
-    grid-template-columns: minmax(5.75rem, 7.1rem) minmax(0, 1fr);
+    grid-template-columns: minmax(8rem, 10rem) minmax(0, 1fr);
     align-items: center;
     gap: 0.9rem;
   }
