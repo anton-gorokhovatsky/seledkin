@@ -22,6 +22,15 @@ const heroJournalNext = heroJournal?.querySelector("[data-hero-journal-next]");
 const heroJournalAll = heroJournal?.querySelector("[data-hero-journal-all]");
 const heroJournalCounter = heroJournal?.querySelector("[data-hero-journal-counter]");
 const heroJournalStatus = heroJournal?.querySelector("[data-hero-journal-status]");
+const aboutStories = document.querySelector("[data-about-stories]");
+const aboutStoryStage = aboutStories?.querySelector("[data-about-story-stage]");
+const aboutStoryCards = [
+  ...(aboutStories?.querySelectorAll("[data-about-story]") ?? []),
+];
+const aboutStoryPrevious = aboutStories?.querySelector("[data-about-story-previous]");
+const aboutStoryNext = aboutStories?.querySelector("[data-about-story-next]");
+const aboutStoryCounter = aboutStories?.querySelector("[data-about-story-counter]");
+const aboutStoryStatus = aboutStories?.querySelector("[data-about-story-status]");
 const keyboardNavigationKeys = new Set([
   "Tab",
   "Enter",
@@ -332,6 +341,104 @@ if (
   );
 
   syncJournal();
+}
+
+if (
+  aboutStories instanceof HTMLElement &&
+  aboutStoryStage instanceof HTMLElement &&
+  aboutStoryCards.length > 0 &&
+  aboutStoryPrevious instanceof HTMLButtonElement &&
+  aboutStoryNext instanceof HTMLButtonElement
+) {
+  const labels = aboutStoryCards.map(
+    (card) =>
+      card.querySelector(".about-overview__reason")?.getAttribute("aria-label") ?? "",
+  );
+  let currentIndex = 0;
+  let pointerStart = null;
+
+  const syncAboutStories = () => {
+    aboutStoryCards.forEach((card, index) => {
+      const active = index === currentIndex;
+      card.hidden = !active;
+      card.setAttribute("aria-hidden", String(!active));
+    });
+
+    const hasPrevious = currentIndex > 0;
+    const hasNext = currentIndex < aboutStoryCards.length - 1;
+    aboutStoryPrevious.setAttribute("aria-disabled", String(!hasPrevious));
+    aboutStoryNext.setAttribute("aria-disabled", String(!hasNext));
+
+    const position =
+      String(currentIndex + 1) + " из " + String(aboutStoryCards.length);
+    if (aboutStoryCounter) {
+      aboutStoryCounter.textContent = position;
+    }
+    if (aboutStoryStatus) {
+      aboutStoryStatus.textContent =
+        "Причина " +
+        position +
+        ": " +
+        labels[currentIndex].toLowerCase() +
+        ".";
+    }
+  };
+
+  const showAboutStory = (index) => {
+    const nextIndex = Math.max(0, Math.min(aboutStoryCards.length - 1, index));
+    if (nextIndex === currentIndex) return;
+    currentIndex = nextIndex;
+    syncAboutStories();
+  };
+
+  aboutStoryPrevious.addEventListener("click", () => {
+    if (aboutStoryPrevious.getAttribute("aria-disabled") === "true") return;
+    showAboutStory(currentIndex - 1);
+  });
+
+  aboutStoryNext.addEventListener("click", () => {
+    if (aboutStoryNext.getAttribute("aria-disabled") === "true") return;
+    showAboutStory(currentIndex + 1);
+  });
+
+  aboutStories.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      showAboutStory(currentIndex - 1);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      showAboutStory(currentIndex + 1);
+    }
+  });
+
+  aboutStoryStage.addEventListener("pointerdown", (event) => {
+    if (!event.isPrimary) return;
+    pointerStart = {
+      id: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+    };
+  });
+
+  aboutStoryStage.addEventListener("pointerup", (event) => {
+    if (!pointerStart || pointerStart.id !== event.pointerId) return;
+    const deltaX = event.clientX - pointerStart.x;
+    const deltaY = event.clientY - pointerStart.y;
+    pointerStart = null;
+
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY) * 1.2) {
+      return;
+    }
+
+    event.preventDefault();
+    showAboutStory(currentIndex + (deltaX < 0 ? 1 : -1));
+  });
+
+  aboutStoryStage.addEventListener("pointercancel", () => {
+    pointerStart = null;
+  });
+
+  syncAboutStories();
 }
 
 reducedMotion.addEventListener("change", syncMenuSeaVideo);

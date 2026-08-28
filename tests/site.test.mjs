@@ -98,7 +98,7 @@ test("the site is plain HTML, CSS and JavaScript", () => {
 test("one drawn harpoon marks every directional transition", () => {
   assert.match(home, /<symbol id="icon-harpoon" viewBox="0 0 32 18">/);
   assert.match(home, /M23 9H8\.5C4\.6 9 2\.5 10\.8 2\.5 13\.2/);
-  assert.equal((home.match(/href="#icon-harpoon"/g) ?? []).length, 10);
+  assert.equal((home.match(/href="#icon-harpoon"/g) ?? []).length, 12);
   assert.doesNotMatch(home, /M2 8h20M16 2l6 6-6 6/);
   assert.match(
     styles,
@@ -149,12 +149,31 @@ test("home about section keeps Oleg's evidence without the old product longread"
     /id="about-title">\s*Ещё одно место в Москве, где продаётся хорошая рыба\s*<\/h2>/,
   );
   assert.match(section, /Почему о нас говорят\?/);
+  assert.match(section, /data-about-stories/);
+  assert.match(section, /role="region"/);
+  assert.match(section, /aria-roledescription="карусель"/);
+  assert.match(section, /aria-describedby="about-stories-instructions"/);
+  assert.match(section, /data-about-story-previous/);
+  assert.match(section, /data-about-story-next/);
+  assert.match(section, /aria-live="polite"/);
   assert.match(section, /Во-первых, это качество/);
   assert.match(section, /Во-вторых, ассортимент/);
   assert.match(section, /третья фирменная фишка/);
   assert.equal((section.match(/class="about-overview__reason"/g) ?? []).length, 3);
   assert.equal((section.match(/<article class="about-overview__chapter/g) ?? []).length, 3);
   assert.equal((section.match(/<figure /g) ?? []).length, 4);
+  assert.match(
+    styles,
+    /\.about-overview__opening-media img,[\s\S]*?\.about-overview__chapter-media img[\s\S]*?height:\s*auto;/,
+  );
+  assert.doesNotMatch(
+    styles,
+    /\.about-overview__(?:opening|chapter)-media(?: img)?\s*\{[^}]*object-fit:/s,
+  );
+  assert.match(siteScript, /aboutStories\.addEventListener\("keydown"/);
+  assert.match(siteScript, /aboutStoryStage\.addEventListener\("pointerdown"/);
+  assert.match(siteScript, /aboutStoryStage\.addEventListener\("pointerup"/);
+  assert.doesNotMatch(siteScript, /aboutStories[\s\S]*?setInterval\s*\(/);
   for (const asset of [
     "flounder.jpg",
     "about-main.jpg",
@@ -846,6 +865,7 @@ test("one restrained jelly material serves translucent controls", () => {
     "catalog-controls",
     "contacts-source__map-toggle",
     "source-hero__journal-control",
+    "about-overview__story-control",
     "site-menu__routes",
   ]) {
     const rule =
@@ -892,6 +912,7 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
     ".catalog-search input:hover",
     ".catalog-filters button:hover",
     ".contacts-source__map-toggle:hover",
+    ".about-overview__story-control:not([aria-disabled=\"true\"]):hover",
     ".source-footer__secondary-action:hover",
     ".theme-toggle:not(.theme-toggle--menu):hover",
   ]) {
