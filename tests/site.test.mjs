@@ -990,14 +990,17 @@ test("one restrained jelly material serves translucent controls", () => {
   assert.doesNotMatch(lightRoot, /--jelly-glass-surface[^;]*gradient\(/);
 });
 
-test("pointer hover and keyboard focus stay visibly distinct", () => {
+test("pointer hover, pressed state and keyboard focus stay visibly distinct", () => {
   const hoverStart = styles.indexOf("@media (hover: hover) and (pointer: fine)");
-  const hoverEnd = styles.indexOf(
+  const pressedStart = styles.indexOf("/* Pressed states */", hoverStart);
+  const pressedEnd = styles.indexOf(
     "@media (prefers-reduced-motion: reduce)",
-    hoverStart,
+    pressedStart,
   );
-  assert.ok(hoverStart >= 0 && hoverEnd > hoverStart);
-  const hoverMedia = styles.slice(hoverStart, hoverEnd);
+  assert.ok(hoverStart >= 0 && pressedStart > hoverStart);
+  assert.ok(pressedEnd > pressedStart);
+  const hoverMedia = styles.slice(hoverStart, pressedStart);
+  const pressedStates = styles.slice(pressedStart, pressedEnd);
 
   for (const selector of [
     ".source-brand:hover img",
@@ -1015,13 +1018,44 @@ test("pointer hover and keyboard focus stay visibly distinct", () => {
     );
   }
 
+  for (const selector of [
+    "a:active",
+    ".source-button:active",
+    ".source-brand:active img",
+    ".source-hero__journal-control:not([aria-disabled=\"true\"]):not(:disabled):active",
+    ".source-hero__journal-card[data-stack-position=\"0\"]:active img",
+    ".assortment-directory__link:active",
+    ".site-menu__routes nav a:active",
+    ".site-menu__channel:active",
+    ".site-menu__socials a:active",
+    ".source-footer__channels a:active",
+    ".floating-menu:active",
+    ".contacts-source__map-toggle:active",
+    ".theme-toggle:active",
+    ".catalog-filters button:active",
+    ".reset-button:active",
+  ]) {
+    assert.ok(
+      pressedStates.includes(selector) || styles.slice(0, hoverStart).includes(selector),
+      `Нет явного pressed-состояния для ${selector}`,
+    );
+  }
+
   assert.match(
     styles,
     /\.source-button--hero-secondary:hover,[\s\S]*?\.source-button--footer-contact:hover,[\s\S]*?\{[^}]*background:\s*var\(--jelly-glass-surface-strong\);/s,
   );
   assert.match(
-    styles,
-    /\.source-button--footer-contact:active\s*\{[^}]*background:\s*var\(--jelly-glass-surface-strong\);[^}]*transform:\s*translateY\(0\.04rem\) scale\(0\.98\);/s,
+    pressedStates,
+    /\.source-button:active\s*\{[^}]*transform:\s*translateY\(0\.04rem\) scale\(0\.98\);/s,
+  );
+  assert.match(
+    pressedStates,
+    /\.source-footer__channels a:active span\s*\{[^}]*text-decoration-thickness:\s*0\.16em;/s,
+  );
+  assert.match(
+    pressedStates,
+    /\.source-hero__journal-card\[data-stack-position="0"\]:active img\s*\{[^}]*scale\(0\.985\);/s,
   );
   assert.match(styles, /:focus-visible\s*\{[^}]*outline:\s*0\.2rem solid var\(--focus\);/s);
   assert.match(
