@@ -56,14 +56,6 @@ const favicon = await readFile(
   new URL("../assets/favicon.svg", import.meta.url),
   "utf8",
 );
-const watchCatchAssets = await Promise.all(
-  ["herring", "shrimp", "squid", "octopus"].map((name) =>
-    readFile(
-      new URL("../assets/watch-catch-" + name + ".svg", import.meta.url),
-      "utf8",
-    ),
-  ),
-);
 const nightSeaManifest = JSON.parse(
   await readFile(
     new URL("../assets/hero-sea-night.manifest.json", import.meta.url),
@@ -447,7 +439,6 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     "source-quote",
     "founder-source",
     "price-preview",
-    "watch-catch",
     "ship-log",
     "delivery-source",
     "contacts-source",
@@ -570,24 +561,19 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.doesNotMatch(home, /telegram-widget|tgme_widget|Feed not found/i);
 });
 
-test("the watch catch sheet is a separate static series tied to products and journal posts", () => {
+test("the watch catch keeps its product stories without rejected draft art", () => {
   const section =
     home.match(
       /<section\s+class="watch-catch source-section"[\s\S]*?<\/section>/,
     )?.[0] ?? "";
 
-  assert.match(section, /<h2 id="watch-catch-title">Улов текущей вахты<\/h2>/);
+  assert.match(section, /<h2 id="watch-catch-title">Свежий улов<\/h2>/);
   assert.equal((section.match(/class="watch-catch__item"/g) ?? []).length, 4);
-  assert.equal((section.match(/class="watch-catch__art"/g) ?? []).length, 4);
-  assert.equal(
-    (
-      section.match(
-        /alt=""[\s\S]*?width="240"[\s\S]*?height="240"/g,
-      ) ?? []
-    ).length,
-    4,
+  assert.doesNotMatch(section, /<img\b|watch-catch-(?:herring|shrimp|squid|octopus)\.svg/);
+  assert.doesNotMatch(
+    section,
+    /Первый лист серии|Каждый знак|Сменная серия|Действующие цены|watch-catch__kicker/,
   );
-  assert.doesNotMatch(section, /Math\.random|setInterval|data-rotate|data-random/);
 
   for (const path of [
     "catalog/?q=Сельдь%20слабосоленая",
@@ -604,31 +590,6 @@ test("the watch catch sheet is a separate static series tied to products and jou
       new RegExp("https://t\\.me/kapitanseledkin/" + id),
     );
   }
-
-  for (const asset of watchCatchAssets) {
-    assert.match(asset, /viewBox="0 0 240 240"/);
-    assert.match(asset, /stroke="#0668a3"/);
-    assert.match(asset, /stroke-linecap="round"/);
-    assert.doesNotMatch(
-      asset,
-      /<(?:image|use)\b|data:image|(?:href|src)="https?:/,
-    );
-  }
-
-  assert.match(
-    catalogScript,
-    /new URLSearchParams\(window\.location\.search\)\.get\("q"\)/,
-  );
-  assert.match(catalogScript, /let query = queryFromUrl;/);
-  assert.match(catalogScript, /search\.value = query;[\s\S]*?render\(\);/);
-  assert.match(
-    styles,
-    /\.watch-catch__list\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);/s,
-  );
-  assert.match(
-    styles,
-    /@media \(max-width: 34rem\)[\s\S]*?\.watch-catch__item figure\s*\{[^}]*grid-template-columns:\s*minmax\(5\.25rem, 6rem\) minmax\(0, 1fr\);/s,
-  );
 });
 
 test("the wide shell and linear Ship's Log avoid narrow nested cards", () => {
