@@ -56,6 +56,9 @@ const favicon = await readFile(
   new URL("../assets/favicon.svg", import.meta.url),
   "utf8",
 );
+const shareCard = await readFile(
+  new URL("../assets/share-card.jpg", import.meta.url),
+);
 const nightSeaManifest = JSON.parse(
   await readFile(
     new URL("../assets/hero-sea-night.manifest.json", import.meta.url),
@@ -85,6 +88,19 @@ function contrast(foreground, background) {
   const first = relativeLuminance(foreground);
   const second = relativeLuminance(background);
   return (Math.max(first, second) + 0.05) / (Math.min(first, second) + 0.05);
+}
+
+function jpegDimensions(buffer) {
+  for (const marker of [0xc0, 0xc1, 0xc2]) {
+    const offset = buffer.indexOf(Buffer.from([0xff, marker]));
+    if (offset < 0) continue;
+    return {
+      width: buffer.readUInt16BE(offset + 7),
+      height: buffer.readUInt16BE(offset + 5),
+    };
+  }
+
+  throw new Error("JPEG size marker not found");
 }
 
 test("the site is plain HTML, CSS and JavaScript", () => {
@@ -475,7 +491,11 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     "oleg-gugunava.jpg",
     "delivery-basket.jpg",
   ]) {
-    assert.match(home, new RegExp(`assets/${asset.replace(".", "\\.")}`));
+    if (asset === "hero-ocean.jpg") {
+      assert.match(styles, /url\("hero-ocean\.jpg"\)/);
+    } else {
+      assert.match(home, new RegExp(`assets/${asset.replace(".", "\\.")}`));
+    }
   }
 
   const founderGrid =
@@ -1604,4 +1624,68 @@ test("the agreed source assets stay unchanged", async () => {
     const binary = await readFile(new URL(path, import.meta.url));
     assert.equal(createHash("sha256").update(binary).digest("hex"), expected);
   }
+});
+
+test("main and catalog publish Pages-native social metadata", () => {
+  const root = "https://anton-gorokhovatsky.github.io/seledkin/";
+  const image = root + "assets/share-card.jpg";
+  const imageAlt =
+    "Свежая рыба со специями и логотип Рыбной лавки капитана Селедкина";
+  const pages = [
+    {
+      html: home,
+      url: root,
+      title:
+        "Рыба и морепродукты в Москве — Рыбная лавка капитана Селедкина",
+      description:
+        "Качественная рыба на каждый день, морепродукты, икра и рыбные деликатесы в Москве рядом с метро «Вавиловская».",
+    },
+    {
+      html: catalogPage,
+      url: root + "catalog/",
+      title: "Каталог и цены — Рыбная лавка капитана Селедкина",
+      description:
+        "Полный каталог Рыбной лавки капитана Селедкина: рыба, морепродукты, икра и деликатесы с действующими ценами.",
+    },
+  ];
+
+  for (const { html, url, title, description } of pages) {
+    const head = html.match(/<head>([\s\S]*?)<\/head>/)?.[1] ?? "";
+    const escapedDescription = description.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    assert.match(
+      head,
+      new RegExp(
+        `name="description"[\\s\\S]{0,180}content="${escapedDescription}"`,
+      ),
+    );
+    for (const tag of [
+      `<title>${title}</title>`,
+      `<link rel="canonical" href="${url}" />`,
+      '<meta property="og:type" content="website" />',
+      '<meta property="og:locale" content="ru_RU" />',
+      '<meta property="og:site_name" content="Рыбная лавка капитана Селедкина" />',
+      `<meta property="og:title" content="${title}" />`,
+      `<meta property="og:description" content="${description}" />`,
+      `<meta property="og:url" content="${url}" />`,
+      `<meta property="og:image" content="${image}" />`,
+      '<meta property="og:image:type" content="image/jpeg" />',
+      '<meta property="og:image:width" content="1200" />',
+      '<meta property="og:image:height" content="630" />',
+      `<meta property="og:image:alt" content="${imageAlt}" />`,
+      '<meta name="twitter:card" content="summary_large_image" />',
+      `<meta name="twitter:title" content="${title}" />`,
+      `<meta name="twitter:description" content="${description}" />`,
+      `<meta name="twitter:image" content="${image}" />`,
+      `<meta name="twitter:image:alt" content="${imageAlt}" />`,
+    ]) {
+      assert.ok(head.includes(tag), `Нет метатега: ${tag}`);
+    }
+  }
+
+  assert.deepEqual(jpegDimensions(shareCard), { width: 1200, height: 630 });
+  assert.ok(shareCard.byteLength > 100_000);
+  assert.ok(shareCard.byteLength < 500_000);
+  assert.doesNotMatch(home + catalogPage, /https:\/\/ks\.fish\//);
+  assert.ok(home.includes(`"url": "${root}"`));
+  assert.ok(home.includes(`"image": "${image}"`));
 });
