@@ -1,0 +1,25 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="64"
+  height="64"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-labelledby="favicon-title favicon-desc"
+>
+  <title id="favicon-title">Целая сельдь — малый знак лавки</title>
+  <desc id="favicon-desc">Целая сельдь с читаемыми глазом, ртом и нижней челюстью в круглом поле</desc>
+  <style>
+    .favicon-badge { fill: #00569d; }
+    .favicon-fish { fill: #fff; }
+    .favicon-detail { stroke: #00569d; }
+    .favicon-detail-fill { fill: #00569d; }
+    @media (prefers-color-scheme: dark) {
+      .favicon-badge { fill: #f7f2e7; }
+      .favicon-fish { fill: #0e202b; }
+      .favicon-detail { stroke: #f7f2e7; }
+      .favicon-detail-fill { fill: #f7f2e7; }
+    }
+  </style>
+  <circle class="favicon-badge" cx="256" cy="256" r="238"/>
+  <!-- COMPLETE_HERRING -->
+</svg>

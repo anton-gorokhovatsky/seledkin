@@ -1,0 +1,52 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-labelledby="herring-title herring-desc"
+>
+  <title id="herring-title">Целая сельдь — малый фирменный знак</title>
+  <desc id="herring-desc">Полный силуэт сельди с глазом, жаберной крышкой, ртом, нижней челюстью, плавниками и раздвоенным хвостом</desc>
+  <g id="herring-mark" data-part="complete-herring">
+    <path
+      id="herring-silhouette"
+      class="favicon-fish"
+      d="M455 256C426 211 371 186 300 178C245 172 195 178 151 197C136 204 126 211 120 221L68 145C65 139 59 142 61 150L84 238L42 252C35 254 35 260 42 263L85 275L63 365C61 373 67 376 72 369L121 291C129 303 141 312 158 319C219 340 288 344 350 326C404 310 438 286 455 256Z"
+    />
+    <path
+      id="herring-dorsal-fin"
+      class="favicon-fish"
+      d="M218 180C231 155 246 137 264 124C272 118 278 121 279 130L282 175Z"
+    />
+    <path
+      id="herring-ventral-fin"
+      class="favicon-fish"
+      d="M270 333L301 384C305 391 312 388 313 380L312 329Z"
+    />
+    <path
+      id="herring-pectoral-fin"
+      class="favicon-detail-fill"
+      d="M336 268C312 272 289 285 273 305C296 308 322 300 345 283Z"
+    />
+    <g
+      id="herring-engraving"
+      class="favicon-detail"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path id="herring-gill" d="M369 214C346 232 342 268 361 297" stroke-width="13"/>
+      <path id="herring-mouth" d="M418 251C433 251 445 254 455 256" stroke-width="11"/>
+      <path id="herring-lower-jaw" d="M454 260C439 280 418 292 390 296" stroke-width="12"/>
+      <path id="herring-lateral-line" d="M341 249C291 240 239 240 183 249" stroke-width="9"/>
+      <path d="M313 207C287 199 260 196 232 199" stroke-width="8"/>
+      <path d="M295 225C266 218 237 218 207 223" stroke-width="8"/>
+      <path d="M295 274C264 283 232 284 200 280" stroke-width="8"/>
+      <path d="M317 294C287 306 256 310 224 306" stroke-width="8"/>
+      <path id="herring-tail-detail" d="M84 238L118 256L85 275" stroke-width="6"/>
+      <path d="M232 177L253 150M249 176L271 145" stroke-width="7"/>
+      <path d="M283 332L299 364M299 329L308 363" stroke-width="7"/>
+    </g>
+    <circle id="herring-eye" class="favicon-detail-fill" cx="397" cy="223" r="16"/>
+    <circle class="favicon-fish" cx="402" cy="218" r="5"/>
+  </g>
+</svg>

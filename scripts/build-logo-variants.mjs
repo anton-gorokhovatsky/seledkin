@@ -2,6 +2,8 @@ import { readFile, writeFile } from "node:fs/promises";
 
 const templatePath = new URL("./logo-variants/squid.svg", import.meta.url);
 const template = await readFile(templatePath, "utf8");
+const herringPath = new URL("./logo-parts/herring.svg", import.meta.url);
+const faviconTemplatePath = new URL("./logo-marks/favicon.svg", import.meta.url);
 const variants = [
   {
     source: new URL("../assets/logo-redrawn.svg", import.meta.url),
@@ -44,3 +46,20 @@ ${sourceBody
     );
   await writeFile(variant.output, selfContained);
 }
+
+const herringSource = await readFile(herringPath, "utf8");
+const herringMark = herringSource
+  .replace(/^<svg\b[^>]*>/, "")
+  .replace(/<\/svg>\s*$/, "")
+  .replace(/<title\b[^>]*>[\s\S]*?<\/title>\s*/, "")
+  .replace(/<desc\b[^>]*>[\s\S]*?<\/desc>\s*/, "")
+  .trim();
+const faviconTemplate = await readFile(faviconTemplatePath, "utf8");
+const favicon = faviconTemplate.replace(
+  "  <!-- COMPLETE_HERRING -->",
+  herringMark
+    .split("\n")
+    .map((line) => (line ? `  ${line}` : ""))
+    .join("\n"),
+);
+await writeFile(new URL("../assets/favicon.svg", import.meta.url), favicon);
