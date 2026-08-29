@@ -1124,7 +1124,7 @@ p {
 .founder-source__inner {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(24rem, 1.05fr);
-  align-items: center;
+  align-items: start;
   gap: clamp(2.5rem, 5vw, 6rem);
 }
 
@@ -3000,7 +3000,6 @@ p {
 
   .source-quote__inner,
   .founder-source__inner {
-    align-items: center;
     gap: 2.5rem;
   }
 

@@ -478,6 +478,14 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     assert.match(home, new RegExp(`assets/${asset.replace(".", "\\.")}`));
   }
 
+  const founderGrid =
+    styles.match(/\.founder-source__inner\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(founderGrid, /align-items:\s*start;/);
+  assert.doesNotMatch(
+    styles,
+    /\.source-quote__inner,\s*\.founder-source__inner\s*\{[^}]*align-items:\s*center;/s,
+  );
+
   assert.doesNotMatch(home, /Feed not found|уточняйте цены|Друзья!/i);
   assert.doesNotMatch(home + catalogPage + styles, /tildacdn\.com/i);
   assert.doesNotMatch(home + catalogPage + styles, /fish-divider\.png/i);
