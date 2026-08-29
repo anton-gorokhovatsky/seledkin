@@ -630,6 +630,10 @@ test("the page and fullscreen menu share one stable outer content axis", () => {
   );
   assert.match(
     styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero__content\s*\{[^}]*width:\s*min\(calc\(100% - var\(--page-outer\)\), 26rem\);[^}]*margin-inline:\s*auto;/,
+  );
+  assert.match(
+    styles,
     /\.site-menu__routes\s*\{[\s\S]*?padding:[\s\S]*?var\(--content-edge\);/,
   );
   assert.match(home, /class="source-quote__inner source-shell"/);

@@ -2768,6 +2768,7 @@ p {
   .source-hero__content {
     display: block;
     width: min(calc(100% - var(--page-outer)), 26rem);
+    margin-inline: auto;
     height: auto;
     min-height: 0;
     padding: 0;
