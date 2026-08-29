@@ -124,9 +124,9 @@ test("one drawn harpoon marks every directional transition", () => {
     styles,
     /\.assortment-directory__link:hover \.assortment-directory__label[\s\S]*?text-decoration-color:\s*currentcolor;[\s\S]*?translateX\(0\.35rem\)/,
   );
-  assert.match(
+  assert.doesNotMatch(
     styles,
-    /\.assortment-directory__link:hover,[\s\S]*?box-shadow:\s*inset 0\.18rem 0 0 var\(--blue-deep\);/,
+    /\.assortment-directory__link(?:[^,{]*)?(?:,|\s*\{)[^}]*box-shadow:/s,
   );
   assert.doesNotMatch(styles, /var\(--link\)/);
 });
@@ -425,6 +425,12 @@ test("the home brand marks the current page without linking to itself", () => {
   assert.doesNotMatch(homeHeader, /<a class="source-brand"/);
   assert.doesNotMatch(homeMenuMasthead, /<a class="site-menu__brand"/);
   assert.match(catalogHeader, /<a class="source-brand" href="\.\.\/"/);
+  assert.match(styles, /\.source-brand\s*\{[^}]*pointer-events:\s*none;/s);
+  assert.match(styles, /a\.source-brand\s*\{[^}]*pointer-events:\s*auto;/s);
+  assert.match(styles, /\.site-menu__brand\s*\{[^}]*pointer-events:\s*none;/s);
+  assert.match(styles, /a\.site-menu__brand\s*\{[^}]*pointer-events:\s*auto;/s);
+  assert.doesNotMatch(styles, /(?:^|[,\n])\s*\.source-brand:hover img/m);
+  assert.doesNotMatch(styles, /(?:^|[,\n])\s*\.site-menu__brand:hover img/m);
 });
 
 test("every page uses the complete vector fish head as its favicon", () => {
@@ -1122,7 +1128,7 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
   const pressedStates = styles.slice(pressedStart, pressedEnd);
 
   for (const selector of [
-    ".source-brand:hover img",
+    "a.source-brand:hover img",
     ".floating-menu:hover",
     ".catalog-search input:hover",
     ".catalog-filters button:hover",
@@ -1140,7 +1146,7 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
   for (const selector of [
     "a:active",
     ".source-button:active",
-    ".source-brand:active img",
+    "a.source-brand:active img",
     ".source-hero__journal-control:not([aria-disabled=\"true\"]):not(:disabled):active",
     ".source-hero__journal-card[data-stack-position=\"0\"]:active img",
     ".assortment-directory__link:active",
