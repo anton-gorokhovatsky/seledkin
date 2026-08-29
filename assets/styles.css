@@ -154,6 +154,20 @@
   }
 }
 
+:root[data-logo-variant="squid"] [data-theme-logo] {
+  content: url("logo-catch-squid.svg");
+}
+
+:root[data-theme="dark"][data-logo-variant="squid"] [data-theme-logo] {
+  content: url("logo-catch-squid-night.svg");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-logo-variant="squid"] [data-theme-logo] {
+    content: url("logo-catch-squid-night.svg");
+  }
+}
+
 *,
 *::before,
 *::after {

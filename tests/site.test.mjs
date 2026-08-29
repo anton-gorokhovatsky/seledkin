@@ -52,6 +52,14 @@ const sourceLogo = await readFile(
   new URL("../assets/logo-redrawn.svg", import.meta.url),
   "utf8",
 );
+const squidLogo = await readFile(
+  new URL("../assets/logo-catch-squid.svg", import.meta.url),
+  "utf8",
+);
+const squidNightLogo = await readFile(
+  new URL("../assets/logo-catch-squid-night.svg", import.meta.url),
+  "utf8",
+);
 const favicon = await readFile(
   new URL("../assets/favicon.svg", import.meta.url),
   "utf8",
@@ -433,17 +441,17 @@ test("the home brand marks the current page without linking to itself", () => {
   assert.doesNotMatch(styles, /(?:^|[,\n])\s*\.site-menu__brand:hover img/m);
 });
 
-test("every page uses the complete vector fish head as its favicon", () => {
+test("every page uses the stable circular fish mark as its favicon", () => {
   assert.match(home, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(notFoundPage, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(catalogPage, /rel="icon" href="\.\.\/assets\/favicon\.svg"/);
   for (const page of [home, notFoundPage, catalogPage]) {
     assert.doesNotMatch(page, /rel="icon"[^>]+logo-redrawn\.svg/);
   }
-  assert.match(favicon, /viewBox="-80 -60 960 960"/);
+  assert.match(favicon, /viewBox="-70 -60 940 940"/);
   assert.match(
     favicon,
-    /<title id="favicon-title">Голова рыбы — знак лавки<\/title>/,
+    /<title id="favicon-title">Рыба капитана Селедкина — малый знак<\/title>/,
   );
   assert.match(favicon, /prefers-color-scheme:\s*dark/);
   assert.equal((favicon.match(/<image /g) ?? []).length, 0);
@@ -457,8 +465,11 @@ test("every page uses the complete vector fish head as its favicon", () => {
   );
   assert.match(
     favicon,
-    /<g aria-hidden="true" clip-path="url\(#fish-crop\)">/,
+    /<circle class="favicon-badge" cx="400" cy="400" r="450"\/>/,
   );
+  assert.match(favicon, /class="favicon-fish"[^>]+clip-path="url\(#favicon-disc\)"/);
+  assert.match(favicon, /\.favicon-badge\s*\{\s*fill:\s*#00569d;/);
+  assert.match(favicon, /\.favicon-fish\s*\{\s*fill:\s*#fff;/);
   assert.ok(Buffer.byteLength(favicon) < 120_000);
 });
 
@@ -1596,6 +1607,40 @@ test("Night Watch uses a dedicated reverse-polarity logo without changing its ge
     (match) => match[1],
   );
   assert.deepEqual(nightPathData, sourcePathData);
+});
+
+test("the squid logo is a contextual, reproducible variant rather than a random rotation", () => {
+  assert.equal(
+    (catalogPage.match(/data-logo-squid-light="\.\.\/assets\/logo-catch-squid\.svg"/g) ?? [])
+      .length,
+    2,
+  );
+  assert.equal(
+    (catalogPage.match(/data-logo-squid-dark="\.\.\/assets\/logo-catch-squid-night\.svg"/g) ?? [])
+      .length,
+    2,
+  );
+  assert.match(catalogPage, /initialCatalogQuery[\s\S]*?includes\("кальмар"\)/);
+  assert.match(catalogScript, /normalize\(query\)\.includes\("кальмар"\) \? "squid" : ""/);
+  assert.match(catalogScript, /seledkin:logovariantchange/);
+  assert.match(themeScript, /root\.dataset\.logoVariant/);
+  assert.match(themeScript, /const variantKey =[\s\S]*?logo\$\{variant\.charAt/);
+  assert.match(themeScript, /seledkin:logovariantchange/);
+  assert.match(styles, /data-logo-variant="squid"[\s\S]*?logo-catch-squid\.svg/);
+  assert.match(styles, /data-logo-variant="squid"[\s\S]*?logo-catch-squid-night\.svg/);
+
+  for (const logo of [squidLogo, squidNightLogo]) {
+    assert.match(logo, /id="accepted-logo-source"/);
+    assert.match(logo, /id="locked-logo-base" data-layer="locked-base"/);
+    assert.match(logo, /id="replaceable-product" data-product="commanderskiy-squid"/);
+    assert.match(logo, /id="locked-hand-and-sleeve-layer" data-layer="locked-hand"/);
+    assert.equal((logo.match(/<image /g) ?? []).length, 0);
+    assert.equal((logo.match(/<use href="#accepted-logo-source"\/>/g) ?? []).length, 2);
+    assert.ok(Buffer.byteLength(logo) < 300_000);
+  }
+  assert.match(squidLogo, /id="squid-mantle"/);
+  assert.match(squidNightLogo, /fill="#b8c2c8"/);
+  assert.doesNotMatch(squidNightLogo, /#fff(?:fff)?/i);
 });
 
 test("Night Watch keeps bioluminescence in a restrained, static wake", () => {

@@ -34,6 +34,11 @@
     <script>
       (() => {
         document.documentElement.classList.add("js");
+        const initialCatalogQuery =
+          new URLSearchParams(window.location.search).get("q") ?? "";
+        if (initialCatalogQuery.toLocaleLowerCase("ru-RU").includes("кальмар")) {
+          document.documentElement.dataset.logoVariant = "squid";
+        }
         let explicitTheme = null;
         try {
           const stored = localStorage.getItem("seledkin-theme");
@@ -87,6 +92,8 @@
             data-theme-logo
             data-logo-light="../assets/logo-redrawn.svg"
             data-logo-dark="../assets/logo-redrawn-night.svg"
+            data-logo-squid-light="../assets/logo-catch-squid.svg"
+            data-logo-squid-dark="../assets/logo-catch-squid-night.svg"
             alt="Рыбная лавка капитана Селедкина"
             width="3600"
             height="1784"
@@ -124,6 +131,8 @@
               data-theme-logo
               data-logo-light="../assets/logo-redrawn.svg"
               data-logo-dark="../assets/logo-redrawn-night.svg"
+              data-logo-squid-light="../assets/logo-catch-squid.svg"
+              data-logo-squid-dark="../assets/logo-catch-squid-night.svg"
               alt="Рыбная лавка капитана Селедкина"
               width="3600"
               height="1784"

@@ -30,6 +30,24 @@ function normalize(value) {
     .trim();
 }
 
+function syncLogoVariant() {
+  const root = document.documentElement;
+  const nextVariant = normalize(query).includes("кальмар") ? "squid" : "";
+  const currentVariant = root.dataset.logoVariant ?? "";
+  if (currentVariant === nextVariant) return;
+
+  if (nextVariant) {
+    root.dataset.logoVariant = nextVariant;
+  } else {
+    delete root.dataset.logoVariant;
+  }
+  document.dispatchEvent(
+    new CustomEvent("seledkin:logovariantchange", {
+      detail: { variant: nextVariant || null },
+    }),
+  );
+}
+
 function positionCount(value) {
   const lastTwo = value % 100;
   const last = value % 10;
@@ -115,6 +133,7 @@ function syncFilterButtons() {
 }
 
 function render() {
+  syncLogoVariant();
   const visible = visibleCatalog();
   const visibleCount = visible.reduce(
     (total, category) => total + category.items.length,

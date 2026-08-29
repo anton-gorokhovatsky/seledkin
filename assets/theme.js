@@ -100,6 +100,17 @@ function initTheme() {
     );
   }
 
+  function logoSource(logo, isDark) {
+    const variant = root.dataset.logoVariant;
+    if (variant) {
+      const variantKey =
+        `logo${variant.charAt(0).toUpperCase()}${variant.slice(1)}${isDark ? "Dark" : "Light"}`;
+      const variantSource = logo.dataset[variantKey];
+      if (variantSource) return variantSource;
+    }
+    return isDark ? logo.dataset.logoDark : logo.dataset.logoLight;
+  }
+
   function renderThemeMedia(isDark) {
     for (const video of themeVideos) {
       if (!(video instanceof HTMLVideoElement)) continue;
@@ -145,7 +156,7 @@ function initTheme() {
     if (themeColor) themeColor.content = isDark ? "#0e202b" : "#ffffff";
 
     for (const logo of themeLogos) {
-      const source = isDark ? logo.dataset.logoDark : logo.dataset.logoLight;
+      const source = logoSource(logo, isDark);
       if (source && logo.getAttribute("src") !== source) {
         logo.setAttribute("src", source);
       }
@@ -211,6 +222,8 @@ function initTheme() {
     renderThemeControls();
     scheduleNextShift();
   });
+
+  document.addEventListener("seledkin:logovariantchange", renderThemeControls);
 
   renderThemeControls();
   scheduleNextShift();
