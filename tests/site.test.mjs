@@ -1207,6 +1207,18 @@ test("menu, focus and reduced motion remain accessible", () => {
     styles,
     /@media \(max-width: 61\.1875rem\)[\s\S]*?\.floating-menu__label\s*\{[\s\S]*?clip-path:\s*inset\(50%\);/,
   );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__masthead\s*\{[\s\S]*?position:\s*sticky;[\s\S]*?top:\s*0;[\s\S]*?background:\s*var\(--surface-water\);[\s\S]*?pointer-events:\s*auto;/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__brand\s*\{[^}]*width:\s*min\(61vw, 14\.5rem\);/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__routes\s*\{[^}]*padding:\s*2rem var\(--page-inset\) 4rem;/,
+  );
   assert.match(home, /role="dialog"/);
   assert.match(home, /aria-modal="true"/);
   assert.match(styles, /\.floating-menu\s*\{[\s\S]*?position:\s*fixed;/);
