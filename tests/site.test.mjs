@@ -461,7 +461,6 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     "source-header",
     "source-hero",
     "assortment-overview",
-    "fish-divider",
     "about-overview",
     "full-photo",
     "source-quote",
@@ -497,6 +496,8 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
   ]) {
     if (asset === "hero-ocean.jpg") {
       assert.match(styles, /url\("hero-ocean\.jpg"\)/);
+    } else if (asset === "fish-pattern.svg") {
+      assert.match(styles, /fish-pattern\.svg/);
     } else {
       assert.match(home, new RegExp(`assets/${asset.replace(".", "\\.")}`));
     }
@@ -989,7 +990,7 @@ test("catalog entry stacks its copy, search and categories without decorative di
   );
   assert.match(
     styles,
-    /\.catalog-intro__stack\s*\{[^}]*display:\s*grid;[^}]*width:\s*min\(100%, 47rem\);[^}]*gap:/s,
+    /\.catalog-intro__stack\s*\{[^}]*display:\s*grid;[^}]*width:\s*min\(100%, 64rem\);[^}]*gap:/s,
   );
   assert.match(
     styles,
@@ -997,7 +998,7 @@ test("catalog entry stacks its copy, search and categories without decorative di
   );
   assert.match(
     styles,
-    /\.catalog-intro__copy\s*\{[^}]*width:\s*min\(56vw, 43rem\);/s,
+    /\.catalog-intro__copy\s*\{[^}]*width:\s*min\(100%, 43rem\);/s,
   );
   assert.match(
     styles,
@@ -1011,7 +1012,11 @@ test("catalog entry stacks its copy, search and categories without decorative di
   );
   assert.match(
     styles,
-    /\.catalog-filters\s*\{[^}]*flex-wrap:\s*wrap;[^}]*gap:\s*0\.25rem 0\.75rem;/s,
+    /\.catalog-filters\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);[^}]*gap:/s,
+  );
+  assert.match(
+    styles,
+    /\.catalog-search input::placeholder\s*\{[^}]*color:\s*var\(--muted\);[^}]*opacity:\s*1;/s,
   );
   assert.match(
     styles,
@@ -1163,28 +1168,38 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
   );
 });
 
-test("catalog shoal keeps one fixed scale and exits through the right edge", () => {
-  assert.match(styles, /--fish-shoal-width:\s*52rem;/);
-  assert.match(styles, /--fish-shoal-backdrop-width:\s*clamp\(42rem, 58vw, 62rem\);/);
-  assert.match(styles, /\.catalog-intro__shoal\s*\{[\s\S]*?width:\s*var\(--fish-shoal-width\);/);
+test("one master shoal keeps deliberate foreground, tonal and sea roles", () => {
+  assert.match(styles, /--fish-shoal-width:\s*clamp\(36rem, 58vw, 52rem\);/);
+  assert.match(styles, /--shoal-primary:\s*#0879bd;/);
+  assert.match(styles, /--shoal-tonal:\s*hsl\(204 34% 92%\);/);
+  assert.match(styles, /--shoal-on-sea:\s*rgb\(255 248 237 \/ 14%\);/);
+  assert.match(
+    styles,
+    /\.catalog-intro__shoal,[\s\S]*?\.not-found-source::before\s*\{[^}]*-webkit-mask:\s*url\("fish-pattern\.svg"\) center \/ contain no-repeat;[^}]*mask:\s*url\("fish-pattern\.svg"\) center \/ contain no-repeat;/s,
+  );
+  assert.match(
+    styles,
+    /\.catalog-intro__shoal\s*\{[^}]*position:\s*absolute;[^}]*right:\s*0;[^}]*width:\s*var\(--fish-shoal-width\);[^}]*--shoal-color:\s*var\(--shoal-tonal\);[^}]*pointer-events:\s*none;/s,
+  );
   assert.match(styles, /\.catalog-intro\s*\{[^}]*overflow:\s*hidden;/s);
+  assert.match(catalogPage, /<span\s+class="catalog-intro__shoal"\s+aria-hidden="true"\s*>\s*<\/span>/s);
+  assert.doesNotMatch(catalogPage, /<img[^>]*catalog-intro__shoal/s);
+  assert.doesNotMatch(home + styles, /fish-divider/);
+  assert.doesNotMatch(styles, /\.catalog-order::before/);
   assert.match(
     styles,
-    /\.catalog-intro__shoal\s*\{[^}]*position:\s*absolute;[^}]*right:\s*-32rem;[^}]*width:\s*var\(--fish-shoal-width\);[^}]*max-width:\s*none;[^}]*pointer-events:\s*none;/s,
-  );
-  assert.doesNotMatch(styles, /\.catalog-intro__shoal\s*\{[^}]*width:\s*min/s);
-  assert.match(
-    styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*right:\s*-37rem;/s,
+    /\.ship-log::before\s*\{[^}]*width:\s*var\(--fish-shoal-width\);[^}]*--shoal-color:\s*var\(--shoal-tonal\);/s,
   );
   assert.match(
     styles,
-    /@media \(max-width: 34rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*right:\s*-48rem;/s,
+    /\.source-footer::before\s*\{[^}]*width:\s*var\(--fish-shoal-width\);[^}]*--shoal-color:\s*var\(--shoal-on-sea\);/s,
   );
-  assert.match(catalogPage, /class="catalog-intro__shoal"[\s\S]*?src="\.\.\/assets\/fish-pattern\.svg"/);
-  assert.match(styles, /\.catalog-order::before\s*\{[\s\S]*?position:\s*absolute;[\s\S]*?width:\s*var\(--fish-shoal-backdrop-width\);/);
+  assert.match(
+    styles,
+    /\.not-found-source::before\s*\{[^}]*--shoal-color:\s*var\(--shoal-primary\);/s,
+  );
   const patternRules = [...styles.matchAll(/([^{}]+)\{([^{}]*fish-pattern\.svg[^{}]*)\}/g)];
-  assert.ok(patternRules.length >= 4);
+  assert.equal(patternRules.length, 1);
   for (const [, selector, declarations] of patternRules) {
     assert.doesNotMatch(declarations, /scaleX\(-1\)|transform:\s*rotate\(/, selector.trim());
   }
@@ -1537,7 +1552,7 @@ test("Night Watch keeps bioluminescence in a restrained, static wake", () => {
   );
   assert.match(
     styles,
-    /\.fish-divider::after\s*\{[\s\S]*?mix-blend-mode:\s*screen;[\s\S]*?opacity:\s*var\(--bioluminescence-opacity\);/,
+    /\.source-footer::after,[\s\S]*?\.site-menu__service::after\s*\{[\s\S]*?mix-blend-mode:\s*screen;[\s\S]*?opacity:\s*var\(--bioluminescence-opacity\);/,
   );
   assert.match(
     styles,

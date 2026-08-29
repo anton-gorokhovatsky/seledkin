@@ -30,8 +30,9 @@
   --jelly-glass-filter: blur(0.85rem) saturate(106%);
   --menu-sea-veil: rgb(4 42 58 / 68%);
   --menu-sea-filter: blur(0.18rem) saturate(82%) contrast(94%);
-  --pattern-filter: none;
-  --pattern-opacity: 1;
+  --shoal-primary: #0879bd;
+  --shoal-tonal: hsl(204 34% 92%);
+  --shoal-on-sea: rgb(255 248 237 / 14%);
   --surface-water: var(--paper);
   --hero-shade: linear-gradient(rgb(0 10 16 / 56%), rgb(0 8 13 / 64%));
   --bioluminescence-display: none;
@@ -51,8 +52,7 @@
   --masthead-top-inset: 2.5rem;
   --masthead-control-size: 3.375rem;
   --brand-width-desktop: 15rem;
-  --fish-shoal-width: 52rem;
-  --fish-shoal-backdrop-width: clamp(42rem, 58vw, 62rem);
+  --fish-shoal-width: clamp(36rem, 58vw, 52rem);
   --focus: #a35d00;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --text-reading: 1.125rem;
@@ -87,10 +87,9 @@
     0 0.45rem 1.4rem rgb(0 12 20 / 32%),
     inset 0 1px 0 var(--jelly-glass-highlight);
   --menu-sea-veil: rgb(3 20 30 / 74%);
-  --pattern-filter: brightness(0) saturate(100%) invert(94%) sepia(12%)
-    saturate(243%) hue-rotate(344deg) brightness(101%) contrast(89%)
-    drop-shadow(0 0 0.65rem rgb(108 221 210 / 14%));
-  --pattern-opacity: 0.78;
+  --shoal-primary: #7dccf2;
+  --shoal-tonal: hsl(201 30% 18%);
+  --shoal-on-sea: rgb(243 237 226 / 13%);
   --surface-water:
     radial-gradient(ellipse at 14% 0%, rgb(74 158 171 / 7%), transparent 34rem),
     var(--paper);
@@ -129,10 +128,9 @@
       0 0.45rem 1.4rem rgb(0 12 20 / 32%),
       inset 0 1px 0 var(--jelly-glass-highlight);
     --menu-sea-veil: rgb(3 20 30 / 74%);
-    --pattern-filter: brightness(0) saturate(100%) invert(94%) sepia(12%)
-      saturate(243%) hue-rotate(344deg) brightness(101%) contrast(89%)
-      drop-shadow(0 0 0.65rem rgb(108 221 210 / 14%));
-    --pattern-opacity: 0.78;
+    --shoal-primary: #7dccf2;
+    --shoal-tonal: hsl(201 30% 18%);
+    --shoal-on-sea: rgb(243 237 226 / 13%);
     --surface-water:
       radial-gradient(ellipse at 14% 0%, rgb(74 158 171 / 7%), transparent 34rem),
       var(--paper);
@@ -883,41 +881,13 @@ p {
   color: var(--text-link);
 }
 
-.fish-divider {
-  position: relative;
-  overflow: hidden;
-  background: var(--surface-water);
-}
-
-.fish-divider img {
-  width: 100%;
-  height: auto;
-  filter: var(--pattern-filter);
-  opacity: var(--pattern-opacity);
-}
-
-.fish-divider::after {
-  position: absolute;
-  inset: 0;
-  display: var(--bioluminescence-display);
-  background:
-    radial-gradient(circle at 7% 63%, var(--bioluminescence-spark) 0 0.06rem, transparent 0.12rem),
-    radial-gradient(circle at 15% 48%, var(--bioluminescence-spark) 0 0.045rem, transparent 0.1rem),
-    radial-gradient(circle at 24% 72%, var(--bioluminescence-spark) 0 0.07rem, transparent 0.13rem),
-    radial-gradient(circle at 36% 39%, var(--bioluminescence-spark) 0 0.05rem, transparent 0.11rem),
-    radial-gradient(circle at 44% 65%, var(--bioluminescence-spark) 0 0.075rem, transparent 0.14rem),
-    radial-gradient(circle at 57% 31%, var(--bioluminescence-spark) 0 0.045rem, transparent 0.1rem),
-    radial-gradient(circle at 66% 59%, var(--bioluminescence-spark) 0 0.065rem, transparent 0.12rem),
-    radial-gradient(circle at 78% 45%, var(--bioluminescence-spark) 0 0.05rem, transparent 0.11rem),
-    radial-gradient(circle at 88% 67%, var(--bioluminescence-spark) 0 0.075rem, transparent 0.14rem),
-    radial-gradient(circle at 95% 36%, var(--bioluminescence-spark) 0 0.045rem, transparent 0.1rem),
-    radial-gradient(ellipse 25% 48% at 18% 60%, var(--bioluminescence-wake), transparent 72%),
-    radial-gradient(ellipse 30% 42% at 52% 48%, var(--bioluminescence-wake-soft), transparent 74%),
-    radial-gradient(ellipse 24% 46% at 84% 57%, var(--bioluminescence-wake), transparent 72%);
-  content: "";
-  mix-blend-mode: screen;
-  opacity: var(--bioluminescence-opacity);
-  pointer-events: none;
+.catalog-intro__shoal,
+.ship-log::before,
+.source-footer::before,
+.not-found-source::before {
+  background-color: var(--shoal-color, var(--shoal-tonal));
+  -webkit-mask: url("fish-pattern.svg") center / contain no-repeat;
+  mask: url("fish-pattern.svg") center / contain no-repeat;
 }
 
 .about-overview {
@@ -1157,10 +1127,6 @@ p {
   line-height: 1.68;
 }
 
-.fish-divider--prices {
-  padding-top: 2.5rem;
-}
-
 .price-preview {
   padding: clamp(4rem, 7vw, 6.5rem) 0;
 }
@@ -1339,12 +1305,10 @@ p {
   position: absolute;
   top: clamp(1.5rem, 4vw, 4rem);
   right: max(-10rem, -9vw);
-  width: var(--fish-shoal-backdrop-width);
+  width: var(--fish-shoal-width);
   aspect-ratio: 7940 / 2494;
-  background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
-  filter: var(--pattern-filter);
-  opacity: 0.08;
+  --shoal-color: var(--shoal-tonal);
   pointer-events: none;
 }
 
@@ -1617,12 +1581,10 @@ p {
   position: absolute;
   top: clamp(1rem, 4vw, 4rem);
   right: min(-8rem, -5vw);
-  width: var(--fish-shoal-backdrop-width);
+  width: var(--fish-shoal-width);
   aspect-ratio: 7940 / 2494;
-  background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
-  filter: brightness(0) invert(1);
-  opacity: 0.12;
+  --shoal-color: var(--shoal-on-sea);
   pointer-events: none;
 }
 
@@ -2243,7 +2205,7 @@ p {
 .catalog-intro {
   position: relative;
   overflow: hidden;
-  padding: clamp(3rem, 4.5vw, 4.25rem) 0 clamp(2.5rem, 3.5vw, 3.5rem);
+  padding: clamp(2.75rem, 4vw, 3.75rem) 0 clamp(3.5rem, 5vw, 4.75rem);
   text-align: left;
 }
 
@@ -2255,24 +2217,22 @@ p {
   position: relative;
   z-index: 1;
   display: grid;
-  width: min(100%, 47rem);
-  gap: clamp(2rem, 3vw, 2.75rem);
+  width: min(100%, 64rem);
+  gap: clamp(2.25rem, 3vw, 3rem);
 }
 
 .catalog-intro__copy {
-  width: min(56vw, 43rem);
+  width: min(100%, 43rem);
 }
 
 .catalog-intro__shoal {
   position: absolute;
-  top: clamp(1.5rem, 3vw, 2.75rem);
-  right: -32rem;
+  top: clamp(10rem, 15vw, 13rem);
+  right: 0;
   display: block;
   width: var(--fish-shoal-width);
-  max-width: none;
-  height: auto;
-  filter: var(--pattern-filter);
-  opacity: var(--pattern-opacity);
+  aspect-ratio: 7940 / 2494;
+  --shoal-color: var(--shoal-tonal);
   pointer-events: none;
 }
 
@@ -2293,6 +2253,7 @@ p {
 .catalog-controls {
   position: relative;
   z-index: 1;
+  width: min(100%, 62rem);
 }
 
 .controls-grid {
@@ -2304,7 +2265,7 @@ p {
 
 .catalog-search {
   display: grid;
-  width: min(100%, 25rem);
+  width: min(100%, 28rem);
   gap: 0.4rem;
   font-size: var(--text-meta);
   font-weight: 600;
@@ -2322,6 +2283,11 @@ p {
     background-color 180ms ease-out;
 }
 
+.catalog-search input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
 .catalog-filter-field {
   display: grid;
   gap: 0.35rem;
@@ -2330,16 +2296,17 @@ p {
 }
 
 .catalog-filters {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 0.25rem 0.75rem;
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: 0.2rem clamp(0.75rem, 1.5vw, 1.5rem);
 }
 
 .catalog-filters button,
 .reset-button {
   flex: 0 0 auto;
+  justify-self: start;
   min-width: 2.75rem;
   min-height: 2.75rem;
   padding: 0.6rem 0.25rem;
@@ -2353,7 +2320,8 @@ p {
     background-color 180ms ease-out,
     color 180ms ease-out,
     transform 180ms var(--ease);
-  white-space: nowrap;
+  text-align: left;
+  white-space: normal;
 }
 
 .catalog-filters button[aria-pressed="true"] {
@@ -2489,20 +2457,6 @@ p {
   border-top: 1px solid var(--line);
 }
 
-.catalog-order::before {
-  position: absolute;
-  top: 50%;
-  right: -10rem;
-  width: var(--fish-shoal-backdrop-width);
-  aspect-ratio: 7940 / 2494;
-  background: url("fish-pattern.svg") center / contain no-repeat;
-  content: "";
-  filter: var(--pattern-filter);
-  opacity: 0.12;
-  pointer-events: none;
-  transform: translateY(-50%);
-}
-
 .catalog-order-grid {
   position: relative;
   z-index: 1;
@@ -2563,10 +2517,8 @@ p {
   width: min(100%, 36rem);
   aspect-ratio: 7940 / 2494;
   margin-bottom: 1.5rem;
-  background: url("fish-pattern.svg") center / contain no-repeat;
   content: "";
-  filter: var(--pattern-filter);
-  opacity: var(--pattern-opacity);
+  --shoal-color: var(--shoal-primary);
 }
 
 .not-found-source__brand {
@@ -3030,21 +2982,6 @@ p {
     font-size: var(--text-reading);
   }
 
-  .fish-divider {
-    width: 100%;
-    margin-left: 0;
-  }
-
-  .fish-divider img {
-    width: 145%;
-    max-width: none;
-    transform: translateX(-15.52%);
-  }
-
-  .fish-divider--prices {
-    padding-top: 0;
-  }
-
   .price-preview {
     padding-top: 1rem;
   }
@@ -3219,20 +3156,22 @@ p {
   }
 
   .catalog-intro {
-    padding: 2.5rem 0;
+    padding: 2.5rem 0 3.75rem;
   }
 
   .catalog-intro__stack {
-    width: min(100%, 39rem);
+    width: min(100%, 42rem);
     gap: 2rem;
   }
 
   .catalog-intro__copy {
-    width: min(calc(100% - 15rem), 34rem);
+    width: min(100%, 38rem);
   }
 
   .catalog-intro__shoal {
-    right: -37rem;
+    top: 9.5rem;
+    right: 0;
+    width: min(100%, 36rem);
   }
 
   .controls-grid {
@@ -3315,7 +3254,7 @@ p {
   }
 
   .catalog-intro {
-    padding: 2.25rem 0;
+    padding: 2.25rem 0 3.25rem;
   }
 
   .catalog-intro__stack {
@@ -3324,12 +3263,13 @@ p {
   }
 
   .catalog-intro__copy {
-    width: calc(100% - 4.5rem);
+    width: 100%;
   }
 
   .catalog-intro__shoal {
-    top: 1rem;
-    right: -48rem;
+    top: 10.25rem;
+    right: 0;
+    width: 100%;
   }
 
   .catalog-intro h1 {
@@ -3857,7 +3797,6 @@ p {
 }
 
 @media (forced-colors: active) {
-  .fish-divider::after,
   .source-footer::after,
   .site-menu__service::after {
     display: none;
