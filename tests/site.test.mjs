@@ -990,7 +990,7 @@ test("catalog entry stacks its copy, search and categories without decorative di
   );
   assert.match(
     styles,
-    /\.catalog-intro__stack\s*\{[^}]*display:\s*grid;[^}]*width:\s*min\(100%, 64rem\);[^}]*gap:/s,
+    /\.catalog-intro__stack\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*minmax\(0, 1fr\);[^}]*width:\s*min\(100%, 42rem\);[^}]*gap:/s,
   );
   assert.match(
     styles,
@@ -998,7 +998,7 @@ test("catalog entry stacks its copy, search and categories without decorative di
   );
   assert.match(
     styles,
-    /\.catalog-intro__copy\s*\{[^}]*width:\s*min\(100%, 43rem\);/s,
+    /\.catalog-intro__copy\s*\{[^}]*width:\s*100%;/s,
   );
   assert.match(
     styles,
@@ -1006,14 +1006,29 @@ test("catalog entry stacks its copy, search and categories without decorative di
   );
   const controlsRule =
     styles.match(/\.catalog-controls\s*\{([^}]*)\}/s)?.[1] ?? "";
+  assert.match(controlsRule, /min-width:\s*0;[^}]*max-width:\s*100%;/s);
   assert.doesNotMatch(
     controlsRule,
     /position:\s*sticky|border|background|box-shadow|backdrop-filter/,
   );
   assert.match(
     styles,
-    /\.catalog-filters\s*\{[^}]*grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\);[^}]*gap:/s,
+    /\.catalog-filters\s*\{[^}]*display:\s*flex;[^}]*flex-wrap:\s*wrap;[^}]*gap:/s,
   );
+  assert.doesNotMatch(
+    styles,
+    /\.catalog-filters\s*\{[^}]*grid-template-columns:/s,
+  );
+  for (const selector of [
+    "\\.catalog-search",
+    "\\.catalog-search input",
+    "\\.catalog-select",
+    "\\.catalog-select select",
+  ]) {
+    const rule =
+      styles.match(new RegExp(selector + "\\s*\\{([^}]*)\\}", "s"))?.[1] ?? "";
+    assert.match(rule, /min-width:\s*0;[^}]*max-width:\s*100%;/s);
+  }
   assert.match(
     styles,
     /\.catalog-search input::placeholder\s*\{[^}]*color:\s*var\(--muted\);[^}]*opacity:\s*1;/s,
@@ -1040,6 +1055,14 @@ test("catalog entry stacks its copy, search and categories without decorative di
   assert.match(
     styles,
     /\.catalog-category \+ \.catalog-category\s*\{[^}]*border-top:\s*1px solid var\(--line\);/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.catalog-product-grid\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\);/s,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 34rem\)[\s\S]*?\.catalog-product-head\s*\{[^}]*flex-wrap:\s*wrap;[^}]*\}[\s\S]*?\.catalog-product strong\s*\{[^}]*min-width:\s*0;[^}]*max-width:\s*100%;[^}]*flex:\s*0 1 auto;[^}]*overflow-wrap:\s*anywhere;[^}]*white-space:\s*normal;/s,
   );
 });
 
@@ -1137,6 +1160,30 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
     );
   }
 
+  const catalogFilterHover =
+    hoverMedia.match(
+      /\.catalog-filters button:hover,[\s\S]*?\.reset-button:hover\s*\{([^}]*)\}/,
+    )?.[1] ?? "";
+  const catalogSearchHover =
+    hoverMedia.match(
+      /\.catalog-search input:hover,[\s\S]*?\.catalog-select select:hover\s*\{([^}]*)\}/,
+    )?.[1] ?? "";
+  assert.doesNotMatch(catalogSearchHover, /background/);
+  assert.doesNotMatch(
+    catalogFilterHover,
+    /background/,
+    "Текстовые фильтры не должны получать прямоугольную подложку",
+  );
+  const catalogFilterPressed =
+    pressedStates.match(
+      /\.catalog-filters button:active,[\s\S]*?\.reset-button:active\s*\{([^}]*)\}/,
+    )?.[1] ?? "";
+  assert.doesNotMatch(catalogFilterPressed, /background/);
+  const catalogFilterSelected =
+    styles.match(/\.catalog-filters button\[aria-pressed="true"\]\s*\{([^}]*)\}/)?.[1] ??
+    "";
+  assert.doesNotMatch(catalogFilterSelected, /background/);
+
   assert.match(
     styles,
     /\.source-button--hero-secondary:hover,[\s\S]*?\.source-button--footer-contact:hover,[\s\S]*?\{[^}]*background:\s*var\(--jelly-glass-surface-strong\);/s,
@@ -1179,7 +1226,15 @@ test("one master shoal keeps deliberate foreground, tonal and sea roles", () => 
   );
   assert.match(
     styles,
-    /\.catalog-intro__shoal\s*\{[^}]*position:\s*absolute;[^}]*right:\s*0;[^}]*width:\s*var\(--fish-shoal-width\);[^}]*--shoal-color:\s*var\(--shoal-tonal\);[^}]*pointer-events:\s*none;/s,
+    /\.catalog-intro__shoal\s*\{[^}]*position:\s*absolute;[^}]*right:\s*clamp\(-28rem, -24vw, -19rem\);[^}]*width:\s*var\(--fish-shoal-width\);[^}]*--shoal-color:\s*var\(--shoal-tonal\);[^}]*pointer-events:\s*none;/s,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*position:\s*relative;[^}]*top:\s*auto;[^}]*right:\s*auto;[^}]*margin-left:\s*clamp\(8rem, 42vw, 24rem\);/s,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 34rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*height:\s*8\.5rem;[^}]*aspect-ratio:\s*auto;[^}]*mask-position:\s*left center;[^}]*mask-size:\s*auto 100%;/s,
   );
   assert.match(styles, /\.catalog-intro\s*\{[^}]*overflow:\s*hidden;/s);
   assert.match(catalogPage, /<span\s+class="catalog-intro__shoal"\s+aria-hidden="true"\s*>\s*<\/span>/s);
