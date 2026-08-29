@@ -57,7 +57,11 @@ const favicon = await readFile(
   "utf8",
 );
 const shareCard = await readFile(
-  new URL("../assets/share-card.jpg", import.meta.url),
+  new URL("../assets/share-card-primary.jpg", import.meta.url),
+);
+const shareCardSource = await readFile(
+  new URL("../assets/share-card-source.svg", import.meta.url),
+  "utf8",
 );
 const nightSeaManifest = JSON.parse(
   await readFile(
@@ -1644,7 +1648,7 @@ test("the agreed source assets stay unchanged", async () => {
 
 test("main and catalog publish Pages-native social metadata", () => {
   const root = "https://anton-gorokhovatsky.github.io/seledkin/";
-  const image = root + "assets/share-card.jpg";
+  const image = root + "assets/share-card-primary.jpg";
   const imageAlt =
     "Свежая рыба со специями и логотип Рыбной лавки капитана Селедкина";
   const pages = [
@@ -1701,6 +1705,12 @@ test("main and catalog publish Pages-native social metadata", () => {
   assert.deepEqual(jpegDimensions(shareCard), { width: 1200, height: 630 });
   assert.ok(shareCard.byteLength > 100_000);
   assert.ok(shareCard.byteLength < 500_000);
+  assert.match(shareCardSource, /width="1200"/);
+  assert.match(shareCardSource, /height="630"/);
+  assert.match(shareCardSource, /href="about-main\.jpg"/);
+  assert.match(shareCardSource, /href="logo-redrawn\.svg"/);
+  assert.doesNotMatch(shareCardSource, /logo-redrawn-night\.svg/);
+  assert.match(shareCardSource, /fill="#ffffff"/);
   assert.doesNotMatch(home + catalogPage, /https:\/\/ks\.fish\//);
   assert.ok(home.includes(`"url": "${root}"`));
   assert.ok(home.includes(`"image": "${image}"`));
