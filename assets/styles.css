@@ -1079,7 +1079,7 @@ p {
 }
 
 .full-photo {
-  width: min(calc(100% - var(--page-outer)), var(--shell));
+  width: min(calc(100% - var(--page-outer)), 52rem);
   margin: 0 auto clamp(4.5rem, 8vw, 7rem);
 }
 

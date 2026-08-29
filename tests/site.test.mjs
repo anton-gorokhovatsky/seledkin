@@ -522,6 +522,22 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
   assert.match(styles, /"Iowan Old Style"/);
 });
 
+test("the standalone tuna photograph keeps an editorial scale", () => {
+  const figureRule =
+    styles.match(/\.full-photo\s*\{([^}]*)\}/s)?.[1] ?? "";
+  const imageRule =
+    styles.match(/\.full-photo img\s*\{([^}]*)\}/s)?.[1] ?? "";
+
+  assert.match(
+    figureRule,
+    /width:\s*min\(calc\(100% - var\(--page-outer\)\), 52rem\);/,
+  );
+  assert.match(figureRule, /margin:\s*0 auto/);
+  assert.match(imageRule, /width:\s*100%/);
+  assert.match(imageRule, /height:\s*auto/);
+  assert.doesNotMatch(imageRule, /object-fit/);
+});
+
 test("the typographic scale protects reading and interface text", () => {
   for (const token of [
     "--text-reading: 1.125rem",
