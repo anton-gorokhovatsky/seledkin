@@ -46,43 +46,21 @@ ${sourceBody
   await writeFile(variant.output, selfContained);
 }
 
-const acceptedLogo = await readFile(
-  new URL("../assets/logo-redrawn.svg", import.meta.url),
+const shoalPattern = await readFile(
+  new URL("../assets/fish-pattern.svg", import.meta.url),
   "utf8",
 );
-const acceptedEngravingPaths = [
-  ...acceptedLogo.matchAll(/<path\b[^>]*\bfill="#004f91"[^>]*\/>/g),
-].map(([path]) => path);
-const acceptedFishSource = acceptedEngravingPaths.find((path) =>
-  path.includes('d="M 1054.939 0.394'),
-);
-if (!acceptedFishSource) {
-  throw new Error("Accepted fish engraving was not found in logo-redrawn.svg");
+const shoalPathData =
+  shoalPattern.match(/<path\b[^>]*\bd="([^"]+)"[^>]*\bfill="#004F91"/)?.[1] ??
+  "";
+const shoalFish = shoalPathData.split(/(?=M)/);
+if (shoalFish.length !== 28 || !shoalFish[0].startsWith("M5020.31 919.44")) {
+  throw new Error("The accepted first fish was not found in fish-pattern.svg");
 }
-const acceptedFishPathData =
-  acceptedFishSource.match(/\bd="([^"]+)"/)?.[1] ?? "";
-const acceptedFishSubpaths = acceptedFishPathData
-  .split(/\s+(?=M\s)/)
-  .filter((subpath) => {
-    const coordinates = [
-      ...subpath.matchAll(/-?\d+(?:\.\d+)?/g),
-    ].map(([coordinate]) => Number(coordinate));
-    const xCoordinates = coordinates.filter((_, index) => index % 2 === 0);
-    const yCoordinates = coordinates.filter((_, index) => index % 2 === 1);
-    return Math.min(...xCoordinates) <= 800 && Math.min(...yCoordinates) <= 830;
-  });
-if (acceptedFishSubpaths.length !== 58) {
-  throw new Error("Accepted fish crop no longer resolves to 58 exact subpaths");
-}
-const acceptedFishPath = acceptedFishSource
-  .replace(/\bd="[^"]+"/, `d="${acceptedFishSubpaths.join(" ")}"`)
-  .replace('fill="#004f91"', 'class="favicon-fish"');
+const faviconFish = `<path d="${shoalFish[0]}" fill="#004F91"/>`;
 const faviconTemplate = await readFile(faviconTemplatePath, "utf8");
 const favicon = faviconTemplate.replace(
-  "    <!-- ACCEPTED_FISH_PATH -->",
-  acceptedFishPath
-    .split("\n")
-    .map((line) => (line ? `    ${line}` : ""))
-    .join("\n"),
+  "  <!-- SHOAL_FISH_PATH -->",
+  faviconFish,
 );
 await writeFile(new URL("../assets/favicon.svg", import.meta.url), favicon);

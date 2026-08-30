@@ -68,6 +68,10 @@ const faviconTemplate = await readFile(
   new URL("../scripts/logo-marks/favicon.svg", import.meta.url),
   "utf8",
 );
+const fishPattern = await readFile(
+  new URL("../assets/fish-pattern.svg", import.meta.url),
+  "utf8",
+);
 const logoBuilder = await readFile(
   new URL("../scripts/build-logo-variants.mjs", import.meta.url),
   "utf8",
@@ -449,48 +453,43 @@ test("the home brand marks the current page without linking to itself", () => {
   assert.doesNotMatch(styles, /(?:^|[,\n])\s*\.site-menu__brand:hover img/m);
 });
 
-test("every page uses an exact crop of the accepted engraving as its favicon", () => {
+test("every page uses one exact silhouette from the accepted shoal as its favicon", () => {
   assert.match(home, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(notFoundPage, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(catalogPage, /rel="icon" href="\.\.\/assets\/favicon\.svg"/);
   for (const page of [home, notFoundPage, catalogPage]) {
     assert.doesNotMatch(page, /rel="icon"[^>]+logo-redrawn\.svg/);
   }
-  assert.match(favicon, /viewBox="-70 -60 940 940"/);
+  assert.match(favicon, /viewBox="4085 642 1000 1000"/);
   assert.match(
     favicon,
-    /<title id="favicon-title">Рыба капитана Селедкина — малый знак<\/title>/,
+    /<title id="favicon-title">Рыба из фирменного косяка — малый знак<\/title>/,
   );
-  assert.match(favicon, /prefers-color-scheme:\s*dark/);
+  assert.doesNotMatch(favicon, /prefers-color-scheme/);
   assert.equal((favicon.match(/<image /g) ?? []).length, 0);
   assert.doesNotMatch(favicon, /data:image/);
-  assert.match(favicon, /<circle class="favicon-badge" cx="400" cy="400" r="450"\/>/);
-  assert.match(favicon, /clip-path="url\(#favicon-disc\)"/);
-  assert.match(favicon, /clip-path="url\(#fish-crop\)"/);
-  assert.equal((favicon.match(/<path /g) ?? []).length, 1);
-  assert.match(favicon, /d="M 1054\.939 0\.394/);
-  assert.match(favicon, /fill-rule="evenodd"/);
-  const acceptedFishPathData =
-    sourceLogo.match(/<path d="(M 1054\.939 0\.394[^"]+)"/)?.[1] ?? "";
-  const faviconFishPathData =
-    favicon.match(/<path d="(M 1054\.939 0\.394[^"]+)"/)?.[1] ?? "";
-  const acceptedFishSubpaths = acceptedFishPathData.split(/\s+(?=M\s)/);
-  const faviconFishSubpaths = faviconFishPathData.split(/\s+(?=M\s)/);
-  assert.equal(faviconFishSubpaths.length, 58);
-  assert.ok(
-    faviconFishSubpaths.every((subpath) =>
-      acceptedFishSubpaths.includes(subpath),
-    ),
+  assert.match(
+    favicon,
+    /<rect x="4085" y="642" width="1000" height="1000" fill="#f7f2e7"\/>/,
   );
-  assert.match(favicon, /\.favicon-badge\s*\{\s*fill:\s*#00569d;/);
-  assert.match(favicon, /\.favicon-fish\s*\{\s*fill:\s*#fff;/);
-  assert.match(faviconTemplate, /<!-- ACCEPTED_FISH_PATH -->/);
+  assert.equal((favicon.match(/<path /g) ?? []).length, 1);
+  assert.match(favicon, /d="M5020\.31 919\.44/);
+  assert.match(favicon, /fill="#004F91"/);
+  const faviconFishPathData =
+    favicon.match(/<path d="(M5020\.31 919\.44[^"]+)"/)?.[1] ?? "";
+  const shoalPathData =
+    fishPattern.match(/<path\b[^>]*\bd="([^"]+)"[^>]*\bfill="#004F91"/)?.[1] ??
+    "";
+  const shoalFish = shoalPathData.split(/(?=M)/);
+  assert.equal(shoalFish.length, 28);
+  assert.equal(faviconFishPathData, shoalFish[0]);
+  assert.match(faviconTemplate, /<!-- SHOAL_FISH_PATH -->/);
   assert.doesNotMatch(logoBuilder, /logo-parts\/herring\.svg/);
-  assert.match(logoBuilder, /logo-redrawn\.svg/);
-  assert.match(logoBuilder, /M 1054\.939 0\.394/);
+  assert.match(logoBuilder, /fish-pattern\.svg/);
+  assert.match(logoBuilder, /shoalFish\[0\]/);
   assert.match(logoBuilder, /logo-marks\/favicon\.svg/);
   assert.match(logoBuilder, /assets\/favicon\.svg/);
-  assert.ok(Buffer.byteLength(favicon) < 120_000);
+  assert.ok(Buffer.byteLength(favicon) < 30_000);
 });
 
 test("home keeps the source ks.fish visual sequence and local imagery", () => {

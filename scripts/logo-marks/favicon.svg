@@ -2,31 +2,11 @@
   xmlns="http://www.w3.org/2000/svg"
   width="64"
   height="64"
-  viewBox="-70 -60 940 940"
+  viewBox="4085 642 1000 1000"
   role="img"
   aria-labelledby="favicon-title"
 >
-  <title id="favicon-title">Рыба капитана Селедкина — малый знак</title>
-  <style>
-    .favicon-badge { fill: #00569d; }
-    .favicon-fish { fill: #fff; }
-    @media (prefers-color-scheme: dark) {
-      .favicon-badge { fill: #f7f2e7; }
-      .favicon-fish { fill: #0e202b; }
-    }
-  </style>
-  <defs>
-    <clipPath id="favicon-disc">
-      <circle cx="400" cy="400" r="450"/>
-    </clipPath>
-    <clipPath id="fish-crop">
-      <polygon points="-100,-100 800,-100 800,285 755,330 705,380 665,445 625,525 580,625 540,725 515,940 -100,940"/>
-    </clipPath>
-  </defs>
-  <circle class="favicon-badge" cx="400" cy="400" r="450"/>
-  <g class="favicon-fish" aria-hidden="true" clip-path="url(#favicon-disc)">
-    <g clip-path="url(#fish-crop)">
-    <!-- ACCEPTED_FISH_PATH -->
-    </g>
-  </g>
+  <title id="favicon-title">Рыба из фирменного косяка — малый знак</title>
+  <rect x="4085" y="642" width="1000" height="1000" fill="#f7f2e7"/>
+  <!-- SHOAL_FISH_PATH -->
 </svg>
