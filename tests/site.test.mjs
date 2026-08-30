@@ -64,10 +64,6 @@ const favicon = await readFile(
   new URL("../assets/favicon.svg", import.meta.url),
   "utf8",
 );
-const herringMarkSource = await readFile(
-  new URL("../scripts/logo-parts/herring.svg", import.meta.url),
-  "utf8",
-);
 const faviconTemplate = await readFile(
   new URL("../scripts/logo-marks/favicon.svg", import.meta.url),
   "utf8",
@@ -453,42 +449,48 @@ test("the home brand marks the current page without linking to itself", () => {
   assert.doesNotMatch(styles, /(?:^|[,\n])\s*\.site-menu__brand:hover img/m);
 });
 
-test("every page uses the stable complete herring mark as its favicon", () => {
+test("every page uses an exact crop of the accepted engraving as its favicon", () => {
   assert.match(home, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(notFoundPage, /rel="icon" href="assets\/favicon\.svg"/);
   assert.match(catalogPage, /rel="icon" href="\.\.\/assets\/favicon\.svg"/);
   for (const page of [home, notFoundPage, catalogPage]) {
     assert.doesNotMatch(page, /rel="icon"[^>]+logo-redrawn\.svg/);
   }
-  assert.match(favicon, /viewBox="0 0 512 512"/);
+  assert.match(favicon, /viewBox="-70 -60 940 940"/);
   assert.match(
     favicon,
-    /<title id="favicon-title">Целая сельдь — малый знак лавки<\/title>/,
+    /<title id="favicon-title">Рыба капитана Селедкина — малый знак<\/title>/,
   );
   assert.match(favicon, /prefers-color-scheme:\s*dark/);
   assert.equal((favicon.match(/<image /g) ?? []).length, 0);
   assert.doesNotMatch(favicon, /data:image/);
-  assert.doesNotMatch(favicon, /clipPath|clip-path/);
-  assert.match(favicon, /<circle class="favicon-badge" cx="256" cy="256" r="238"\/>/);
-  assert.match(favicon, /id="herring-mark" data-part="complete-herring"/);
-  assert.match(favicon, /id="herring-silhouette"/);
-  assert.match(favicon, /id="herring-eye"/);
-  assert.match(favicon, /id="herring-gill"/);
-  assert.match(favicon, /id="herring-mouth"/);
-  assert.match(favicon, /id="herring-lower-jaw"/);
-  assert.match(favicon, /id="herring-tail-detail"/);
+  assert.match(favicon, /<circle class="favicon-badge" cx="400" cy="400" r="450"\/>/);
+  assert.match(favicon, /clip-path="url\(#favicon-disc\)"/);
+  assert.match(favicon, /clip-path="url\(#fish-crop\)"/);
+  assert.equal((favicon.match(/<path /g) ?? []).length, 1);
+  assert.match(favicon, /d="M 1054\.939 0\.394/);
+  assert.match(favicon, /fill-rule="evenodd"/);
+  const acceptedFishPathData =
+    sourceLogo.match(/<path d="(M 1054\.939 0\.394[^"]+)"/)?.[1] ?? "";
+  const faviconFishPathData =
+    favicon.match(/<path d="(M 1054\.939 0\.394[^"]+)"/)?.[1] ?? "";
+  const acceptedFishSubpaths = acceptedFishPathData.split(/\s+(?=M\s)/);
+  const faviconFishSubpaths = faviconFishPathData.split(/\s+(?=M\s)/);
+  assert.equal(faviconFishSubpaths.length, 58);
+  assert.ok(
+    faviconFishSubpaths.every((subpath) =>
+      acceptedFishSubpaths.includes(subpath),
+    ),
+  );
   assert.match(favicon, /\.favicon-badge\s*\{\s*fill:\s*#00569d;/);
   assert.match(favicon, /\.favicon-fish\s*\{\s*fill:\s*#fff;/);
-  assert.match(herringMarkSource, /data-part="complete-herring"/);
-  assert.match(
-    herringMarkSource,
-    /Полный силуэт сельди с глазом, жаберной крышкой, ртом, нижней челюстью/,
-  );
-  assert.match(faviconTemplate, /<!-- COMPLETE_HERRING -->/);
-  assert.match(logoBuilder, /logo-parts\/herring\.svg/);
+  assert.match(faviconTemplate, /<!-- ACCEPTED_FISH_PATH -->/);
+  assert.doesNotMatch(logoBuilder, /logo-parts\/herring\.svg/);
+  assert.match(logoBuilder, /logo-redrawn\.svg/);
+  assert.match(logoBuilder, /M 1054\.939 0\.394/);
   assert.match(logoBuilder, /logo-marks\/favicon\.svg/);
   assert.match(logoBuilder, /assets\/favicon\.svg/);
-  assert.ok(Buffer.byteLength(favicon) < 10_000);
+  assert.ok(Buffer.byteLength(favicon) < 120_000);
 });
 
 test("home keeps the source ks.fish visual sequence and local imagery", () => {

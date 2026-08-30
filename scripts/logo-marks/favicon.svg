@@ -2,24 +2,31 @@
   xmlns="http://www.w3.org/2000/svg"
   width="64"
   height="64"
-  viewBox="0 0 512 512"
+  viewBox="-70 -60 940 940"
   role="img"
-  aria-labelledby="favicon-title favicon-desc"
+  aria-labelledby="favicon-title"
 >
-  <title id="favicon-title">Целая сельдь — малый знак лавки</title>
-  <desc id="favicon-desc">Целая сельдь с читаемыми глазом, ртом и нижней челюстью в круглом поле</desc>
+  <title id="favicon-title">Рыба капитана Селедкина — малый знак</title>
   <style>
     .favicon-badge { fill: #00569d; }
     .favicon-fish { fill: #fff; }
-    .favicon-detail { stroke: #00569d; }
-    .favicon-detail-fill { fill: #00569d; }
     @media (prefers-color-scheme: dark) {
       .favicon-badge { fill: #f7f2e7; }
       .favicon-fish { fill: #0e202b; }
-      .favicon-detail { stroke: #f7f2e7; }
-      .favicon-detail-fill { fill: #f7f2e7; }
     }
   </style>
-  <circle class="favicon-badge" cx="256" cy="256" r="238"/>
-  <!-- COMPLETE_HERRING -->
+  <defs>
+    <clipPath id="favicon-disc">
+      <circle cx="400" cy="400" r="450"/>
+    </clipPath>
+    <clipPath id="fish-crop">
+      <polygon points="-100,-100 800,-100 800,285 755,330 705,380 665,445 625,525 580,625 540,725 515,940 -100,940"/>
+    </clipPath>
+  </defs>
+  <circle class="favicon-badge" cx="400" cy="400" r="450"/>
+  <g class="favicon-fish" aria-hidden="true" clip-path="url(#favicon-disc)">
+    <g clip-path="url(#fish-crop)">
+    <!-- ACCEPTED_FISH_PATH -->
+    </g>
+  </g>
 </svg>
