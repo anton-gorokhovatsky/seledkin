@@ -330,7 +330,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /\.source-hero__mobile-logo\s*\{[^}]*left:\s*50%;[^}]*width:\s*min\(82vw, 18rem\);[^}]*transform:\s*translateX\(-50%\);/s,
+    /\.source-hero__mobile-brand\s*\{[^}]*left:\s*50%;[^}]*width:\s*min\(82vw, 18rem\);[^}]*transform:\s*translateX\(-50%\);/s,
   );
   assert.match(
     styles,
@@ -1650,6 +1650,41 @@ test("Night Watch uses a dedicated reverse-polarity logo without changing its ge
     (match) => match[1],
   );
   assert.deepEqual(nightPathData, sourcePathData);
+});
+
+test("the mobile hero uses the exact logo geometry as a jelly material", async () => {
+  assert.match(
+    home,
+    /class="source-hero__mobile-brand"[\s\S]*?class="source-hero__mobile-jelly"[\s\S]*?src="assets\/logo-redrawn-sea\.svg"[\s\S]*?data-logo-dark="assets\/logo-redrawn-sea-night\.svg"/,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__mobile-jelly\s*\{[^}]*background:\s*var\(--source-hero-logo-jelly-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);[^}]*mask:\s*url\("logo-redrawn-jelly-mask\.svg"\)/s,
+  );
+  assert.match(styles, /\.source-hero__mobile-logo\s*\{[^}]*filter:\s*none;/s);
+  const pathData = (svg) => [...svg.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"/g)].map(
+    (match) => match[1],
+  );
+  const logoPairs = [
+    ["logo-redrawn.svg", "logo-redrawn-sea.svg", "#004f91", /#fff(?:fff)?/i],
+    ["logo-redrawn-night.svg", "logo-redrawn-sea-night.svg", "#0e202b", /#b8c2c8/i],
+  ];
+  for (const [sourceName, seaName, ink, removedBase] of logoPairs) {
+    const source = await readFile(new URL(`../assets/${sourceName}`, import.meta.url), "utf8");
+    const sea = await readFile(new URL(`../assets/${seaName}`, import.meta.url), "utf8");
+    assert.deepEqual(pathData(sea), pathData(source));
+    assert.match(sea, new RegExp(`fill="${ink}"`));
+    assert.doesNotMatch(sea, removedBase);
+    assert.match(sea, /mask id="ink-cutouts"/);
+    assert.match(sea, /mask="url\(#ink-cutouts\)"/);
+  }
+  const jellyMask = await readFile(
+    new URL("../assets/logo-redrawn-jelly-mask.svg", import.meta.url),
+    "utf8",
+  );
+  assert.deepEqual(pathData(jellyMask), pathData(sourceLogo));
+  assert.match(jellyMask, /fill="#ffffff"/);
+  assert.doesNotMatch(jellyMask, /fill="#004f91"/);
 });
 
 test("the squid logo is a contextual, reproducible variant rather than a random rotation", () => {
