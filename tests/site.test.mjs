@@ -1655,11 +1655,19 @@ test("Night Watch uses a dedicated reverse-polarity logo without changing its ge
 test("the mobile hero uses the exact logo geometry as a jelly material", async () => {
   assert.match(
     home,
-    /class="source-hero__mobile-brand"[\s\S]*?class="source-hero__mobile-jelly"[\s\S]*?src="assets\/logo-redrawn-sea\.svg"[\s\S]*?data-logo-dark="assets\/logo-redrawn-sea-night\.svg"/,
+    /class="source-hero__mobile-brand"[\s\S]*?source-hero__mobile-jelly--depth[\s\S]*?source-hero__mobile-jelly--body[\s\S]*?source-hero__mobile-jelly--rim[\s\S]*?src="assets\/logo-redrawn-sea\.svg"[\s\S]*?data-logo-dark="assets\/logo-redrawn-sea-night\.svg"/,
   );
   assert.match(
     styles,
-    /\.source-hero__mobile-jelly\s*\{[^}]*background:\s*var\(--source-hero-logo-jelly-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);[^}]*mask:\s*url\("logo-redrawn-jelly-mask\.svg"\)/s,
+    /\.source-hero__mobile-jelly--body\s*\{[^}]*background:\s*var\(--source-hero-jelly-body\);[^}]*backdrop-filter:\s*var\(--source-hero-jelly-filter\);/s,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__mobile-jelly--rim\s*\{[^}]*mask-composite:\s*exclude;[^}]*drop-shadow/s,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__actions \.source-button--hero-primary\s*\{[^}]*background-color:\s*var\(--source-hero-jelly-control\);[^}]*backdrop-filter:\s*var\(--source-hero-jelly-filter\);/s,
   );
   assert.match(styles, /\.source-hero__mobile-logo\s*\{[^}]*filter:\s*none;/s);
   const pathData = (svg) => [...svg.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"/g)].map(
