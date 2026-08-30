@@ -41,6 +41,9 @@ const requiredFiles = [
   "assets/catalog-data.js",
   "assets/logo-redrawn.svg",
   "assets/logo-redrawn-night.svg",
+  "assets/logo-redrawn-sea.svg",
+  "assets/logo-redrawn-sea-night.svg",
+  "assets/logo-redrawn-jelly-mask.svg",
   "assets/social-icons.svg",
   "assets/salmon-cat.jpg",
   "assets/hero-ocean.jpg",
@@ -208,8 +211,9 @@ for (const file of htmlFiles) {
       'data-poster-dark="assets/hero-sea-night-poster.jpg"',
       'src="assets/hero-sea.mp4"',
       'data-src-dark="assets/hero-sea-night.mp4"',
-      'data-logo-light="assets/logo-redrawn.svg"',
-      'data-logo-dark="assets/logo-redrawn-night.svg"',
+      'data-logo-light="assets/logo-redrawn-sea.svg"',
+      'data-logo-dark="assets/logo-redrawn-sea.svg"',
+      'class="source-hero__mobile-brand brand-jelly"',
       'class="source-header source-header--over-media"',
     ]) {
       if (!html.includes(required)) fail(`${file}: первый экран не содержит ${required}`);

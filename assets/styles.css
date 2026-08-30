@@ -30,9 +30,9 @@
     inset 0 1px 0 var(--jelly-glass-highlight);
   --jelly-glass-filter: blur(0.85rem) saturate(106%);
   --source-hero-jelly-body: linear-gradient(145deg, rgb(255 255 255 / 49%), rgb(229 247 250 / 25%) 36%, rgb(177 217 226 / 15%) 66%, rgb(255 255 255 / 38%));
-  --source-hero-jelly-depth: rgb(0 20 30 / 6%);
-  --source-hero-jelly-rim: linear-gradient(150deg, rgb(255 255 255 / 96%), rgb(222 246 250 / 72%) 34%, rgb(119 177 190 / 44%) 68%, rgb(255 255 255 / 82%));
   --source-hero-jelly-filter: blur(0.4rem) saturate(124%) brightness(126%);
+  --brand-jelly-body: var(--source-hero-jelly-body);
+  --brand-jelly-filter: var(--source-hero-jelly-filter);
   --source-hero-jelly-control: rgb(215 239 244 / 42%);
   --source-hero-jelly-control-strong: rgb(230 247 250 / 52%);
   --source-hero-jelly-edge: rgb(255 255 255 / 74%);
@@ -168,34 +168,12 @@
 }
 
 :root[data-theme="dark"] [data-theme-logo] {
-  content: url("logo-redrawn-night.svg");
-}
-
-:root[data-theme="dark"] .source-hero__mobile-logo {
-  content: url("logo-redrawn-sea-night.svg");
+  content: url("logo-redrawn-sea.svg");
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) [data-theme-logo] {
-    content: url("logo-redrawn-night.svg");
-  }
-
-  :root:not([data-theme="light"]) .source-hero__mobile-logo {
-    content: url("logo-redrawn-sea-night.svg");
-  }
-}
-
-:root[data-logo-variant="squid"] [data-theme-logo] {
-  content: url("logo-catch-squid.svg");
-}
-
-:root[data-theme="dark"][data-logo-variant="squid"] [data-theme-logo] {
-  content: url("logo-catch-squid-night.svg");
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"])[data-logo-variant="squid"] [data-theme-logo] {
-    content: url("logo-catch-squid-night.svg");
+    content: url("logo-redrawn-sea.svg");
   }
 }
 
@@ -372,6 +350,35 @@ p {
   padding: var(--masthead-top-inset) var(--content-edge) 1rem;
 }
 
+.brand-jelly {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 3600 / 1784;
+}
+
+.brand-jelly::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: "";
+  background: var(--brand-jelly-body);
+  -webkit-mask: url("logo-redrawn-jelly-mask.svg") center / contain no-repeat;
+  mask: url("logo-redrawn-jelly-mask.svg") center / contain no-repeat;
+  -webkit-backdrop-filter: var(--brand-jelly-filter);
+  backdrop-filter: var(--brand-jelly-filter);
+  pointer-events: none;
+}
+
+.brand-jelly > img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: none;
+}
+
 .source-brand {
   display: block;
   width: var(--brand-width-desktop);
@@ -386,10 +393,6 @@ a.source-brand {
 .source-brand img {
   width: 100%;
   height: auto;
-}
-
-.source-header--over-media .source-brand img {
-  filter: drop-shadow(0 0.15rem 0.7rem rgb(0 0 0 / 35%));
 }
 
 .source-button {
@@ -2839,42 +2842,11 @@ a.site-menu__brand {
     transform: translateX(-50%);
   }
 
-  .source-hero__mobile-jelly,
   .source-hero__mobile-logo {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-  }
-
-  .source-hero__mobile-jelly {
-    -webkit-mask: url("logo-redrawn-jelly-mask.svg") center / contain no-repeat;
-    mask: url("logo-redrawn-jelly-mask.svg") center / contain no-repeat;
-    pointer-events: none;
-  }
-
-  .source-hero__mobile-jelly--depth {
-    z-index: 0;
-    background: var(--source-hero-jelly-depth);
-    filter: drop-shadow(0 0.68rem 0.72rem rgb(0 13 21 / 38%));
-    transform: translateY(0.08rem);
-  }
-
-  .source-hero__mobile-jelly--body {
-    z-index: 1;
-    background: var(--source-hero-jelly-body);
-    -webkit-backdrop-filter: var(--source-hero-jelly-filter);
-    backdrop-filter: var(--source-hero-jelly-filter);
-  }
-
-  .source-hero__mobile-jelly--rim {
-    z-index: 2;
-    background: var(--source-hero-jelly-rim);
-    -webkit-mask: url("logo-redrawn-jelly-mask.svg") center / contain no-repeat, url("logo-redrawn-jelly-mask.svg") center / 98.4% 96.8% no-repeat;
-    -webkit-mask-composite: xor;
-    mask: url("logo-redrawn-jelly-mask.svg") center / contain no-repeat, url("logo-redrawn-jelly-mask.svg") center / 98.4% 96.8% no-repeat;
-    mask-composite: exclude;
-    filter: drop-shadow(0 0 0.12rem rgb(255 255 255 / 72%));
   }
 
   .source-hero__mobile-logo {
@@ -3711,21 +3683,6 @@ a.site-menu__brand {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  a.source-brand img,
-  a.site-menu__brand img,
-  .not-found-source__brand img {
-    transition:
-      opacity 180ms ease-out,
-      transform 180ms var(--ease);
-  }
-
-  a.source-brand:hover img,
-  a.site-menu__brand:hover img,
-  .not-found-source__brand:hover img {
-    transform: translateY(-0.08rem);
-    opacity: 0.82;
-  }
-
   .source-hero__journal-control:not([aria-disabled="true"]):hover {
     border-color: var(--brass);
     background: var(--jelly-glass-surface-strong);
@@ -3815,13 +3772,6 @@ a.site-menu__brand {
   border-color: var(--brass);
   background: var(--jelly-glass-surface-strong);
   color: var(--ink);
-}
-
-a.source-brand:active img,
-a.site-menu__brand:active img,
-.not-found-source__brand:active img {
-  opacity: 0.9;
-  transform: translateY(0.04rem) scale(0.985);
 }
 
 .source-hero__journal-control:not([aria-disabled="true"]):not(:disabled):active {
@@ -3975,7 +3925,7 @@ a.site-menu__brand:active img,
   .site-menu__routes,
   .source-hero__journal-card,
   .source-hero__journal-control,
-  .source-hero__mobile-jelly,
+  .brand-jelly::before,
   .theme-toggle--menu {
     background: Canvas;
     box-shadow: none;

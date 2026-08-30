@@ -468,7 +468,7 @@ test("the home brand marks the current page without linking to itself", () => {
 
   assert.doesNotMatch(homeHeader, /<a class="source-brand"/);
   assert.doesNotMatch(homeMenuMasthead, /<a class="site-menu__brand"/);
-  assert.match(catalogHeader, /<a class="source-brand" href="\.\.\/"/);
+  assert.match(catalogHeader, /<a class="source-brand brand-jelly" href="\.\.\/"/);
   assert.match(styles, /\.source-brand\s*\{[^}]*pointer-events:\s*none;/s);
   assert.match(styles, /a\.source-brand\s*\{[^}]*pointer-events:\s*auto;/s);
   assert.match(styles, /\.site-menu__brand\s*\{[^}]*pointer-events:\s*none;/s);
@@ -1182,7 +1182,6 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
   const pressedStates = styles.slice(pressedStart, pressedEnd);
 
   for (const selector of [
-    "a.source-brand:hover img",
     ".floating-menu:hover",
     ".catalog-search input:hover",
     ".catalog-filters button:hover",
@@ -1200,7 +1199,6 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
   for (const selector of [
     "a:active",
     ".source-button:active",
-    "a.source-brand:active img",
     ".source-hero__journal-control:not([aria-disabled=\"true\"]):not(:disabled):active",
     ".source-hero__journal-card[data-stack-position=\"0\"]:active img",
     ".assortment-directory__link:active",
@@ -1612,11 +1610,11 @@ test("Night Watch switches the hero and menu to a dedicated night sea file", asy
   }
 });
 
-test("Night Watch uses a dedicated reverse-polarity logo without changing its geometry", async () => {
+test("Night Watch keeps the original blue logo ink instead of inverting it", () => {
   for (const page of [home, catalogPage, notFoundPage]) {
     assert.match(page, /data-theme-logo/);
-    assert.match(page, /data-logo-light="(?:\.\.\/)?assets\/logo-redrawn\.svg"/);
-    assert.match(page, /data-logo-dark="(?:\.\.\/)?assets\/logo-redrawn-night\.svg"/);
+    assert.match(page, /data-logo-light="(?:\.\.\/)?assets\/logo-redrawn-sea\.svg"/);
+    assert.match(page, /data-logo-dark="(?:\.\.\/)?assets\/logo-redrawn-sea\.svg"/);
   }
 
   assert.equal(
@@ -1628,48 +1626,30 @@ test("Night Watch uses a dedicated reverse-polarity logo without changing its ge
   assert.match(themeScript, /document\.querySelectorAll\("\[data-theme-logo\]"\)/);
   assert.match(themeScript, /logo\.dataset\.logoDark/);
   assert.match(themeScript, /logo\.dataset\.logoLight/);
-  assert.match(styles, /content:\s*url\("logo-redrawn-night\.svg"\)/);
+  assert.match(styles, /content:\s*url\("logo-redrawn-sea\.svg"\)/);
+  assert.doesNotMatch(styles, /content:\s*url\("logo-redrawn-night\.svg"\)/);
 
-  const nightLogo = await readFile(
-    new URL("../assets/logo-redrawn-night.svg", import.meta.url),
-    "utf8",
-  );
-  assert.match(nightLogo, /id="logo-night-base"[^>]*fill="#b8c2c8"/);
-  assert.match(nightLogo, /id="logo-night-shadows"[^>]*fill="#0e202b"/);
-  assert.match(nightLogo, /id="logo-night-board-1"[^>]*fill="#b8c2c8"/);
-  assert.match(nightLogo, /id="logo-night-board-2"[^>]*fill="#b8c2c8"/);
-  assert.match(nightLogo, /id="logo-night-wordmark-1" fill="#0e202b"/);
-  assert.match(nightLogo, /id="logo-night-wordmark-2" fill="#0e202b"/);
-  assert.doesNotMatch(nightLogo, /#fff(?:fff)?/i);
-  assert.doesNotMatch(nightLogo, /filter=|invert\(/i);
-  assert.doesNotMatch(nightLogo, /clipPath|clip-path/i);
-  const sourcePathData = [...sourceLogo.matchAll(/<path d="([^"]*)"/g)].map(
-    (match) => match[1],
-  );
-  const nightPathData = [...nightLogo.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"/g)].map(
-    (match) => match[1],
-  );
-  assert.deepEqual(nightPathData, sourcePathData);
 });
 
-test("the mobile hero uses the exact logo geometry as a jelly material", async () => {
-  assert.match(
-    home,
-    /class="source-hero__mobile-brand"[\s\S]*?source-hero__mobile-jelly--depth[\s\S]*?source-hero__mobile-jelly--body[\s\S]*?source-hero__mobile-jelly--rim[\s\S]*?src="assets\/logo-redrawn-sea\.svg"[\s\S]*?data-logo-dark="assets\/logo-redrawn-sea-night\.svg"/,
-  );
+test("every rendered logo uses the exact geometry in one jelly material", async () => {
+  assert.equal((home.match(/brand-jelly/g) ?? []).length, 3);
+  assert.equal((catalogPage.match(/brand-jelly/g) ?? []).length, 2);
+  assert.equal((notFoundPage.match(/brand-jelly/g) ?? []).length, 1);
+  for (const page of [home, catalogPage, notFoundPage]) {
+    assert.doesNotMatch(page, /source-hero__mobile-jelly|data-logo-squid/);
+    assert.doesNotMatch(page, /src="(?:\.\.\/)?assets\/logo-redrawn\.svg"/);
+  }
   assert.match(
     styles,
-    /\.source-hero__mobile-jelly--body\s*\{[^}]*background:\s*var\(--source-hero-jelly-body\);[^}]*backdrop-filter:\s*var\(--source-hero-jelly-filter\);/s,
+    /\.brand-jelly::before\s*\{[^}]*background:\s*var\(--brand-jelly-body\);[^}]*mask:\s*url\("logo-redrawn-jelly-mask\.svg"\)[^}]*backdrop-filter:\s*var\(--brand-jelly-filter\);/s,
   );
-  assert.match(
-    styles,
-    /\.source-hero__mobile-jelly--rim\s*\{[^}]*mask-composite:\s*exclude;[^}]*drop-shadow/s,
-  );
+  assert.doesNotMatch(styles, /source-hero__mobile-jelly|source-hero-jelly-(?:depth|rim)/);
+  assert.doesNotMatch(styles, /a\.source-brand:hover img|a\.site-menu__brand:hover img/);
   assert.match(
     styles,
     /\.source-hero__actions \.source-button--hero-primary\s*\{[^}]*background-color:\s*var\(--source-hero-jelly-control\);[^}]*backdrop-filter:\s*var\(--source-hero-jelly-filter\);/s,
   );
-  assert.match(styles, /\.source-hero__mobile-logo\s*\{[^}]*filter:\s*none;/s);
+  assert.match(styles, /\.brand-jelly > img\s*\{[^}]*filter:\s*none;/s);
   const pathData = (svg) => [...svg.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"/g)].map(
     (match) => match[1],
   );
@@ -1695,26 +1675,15 @@ test("the mobile hero uses the exact logo geometry as a jelly material", async (
   assert.doesNotMatch(jellyMask, /fill="#004f91"/);
 });
 
-test("the squid logo is a contextual, reproducible variant rather than a random rotation", () => {
-  assert.equal(
-    (catalogPage.match(/data-logo-squid-light="\.\.\/assets\/logo-catch-squid\.svg"/g) ?? [])
-      .length,
-    2,
-  );
-  assert.equal(
-    (catalogPage.match(/data-logo-squid-dark="\.\.\/assets\/logo-catch-squid-night\.svg"/g) ?? [])
-      .length,
-    2,
-  );
+test("the unaccepted squid draft stays isolated from the live jelly logo", () => {
+  assert.doesNotMatch(catalogPage, /data-logo-squid|logo-catch-squid/);
+  assert.doesNotMatch(styles, /data-logo-variant="squid"|logo-catch-squid/);
   assert.match(catalogPage, /initialCatalogQuery[\s\S]*?includes\("кальмар"\)/);
   assert.match(catalogScript, /normalize\(query\)\.includes\("кальмар"\) \? "squid" : ""/);
   assert.match(catalogScript, /seledkin:logovariantchange/);
   assert.match(themeScript, /root\.dataset\.logoVariant/);
   assert.match(themeScript, /const variantKey =[\s\S]*?logo\$\{variant\.charAt/);
   assert.match(themeScript, /seledkin:logovariantchange/);
-  assert.match(styles, /data-logo-variant="squid"[\s\S]*?logo-catch-squid\.svg/);
-  assert.match(styles, /data-logo-variant="squid"[\s\S]*?logo-catch-squid-night\.svg/);
-
   for (const logo of [squidLogo, squidNightLogo]) {
     assert.match(logo, /id="accepted-logo-source"/);
     assert.match(logo, /id="locked-logo-base" data-layer="locked-base"/);
