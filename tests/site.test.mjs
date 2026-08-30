@@ -183,7 +183,7 @@ test("home assortment links directly to every catalog section", () => {
   );
 });
 
-test("home about section keeps Oleg's evidence in an open editorial sequence", () => {
+test("home about section keeps Oleg's evidence in three full-bleed editorial stories", () => {
   const section =
     home.match(/<section\s+class="about-overview[\s\S]*?<\/section>/)?.[0] ?? "";
 
@@ -215,7 +215,15 @@ test("home about section keeps Oleg's evidence in an open editorial sequence", (
   );
   assert.match(
     styles,
-    /\.about-overview__story-stage\s*\{[^}]*gap:\s*clamp\(/s,
+    /\.about-overview__story-stage\s*\{[^}]*width:\s*calc\(100% \+ \(2 \* var\(--content-edge\)\)\);[^}]*background:\s*var\(--footer\);/s,
+  );
+  assert.match(
+    styles,
+    /\.about-overview__chapter\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\);/s,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 34rem\)[\s\S]*?\.about-overview__chapter\s*\{[^}]*grid-template-columns:\s*1fr;/s,
   );
   assert.match(
     styles,
