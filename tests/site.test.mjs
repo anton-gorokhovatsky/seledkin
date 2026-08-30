@@ -322,6 +322,22 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero\s*\{[^}]*background-position:\s*50% bottom;[^}]*background-size:\s*auto 145%;/,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__copy\s*\{[^}]*padding:\s*clamp\(20rem, 45dvh, 24rem\) 0 clamp\(3rem, 8dvh, 4\.5rem\);/s,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__mobile-logo\s*\{[^}]*left:\s*50%;[^}]*width:\s*min\(82vw, 18rem\);[^}]*transform:\s*translateX\(-50%\);/s,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__content p\s*\{[^}]*font-family:\s*var\(--serif\);[^}]*font-size:\s*clamp\(1\.95rem, 8\.4vw, 2\.4rem\);/s,
+  );
+  assert.match(
+    styles,
     /\.source-hero__actions \.source-button--hero-secondary\s*\{[^}]*display:\s*none;/s,
   );
   assert.match(

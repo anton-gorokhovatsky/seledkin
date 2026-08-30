@@ -2757,7 +2757,14 @@ a.site-menu__brand {
     min-height: 0;
     height: auto;
     place-items: stretch;
-    background-position: 50% center;
+    background-position: 50% bottom;
+    background-size: auto 145%;
+  }
+
+  .source-hero__video {
+    top: auto;
+    bottom: 0;
+    height: 145%;
   }
 
   .source-hero__content {
@@ -2775,9 +2782,9 @@ a.site-menu__brand {
     width: 100%;
     min-height: 100vh;
     min-height: 100dvh;
-    padding: clamp(10.5rem, 26dvh, 13rem) 0 clamp(3rem, 8dvh, 4.5rem);
+    padding: clamp(20rem, 45dvh, 24rem) 0 clamp(3rem, 8dvh, 4.5rem);
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .source-hero h1 {
@@ -2794,20 +2801,24 @@ a.site-menu__brand {
   .source-hero__mobile-logo {
     display: block;
     position: absolute;
-    top: var(--masthead-top-inset);
-    left: 0;
-    width: min(61vw, 14.5rem);
+    top: clamp(6.25rem, 14dvh, 7.5rem);
+    left: 50%;
+    width: min(82vw, 18rem);
     height: auto;
     margin: 0;
     filter: drop-shadow(0 0.25rem 0.7rem rgb(0 0 0 / 30%));
+    transform: translateX(-50%);
   }
 
   .source-hero__content p {
-    max-width: 23rem;
+    max-width: 100%;
     margin-inline: auto;
-    font-size: clamp(1rem, 4.6vw, 1.125rem);
+    font-family: var(--serif);
+    font-size: clamp(1.95rem, 8.4vw, 2.4rem);
+    font-weight: 400;
     letter-spacing: 0;
-    line-height: 1.5;
+    line-height: 1.06;
+    text-wrap: balance;
   }
 
   .source-hero__actions {
@@ -2815,7 +2826,7 @@ a.site-menu__brand {
     flex-direction: column;
     align-items: stretch;
     gap: 0.65rem;
-    margin: 1.5rem auto 0;
+    margin: clamp(2rem, 5dvh, 2.75rem) auto 0;
   }
 
   .source-hero__actions .source-button {
