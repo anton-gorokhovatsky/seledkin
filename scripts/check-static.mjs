@@ -74,6 +74,8 @@ const requiredFiles = [
   "assets/journal-680.jpg",
   "assets/journal-681.jpg",
   "assets/journal-682.jpg",
+  "assets/journal-683.jpg",
+  "assets/journal-684.jpg",
   "assets/fish-pattern.svg",
 ];
 
@@ -333,10 +335,10 @@ for (const required of ['role="status"', 'aria-live="polite"', 'role="group"']) 
 }
 
 const homePage = readFileSync(join(root, "index.html"), "utf8");
-if ((homePage.match(/<article class="ship-log-entry"/g) ?? []).length !== 4) {
+if ((homePage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length !== 4) {
   fail("index.html: «Судовой журнал» должен содержать четыре отобранные записи");
 }
-for (const id of [682, 681, 680, 679]) {
+for (const id of [684, 683, 682, 681]) {
   for (const required of [
     `assets/journal-${id}.jpg`,
     `https://t.me/kapitanseledkin/${id}`,
@@ -454,6 +456,14 @@ const expectedHashes = new Map([
   [
     "assets/journal-682.jpg",
     "ce166cf12eb8616f7e0777ef042d71882fe0f56f809b7162aac3c32a32f9a277",
+  ],
+  [
+    "assets/journal-683.jpg",
+    "6eac749cc212583a21aa62292af5ba9ba9501eafb8eb7eb7c30d3d8aac41e8f0",
+  ],
+  [
+    "assets/journal-684.jpg",
+    "96eb277689b103c1aee0e6cff65ff72d325f354ad45e1b368fd6f3bb04fa3d11",
   ],
 ]);
 

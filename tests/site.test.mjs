@@ -252,10 +252,10 @@ test("home exposes the core customer jobs", () => {
   assert.match(hero, /href="catalog\/"/);
   assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
-  assert.match(hero, /href="#journal-entry-682"/);
-  assert.match(hero, /src="assets\/journal-682\.jpg"/);
-  assert.match(hero, /datetime="2026-08-25"/);
-  assert.match(hero, /У&nbsp;нас новый завоз царского малосольного тугунка/);
+  assert.match(hero, /href="#journal-entry-684"/);
+  assert.match(hero, /src="assets\/journal-684\.jpg"/);
+  assert.match(hero, /datetime="2026-08-29"/);
+  assert.match(hero, /Икряная камбала холодного копчения уже в&nbsp;Селёдкине/);
   assert.doesNotMatch(hero, /src="assets\/about-main\.jpg"/);
   assert.doesNotMatch(hero, /Из ассортимента лавки/);
   assert.match(home, /метро «Вавиловская»/);
@@ -278,11 +278,11 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     /Переключайте записи кнопками или клавишами со стрелками влево и вправо\./,
   );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 3);
-  for (const id of [682, 681, 680]) {
+  for (const id of [684, 683, 682]) {
     assert.match(hero, new RegExp("href=\"#journal-entry-" + id + "\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }
-  assert.doesNotMatch(hero, /https:\/\/t\.me\/kapitanseledkin\/68[012]/);
+  assert.doesNotMatch(hero, /https:\/\/t\.me\/kapitanseledkin\/68[234]/);
 
   assert.match(hero, /data-hero-journal-previous/);
   assert.match(hero, /data-hero-journal-next/);
@@ -643,19 +643,19 @@ test("the typographic scale protects reading and interface text", () => {
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(home, /id="journal"/);
   assert.match(home, /<h2 id="journal-title">Судовой журнал<\/h2>/);
-  assert.equal((home.match(/<article class="ship-log-entry"/g) ?? []).length, 4);
-  for (const id of [682, 681, 680]) {
+  assert.equal((home.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 4);
+  for (const id of [684, 683, 682, 681]) {
     assert.match(
       home,
       new RegExp(
-        `<article class="ship-log-entry" id="journal-entry-` + id + `" tabindex="-1">`,
+        `<article[^>]+id="journal-entry-` + id + `"[^>]+tabindex="-1"\\s*>`,
       ),
     );
   }
   assert.match(home, /https:\/\/t\.me\/kapitanseledkin"/);
 
   let cursor = -1;
-  for (const id of [682, 681, 680, 679]) {
+  for (const id of [684, 683, 682, 681]) {
     const next = home.indexOf(`https://t.me/kapitanseledkin/${id}`, cursor + 1);
     assert.ok(next > cursor, `Запись ${id} должна идти в обратной хронологии`);
     assert.match(home, new RegExp(`assets/journal-${id}\\.jpg`));
@@ -663,10 +663,11 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   }
 
   for (const excerpt of [
+    "Икряная камбала холодного копчения уже в&nbsp;Селёдкине!",
+    "У&nbsp;нас новинка! Филе сельди холодного копчения",
+    "Имеется ль у вас копченая селёдка?",
     "У&nbsp;нас новый завоз царского малосольного тугунка.",
     "Первая икра дикого кижуча сезона 2026",
-    "Нежнейшая малосольная черноморская барабуля",
-    "Куриные котлетки тоже есть.",
   ]) {
     assert.ok(home.includes(excerpt), `Не сохранена авторская формулировка: ${excerpt}`);
   }
@@ -721,12 +722,13 @@ test("the wide shell and linear Ship's Log avoid narrow nested cards", () => {
   assert.match(entryRule, /padding-block:\s*clamp\(2\.25rem, 3\.5vw, 3\.5rem\)/);
   assert.match(
     styles,
-    /\.ship-log-entry:first-child \.ship-log-entry__body,[\s\S]*?columns:\s*2 18rem/,
+    /\.ship-log-entry--columns \.ship-log-entry__body\s*\{[^}]*columns:\s*2 18rem/,
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.ship-log-entry:first-child \.ship-log-entry__body,[\s\S]*?columns:\s*auto/,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.ship-log-entry--columns \.ship-log-entry__body\s*\{[^}]*columns:\s*auto/,
   );
+  assert.match(styles, /\.ship-log-entry__dialogue\s*\{[^}]*border-left:\s*1px solid var\(--brass\)/);
 });
 
 test("the page and fullscreen menu share one stable outer content axis", () => {
