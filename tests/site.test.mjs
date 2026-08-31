@@ -1625,6 +1625,22 @@ test("Night Watch keeps the original blue logo ink instead of inverting it", () 
 
 });
 
+test("the custom 404 resolves assets and actions from the deployment root", () => {
+  const baseBootstrap = notFoundPage.indexOf(
+    `const base = document.createElement("base")`,
+  );
+  const firstRelativeAsset = notFoundPage.indexOf(
+    `<link rel="stylesheet" href="assets/styles.css"`,
+  );
+
+  assert.ok(baseBootstrap >= 0);
+  assert.ok(firstRelativeAsset > baseBootstrap);
+  assert.match(
+    notFoundPage,
+    /window\.location\.hostname\.endsWith\("\.github\.io"\)[\s\S]*?"\/seledkin\/"[\s\S]*?document\.head\.append\(base\)/,
+  );
+});
+
 test("every rendered logo keeps exact geometry across contextual jelly modes", async () => {
   const logoClass = /class="[^"]*\bbrand-jelly(?=\s|")/g;
   assert.equal((home.match(logoClass) ?? []).length, 3);

@@ -13,6 +13,11 @@
     />
     <script>
       (() => {
+        const base = document.createElement("base");
+        base.href = window.location.hostname.endsWith(".github.io")
+          ? "/seledkin/"
+          : "/";
+        document.head.append(base);
         document.documentElement.classList.add("js");
         let explicitTheme = null;
         try {
