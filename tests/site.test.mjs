@@ -346,7 +346,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero__journal-stack\s*\{[^}]*width:\s*100%;[^}]*margin-inline:\s*auto;[^}]*padding:\s*0 0\.75rem 0\.75rem 0;/,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero__journal-stack\s*\{[^}]*width:\s*100%;[^}]*min-width:\s*0;[^}]*margin-inline:\s*auto;[^}]*padding:\s*0 12px 12px 0;/,
   );
   assert.doesNotMatch(
     styles,
@@ -516,26 +516,25 @@ test("every page uses one exact silhouette from the accepted shoal as its favico
   assert.ok(Buffer.byteLength(favicon) < 30_000);
 });
 
-test("home keeps the source ks.fish visual sequence and local imagery", () => {
+test("home prioritizes shopping before its editorial story and keeps local imagery", () => {
   const sequence = [
     "source-header",
     "source-hero",
     "assortment-overview",
-    "about-overview",
-    "full-photo",
-    "source-quote",
-    "founder-source",
     "price-preview",
-    "ship-log",
+    "watch-catch",
     "delivery-source",
     "contacts-source",
+    "about-overview",
+    "founder-source",
+    "ship-log",
     "source-footer",
   ];
 
   let cursor = -1;
   for (const marker of sequence) {
     const next = home.indexOf(marker, cursor + 1);
-    assert.ok(next > cursor, `Секция ${marker} должна идти в исходном порядке`);
+    assert.ok(next > cursor, `Секция ${marker} должна идти в сценарном порядке`);
     cursor = next;
   }
 
@@ -549,8 +548,6 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
     "about-main.jpg",
     "about-small-2.jpg",
     "gallery-small-2.jpg",
-    "cutting-tuna.jpg",
-    "quote-pan.jpg",
     "oleg-gugunava.jpg",
     "delivery-basket.jpg",
   ]) {
@@ -587,20 +584,18 @@ test("home keeps the source ks.fish visual sequence and local imagery", () => {
   assert.match(styles, /"Iowan Old Style"/);
 });
 
-test("the standalone tuna photograph keeps an editorial scale", () => {
-  const figureRule =
-    styles.match(/\.full-photo\s*\{([^}]*)\}/s)?.[1] ?? "";
-  const imageRule =
-    styles.match(/\.full-photo img\s*\{([^}]*)\}/s)?.[1] ?? "";
+test("the founder story absorbs the principle without standalone interludes", () => {
+  const founder =
+    home.match(/<section class="founder-source"[\s\S]*?<\/section>/)?.[0] ?? "";
 
+  assert.match(founder, /class="founder-source__principle"/);
+  assert.match(founder, /вкус блюда определяется не только навыками повара/);
+  assert.doesNotMatch(home, /class="full-photo"|class="source-quote"/);
+  assert.doesNotMatch(styles, /\.full-photo|\.source-quote/);
   assert.match(
-    figureRule,
-    /width:\s*min\(calc\(100% - var\(--page-outer\)\), 52rem\);/,
+    styles,
+    /\.founder-source__principle\s*\{[^}]*font-family:\s*var\(--serif\);[^}]*font-style:\s*italic;/s,
   );
-  assert.match(figureRule, /margin:\s*0 auto/);
-  assert.match(imageRule, /width:\s*100%/);
-  assert.match(imageRule, /height:\s*auto/);
-  assert.doesNotMatch(imageRule, /object-fit/);
 });
 
 test("the typographic scale protects reading and interface text", () => {
@@ -753,7 +748,10 @@ test("the page and fullscreen menu share one stable outer content axis", () => {
     styles,
     /\.site-menu__routes\s*\{[\s\S]*?padding:[\s\S]*?var\(--content-edge\);/,
   );
-  assert.match(home, /class="source-quote__inner source-shell"/);
+  assert.match(
+    home,
+    /class="about-overview source-section"[\s\S]*?<div class="source-shell">/,
+  );
   assert.match(
     styles,
     /\.contacts-source\s*\{[\s\S]*?width:\s*min\(calc\(100% - var\(--page-outer\)\), var\(--shell\)\);[\s\S]*?margin-inline:\s*auto;/,
@@ -1050,7 +1048,11 @@ test("catalog entry stacks its copy, search and categories without decorative di
   );
   assert.match(
     styles,
-    /\.catalog-intro__stack\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*minmax\(0, 1fr\);[^}]*width:\s*min\(100%, 42rem\);[^}]*gap:/s,
+    /\.catalog-intro__stack\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*minmax\(20rem, 0\.82fr\) minmax\(28rem, 1\.18fr\);[^}]*width:\s*100%;[^}]*align-items:\s*end;/s,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.catalog-intro__stack\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\);[^}]*width:\s*min\(100%, 42rem\);/s,
   );
   assert.match(
     styles,
@@ -1280,23 +1282,10 @@ test("one master shoal keeps deliberate foreground, tonal and sea roles", () => 
   assert.match(styles, /--shoal-on-sea:\s*rgb\(255 248 237 \/ 14%\);/);
   assert.match(
     styles,
-    /\.catalog-intro__shoal,[\s\S]*?\.not-found-source::before\s*\{[^}]*-webkit-mask:\s*url\("fish-pattern\.svg"\) center \/ contain no-repeat;[^}]*mask:\s*url\("fish-pattern\.svg"\) center \/ contain no-repeat;/s,
-  );
-  assert.match(
-    styles,
-    /\.catalog-intro__shoal\s*\{[^}]*position:\s*absolute;[^}]*right:\s*clamp\(-28rem, -24vw, -19rem\);[^}]*width:\s*var\(--fish-shoal-width\);[^}]*--shoal-color:\s*var\(--shoal-tonal\);[^}]*pointer-events:\s*none;/s,
-  );
-  assert.match(
-    styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*position:\s*relative;[^}]*top:\s*auto;[^}]*right:\s*auto;[^}]*margin-left:\s*clamp\(8rem, 42vw, 24rem\);/s,
-  );
-  assert.match(
-    styles,
-    /@media \(max-width: 34rem\)[\s\S]*?\.catalog-intro__shoal\s*\{[^}]*height:\s*8\.5rem;[^}]*aspect-ratio:\s*auto;[^}]*mask-position:\s*left center;[^}]*mask-size:\s*auto 100%;/s,
+    /\.ship-log::before,[\s\S]*?\.not-found-source::before\s*\{[^}]*-webkit-mask:\s*url\("fish-pattern\.svg"\) center \/ contain no-repeat;[^}]*mask:\s*url\("fish-pattern\.svg"\) center \/ contain no-repeat;/s,
   );
   assert.match(styles, /\.catalog-intro\s*\{[^}]*overflow:\s*hidden;/s);
-  assert.match(catalogPage, /<span\s+class="catalog-intro__shoal"\s+aria-hidden="true"\s*>\s*<\/span>/s);
-  assert.doesNotMatch(catalogPage, /<img[^>]*catalog-intro__shoal/s);
+  assert.doesNotMatch(catalogPage + styles, /catalog-intro__shoal/);
   assert.doesNotMatch(home + styles, /fish-divider/);
   assert.doesNotMatch(styles, /\.catalog-order::before/);
   assert.match(
@@ -1397,11 +1386,11 @@ test("menu, focus and reduced motion remain accessible", () => {
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__masthead\s*\{[\s\S]*?position:\s*sticky;[\s\S]*?top:\s*0;[\s\S]*?background:\s*var\(--surface-water\);[\s\S]*?pointer-events:\s*auto;/,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__masthead\s*\{[\s\S]*?position:\s*sticky;[\s\S]*?top:\s*0;[\s\S]*?background:\s*var\(--jelly-glass-surface\);[\s\S]*?backdrop-filter:\s*var\(--jelly-glass-filter\);[\s\S]*?pointer-events:\s*auto;/,
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__brand\s*\{[^}]*width:\s*min\(61vw, 14\.5rem\);/,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__brand\s*\{[^}]*width:\s*min\(43vw, 10\.5rem\);/,
   );
   assert.match(
     styles,
@@ -1436,7 +1425,7 @@ test("menu, focus and reduced motion remain accessible", () => {
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?--masthead-top-inset:\s*1\.375rem;[\s\S]*?\.floating-menu\s*\{[\s\S]*?top:\s*var\(--masthead-top-inset\);/,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?--masthead-top-inset:\s*clamp\(12px, 3\.5vw, 18px\);[\s\S]*?\.floating-menu\s*\{[\s\S]*?top:\s*var\(--masthead-top-inset\);/,
   );
   assert.match(
     styles,
@@ -1641,13 +1630,14 @@ test("every rendered logo uses the exact geometry in one jelly material", async 
   }
   assert.match(
     styles,
-    /\.brand-jelly::before\s*\{[^}]*background:\s*var\(--brand-jelly-body\);[^}]*mask:\s*url\("logo-redrawn-jelly-mask\.svg"\)[^}]*backdrop-filter:\s*var\(--brand-jelly-filter\);/s,
+    /\.brand-jelly::before\s*\{[^}]*background:\s*var\(--jelly-glass-brand-surface\);[^}]*mask:\s*url\("logo-redrawn-jelly-mask\.svg"\)[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
   );
   assert.doesNotMatch(styles, /source-hero__mobile-jelly|source-hero-jelly-(?:depth|rim)/);
+  assert.doesNotMatch(styles, /source-hero-jelly|brand-jelly-(?:body|filter)/);
   assert.doesNotMatch(styles, /a\.source-brand:hover img|a\.site-menu__brand:hover img/);
   assert.match(
     styles,
-    /\.source-hero__actions \.source-button--hero-primary\s*\{[^}]*background-color:\s*var\(--source-hero-jelly-control\);[^}]*backdrop-filter:\s*var\(--source-hero-jelly-filter\);/s,
+    /\.source-hero__actions \.source-button--hero-primary\s*\{[^}]*background:\s*var\(--jelly-glass-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
   );
   assert.match(styles, /\.brand-jelly > img\s*\{[^}]*filter:\s*none;/s);
   const pathData = (svg) => [...svg.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"/g)].map(
