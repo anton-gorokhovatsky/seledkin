@@ -29,7 +29,17 @@
     0 0.45rem 1.4rem rgb(0 20 28 / 14%),
     inset 0 1px 0 var(--jelly-glass-highlight);
   --jelly-glass-filter: blur(0.85rem) saturate(106%);
-  --jelly-glass-brand-surface: rgb(207 222 228 / 72%);
+  --sea-jelly-surface: rgb(255 248 237 / 88%);
+  --sea-jelly-border: rgb(255 248 237 / 72%);
+  --sea-jelly-ink: #073d55;
+  --brand-jelly-sea-surface: var(--sea-jelly-surface);
+  --brand-jelly-page-surface: linear-gradient(145deg, rgb(146 193 208 / 58%), rgb(206 229 235 / 42%) 52%, rgb(172 207 218 / 52%));
+  --brand-jelly-panel-surface: linear-gradient(145deg, rgb(255 255 255 / 24%), rgb(200 220 228 / 4%) 55%, rgb(240 247 248 / 14%));
+  --brand-jelly-glint: linear-gradient(155deg, rgb(255 255 255 / 54%), transparent 38%, rgb(255 255 255 / 18%) 76%, transparent);
+  --brand-jelly-edge: rgb(255 255 255 / 58%);
+  --brand-jelly-page-edge: rgb(0 79 145 / 22%);
+  --brand-jelly-panel-edge: transparent;
+  --brand-jelly-shadow: rgb(0 28 40 / 20%);
   --menu-sea-veil: rgb(4 42 58 / 68%);
   --menu-sea-filter: blur(0.18rem) saturate(82%) contrast(94%);
   --shoal-primary: #0879bd;
@@ -85,7 +95,14 @@
   --jelly-glass-surface-strong: rgb(14 32 43 / 91%);
   --jelly-glass-border: rgb(243 237 226 / 26%);
   --jelly-glass-highlight: rgb(243 237 226 / 24%);
-  --jelly-glass-brand-surface: rgb(218 232 236 / 82%);
+  --brand-jelly-sea-surface: var(--sea-jelly-surface);
+  --brand-jelly-page-surface: linear-gradient(145deg, rgb(238 247 248 / 82%), rgb(189 211 220 / 68%) 50%, rgb(224 236 240 / 76%));
+  --brand-jelly-panel-surface: linear-gradient(145deg, rgb(238 247 248 / 74%), rgb(189 211 220 / 58%) 50%, rgb(224 236 240 / 68%));
+  --brand-jelly-glint: linear-gradient(155deg, rgb(255 255 255 / 56%), transparent 38%, rgb(255 255 255 / 20%) 76%, transparent);
+  --brand-jelly-edge: rgb(243 237 226 / 52%);
+  --brand-jelly-page-edge: var(--brand-jelly-edge);
+  --brand-jelly-panel-edge: rgb(243 237 226 / 34%);
+  --brand-jelly-shadow: rgb(0 10 18 / 42%);
   --jelly-glass-shadow:
     0 0.45rem 1.4rem rgb(0 12 20 / 32%),
     inset 0 1px 0 var(--jelly-glass-highlight);
@@ -127,7 +144,14 @@
     --jelly-glass-surface-strong: rgb(14 32 43 / 91%);
     --jelly-glass-border: rgb(243 237 226 / 26%);
     --jelly-glass-highlight: rgb(243 237 226 / 24%);
-    --jelly-glass-brand-surface: rgb(218 232 236 / 82%);
+    --brand-jelly-sea-surface: var(--sea-jelly-surface);
+    --brand-jelly-page-surface: linear-gradient(145deg, rgb(238 247 248 / 82%), rgb(189 211 220 / 68%) 50%, rgb(224 236 240 / 76%));
+    --brand-jelly-panel-surface: linear-gradient(145deg, rgb(238 247 248 / 74%), rgb(189 211 220 / 58%) 50%, rgb(224 236 240 / 68%));
+    --brand-jelly-glint: linear-gradient(155deg, rgb(255 255 255 / 56%), transparent 38%, rgb(255 255 255 / 20%) 76%, transparent);
+    --brand-jelly-edge: rgb(243 237 226 / 52%);
+    --brand-jelly-page-edge: var(--brand-jelly-edge);
+    --brand-jelly-panel-edge: rgb(243 237 226 / 34%);
+    --brand-jelly-shadow: rgb(0 10 18 / 42%);
     --jelly-glass-shadow:
       0 0.45rem 1.4rem rgb(0 12 20 / 32%),
       inset 0 1px 0 var(--jelly-glass-highlight);
@@ -335,19 +359,56 @@ p {
   position: relative;
   isolation: isolate;
   aspect-ratio: 3600 / 1784;
+  --brand-jelly-surface: var(--brand-jelly-sea-surface);
+  --brand-jelly-glint-opacity: 0.8;
+  --brand-jelly-local-edge: var(--brand-jelly-edge);
+  --brand-jelly-local-shadow: var(--brand-jelly-shadow);
 }
 
-.brand-jelly::before {
+.brand-jelly--sea {
+  --brand-jelly-surface: var(--brand-jelly-sea-surface);
+  --brand-jelly-glint-opacity: 0.8;
+  --brand-jelly-local-edge: var(--brand-jelly-edge);
+  --brand-jelly-local-shadow: var(--brand-jelly-shadow);
+}
+
+.brand-jelly--page {
+  --brand-jelly-surface: var(--brand-jelly-page-surface);
+  --brand-jelly-glint-opacity: 0.42;
+  --brand-jelly-local-edge: var(--brand-jelly-page-edge);
+  --brand-jelly-local-shadow: rgb(0 28 40 / 10%);
+}
+
+.brand-jelly--panel {
+  --brand-jelly-surface: var(--brand-jelly-panel-surface);
+  --brand-jelly-glint-opacity: 0.24;
+  --brand-jelly-local-edge: var(--brand-jelly-panel-edge);
+  --brand-jelly-local-shadow: transparent;
+}
+
+.brand-jelly::before,
+.brand-jelly::after {
   position: absolute;
   z-index: 0;
   inset: 0;
   content: "";
-  background: var(--jelly-glass-brand-surface);
   -webkit-mask: url("logo-redrawn-jelly-mask.svg") center / contain no-repeat;
   mask: url("logo-redrawn-jelly-mask.svg") center / contain no-repeat;
+  pointer-events: none;
+}
+
+.brand-jelly::before {
+  background: var(--brand-jelly-surface);
   -webkit-backdrop-filter: var(--jelly-glass-filter);
   backdrop-filter: var(--jelly-glass-filter);
-  pointer-events: none;
+  filter:
+    drop-shadow(0 0 0.06rem var(--brand-jelly-local-edge))
+    drop-shadow(0 0.22rem 0.42rem var(--brand-jelly-local-shadow));
+}
+
+.brand-jelly::after {
+  background: var(--brand-jelly-glint);
+  opacity: var(--brand-jelly-glint-opacity);
 }
 
 .brand-jelly > img {
@@ -1695,11 +1756,19 @@ a.source-brand {
   padding-inline: 1rem;
 }
 
-.source-button--hero-primary,
 .source-button--menu-primary {
   border-color: var(--footer-text);
   background: var(--footer-text);
   color: var(--footer);
+}
+
+.source-button--hero-primary {
+  border-color: var(--sea-jelly-border);
+  background: var(--sea-jelly-surface);
+  color: var(--sea-jelly-ink);
+  box-shadow: var(--jelly-glass-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
 }
 
 .source-button--hero-secondary,
@@ -1714,11 +1783,16 @@ a.source-brand {
   backdrop-filter: var(--jelly-glass-filter);
 }
 
-.source-button--hero-primary:hover,
 .source-button--menu-primary:hover {
   border-color: var(--brass);
   background: var(--footer-text);
   color: var(--footer);
+}
+
+.source-button--hero-primary:hover {
+  border-color: var(--brass);
+  background: var(--sea-jelly-surface);
+  color: var(--sea-jelly-ink);
 }
 
 .source-button--hero-secondary:hover,
@@ -2220,10 +2294,15 @@ a.site-menu__brand {
   background: var(--surface-water);
 }
 
+.catalog-page .source-header,
+.catalog-page .source-header__bar {
+  min-height: 9.75rem;
+}
+
 .catalog-intro {
   position: relative;
   overflow: hidden;
-  padding: clamp(2.75rem, 4vw, 3.75rem) 0 clamp(3.5rem, 5vw, 4.75rem);
+  padding: clamp(1.5rem, 2.4vw, 2.25rem) 0 clamp(3.5rem, 5vw, 4.75rem);
   text-align: left;
 }
 
@@ -2237,7 +2316,7 @@ a.site-menu__brand {
   display: grid;
   grid-template-columns: minmax(20rem, 0.82fr) minmax(28rem, 1.18fr);
   width: 100%;
-  align-items: end;
+  align-items: start;
   gap: clamp(3rem, 6vw, 7rem);
 }
 
@@ -2832,19 +2911,6 @@ a.site-menu__brand {
   .source-hero__actions .source-button {
     width: 100%;
     min-width: 0;
-  }
-
-  .source-hero__actions .source-button--hero-primary {
-    border-color: var(--jelly-glass-border);
-    background: var(--jelly-glass-surface);
-    color: var(--ink);
-    box-shadow: var(--jelly-glass-shadow);
-    -webkit-backdrop-filter: var(--jelly-glass-filter);
-    backdrop-filter: var(--jelly-glass-filter);
-  }
-
-  .source-hero__actions .source-button--hero-primary:hover {
-    background: var(--jelly-glass-surface);
   }
 
   .source-hero__actions .source-button--hero-secondary {
@@ -3678,11 +3744,16 @@ a.site-menu__brand {
   border-color: var(--ink);
 }
 
-.source-button--hero-primary:active,
 .source-button--menu-primary:active {
   border-color: var(--brass);
   background: var(--footer-text);
   color: var(--footer);
+}
+
+.source-button--hero-primary:active {
+  border-color: var(--brass);
+  background: var(--sea-jelly-surface);
+  color: var(--sea-jelly-ink);
 }
 
 .source-button--hero-secondary:active,
@@ -3791,7 +3862,10 @@ a.site-menu__brand {
     --muted: #3a3a3a;
     --jelly-glass-surface: var(--paper);
     --jelly-glass-surface-strong: var(--paper);
-    --jelly-glass-brand-surface: var(--paper);
+    --brand-jelly-sea-surface: var(--paper);
+    --brand-jelly-page-surface: var(--paper);
+    --brand-jelly-panel-surface: var(--paper);
+    --brand-jelly-glint: none;
     --jelly-glass-filter: none;
     --bioluminescence-opacity: 0;
     --bioluminescence-display: none;
@@ -3807,7 +3881,9 @@ a.site-menu__brand {
   :root[data-theme="dark"] {
     --line: #91a0a8;
     --muted: #ffffff;
-    --jelly-glass-brand-surface: var(--paper);
+    --brand-jelly-sea-surface: var(--ink);
+    --brand-jelly-page-surface: var(--ink);
+    --brand-jelly-panel-surface: var(--ink);
     --bioluminescence-opacity: 0;
     --bioluminescence-display: none;
   }
@@ -3817,7 +3893,9 @@ a.site-menu__brand {
   :root:not([data-theme="light"]) {
     --line: #91a0a8;
     --muted: #ffffff;
-    --jelly-glass-brand-surface: var(--paper);
+    --brand-jelly-sea-surface: var(--ink);
+    --brand-jelly-page-surface: var(--ink);
+    --brand-jelly-panel-surface: var(--ink);
     --bioluminescence-opacity: 0;
     --bioluminescence-display: none;
   }
@@ -3841,11 +3919,13 @@ a.site-menu__brand {
   .source-hero__journal-card,
   .source-hero__journal-control,
   .brand-jelly::before,
+  .brand-jelly::after,
   .theme-toggle--menu {
     background: Canvas;
     box-shadow: none;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
+    filter: none;
   }
 
   .contacts-source__map iframe {

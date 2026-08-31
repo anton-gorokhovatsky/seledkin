@@ -468,7 +468,7 @@ test("the home brand marks the current page without linking to itself", () => {
 
   assert.doesNotMatch(homeHeader, /<a class="source-brand"/);
   assert.doesNotMatch(homeMenuMasthead, /<a class="site-menu__brand"/);
-  assert.match(catalogHeader, /<a class="source-brand brand-jelly" href="\.\.\/"/);
+  assert.match(catalogHeader, /<a class="source-brand brand-jelly brand-jelly--page" href="\.\.\/"/);
   assert.match(styles, /\.source-brand\s*\{[^}]*pointer-events:\s*none;/s);
   assert.match(styles, /a\.source-brand\s*\{[^}]*pointer-events:\s*auto;/s);
   assert.match(styles, /\.site-menu__brand\s*\{[^}]*pointer-events:\s*none;/s);
@@ -1048,7 +1048,11 @@ test("catalog entry stacks its copy, search and categories without decorative di
   );
   assert.match(
     styles,
-    /\.catalog-intro__stack\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*minmax\(20rem, 0\.82fr\) minmax\(28rem, 1\.18fr\);[^}]*width:\s*100%;[^}]*align-items:\s*end;/s,
+    /\.catalog-intro__stack\s*\{[^}]*display:\s*grid;[^}]*grid-template-columns:\s*minmax\(20rem, 0\.82fr\) minmax\(28rem, 1\.18fr\);[^}]*width:\s*100%;[^}]*align-items:\s*start;/s,
+  );
+  assert.match(
+    styles,
+    /\.catalog-page \.source-header,\s*\.catalog-page \.source-header__bar\s*\{[^}]*min-height:\s*9\.75rem;/s,
   );
   assert.match(
     styles,
@@ -1158,9 +1162,10 @@ test("one restrained jelly material serves translucent controls", () => {
     /background|backdrop-filter|box-shadow/,
     "У листа журнала не должно быть подложки: материал разрешён только контролам",
   );
+  assert.match(styles, /\.source-button--menu-primary\s*\{[^}]*background:\s*var\(--footer-text\);/s);
   assert.match(
     styles,
-    /\.source-button--hero-primary,[\s\S]*?\.source-button--menu-primary\s*\{[\s\S]*?background:\s*var\(--footer-text\);/,
+    /\.source-button--hero-primary\s*\{[^}]*background:\s*var\(--sea-jelly-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
   );
   assert.match(
     styles,
@@ -1620,24 +1625,43 @@ test("Night Watch keeps the original blue logo ink instead of inverting it", () 
 
 });
 
-test("every rendered logo uses the exact geometry in one jelly material", async () => {
-  assert.equal((home.match(/brand-jelly/g) ?? []).length, 3);
-  assert.equal((catalogPage.match(/brand-jelly/g) ?? []).length, 2);
-  assert.equal((notFoundPage.match(/brand-jelly/g) ?? []).length, 1);
+test("every rendered logo keeps exact geometry across contextual jelly modes", async () => {
+  const logoClass = /class="[^"]*\bbrand-jelly(?=\s|")/g;
+  assert.equal((home.match(logoClass) ?? []).length, 3);
+  assert.equal((catalogPage.match(logoClass) ?? []).length, 2);
+  assert.equal((notFoundPage.match(logoClass) ?? []).length, 1);
+  assert.equal((home.match(/brand-jelly--sea/g) ?? []).length, 2);
+  assert.equal((home.match(/brand-jelly--panel/g) ?? []).length, 1);
+  assert.equal((catalogPage.match(/brand-jelly--page/g) ?? []).length, 1);
+  assert.equal((catalogPage.match(/brand-jelly--panel/g) ?? []).length, 1);
+  assert.equal((notFoundPage.match(/brand-jelly--page/g) ?? []).length, 1);
   for (const page of [home, catalogPage, notFoundPage]) {
     assert.doesNotMatch(page, /source-hero__mobile-jelly|data-logo-squid/);
     assert.doesNotMatch(page, /src="(?:\.\.\/)?assets\/logo-redrawn\.svg"/);
   }
   assert.match(
     styles,
-    /\.brand-jelly::before\s*\{[^}]*background:\s*var\(--jelly-glass-brand-surface\);[^}]*mask:\s*url\("logo-redrawn-jelly-mask\.svg"\)[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
+    /\.brand-jelly::before,\s*\.brand-jelly::after\s*\{[^}]*mask:\s*url\("logo-redrawn-jelly-mask\.svg"\)/s,
   );
+  assert.match(
+    styles,
+    /\.brand-jelly::before\s*\{[^}]*background:\s*var\(--brand-jelly-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
+  );
+  assert.match(styles, /\.brand-jelly--sea\s*\{[^}]*--brand-jelly-surface:\s*var\(--brand-jelly-sea-surface\)/s);
+  assert.match(styles, /\.brand-jelly--page\s*\{[^}]*--brand-jelly-surface:\s*var\(--brand-jelly-page-surface\)/s);
+  assert.match(styles, /\.brand-jelly--panel\s*\{[^}]*--brand-jelly-surface:\s*var\(--brand-jelly-panel-surface\)/s);
+  assert.match(styles, /--sea-jelly-surface:\s*rgb\(255 248 237 \/ 88%\);/);
+  assert.equal(
+    (styles.match(/--brand-jelly-sea-surface:\s*var\(--sea-jelly-surface\);/g) ?? []).length,
+    3,
+  );
+  assert.doesNotMatch(styles, /--jelly-glass-brand-surface/);
   assert.doesNotMatch(styles, /source-hero__mobile-jelly|source-hero-jelly-(?:depth|rim)/);
   assert.doesNotMatch(styles, /source-hero-jelly|brand-jelly-(?:body|filter)/);
   assert.doesNotMatch(styles, /a\.source-brand:hover img|a\.site-menu__brand:hover img/);
   assert.match(
     styles,
-    /\.source-hero__actions \.source-button--hero-primary\s*\{[^}]*background:\s*var\(--jelly-glass-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
+    /\.source-button--hero-primary\s*\{[^}]*background:\s*var\(--sea-jelly-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
   );
   assert.match(styles, /\.brand-jelly > img\s*\{[^}]*filter:\s*none;/s);
   const pathData = (svg) => [...svg.matchAll(/<path(?: id="[^"]+")? d="([^"]*)"/g)].map(

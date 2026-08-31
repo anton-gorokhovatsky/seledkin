@@ -213,7 +213,7 @@ for (const file of htmlFiles) {
       'data-src-dark="assets/hero-sea-night.mp4"',
       'data-logo-light="assets/logo-redrawn-sea.svg"',
       'data-logo-dark="assets/logo-redrawn-sea.svg"',
-      'class="source-hero__mobile-brand brand-jelly"',
+      'class="source-hero__mobile-brand brand-jelly brand-jelly--sea"',
       'class="source-header source-header--over-media"',
     ]) {
       if (!html.includes(required)) fail(`${file}: первый экран не содержит ${required}`);
