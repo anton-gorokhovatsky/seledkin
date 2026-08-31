@@ -60,20 +60,17 @@ const squidNightLogo = await readFile(
   new URL("../assets/logo-catch-squid-night.svg", import.meta.url),
   "utf8",
 );
-const favicon = await readFile(
-  new URL("../assets/favicon.svg", import.meta.url),
-  "utf8",
+const favicon16 = await readFile(
+  new URL("../assets/favicon-16.png", import.meta.url),
 );
-const faviconTemplate = await readFile(
-  new URL("../scripts/logo-marks/favicon.svg", import.meta.url),
-  "utf8",
+const favicon32 = await readFile(
+  new URL("../assets/favicon-32.png", import.meta.url),
 );
-const fishPattern = await readFile(
-  new URL("../assets/fish-pattern.svg", import.meta.url),
-  "utf8",
+const appleTouchIcon = await readFile(
+  new URL("../assets/apple-touch-icon.png", import.meta.url),
 );
-const logoBuilder = await readFile(
-  new URL("../scripts/build-logo-variants.mjs", import.meta.url),
+const faviconProvenance = await readFile(
+  new URL("../assets/favicon-salmon.provenance.md", import.meta.url),
   "utf8",
 );
 const shareCard = await readFile(
@@ -125,6 +122,15 @@ function jpegDimensions(buffer) {
   }
 
   throw new Error("JPEG size marker not found");
+}
+
+function pngDimensions(buffer) {
+  const signature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  assert.ok(buffer.subarray(0, 8).equals(signature), "PNG signature not found");
+  return {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20),
+  };
 }
 
 test("the site is plain HTML, CSS and JavaScript", () => {
@@ -481,43 +487,46 @@ test("the home brand marks the current page without linking to itself", () => {
   assert.doesNotMatch(styles, /(?:^|[,\n])\s*\.site-menu__brand:hover img/m);
 });
 
-test("every page uses one exact silhouette from the accepted shoal as its favicon", () => {
-  assert.match(home, /rel="icon" href="assets\/favicon\.svg"/);
-  assert.match(notFoundPage, /rel="icon" href="assets\/favicon\.svg"/);
-  assert.match(catalogPage, /rel="icon" href="\.\.\/assets\/favicon\.svg"/);
-  for (const page of [home, notFoundPage, catalogPage]) {
-    assert.doesNotMatch(page, /rel="icon"[^>]+logo-redrawn\.svg/);
+test("every page uses the exact photo-derived Salmon favicon set", () => {
+  for (const [page, prefix] of [
+    [home, "assets/"],
+    [notFoundPage, "assets/"],
+    [catalogPage, "../assets/"],
+  ]) {
+    assert.match(
+      page,
+      new RegExp(
+        `rel="icon" href="${prefix.replaceAll("/", "\\/")}favicon-32\\.png" sizes="32x32" type="image\\/png"`,
+      ),
+    );
+    assert.match(
+      page,
+      new RegExp(
+        `rel="icon" href="${prefix.replaceAll("/", "\\/")}favicon-16\\.png" sizes="16x16" type="image\\/png"`,
+      ),
+    );
+    assert.match(
+      page,
+      new RegExp(
+        `rel="apple-touch-icon" href="${prefix.replaceAll("/", "\\/")}apple-touch-icon\\.png"`,
+      ),
+    );
+    assert.doesNotMatch(page, /rel="icon"[^>]+(?:favicon\.svg|logo-redrawn\.svg)/);
   }
-  assert.match(favicon, /viewBox="4085 642 1000 1000"/);
-  assert.match(
-    favicon,
-    /<title id="favicon-title">Рыба из фирменного косяка — малый знак<\/title>/,
-  );
-  assert.doesNotMatch(favicon, /prefers-color-scheme/);
-  assert.equal((favicon.match(/<image /g) ?? []).length, 0);
-  assert.doesNotMatch(favicon, /data:image/);
-  assert.match(
-    favicon,
-    /<rect x="4085" y="642" width="1000" height="1000" fill="#f7f2e7"\/>/,
-  );
-  assert.equal((favicon.match(/<path /g) ?? []).length, 1);
-  assert.match(favicon, /d="M5020\.31 919\.44/);
-  assert.match(favicon, /fill="#004F91"/);
-  const faviconFishPathData =
-    favicon.match(/<path d="(M5020\.31 919\.44[^"]+)"/)?.[1] ?? "";
-  const shoalPathData =
-    fishPattern.match(/<path\b[^>]*\bd="([^"]+)"[^>]*\bfill="#004F91"/)?.[1] ??
-    "";
-  const shoalFish = shoalPathData.split(/(?=M)/);
-  assert.equal(shoalFish.length, 28);
-  assert.equal(faviconFishPathData, shoalFish[0]);
-  assert.match(faviconTemplate, /<!-- SHOAL_FISH_PATH -->/);
-  assert.doesNotMatch(logoBuilder, /logo-parts\/herring\.svg/);
-  assert.match(logoBuilder, /fish-pattern\.svg/);
-  assert.match(logoBuilder, /shoalFish\[0\]/);
-  assert.match(logoBuilder, /logo-marks\/favicon\.svg/);
-  assert.match(logoBuilder, /assets\/favicon\.svg/);
-  assert.ok(Buffer.byteLength(favicon) < 30_000);
+
+  assert.deepEqual(pngDimensions(favicon16), { width: 16, height: 16 });
+  assert.deepEqual(pngDimensions(favicon32), { width: 32, height: 32 });
+  assert.deepEqual(pngDimensions(appleTouchIcon), { width: 180, height: 180 });
+  for (const [binary, expected] of [
+    [favicon16, "adf0aae072ef5208fbcdd5d9ab21d5127eeebb382e4befb276056874c13a52a0"],
+    [favicon32, "b04ec2c50ca544eb61334f77029fea4545b28270ab83d59ad5778b7e9761469b"],
+    [appleTouchIcon, "a466b28ec877a2260eaae6dc61d565f13d609d1c1fb781b675147f95130e9433"],
+  ]) {
+    assert.equal(createHash("sha256").update(binary).digest("hex"), expected);
+  }
+  assert.match(faviconProvenance, /assets\/salmon-cat\.jpg/);
+  assert.match(faviconProvenance, /crop=1440:1440:80:0/);
+  assert.match(faviconProvenance, /без генеративной дорисовки/);
 });
 
 test("home prioritizes shopping before its editorial story and keeps local imagery", () => {
