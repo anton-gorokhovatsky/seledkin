@@ -1395,11 +1395,16 @@ test("menu, focus and reduced motion remain accessible", () => {
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__brand\s*\{[^}]*width:\s*min\(43vw, 10\.5rem\);/,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__brand\s*\{[^}]*width:\s*clamp\(6\.25rem, 29vw, 7rem\);/,
   );
   assert.match(
     styles,
     /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__routes\s*\{[^}]*padding:\s*2rem var\(--page-inset\) 4rem;/,
+  );
+  assert.doesNotMatch(styles, /min\(43vw, 10\.5rem\)/);
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.site-menu__masthead\s*\{[^}]*height:\s*calc\(var\(--masthead-control-size\) \+ var\(--masthead-top-inset\) \* 2\);[^}]*min-height:\s*0;/,
   );
   assert.match(home, /role="dialog"/);
   assert.match(home, /aria-modal="true"/);
@@ -1666,11 +1671,37 @@ test("every rendered logo keeps exact geometry across contextual jelly modes", a
   assert.match(styles, /\.brand-jelly--sea\s*\{[^}]*--brand-jelly-surface:\s*var\(--brand-jelly-sea-surface\)/s);
   assert.match(styles, /\.brand-jelly--page\s*\{[^}]*--brand-jelly-surface:\s*var\(--brand-jelly-page-surface\)/s);
   assert.match(styles, /\.brand-jelly--panel\s*\{[^}]*--brand-jelly-surface:\s*var\(--brand-jelly-panel-surface\)/s);
+  assert.match(
+    styles,
+    /\.brand-jelly--panel\s*\{[^}]*--brand-jelly-glint-opacity:\s*var\(--brand-jelly-panel-glint-opacity\)/s,
+  );
   assert.match(styles, /--sea-jelly-surface:\s*rgb\(255 248 237 \/ 88%\);/);
   assert.equal(
     (styles.match(/--brand-jelly-sea-surface:\s*var\(--sea-jelly-surface\);/g) ?? []).length,
     3,
   );
+  assert.equal(
+    (styles.match(/--brand-jelly-page-surface:\s*var\(--paper\);/g) ?? []).length,
+    2,
+  );
+  assert.equal(
+    (styles.match(/--brand-jelly-page-glint-opacity:\s*0;/g) ?? []).length,
+    1,
+  );
+  assert.equal(
+    (styles.match(/--brand-jelly-panel-surface:\s*var\(--paper\);/g) ?? []).length,
+    2,
+  );
+  assert.equal(
+    (styles.match(/--brand-jelly-panel-glint-opacity:\s*0;/g) ?? []).length,
+    1,
+  );
+  assert.match(
+    styles,
+    /\.brand-jelly--page\s*\{[^}]*--brand-jelly-glint-opacity:\s*var\(--brand-jelly-page-glint-opacity\);[^}]*--brand-jelly-local-shadow:\s*var\(--brand-jelly-page-shadow\);/s,
+  );
+  assert.doesNotMatch(styles, /rgb\(146 193 208 \/ 58%\)/);
+  assert.doesNotMatch(styles, /rgb\(200 220 228 \/ 4%\)/);
   assert.doesNotMatch(styles, /--jelly-glass-brand-surface/);
   assert.doesNotMatch(styles, /source-hero__mobile-jelly|source-hero-jelly-(?:depth|rim)/);
   assert.doesNotMatch(styles, /source-hero-jelly|brand-jelly-(?:body|filter)/);
