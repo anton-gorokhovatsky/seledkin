@@ -2,7 +2,6 @@ import { readFile, writeFile } from "node:fs/promises";
 
 const templatePath = new URL("./logo-variants/squid.svg", import.meta.url);
 const template = await readFile(templatePath, "utf8");
-const faviconTemplatePath = new URL("./logo-marks/favicon.svg", import.meta.url);
 const variants = [
   {
     source: new URL("../assets/logo-redrawn.svg", import.meta.url),
@@ -45,22 +44,3 @@ ${sourceBody
     );
   await writeFile(variant.output, selfContained);
 }
-
-const shoalPattern = await readFile(
-  new URL("../assets/fish-pattern.svg", import.meta.url),
-  "utf8",
-);
-const shoalPathData =
-  shoalPattern.match(/<path\b[^>]*\bd="([^"]+)"[^>]*\bfill="#004F91"/)?.[1] ??
-  "";
-const shoalFish = shoalPathData.split(/(?=M)/);
-if (shoalFish.length !== 28 || !shoalFish[0].startsWith("M5020.31 919.44")) {
-  throw new Error("The accepted first fish was not found in fish-pattern.svg");
-}
-const faviconFish = `<path d="${shoalFish[0]}" fill="#004F91"/>`;
-const faviconTemplate = await readFile(faviconTemplatePath, "utf8");
-const favicon = faviconTemplate.replace(
-  "  <!-- SHOAL_FISH_PATH -->",
-  faviconFish,
-);
-await writeFile(new URL("../assets/favicon.svg", import.meta.url), favicon);

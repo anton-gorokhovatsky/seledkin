@@ -30,6 +30,8 @@ function sha256(path) {
 const requiredFiles = [
   "index.html",
   "404.html",
+  "robots.txt",
+  "sitemap.xml",
   ".nojekyll",
   "catalog/index.html",
   "catalog/catalog.js",

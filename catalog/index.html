@@ -34,11 +34,6 @@
     <script>
       (() => {
         document.documentElement.classList.add("js");
-        const initialCatalogQuery =
-          new URLSearchParams(window.location.search).get("q") ?? "";
-        if (initialCatalogQuery.toLocaleLowerCase("ru-RU").includes("кальмар")) {
-          document.documentElement.dataset.logoVariant = "squid";
-        }
         let explicitTheme = null;
         try {
           const stored = localStorage.getItem("seledkin-theme");

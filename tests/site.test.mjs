@@ -24,6 +24,14 @@ const notFoundPage = await readFile(
   new URL("../404.html", import.meta.url),
   "utf8",
 );
+const robots = await readFile(
+  new URL("../robots.txt", import.meta.url),
+  "utf8",
+);
+const sitemap = await readFile(
+  new URL("../sitemap.xml", import.meta.url),
+  "utf8",
+);
 const accessibility = await readFile(
   new URL("../ACCESSIBILITY.md", import.meta.url),
   "utf8",
@@ -1713,6 +1721,11 @@ test("every rendered logo keeps exact geometry across contextual jelly modes", a
     assert.doesNotMatch(page, /source-hero__mobile-jelly|data-logo-squid/);
     assert.doesNotMatch(page, /src="(?:\.\.\/)?assets\/logo-redrawn\.svg"/);
   }
+  assert.doesNotMatch(
+    catalogPage,
+    /initialCatalogQuery|dataset\.logoVariant/,
+    "catalog search must not mutate the live brand",
+  );
   assert.match(
     styles,
     /\.brand-jelly::before,\s*\.brand-jelly::after\s*\{[^}]*mask:\s*url\("logo-redrawn-jelly-mask\.svg"\)/s,
@@ -1792,12 +1805,9 @@ test("every rendered logo keeps exact geometry across contextual jelly modes", a
 test("the unaccepted squid draft stays isolated from the live jelly logo", () => {
   assert.doesNotMatch(catalogPage, /data-logo-squid|logo-catch-squid/);
   assert.doesNotMatch(styles, /data-logo-variant="squid"|logo-catch-squid/);
-  assert.match(catalogPage, /initialCatalogQuery[\s\S]*?includes\("кальмар"\)/);
-  assert.match(catalogScript, /normalize\(query\)\.includes\("кальмар"\) \? "squid" : ""/);
-  assert.match(catalogScript, /seledkin:logovariantchange/);
-  assert.match(themeScript, /root\.dataset\.logoVariant/);
-  assert.match(themeScript, /const variantKey =[\s\S]*?logo\$\{variant\.charAt/);
-  assert.match(themeScript, /seledkin:logovariantchange/);
+  assert.doesNotMatch(catalogPage, /initialCatalogQuery|logoVariant/);
+  assert.doesNotMatch(catalogScript, /logoVariant|logovariantchange/);
+  assert.doesNotMatch(themeScript, /logoVariant|variantKey|logovariantchange/);
   for (const logo of [squidLogo, squidNightLogo]) {
     assert.match(logo, /id="accepted-logo-source"/);
     assert.match(logo, /id="locked-logo-base" data-layer="locked-base"/);
@@ -2004,4 +2014,14 @@ test("main and catalog publish Pages-native social metadata", () => {
   assert.doesNotMatch(home + catalogPage, /https:\/\/ks\.fish\//);
   assert.ok(home.includes(`"url": "${root}"`));
   assert.ok(home.includes(`"image": "${image}"`));
+});
+
+test("search engines receive the current two-page public map", () => {
+  const root = "https://anton-gorokhovatsky.github.io/seledkin/";
+  assert.match(robots, /^User-agent: \*\nAllow: \/\n/m);
+  assert.ok(robots.includes(`Sitemap: ${root}sitemap.xml`));
+  assert.match(sitemap, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
+  assert.ok(sitemap.includes(`<loc>${root}</loc>`));
+  assert.ok(sitemap.includes(`<loc>${root}catalog/</loc>`));
+  assert.equal((sitemap.match(/<url>/g) ?? []).length, 2);
 });

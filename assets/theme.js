@@ -101,13 +101,6 @@ function initTheme() {
   }
 
   function logoSource(logo, isDark) {
-    const variant = root.dataset.logoVariant;
-    if (variant) {
-      const variantKey =
-        `logo${variant.charAt(0).toUpperCase()}${variant.slice(1)}${isDark ? "Dark" : "Light"}`;
-      const variantSource = logo.dataset[variantKey];
-      if (variantSource) return variantSource;
-    }
     return isDark ? logo.dataset.logoDark : logo.dataset.logoLight;
   }
 
@@ -222,8 +215,6 @@ function initTheme() {
     renderThemeControls();
     scheduleNextShift();
   });
-
-  document.addEventListener("seledkin:logovariantchange", renderThemeControls);
 
   renderThemeControls();
   scheduleNextShift();
