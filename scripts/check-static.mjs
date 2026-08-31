@@ -335,10 +335,10 @@ for (const required of ['role="status"', 'aria-live="polite"', 'role="group"']) 
 }
 
 const homePage = readFileSync(join(root, "index.html"), "utf8");
-if ((homePage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length !== 4) {
-  fail("index.html: «Судовой журнал» должен содержать четыре отобранные записи");
+if ((homePage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length !== 5) {
+  fail("index.html: «Судовой журнал» должен содержать пять отобранных записей");
 }
-for (const id of [684, 683, 682, 681]) {
+for (const id of [684, 683, 682, 681, 680]) {
   for (const required of [
     `assets/journal-${id}.jpg`,
     `https://t.me/kapitanseledkin/${id}`,

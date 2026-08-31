@@ -277,12 +277,12 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     hero,
     /Переключайте записи кнопками или клавишами со стрелками влево и вправо\./,
   );
-  assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 3);
-  for (const id of [684, 683, 682]) {
+  assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 5);
+  for (const id of [684, 683, 682, 681, 680]) {
     assert.match(hero, new RegExp("href=\"#journal-entry-" + id + "\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }
-  assert.doesNotMatch(hero, /https:\/\/t\.me\/kapitanseledkin\/68[234]/);
+  assert.doesNotMatch(hero, /https:\/\/t\.me\/kapitanseledkin\/68[0-4]/);
 
   assert.match(hero, /data-hero-journal-previous/);
   assert.match(hero, /data-hero-journal-next/);
@@ -309,6 +309,10 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(
     styles,
     /\.source-hero__journal-card\[data-stack-position="2"\][\s\S]*?opacity:\s*1;/,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__journal-card\[data-stack-position="3"\],[\s\S]*?data-stack-position="4"\][\s\S]*?opacity:\s*0;/,
   );
   assert.doesNotMatch(
     styles,
@@ -643,8 +647,8 @@ test("the typographic scale protects reading and interface text", () => {
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(home, /id="journal"/);
   assert.match(home, /<h2 id="journal-title">Судовой журнал<\/h2>/);
-  assert.equal((home.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 4);
-  for (const id of [684, 683, 682, 681]) {
+  assert.equal((home.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 5);
+  for (const id of [684, 683, 682, 681, 680]) {
     assert.match(
       home,
       new RegExp(
@@ -655,7 +659,7 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.match(home, /https:\/\/t\.me\/kapitanseledkin"/);
 
   let cursor = -1;
-  for (const id of [684, 683, 682, 681]) {
+  for (const id of [684, 683, 682, 681, 680]) {
     const next = home.indexOf(`https://t.me/kapitanseledkin/${id}`, cursor + 1);
     assert.ok(next > cursor, `Запись ${id} должна идти в обратной хронологии`);
     assert.match(home, new RegExp(`assets/journal-${id}\\.jpg`));
@@ -668,6 +672,7 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
     "Имеется ль у вас копченая селёдка?",
     "У&nbsp;нас новый завоз царского малосольного тугунка.",
     "Первая икра дикого кижуча сезона 2026",
+    "Нежнейшая малосольная черноморская барабуля",
   ]) {
     assert.ok(home.includes(excerpt), `Не сохранена авторская формулировка: ${excerpt}`);
   }
