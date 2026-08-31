@@ -332,7 +332,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero\s*\{[^}]*background-position:\s*50% bottom;[^}]*background-size:\s*auto 145%;/,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero\s*\{[^}]*background-position:\s*56% bottom;[^}]*background-size:\s*auto 145%;/,
   );
   assert.match(
     styles,
@@ -344,7 +344,11 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /\.source-hero__content p\s*\{[^}]*font-family:\s*var\(--serif\);[^}]*font-size:\s*clamp\(1\.95rem, 8\.4vw, 2\.4rem\);/s,
+    /\.source-hero__copy > p\s*\{[^}]*font-family:\s*var\(--serif\);[^}]*font-size:\s*clamp\(1\.95rem, 8\.4vw, 2\.4rem\);/s,
+  );
+  assert.match(
+    styles,
+    /\.source-hero__journal-status\s*\{[^}]*font-family:\s*var\(--sans\);[^}]*font-size:\s*var\(--text-meta\);/s,
   );
   assert.match(
     styles,
@@ -357,6 +361,14 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(
     styles,
     /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero__journal-stack\s*\{[^}]*width:\s*100%;[^}]*min-width:\s*0;[^}]*margin-inline:\s*auto;[^}]*padding:\s*0 12px 12px 0;/,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero__journal-control\s*\{[^}]*width:\s*44px;[^}]*min-width:\s*44px;[^}]*height:\s*44px;[^}]*\}[\s\S]*?\.source-hero__journal-next-slot\s*\{[^}]*width:\s*100%;[^}]*min-width:\s*80px;[^}]*height:\s*44px;/,
+  );
+  assert.doesNotMatch(
+    styles,
+    /\.source-hero__journal-control,\s*\.source-hero__journal-next-slot\s*\{\s*width:\s*44px;/s,
   );
   assert.doesNotMatch(
     styles,
@@ -552,7 +564,6 @@ test("home prioritizes shopping before its editorial story and keeps local image
   }
 
   for (const asset of [
-    "hero-ocean.jpg",
     "hero-sea-poster.webp",
     "hero-sea.mp4",
     "caviar-slab.jpg",
@@ -564,9 +575,7 @@ test("home prioritizes shopping before its editorial story and keeps local image
     "oleg-gugunava.jpg",
     "delivery-basket.jpg",
   ]) {
-    if (asset === "hero-ocean.jpg") {
-      assert.match(styles, /url\("hero-ocean\.jpg"\)/);
-    } else if (asset === "fish-pattern.svg") {
+    if (asset === "fish-pattern.svg") {
       assert.match(styles, /fish-pattern\.svg/);
     } else {
       assert.match(home, new RegExp(`assets/${asset.replace(".", "\\.")}`));
@@ -587,6 +596,13 @@ test("home prioritizes shopping before its editorial story and keeps local image
   assert.match(home, /<video[\s\S]*?class="source-hero__video"/);
   assert.match(home, /poster="assets\/hero-sea-poster\.webp"/);
   assert.match(home, /<source[\s\S]*?src="assets\/hero-sea\.mp4"[\s\S]*?type="video\/mp4"/);
+  assert.match(styles, /--hero-sea-static-image:\s*url\("hero-sea-poster\.webp"\)/);
+  assert.match(styles, /--hero-sea-static-image:\s*url\("hero-sea-night-poster\.jpg"\)/);
+  assert.match(
+    styles,
+    /\.source-hero\s*\{[^}]*background:\s*var\(--hero-sea-static-image\) 56% center \/ cover no-repeat,/s,
+  );
+  assert.doesNotMatch(styles, /url\("hero-ocean\.jpg"\)/);
   assert.doesNotMatch(home, /youtube-nocookie\.com/);
   assert.match(home, /data-hero-video/);
   assert.match(siteScript, /prefers-reduced-motion: reduce/);
@@ -1589,6 +1605,9 @@ test("Night Watch switches the hero and menu to a dedicated night sea file", asy
   assert.match(siteScript, /document\.addEventListener\("seledkin:themechange"/);
   assert.match(projectRules, /Ночное море — отдельный медиавариант/);
   assert.match(nightSeaProvenance, /ничего не дорисовано и не сгенерировано/);
+  assert.match(nightSeaProvenance, /первого кадра ролика \(0:00\)/);
+  assert.equal(nightSeaManifest.posterFrame, 0);
+  assert.equal(nightSeaManifest.posterUpdated, "2026-08-31");
 
   assert.deepEqual(
     {
