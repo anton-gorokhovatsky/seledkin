@@ -366,6 +366,18 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     styles,
     /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero__journal-control\s*\{[^}]*width:\s*44px;[^}]*min-width:\s*44px;[^}]*height:\s*44px;[^}]*\}[\s\S]*?\.source-hero__journal-next-slot\s*\{[^}]*width:\s*100%;[^}]*min-width:\s*80px;[^}]*height:\s*44px;/,
   );
+  assert.match(
+    styles,
+    /\.js \.source-hero__journal-controls\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) auto minmax\(0, 1fr\);/s,
+  );
+  assert.doesNotMatch(
+    styles,
+    /\.js \.source-hero__journal-controls\s*\{[^}]*grid-template-columns:\s*(?:2\.75rem|44px)/s,
+  );
+  assert.match(
+    styles,
+    /@media \(max-width: 34rem\)[\s\S]*?\.source-hero__journal-control--all\s*\{[^}]*min-width:\s*80px;[^}]*gap:\s*6px;[^}]*padding-inline:\s*8px;[^}]*\}[\s\S]*?\.source-hero__journal-control--all svg\s*\{[^}]*width:\s*1rem;/,
+  );
   assert.doesNotMatch(
     styles,
     /\.source-hero__journal-control,\s*\.source-hero__journal-next-slot\s*\{\s*width:\s*44px;/s,

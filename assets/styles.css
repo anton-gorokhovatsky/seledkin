@@ -653,7 +653,7 @@ a.source-brand {
 .js .source-hero__journal-controls {
   display: grid;
   width: 100%;
-  grid-template-columns: 2.75rem minmax(3.5rem, 1fr) minmax(2.75rem, auto);
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: clamp(0.65rem, 2vw, 1rem);
   margin-top: 0.4rem;
@@ -3021,7 +3021,7 @@ a.site-menu__brand {
   .js .source-hero__journal-controls {
     width: 100%;
     min-width: 0;
-    grid-template-columns: 44px minmax(0, 1fr) minmax(44px, auto);
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     gap: 12px;
     margin-top: 0.3rem;
   }
@@ -3575,7 +3575,12 @@ a.site-menu__brand {
   .source-hero__journal-control--all {
     width: auto;
     min-width: 80px;
-    padding-inline: 12px;
+    gap: 6px;
+    padding-inline: 8px;
+  }
+
+  .source-hero__journal-control--all svg {
+    width: 1rem;
   }
 
   .source-hero__journal-all-label--full {
