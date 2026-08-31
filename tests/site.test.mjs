@@ -296,6 +296,11 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(hero, /href="#journal"/);
   assert.match(hero, /aria-label="Открыть весь Судовой журнал"/);
   assert.match(hero, />Весь журнал<\/span>/);
+  const heroJournalNextSlot =
+    hero.match(/<span class="source-hero__journal-next-slot">([\s\S]*?)<\/span>/)?.[1] ??
+    "";
+  assert.match(heroJournalNextSlot, /data-hero-journal-next/);
+  assert.doesNotMatch(heroJournalNextSlot, /data-hero-journal-all/);
   assert.equal(
     (hero.match(/source-hero__journal-control(?:\s|")/g) ?? []).length,
     3,
@@ -364,7 +369,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero__journal-control\s*\{[^}]*width:\s*44px;[^}]*min-width:\s*44px;[^}]*height:\s*44px;[^}]*\}[\s\S]*?\.source-hero__journal-next-slot\s*\{[^}]*width:\s*100%;[^}]*min-width:\s*80px;[^}]*height:\s*44px;/,
+    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero__journal-control\s*\{[^}]*width:\s*44px;[^}]*min-width:\s*44px;[^}]*height:\s*44px;[^}]*\}[\s\S]*?\.source-hero__journal-next-slot\s*\{[^}]*width:\s*100%;[^}]*min-width:\s*44px;[^}]*height:\s*44px;[^}]*\}[\s\S]*?\.source-hero__journal-control--all\s*\{[^}]*width:\s*auto;[^}]*min-width:\s*7\.75rem;/,
   );
   assert.match(
     styles,
@@ -376,8 +381,9 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /@media \(max-width: 34rem\)[\s\S]*?\.source-hero__journal-control--all\s*\{[^}]*min-width:\s*80px;[^}]*gap:\s*6px;[^}]*padding-inline:\s*8px;[^}]*\}[\s\S]*?\.source-hero__journal-control--all svg\s*\{[^}]*width:\s*1rem;/,
+    /\.source-hero__journal-control--all\s*\{[^}]*grid-column:\s*1 \/ -1;[^}]*grid-row:\s*2;[^}]*justify-self:\s*center;[^}]*padding-inline:\s*1rem;[^}]*gap:\s*0\.625rem;/s,
   );
+  assert.doesNotMatch(styles, /journal-all-label--short/);
   assert.doesNotMatch(
     styles,
     /\.source-hero__journal-control,\s*\.source-hero__journal-next-slot\s*\{\s*width:\s*44px;/s,
