@@ -2042,6 +2042,31 @@ a.source-brand {
   transform: rotate(-45deg);
 }
 
+/* Keep the existing 22px slot: every morph frame is an overlay, not layout. */
+.floating-menu__mark[data-morph-ready] {
+  background: transparent;
+}
+
+.floating-menu__mark[data-morph-ready]::before,
+.floating-menu__mark[data-morph-ready]::after {
+  content: none;
+}
+
+.floating-menu__morph {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  pointer-events: none;
+}
+
 .floating-menu__label {
   font-size: var(--text-meta);
   font-weight: 600;
@@ -2757,6 +2782,17 @@ a.site-menu__brand {
 .theme-toggle[data-current-theme="dark"] .theme-toggle__sun {
   opacity: 1;
   transform: scale(1) rotate(0);
+}
+
+.theme-toggle__mark[data-morph-ready] .theme-toggle__moon,
+.theme-toggle__mark[data-morph-ready] .theme-toggle__sun > circle {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle__mark[data-morph-ready] .theme-toggle__sun {
+    transition: none;
+  }
 }
 
 .theme-toggle--menu {

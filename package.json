@@ -8,9 +8,13 @@
   },
   "packageManager": "pnpm@11.9.0",
   "scripts": {
+    "build:icons": "node scripts/vendor-morphicons.mjs",
     "build:logo-drafts": "node scripts/build-logo-variants.mjs",
     "dev": "python3 -m http.server 4173",
     "lint": "node scripts/check-static.mjs",
     "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "morphicons": "1.7.1"
   }
 }
