@@ -385,7 +385,7 @@ if (
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape" || mapToggle.getAttribute("aria-pressed") !== "true") {
+    if (event.defaultPrevented || event.key !== "Escape" || mapToggle.getAttribute("aria-pressed") !== "true") {
       return;
     }
 

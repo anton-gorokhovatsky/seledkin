@@ -17,7 +17,7 @@ function relative(path) {
 
 function walk(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    if ([".git", "node_modules", "_site"].includes(entry.name)) return [];
+    if ([".git", "node_modules", "_site", "test-results", "playwright-report"].includes(entry.name)) return [];
     const path = join(directory, entry.name);
     return entry.isDirectory() ? walk(path) : [path];
   });
@@ -35,6 +35,10 @@ const requiredFiles = [
   ".nojekyll",
   "catalog/index.html",
   "catalog/catalog.js",
+  "assets/catalog-model.js",
+  "scripts/build-catalog.mjs",
+  "playwright.config.mjs",
+  "tests/browser/journeys.spec.mjs",
   "ACCESSIBILITY.md",
   "assets/styles.css",
   "assets/site.js",

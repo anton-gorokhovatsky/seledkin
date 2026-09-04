@@ -341,7 +341,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(styles, /\.source-hero\s*\{[\s\S]*?height:\s*100svh;/);
   assert.match(
     styles,
-    /\.source-hero__copy\s*\{[^}]*min-height:\s*100dvh;/s,
+    /\.source-hero__copy\s*\{[^}]*min-height:\s*0;/s,
   );
   assert.match(
     styles,
@@ -349,15 +349,15 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /\.source-hero__copy\s*\{[^}]*padding:\s*clamp\(20rem, 45dvh, 24rem\) 0 clamp\(3rem, 8dvh, 4\.5rem\);/s,
+    /\.source-hero__copy\s*\{[^}]*padding:\s*0;/s,
   );
   assert.match(
     styles,
-    /\.source-hero__mobile-brand\s*\{[^}]*left:\s*50%;[^}]*width:\s*min\(82vw, 18rem\);[^}]*transform:\s*translateX\(-50%\);/s,
+    /\.source-hero__mobile-brand\s*\{[^}]*position:\s*relative;[^}]*width:\s*clamp\(11rem, 62vw, 14rem\);/s,
   );
   assert.match(
     styles,
-    /\.source-hero__copy > p\s*\{[^}]*font-family:\s*var\(--serif\);[^}]*font-size:\s*clamp\(1\.95rem, 8\.4vw, 2\.4rem\);/s,
+    /\.source-hero__copy > p\s*\{[^}]*font-family:\s*var\(--serif\);[^}]*font-size:\s*clamp\(1\.5rem, 6\.3vw, 1\.85rem\);/s,
   );
   assert.match(
     styles,
@@ -365,11 +365,11 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /\.source-hero__actions \.source-button--hero-secondary\s*\{[^}]*display:\s*none;/s,
+    /\.source-hero__actions \.source-button--hero-secondary\s*\{[^}]*display:\s*inline-flex;/s,
   );
   assert.match(
     styles,
-    /\.source-hero__journal\s*\{[^}]*min-height:\s*100dvh;/s,
+    /\.source-hero__journal\s*\{[^}]*min-height:\s*0;/s,
   );
   assert.match(
     styles,
@@ -573,11 +573,11 @@ test("home prioritizes shopping before its editorial story and keeps local image
     "source-hero",
     "assortment-overview",
     "price-preview",
-    "watch-catch",
     "delivery-source",
     "contacts-source",
     "about-overview",
     "founder-source",
+    "watch-catch",
     "ship-log",
     "source-footer",
   ];
@@ -1072,7 +1072,7 @@ test("home catalog is a compact projection of the full catalog", () => {
   assert.doesNotMatch(styles, /\.price-preview__grid \.catalog-product\s*\{/);
   assert.match(
     styles,
-    /\.price-preview__header\s*\{[^}]*align-items:\s*start;/s,
+    /\.price-preview > \.source-shell\s*\{[^}]*align-items:\s*start;/s,
   );
   assert.doesNotMatch(
     preview,
@@ -1696,7 +1696,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.createElement("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=morphicons-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=journeys-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);
