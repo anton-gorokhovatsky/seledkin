@@ -126,7 +126,8 @@ test("hero is compact and journal controls remain one stable row in every state"
       expect(right.x).toBeGreaterThanOrEqual(box.x + box.width + 4);
       // Existing hover lifts the control by 1.28px; it must still occupy one row.
       expect(Math.abs(right.y + right.height / 2 - row.y - row.height / 2)).toBeLessThanOrEqual(2);
-      expect(right.height).toBeGreaterThanOrEqual(44);
+      // Translated DOMRects can report 43.99997 for a 44px target on Linux.
+      expect(Math.round(right.height * 1000) / 1000).toBeGreaterThanOrEqual(44);
       expect(right.x + right.width).toBeLessThanOrEqual(row.x + row.width + 1);
       if (index < 5) await next.click();
     }

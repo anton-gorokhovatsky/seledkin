@@ -4,7 +4,8 @@ export default defineConfig({
   testDir: "./tests/browser",
   timeout: 45000,
   expect: { timeout: 8000 },
-  workers: 2,
+  // Avoid connection resets from the small local HTTP server's request queue.
+  workers: 1,
   retries: 0,
   reporter: "list",
   use: {
