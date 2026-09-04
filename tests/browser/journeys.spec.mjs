@@ -159,6 +159,33 @@ test("all pages and open navigation pass axe in both watches", async ({ browser,
   }
 });
 
+test("ordinary sections share one continuous surface and delivery keeps its content", async ({ page }) => {
+  await page.goto("");
+  for (const theme of ["light", "dark"]) {
+    await page.evaluate(value => localStorage.setItem("seledkin-theme", value), theme);
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    for (const width of [320, 390, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      const surfaces = await page.locator(".source-section, .founder-source").evaluateAll(elements => elements.map(e => {
+        const s = getComputedStyle(e);
+        return { image: s.backgroundImage, color: s.backgroundColor };
+      }));
+      expect(surfaces).toHaveLength(6);
+      expect(surfaces.every(s => s.image === "none" && s.color === "rgba(0, 0, 0, 0)")).toBe(true);
+      const delivery = page.locator("#delivery");
+      await expect(delivery.locator(".delivery-source__lead")).toHaveText("Мы доставляем нашу продукцию домой или в офис в течение двух часов.");
+      await expect(delivery.locator(".delivery-source__terms")).toHaveText("Стоимость доставки в пределах МКАД — 490 ₽. Минимальной суммы заказа нет, это удобно.");
+      const photo = await delivery.locator("img").boundingBox();
+      expect(photo.width / photo.height).toBeCloseTo(1, 2);
+      const order = delivery.getByRole("link", { name: "Заказать в Телеграме", exact: true });
+      await expect(order).toHaveAttribute("href", "https://t.me/+79166751452");
+      expect((await order.boundingBox()).height).toBeGreaterThanOrEqual(44);
+      await noOverflow(page);
+    }
+  }
+});
+
 test("320px reflow, enlarged text, custom spacing and contrast retain controls", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 });
   for (const path of ["", "catalog/", "404.html"]) {

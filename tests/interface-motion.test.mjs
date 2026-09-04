@@ -68,7 +68,7 @@ test("enhancement is independent of navigation, local on every page, and preserv
   for (const file of ["index.html", "catalog/index.html", "404.html"]) {
     const page = await readFile(new URL(`../${file}`, import.meta.url), "utf8");
     assert.match(page, /<script type="module" src="(?:\.\.\/)?assets\/interface-motion\.js"><\/script>/);
-    assert.match(page, /styles\.css\?v=journeys-1/, "new enhancement must not combine with stale CSS");
+    assert.match(page, /styles\.css\?v=surface-delivery-1/, "new enhancement must not combine with stale CSS");
     assert.match(page, /class="theme-toggle__moon"/);
     assert.match(page, /class="theme-toggle__sun"/);
   }

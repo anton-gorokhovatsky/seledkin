@@ -336,8 +336,10 @@ p {
   margin-inline: auto;
 }
 
-.source-section {
-  background: var(--surface-water);
+/* Body owns the continuous page surface; sections must not restart its glow. */
+.source-section,
+.founder-source {
+  background: transparent;
 }
 
 .source-nowrap {
@@ -1165,7 +1167,6 @@ a.source-brand {
 
 .founder-source {
   padding: clamp(5rem, 8vw, 7.5rem) 0;
-  background: var(--surface-water);
 }
 
 .founder-source__inner {
@@ -1566,9 +1567,9 @@ a.source-brand {
 .delivery-source {
   display: grid;
   width: min(calc(100% - var(--page-outer)), var(--shell));
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: center;
-  gap: 2.5rem;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  align-items: start;
+  gap: clamp(2.5rem, 6vw, 6rem);
   margin-inline: auto;
   padding: 2.5rem 0 5rem;
 }
@@ -1579,7 +1580,37 @@ a.source-brand {
 }
 
 .delivery-source .source-copy {
-  padding-inline: clamp(1rem, 4vw, 4rem);
+  max-width: 38rem;
+  padding: 0;
+}
+
+.delivery-source h2 {
+  margin: 0 0 1.5rem;
+  font-size: clamp(3rem, 5.4vw, 5rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.delivery-source .delivery-source__lead {
+  max-width: 28ch;
+  margin-bottom: 1.75rem;
+  font-family: var(--serif);
+  font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+  line-height: 1.22;
+  text-wrap: pretty;
+}
+
+.delivery-source__terms {
+  max-width: 39ch;
+}
+
+.delivery-source__terms strong {
+  white-space: nowrap;
+}
+
+.delivery-source .delivery-source__order {
+  margin-top: 0.35rem;
+  color: var(--on-color);
 }
 
 .contacts-source {
@@ -3319,12 +3350,12 @@ a.site-menu__brand {
   .delivery-source {
     width: min(calc(100% - var(--page-outer)), var(--shell));
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 2rem;
     padding-top: 1rem;
   }
 
   .delivery-source .source-copy {
-    padding-inline: 0;
+    grid-row: 1;
   }
 
   .contacts-source {
