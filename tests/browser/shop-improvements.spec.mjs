@@ -12,9 +12,9 @@ test("customer vocabulary finds existing products and preserves precise filters"
   await expect(page.locator("[data-catalog-empty]")).toBeVisible();
 });
 
-test("the featured product leads to its full story and a product-specific inquiry", async ({ page }) => {
+test("the journal preview leads to its full story and a product-specific inquiry", async ({ page }) => {
   await page.goto("");
-  await page.locator('[data-hero-journal-card][data-stack-position="0"]').click();
+  await page.locator('.journal-preview__entry[href="journal/#journal-entry-688"]').click();
   await expect(page).toHaveURL(/journal\/#journal-entry-688$/);
   const entry = page.locator("#journal-entry-688");
   const inquiry = entry.getByRole("link", { name: /Спросить о наличии/ });
@@ -93,6 +93,7 @@ test("the sea can be paused, stops offscreen, and respects the saved choice acro
 });
 
 test("reduced motion downloads no sea video and the journal loads full images on demand", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   const requests = [];
   page.on("request", request => requests.push(request.url()));

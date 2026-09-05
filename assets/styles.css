@@ -3114,7 +3114,7 @@ a.site-menu__brand {
   }
 
   .source-hero__journal {
-    display: grid;
+    display: none;
     width: min(100%, 22rem);
     height: auto;
     min-height: 0;

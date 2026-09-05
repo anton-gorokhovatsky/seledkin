@@ -102,7 +102,7 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   await expect(map).toHaveAttribute("aria-pressed", "false");
 });
 
-test("hero is compact and journal controls remain one stable row in every state", async ({ page }, testInfo) => {
+test("the mobile hero stays clear while desktop journal controls remain stable", async ({ page }, testInfo) => {
   for (const width of [320, 390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("");
@@ -110,8 +110,14 @@ test("hero is compact and journal controls remain one stable row in every state"
     const hero = await page.locator(".source-hero").boundingBox();
     if (width < 1000) {
       expect(hero.height).toBeLessThan(1100);
-      await expect(page.locator(".source-button--hero-secondary")).toBeVisible();
+      await expect(page.locator(".source-button--hero-secondary")).toBeInViewport();
+      await expect(page.locator(".source-hero__journal")).toBeHidden();
+      expect(hero.height).toBeLessThan(700);
+      await noOverflow(page);
+      await page.screenshot({ path: testInfo.outputPath(`hero-${width}.png`) });
+      continue;
     }
+    await expect(page.locator(".source-hero__journal")).toBeVisible();
     const counter = page.locator("[data-hero-journal-counter]");
     const center = await counter.evaluate(e => { const r = e.getBoundingClientRect(); return r.x + r.width / 2; });
     for (let index = 1; index <= 5; index += 1) {
