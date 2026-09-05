@@ -295,7 +295,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     /Переключайте записи кнопками или клавишами со стрелками влево и вправо\./,
   );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 5);
-  for (const id of [684, 683, 682, 681, 680]) {
+  for (const id of [688, 687, 686, 685, 684]) {
     assert.match(hero, new RegExp("href=\"journal/#journal-entry-" + id + "\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }
@@ -699,8 +699,8 @@ test("the typographic scale protects reading and interface text", () => {
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(journalPage, /id="journal"/);
   assert.match(journalPage, /<h1 id="journal-title">Судовой журнал<\/h1>/);
-  assert.equal((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 5);
-  for (const id of [684, 683, 682, 681, 680]) {
+  assert.equal((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 9);
+  for (const id of [688, 687, 686, 685, 684, 683, 682, 681, 680]) {
     assert.match(
       journalPage,
       new RegExp(
@@ -711,7 +711,7 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.match(journalPage, /https:\/\/t\.me\/kapitanseledkin"/);
 
   let cursor = -1;
-  for (const id of [684, 683, 682, 681, 680]) {
+  for (const id of [688, 687, 686, 685, 684, 683, 682, 681, 680]) {
     const next = journalPage.indexOf(`https://t.me/kapitanseledkin/${id}`, cursor + 1);
     assert.ok(next > cursor, `Запись ${id} должна идти в обратной хронологии`);
     assert.match(journalPage, new RegExp(`assets/journal-${id}\\.jpg`));
@@ -733,7 +733,7 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
 
 test("the watch catch keeps its product stories without rejected draft art", () => {
   const section =
-    aboutPage.match(
+    home.match(
       /<section\s+class="watch-catch source-section"[\s\S]*?<\/section>/,
     )?.[0] ?? "";
 
@@ -1697,7 +1697,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.createElement("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=shop-journeys-2"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=shop-feedback-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);

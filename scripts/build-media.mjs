@@ -40,7 +40,7 @@ im.save(sys.argv[2], format="WEBP", quality=int(sys.argv[4]), method=6, icc_prof
 function record(file, source, extra = {}) {
   manifest.push({ file, source, sourceSha256: hash(source), sha256: hash(file), bytes: readFileSync(path(file)).length, ...extra });
 }
-const photos = ["about-main.jpg", "about-small-2.jpg", "caviar-slab.jpg", "delivery-basket.jpg", "flounder.jpg", "gallery-small-2.jpg", "journal-680.jpg", "journal-681.jpg", "journal-682.jpg", "journal-683.jpg", "journal-684.jpg", "oleg-gugunava.jpg", "salmon-cat.jpg"];
+const photos = ["about-main.jpg", "about-small-2.jpg", "caviar-slab.jpg", "delivery-basket.jpg", "flounder.jpg", "gallery-small-2.jpg", "journal-680.jpg", "journal-681.jpg", "journal-682.jpg", "journal-683.jpg", "journal-684.jpg", "journal-685.jpg", "journal-686.jpg", "journal-687.jpg", "journal-688.jpg", "oleg-gugunava.jpg", "salmon-cat.jpg"];
 for (const source of photos) {
   const info = probe(source).streams[0];
   const widths = [...new Set([Math.min(480, info.width), Math.min(960, info.width)])];

@@ -175,7 +175,7 @@ test("ordinary sections share one continuous surface and delivery keeps its cont
         const s = getComputedStyle(e);
         return { image: s.backgroundImage, color: s.backgroundColor };
       }));
-      expect(surfaces).toHaveLength(4);
+      expect(surfaces).toHaveLength(5);
       expect(surfaces.every(s => s.image === "none" && s.color === "rgba(0, 0, 0, 0)")).toBe(true);
       const delivery = page.locator("#delivery");
       await expect(delivery.locator(".delivery-source__lead")).toHaveText("Мы доставляем нашу продукцию домой или в офис в течение двух часов.");
@@ -185,6 +185,9 @@ test("ordinary sections share one continuous surface and delivery keeps its cont
       const order = delivery.getByRole("link", { name: "Заказать в Телеграме", exact: true });
       await expect(order).toHaveAttribute("href", "https://t.me/+79166751452");
       expect((await order.boundingBox()).height).toBeGreaterThanOrEqual(44);
+      const whatsapp = delivery.getByRole("link", { name: "Заказать в WhatsApp", exact: true });
+      await expect(whatsapp).toHaveAttribute("href", "https://wa.me/79166751452");
+      expect((await whatsapp.boundingBox()).height).toBeGreaterThanOrEqual(44);
       await noOverflow(page);
     }
   }

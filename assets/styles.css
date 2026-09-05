@@ -65,6 +65,7 @@
   --page-outer: 5rem;
   --content-edge: max(var(--page-inset), calc((100vw - var(--shell)) / 2));
   --masthead-height: 8rem;
+  --hero-controls-inset: 3rem;
   --masthead-panel-height: 11rem;
   --masthead-top-inset: 2.5rem;
   --masthead-control-size: 3.375rem;
@@ -557,7 +558,7 @@ a.source-brand {
   grid-template-columns: minmax(0, 1fr) clamp(18rem, 22vw, 21rem);
   align-items: center;
   gap: clamp(3rem, 6vw, 6rem);
-  padding-block: calc(var(--masthead-height) + 1rem) 3rem;
+  padding-block: calc(var(--masthead-height) + 1rem) var(--hero-controls-inset);
 }
 
 .source-hero__copy {
@@ -1615,8 +1616,14 @@ a.source-brand {
   white-space: nowrap;
 }
 
-.delivery-source .delivery-source__order {
+.delivery-source__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   margin-top: 0.35rem;
+}
+
+.delivery-source .delivery-source__order {
   color: var(--on-color);
 }
 
@@ -4240,6 +4247,7 @@ a.site-menu__brand {
   margin-top: 0;
 }
 .ship-log-entry__actions {
+  margin-top: 1.5rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -4255,27 +4263,29 @@ a.site-menu__brand {
   min-height: 2.75rem;
   align-items: center;
   justify-content: center;
-  gap: .5rem;
-  padding: .5rem 1rem;
-  border-radius: 999px;
-  color: var(--ink);
-  background: var(--jelly-glass-surface);
-  border: 1px solid var(--jelly-glass-border);
-  box-shadow: var(--jelly-glass-shadow);
-  backdrop-filter: var(--jelly-glass-filter);
-  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  padding: .5rem 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
   cursor: pointer;
   font-size: var(--text-meta);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: .25em;
+}
+.sea-motion-toggle:hover {
+  text-decoration-thickness: 2px;
 }
 .source-hero > .sea-motion-toggle {
   position: absolute;
-  bottom: 1.5rem;
+  bottom: var(--hero-controls-inset);
   left: var(--content-edge);
   z-index: 3;
 }
 .site-menu__service .sea-motion-toggle {
   margin-top: 1rem;
-  color: var(--ink);
+  align-self: flex-start;
 }
 .sea-motion-toggle[hidden] {
   display: none;

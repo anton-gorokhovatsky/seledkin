@@ -12,16 +12,16 @@ test("customer vocabulary finds existing products and preserves precise filters"
   await expect(page.locator("[data-catalog-empty]")).toBeVisible();
 });
 
-test("the featured fish leads to its full story and a product-specific inquiry", async ({ page }) => {
+test("the featured product leads to its full story and a product-specific inquiry", async ({ page }) => {
   await page.goto("");
   await page.locator('[data-hero-journal-card][data-stack-position="0"]').click();
-  await expect(page).toHaveURL(/journal\/#journal-entry-684$/);
-  const entry = page.locator("#journal-entry-684");
+  await expect(page).toHaveURL(/journal\/#journal-entry-688$/);
+  const entry = page.locator("#journal-entry-688");
   const inquiry = entry.getByRole("link", { name: /Спросить о наличии/ });
   const url = new URL(await inquiry.getAttribute("href"));
-  expect(url.searchParams.get("text")).toContain("Икряная камбала холодного копчения");
-  expect(url.searchParams.get("text")).toContain("https://t.me/kapitanseledkin/684");
-  await expect(entry.getByRole("link", { name: "Читать запись в Телеграме" })).toHaveAttribute("href", "https://t.me/kapitanseledkin/684");
+  expect(url.searchParams.get("text")).toContain("Паштет из охлажденной куриной печени");
+  expect(url.searchParams.get("text")).toContain("https://t.me/kapitanseledkin/688");
+  await expect(entry.getByRole("link", { name: "Читать запись в Телеграме" })).toHaveAttribute("href", "https://t.me/kapitanseledkin/688");
   await page.goto("#journal-entry-680");
   await expect(page).toHaveURL(/journal\/#journal-entry-680$/);
   await page.goto("#journal-entry-683");
@@ -36,8 +36,8 @@ test("complete editorial pages and inquiry links work without JavaScript", async
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
   await page.goto(`${baseURL}journal/`);
-  await expect(page.locator(".ship-log-entry")).toHaveCount(5);
-  await expect(page.getByRole("link", { name: /Спросить о наличии/ })).toHaveCount(5);
+  await expect(page.locator(".ship-log-entry")).toHaveCount(9);
+  await expect(page.getByRole("link", { name: /Спросить о наличии/ })).toHaveCount(9);
   await page.goto(`${baseURL}about/`);
   await expect(page.locator(".about-overview__chapter")).toHaveCount(3);
   await expect(page.locator(".founder-source")).toBeVisible();

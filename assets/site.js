@@ -4,8 +4,14 @@ import { syncMenuSeaVideo } from "./sea-motion.js?v=hero-priority-1";
 
 const root = new URL("../", import.meta.url);
 const isHome = location.pathname === root.pathname || location.pathname === `${root.pathname}index.html`;
-if (isHome && /^#journal-entry-68[0-4]$/.test(location.hash)) {
+if (isHome && /^#journal-entry-68[0-8]$/.test(location.hash)) {
   location.replace(new URL(`journal/${location.hash}`, root).href);
+}
+
+const isAbout = location.pathname === new URL("about/", root).pathname
+  || location.pathname === new URL("about/index.html", root).pathname;
+if (isAbout && location.hash === "#watch-catch") {
+  location.replace(new URL("#watch-catch", root).href);
 }
 
 const menuButton = document.querySelector("[data-menu-toggle]");
