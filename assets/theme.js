@@ -120,7 +120,7 @@ function initTheme() {
       if (nextPoster && video.getAttribute("poster") !== nextPoster) {
         video.setAttribute("poster", nextPoster);
       }
-      if (source && nextSource && source.getAttribute("src") !== nextSource) {
+      if (source?.hasAttribute("src") && nextSource && source.getAttribute("src") !== nextSource) {
         source.setAttribute("src", nextSource);
         sourceChanged = true;
       }

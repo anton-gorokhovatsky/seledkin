@@ -34,8 +34,12 @@ const requiredFiles = [
   "sitemap.xml",
   ".nojekyll",
   "catalog/index.html",
+  "about/index.html",
+  "journal/index.html",
   "catalog/catalog.js",
   "assets/catalog-model.js",
+  "assets/sea-motion.js",
+  "assets/media-variants.json",
   "scripts/build-catalog.mjs",
   "playwright.config.mjs",
   "tests/browser/journeys.spec.mjs",
@@ -110,6 +114,8 @@ const publicSourcePaths = [
   "index.html",
   "404.html",
   "catalog/index.html",
+  "about/index.html",
+  "journal/index.html",
   "catalog/catalog.js",
   "assets/styles.css",
   "assets/site.js",
@@ -128,7 +134,7 @@ for (const forbidden of ["next/", "next.js", "react-dom", "from \"react\"", "til
   }
 }
 
-const htmlFiles = ["index.html", "catalog/index.html", "404.html"];
+const htmlFiles = ["index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html"];
 const pageTitles = new Map();
 for (const file of htmlFiles) {
   const path = join(root, file);
@@ -224,10 +230,10 @@ for (const file of htmlFiles) {
     for (const required of [
       "data-hero-video",
       "data-theme-video",
-      'poster="assets/hero-sea-poster.webp"',
-      'data-poster-dark="assets/hero-sea-night-poster.jpg"',
-      'src="assets/hero-sea.mp4"',
-      'data-src-dark="assets/hero-sea-night.mp4"',
+      'data-poster-light="assets/hero-sea-poster.webp"',
+      'data-poster-dark="assets/hero-sea-night-poster.webp"',
+      'data-src-light="assets/hero-sea-web.mp4"',
+      'data-src-dark="assets/hero-sea-night-web.mp4"',
       'data-logo-light="assets/logo-redrawn-sea.svg"',
       'data-logo-dark="assets/logo-redrawn-sea.svg"',
       'class="source-hero__mobile-brand brand-jelly brand-jelly--sea"',
@@ -321,9 +327,7 @@ for (const required of [
   'menuButtonLabel.textContent = "Меню"',
   "menuPanel.scrollTop = 0",
   'window.matchMedia("(prefers-reduced-motion: reduce)")',
-  "heroVideo.pause()",
-  "heroVideo.currentTime = 0",
-  'import "./theme.js"',
+  'import "./theme.js?v=shop-journeys-2"',
 ]) {
   if (!siteScript.includes(required)) fail(`assets/site.js: нет обязательного поведения ${required}`);
 }
@@ -350,16 +354,21 @@ for (const required of ['role="status"', 'aria-live="polite"', 'role="group"']) 
 }
 
 const homePage = readFileSync(join(root, "index.html"), "utf8");
-if ((homePage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length !== 5) {
-  fail("index.html: «Судовой журнал» должен содержать пять отобранных записей");
+const journalPage = readFileSync(join(root, "journal/index.html"), "utf8");
+const seaScript = readFileSync(join(root, "assets/sea-motion.js"), "utf8");
+for (const required of ["video.pause()", "video.currentTime = 0", "IntersectionObserver", "data-sea-toggle"]) {
+  if (!seaScript.includes(required)) fail(`assets/sea-motion.js: нет обязательного поведения ${required}`);
+}
+if ((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length !== 5) {
+  fail("journal/index.html: «Судовой журнал» должен содержать пять отобранных записей");
 }
 for (const id of [684, 683, 682, 681, 680]) {
   for (const required of [
     `assets/journal-${id}.jpg`,
     `https://t.me/kapitanseledkin/${id}`,
   ]) {
-    if (!homePage.includes(required)) {
-      fail(`index.html: в «Судовом журнале» нет ${required}`);
+    if (!journalPage.includes(required)) {
+      fail(`journal/index.html: в «Судовом журнале» нет ${required}`);
     }
   }
 }

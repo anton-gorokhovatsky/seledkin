@@ -1,0 +1,310 @@
+[
+  {
+    "file": "about-main-480.webp",
+    "source": "about-main.jpg",
+    "sourceSha256": "c91b18c48d30e30d21adc37592199aa83a79ac753eab8f6243727e42af7b4cb6",
+    "sha256": "8321dee42d50f8e36effa41eacd272d2a52f49f7e7c46bedd964f8038c1eddd9",
+    "bytes": 73396,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "about-main-960.webp",
+    "source": "about-main.jpg",
+    "sourceSha256": "c91b18c48d30e30d21adc37592199aa83a79ac753eab8f6243727e42af7b4cb6",
+    "sha256": "64b27dc61d3413233cba6842a9ac5c019a15cf62a8ad30061e50ea99d96da6bd",
+    "bytes": 243426,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "about-small-2-480.webp",
+    "source": "about-small-2.jpg",
+    "sourceSha256": "0b9538a73372d08c4a52f77c4fa762dde79e139f10df3397d9ab9480d3a71488",
+    "sha256": "e96f6a35fc37301c9030caaae5f6d27c83224e90e8e0556de9618595cc30606f",
+    "bytes": 42498,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "about-small-2-960.webp",
+    "source": "about-small-2.jpg",
+    "sourceSha256": "0b9538a73372d08c4a52f77c4fa762dde79e139f10df3397d9ab9480d3a71488",
+    "sha256": "6048566c8bdf741985ad7b061375b0f6f1397d1df63a6e96dba6364c9ef70231",
+    "bytes": 146106,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "caviar-slab-480.webp",
+    "source": "caviar-slab.jpg",
+    "sourceSha256": "1f05fcc3ba47c52499bdbfd4e34f27fc0dedc84a1726dfb7a032c04f85528366",
+    "sha256": "2363801ed5e17d6936895720c852df96495be5f5d9750cded437260f8af79225",
+    "bytes": 49798,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "caviar-slab-793.webp",
+    "source": "caviar-slab.jpg",
+    "sourceSha256": "1f05fcc3ba47c52499bdbfd4e34f27fc0dedc84a1726dfb7a032c04f85528366",
+    "sha256": "d5511b0099476eb7fa896ad218a23d396e18e980bfc3ba1f4cb0a6279d006518",
+    "bytes": 142190,
+    "width": 793,
+    "height": 793
+  },
+  {
+    "file": "delivery-basket-480.webp",
+    "source": "delivery-basket.jpg",
+    "sourceSha256": "dae2c862638df1bdda133182436a759e93f7dbe6f93fd0f808d647818ffe82e9",
+    "sha256": "25c3407fd6ce5002bd6f91b273d688a3ba0ac9c9e6c48b2b2c62f3c5f639c224",
+    "bytes": 64194,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "delivery-basket-960.webp",
+    "source": "delivery-basket.jpg",
+    "sourceSha256": "dae2c862638df1bdda133182436a759e93f7dbe6f93fd0f808d647818ffe82e9",
+    "sha256": "a295e73f92457d16547e4c70d8cae3c50b3294e21425617cac11f34b66fca518",
+    "bytes": 194052,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "flounder-480.webp",
+    "source": "flounder.jpg",
+    "sourceSha256": "7dd7c27b5b7732a88575caf36be176d293a0c6637ab08543c1ab2af654b097b5",
+    "sha256": "418051a60dff00266a238a2142972119dc4cf4c6101631e60e37fd0e3f1cdfed",
+    "bytes": 44406,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "flounder-960.webp",
+    "source": "flounder.jpg",
+    "sourceSha256": "7dd7c27b5b7732a88575caf36be176d293a0c6637ab08543c1ab2af654b097b5",
+    "sha256": "3a1b5cfb49c8553c7121269472ac5c66ebe3443dc548b239b5ac8b00590b4a3f",
+    "bytes": 172108,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "gallery-small-2-480.webp",
+    "source": "gallery-small-2.jpg",
+    "sourceSha256": "e02eec9ba7a82d37f8d04f3c9c28b1e990fe1a827df7f866b1d4b2e5393a1013",
+    "sha256": "d662c39c8b2a1b70df17a934b7ed5a2d0c036c35635e6190232f7d71bfc3b5b9",
+    "bytes": 41952,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "gallery-small-2-960.webp",
+    "source": "gallery-small-2.jpg",
+    "sourceSha256": "e02eec9ba7a82d37f8d04f3c9c28b1e990fe1a827df7f866b1d4b2e5393a1013",
+    "sha256": "a123aa9cec13eab46bbbbcd4fe054c349600485d0ca60b106011cd0b587a83f1",
+    "bytes": 166816,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "journal-680-480.webp",
+    "source": "journal-680.jpg",
+    "sourceSha256": "4c585dfc8d94f59a135ce44bce88e1d461dd6df8b75b1bceb6890e6b6df266e7",
+    "sha256": "09ff2bdfe1d1fd3733ef19d3ac04a2aa3321551b3a5c5f2286e586e0a4f2dc67",
+    "bytes": 35870,
+    "width": 480,
+    "height": 640
+  },
+  {
+    "file": "journal-680-600.webp",
+    "source": "journal-680.jpg",
+    "sourceSha256": "4c585dfc8d94f59a135ce44bce88e1d461dd6df8b75b1bceb6890e6b6df266e7",
+    "sha256": "8c92dd9717a772e527e4fc11868a0be830f4af428e0aed1fa7f3bc969872ccdd",
+    "bytes": 55966,
+    "width": 600,
+    "height": 800
+  },
+  {
+    "file": "journal-680-32.webp",
+    "source": "journal-680.jpg",
+    "sourceSha256": "4c585dfc8d94f59a135ce44bce88e1d461dd6df8b75b1bceb6890e6b6df266e7",
+    "sha256": "bc3d18fd2ad45f070f3d6414c4902eff01a59ff0d5710f5b471cb4d4c7a839ad",
+    "bytes": 402,
+    "width": 32,
+    "height": 43
+  },
+  {
+    "file": "journal-681-480.webp",
+    "source": "journal-681.jpg",
+    "sourceSha256": "0e48aaa7c67d2a6687cbe5d4ab6a8f56f2f18536811ddae40d7cd13565fbee2c",
+    "sha256": "89b9a4bd6bf3995d3dae6bd6a2e466ac63637996a300db00eae51fa306a26602",
+    "bytes": 38142,
+    "width": 480,
+    "height": 530
+  },
+  {
+    "file": "journal-681-725.webp",
+    "source": "journal-681.jpg",
+    "sourceSha256": "0e48aaa7c67d2a6687cbe5d4ab6a8f56f2f18536811ddae40d7cd13565fbee2c",
+    "sha256": "ad849fd7b7060b887845136805fc6ea7d837c852ce291f6821fbb9046ae3c47c",
+    "bytes": 65706,
+    "width": 725,
+    "height": 800
+  },
+  {
+    "file": "journal-681-32.webp",
+    "source": "journal-681.jpg",
+    "sourceSha256": "0e48aaa7c67d2a6687cbe5d4ab6a8f56f2f18536811ddae40d7cd13565fbee2c",
+    "sha256": "02307c53dfa8915283df7cceac75cbf1eac61e8d6f0651b0effd23cff397301a",
+    "bytes": 390,
+    "width": 32,
+    "height": 35
+  },
+  {
+    "file": "journal-682-480.webp",
+    "source": "journal-682.jpg",
+    "sourceSha256": "ce166cf12eb8616f7e0777ef042d71882fe0f56f809b7162aac3c32a32f9a277",
+    "sha256": "16fe78ba9c79705656996bf9f246dc6e37ac8f71e1811fc5b6c757b7d08bf2bc",
+    "bytes": 43882,
+    "width": 480,
+    "height": 594
+  },
+  {
+    "file": "journal-682-647.webp",
+    "source": "journal-682.jpg",
+    "sourceSha256": "ce166cf12eb8616f7e0777ef042d71882fe0f56f809b7162aac3c32a32f9a277",
+    "sha256": "6f70f60822e68aa10f9892f0a8887e0efa2acc5782ce6550bd2c5e948c26cb6b",
+    "bytes": 68282,
+    "width": 647,
+    "height": 800
+  },
+  {
+    "file": "journal-682-32.webp",
+    "source": "journal-682.jpg",
+    "sourceSha256": "ce166cf12eb8616f7e0777ef042d71882fe0f56f809b7162aac3c32a32f9a277",
+    "sha256": "02dbe142dbe6415d299e27af2b48fcf1109f9398a8da10742e5367fa5257149a",
+    "bytes": 472,
+    "width": 32,
+    "height": 40
+  },
+  {
+    "file": "journal-683-480.webp",
+    "source": "journal-683.jpg",
+    "sourceSha256": "6eac749cc212583a21aa62292af5ba9ba9501eafb8eb7eb7c30d3d8aac41e8f0",
+    "sha256": "fafcdebbedb7d84f4ac752ef995ce48eb6539297f4c03520ebf257eda580866d",
+    "bytes": 66640,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "journal-683-800.webp",
+    "source": "journal-683.jpg",
+    "sourceSha256": "6eac749cc212583a21aa62292af5ba9ba9501eafb8eb7eb7c30d3d8aac41e8f0",
+    "sha256": "99e0fa5c041cfa12afe1dc43f5a47ec775f31ba0d21222be2ae0663772b55504",
+    "bytes": 161282,
+    "width": 800,
+    "height": 800
+  },
+  {
+    "file": "journal-683-32.webp",
+    "source": "journal-683.jpg",
+    "sourceSha256": "6eac749cc212583a21aa62292af5ba9ba9501eafb8eb7eb7c30d3d8aac41e8f0",
+    "sha256": "8d619bab1c2d8db53c3d7b1c28c0d3285a5fde17859bf46f815904e23b320b2c",
+    "bytes": 434,
+    "width": 32,
+    "height": 32
+  },
+  {
+    "file": "journal-684-480.webp",
+    "source": "journal-684.jpg",
+    "sourceSha256": "96eb277689b103c1aee0e6cff65ff72d325f354ad45e1b368fd6f3bb04fa3d11",
+    "sha256": "81f1c19583df908b352b7c0bdc0a738648838ebdfe2baf553277ae46215a438d",
+    "bytes": 31352,
+    "width": 480,
+    "height": 604
+  },
+  {
+    "file": "journal-684-636.webp",
+    "source": "journal-684.jpg",
+    "sourceSha256": "96eb277689b103c1aee0e6cff65ff72d325f354ad45e1b368fd6f3bb04fa3d11",
+    "sha256": "a863ad3327ad84928bd002517f3eb6d88f556c27b8a73b67f4f363e1fc1d1549",
+    "bytes": 58522,
+    "width": 636,
+    "height": 800
+  },
+  {
+    "file": "journal-684-32.webp",
+    "source": "journal-684.jpg",
+    "sourceSha256": "96eb277689b103c1aee0e6cff65ff72d325f354ad45e1b368fd6f3bb04fa3d11",
+    "sha256": "ab8012172ee96b03398952f1589bebc2d9da90c2ade4c0bad5e214eec2a4a409",
+    "bytes": 302,
+    "width": 32,
+    "height": 40
+  },
+  {
+    "file": "oleg-gugunava-480.webp",
+    "source": "oleg-gugunava.jpg",
+    "sourceSha256": "0052bf8f37b7184f553e74edef377c74e9fe1ede233883d72fda4bfdf1a48792",
+    "sha256": "030beaeb30f971d95a9fc5f45365df44432637b9bd65340fc249a3cbf43ad839",
+    "bytes": 36428,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "oleg-gugunava-960.webp",
+    "source": "oleg-gugunava.jpg",
+    "sourceSha256": "0052bf8f37b7184f553e74edef377c74e9fe1ede233883d72fda4bfdf1a48792",
+    "sha256": "9b3d7fbedca84f57a32b127486d87a387add05629333ad3bc4a1099ae58cf695",
+    "bytes": 79420,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "salmon-cat-480.webp",
+    "source": "salmon-cat.jpg",
+    "sourceSha256": "b12d7f749f2bffbfc1ee92dc10d18f050badaaebd8b851708e2b7dd9a625f1bd",
+    "sha256": "f12b35a2ae0be43de26fe3fea87d45e13e175a7accb0f77da40bf49ce72b140f",
+    "bytes": 31414,
+    "width": 480,
+    "height": 640
+  },
+  {
+    "file": "salmon-cat-960.webp",
+    "source": "salmon-cat.jpg",
+    "sourceSha256": "b12d7f749f2bffbfc1ee92dc10d18f050badaaebd8b851708e2b7dd9a625f1bd",
+    "sha256": "0045f07513d5dde3e57afc81463a5363fb4217f8270f48af2bd77353fc7acb55",
+    "bytes": 85658,
+    "width": 960,
+    "height": 1280
+  },
+  {
+    "file": "hero-sea-web.mp4",
+    "source": "hero-sea.mp4",
+    "sourceSha256": "4bd39c26bc86951039361f50508b9b5e2c486460c1ea6b2a919a502097baf232",
+    "sha256": "778a238c4059cac70d5943fd7e6bdb8a6738e46f355c707e4c001755a7ab0a90",
+    "bytes": 1593677,
+    "width": 1280,
+    "height": 720,
+    "r_frame_rate": "30/1",
+    "nb_frames": "240"
+  },
+  {
+    "file": "hero-sea-night-web.mp4",
+    "source": "hero-sea-night.mp4",
+    "sourceSha256": "8c27339ac3f6d07cf9b119931bdff8b1d6119f3f732077b6314b5e318b40f18e",
+    "sha256": "cd37885b8068962c2bfa873cf17f949e8b19017b43e0650646994d49c8681528",
+    "bytes": 794247,
+    "width": 1280,
+    "height": 720,
+    "r_frame_rate": "30/1",
+    "nb_frames": "240"
+  },
+  {
+    "file": "hero-sea-night-poster.webp",
+    "source": "hero-sea-night-poster.jpg",
+    "sourceSha256": "61631e759b65d552f54f6876f55c94da176aebf9068cdb85d32f25cfb68357a7",
+    "sha256": "83c584765c24f1261340bf9df8c86d6b458a623253144790e6e831d341c1a241",
+    "bytes": 27170
+  }
+]

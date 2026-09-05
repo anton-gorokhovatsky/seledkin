@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="История Рыбной лавки капитана Селедкина, её основатель Олег Гугунава и три причины выбирать нашу рыбу."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="Рыбная лавка капитана Селедкина" />
+    <meta property="og:title" content="О лавке и её капитане — Рыбная лавка капитана Селедкина" />
+    <meta property="og:description" content="История Рыбной лавки капитана Селедкина, её основатель Олег Гугунава и три причины выбирать нашу рыбу." />
+    <meta property="og:url" content="https://anton-gorokhovatsky.github.io/seledkin/about/" />
+    <meta property="og:image" content="https://anton-gorokhovatsky.github.io/seledkin/assets/share-card-primary.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Свежая рыба со специями и логотип Рыбной лавки капитана Селедкина" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="О лавке и её капитане — Рыбная лавка капитана Селедкина" />
+    <meta name="twitter:description" content="История Рыбной лавки капитана Селедкина, её основатель Олег Гугунава и три причины выбирать нашу рыбу." />
+    <meta name="twitter:image" content="https://anton-gorokhovatsky.github.io/seledkin/assets/share-card-primary.jpg" />
+    <meta name="twitter:image:alt" content="Свежая рыба со специями и логотип Рыбной лавки капитана Селедкина" />
+    <link rel="canonical" href="https://anton-gorokhovatsky.github.io/seledkin/about/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (() => {
+        document.documentElement.classList.add("js");
+        let explicitTheme = null;
+        try {
+          const stored = localStorage.getItem("seledkin-theme");
+          if (stored === "light" || stored === "dark") explicitTheme = stored;
+        } catch {}
+        let scheduleTheme = null;
+        try {
+          const hourPart = new Intl.DateTimeFormat("en-GB", {
+            timeZone: "Europe/Moscow",
+            hour: "2-digit",
+            hourCycle: "h23",
+          })
+            .formatToParts(new Date())
+            .find(({ type }) => type === "hour");
+          const hour = Number(hourPart?.value);
+          if (Number.isFinite(hour)) {
+            scheduleTheme = hour >= 11 && hour < 20 ? "light" : "dark";
+          }
+        } catch {}
+        const theme =
+          explicitTheme ??
+          scheduleTheme ??
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        const isDark = theme === "dark";
+        document.documentElement.dataset.theme = theme;
+        if (explicitTheme) {
+          document.documentElement.dataset.themeSource = "explicit";
+        }
+        document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+        document.querySelector('meta[name="theme-color"]').content = isDark
+          ? "#0e202b"
+          : "#ffffff";
+      })();
+    </script>
+    <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../assets/styles.css?v=shop-journeys-2" />
+    <script type="module" src="../assets/site.js?v=shop-journeys-2"></script>
+    <script type="module" src="../assets/interface-motion.js"></script>
+    <title>О лавке и её капитане — Рыбная лавка капитана Селедкина</title>
+  </head>
+  <body class="about-page">
+    <a class="skip-link" href="#main">Перейти к каталогу</a>
+
+    <header class="source-header" id="top">
+      <div class="source-header__bar">
+        <a class="source-brand brand-jelly brand-jelly--page" href="../" aria-label="Рыбная лавка капитана Селедкина — на главную">
+          <img
+            src="../assets/logo-redrawn-sea.svg"
+            data-theme-logo
+            data-logo-light="../assets/logo-redrawn-sea.svg"
+            data-logo-dark="../assets/logo-redrawn-sea.svg"
+            alt="Рыбная лавка капитана Селедкина"
+            width="3600"
+            height="1784"
+          />
+        </a>
+      </div>
+    </header>
+
+    <button
+      class="floating-menu"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      aria-label="Открыть меню"
+      data-menu-toggle
+    >
+      <span class="floating-menu__mark" aria-hidden="true"></span>
+      <span class="floating-menu__label">Меню</span>
+    </button>
+
+    <div
+      class="site-menu"
+      id="primary-navigation"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="menu-title"
+      data-menu
+      hidden
+    >
+      <div class="site-menu__panel">
+        <header class="site-menu__masthead">
+          <a class="site-menu__brand brand-jelly brand-jelly--panel" href="../">
+            <img
+              src="../assets/logo-redrawn-sea.svg"
+              data-theme-logo
+              data-logo-light="../assets/logo-redrawn-sea.svg"
+              data-logo-dark="../assets/logo-redrawn-sea.svg"
+              alt="Рыбная лавка капитана Селедкина"
+              width="3600"
+              height="1784"
+            />
+          </a>
+        </header>
+
+        <div class="site-menu__layout">
+          <video
+            class="site-menu__service-video"
+            data-poster-light="../assets/hero-sea-poster.webp"
+            data-poster-dark="../assets/hero-sea-night-poster.webp"
+            data-theme-video
+            data-menu-sea-video
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            <source
+              data-src-light="../assets/hero-sea-web.mp4"
+              data-src-dark="../assets/hero-sea-night-web.mp4"
+              data-theme-video-source
+              type="video/mp4"
+            />
+          </video>
+          <section class="site-menu__routes">
+            <p class="site-menu__kicker">По сайту</p>
+            <h2 id="menu-title">Куда держим курс?</h2>
+            <nav aria-label="Меню сайта">
+              <a href="../#assortment">
+                <span aria-hidden="true">01</span>
+                <span>Что продаём</span>
+              </a>
+              <a href="./" aria-current="page">
+                <span aria-hidden="true">02</span>
+                <span>Продукты и цены</span>
+              </a>
+              <a href="../#delivery">
+                <span aria-hidden="true">03</span>
+                <span>Доставка</span>
+              </a>
+              <a href="../#contacts">
+                <span aria-hidden="true">04</span>
+                <span>Контакты</span>
+              </a>
+              <a href="../about/">
+                <span aria-hidden="true">05</span>
+                <span>О нас</span>
+              </a>
+              <a href="../journal/">
+                <span aria-hidden="true">06</span>
+                <span>Судовой журнал</span>
+              </a>
+            </nav>
+          </section>
+
+          <section class="site-menu__service" aria-labelledby="menu-service-title">
+            <div class="site-menu__service-inner">
+              <h3 id="menu-service-title">Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
+              <address>
+                Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
+                Метро «Вавиловская»
+              </address>
+              <div class="site-menu__actions">
+                <a
+                  class="source-button source-button--menu-call"
+                  href="tel:+79166751452"
+                  aria-label="Позвонить в лавку: +7 916 675-14-52"
+                >
+                  Позвонить
+                </a>
+                <a class="source-button source-button--menu-primary" href="https://t.me/+79166751452">
+                  Заказать в Телеграме
+                </a>
+                <a class="source-button source-button--menu-secondary" href="https://wa.me/79166751452">
+                  Заказать в WhatsApp
+                </a>
+              </div>
+              <div class="site-menu__networks">
+                <a class="site-menu__channel" href="https://t.me/kapitanseledkin">
+                  <svg class="site-menu__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <use href="../assets/social-icons.svg#telegram"></use>
+                  </svg>
+                  <span class="site-menu__channel-copy">
+                    <strong>Телеграм-канал</strong>
+                    <span>Судовой журнал капитана</span>
+                  </span>
+                </a>
+                <nav class="site-menu__socials" aria-label="Другие площадки лавки">
+                  <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <use href="../assets/social-icons.svg#youtube"></use>
+                    </svg>
+                    <span>YouTube</span>
+                  </a>
+                  <a href="https://soundcloud.com/kapitanseledkin">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <use href="../assets/social-icons.svg#soundcloud"></use>
+                    </svg>
+                    <span>SoundCloud</span>
+                  </a>
+                </nav>
+              </div>
+              <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить море</button>
+              <button
+                class="theme-toggle theme-toggle--menu"
+                type="button"
+                aria-label="Включить ночную вахту"
+                data-theme-toggle
+              >
+                <svg class="theme-toggle__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path class="theme-toggle__moon" d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8a8.5 8.5 0 1 0 11.6 11.6Z" />
+                  <g class="theme-toggle__sun">
+                    <circle cx="12" cy="12" r="3.5" />
+                    <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6 6 6M18 18l1.4 1.4M19.4 4.6 18 6M6 18l-1.4 1.4" />
+                  </g>
+                </svg>
+                <span data-theme-label>Ночная вахта</span>
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <main id="main" tabindex="-1">
+      <section
+        class="about-overview source-section"
+        id="about"
+        aria-labelledby="about-title"
+      >
+        <div class="source-shell">
+          <header class="about-overview__header">
+            <div class="about-overview__heading">
+              <p class="about-overview__eyebrow">О нас</p>
+              <h1 id="about-title">
+                Ещё одно место в Москве, где продаётся хорошая рыба
+              </h1>
+            </div>
+            <div class="about-overview__introduction">
+              <p>
+                «Рыбная лавка капитана Селедкина» — небольшой магазин в
+                нескольких минутах ходьбы от метро «Вавиловская».
+              </p>
+              <p>
+                Казалось бы, обычная торговая точка, но нас уже знают не только
+                жители окрестных домов — к нам приезжают из других районов
+                Москвы, а потом благодарят у себя в блогах.
+              </p>
+            </div>
+          </header>
+
+          <figure class="about-overview__opening-media">
+            <img
+              src="../assets/flounder-480.webp"
+                srcset="../assets/flounder-480.webp 480w, ../assets/flounder-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/flounder.jpg"
+                decoding="async"
+              alt="Камбала, нож и перец на столе"
+              width="1680"
+              height="1680"
+              loading="lazy"
+            />
+          </figure>
+
+          <div class="about-overview__reasons" aria-labelledby="about-reasons-title">
+            <header class="about-overview__reasons-header">
+              <p class="about-overview__eyebrow">Три причины</p>
+              <h2 id="about-reasons-title">Почему о нас говорят?</h2>
+            </header>
+
+            <div class="about-overview__story-stage">
+              <article class="about-overview__chapter">
+                <figure class="about-overview__chapter-media">
+                  <img
+                    src="../assets/about-main-480.webp"
+                srcset="../assets/about-main-480.webp 480w, ../assets/about-main-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/about-main.jpg"
+                decoding="async"
+                    alt="Рыба, зелень и перец на столе"
+                    width="1680"
+                    height="1680"
+                    loading="lazy"
+                  />
+                </figure>
+                <div class="about-overview__reason">
+                  <span class="about-overview__number" aria-hidden="true">01</span>
+                  <h3>Во-первых, это качество.</h3>
+                  <p>
+                    Мы изучаем предложения поставщиков и выбираем только рыбу
+                    свежего завоза и не вымороженную. Мы закупаем рыбу, быстро
+                    замороженную после поимки прямо на промысле и ни разу с тех пор
+                    не размораживавшуюся: покупатель разморозит её сам уже дома. В
+                    лавке её быстро разбирают, а склада у нас нет, весь наш товар
+                    лежит в прилавках-холодильниках. Поэтому рыба не залеживается,
+                    мы постоянно подвозим свежемороженую продукцию.
+                  </p>
+                </div>
+              </article>
+
+              <article class="about-overview__chapter about-overview__chapter--reverse">
+                <figure class="about-overview__chapter-media">
+                  <img
+                    src="../assets/about-small-2-480.webp"
+                srcset="../assets/about-small-2-480.webp 480w, ../assets/about-small-2-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/about-small-2.jpg"
+                decoding="async"
+                    alt="Полки лавки с рыбой и морепродуктами"
+                    width="1680"
+                    height="1680"
+                    loading="lazy"
+                  />
+                </figure>
+                <div class="about-overview__reason">
+                  <span class="about-overview__number" aria-hidden="true">02</span>
+                  <h3>Во-вторых, ассортимент.</h3>
+                  <p>
+                    Хоть магазин и невелик, мы предлагаем и достаточно обычную
+                    рыбу для повседневного приготовления, и интересные деликатесы.
+                    При этом настоящим деликатесом могут стать и самые простые,
+                    казалось бы, виды — например, купленная у нас мороженая сельдь,
+                    если посолить её грамотно и правильно.
+                  </p>
+                </div>
+              </article>
+
+              <article class="about-overview__chapter">
+                <figure class="about-overview__chapter-media">
+                  <img
+                    src="../assets/gallery-small-2-480.webp"
+                srcset="../assets/gallery-small-2-480.webp 480w, ../assets/gallery-small-2-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/gallery-small-2.jpg"
+                decoding="async"
+                    alt="Рыба, нож и специи на разделочном столе"
+                    width="1680"
+                    height="1680"
+                    loading="lazy"
+                  />
+                </figure>
+                <div class="about-overview__reason">
+                  <span class="about-overview__number" aria-hidden="true">03</span>
+                  <h3>И это наша третья фирменная фишка</h3>
+                  <p>
+                    — от слова «fish», разумеется. Наши продавцы и консультанты
+                    всегда делятся советами — или подскажут, где их прочитать.
+                  </p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="founder-source" aria-labelledby="founder-title">
+        <div class="founder-source__inner source-shell">
+          <img
+            src="../assets/oleg-gugunava-480.webp"
+                srcset="../assets/oleg-gugunava-480.webp 480w, ../assets/oleg-gugunava-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/oleg-gugunava.jpg"
+                decoding="async"
+            alt="Олег Гугунава держит рыбу"
+            width="960"
+            height="960"
+            loading="lazy"
+          />
+          <div class="founder-source__copy">
+            <h2 id="founder-title">Олег Гугунава</h2>
+            <p class="source-caption">Владелец «Рыбной лавки капитана Селедкина»</p>
+            <blockquote class="founder-source__principle">
+              Мы убеждены, что вкус блюда определяется не только навыками повара,
+              но и качеством ингредиентов
+            </blockquote>
+            <p>
+              «Когда моя жена была беременна, врач посоветовал есть больше рыбы и
+              морепродуктов. Я прошёлся по местным лавочкам и магазинам и
+              ужаснулся. В Москве нормальную рыбу сложно найти.
+            </p>
+            <p>
+              Некоторые мороженую рыбу заливают водой — для веса, у других с
+              весом всё „ок“, но неправильно везут либо неправильно замораживают —
+              если продукт и не испорчен, то точно не первого качества. Свою семью
+              я этим кормить не хотел.
+            </p>
+            <p>
+              Я позвонил знакомому во Владивосток, спросил, можно ли доставить
+              нормальной рыбы. Оказалось, что можно, но относительно большими
+              партиями — нам столько не съесть. Походил по знакомым и соседям —
+              оказалось, что спрос есть, поэтому решили скинуться и взять на всех.
+              Через какое-то время открыл «Лавку капитана Селедкина».
+            </p>
+            <p>
+              У нас весь бизнес основан на качестве товара и на нормах работы с
+              продуктом. Забудешь, например, заморозку включить — рыба испортится,
+              неправильно примешь от поставщика — старая рыба будет лежать
+              месяцами и портиться. Мы следим за такими вещами, поэтому можем
+              гарантировать хорошую рыбу и морепродукты».
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="watch-catch source-section"
+        id="watch-catch"
+        aria-labelledby="watch-catch-title"
+      >
+        <div class="source-shell">
+          <header class="watch-catch__header">
+            <p class="about-overview__eyebrow">Продукты в рассказах Олега</p>
+            <h2 id="watch-catch-title">Свежий улов</h2>
+          </header>
+
+          <ul class="watch-catch__list">
+            <li class="watch-catch__item">
+              <article>
+                <p class="watch-catch__number">01</p>
+                <h3>Селёдка</h3>
+                <p class="watch-catch__product">
+                  <span>Сельдь слабосоленая</span>
+                  <strong>699&nbsp;₽/кг</strong>
+                </p>
+                <div class="watch-catch__links">
+                  <a href="../catalog/?q=Сельдь%20слабосоленая">
+                    Открыть в каталоге
+                  </a>
+                  <a href="https://t.me/kapitanseledkin/506">
+                    Олег о&nbsp;селёдке в&nbsp;Телеграме
+                  </a>
+                </div>
+              </article>
+            </li>
+
+            <li class="watch-catch__item">
+              <article>
+                <p class="watch-catch__number">02</p>
+                <h3>Северная креветка</h3>
+                <p class="watch-catch__product">
+                  <span>Креветка северная в/м</span>
+                  <strong>3&#8239;200&nbsp;₽/кг</strong>
+                </p>
+                <div class="watch-catch__links">
+                  <a href="../catalog/?q=Креветка%20северная">
+                    Открыть в каталоге
+                  </a>
+                  <a href="https://t.me/kapitanseledkin/412">
+                    Рецепт креветок в&nbsp;Телеграме
+                  </a>
+                </div>
+              </article>
+            </li>
+
+            <li class="watch-catch__item">
+              <article>
+                <p class="watch-catch__number">03</p>
+                <h3>Командорский кальмар</h3>
+                <p class="watch-catch__product">
+                  <span>Кальмар командорский</span>
+                  <strong>595&nbsp;₽/кг</strong>
+                </p>
+                <div class="watch-catch__links">
+                  <a href="../catalog/?q=Кальмар%20командорский">
+                    Открыть в каталоге
+                  </a>
+                  <a href="https://t.me/kapitanseledkin/610">
+                    Олег о&nbsp;кальмаре в&nbsp;Телеграме
+                  </a>
+                </div>
+              </article>
+            </li>
+
+            <li class="watch-catch__item">
+              <article>
+                <p class="watch-catch__number">04</p>
+                <h3>Осьминог</h3>
+                <p class="watch-catch__product">
+                  <span>Осьминог, Марокко</span>
+                  <strong>1&#8239;900&nbsp;₽/кг</strong>
+                </p>
+                <div class="watch-catch__links">
+                  <a href="../catalog/?q=Осьминог%20Марокко">
+                    Открыть в каталоге
+                  </a>
+                  <a href="https://t.me/kapitanseledkin/377">
+                    Как приготовить в&nbsp;Телеграме
+                  </a>
+                </div>
+              </article>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+
+    </main>
+
+    <footer class="source-footer" aria-labelledby="footer-title">
+      <div class="source-footer__content source-shell">
+        <div class="source-footer__details">
+          <p class="source-footer__kicker">До встречи на Вавиловской</p>
+          <h2 id="footer-title">Лосось на вахте — заходите в лавку</h2>
+          <p class="source-footer__lead">
+            Каждый день с&nbsp;11:00 до&nbsp;20:00. Можно приехать за рыбой и
+            деликатесами или заказать доставку.
+          </p>
+          <div class="source-footer__visit">
+            <p>Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1; метро «Вавиловская»</p>
+          </div>
+          <div class="source-footer__actions" aria-label="Связаться с лавкой">
+            <a class="source-button source-button--footer-contact" href="tel:+79166751452">
+              Позвонить
+            </a>
+            <a class="source-button source-button--footer-contact" href="https://t.me/+79166751452">
+              Заказать в Телеграме
+            </a>
+            <a class="source-button source-button--footer-contact" href="https://wa.me/79166751452">
+              Заказать в WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <figure class="source-footer__portrait">
+          <img
+            src="../assets/salmon-cat-480.webp"
+                srcset="../assets/salmon-cat-480.webp 480w, ../assets/salmon-cat-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/salmon-cat.jpg"
+                decoding="async"
+            alt="Кот Лосось греется на солнце с закрытыми глазами"
+            width="1536"
+            height="2048"
+            loading="lazy"
+          />
+          <figcaption>Лосось принимает солнечную ванну между вахтами.</figcaption>
+        </figure>
+      </div>
+
+      <div class="source-footer__postscript source-shell">
+        <p>
+          P.&nbsp;S.: а ещё мы публикуем советы по приготовлению и обработке
+          рыбы, все наши новости, в&nbsp;т.&nbsp;ч. об ассортименте, в наших
+          социальных сетях. Подписывайтесь!
+        </p>
+        <nav class="source-footer__channels" aria-label="Социальные сети и каналы лавки">
+          <a class="source-footer__channel--primary" href="https://t.me/kapitanseledkin">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="../assets/social-icons.svg#telegram"></use>
+            </svg>
+            <span>Телеграм-канал</span>
+          </a>
+          <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="../assets/social-icons.svg#youtube"></use>
+            </svg>
+            <span>YouTube</span>
+          </a>
+          <a href="https://soundcloud.com/kapitanseledkin">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="../assets/social-icons.svg#soundcloud"></use>
+            </svg>
+            <span>SoundCloud</span>
+          </a>
+        </nav>
+      </div>
+      <div class="source-footer__base source-shell">
+        <small>© «Рыбная лавка капитана Селедкина», 2026</small>
+        <a class="source-footer__credit" href="https://anton-gorokhovatsky.github.io/design/">Дизайн и разработка</a>
+        <a href="#top">В начало</a>
+      </div>
+    </footer>
+
+  </body>
+</html>

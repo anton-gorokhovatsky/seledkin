@@ -1,4 +1,4 @@
-import { matchesSearch, positionCount } from "../assets/catalog-model.js";
+import { matchesSearch, positionCount } from "../assets/catalog-model.js?v=search-forms-1";
 
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");

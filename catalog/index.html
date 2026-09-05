@@ -73,10 +73,10 @@
     <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="../assets/styles.css?v=surface-delivery-1" />
-    <script type="module" src="../assets/site.js?v=journeys-1"></script>
+    <link rel="stylesheet" href="../assets/styles.css?v=shop-journeys-2" />
+    <script type="module" src="../assets/site.js?v=shop-journeys-2"></script>
     <script type="module" src="../assets/interface-motion.js"></script>
-    <script type="module" src="catalog.js?v=journeys-1"></script>
+    <script type="module" src="catalog.js?v=search-forms-1"></script>
     <title>Каталог и цены — Рыбная лавка капитана Селедкина</title>
   </head>
   <body class="catalog-page">
@@ -137,9 +137,8 @@
         <div class="site-menu__layout">
           <video
             class="site-menu__service-video"
-            poster="../assets/hero-sea-poster.webp"
             data-poster-light="../assets/hero-sea-poster.webp"
-            data-poster-dark="../assets/hero-sea-night-poster.jpg"
+            data-poster-dark="../assets/hero-sea-night-poster.webp"
             data-theme-video
             data-menu-sea-video
             muted
@@ -150,9 +149,8 @@
             tabindex="-1"
           >
             <source
-              src="../assets/hero-sea.mp4"
-              data-src-light="../assets/hero-sea.mp4"
-              data-src-dark="../assets/hero-sea-night.mp4"
+              data-src-light="../assets/hero-sea-web.mp4"
+              data-src-dark="../assets/hero-sea-night-web.mp4"
               data-theme-video-source
               type="video/mp4"
             />
@@ -177,11 +175,11 @@
                 <span aria-hidden="true">04</span>
                 <span>Контакты</span>
               </a>
-              <a href="../#about">
+              <a href="../about/">
                 <span aria-hidden="true">05</span>
                 <span>О нас</span>
               </a>
-              <a href="../#journal">
+              <a href="../journal/">
                 <span aria-hidden="true">06</span>
                 <span>Судовой журнал</span>
               </a>
@@ -235,6 +233,7 @@
                   </a>
                 </nav>
               </div>
+              <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить море</button>
               <button
                 class="theme-toggle theme-toggle--menu"
                 type="button"
@@ -1677,7 +1676,11 @@
 
         <figure class="source-footer__portrait">
           <img
-            src="../assets/salmon-cat.jpg"
+            src="../assets/salmon-cat-480.webp"
+                srcset="../assets/salmon-cat-480.webp 480w, ../assets/salmon-cat-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/salmon-cat.jpg"
+                decoding="async"
             alt="Кот Лосось греется на солнце с закрытыми глазами"
             width="1536"
             height="2048"

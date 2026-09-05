@@ -16,6 +16,9 @@ import {
 import { typographPrice, typographText } from "../assets/typography.js";
 
 const home = await readFile(new URL("../index.html", import.meta.url), "utf8");
+const aboutPage = await readFile(new URL("../about/index.html", import.meta.url), "utf8");
+const journalPage = await readFile(new URL("../journal/index.html", import.meta.url), "utf8");
+const seaScript = await readFile(new URL("../assets/sea-motion.js", import.meta.url), "utf8");
 const catalogPage = await readFile(
   new URL("../catalog/index.html", import.meta.url),
   "utf8",
@@ -197,15 +200,15 @@ test("home assortment links directly to every catalog section", () => {
   );
 });
 
-test("home about section keeps Oleg's evidence in three full-bleed editorial stories", () => {
+test("story page keeps Oleg's evidence in three full-bleed editorial stories", () => {
   const section =
-    home.match(/<section\s+class="about-overview[\s\S]*?<\/section>/)?.[0] ?? "";
+    aboutPage.match(/<section\s+class="about-overview[\s\S]*?<\/section>/)?.[0] ?? "";
 
   assert.match(section, /id="about"/);
   assert.match(section, /class="about-overview__eyebrow">О нас<\/p>/);
   assert.match(
     section,
-    /id="about-title">\s*Ещё одно место в Москве, где продаётся хорошая рыба\s*<\/h2>/,
+    /id="about-title">\s*Ещё одно место в Москве, где продаётся хорошая рыба\s*<\/h1>/,
   );
   assert.match(section, /Почему о нас говорят\?/);
   assert.match(section, /Во-первых, это качество/);
@@ -213,7 +216,7 @@ test("home about section keeps Oleg's evidence in three full-bleed editorial sto
   assert.match(section, /третья фирменная фишка/);
   assert.equal((section.match(/class="about-overview__reason"/g) ?? []).length, 3);
   assert.equal((section.match(/<article class="about-overview__chapter/g) ?? []).length, 3);
-  assert.equal((section.match(/<h4>/g) ?? []).length, 3);
+  assert.equal((section.match(/<h3>/g) ?? []).length, 3);
   assert.equal((section.match(/<figure /g) ?? []).length, 4);
   assert.match(section, /about-overview__chapter about-overview__chapter--reverse/);
   assert.doesNotMatch(section, /\bdata-about-story|aria-roledescription="карусель"/);
@@ -250,7 +253,7 @@ test("home about section keeps Oleg's evidence in three full-bleed editorial sto
     "about-small-2.jpg",
     "gallery-small-2.jpg",
   ]) {
-    assert.match(section, new RegExp(`src="assets/${asset.replace(".", "\\.")}"`));
+    assert.match(section, new RegExp(`data-source-image="../assets/${asset.replace(".", "\\.")}"`));
   }
   assert.doesNotMatch(section, /<h2>Икра<\/h2>|source-split|source-gallery|why-collage/);
 });
@@ -266,8 +269,8 @@ test("home exposes the core customer jobs", () => {
   assert.match(hero, /href="catalog\/"/);
   assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
-  assert.match(hero, /href="#journal-entry-684"/);
-  assert.match(hero, /src="assets\/journal-684\.jpg"/);
+  assert.match(hero, /href="journal\/#journal-entry-684"/);
+  assert.match(hero, /data-source-image="assets\/journal-684\.jpg"/);
   assert.match(hero, /datetime="2026-08-29"/);
   assert.match(hero, /Икряная камбала холодного копчения уже в&nbsp;Селёдкине/);
   assert.doesNotMatch(hero, /src="assets\/about-main\.jpg"/);
@@ -293,7 +296,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 5);
   for (const id of [684, 683, 682, 681, 680]) {
-    assert.match(hero, new RegExp("href=\"#journal-entry-" + id + "\""));
+    assert.match(hero, new RegExp("href=\"journal/#journal-entry-" + id + "\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }
   assert.doesNotMatch(hero, /https:\/\/t\.me\/kapitanseledkin\/68[0-4]/);
@@ -301,7 +304,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(hero, /data-hero-journal-previous/);
   assert.match(hero, /data-hero-journal-next/);
   assert.match(hero, /data-hero-journal-all/);
-  assert.match(hero, /href="#journal"/);
+  assert.match(hero, /href="journal\/"/);
   assert.match(hero, /aria-label="Открыть весь Судовой журнал"/);
   assert.match(hero, />Журнал<\/span>/);
   const heroJournalNextSlot =
@@ -575,10 +578,8 @@ test("home prioritizes shopping before its editorial story and keeps local image
     "price-preview",
     "delivery-source",
     "contacts-source",
-    "about-overview",
-    "founder-source",
-    "watch-catch",
-    "ship-log",
+    "about-preview",
+    "journal-preview",
     "source-footer",
   ];
 
@@ -591,7 +592,7 @@ test("home prioritizes shopping before its editorial story and keeps local image
 
   for (const asset of [
     "hero-sea-poster.webp",
-    "hero-sea.mp4",
+    "hero-sea-web.mp4",
     "caviar-slab.jpg",
     "fish-pattern.svg",
     "flounder.jpg",
@@ -604,7 +605,7 @@ test("home prioritizes shopping before its editorial story and keeps local image
     if (asset === "fish-pattern.svg") {
       assert.match(styles, /fish-pattern\.svg/);
     } else {
-      assert.match(home, new RegExp(`assets/${asset.replace(".", "\\.")}`));
+      assert.match(home + aboutPage, new RegExp(`assets/${asset.replace(".", "\\.")}`));
     }
   }
 
@@ -620,10 +621,10 @@ test("home prioritizes shopping before its editorial story and keeps local image
   assert.doesNotMatch(home + catalogPage + styles, /tildacdn\.com/i);
   assert.doesNotMatch(home + catalogPage + styles, /fish-divider\.png/i);
   assert.match(home, /<video[\s\S]*?class="source-hero__video"/);
-  assert.match(home, /poster="assets\/hero-sea-poster\.webp"/);
-  assert.match(home, /<source[\s\S]*?src="assets\/hero-sea\.mp4"[\s\S]*?type="video\/mp4"/);
+  assert.match(home, /data-poster-light="assets\/hero-sea-poster\.webp"/);
+  assert.match(home, /<source[\s\S]*?data-src-light="assets\/hero-sea-web\.mp4"[\s\S]*?type="video\/mp4"/);
   assert.match(styles, /--hero-sea-static-image:\s*url\("hero-sea-poster\.webp"\)/);
-  assert.match(styles, /--hero-sea-static-image:\s*url\("hero-sea-night-poster\.jpg"\)/);
+  assert.match(styles, /--hero-sea-static-image:\s*url\("hero-sea-night-poster\.webp"\)/);
   assert.match(
     styles,
     /\.source-hero\s*\{[^}]*background:\s*var\(--hero-sea-static-image\) 56% center \/ cover no-repeat,/s,
@@ -632,8 +633,8 @@ test("home prioritizes shopping before its editorial story and keeps local image
   assert.doesNotMatch(home, /youtube-nocookie\.com/);
   assert.match(home, /data-hero-video/);
   assert.match(siteScript, /prefers-reduced-motion: reduce/);
-  assert.match(siteScript, /heroVideo\.pause\(\)/);
-  assert.match(siteScript, /heroVideo\.currentTime = 0/);
+  assert.match(seaScript, /video\.pause\(\)/);
+  assert.match(seaScript, /video\.currentTime = 0/);
   assert.match(styles, /object-fit:\s*cover/);
   assert.match(styles, /fish-pattern\.svg/);
   assert.match(styles, /"Iowan Old Style"/);
@@ -641,7 +642,7 @@ test("home prioritizes shopping before its editorial story and keeps local image
 
 test("the founder story absorbs the principle without standalone interludes", () => {
   const founder =
-    home.match(/<section class="founder-source"[\s\S]*?<\/section>/)?.[0] ?? "";
+    aboutPage.match(/<section class="founder-source"[\s\S]*?<\/section>/)?.[0] ?? "";
 
   assert.match(founder, /class="founder-source__principle"/);
   assert.match(founder, /вкус блюда определяется не только навыками повара/);
@@ -696,24 +697,24 @@ test("the typographic scale protects reading and interface text", () => {
 });
 
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
-  assert.match(home, /id="journal"/);
-  assert.match(home, /<h2 id="journal-title">Судовой журнал<\/h2>/);
-  assert.equal((home.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 5);
+  assert.match(journalPage, /id="journal"/);
+  assert.match(journalPage, /<h1 id="journal-title">Судовой журнал<\/h1>/);
+  assert.equal((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 5);
   for (const id of [684, 683, 682, 681, 680]) {
     assert.match(
-      home,
+      journalPage,
       new RegExp(
         `<article[^>]+id="journal-entry-` + id + `"[^>]+tabindex="-1"\\s*>`,
       ),
     );
   }
-  assert.match(home, /https:\/\/t\.me\/kapitanseledkin"/);
+  assert.match(journalPage, /https:\/\/t\.me\/kapitanseledkin"/);
 
   let cursor = -1;
   for (const id of [684, 683, 682, 681, 680]) {
-    const next = home.indexOf(`https://t.me/kapitanseledkin/${id}`, cursor + 1);
+    const next = journalPage.indexOf(`https://t.me/kapitanseledkin/${id}`, cursor + 1);
     assert.ok(next > cursor, `Запись ${id} должна идти в обратной хронологии`);
-    assert.match(home, new RegExp(`assets/journal-${id}\\.jpg`));
+    assert.match(journalPage, new RegExp(`assets/journal-${id}\\.jpg`));
     cursor = next;
   }
 
@@ -725,14 +726,14 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
     "Первая икра дикого кижуча сезона 2026",
     "Нежнейшая малосольная черноморская барабуля",
   ]) {
-    assert.ok(home.includes(excerpt), `Не сохранена авторская формулировка: ${excerpt}`);
+    assert.ok(journalPage.includes(excerpt), `Не сохранена авторская формулировка: ${excerpt}`);
   }
-  assert.doesNotMatch(home, /telegram-widget|tgme_widget|Feed not found/i);
+  assert.doesNotMatch(journalPage, /telegram-widget|tgme_widget|Feed not found/i);
 });
 
 test("the watch catch keeps its product stories without rejected draft art", () => {
   const section =
-    home.match(
+    aboutPage.match(
       /<section\s+class="watch-catch source-section"[\s\S]*?<\/section>/,
     )?.[0] ?? "";
 
@@ -807,7 +808,7 @@ test("the page and fullscreen menu share one stable outer content axis", () => {
     /\.site-menu__routes\s*\{[\s\S]*?padding:[\s\S]*?var\(--content-edge\);/,
   );
   assert.match(
-    home,
+    aboutPage,
     /class="about-overview source-section"[\s\S]*?<div class="source-shell">/,
   );
   assert.match(
@@ -835,7 +836,7 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
   assert.match(sectionRule, /grid-template-columns:\s*1fr/);
   assert.match(sectionRule, /grid-template-rows:\s*auto clamp\(22rem, 46svh, 30rem\)/);
   assert.match(sectionRule, /margin-bottom:\s*clamp\(4rem, 7vw, 7rem\)/);
-  assert.match(home, /map-widget\/v1\/\?ll=37\.535850%2C55\.686220/);
+  assert.match(home, /map-widget\/v1\/\?oid=1784904240&amp;ol=biz/);
   assert.doesNotMatch(home, /[?&]pt=/);
   assert.doesNotMatch(home, /map-widget\/v1\/\?[^"\s]*text=/);
   const contactCard =
@@ -1110,7 +1111,7 @@ test("catalog entry stacks its copy, search and categories without decorative di
   );
   assert.match(
     styles,
-    /\.catalog-page \.source-header,\s*\.catalog-page \.source-header__bar\s*\{[^}]*min-height:\s*9\.75rem;/s,
+    /:is\(\.catalog-page, \.journal-page, \.about-page\) \.source-header,\s*:is\(\.catalog-page, \.journal-page, \.about-page\) \.source-header__bar\s*\{[^}]*min-height:\s*9\.75rem;/s,
   );
   assert.match(
     styles,
@@ -1372,8 +1373,8 @@ test("one master shoal keeps deliberate foreground, tonal and sea roles", () => 
 
 test("menu, focus and reduced motion remain accessible", () => {
   for (const [page, journalPath] of [
-    [home, "#journal"],
-    [catalogPage, "../#journal"],
+    [home, "journal/"],
+    [catalogPage, "../journal/"],
   ]) {
     assert.match(page, /aria-controls="primary-navigation"/);
     assert.equal((page.match(/data-menu-toggle/g) ?? []).length, 1);
@@ -1386,10 +1387,10 @@ test("menu, focus and reduced motion remain accessible", () => {
     assert.doesNotMatch(page, /Лавка на Вавиловской/);
     assert.equal((page.match(/data-menu-sea-video/g) ?? []).length, 1);
     assert.match(page, /class="site-menu__service-video"/);
-    assert.match(page, /poster="(?:\.\.\/)?assets\/hero-sea-poster\.webp"/);
+    assert.match(page, /data-poster-light="(?:\.\.\/)?assets\/hero-sea-poster\.webp"/);
     assert.match(
       page,
-      /<source[\s\S]*?src="(?:\.\.\/)?assets\/hero-sea\.mp4"[\s\S]*?type="video\/mp4"/,
+      /<source[\s\S]*?data-src-light="(?:\.\.\/)?assets\/hero-sea-web\.mp4"[\s\S]*?type="video\/mp4"/,
     );
     assert.doesNotMatch(
       page.match(/<video[\s\S]*?data-menu-sea-video[\s\S]*?<\/video>/)?.[0] ?? "",
@@ -1511,10 +1512,10 @@ test("menu, focus and reduced motion remain accessible", () => {
     styles,
     /\.site-menu__service::before\s*\{[^}]*fish-pattern\.svg/s,
   );
-  assert.match(siteScript, /const menuSeaVideo = menu\?\.querySelector/);
-  assert.match(siteScript, /function syncMenuSeaVideo\(\)/);
-  assert.match(siteScript, /menuSeaVideo\.play\(\)/);
-  assert.match(siteScript, /menuSeaVideo\.pause\(\)/);
+  assert.match(seaScript, /function syncMenuSeaVideo\(\)/);
+  assert.match(seaScript, /video\.play\(\)/);
+  assert.match(seaScript, /video\.pause\(\)/);
+  assert.match(siteScript, /import .*syncMenuSeaVideo.*sea-motion/);
   assert.match(siteScript, /document\.documentElement\.dataset\.inputModality = "pointer"/);
   assert.match(siteScript, /document\.documentElement\.dataset\.inputModality = "keyboard"/);
   assert.match(
@@ -1576,7 +1577,7 @@ test("theme follows store hours and a deliberate choice persists across pages", 
     30_050,
   );
 
-  assert.match(siteScript, /import "\.\/theme\.js"/);
+  assert.match(siteScript, /import "\.\/theme\.js\?v=shop-journeys-2"/);
   for (const page of [home, catalogPage, notFoundPage]) {
     assert.match(page, /localStorage\.getItem\("seledkin-theme"\)/);
     assert.match(page, /timeZone:\s*"Europe\/Moscow"/);
@@ -1617,9 +1618,9 @@ test("Night Watch switches the hero and menu to a dedicated night sea file", asy
 
   for (const page of [home, catalogPage]) {
     assert.match(page, /data-poster-light="(?:\.\.\/)?assets\/hero-sea-poster\.webp"/);
-    assert.match(page, /data-poster-dark="(?:\.\.\/)?assets\/hero-sea-night-poster\.jpg"/);
-    assert.match(page, /data-src-light="(?:\.\.\/)?assets\/hero-sea\.mp4"/);
-    assert.match(page, /data-src-dark="(?:\.\.\/)?assets\/hero-sea-night\.mp4"/);
+    assert.match(page, /data-poster-dark="(?:\.\.\/)?assets\/hero-sea-night-poster\.webp"/);
+    assert.match(page, /data-src-light="(?:\.\.\/)?assets\/hero-sea-web\.mp4"/);
+    assert.match(page, /data-src-dark="(?:\.\.\/)?assets\/hero-sea-night-web\.mp4"/);
     assert.match(page, /data-theme-video-source/);
   }
 
@@ -1628,7 +1629,7 @@ test("Night Watch switches the hero and menu to a dedicated night sea file", asy
   assert.match(themeScript, /source\?\.dataset\.srcLight/);
   assert.match(themeScript, /video\.load\(\)/);
   assert.match(themeScript, /seledkin:themechange/);
-  assert.match(siteScript, /document\.addEventListener\("seledkin:themechange"/);
+  assert.match(seaScript, /document\.addEventListener\("seledkin:themechange"/);
   assert.match(projectRules, /Ночное море — отдельный медиавариант/);
   assert.match(nightSeaProvenance, /ничего не дорисовано и не сгенерировано/);
   assert.match(nightSeaProvenance, /первого кадра ролика \(0:00\)/);
@@ -1696,7 +1697,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.createElement("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=surface-delivery-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=shop-journeys-2"`,
   );
 
   assert.ok(baseBootstrap >= 0);
@@ -2016,12 +2017,14 @@ test("main and catalog publish Pages-native social metadata", () => {
   assert.ok(home.includes(`"image": "${image}"`));
 });
 
-test("search engines receive the current two-page public map", () => {
+test("search engines receive the current four-page public map", () => {
   const root = "https://anton-gorokhovatsky.github.io/seledkin/";
   assert.match(robots, /^User-agent: \*\nAllow: \/\n/m);
   assert.ok(robots.includes(`Sitemap: ${root}sitemap.xml`));
   assert.match(sitemap, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
   assert.ok(sitemap.includes(`<loc>${root}</loc>`));
   assert.ok(sitemap.includes(`<loc>${root}catalog/</loc>`));
-  assert.equal((sitemap.match(/<url>/g) ?? []).length, 2);
+  assert.ok(sitemap.includes(`<loc>${root}journal/</loc>`));
+  assert.ok(sitemap.includes(`<loc>${root}about/</loc>`));
+  assert.equal((sitemap.match(/<url>/g) ?? []).length, 4);
 });

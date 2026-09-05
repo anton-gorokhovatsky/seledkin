@@ -65,6 +65,12 @@
           document.documentElement.dataset.themeSource = "explicit";
         }
         document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+        const posterPreload = document.createElement("link");
+        posterPreload.rel = "preload";
+        posterPreload.as = "image";
+        posterPreload.fetchPriority = "high";
+        posterPreload.href = isDark ? "assets/hero-sea-night-poster.webp" : "assets/hero-sea-poster.webp";
+        document.head.append(posterPreload);
         document.querySelector('meta[name="theme-color"]').content = isDark
           ? "#0e202b"
           : "#ffffff";
@@ -73,8 +79,8 @@
     <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="assets/styles.css?v=surface-delivery-1" />
-    <script type="module" src="assets/site.js?v=journeys-1"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=shop-journeys-2" />
+    <script type="module" src="assets/site.js?v=shop-journeys-2"></script>
     <script type="module" src="assets/interface-motion.js"></script>
     <script type="application/ld+json">
       {
@@ -169,9 +175,8 @@
         <div class="site-menu__layout">
           <video
             class="site-menu__service-video"
-            poster="assets/hero-sea-poster.webp"
             data-poster-light="assets/hero-sea-poster.webp"
-            data-poster-dark="assets/hero-sea-night-poster.jpg"
+            data-poster-dark="assets/hero-sea-night-poster.webp"
             data-theme-video
             data-menu-sea-video
             muted
@@ -182,9 +187,8 @@
             tabindex="-1"
           >
             <source
-              src="assets/hero-sea.mp4"
-              data-src-light="assets/hero-sea.mp4"
-              data-src-dark="assets/hero-sea-night.mp4"
+              data-src-light="assets/hero-sea-web.mp4"
+              data-src-dark="assets/hero-sea-night-web.mp4"
               data-theme-video-source
               type="video/mp4"
             />
@@ -209,11 +213,11 @@
                 <span aria-hidden="true">04</span>
                 <span>Контакты</span>
               </a>
-              <a href="#about">
+              <a href="about/">
                 <span aria-hidden="true">05</span>
                 <span>О нас</span>
               </a>
-              <a href="#journal">
+              <a href="journal/">
                 <span aria-hidden="true">06</span>
                 <span>Судовой журнал</span>
               </a>
@@ -267,6 +271,7 @@
                   </a>
                 </nav>
               </div>
+              <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить море</button>
               <button
                 class="theme-toggle theme-toggle--menu"
                 type="button"
@@ -292,22 +297,20 @@
       <section class="source-hero" aria-labelledby="hero-title">
         <video
           class="source-hero__video"
-          poster="assets/hero-sea-poster.webp"
           data-poster-light="assets/hero-sea-poster.webp"
-          data-poster-dark="assets/hero-sea-night-poster.jpg"
+          data-poster-dark="assets/hero-sea-night-poster.webp"
           data-theme-video
           data-hero-video
           muted
           loop
           playsinline
-          preload="metadata"
+          preload="none"
           aria-hidden="true"
           tabindex="-1"
         >
           <source
-            src="assets/hero-sea.mp4"
-            data-src-light="assets/hero-sea.mp4"
-            data-src-dark="assets/hero-sea-night.mp4"
+            data-src-light="assets/hero-sea-web.mp4"
+            data-src-dark="assets/hero-sea-night-web.mp4"
             data-theme-video-source
             type="video/mp4"
           />
@@ -354,14 +357,18 @@
             <div class="source-hero__journal-stack" data-hero-journal-stack>
               <a
                 class="source-hero__proof source-hero__journal-card"
-                href="#journal-entry-684"
+                href="journal/#journal-entry-684"
                 aria-label="Перейти к записи в журнале об икряной камбале холодного копчения"
                 data-hero-journal-card
                 data-stack-position="0"
               >
                 <figure>
                   <img
-                    src="assets/journal-684.jpg"
+                    src="assets/journal-684-480.webp"
+                srcset="assets/journal-684-480.webp 480w, assets/journal-684-636.webp 636w"
+                sizes="(max-width: 61.1875rem) 128px, 288px"
+                data-source-image="assets/journal-684.jpg"
+                decoding="async"
                     alt="Икряная камбала холодного копчения на ярко-розовом фоне"
                     width="636"
                     height="800"
@@ -377,7 +384,7 @@
               </a>
               <a
                 class="source-hero__proof source-hero__journal-card"
-                href="#journal-entry-683"
+                href="journal/#journal-entry-683"
                 aria-label="Перейти к записи в журнале о филе сельди холодного копчения «По-Датски»"
                 aria-hidden="true"
                 tabindex="-1"
@@ -386,7 +393,11 @@
               >
                 <figure>
                   <img
-                    src="assets/journal-683.jpg"
+                    src="assets/journal-683-32.webp" data-full-src="assets/journal-683-480.webp"
+                data-full-srcset="assets/journal-683-480.webp 480w, assets/journal-683-800.webp 800w"
+                sizes="(max-width: 61.1875rem) 128px, 288px"
+                data-source-image="assets/journal-683.jpg"
+                decoding="async"
                     alt="Филе сельди холодного копчения, перевязанное цветной нитью"
                     width="800"
                     height="800"
@@ -401,7 +412,7 @@
               </a>
               <a
                 class="source-hero__proof source-hero__journal-card"
-                href="#journal-entry-682"
+                href="journal/#journal-entry-682"
                 aria-label="Перейти к записи в журнале о новом завозе царского малосольного тугунка"
                 aria-hidden="true"
                 tabindex="-1"
@@ -410,7 +421,11 @@
               >
                 <figure>
                   <img
-                    src="assets/journal-682.jpg"
+                    src="assets/journal-682-32.webp" data-full-src="assets/journal-682-480.webp"
+                data-full-srcset="assets/journal-682-480.webp 480w, assets/journal-682-647.webp 647w"
+                sizes="(max-width: 61.1875rem) 128px, 288px"
+                data-source-image="assets/journal-682.jpg"
+                decoding="async"
                     alt="Малосольный тугунок в овальном блюде на ярко-жёлтом фоне"
                     width="647"
                     height="800"
@@ -425,7 +440,7 @@
               </a>
               <a
                 class="source-hero__proof source-hero__journal-card"
-                href="#journal-entry-681"
+                href="journal/#journal-entry-681"
                 aria-label="Перейти к записи в журнале об икре дикого кижуча"
                 aria-hidden="true"
                 tabindex="-1"
@@ -434,7 +449,11 @@
               >
                 <figure>
                   <img
-                    src="assets/journal-681.jpg"
+                    src="assets/journal-681-32.webp" data-full-src="assets/journal-681-480.webp"
+                data-full-srcset="assets/journal-681-480.webp 480w, assets/journal-681-725.webp 725w"
+                sizes="(max-width: 61.1875rem) 128px, 288px"
+                data-source-image="assets/journal-681.jpg"
+                decoding="async"
                     alt="Красная икра дикого кижуча на ложке крупным планом"
                     width="725"
                     height="800"
@@ -449,7 +468,7 @@
               </a>
               <a
                 class="source-hero__proof source-hero__journal-card"
-                href="#journal-entry-680"
+                href="journal/#journal-entry-680"
                 aria-label="Перейти к записи в журнале о малосольной черноморской барабуле"
                 aria-hidden="true"
                 tabindex="-1"
@@ -458,7 +477,11 @@
               >
                 <figure>
                   <img
-                    src="assets/journal-680.jpg"
+                    src="assets/journal-680-32.webp" data-full-src="assets/journal-680-480.webp"
+                data-full-srcset="assets/journal-680-480.webp 480w, assets/journal-680-600.webp 600w"
+                sizes="(max-width: 61.1875rem) 128px, 288px"
+                data-source-image="assets/journal-680.jpg"
+                decoding="async"
                     alt="Два филе черноморской барабули на тарелке и рюмка на столе"
                     width="600"
                     height="800"
@@ -504,7 +527,7 @@
                 </button>
                 <a
                   class="source-hero__journal-control source-hero__journal-control--all"
-                  href="#journal"
+                  href="journal/"
                   aria-label="Открыть весь Судовой журнал"
                   hidden
                   tabindex="-1"
@@ -519,6 +542,7 @@
             </div>
           </section>
         </div>
+        <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить море</button>
       </section>
 
       <section
@@ -535,7 +559,11 @@
           <div class="assortment-overview__layout">
             <figure class="assortment-overview__media">
               <img
-                src="assets/caviar-slab.jpg"
+                src="assets/caviar-slab-480.webp"
+                srcset="assets/caviar-slab-480.webp 480w, assets/caviar-slab-793.webp 793w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="assets/caviar-slab.jpg"
+                decoding="async"
                 alt="Пласт красной икры"
                 width="793"
                 height="793"
@@ -674,7 +702,11 @@
 
       <section class="delivery-source" id="delivery" aria-labelledby="delivery-title">
         <img
-          src="assets/delivery-basket.jpg"
+          src="assets/delivery-basket-480.webp"
+                srcset="assets/delivery-basket-480.webp 480w, assets/delivery-basket-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="assets/delivery-basket.jpg"
+                decoding="async"
           alt="Корзина с рыбой, икрой и продуктами из лавки"
           width="1680"
           height="1680"
@@ -710,7 +742,7 @@
           </div>
           <a
             class="source-button source-button--outline"
-            href="https://yandex.ru/maps/?text=%D0%9C%D0%BE%D1%81%D0%BA%D0%B2%D0%B0%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%A1%D1%82%D1%80%D0%BE%D0%B8%D1%82%D0%B5%D0%BB%D0%B5%D0%B9%2C%207%2C%20%D0%BA%D0%BE%D1%80%D0%BF%D1%83%D1%81%201"
+            href="https://yandex.ru/maps/org/1784904240/"
           >
             Открыть в Яндекс Картах
           </a>
@@ -719,7 +751,7 @@
           <iframe
             id="store-map-frame"
             title="Карта проезда к Рыбной лавке капитана Селедкина"
-            src="https://yandex.ru/map-widget/v1/?ll=37.535850%2C55.686220&z=16&lang=ru_RU"
+            src="https://yandex.ru/map-widget/v1/?oid=1784904240&amp;ol=biz&amp;z=16&amp;lang=ru_RU"
             loading="lazy"
             tabindex="-1"
             aria-hidden="true"
@@ -735,20 +767,20 @@
           </button>
         </div>
       </section>
-      <section
-        class="about-overview source-section"
-        id="about"
-        aria-labelledby="about-title"
-      >
-        <div class="source-shell">
-          <header class="about-overview__header">
-            <div class="about-overview__heading">
-              <p class="about-overview__eyebrow">О нас</p>
-              <h2 id="about-title">
-                Ещё одно место в Москве, где продаётся хорошая рыба
-              </h2>
-            </div>
-            <div class="about-overview__introduction">
+      <section class="about-preview source-section" id="about" aria-labelledby="about-preview-title">
+        <div class="source-shell about-preview__layout">
+          <figure>
+            <img src="assets/oleg-gugunava-480.webp"
+                srcset="assets/oleg-gugunava-480.webp 480w, assets/oleg-gugunava-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="assets/oleg-gugunava.jpg"
+                decoding="async" alt="Олег Гугунава держит рыбу" width="960" height="960" loading="lazy" />
+            <figcaption>Олег Гугунава, владелец лавки</figcaption>
+          </figure>
+          <div class="about-preview__copy">
+            <p class="about-overview__eyebrow">О нас</p>
+            <h2 id="about-preview-title">Ещё одно место в Москве, где продаётся хорошая рыба</h2>
+
               <p>
                 «Рыбная лавка капитана Селедкина» — небольшой магазин в
                 нескольких минутах ходьбы от метро «Вавиловская».
@@ -758,448 +790,65 @@
                 жители окрестных домов — к нам приезжают из других районов
                 Москвы, а потом благодарят у себя в блогах.
               </p>
-            </div>
-          </header>
 
-          <figure class="about-overview__opening-media">
-            <img
-              src="assets/flounder.jpg"
-              alt="Камбала, нож и перец на столе"
-              width="1680"
-              height="1680"
-              loading="lazy"
-            />
-          </figure>
-
-          <div class="about-overview__reasons" aria-labelledby="about-reasons-title">
-            <header class="about-overview__reasons-header">
-              <p class="about-overview__eyebrow">Три причины</p>
-              <h3 id="about-reasons-title">Почему о нас говорят?</h3>
-            </header>
-
-            <div class="about-overview__story-stage">
-              <article class="about-overview__chapter">
-                <figure class="about-overview__chapter-media">
-                  <img
-                    src="assets/about-main.jpg"
-                    alt="Рыба, зелень и перец на столе"
-                    width="1680"
-                    height="1680"
-                    loading="lazy"
-                  />
-                </figure>
-                <div class="about-overview__reason">
-                  <span class="about-overview__number" aria-hidden="true">01</span>
-                  <h4>Во-первых, это качество.</h4>
-                  <p>
-                    Мы изучаем предложения поставщиков и выбираем только рыбу
-                    свежего завоза и не вымороженную. Мы закупаем рыбу, быстро
-                    замороженную после поимки прямо на промысле и ни разу с тех пор
-                    не размораживавшуюся: покупатель разморозит её сам уже дома. В
-                    лавке её быстро разбирают, а склада у нас нет, весь наш товар
-                    лежит в прилавках-холодильниках. Поэтому рыба не залеживается,
-                    мы постоянно подвозим свежемороженую продукцию.
-                  </p>
-                </div>
-              </article>
-
-              <article class="about-overview__chapter about-overview__chapter--reverse">
-                <figure class="about-overview__chapter-media">
-                  <img
-                    src="assets/about-small-2.jpg"
-                    alt="Полки лавки с рыбой и морепродуктами"
-                    width="1680"
-                    height="1680"
-                    loading="lazy"
-                  />
-                </figure>
-                <div class="about-overview__reason">
-                  <span class="about-overview__number" aria-hidden="true">02</span>
-                  <h4>Во-вторых, ассортимент.</h4>
-                  <p>
-                    Хоть магазин и невелик, мы предлагаем и достаточно обычную
-                    рыбу для повседневного приготовления, и интересные деликатесы.
-                    При этом настоящим деликатесом могут стать и самые простые,
-                    казалось бы, виды — например, купленная у нас мороженая сельдь,
-                    если посолить её грамотно и правильно.
-                  </p>
-                </div>
-              </article>
-
-              <article class="about-overview__chapter">
-                <figure class="about-overview__chapter-media">
-                  <img
-                    src="assets/gallery-small-2.jpg"
-                    alt="Рыба, нож и специи на разделочном столе"
-                    width="1680"
-                    height="1680"
-                    loading="lazy"
-                  />
-                </figure>
-                <div class="about-overview__reason">
-                  <span class="about-overview__number" aria-hidden="true">03</span>
-                  <h4>И это наша третья фирменная фишка</h4>
-                  <p>
-                    — от слова «fish», разумеется. Наши продавцы и консультанты
-                    всегда делятся советами — или подскажут, где их прочитать.
-                  </p>
-                </div>
-              </article>
-            </div>
+            <a class="source-button source-button--outline" href="about/">История лавки и её капитана</a>
           </div>
         </div>
       </section>
 
-      <section class="founder-source" aria-labelledby="founder-title">
-        <div class="founder-source__inner source-shell">
-          <img
-            src="assets/oleg-gugunava.jpg"
-            alt="Олег Гугунава держит рыбу"
-            width="960"
-            height="960"
-            loading="lazy"
-          />
-          <div class="founder-source__copy">
-            <h2 id="founder-title">Олег Гугунава</h2>
-            <p class="source-caption">Владелец «Рыбной лавки капитана Селедкина»</p>
-            <blockquote class="founder-source__principle">
-              Мы убеждены, что вкус блюда определяется не только навыками повара,
-              но и качеством ингредиентов
-            </blockquote>
-            <p>
-              «Когда моя жена была беременна, врач посоветовал есть больше рыбы и
-              морепродуктов. Я прошёлся по местным лавочкам и магазинам и
-              ужаснулся. В Москве нормальную рыбу сложно найти.
-            </p>
-            <p>
-              Некоторые мороженую рыбу заливают водой — для веса, у других с
-              весом всё „ок“, но неправильно везут либо неправильно замораживают —
-              если продукт и не испорчен, то точно не первого качества. Свою семью
-              я этим кормить не хотел.
-            </p>
-            <p>
-              Я позвонил знакомому во Владивосток, спросил, можно ли доставить
-              нормальной рыбы. Оказалось, что можно, но относительно большими
-              партиями — нам столько не съесть. Походил по знакомым и соседям —
-              оказалось, что спрос есть, поэтому решили скинуться и взять на всех.
-              Через какое-то время открыл «Лавку капитана Селедкина».
-            </p>
-            <p>
-              У нас весь бизнес основан на качестве товара и на нормах работы с
-              продуктом. Забудешь, например, заморозку включить — рыба испортится,
-              неправильно примешь от поставщика — старая рыба будет лежать
-              месяцами и портиться. Мы следим за такими вещами, поэтому можем
-              гарантировать хорошую рыбу и морепродукты».
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section
-        class="watch-catch source-section"
-        id="watch-catch"
-        aria-labelledby="watch-catch-title"
-      >
+      <section class="journal-preview source-section" id="journal" aria-labelledby="journal-preview-title">
         <div class="source-shell">
-          <header class="watch-catch__header">
-            <p class="about-overview__eyebrow">Продукты в рассказах Олега</p>
-            <h2 id="watch-catch-title">Свежий улов</h2>
-          </header>
-
-          <ul class="watch-catch__list">
-            <li class="watch-catch__item">
-              <article>
-                <p class="watch-catch__number">01</p>
-                <h3>Селёдка</h3>
-                <p class="watch-catch__product">
-                  <span>Сельдь слабосоленая</span>
-                  <strong>699&nbsp;₽/кг</strong>
-                </p>
-                <div class="watch-catch__links">
-                  <a href="catalog/?q=Сельдь%20слабосоленая">
-                    Открыть в каталоге
-                  </a>
-                  <a href="https://t.me/kapitanseledkin/506">
-                    Олег о&nbsp;селёдке в&nbsp;Телеграме
-                  </a>
-                </div>
-              </article>
-            </li>
-
-            <li class="watch-catch__item">
-              <article>
-                <p class="watch-catch__number">02</p>
-                <h3>Северная креветка</h3>
-                <p class="watch-catch__product">
-                  <span>Креветка северная в/м</span>
-                  <strong>3&#8239;200&nbsp;₽/кг</strong>
-                </p>
-                <div class="watch-catch__links">
-                  <a href="catalog/?q=Креветка%20северная">
-                    Открыть в каталоге
-                  </a>
-                  <a href="https://t.me/kapitanseledkin/412">
-                    Рецепт креветок в&nbsp;Телеграме
-                  </a>
-                </div>
-              </article>
-            </li>
-
-            <li class="watch-catch__item">
-              <article>
-                <p class="watch-catch__number">03</p>
-                <h3>Командорский кальмар</h3>
-                <p class="watch-catch__product">
-                  <span>Кальмар командорский</span>
-                  <strong>595&nbsp;₽/кг</strong>
-                </p>
-                <div class="watch-catch__links">
-                  <a href="catalog/?q=Кальмар%20командорский">
-                    Открыть в каталоге
-                  </a>
-                  <a href="https://t.me/kapitanseledkin/610">
-                    Олег о&nbsp;кальмаре в&nbsp;Телеграме
-                  </a>
-                </div>
-              </article>
-            </li>
-
-            <li class="watch-catch__item">
-              <article>
-                <p class="watch-catch__number">04</p>
-                <h3>Осьминог</h3>
-                <p class="watch-catch__product">
-                  <span>Осьминог, Марокко</span>
-                  <strong>1&#8239;900&nbsp;₽/кг</strong>
-                </p>
-                <div class="watch-catch__links">
-                  <a href="catalog/?q=Осьминог%20Марокко">
-                    Открыть в каталоге
-                  </a>
-                  <a href="https://t.me/kapitanseledkin/377">
-                    Как приготовить в&nbsp;Телеграме
-                  </a>
-                </div>
-              </article>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="ship-log source-section" id="journal" aria-labelledby="journal-title">
-        <div class="ship-log__inner source-shell">
-          <header class="ship-log__header">
+          <header class="journal-preview__header">
             <div>
               <p class="ship-log__kicker">Записи Олега Гугунавы</p>
-              <h2 id="journal-title">Судовой журнал</h2>
+              <h2 id="journal-preview-title">Судовой журнал</h2>
             </div>
-            <div class="ship-log__introduction">
-              <p>
-                Поставки, рецепты и жизнь лавки — от самого капитана. Здесь
-                пять последних записей; остальное хранится в авторском
-                телеграм-канале.
-              </p>
-              <a href="https://t.me/kapitanseledkin">
-                Читать весь журнал в Телеграме
-              </a>
-            </div>
+            <a class="source-button source-button--outline" href="journal/">Все записи журнала</a>
           </header>
-
-          <div class="ship-log__grid">
-            <article class="ship-log-entry" id="journal-entry-684" tabindex="-1">
+          <div class="journal-preview__list">
+            <a class="journal-preview__entry" href="journal/#journal-entry-684">
               <img
-                src="assets/journal-684.jpg"
+                src="assets/journal-684-480.webp"
+                srcset="assets/journal-684-480.webp 480w, assets/journal-684-636.webp 636w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="assets/journal-684.jpg"
+                decoding="async"
                 alt="Икряная камбала холодного копчения на ярко-розовом фоне"
                 width="636"
                 height="800"
                 loading="lazy"
               />
-              <div class="ship-log-entry__content">
-                <p class="ship-log-entry__meta">
-                  <time datetime="2026-08-29">29&nbsp;августа 2026</time>
-                  <span>Запись №&nbsp;684</span>
-                </p>
-                <h3>Икряная камбала холодного копчения уже в&nbsp;Селёдкине!</h3>
-                <div class="ship-log-entry__body">
-                  <p>
-                    Килограмм стоит 1800&nbsp;₽. Вес одной рыбы около
-                    300&nbsp;г.
-                  </p>
-                  <p>Заезжайте, даже если это не входило в ваши планы.</p>
-                </div>
-                <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/684">
-                  Читать запись в Телеграме
-                </a>
-              </div>
-            </article>
-
-            <article class="ship-log-entry" id="journal-entry-683" tabindex="-1">
+              <div><time datetime="2026-08-29">29&nbsp;августа 2026</time><h3>Икряная камбала холодного копчения уже в&nbsp;Селёдкине!</h3><span>Читать запись</span></div>
+            </a>
+            <a class="journal-preview__entry" href="journal/#journal-entry-683">
               <img
-                src="assets/journal-683.jpg"
+                src="assets/journal-683-480.webp"
+                srcset="assets/journal-683-480.webp 480w, assets/journal-683-800.webp 800w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="assets/journal-683.jpg"
+                decoding="async"
                 alt="Филе сельди холодного копчения, перевязанное цветной нитью"
                 width="800"
                 height="800"
                 loading="lazy"
               />
-              <div class="ship-log-entry__content">
-                <p class="ship-log-entry__meta">
-                  <time datetime="2026-08-28">28&nbsp;августа 2026</time>
-                  <span>Запись №&nbsp;683</span>
-                </p>
-                <h3>
-                  У&nbsp;нас новинка! Филе сельди холодного копчения
-                  «По-Датски».
-                </h3>
-                <div class="ship-log-entry__body">
-                  <p>
-                    Две половинки малосольного филе с легким ароматом
-                    натурального древесного дымка. Никакой химии внутри и
-                    снаружи. Рыба, соль, ольховая стружка и нитяная оплетка для
-                    сохранения формы.
-                  </p>
-                  <p>
-                    Килограмм стоит 1800&nbsp;₽. Одна рыба весит около
-                    100&nbsp;г.
-                  </p>
-                  <p>
-                    Завтра, 29&nbsp;августа, ее можно будет попробовать перед
-                    покупкой.
-                  </p>
-                  <p>
-                    Приедете на машине — компенсируем час парковки перед
-                    магазином. Доберетесь своим ходом — отметим это дело
-                    традиционно.
-                  </p>
-                  <p>И&nbsp;Вильяма, понимаете ли, нашего Шекспира вспомним.</p>
-                  <blockquote class="ship-log-entry__dialogue">
-                    <p>
-                      <strong>Полоний:</strong>
-                      — Вы узнаете меня, принц?
-                    </p>
-                    <p>
-                      <strong>Гамлет:</strong>
-                      — Конечно; вы — торговец рыбой.
-                    </p>
-                    <p>
-                      <strong>Полоний:</strong>
-                      Нет, принц.
-                    </p>
-                    <p>
-                      <strong>Гамлет:</strong>
-                      Тогда мне хотелось бы, чтобы вы были таким же честным
-                      человеком. Имеется ль у вас копченая селёдка?
-                    </p>
-                  </blockquote>
-                  <p>Что-то в этом ключе.</p>
-                  <p>Заезжайте, даже если это не входило в ваши планы.</p>
-                </div>
-                <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/683">
-                  Читать запись в Телеграме
-                </a>
-              </div>
-            </article>
-
-            <article
-              class="ship-log-entry ship-log-entry--columns"
-              id="journal-entry-682"
-              tabindex="-1"
-            >
+              <div><time datetime="2026-08-28">28&nbsp;августа 2026</time><h3>У&nbsp;нас новинка! Филе сельди холодного копчения
+                  «По-Датски».</h3><span>Читать запись</span></div>
+            </a>
+            <a class="journal-preview__entry" href="journal/#journal-entry-682">
               <img
-                src="assets/journal-682.jpg"
+                src="assets/journal-682-480.webp"
+                srcset="assets/journal-682-480.webp 480w, assets/journal-682-647.webp 647w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="assets/journal-682.jpg"
+                decoding="async"
                 alt="Малосольный тугунок в овальном блюде на ярко-жёлтом фоне"
                 width="647"
                 height="800"
                 loading="lazy"
               />
-              <div class="ship-log-entry__content">
-                <p class="ship-log-entry__meta">
-                  <time datetime="2026-08-25">25&nbsp;августа 2026</time>
-                  <span>Запись №&nbsp;682</span>
-                </p>
-                <h3>У&nbsp;нас новый завоз царского малосольного тугунка.</h3>
-                <div class="ship-log-entry__body">
-                  <p>
-                    Вылов, засол и заморозка — август 2026&nbsp;г. Килограмм
-                    стоит 5900&nbsp;₽. Вес одной банки около 600&nbsp;граммов.
-                  </p>
-                  <p>
-                    Тугунка можно подать к&nbsp;Новогоднему столу — удивить и
-                    порадовать гостей. Можно съесть, так сказать, по
-                    индивидуальной программе. А можно высушить и поджечь.
-                    Тугунок такой жирный, что будет гореть не хуже свечки.
-                    В&nbsp;старину так и делали.
-                  </p>
-                  <p>
-                    За малосольным тугунком — к&nbsp;Селёдкину! Мы знаем в нём
-                    толк и привозим самого лучшего.
-                  </p>
-                </div>
-                <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/682">
-                  Читать запись в Телеграме
-                </a>
-              </div>
-            </article>
-
-            <article class="ship-log-entry" id="journal-entry-681" tabindex="-1">
-              <img
-                src="assets/journal-681.jpg"
-                alt="Красная икра дикого кижуча на ложке крупным планом"
-                width="725"
-                height="800"
-                loading="lazy"
-              />
-              <div class="ship-log-entry__content">
-                <p class="ship-log-entry__meta">
-                  <time datetime="2026-08-24">24&nbsp;августа 2026</time>
-                  <span>Запись №&nbsp;681</span>
-                </p>
-                <h3>
-                  Первая икра дикого кижуча сезона 2026 уже
-                  в&nbsp;Селёдкине!
-                </h3>
-                <div class="ship-log-entry__body">
-                  <p>
-                    Банка 250&nbsp;г стоит 4990&nbsp;₽. Еще есть икра осетра,
-                    щуки и боттарга.
-                  </p>
-                </div>
-                <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/681">
-                  Читать запись в Телеграме
-                </a>
-              </div>
-            </article>
-
-            <article class="ship-log-entry" id="journal-entry-680" tabindex="-1">
-              <img
-                src="assets/journal-680.jpg"
-                alt="Два филе черноморской барабули на тарелке и рюмка на столе"
-                width="600"
-                height="800"
-                loading="lazy"
-              />
-              <div class="ship-log-entry__content">
-                <p class="ship-log-entry__meta">
-                  <time datetime="2026-08-23">23&nbsp;августа 2026</time>
-                  <span>Запись №&nbsp;680</span>
-                </p>
-                <h3>
-                  Нежнейшая малосольная черноморская барабуля снова
-                  в&nbsp;Селёдкине.
-                </h3>
-                <div class="ship-log-entry__body">
-                  <p>
-                    Бескостное филе, разделанное вручную. Дата изготовления
-                    20.08.26, трех дней еще не прошло. Банка 330&nbsp;г стоит
-                    999&nbsp;рублей.
-                  </p>
-                  <p>Хамса, кстати, тоже есть.</p>
-                </div>
-                <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/680">
-                  Читать запись в Телеграме
-                </a>
-              </div>
-            </article>
-
+              <div><time datetime="2026-08-25">25&nbsp;августа 2026</time><h3>У&nbsp;нас новый завоз царского малосольного тугунка.</h3><span>Читать запись</span></div>
+            </a>
           </div>
         </div>
       </section>
@@ -1233,7 +882,11 @@
 
         <figure class="source-footer__portrait">
           <img
-            src="assets/salmon-cat.jpg"
+            src="assets/salmon-cat-480.webp"
+                srcset="assets/salmon-cat-480.webp 480w, assets/salmon-cat-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="assets/salmon-cat.jpg"
+                decoding="async"
             alt="Кот Лосось греется на солнце с закрытыми глазами"
             width="1536"
             height="2048"

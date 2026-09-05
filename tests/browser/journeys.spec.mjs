@@ -84,7 +84,8 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   await expect(page.locator("main")).toHaveJSProperty("inert", true);
   if (browserName === "chromium") {
     await menu.focus();
-    for (let i = 0; i < 14; i += 1) await page.keyboard.press("Tab");
+    const targets = await page.locator("[data-menu] a[href]:visible, [data-menu] button:visible").count();
+    for (let i = 0; i <= targets; i += 1) await page.keyboard.press("Tab");
     await expect(menu).toBeFocused();
   }
   await menu.focus();
@@ -141,7 +142,7 @@ test("all pages and open navigation pass axe in both watches", async ({ browser,
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
     await context.addInitScript(value => localStorage.setItem("seledkin-theme", value), theme);
     const page = await context.newPage();
-    for (const path of ["", "catalog/", "404.html"]) {
+    for (const path of ["", "catalog/", "about/", "journal/", "404.html"]) {
       await page.goto(`${baseURL}${path}`);
       await page.evaluate(() => document.fonts.ready);
       await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
@@ -171,7 +172,7 @@ test("ordinary sections share one continuous surface and delivery keeps its cont
         const s = getComputedStyle(e);
         return { image: s.backgroundImage, color: s.backgroundColor };
       }));
-      expect(surfaces).toHaveLength(6);
+      expect(surfaces).toHaveLength(4);
       expect(surfaces.every(s => s.image === "none" && s.color === "rgba(0, 0, 0, 0)")).toBe(true);
       const delivery = page.locator("#delivery");
       await expect(delivery.locator(".delivery-source__lead")).toHaveText("Мы доставляем нашу продукцию домой или в офис в течение двух часов.");
@@ -188,12 +189,13 @@ test("ordinary sections share one continuous surface and delivery keeps its cont
 
 test("320px reflow, enlarged text, custom spacing and contrast retain controls", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 });
-  for (const path of ["", "catalog/", "404.html"]) {
+  for (const path of ["", "catalog/", "about/", "journal/", "404.html"]) {
     for (const mode of ["text", "spacing", "contrast", "forced"]) {
       await page.emulateMedia({ reducedMotion: "reduce", contrast: mode === "contrast" ? "more" : "no-preference", forcedColors: mode === "forced" ? "active" : "none" });
       await page.goto(path);
       if (mode === "text") await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
       if (mode === "spacing") await page.addStyleTag({ content: "* { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-bottom: 2em !important; }" });
+      await page.evaluate(() => document.fonts.ready);
       await noOverflow(page);
       const clipped = await page.locator(".source-button:visible, summary:visible, input:visible, select:visible").evaluateAll(elements => elements.filter(e => { const r = e.getBoundingClientRect(); return r.x < -1 || r.right > innerWidth + 1; }).map(e => e.textContent.trim() || e.tagName));
       expect(clipped).toEqual([]);

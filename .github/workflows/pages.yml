@@ -56,10 +56,12 @@ jobs:
 
       - name: Package static files
         run: |
-          mkdir -p _site/assets _site/catalog
+          mkdir -p _site/assets _site/catalog _site/journal _site/about
           cp index.html 404.html robots.txt sitemap.xml .nojekyll _site/
           cp assets/* _site/assets/
           cp catalog/index.html catalog/catalog.js _site/catalog/
+          cp journal/index.html _site/journal/
+          cp about/index.html _site/about/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

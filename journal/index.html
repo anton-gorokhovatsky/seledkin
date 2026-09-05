@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Поставки, рецепты и жизнь Рыбной лавки капитана Селедкина — авторские записи Олега Гугунавы."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="Рыбная лавка капитана Селедкина" />
+    <meta property="og:title" content="Судовой журнал — Рыбная лавка капитана Селедкина" />
+    <meta property="og:description" content="Поставки, рецепты и жизнь Рыбной лавки капитана Селедкина — авторские записи Олега Гугунавы." />
+    <meta property="og:url" content="https://anton-gorokhovatsky.github.io/seledkin/journal/" />
+    <meta property="og:image" content="https://anton-gorokhovatsky.github.io/seledkin/assets/share-card-primary.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Свежая рыба со специями и логотип Рыбной лавки капитана Селедкина" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Судовой журнал — Рыбная лавка капитана Селедкина" />
+    <meta name="twitter:description" content="Поставки, рецепты и жизнь Рыбной лавки капитана Селедкина — авторские записи Олега Гугунавы." />
+    <meta name="twitter:image" content="https://anton-gorokhovatsky.github.io/seledkin/assets/share-card-primary.jpg" />
+    <meta name="twitter:image:alt" content="Свежая рыба со специями и логотип Рыбной лавки капитана Селедкина" />
+    <link rel="canonical" href="https://anton-gorokhovatsky.github.io/seledkin/journal/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (() => {
+        document.documentElement.classList.add("js");
+        let explicitTheme = null;
+        try {
+          const stored = localStorage.getItem("seledkin-theme");
+          if (stored === "light" || stored === "dark") explicitTheme = stored;
+        } catch {}
+        let scheduleTheme = null;
+        try {
+          const hourPart = new Intl.DateTimeFormat("en-GB", {
+            timeZone: "Europe/Moscow",
+            hour: "2-digit",
+            hourCycle: "h23",
+          })
+            .formatToParts(new Date())
+            .find(({ type }) => type === "hour");
+          const hour = Number(hourPart?.value);
+          if (Number.isFinite(hour)) {
+            scheduleTheme = hour >= 11 && hour < 20 ? "light" : "dark";
+          }
+        } catch {}
+        const theme =
+          explicitTheme ??
+          scheduleTheme ??
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        const isDark = theme === "dark";
+        document.documentElement.dataset.theme = theme;
+        if (explicitTheme) {
+          document.documentElement.dataset.themeSource = "explicit";
+        }
+        document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+        document.querySelector('meta[name="theme-color"]').content = isDark
+          ? "#0e202b"
+          : "#ffffff";
+      })();
+    </script>
+    <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../assets/styles.css?v=shop-journeys-2" />
+    <script type="module" src="../assets/site.js?v=shop-journeys-2"></script>
+    <script type="module" src="../assets/interface-motion.js"></script>
+    <title>Судовой журнал — Рыбная лавка капитана Селедкина</title>
+  </head>
+  <body class="journal-page">
+    <a class="skip-link" href="#main">Перейти к каталогу</a>
+
+    <header class="source-header" id="top">
+      <div class="source-header__bar">
+        <a class="source-brand brand-jelly brand-jelly--page" href="../" aria-label="Рыбная лавка капитана Селедкина — на главную">
+          <img
+            src="../assets/logo-redrawn-sea.svg"
+            data-theme-logo
+            data-logo-light="../assets/logo-redrawn-sea.svg"
+            data-logo-dark="../assets/logo-redrawn-sea.svg"
+            alt="Рыбная лавка капитана Селедкина"
+            width="3600"
+            height="1784"
+          />
+        </a>
+      </div>
+    </header>
+
+    <button
+      class="floating-menu"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      aria-label="Открыть меню"
+      data-menu-toggle
+    >
+      <span class="floating-menu__mark" aria-hidden="true"></span>
+      <span class="floating-menu__label">Меню</span>
+    </button>
+
+    <div
+      class="site-menu"
+      id="primary-navigation"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="menu-title"
+      data-menu
+      hidden
+    >
+      <div class="site-menu__panel">
+        <header class="site-menu__masthead">
+          <a class="site-menu__brand brand-jelly brand-jelly--panel" href="../">
+            <img
+              src="../assets/logo-redrawn-sea.svg"
+              data-theme-logo
+              data-logo-light="../assets/logo-redrawn-sea.svg"
+              data-logo-dark="../assets/logo-redrawn-sea.svg"
+              alt="Рыбная лавка капитана Селедкина"
+              width="3600"
+              height="1784"
+            />
+          </a>
+        </header>
+
+        <div class="site-menu__layout">
+          <video
+            class="site-menu__service-video"
+            data-poster-light="../assets/hero-sea-poster.webp"
+            data-poster-dark="../assets/hero-sea-night-poster.webp"
+            data-theme-video
+            data-menu-sea-video
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            <source
+              data-src-light="../assets/hero-sea-web.mp4"
+              data-src-dark="../assets/hero-sea-night-web.mp4"
+              data-theme-video-source
+              type="video/mp4"
+            />
+          </video>
+          <section class="site-menu__routes">
+            <p class="site-menu__kicker">По сайту</p>
+            <h2 id="menu-title">Куда держим курс?</h2>
+            <nav aria-label="Меню сайта">
+              <a href="../#assortment">
+                <span aria-hidden="true">01</span>
+                <span>Что продаём</span>
+              </a>
+              <a href="./" aria-current="page">
+                <span aria-hidden="true">02</span>
+                <span>Продукты и цены</span>
+              </a>
+              <a href="../#delivery">
+                <span aria-hidden="true">03</span>
+                <span>Доставка</span>
+              </a>
+              <a href="../#contacts">
+                <span aria-hidden="true">04</span>
+                <span>Контакты</span>
+              </a>
+              <a href="../about/">
+                <span aria-hidden="true">05</span>
+                <span>О нас</span>
+              </a>
+              <a href="../journal/">
+                <span aria-hidden="true">06</span>
+                <span>Судовой журнал</span>
+              </a>
+            </nav>
+          </section>
+
+          <section class="site-menu__service" aria-labelledby="menu-service-title">
+            <div class="site-menu__service-inner">
+              <h3 id="menu-service-title">Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
+              <address>
+                Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
+                Метро «Вавиловская»
+              </address>
+              <div class="site-menu__actions">
+                <a
+                  class="source-button source-button--menu-call"
+                  href="tel:+79166751452"
+                  aria-label="Позвонить в лавку: +7 916 675-14-52"
+                >
+                  Позвонить
+                </a>
+                <a class="source-button source-button--menu-primary" href="https://t.me/+79166751452">
+                  Заказать в Телеграме
+                </a>
+                <a class="source-button source-button--menu-secondary" href="https://wa.me/79166751452">
+                  Заказать в WhatsApp
+                </a>
+              </div>
+              <div class="site-menu__networks">
+                <a class="site-menu__channel" href="https://t.me/kapitanseledkin">
+                  <svg class="site-menu__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <use href="../assets/social-icons.svg#telegram"></use>
+                  </svg>
+                  <span class="site-menu__channel-copy">
+                    <strong>Телеграм-канал</strong>
+                    <span>Судовой журнал капитана</span>
+                  </span>
+                </a>
+                <nav class="site-menu__socials" aria-label="Другие площадки лавки">
+                  <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <use href="../assets/social-icons.svg#youtube"></use>
+                    </svg>
+                    <span>YouTube</span>
+                  </a>
+                  <a href="https://soundcloud.com/kapitanseledkin">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <use href="../assets/social-icons.svg#soundcloud"></use>
+                    </svg>
+                    <span>SoundCloud</span>
+                  </a>
+                </nav>
+              </div>
+              <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить море</button>
+              <button
+                class="theme-toggle theme-toggle--menu"
+                type="button"
+                aria-label="Включить ночную вахту"
+                data-theme-toggle
+              >
+                <svg class="theme-toggle__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path class="theme-toggle__moon" d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8a8.5 8.5 0 1 0 11.6 11.6Z" />
+                  <g class="theme-toggle__sun">
+                    <circle cx="12" cy="12" r="3.5" />
+                    <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6 6 6M18 18l1.4 1.4M19.4 4.6 18 6M6 18l-1.4 1.4" />
+                  </g>
+                </svg>
+                <span data-theme-label>Ночная вахта</span>
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <main id="main" tabindex="-1">
+      <section class="ship-log source-section" id="journal" aria-labelledby="journal-title">
+        <div class="ship-log__inner source-shell">
+          <header class="ship-log__header">
+            <div>
+              <p class="ship-log__kicker">Записи Олега Гугунавы</p>
+              <h1 id="journal-title">Судовой журнал</h1>
+            </div>
+            <div class="ship-log__introduction">
+              <p>
+                Поставки, рецепты и жизнь лавки — от самого капитана. Здесь
+                пять последних записей; остальное хранится в авторском
+                телеграм-канале.
+              </p>
+              <a href="https://t.me/kapitanseledkin">
+                Читать весь журнал в Телеграме
+              </a>
+            </div>
+          </header>
+
+          <div class="ship-log__grid">
+            <article class="ship-log-entry" id="journal-entry-684" tabindex="-1">
+              <img
+                src="../assets/journal-684-480.webp"
+                srcset="../assets/journal-684-480.webp 480w, ../assets/journal-684-636.webp 636w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/journal-684.jpg"
+                decoding="async"
+                alt="Икряная камбала холодного копчения на ярко-розовом фоне"
+                width="636"
+                height="800"
+                loading="lazy"
+              />
+              <div class="ship-log-entry__content">
+                <p class="ship-log-entry__meta">
+                  <time datetime="2026-08-29">29&nbsp;августа 2026</time>
+                  <span>Запись №&nbsp;684</span>
+                </p>
+                <h2>Икряная камбала холодного копчения уже в&nbsp;Селёдкине!</h2>
+                <div class="ship-log-entry__body">
+                  <p>
+                    Килограмм стоит 1800&nbsp;₽. Вес одной рыбы около
+                    300&nbsp;г.
+                  </p>
+                  <p>Заезжайте, даже если это не входило в ваши планы.</p>
+                </div>
+                <div class="ship-log-entry__actions">
+                  <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%B5%D1%81%D1%82%D1%8C%20%D0%BB%D0%B8%20%D0%B2%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B8%3A%0A%D0%98%D0%BA%D1%80%D1%8F%D0%BD%D0%B0%D1%8F%20%D0%BA%D0%B0%D0%BC%D0%B1%D0%B0%D0%BB%D0%B0%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A%D0%A3%D0%B2%D0%B8%D0%B4%D0%B5%D0%BB%28%D0%B0%29%20%D0%B2%20%D0%A1%D1%83%D0%B4%D0%BE%D0%B2%D0%BE%D0%BC%20%D0%B6%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D0%B5%3A%20https%3A%2F%2Ft.me%2Fkapitanseledkin%2F684">
+                    Спросить о наличии<span class="visually-hidden"> в Телеграме: Икряная камбала холодного копчения</span>
+                  </a>
+                  <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/684">
+                    Читать запись в Телеграме
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article class="ship-log-entry" id="journal-entry-683" tabindex="-1">
+              <img
+                src="../assets/journal-683-480.webp"
+                srcset="../assets/journal-683-480.webp 480w, ../assets/journal-683-800.webp 800w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/journal-683.jpg"
+                decoding="async"
+                alt="Филе сельди холодного копчения, перевязанное цветной нитью"
+                width="800"
+                height="800"
+                loading="lazy"
+              />
+              <div class="ship-log-entry__content">
+                <p class="ship-log-entry__meta">
+                  <time datetime="2026-08-28">28&nbsp;августа 2026</time>
+                  <span>Запись №&nbsp;683</span>
+                </p>
+                <h2>
+                  У&nbsp;нас новинка! Филе сельди холодного копчения
+                  «По-Датски».
+                </h2>
+                <div class="ship-log-entry__body">
+                  <p>
+                    Две половинки малосольного филе с легким ароматом
+                    натурального древесного дымка. Никакой химии внутри и
+                    снаружи. Рыба, соль, ольховая стружка и нитяная оплетка для
+                    сохранения формы.
+                  </p>
+                  <p>
+                    Килограмм стоит 1800&nbsp;₽. Одна рыба весит около
+                    100&nbsp;г.
+                  </p>
+                  <p>
+                    Завтра, 29&nbsp;августа, ее можно будет попробовать перед
+                    покупкой.
+                  </p>
+                  <p>
+                    Приедете на машине — компенсируем час парковки перед
+                    магазином. Доберетесь своим ходом — отметим это дело
+                    традиционно.
+                  </p>
+                  <p>И&nbsp;Вильяма, понимаете ли, нашего Шекспира вспомним.</p>
+                  <blockquote class="ship-log-entry__dialogue">
+                    <p>
+                      <strong>Полоний:</strong>
+                      — Вы узнаете меня, принц?
+                    </p>
+                    <p>
+                      <strong>Гамлет:</strong>
+                      — Конечно; вы — торговец рыбой.
+                    </p>
+                    <p>
+                      <strong>Полоний:</strong>
+                      Нет, принц.
+                    </p>
+                    <p>
+                      <strong>Гамлет:</strong>
+                      Тогда мне хотелось бы, чтобы вы были таким же честным
+                      человеком. Имеется ль у вас копченая селёдка?
+                    </p>
+                  </blockquote>
+                  <p>Что-то в этом ключе.</p>
+                  <p>Заезжайте, даже если это не входило в ваши планы.</p>
+                </div>
+                <div class="ship-log-entry__actions">
+                  <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%B5%D1%81%D1%82%D1%8C%20%D0%BB%D0%B8%20%D0%B2%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B8%3A%0A%D0%A4%D0%B8%D0%BB%D0%B5%20%D1%81%D0%B5%D0%BB%D1%8C%D0%B4%D0%B8%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%20%C2%AB%D0%9F%D0%BE-%D0%94%D0%B0%D1%82%D1%81%D0%BA%D0%B8%C2%BB%0A%D0%A3%D0%B2%D0%B8%D0%B4%D0%B5%D0%BB%28%D0%B0%29%20%D0%B2%20%D0%A1%D1%83%D0%B4%D0%BE%D0%B2%D0%BE%D0%BC%20%D0%B6%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D0%B5%3A%20https%3A%2F%2Ft.me%2Fkapitanseledkin%2F683">
+                    Спросить о наличии<span class="visually-hidden"> в Телеграме: Филе сельди холодного копчения «По-Датски»</span>
+                  </a>
+                  <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/683">
+                    Читать запись в Телеграме
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="ship-log-entry ship-log-entry--columns"
+              id="journal-entry-682"
+              tabindex="-1"
+            >
+              <img
+                src="../assets/journal-682-480.webp"
+                srcset="../assets/journal-682-480.webp 480w, ../assets/journal-682-647.webp 647w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/journal-682.jpg"
+                decoding="async"
+                alt="Малосольный тугунок в овальном блюде на ярко-жёлтом фоне"
+                width="647"
+                height="800"
+                loading="lazy"
+              />
+              <div class="ship-log-entry__content">
+                <p class="ship-log-entry__meta">
+                  <time datetime="2026-08-25">25&nbsp;августа 2026</time>
+                  <span>Запись №&nbsp;682</span>
+                </p>
+                <h2>У&nbsp;нас новый завоз царского малосольного тугунка.</h2>
+                <div class="ship-log-entry__body">
+                  <p>
+                    Вылов, засол и заморозка — август 2026&nbsp;г. Килограмм
+                    стоит 5900&nbsp;₽. Вес одной банки около 600&nbsp;граммов.
+                  </p>
+                  <p>
+                    Тугунка можно подать к&nbsp;Новогоднему столу — удивить и
+                    порадовать гостей. Можно съесть, так сказать, по
+                    индивидуальной программе. А можно высушить и поджечь.
+                    Тугунок такой жирный, что будет гореть не хуже свечки.
+                    В&nbsp;старину так и делали.
+                  </p>
+                  <p>
+                    За малосольным тугунком — к&nbsp;Селёдкину! Мы знаем в нём
+                    толк и привозим самого лучшего.
+                  </p>
+                </div>
+                <div class="ship-log-entry__actions">
+                  <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%B5%D1%81%D1%82%D1%8C%20%D0%BB%D0%B8%20%D0%B2%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B8%3A%0A%D0%A6%D0%B0%D1%80%D1%81%D0%BA%D0%B8%D0%B9%20%D0%BC%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D1%82%D1%83%D0%B3%D1%83%D0%BD%D0%BE%D0%BA%0A%D0%A3%D0%B2%D0%B8%D0%B4%D0%B5%D0%BB%28%D0%B0%29%20%D0%B2%20%D0%A1%D1%83%D0%B4%D0%BE%D0%B2%D0%BE%D0%BC%20%D0%B6%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D0%B5%3A%20https%3A%2F%2Ft.me%2Fkapitanseledkin%2F682">
+                    Спросить о наличии<span class="visually-hidden"> в Телеграме: Царский малосольный тугунок</span>
+                  </a>
+                  <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/682">
+                    Читать запись в Телеграме
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article class="ship-log-entry" id="journal-entry-681" tabindex="-1">
+              <img
+                src="../assets/journal-681-480.webp"
+                srcset="../assets/journal-681-480.webp 480w, ../assets/journal-681-725.webp 725w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/journal-681.jpg"
+                decoding="async"
+                alt="Красная икра дикого кижуча на ложке крупным планом"
+                width="725"
+                height="800"
+                loading="lazy"
+              />
+              <div class="ship-log-entry__content">
+                <p class="ship-log-entry__meta">
+                  <time datetime="2026-08-24">24&nbsp;августа 2026</time>
+                  <span>Запись №&nbsp;681</span>
+                </p>
+                <h2>
+                  Первая икра дикого кижуча сезона 2026 уже
+                  в&nbsp;Селёдкине!
+                </h2>
+                <div class="ship-log-entry__body">
+                  <p>
+                    Банка 250&nbsp;г стоит 4990&nbsp;₽. Еще есть икра осетра,
+                    щуки и боттарга.
+                  </p>
+                </div>
+                <div class="ship-log-entry__actions">
+                  <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%B5%D1%81%D1%82%D1%8C%20%D0%BB%D0%B8%20%D0%B2%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B8%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%B4%D0%B8%D0%BA%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%B8%D0%B6%D1%83%D1%87%D0%B0%2C%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20250%20%D0%B3%0A%D0%A3%D0%B2%D0%B8%D0%B4%D0%B5%D0%BB%28%D0%B0%29%20%D0%B2%20%D0%A1%D1%83%D0%B4%D0%BE%D0%B2%D0%BE%D0%BC%20%D0%B6%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D0%B5%3A%20https%3A%2F%2Ft.me%2Fkapitanseledkin%2F681">
+                    Спросить о наличии<span class="visually-hidden"> в Телеграме: Икра дикого кижуча, банка 250 г</span>
+                  </a>
+                  <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/681">
+                    Читать запись в Телеграме
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article class="ship-log-entry" id="journal-entry-680" tabindex="-1">
+              <img
+                src="../assets/journal-680-480.webp"
+                srcset="../assets/journal-680-480.webp 480w, ../assets/journal-680-600.webp 600w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/journal-680.jpg"
+                decoding="async"
+                alt="Два филе черноморской барабули на тарелке и рюмка на столе"
+                width="600"
+                height="800"
+                loading="lazy"
+              />
+              <div class="ship-log-entry__content">
+                <p class="ship-log-entry__meta">
+                  <time datetime="2026-08-23">23&nbsp;августа 2026</time>
+                  <span>Запись №&nbsp;680</span>
+                </p>
+                <h2>
+                  Нежнейшая малосольная черноморская барабуля снова
+                  в&nbsp;Селёдкине.
+                </h2>
+                <div class="ship-log-entry__body">
+                  <p>
+                    Бескостное филе, разделанное вручную. Дата изготовления
+                    20.08.26, трех дней еще не прошло. Банка 330&nbsp;г стоит
+                    999&nbsp;рублей.
+                  </p>
+                  <p>Хамса, кстати, тоже есть.</p>
+                </div>
+                <div class="ship-log-entry__actions">
+                  <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%B5%D1%81%D1%82%D1%8C%20%D0%BB%D0%B8%20%D0%B2%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B8%3A%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%20%D1%87%D0%B5%D1%80%D0%BD%D0%BE%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%B0%D1%8F%20%D0%B1%D0%B0%D1%80%D0%B0%D0%B1%D1%83%D0%BB%D1%8F%2C%20%D0%B1%D0%B5%D1%81%D0%BA%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%84%D0%B8%D0%BB%D0%B5%2C%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20330%20%D0%B3%0A%D0%A3%D0%B2%D0%B8%D0%B4%D0%B5%D0%BB%28%D0%B0%29%20%D0%B2%20%D0%A1%D1%83%D0%B4%D0%BE%D0%B2%D0%BE%D0%BC%20%D0%B6%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D0%B5%3A%20https%3A%2F%2Ft.me%2Fkapitanseledkin%2F680">
+                    Спросить о наличии<span class="visually-hidden"> в Телеграме: Малосольная черноморская барабуля, бескостное филе, банка 330 г</span>
+                  </a>
+                  <a class="ship-log-entry__link" href="https://t.me/kapitanseledkin/680">
+                    Читать запись в Телеграме
+                  </a>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="source-footer" aria-labelledby="footer-title">
+      <div class="source-footer__content source-shell">
+        <div class="source-footer__details">
+          <p class="source-footer__kicker">До встречи на Вавиловской</p>
+          <h2 id="footer-title">Лосось на вахте — заходите в лавку</h2>
+          <p class="source-footer__lead">
+            Каждый день с&nbsp;11:00 до&nbsp;20:00. Можно приехать за рыбой и
+            деликатесами или заказать доставку.
+          </p>
+          <div class="source-footer__visit">
+            <p>Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1; метро «Вавиловская»</p>
+          </div>
+          <div class="source-footer__actions" aria-label="Связаться с лавкой">
+            <a class="source-button source-button--footer-contact" href="tel:+79166751452">
+              Позвонить
+            </a>
+            <a class="source-button source-button--footer-contact" href="https://t.me/+79166751452">
+              Заказать в Телеграме
+            </a>
+            <a class="source-button source-button--footer-contact" href="https://wa.me/79166751452">
+              Заказать в WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <figure class="source-footer__portrait">
+          <img
+            src="../assets/salmon-cat-480.webp"
+                srcset="../assets/salmon-cat-480.webp 480w, ../assets/salmon-cat-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../assets/salmon-cat.jpg"
+                decoding="async"
+            alt="Кот Лосось греется на солнце с закрытыми глазами"
+            width="1536"
+            height="2048"
+            loading="lazy"
+          />
+          <figcaption>Лосось принимает солнечную ванну между вахтами.</figcaption>
+        </figure>
+      </div>
+
+      <div class="source-footer__postscript source-shell">
+        <p>
+          P.&nbsp;S.: а ещё мы публикуем советы по приготовлению и обработке
+          рыбы, все наши новости, в&nbsp;т.&nbsp;ч. об ассортименте, в наших
+          социальных сетях. Подписывайтесь!
+        </p>
+        <nav class="source-footer__channels" aria-label="Социальные сети и каналы лавки">
+          <a class="source-footer__channel--primary" href="https://t.me/kapitanseledkin">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="../assets/social-icons.svg#telegram"></use>
+            </svg>
+            <span>Телеграм-канал</span>
+          </a>
+          <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="../assets/social-icons.svg#youtube"></use>
+            </svg>
+            <span>YouTube</span>
+          </a>
+          <a href="https://soundcloud.com/kapitanseledkin">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="../assets/social-icons.svg#soundcloud"></use>
+            </svg>
+            <span>SoundCloud</span>
+          </a>
+        </nav>
+      </div>
+      <div class="source-footer__base source-shell">
+        <small>© «Рыбная лавка капитана Селедкина», 2026</small>
+        <a class="source-footer__credit" href="https://anton-gorokhovatsky.github.io/design/">Дизайн и разработка</a>
+        <a href="#top">В начало</a>
+      </div>
+    </footer>
+
+  </body>
+</html>

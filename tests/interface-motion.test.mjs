@@ -65,10 +65,10 @@ test("reduced motion swaps both pairs immediately, without scheduling a frame", 
 }));
 
 test("enhancement is independent of navigation, local on every page, and preserves static fallbacks", async () => {
-  for (const file of ["index.html", "catalog/index.html", "404.html"]) {
+  for (const file of ["index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html"]) {
     const page = await readFile(new URL(`../${file}`, import.meta.url), "utf8");
     assert.match(page, /<script type="module" src="(?:\.\.\/)?assets\/interface-motion\.js"><\/script>/);
-    assert.match(page, /styles\.css\?v=surface-delivery-1/, "new enhancement must not combine with stale CSS");
+    assert.match(page, /styles\.css\?v=shop-journeys-2/, "new enhancement must not combine with stale CSS");
     assert.match(page, /class="theme-toggle__moon"/);
     assert.match(page, /class="theme-toggle__sun"/);
   }

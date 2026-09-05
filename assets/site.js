@@ -1,12 +1,17 @@
 import "./typography.js";
-import "./theme.js";
+import "./theme.js?v=shop-journeys-2";
+import { syncMenuSeaVideo } from "./sea-motion.js";
+
+const root = new URL("../", import.meta.url);
+const isHome = location.pathname === root.pathname || location.pathname === `${root.pathname}index.html`;
+if (isHome && /^#journal-entry-68[0-4]$/.test(location.hash)) {
+  location.replace(new URL(`journal/${location.hash}`, root).href);
+}
 
 const menuButton = document.querySelector("[data-menu-toggle]");
 const menuButtonLabel = menuButton?.querySelector(".floating-menu__label");
 const menu = document.querySelector("[data-menu]");
 const menuPanel = menu?.querySelector(".site-menu__panel");
-const heroVideo = document.querySelector("[data-hero-video]");
-const menuSeaVideo = menu?.querySelector("[data-menu-sea-video]");
 const map = document.querySelector("[data-map]");
 const mapToggle = map?.querySelector("[data-map-toggle]");
 const mapToggleLabel = mapToggle?.querySelector("[data-map-toggle-label]");
@@ -61,7 +66,7 @@ function focusableMenuItems() {
     ...menu.querySelectorAll(
       'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
     ),
-  ];
+  ].filter(element => !element.hidden && element.getClientRects().length > 0);
 }
 
 function setPageInert(value) {
@@ -78,36 +83,6 @@ function setPageInert(value) {
     if (element.tagName === "SCRIPT") continue;
     element.inert = value;
   }
-}
-
-function syncMenuSeaVideo() {
-  if (!(menuSeaVideo instanceof HTMLVideoElement)) return;
-
-  const menuIsOpen =
-    menuButton?.getAttribute("aria-expanded") === "true" && !menu?.hidden;
-
-  if (reducedMotion.matches || !menuIsOpen) {
-    menuSeaVideo.pause();
-    if (reducedMotion.matches) menuSeaVideo.currentTime = 0;
-    return;
-  }
-
-  menuSeaVideo.play().catch(() => {});
-}
-
-function syncHeroVideo() {
-  if (!(heroVideo instanceof HTMLVideoElement)) return;
-
-  if (reducedMotion.matches) {
-    heroVideo.pause();
-    heroVideo.currentTime = 0;
-    heroVideo.classList.add("is-ready");
-    return;
-  }
-
-  heroVideo.play().catch(() => {
-    heroVideo.classList.add("is-ready");
-  });
 }
 
 function openMenu() {
@@ -190,17 +165,6 @@ if (menuButton && menu) {
   });
 }
 
-if (heroVideo instanceof HTMLVideoElement) {
-  heroVideo.addEventListener("loadeddata", () => {
-    heroVideo.classList.add("is-ready");
-  });
-  if (heroVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-    heroVideo.classList.add("is-ready");
-  }
-  reducedMotion.addEventListener("change", syncHeroVideo);
-  syncHeroVideo();
-}
-
 if (
   heroJournal instanceof HTMLElement &&
   heroJournalStack instanceof HTMLElement &&
@@ -219,6 +183,13 @@ if (
   let blockNextClick = false;
 
   const syncJournal = () => {
+    const image = heroJournalCards[currentIndex]?.querySelector("img[data-full-src]");
+    if (image) {
+      image.srcset = image.dataset.fullSrcset;
+      image.src = image.dataset.fullSrc;
+      delete image.dataset.fullSrc;
+      delete image.dataset.fullSrcset;
+    }
     heroJournalCards.forEach((card, index) => {
       const active = index === currentIndex;
       const stackPosition =
@@ -351,13 +322,6 @@ if (
 
   syncJournal();
 }
-
-reducedMotion.addEventListener("change", syncMenuSeaVideo);
-document.addEventListener("seledkin:themechange", () => {
-  syncHeroVideo();
-  syncMenuSeaVideo();
-});
-syncMenuSeaVideo();
 
 if (
   map instanceof HTMLElement &&

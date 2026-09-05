@@ -5,9 +5,35 @@ export function normalizeSearch(value) {
     .replace(/[\s\u00a0\u202f]+/gu, " ").trim();
 }
 
+// Equivalent words from the shop's vocabulary; distinct fish stay distinct.
+const searchForms = new Map([
+  ["креветка", "креветки", "креветку", "креветок", "креветкой", "креветками"],
+  ["кальмар", "кальмара", "кальмары", "кальмаров", "кальмаром", "кальмарами"],
+  ["сельдь", "сельди", "сельдей", "сельдью", "селедка", "селедки", "селедку", "селедок", "селедкой"],
+  ["лосось", "лосося", "лососи", "лососей", "лососем"],
+  ["треска", "трески", "треску", "треской"],
+  ["краб", "краба", "крабы", "крабов", "крабом", "крабами"],
+  ["осьминог", "осьминога", "осьминоги", "осьминогов", "осьминогом"],
+  ["мидия", "мидии", "мидий", "мидиями"],
+  ["гребешок", "гребешка", "гребешки", "гребешков"],
+  ["стейк", "стейка", "стейки", "стейков"],
+  ["северная", "северный", "северное", "северные", "северной", "северную", "северных"],
+  ["тигровая", "тигровые", "тигровой", "тигровую", "тигровых"],
+  ["патагонская", "патагонские", "патагонской", "патагонскую", "патагонских"],
+  ["командорский", "командорского", "командорские", "командорских"],
+].flatMap((forms) => forms.map((word) => [word, forms[0]])));
+
 export function matchesSearch(text, query) {
   const haystack = normalizeSearch(text);
-  return normalizeSearch(query).split(" ").every((word) => haystack.includes(word));
+  const normalizedQuery = normalizeSearch(query);
+  if (!normalizedQuery) return true;
+  const words = new Set((haystack.match(/[\p{L}\p{N}]+/gu) ?? [])
+    .map((word) => searchForms.get(word) ?? word));
+  const terms = normalizedQuery.match(/[\p{L}\p{N}]+/gu) ?? [];
+  return terms.length > 0 && terms.every((term) => {
+    const equivalent = searchForms.get(term);
+    return equivalent ? words.has(equivalent) : haystack.includes(term);
+  });
 }
 
 export function positionCount(value) {
