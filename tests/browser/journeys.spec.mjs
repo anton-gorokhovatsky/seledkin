@@ -68,6 +68,7 @@ test("search, category, shared URL and browser history retain the same selection
 });
 
 test("contact anchor is clear of the menu; Escape only closes the top interaction", async ({ page, browserName }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("");
   await page.evaluate(() => document.fonts.ready);
   const menu = page.locator("[data-menu-toggle]");
@@ -78,10 +79,12 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   expect(heading.y).toBeGreaterThan(button.y + button.height);
   const map = page.locator("[data-map-toggle]");
   await map.click();
+  await expect(map).toHaveAttribute("aria-pressed", "true");
   await page.locator(".source-footer__details").scrollIntoViewIfNeeded();
   const scroll = await page.evaluate(() => scrollY);
   await menu.click();
   await expect(page.locator("main")).toHaveJSProperty("inert", true);
+  await expect(map).toHaveAttribute("aria-pressed", "true");
   if (browserName === "chromium") {
     await menu.focus();
     const targets = await page.locator("[data-menu] a[href]:visible, [data-menu] button:visible").count();

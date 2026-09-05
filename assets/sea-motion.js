@@ -72,8 +72,11 @@ if (heroVideo instanceof HTMLVideoElement) {
     heroVisible = true;
   }
   // First deliver the poster and visible shop/product imagery; then start the sea.
-  const criticalImages = [...document.querySelectorAll('.source-hero img[fetchpriority="high"], .source-hero__mobile-logo, .source-brand img')]
-    .filter(image => image.getBoundingClientRect().width > 0);
+  const poster = new Image();
+  poster.fetchPriority = "high";
+  poster.src = document.documentElement.dataset.theme === "dark"
+    ? heroVideo.dataset.posterDark : heroVideo.dataset.posterLight;
+  const criticalImages = [poster, ...document.querySelectorAll('.source-hero img[fetchpriority="high"]')];
   Promise.allSettled(criticalImages.map(image => image.decode())).then(() => {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       readyToPlay = true;

@@ -110,3 +110,24 @@ test("reduced motion downloads no sea video and the journal loads full images on
   }
   await expect(page.locator("[data-hero-journal-all]")).toHaveAttribute("href", "journal/");
 });
+
+
+test("a delayed brand image does not block the prioritized poster and sea", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "no-preference" });
+  const page = await context.newPage();
+  let releaseLogo;
+  const logoGate = new Promise(resolve => { releaseLogo = resolve; });
+  await page.route("**/logo-redrawn-sea.svg", async route => {
+    await logoGate;
+    await route.continue();
+  });
+  try {
+    await page.goto(baseURL, { waitUntil: "domcontentloaded" });
+    await expect.poll(() => page.locator("[data-hero-video]").evaluate(video => !video.paused && video.currentTime > 0), { timeout: 15000 }).toBe(true);
+    expect(await page.locator(".source-hero__mobile-logo").evaluate(image => image.complete)).toBe(false);
+  } finally {
+    releaseLogo();
+    await page.waitForLoadState("load");
+    await context.close();
+  }
+});
