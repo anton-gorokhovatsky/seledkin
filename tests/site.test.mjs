@@ -372,7 +372,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /\.source-hero__journal\s*\{[^}]*min-height:\s*0;/s,
+    /\.source-hero__journal\s*\{[^}]*min-height:\s*100svh;/s,
   );
   assert.match(
     styles,
@@ -1697,7 +1697,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.createElement("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=mobile-hero-clear-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=mobile-journal-second-screen-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);

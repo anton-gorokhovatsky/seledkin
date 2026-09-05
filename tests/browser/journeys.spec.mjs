@@ -102,26 +102,29 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   await expect(map).toHaveAttribute("aria-pressed", "false");
 });
 
-test("the mobile hero stays clear while desktop journal controls remain stable", async ({ page }, testInfo) => {
-  for (const width of [320, 390, 1440]) {
-    await page.setViewportSize({ width, height: 900 });
+test("the complete journal follows the first mobile screen and desktop controls remain stable", async ({ page }, testInfo) => {
+  for (const [width, height] of [[320, 568], [390, 664], [390, 844], [1440, 900]]) {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.setViewportSize({ width, height });
     await page.goto("");
     await page.evaluate(() => document.fonts.ready);
-    const hero = await page.locator(".source-hero").boundingBox();
-    if (width < 1000) {
-      expect(hero.height).toBeLessThan(1100);
-      await expect(page.locator(".source-button--hero-secondary")).toBeInViewport();
-      await expect(page.locator(".source-hero__journal")).toBeHidden();
-      expect(hero.height).toBeLessThan(700);
-      await noOverflow(page);
-      await page.screenshot({ path: testInfo.outputPath(`hero-${width}.png`) });
-      continue;
+    const journal = page.locator(".source-hero__journal");
+    await expect(journal).toBeVisible();
+    if (width < 980) {
+      await expect(page.locator(".source-button--hero-primary")).toBeInViewport({ ratio: 1 });
+      await expect(page.locator(".source-button--hero-secondary")).toBeInViewport({ ratio: 1 });
+      await expect(journal.locator("[data-hero-journal-stack]")).not.toBeInViewport();
+      expect((await journal.boundingBox()).y).toBeCloseTo(height, 0);
+      await page.screenshot({ path: testInfo.outputPath(`hero-${width}-${height}-first.png`) });
+      await journal.evaluate(element => window.scrollTo({ top: element.getBoundingClientRect().top + window.scrollY, behavior: "instant" }));
     }
-    await expect(page.locator(".source-hero__journal")).toBeVisible();
     const counter = page.locator("[data-hero-journal-counter]");
     const center = await counter.evaluate(e => { const r = e.getBoundingClientRect(); return r.x + r.width / 2; });
     for (let index = 1; index <= 5; index += 1) {
       await expect(counter).toHaveText(`${index} из 5`);
+      const active = page.locator('[data-hero-journal-card][data-stack-position="0"]');
+      await active.locator("img").evaluate(image => image.decode());
+      await active.evaluate(element => Promise.allSettled(element.getAnimations({ subtree: true }).map(animation => animation.finished)));
       // Read one layout frame: lazy media or scrolling must not mix coordinates.
       const { box, right, row } = await page.evaluate((last) => {
         const rect = (selector) => document.querySelector(selector).getBoundingClientRect().toJSON();
@@ -132,17 +135,37 @@ test("the mobile hero stays clear while desktop journal controls remain stable",
         };
       }, index === 5);
       expect(box.x + box.width / 2).toBeCloseTo(center, 0);
-      const next = page.locator(index === 5 ? "[data-hero-journal-all]" : "[data-hero-journal-next]");
       expect(right.x).toBeGreaterThanOrEqual(box.x + box.width + 4);
       // Existing hover lifts the control by 1.28px; it must still occupy one row.
       expect(Math.abs(right.y + right.height / 2 - row.y - row.height / 2)).toBeLessThanOrEqual(2);
       // Translated DOMRects can report 43.99997 for a 44px target on Linux.
       expect(Math.round(right.height * 1000) / 1000).toBeGreaterThanOrEqual(44);
       expect(right.x + right.width).toBeLessThanOrEqual(row.x + row.width + 1);
-      if (index < 5) await next.click();
+      if (width < 980) {
+        const photo = await active.locator("img").boundingBox();
+        const caption = await active.locator("figcaption").boundingBox();
+        expect(photo.y).toBeGreaterThanOrEqual(0);
+        expect(caption.y).toBeGreaterThanOrEqual(photo.y + photo.height + 8);
+        expect(caption.y + caption.height).toBeLessThanOrEqual(row.y - 8);
+        expect(row.y + row.height).toBeLessThanOrEqual(height);
+      }
+      if (index < 5) {
+        // Controls are already visible. A real pointer avoids Playwright's
+        // automatic re-centering during the hover transition.
+        const scroll = await page.evaluate(() => scrollY);
+        await page.mouse.click(right.x + right.width / 2, right.y + right.height / 2);
+        expect(await page.evaluate(() => scrollY)).toBeCloseTo(scroll, 0);
+      }
     }
+    await page.locator("[data-hero-journal-previous]").focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(counter).toHaveText("4 из 5");
+    await page.keyboard.press("ArrowRight");
+    await expect(counter).toHaveText("5 из 5");
     await noOverflow(page);
-    await page.screenshot({ path: testInfo.outputPath(`hero-${width}.png`) });
+    await page.screenshot({ path: testInfo.outputPath(`hero-${width}-${height}-journal.png`) });
+    await page.locator("[data-hero-journal-all]").click();
+    await expect(page).toHaveURL(/journal\/$/);
   }
 });
 

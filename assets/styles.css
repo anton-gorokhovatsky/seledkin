@@ -561,6 +561,10 @@ a.source-brand {
   padding-block: calc(var(--masthead-height) + 1rem) var(--hero-controls-inset);
 }
 
+.source-hero__intro {
+  display: contents;
+}
+
 .source-hero__copy {
   max-width: 52rem;
 }
@@ -3036,9 +3040,19 @@ a.site-menu__brand {
     margin-inline: auto;
     height: auto;
     min-height: 0;
-    padding: 5rem 0 2.5rem;
-    gap: 1.5rem;
+    padding: 0;
+    gap: 0;
     text-align: center;
+  }
+
+  .source-hero__intro {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 5rem 0 3rem;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
   }
 
   .source-hero__copy {
@@ -3114,15 +3128,16 @@ a.site-menu__brand {
   }
 
   .source-hero__journal {
-    display: none;
+    display: grid;
     width: min(100%, 22rem);
     height: auto;
-    min-height: 0;
+    min-height: 100vh;
+    min-height: 100svh;
     grid-template-rows: minmax(0, 1fr) auto;
     align-items: center;
     align-content: stretch;
     margin: 0 auto;
-    padding: 0.5rem 0 0;
+    padding: 1.5rem 0 2.5rem;
     gap: 1rem;
   }
 
@@ -3131,6 +3146,8 @@ a.site-menu__brand {
     min-width: 0;
     margin-inline: auto;
     padding: 0 12px 12px 0;
+    /* Keep the full image, caption and controls within a short second screen. */
+    max-width: max(13rem, calc((100svh - 20rem) * 647 / 800 + 12px));
   }
 
   .source-hero__proof {
@@ -3141,17 +3158,14 @@ a.site-menu__brand {
   }
 
   .source-hero__proof figure {
-    display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-    align-items: center;
-    gap: 1.25rem;
+    display: block;
   }
 
   .source-hero__proof figcaption {
     min-width: 0;
     overflow-wrap: anywhere;
     gap: 0.25rem;
-    margin-top: 0;
+    margin-top: 0.8rem;
   }
 
   .source-hero__proof-meta {
@@ -4352,7 +4366,7 @@ a.site-menu__brand {
 }
 
 @media (max-width: 61.1875rem) and (prefers-reduced-motion: no-preference) {
-  .js .source-hero__content {
-    padding-bottom: 6.5rem;
+  .js .source-hero__journal {
+    padding-bottom: 5.25rem;
   }
 }

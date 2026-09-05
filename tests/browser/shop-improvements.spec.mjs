@@ -47,7 +47,9 @@ test("complete editorial pages and inquiry links work without JavaScript", async
 test("mobile shopping appears earlier while original photo proportions survive", async ({ page }) => {
   await page.goto("");
   await page.evaluate(() => document.fonts.ready);
-  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThan(10000);
+  // The full journal now occupies its own second mobile screen.
+  const restOfHome = await page.evaluate(() => document.documentElement.scrollHeight - document.querySelector(".source-hero__journal").getBoundingClientRect().height);
+  expect(restOfHome).toBeLessThan(10000);
   await page.goto("catalog/");
   await page.evaluate(() => document.fonts.ready);
   expect((await page.locator(".catalog-product").first().boundingBox()).y).toBeLessThan(650);
