@@ -711,7 +711,7 @@ a.source-brand {
   grid-template-columns: minmax(min-content, 1fr) auto minmax(min-content, 1fr);
   justify-items: stretch;
   align-items: center;
-  gap: clamp(0.65rem, 2vw, 1rem);
+  gap: var(--journal-control-gap, clamp(0.65rem, 2vw, 1rem));
   margin-top: 0.4rem;
 }
 
@@ -756,7 +756,7 @@ a.source-brand {
 
 .source-hero__journal-control--all {
   width: max-content;
-  padding-left: 0.5rem;
+  padding-left: 1rem;
   border-radius: 999px;
   grid-template-columns: auto calc(var(--journal-control-size) - 2px);
   column-gap: 0.1rem;
@@ -804,6 +804,12 @@ a.source-brand {
   text-transform: uppercase;
   text-shadow: 0 0.1rem 0.8rem rgb(0 0 0 / 35%);
   white-space: nowrap;
+}
+
+@container (width <= 20rem) {
+  .source-hero__journal-controls {
+    --journal-control-gap: 0.25rem;
+  }
 }
 
 @container (width < 18rem) {
@@ -3209,7 +3215,7 @@ a.site-menu__brand {
     width: 100%;
     min-width: 0;
     grid-template-columns: minmax(min-content, 1fr) auto minmax(min-content, 1fr);
-    gap: 12px;
+    gap: var(--journal-control-gap, 12px);
     margin-top: 0.3rem;
   }
 
