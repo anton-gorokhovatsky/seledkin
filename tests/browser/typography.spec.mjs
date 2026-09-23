@@ -67,11 +67,17 @@ test("internal sections and the three reasons retain their shared heading levels
           expect(levels[2]).toEqual(levels[0]);
         }
       }
+      if (route === "catalog/") await expect(page.locator('.catalog-order h2')).toHaveCSS('font-weight', '400');
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     }
     expect(headings[1]).toEqual(headings[0]);
     expect(headings[2]).toEqual(headings[0]);
     expect(headings[0].weight).toBe("400");
+    await page.goto('404.html');
+    await expect(page.locator('h1')).toHaveCSS('font-weight', '400');
+    await expect(page.locator('h1')).toHaveCSS('font-size', headings[0].size);
+    await page.goto('');
+    await expect(page.locator('#contacts h2')).toHaveCSS('font-weight', '400');
   }
 });
 

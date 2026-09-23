@@ -79,7 +79,7 @@
     <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="assets/styles.css?v=journal-integrated-23-2" />
+    <link rel="stylesheet" href="assets/styles.css?v=home-flow-23-1" />
     <script type="module" src="assets/site.js?v=journal-integrated-23-2"></script>
     <script type="module" src="assets/interface-motion.js"></script>
     <script type="application/ld+json">
@@ -534,64 +534,60 @@
               </ul>
             </nav>
           </div>
-        </div>
-      </section>
+          <section class="price-preview" id="prices" aria-labelledby="prices-title">
+            <header class="price-preview__header">
+              <h3 id="prices-title">Цены в лавке</h3>
+              <div class="price-preview__introduction">
+                <p>В полном каталоге — весь ассортимент и действующие цены.</p>
+                <a class="source-button source-button--outline" href="catalog/">
+                  <span class="source-button__label">Открыть весь каталог</span>
+                </a>
+              </div>
+            </header>
 
-      <section class="price-preview source-section" id="prices" aria-labelledby="prices-title">
-        <div class="source-shell">
-          <header class="price-preview__header">
-            <h2 id="prices-title">Продукты и цены</h2>
-            <div class="price-preview__introduction">
-              <p>В полном каталоге — весь ассортимент и действующие цены.</p>
-              <a class="source-button source-button--outline" href="catalog/">
-                <span class="source-button__label">Открыть весь каталог</span>
-              </a>
+            <div
+              class="price-preview__grid"
+              role="group"
+              aria-label="Примеры товаров и цен"
+            >
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4>Чёрная икра</h4><strong>6&#8239;000&nbsp;₽/0,05&nbsp;кг</strong>
+                </div>
+                <p>Осетровая, забойная, высшего качества</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4>Креветка северная в/м</h4><strong>3&#8239;200&nbsp;₽/кг</strong>
+                </div>
+                <p>Магадан</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4>Нерка</h4><strong>1&#8239;820&nbsp;₽/кг</strong>
+                </div>
+                <p>Камчатка</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4>Филе трески</h4><strong>2&#8239;480&nbsp;₽/кг</strong>
+                </div>
+                <p>Мурманск, судовая заморозка, глазировка 0 %</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4>Стейк лосося</h4><strong>2&#8239;990&nbsp;₽/кг</strong>
+                </div>
+                <p>Пилим сами, глазировка 0 %</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4>Сельдь слабосоленая</h4><strong>699&nbsp;₽/кг</strong>
+                </div>
+                <p>Атлантическая. Солим сами, без консервантов и созревателей</p>
+              </article>
             </div>
-          </header>
-
-          <div
-            class="price-preview__grid"
-            role="group"
-            aria-label="Примеры товаров и цен"
-          >
-            <article class="catalog-product">
-              <div class="catalog-product-head">
-                <h3>Чёрная икра</h3><strong>6&#8239;000&nbsp;₽/0,05&nbsp;кг</strong>
-              </div>
-              <p>Осетровая, забойная, высшего качества</p>
-            </article>
-            <article class="catalog-product">
-              <div class="catalog-product-head">
-                <h3>Креветка северная в/м</h3><strong>3&#8239;200&nbsp;₽/кг</strong>
-              </div>
-              <p>Магадан</p>
-            </article>
-            <article class="catalog-product">
-              <div class="catalog-product-head">
-                <h3>Нерка</h3><strong>1&#8239;820&nbsp;₽/кг</strong>
-              </div>
-              <p>Камчатка</p>
-            </article>
-            <article class="catalog-product">
-              <div class="catalog-product-head">
-                <h3>Филе трески</h3><strong>1&#8239;790&nbsp;₽/кг</strong>
-              </div>
-              <p>Мурманск, судовая заморозка, глазировка 0 %</p>
-            </article>
-            <article class="catalog-product">
-              <div class="catalog-product-head">
-                <h3>Стейк лосося</h3><strong>2&#8239;800&nbsp;₽/кг</strong>
-              </div>
-              <p>Пилим сами, глазировка 0 %</p>
-            </article>
-            <article class="catalog-product">
-              <div class="catalog-product-head">
-                <h3>Сельдь слабосоленая</h3><strong>699&nbsp;₽/кг</strong>
-              </div>
-              <p>Атлантическая. Солим сами, без консервантов и созревателей</p>
-            </article>
-          </div>
-
+          </section>
         </div>
       </section>
 
@@ -603,7 +599,7 @@
         <div class="source-shell">
           <header class="watch-catch__header">
             <p class="about-overview__eyebrow">Продукты в рассказах Олега</p>
-            <h2 id="watch-catch-title">Свежий улов</h2>
+            <h2 id="watch-catch-title">Рецепты и советы</h2>
           </header>
 
           <ul class="watch-catch__list">
@@ -611,16 +607,12 @@
               <article>
                 <p class="watch-catch__number">01</p>
                 <h3>Селёдка</h3>
-                <p class="watch-catch__product">
-                  <span>Сельдь слабосоленая</span>
-                  <strong>699&nbsp;₽/кг</strong>
-                </p>
                 <div class="watch-catch__links">
-                  <a href="catalog/?q=Сельдь%20слабосоленая">
-                    Открыть в каталоге
-                  </a>
                   <a href="https://t.me/kapitanseledkin/506">
                     Олег о&nbsp;селёдке в&nbsp;Телеграме
+                  </a>
+                  <a href="catalog/?q=Сельдь%20слабосоленая">
+                    Открыть в каталоге
                   </a>
                 </div>
               </article>
@@ -630,16 +622,12 @@
               <article>
                 <p class="watch-catch__number">02</p>
                 <h3>Северная креветка</h3>
-                <p class="watch-catch__product">
-                  <span>Креветка северная в/м</span>
-                  <strong>3&#8239;200&nbsp;₽/кг</strong>
-                </p>
                 <div class="watch-catch__links">
-                  <a href="catalog/?q=Креветка%20северная">
-                    Открыть в каталоге
-                  </a>
                   <a href="https://t.me/kapitanseledkin/412">
                     Рецепт креветок в&nbsp;Телеграме
+                  </a>
+                  <a href="catalog/?q=Креветка%20северная">
+                    Открыть в каталоге
                   </a>
                 </div>
               </article>
@@ -649,16 +637,12 @@
               <article>
                 <p class="watch-catch__number">03</p>
                 <h3>Командорский кальмар</h3>
-                <p class="watch-catch__product">
-                  <span>Кальмар командорский</span>
-                  <strong>595&nbsp;₽/кг</strong>
-                </p>
                 <div class="watch-catch__links">
-                  <a href="catalog/?q=Кальмар%20командорский">
-                    Открыть в каталоге
-                  </a>
                   <a href="https://t.me/kapitanseledkin/610">
                     Олег о&nbsp;кальмаре в&nbsp;Телеграме
+                  </a>
+                  <a href="catalog/?q=Кальмар%20командорский">
+                    Открыть в каталоге
                   </a>
                 </div>
               </article>
@@ -668,16 +652,12 @@
               <article>
                 <p class="watch-catch__number">04</p>
                 <h3>Осьминог</h3>
-                <p class="watch-catch__product">
-                  <span>Осьминог, Марокко</span>
-                  <strong>1&#8239;900&nbsp;₽/кг</strong>
-                </p>
                 <div class="watch-catch__links">
-                  <a href="catalog/?q=Осьминог%20Марокко">
-                    Открыть в каталоге
-                  </a>
                   <a href="https://t.me/kapitanseledkin/377">
                     Как приготовить в&nbsp;Телеграме
+                  </a>
+                  <a href="catalog/?q=Осьминог%20Марокко">
+                    Открыть в каталоге
                   </a>
                 </div>
               </article>

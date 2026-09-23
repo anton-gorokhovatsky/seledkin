@@ -53,8 +53,13 @@ for (const source of ["", "catalog/", "about/", "journal/"]) {
 test("recipes are on the homepage and each featured product opens matching catalog results", async ({ page }) => {
   await page.goto("#watch-catch");
   const stories = page.locator("#watch-catch");
-  await expect(stories.locator("h2")).toHaveText("Свежий улов");
+  await expect(stories.locator("h2")).toHaveText("Рецепты и советы");
+  await expect(page.locator('#assortment #prices .catalog-product')).toHaveCount(6);
+  await expect(page.locator('#assortment > .source-shell > h2, #assortment h2')).toHaveCount(1);
+  await expect(page.locator('#prices h3')).toHaveText('Цены в лавке');
   await expect(stories.locator(".watch-catch__item")).toHaveCount(4);
+  await expect(stories.locator('.watch-catch__product')).toHaveCount(0);
+  expect(await stories.locator('.watch-catch__links').evaluateAll(groups => groups.map(group => group.querySelector('a').href))).toEqual([506, 412, 610, 377].map(id => `https://t.me/kapitanseledkin/${id}`));
   const links = await stories.getByRole("link", { name: "Открыть в каталоге", exact: true }).evaluateAll(items => items.map(item => item.href));
   for (const [index, name] of ["Сельдь слабосоленая", "Креветка северная в/м", "Кальмар командорский", "Осьминог"].entries()) {
     await page.goto(links[index]);

@@ -677,7 +677,7 @@ test("the watch catch keeps its product stories without rejected draft art", () 
       /<section\s+class="watch-catch source-section"[\s\S]*?<\/section>/,
     )?.[0] ?? "";
 
-  assert.match(section, /<h2 id="watch-catch-title">Свежий улов<\/h2>/);
+  assert.match(section, /<h2 id="watch-catch-title">Рецепты и советы<\/h2>/);
   assert.equal((section.match(/class="watch-catch__item"/g) ?? []).length, 4);
   assert.doesNotMatch(section, /<img\b|watch-catch-(?:herring|shrimp|squid|octopus)\.svg/);
   assert.doesNotMatch(
@@ -1010,7 +1010,7 @@ test("home catalog is a compact projection of the full catalog", () => {
   const preview =
     home.match(/<section class="price-preview[\s\S]*?<\/section>/)?.[0] ?? "";
 
-  assert.match(preview, /<h2 id="prices-title">Продукты и цены<\/h2>/);
+  assert.match(preview, /<h3 id="prices-title">Цены в лавке<\/h3>/);
   assert.equal((preview.match(/class="catalog-product"/g) ?? []).length, 6);
   assert.equal((preview.match(/href="catalog\/"/g) ?? []).length, 1);
   assert.match(preview, /class="catalog-product-head"/);
@@ -1018,7 +1018,7 @@ test("home catalog is a compact projection of the full catalog", () => {
   assert.doesNotMatch(styles, /\.price-preview__grid \.catalog-product\s*\{/);
   assert.match(
     styles,
-    /\.price-preview > \.source-shell\s*\{[^}]*align-items:\s*start;/s,
+    /\.price-preview\s*\{[^}]*align-items:\s*start;/s,
   );
   assert.doesNotMatch(
     preview,
@@ -1642,7 +1642,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=journal-integrated-23-2"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=home-flow-23-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);

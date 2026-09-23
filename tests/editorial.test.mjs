@@ -18,11 +18,23 @@ const plain = text => text.replace(/<[^>]*>/g, "")
 
 test("every original editorial paragraph survives on its published page", () => {
   const paragraphs = [...(home + about + journal).matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(match => plain(match[1]));
-  assert.equal(originals.length, 47);
+  // Catalog UI labels are not author paragraphs. Published price examples
+  // are checked against the current catalog data below.
+  assert.equal(originals.length, 43);
   for (const paragraph of originals) assert.ok(paragraphs.includes(plain(paragraph)), `Lost author paragraph: ${paragraph.slice(0, 80)}`);
   assert.match(home, /href="about\/"/);
   assert.match(home, /href="journal\/"/);
   assert.doesNotMatch(home, /<article\s+class="ship-log-entry/);
+});
+
+test("all homepage price examples agree with the current catalog", () => {
+  const preview = home.match(/<section class="price-preview"[\s\S]*?<\/section>/)?.[0] ?? '';
+  const products = [...preview.matchAll(/<h4>([^<]+)<\/h4><strong>([^<]+)<\/strong>/g)];
+  assert.equal(products.length, 6);
+  const comparable = value => plain(value).replaceAll('ё', 'е');
+  for (const [, name, price] of products) {
+    assert.ok(catalog.some(category => category.items.some(item => comparable(item.name) === comparable(name) && comparable(item.price) === comparable(price))), `Homepage disagrees with catalog: ${plain(name)} ${plain(price)}`);
+  }
 });
 
 test("all journal entries retain their source and a draft about that exact product", () => {

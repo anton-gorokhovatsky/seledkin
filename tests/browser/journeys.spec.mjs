@@ -260,7 +260,7 @@ test("ordinary sections share one continuous surface and delivery keeps its cont
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     for (const width of [320, 390, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      const surfaces = await page.locator(".source-section, .founder-source").evaluateAll(elements => elements.map(e => {
+      const surfaces = await page.locator(".source-section, .price-preview, .founder-source").evaluateAll(elements => elements.map(e => {
         const s = getComputedStyle(e);
         return { image: s.backgroundImage, color: s.backgroundColor };
       }));
