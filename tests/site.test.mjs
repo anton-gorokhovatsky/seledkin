@@ -1704,7 +1704,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=button-alignment-23-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=about-advice-23-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);

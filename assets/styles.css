@@ -1197,6 +1197,51 @@ a.source-brand {
   text-wrap: pretty;
 }
 
+/* The short advice story pairs two complete photographs with one compact
+   introduction. Give it its own proportions within the three-part story. */
+.about-overview__chapter.about-overview__chapter--advice {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 4vw, 4rem);
+  padding: clamp(2.5rem, 5vw, 5rem) var(--content-edge);
+}
+
+.about-overview__chapter--advice .about-overview__chapter-media {
+  grid-column: 1;
+  grid-row: 1;
+  gap: clamp(0.75rem, 1.5vw, 1.5rem);
+}
+
+.about-overview__chapter--advice .about-overview__reason {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 0;
+}
+
+.about-overview__chapter--advice .about-overview__number {
+  margin-bottom: 1rem;
+  font-size: clamp(3rem, 2rem + 2vw, 4.5rem);
+  line-height: 1;
+}
+
+.about-overview__chapter--advice .about-overview__reason h3 {
+  max-width: 20ch;
+  font-size: clamp(2rem, 1.25rem + 1.5vw, 3rem);
+  line-height: 1.12;
+}
+
+@media (max-width: 68.75rem) {
+  .about-overview__chapter.about-overview__chapter--advice {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .about-overview__chapter--advice .about-overview__chapter-media,
+  .about-overview__chapter--advice .about-overview__reason {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
 .founder-source {
   padding: clamp(5rem, 8vw, 7.5rem) 0;
 }
