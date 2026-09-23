@@ -79,8 +79,8 @@
     <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="assets/styles.css?v=journal-navigation-23-1" />
-    <script type="module" src="assets/site.js?v=journal-navigation-23-1"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=journal-integrated-23-2" />
+    <script type="module" src="assets/site.js?v=journal-integrated-23-2"></script>
     <script type="module" src="assets/interface-motion.js"></script>
     <script type="application/ld+json">
       {
@@ -396,35 +396,44 @@
                   aria-label="Показать более новую запись"
                   aria-disabled="true"
                   disabled
+                  hidden
                   data-hero-journal-previous
                 >
                   <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
                     <use href="#icon-harpoon" />
                   </svg>
                 </button>
-                <p class="source-hero__journal-status" aria-live="polite" aria-atomic="true">
+                <p class="source-hero__journal-status" aria-live="polite" aria-atomic="true" hidden>
                   <span aria-hidden="true" data-hero-journal-counter>1 из 5</span>
                   <span class="visually-hidden" data-hero-journal-status>
                     Запись 1 из 5 выбранных: Нежнейшая ряпушка холодного копчения.
                   </span>
                 </p>
-                <button
-                  class="source-hero__journal-control"
-                  type="button"
-                  aria-label="Показать более старую запись"
-                  data-hero-journal-next
-                >
-                  <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
-                    <use href="#icon-harpoon" />
-                  </svg>
-                </button>
+                <span class="source-hero__journal-next-slot">
+                  <button
+                    class="source-hero__journal-control"
+                    type="button"
+                    aria-label="Показать более старую запись"
+                    hidden
+                    data-hero-journal-next
+                  >
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </button>
+                  <a
+                    class="source-hero__journal-control source-hero__journal-control--all"
+                    href="journal/"
+                    aria-label="Открыть весь Судовой журнал"
+                    data-hero-journal-all
+                  >
+                    <span>Журнал</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </a>
+                </span>
               </div>
-              <a class="source-hero__journal-archive" href="journal/" data-hero-journal-all>
-                <span>Все записи журнала</span>
-                <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
-                  <use href="#icon-harpoon" />
-                </svg>
-              </a>
             </div>
           </section>
         </div>

@@ -189,6 +189,9 @@ if (
   let blockNextClick = false;
 
   const syncJournal = () => {
+    heroJournal.dataset.ready = "";
+    heroJournalPrevious.hidden = false;
+    if (heroJournalCounter) heroJournalCounter.closest("p").hidden = false;
     const image = heroJournalCards[currentIndex]?.querySelector("img[data-full-src]");
     if (image) {
       image.srcset = image.dataset.fullSrcset;
@@ -212,6 +215,8 @@ if (
     heroJournalNext.setAttribute("aria-disabled", String(!hasNext));
     heroJournalPrevious.disabled = !hasPrevious;
     heroJournalNext.disabled = !hasNext;
+    heroJournalNext.hidden = !hasNext;
+    heroJournalAll.hidden = hasNext;
 
     const position =
       typographText(String(currentIndex + 1) + " из " + String(heroJournalCards.length));
@@ -225,7 +230,7 @@ if (
         " выбранных" +
         ": " +
         titles[currentIndex] +
-        (hasNext ? "" : ". Последняя выбранная запись."));
+        (hasNext ? "" : ". Последняя выбранная запись. Справа можно открыть весь Судовой журнал."));
     }
   };
 
@@ -238,8 +243,10 @@ if (
     const focusedControl = document.activeElement;
     currentIndex = nextIndex;
     syncJournal();
-    if (focusCard ||
-        (focusedControl === heroJournalNext && heroJournalNext.disabled) ||
+    if (!focusCard && focusedControl === heroJournalNext && heroJournalNext.hidden) {
+      heroJournalAll.focus({ preventScroll: true });
+    } else if (focusCard ||
+        (focusedControl === heroJournalAll && heroJournalAll.hidden) ||
         (focusedControl === heroJournalPrevious && heroJournalPrevious.disabled)) {
       heroJournalCards[currentIndex].focus({ preventScroll: true });
     }

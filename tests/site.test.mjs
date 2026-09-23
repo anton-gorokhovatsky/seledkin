@@ -266,8 +266,8 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(hero, /data-hero-journal-next/);
   assert.match(hero, /data-hero-journal-all/);
   assert.match(hero, /href="journal\/"/);
-  assert.match(hero, />Все записи журнала<\/span>/);
-  const archiveLink = hero.match(/<a class="source-hero__journal-archive"[^>]*>/)?.[0] ?? "";
+  assert.match(hero, />Журнал<\/span>/);
+  const archiveLink = hero.match(/<a\s+class="source-hero__journal-control source-hero__journal-control--all"[^>]*>/)?.[0] ?? "";
   assert.match(archiveLink, /href="journal\/"/);
   assert.doesNotMatch(archiveLink, /hidden|tabindex="-1"/);
   assert.equal((hero.match(/class="source-hero__journal-control"/g) ?? []).length, 2);
@@ -335,7 +335,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /\.js \.source-hero__journal-controls\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) auto minmax\(0, 1fr\);/s,
+    /\.source-hero__journal\[data-ready\] \.source-hero__journal-controls\s*\{[^}]*grid-template-columns:\s*minmax\(min-content, 1fr\) auto minmax\(min-content, 1fr\);/s,
   );
   assert.doesNotMatch(
     styles,
@@ -386,8 +386,9 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     /\.source-hero__journal-control\[aria-disabled="true"\] svg,\s*\.source-hero__journal-control:disabled svg\s*\{[^}]*opacity:\s*0\.38;/s,
   );
   assert.doesNotMatch(hero, /Запись №|source-hero__proof-link|>Перейти к записи в журнале</);
-  assert.doesNotMatch(siteScript, /heroJournal(?:Next|All)\.hidden\s*=/);
-  assert.match(hero, /aria-disabled="true"\s+disabled\s+data-hero-journal-previous/);
+  assert.match(siteScript, /heroJournalNext\.hidden = !hasNext/);
+  assert.match(siteScript, /heroJournalAll\.hidden = hasNext/);
+  assert.match(hero, /aria-disabled="true"\s+disabled\s+hidden\s+data-hero-journal-previous/);
   assert.match(siteScript, /heroJournalPrevious\.disabled = !hasPrevious/);
   assert.match(siteScript, /heroJournalNext\.disabled = !hasNext/);
   assert.match(
@@ -1641,7 +1642,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=journal-navigation-23-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=journal-integrated-23-2"`,
   );
 
   assert.ok(baseBootstrap >= 0);
