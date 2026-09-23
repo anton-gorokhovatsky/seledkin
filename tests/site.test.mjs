@@ -239,8 +239,7 @@ test("home exposes the core customer jobs", () => {
   assert.match(home, /метро «Вавиловская»/);
   const contacts =
     home.match(/<section class="contacts-source"[\s\S]*?<\/section>/)?.[0] ?? "";
-  assert.match(contacts, /Метро\s+«Вавиловская»/);
-  assert.doesNotMatch(contacts, /Университет/);
+  assert.match(contacts, /Метро «Вавиловская» и «Университет»/);
   assert.match(contacts, /Ежедневно с 11:00 до 20:00/);
   assert.doesNotMatch(home + styles, /source-hero__down/);
 });
