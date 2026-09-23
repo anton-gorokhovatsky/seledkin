@@ -1152,12 +1152,6 @@ a.source-brand {
   align-self: center;
 }
 
-.about-overview__chapter-media--pair {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-  align-items: start;
-}
-
 .about-overview__reason {
   display: flex;
   width: 100%;
@@ -1197,8 +1191,7 @@ a.source-brand {
   text-wrap: pretty;
 }
 
-/* The short advice story pairs two complete photographs with one compact
-   introduction. Give it its own proportions within the three-part story. */
+/* Give the preparation photograph a full frame beside the advice story. */
 .about-overview__chapter.about-overview__chapter--advice {
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
   align-items: center;
@@ -1209,7 +1202,6 @@ a.source-brand {
 .about-overview__chapter--advice .about-overview__chapter-media {
   grid-column: 1;
   grid-row: 1;
-  gap: clamp(0.75rem, 1.5vw, 1.5rem);
 }
 
 .about-overview__chapter--advice .about-overview__reason {
@@ -1230,7 +1222,7 @@ a.source-brand {
   line-height: 1.12;
 }
 
-@media (max-width: 68.75rem) {
+@media (max-width: 50rem) {
   .about-overview__chapter.about-overview__chapter--advice {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1278,14 +1270,39 @@ a.source-brand {
 
 .founder-source__principle {
   max-width: 28ch;
-  margin: 0 0 2rem;
+  margin: 0;
   color: var(--blue-deep);
   font-family: var(--serif);
-  font-size: clamp(1.5rem, 2.1vw, 2.05rem);
+  font-size: clamp(1.5rem, 1rem + 1.65vw, 2.65rem);
   font-style: italic;
   font-weight: 400;
   line-height: 1.18;
   text-wrap: balance;
+}
+
+.founder-source__closing {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  margin-top: clamp(4rem, 7vw, 7rem);
+}
+
+.founder-source__dish {
+  min-width: 0;
+  margin: 0;
+}
+
+.founder-source__dish img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 50rem) {
+  .founder-source__closing {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .founder-source__copy p {

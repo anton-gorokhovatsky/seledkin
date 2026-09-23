@@ -105,6 +105,31 @@ test("mobile shopping appears earlier while original photo proportions survive",
   }
 });
 
+test("preparation and cooking photographs each have their own large frame", async ({ page }) => {
+  for (const [width, enlarged] of [[1440, false], [980, false], [390, false], [320, true]]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("about/");
+    if (enlarged) await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
+    await page.evaluate(() => document.fonts.ready);
+    const photos = page.locator('img[data-source-image="../assets/cutting-tuna.jpg"], img[data-source-image="../assets/quote-pan.jpg"]');
+    const frames = await photos.evaluateAll(async images => {
+      await Promise.all(images.map(image => { image.loading = "eager"; return image.decode(); }));
+      return images.map(image => {
+        const rect = image.getBoundingClientRect();
+        return { width: rect.width, height: rect.height, top: rect.top, bottom: rect.bottom, ratio: image.naturalWidth / image.naturalHeight, framePhotos: image.closest("figure").querySelectorAll("img").length };
+      });
+    });
+    expect(frames).toHaveLength(2);
+    for (const frame of frames) {
+      expect(frame.framePhotos).toBe(1);
+      expect(frame.width).toBeGreaterThan(width * (width > 800 ? 0.4 : 0.7));
+      expect(frame.width / frame.height).toBeCloseTo(frame.ratio, 2);
+    }
+    expect(frames[1].top).toBeGreaterThan(frames[0].bottom);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+  }
+});
+
 test("the sea can be paused, stops offscreen, and respects the saved choice across watches", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "no-preference" });
   await context.addInitScript(() => localStorage.setItem("seledkin-theme", "light"));

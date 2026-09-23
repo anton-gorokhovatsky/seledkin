@@ -252,7 +252,6 @@ test("story page keeps Oleg's evidence in three full-bleed editorial stories", (
     "gallery-small-1.jpg",
     "about-small-1.jpg",
     "cutting-tuna.jpg",
-    "quote-pan.jpg",
   ]) {
     assert.match(section, new RegExp(`data-source-image="../assets/${asset.replace(".", "\\.")}"`));
   }
@@ -642,12 +641,13 @@ test("home prioritizes shopping before its editorial story and keeps local image
   assert.match(styles, /"Iowan Old Style"/);
 });
 
-test("the founder story absorbs the principle without standalone interludes", () => {
+test("the founder story closes with Oleg's principle and a complete photograph of the dish", () => {
   const founder =
     aboutPage.match(/<section class="founder-source"[\s\S]*?<\/section>/)?.[0] ?? "";
 
   assert.match(founder, /class="founder-source__principle"/);
   assert.match(founder, /вкус блюда определяется не только навыками повара/);
+  assert.match(founder, /data-source-image="\.\.\/assets\/quote-pan\.jpg"/);
   assert.doesNotMatch(home, /class="full-photo"|class="source-quote"/);
   assert.doesNotMatch(styles, /\.full-photo|\.source-quote/);
   assert.match(
@@ -1704,7 +1704,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=about-advice-23-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=about-photos-23-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);
