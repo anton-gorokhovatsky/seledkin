@@ -484,6 +484,24 @@ a.source-brand {
   transform: translateY(-0.1rem);
 }
 
+/* Centre uppercase labels by their cap height, independent of font/browser
+   baseline metrics. Restore the trimmed leading as equal padding so button
+   heights, wrapped lines and enlarged text keep their existing space. */
+.source-button__label {
+  display: block;
+  min-width: 0;
+}
+
+@supports (text-box: trim-both cap alphabetic) and (padding-block: calc((1lh - 1cap) / 2)) {
+  .source-button__label,
+  .theme-toggle [data-theme-label],
+  .floating-menu__label,
+  .source-hero__journal-control--all > span {
+    text-box: trim-both cap alphabetic;
+    padding-block: calc((1lh - 1cap) / 2);
+  }
+}
+
 .source-button--telegram {
   background: var(--telegram);
 }

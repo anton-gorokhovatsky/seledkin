@@ -1415,7 +1415,7 @@ test("menu, focus and reduced motion remain accessible", () => {
     assert.doesNotMatch(page, /site-menu__phone/);
     const contactActions =
       page.match(/<div class="site-menu__actions">([\s\S]*?)<\/div>/)?.[1] ?? "";
-    assert.equal((contactActions.match(/class="source-button/g) ?? []).length, 3);
+    assert.equal((contactActions.match(/class="source-button(?:\s|")/g) ?? []).length, 3);
     assert.match(page, /class="theme-toggle__moon"/);
     assert.match(page, /class="theme-toggle__sun"/);
     assert.ok(page.includes(`href="${journalPath}"`));
@@ -1704,7 +1704,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=journal-september-23-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=button-alignment-23-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);
