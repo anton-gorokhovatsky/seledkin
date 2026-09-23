@@ -198,62 +198,25 @@ test("home assortment links directly to every catalog section", () => {
   );
 });
 
-test("story page keeps Oleg's evidence in three full-bleed editorial stories", () => {
-  const section =
-    aboutPage.match(/<section\s+class="about-overview[\s\S]*?<\/section>/)?.[0] ?? "";
-
-  assert.match(section, /id="about"/);
-  assert.match(section, /class="about-overview__eyebrow page-intro__eyebrow">О нас<\/p>/);
-  assert.match(
-    section,
-    /id="about-title">\s*Ещё одно место в Москве, где продаётся хорошая рыба\s*<\/h1>/,
-  );
-  assert.match(section, /Почему о нас говорят\?/);
-  assert.match(section, /Во-первых, это качество/);
-  assert.match(section, /Во-вторых, ассортимент/);
-  assert.match(section, /третья фирменная фишка/);
-  assert.equal((section.match(/class="about-overview__reason"/g) ?? []).length, 3);
-  assert.equal((section.match(/<article class="about-overview__chapter/g) ?? []).length, 3);
-  assert.equal((section.match(/<h3>/g) ?? []).length, 3);
-  assert.equal((section.match(/<figure /g) ?? []).length, 4);
-  assert.match(section, /about-overview__chapter about-overview__chapter--reverse/);
-  assert.doesNotMatch(section, /\bdata-about-story|aria-roledescription="карусель"/);
-  assert.doesNotMatch(section, /about-overview__story-control|aria-live="polite"/);
-  assert.doesNotMatch(section, /<(?:button|input|select|textarea)\b/);
-  assert.match(
-    styles,
-    /\.about-overview__opening-media img,[\s\S]*?\.about-overview__chapter-media img[\s\S]*?height:\s*auto;/,
-  );
-  assert.doesNotMatch(
-    styles,
-    /\.about-overview__(?:opening|chapter)-media(?: img)?\s*\{[^}]*object-fit:/s,
-  );
-  assert.match(
-    styles,
-    /\.about-overview__story-stage\s*\{[^}]*width:\s*calc\(100% \+ \(2 \* var\(--content-edge\)\)\);[^}]*background:\s*var\(--story-surface\);/s,
-  );
-  assert.match(
-    styles,
-    /\.about-overview__chapter\s*\{[^}]*grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\);/s,
-  );
-  assert.match(
-    styles,
-    /@media \(max-width: 34rem\)[\s\S]*?\.about-overview__chapter\s*\{[^}]*grid-template-columns:\s*1fr;/s,
-  );
-  assert.match(
-    styles,
-    /\.about-overview__chapter--reverse \.about-overview__chapter-media\s*\{[^}]*grid-column:\s*2;/s,
-  );
-  assert.doesNotMatch(siteScript, /aboutStor(?:y|ies)/);
-  for (const asset of [
-    "flounder.jpg",
-    "gallery-small-1.jpg",
-    "about-small-1.jpg",
-    "cutting-tuna.jpg",
-  ]) {
-    assert.match(section, new RegExp(`data-source-image="../assets/${asset.replace(".", "\\.")}"`));
+test("the about story introduces its owner before three principles and keeps every full photograph", () => {
+  const main = aboutPage.match(/<main\b[\s\S]*?<\/main>/)?.[0] ?? "";
+  const introduction = main.indexOf('id="about"');
+  const founder = main.indexOf('class="founder-source"');
+  const reasons = main.indexOf('class="about-overview__reasons source-section"');
+  const closing = main.indexOf('class="about-closing source-section"');
+  assert.ok(introduction >= 0 && introduction < founder && founder < reasons && reasons < closing);
+  for (const text of ["Ещё одно место в Москве, где продаётся хорошая рыба", "Почему о нас говорят?", "Во-первых, это качество", "Во-вторых, ассортимент", "третья фирменная фишка"]) {
+    assert.ok(main.includes(text));
   }
-  assert.doesNotMatch(section, /<h2>Икра<\/h2>|source-split|source-gallery|why-collage/);
+  assert.equal((main.match(/class="about-overview__reason"/g) ?? []).length, 3);
+  assert.equal((main.match(/<article class="about-overview__chapter/g) ?? []).length, 3);
+  assert.equal((main.match(/<h3>/g) ?? []).length, 3);
+  assert.doesNotMatch(main, /\bdata-about-story|aria-roledescription="карусель"|about-overview__story-control/);
+  assert.doesNotMatch(siteScript, /aboutStor(?:y|ies)/);
+  for (const asset of ["flounder.jpg", "oleg-gugunava.jpg", "gallery-small-1.jpg", "about-small-1.jpg", "cutting-tuna.jpg", "quote-pan.jpg"]) {
+    assert.ok(main.includes(`data-source-image="../assets/${asset}"`));
+  }
+  assert.doesNotMatch(styles, /\.about-overview__(?:opening|chapter)-media(?: img)?\s*\{[^}]*object-fit:/s);
 });
 
 test("home exposes the core customer jobs", () => {
@@ -608,13 +571,6 @@ test("home prioritizes shopping before its editorial story and keeps local image
     }
   }
 
-  const founderGrid =
-    styles.match(/\.founder-source__inner\s*\{([^}]*)\}/s)?.[1] ?? "";
-  assert.match(founderGrid, /align-items:\s*start;/);
-  assert.doesNotMatch(
-    styles,
-    /\.source-quote__inner,\s*\.founder-source__inner\s*\{[^}]*align-items:\s*center;/s,
-  );
 
   assert.doesNotMatch(home, /Feed not found|уточняйте цены|Друзья!/i);
   assert.doesNotMatch(home + catalogPage + styles, /tildacdn\.com/i);
@@ -639,11 +595,12 @@ test("home prioritizes shopping before its editorial story and keeps local image
   assert.match(styles, /"Iowan Old Style"/);
 });
 
-test("the founder story closes with Oleg's principle and a complete photograph of the dish", () => {
+test("the photo essay closes with Oleg's principle, a complete dish photograph and the catalog", () => {
   const founder =
-    aboutPage.match(/<section class="founder-source"[\s\S]*?<\/section>/)?.[0] ?? "";
+    aboutPage.match(/<section class="about-closing source-section"[\s\S]*?<\/section>/)?.[0] ?? "";
 
   assert.match(founder, /class="founder-source__principle"/);
+  assert.match(founder, /href="\.\.\/catalog\/"/);
   assert.match(founder, /вкус блюда определяется не только навыками повара/);
   assert.match(founder, /data-source-image="\.\.\/assets\/quote-pan\.jpg"/);
   assert.doesNotMatch(home, /class="full-photo"|class="source-quote"/);
@@ -1702,7 +1659,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=typography-23-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=about-story-23-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);
