@@ -132,14 +132,24 @@ test("the complete journal follows the first mobile screen and desktop controls 
       await active.locator("img").evaluate(image => image.decode());
       await active.evaluate(element => Promise.allSettled(element.getAnimations({ subtree: true }).map(animation => animation.finished)));
       // Read one layout frame: lazy media or scrolling must not mix coordinates.
-      const { box, right, row } = await page.evaluate((last) => {
+      const { box, right, row, archive, icons } = await page.evaluate(() => {
         const rect = (selector) => document.querySelector(selector).getBoundingClientRect().toJSON();
         return {
           box: rect("[data-hero-journal-counter]"),
-          right: rect(last ? "[data-hero-journal-all]" : "[data-hero-journal-next]"),
+          right: rect("[data-hero-journal-next]"),
+          archive: rect("[data-hero-journal-all]"),
+          icons: [...document.querySelectorAll(".source-hero__journal-navigation svg")].map(el => el.getBoundingClientRect().width),
           row: rect(".source-hero__journal-controls"),
         };
-      }, index === 5);
+      });
+      await expect(page.locator("[data-hero-journal-all]")).toBeVisible();
+      await expect(page.locator("[data-hero-journal-next]")).toBeVisible();
+      if (index === 5) await expect(page.locator("[data-hero-journal-next]")).toBeDisabled();
+      else await expect(page.locator("[data-hero-journal-next]")).toBeEnabled();
+      expect(archive.y).toBeGreaterThanOrEqual(row.y + row.height);
+      expect(archive.height).toBeGreaterThanOrEqual(44);
+      expect(icons).toHaveLength(3);
+      expect(icons.every(width => Math.abs(width - icons[0]) < .1)).toBe(true);
       expect(box.x + box.width / 2).toBeCloseTo(center, 0);
       expect(right.x).toBeGreaterThanOrEqual(box.x + box.width + 4);
       // Existing hover lifts the control by 1.28px; it must still occupy one row.
@@ -153,7 +163,7 @@ test("the complete journal follows the first mobile screen and desktop controls 
         expect(photo.y).toBeGreaterThanOrEqual(0);
         expect(caption.y).toBeGreaterThanOrEqual(photo.y + photo.height + 8);
         expect(caption.y + caption.height).toBeLessThanOrEqual(row.y - 8);
-        expect(row.y + row.height).toBeLessThanOrEqual(height);
+        expect(archive.y + archive.height).toBeLessThanOrEqual(height);
       }
       if (index < 5) {
         // Controls are already visible. A real pointer avoids Playwright's
@@ -168,11 +178,27 @@ test("the complete journal follows the first mobile screen and desktop controls 
     await expect(counter).toHaveText("4 из 5");
     await page.keyboard.press("ArrowRight");
     await expect(counter).toHaveText("5 из 5");
+    const lastCard = page.locator('[data-hero-journal-card][data-stack-position="0"]');
+    await expect(lastCard).toBeFocused();
+    await page.keyboard.press("ArrowRight");
+    await expect(lastCard).toBeFocused();
+    await expect(counter).toHaveText("5 из 5");
     await noOverflow(page);
     await page.screenshot({ path: testInfo.outputPath(`hero-${width}-${height}-journal.png`) });
     await page.locator("[data-hero-journal-all]").click();
     await expect(page).toHaveURL(/journal\/$/);
   }
+});
+
+test("the full journal remains directly available without JavaScript", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 664 } });
+  const page = await context.newPage();
+  await page.goto(baseURL);
+  const archive = page.getByRole("link", { name: "Все записи журнала", exact: true }).first();
+  await expect(archive).toBeVisible();
+  await archive.click();
+  await expect(page).toHaveURL(/journal\/$/);
+  await context.close();
 });
 
 test("all pages and open navigation pass axe in both watches", async ({ browser, baseURL }, testInfo) => {

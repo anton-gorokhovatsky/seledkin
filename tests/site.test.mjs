@@ -266,17 +266,11 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   assert.match(hero, /data-hero-journal-next/);
   assert.match(hero, /data-hero-journal-all/);
   assert.match(hero, /href="journal\/"/);
-  assert.match(hero, /aria-label="Открыть весь Судовой журнал"/);
-  assert.match(hero, />Журнал<\/span>/);
-  const heroJournalNextSlot =
-    hero.match(/<span class="source-hero__journal-next-slot">([\s\S]*?)<\/span>/)?.[1] ??
-    "";
-  assert.match(heroJournalNextSlot, /data-hero-journal-next/);
-  assert.match(heroJournalNextSlot, /data-hero-journal-all/);
-  assert.equal(
-    (hero.match(/source-hero__journal-control(?:\s|")/g) ?? []).length,
-    3,
-  );
+  assert.match(hero, />Все записи журнала<\/span>/);
+  const archiveLink = hero.match(/<a class="source-hero__journal-archive"[^>]*>/)?.[0] ?? "";
+  assert.match(archiveLink, /href="journal\/"/);
+  assert.doesNotMatch(archiveLink, /hidden|tabindex="-1"/);
+  assert.equal((hero.match(/class="source-hero__journal-control"/g) ?? []).length, 2);
   assert.match(hero, /aria-live="polite"/);
   assert.match(styles, /\.source-hero__journal-stack\s*\{[\s\S]*?touch-action:\s*pan-y;/);
   assert.match(styles, /\.source-hero__journal-card\[aria-hidden="true"\] figcaption/);
@@ -341,25 +335,13 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.match(
     styles,
-    /@media \(max-width: 61\.1875rem\)[\s\S]*?\.source-hero__journal-control\s*\{[^}]*width:\s*44px;[^}]*min-width:\s*44px;[^}]*height:\s*44px;[^}]*\}[\s\S]*?\.source-hero__journal-next-slot\s*\{[^}]*width:\s*100%;[^}]*min-width:\s*44px;[^}]*height:\s*44px;[^}]*\}[\s\S]*?\.source-hero__journal-control--all\s*\{[^}]*width:\s*auto;[^}]*min-width:\s*6\.75rem;/,
-  );
-  assert.match(
-    styles,
     /\.js \.source-hero__journal-controls\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) auto minmax\(0, 1fr\);/s,
   );
   assert.doesNotMatch(
     styles,
     /\.js \.source-hero__journal-controls\s*\{[^}]*grid-template-columns:\s*(?:2\.75rem|44px)/s,
   );
-  assert.match(
-    styles,
-    /\.source-hero__journal-control--all\s*\{[^}]*min-width:\s*6\.75rem;[^}]*padding-inline:\s*0\.75rem;[^}]*gap:\s*0\.5rem;[^}]*font-size:\s*var\(--text-meta\);/s,
-  );
   assert.doesNotMatch(styles, /journal-all-label--short/);
-  assert.doesNotMatch(
-    styles,
-    /\.source-hero__journal-control,\s*\.source-hero__journal-next-slot\s*\{\s*width:\s*44px;/s,
-  );
   assert.doesNotMatch(
     styles,
     /\.source-hero__journal-stack\s*\{[^}]*width:\s*min\(74vw, 18rem\);/,
@@ -404,7 +386,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     /\.source-hero__journal-control\[aria-disabled="true"\] svg,\s*\.source-hero__journal-control:disabled svg\s*\{[^}]*opacity:\s*0\.38;/s,
   );
   assert.doesNotMatch(hero, /Запись №|source-hero__proof-link|>Перейти к записи в журнале</);
-  assert.match(siteScript, /heroJournalNext\.hidden = !hasNext/);
+  assert.doesNotMatch(siteScript, /heroJournal(?:Next|All)\.hidden\s*=/);
   assert.match(hero, /aria-disabled="true"\s+disabled\s+data-hero-journal-previous/);
   assert.match(siteScript, /heroJournalPrevious\.disabled = !hasPrevious/);
   assert.match(siteScript, /heroJournalNext\.disabled = !hasNext/);
@@ -412,7 +394,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     styles,
     /\.source-hero__journal-control:not\(\[aria-disabled="true"\]\):not\(:disabled\):active\s*\{[^}]*background:\s*var\(--jelly-glass-surface-strong\);[^}]*transform:\s*translateY\(0\.04rem\) scale\(0\.96\);/s,
   );
-  assert.match(siteScript, /heroJournalAll\.hidden = hasNext/);
+
   assert.match(siteScript, /heroJournalCounter\.textContent = position/);
   assert.match(
     siteScript,
@@ -1659,7 +1641,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=about-story-23-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=journal-navigation-23-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);

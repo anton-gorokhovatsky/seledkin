@@ -212,9 +212,6 @@ if (
     heroJournalNext.setAttribute("aria-disabled", String(!hasNext));
     heroJournalPrevious.disabled = !hasPrevious;
     heroJournalNext.disabled = !hasNext;
-    heroJournalNext.hidden = !hasNext;
-    heroJournalAll.hidden = hasNext;
-    heroJournalAll.tabIndex = hasNext ? -1 : 0;
 
     const position =
       typographText(String(currentIndex + 1) + " из " + String(heroJournalCards.length));
@@ -228,7 +225,7 @@ if (
         " выбранных" +
         ": " +
         titles[currentIndex] +
-        (hasNext ? "" : ". Следующее действие — открыть весь Судовой журнал."));
+        (hasNext ? "" : ". Последняя выбранная запись."));
     }
   };
 
@@ -238,9 +235,12 @@ if (
       Math.min(heroJournalCards.length - 1, index),
     );
     if (nextIndex === currentIndex) return;
+    const focusedControl = document.activeElement;
     currentIndex = nextIndex;
     syncJournal();
-    if (focusCard) {
+    if (focusCard ||
+        (focusedControl === heroJournalNext && heroJournalNext.disabled) ||
+        (focusedControl === heroJournalPrevious && heroJournalPrevious.disabled)) {
       heroJournalCards[currentIndex].focus({ preventScroll: true });
     }
   };
@@ -277,11 +277,7 @@ if (
       showJournalCard(currentIndex - 1, { focusCard: true });
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
-      if (currentIndex === heroJournalCards.length - 1) {
-        heroJournalAll.focus();
-      } else {
-        showJournalCard(currentIndex + 1, { focusCard: true });
-      }
+      showJournalCard(currentIndex + 1, { focusCard: true });
     }
   });
 
