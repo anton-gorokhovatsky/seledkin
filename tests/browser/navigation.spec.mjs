@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 const routes = [
   ["Что продаём", "#assortment", "#assortment h2"],
@@ -8,6 +9,22 @@ const routes = [
   ["О нас", "about/", "main h1"],
   ["Судовой журнал", "journal/", "main h1"],
 ];
+
+test("a missing nested URL retains the catalog route and images without JavaScript on the custom domain", async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  const missing = new URL("missing/old-tilda-page/", baseURL).href;
+  const body = await readFile(new URL("../../404.html", import.meta.url), "utf8");
+  await page.route(missing, route => route.fulfill({ status: 404, contentType: "text/html", body }));
+  await page.goto(missing);
+  await expect(page.locator("h1")).toHaveText("Такой страницы в лавке нет.");
+  await expect(page.locator(".not-found-source__brand img")).toHaveJSProperty("naturalWidth", 3600);
+  const catalog = page.getByRole("link", { name: "Открыть каталог", exact: true });
+  expect(await catalog.evaluate(link => link.href)).toBe(new URL("catalog/", baseURL).href);
+  await catalog.click();
+  await expect(page.locator(".catalog-product")).toHaveCount(114);
+  await context.close();
+});
 
 for (const source of ["", "catalog/", "about/", "journal/"]) {
   test(`all menu destinations work from ${source || "home"} on desktop and mobile`, async ({ page, baseURL }) => {

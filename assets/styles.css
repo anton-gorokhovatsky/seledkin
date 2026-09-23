@@ -4197,12 +4197,15 @@ a.site-menu__brand {
 .about-preview__copy .source-button {
   margin-top: 1rem;
 }
+.journal-preview > .source-shell {
+  container-type: inline-size;
+}
 .journal-preview__header {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
 .journal-preview h2, .journal-page .ship-log__header h1 {
   font-size: clamp(2.5rem, 5.4vw, 5rem);
@@ -4213,34 +4216,51 @@ a.site-menu__brand {
 .journal-preview__list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.5rem, 3vw, 3rem);
+  gap: clamp(1.5rem, 4vw, 4rem);
 }
 .journal-preview__entry {
   display: grid;
-  grid-template-columns: 5rem minmax(0, 1fr);
-  gap: 1rem;
-  align-items: start;
+  grid-template-rows: auto 1fr;
+  gap: 1.25rem;
+  min-width: 0;
   color: var(--ink);
   text-decoration: none;
 }
+.journal-preview__media {
+  display: flex;
+  height: clamp(15rem, 25vw, 23rem);
+  align-items: end;
+}
 .journal-preview__entry img {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left bottom;
+}
+.journal-preview__copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: start;
 }
 .journal-preview__entry time {
   display: block;
-  margin-bottom: .5rem;
+  margin-bottom: .75rem;
   color: var(--muted);
   font-size: var(--text-meta);
 }
 .journal-preview__entry h3 {
-  font-size: clamp(1.35rem, 1.6vw, 1.7rem);
-  line-height: 1.2;
+  max-width: 20ch;
+  margin-bottom: 1rem;
+  font-size: clamp(1.65rem, 2.25vw, 2.25rem);
+  line-height: 1.12;
   font-weight: 400;
 }
-.journal-preview__entry span {
+.journal-preview__link {
   display: inline-flex;
   min-height: 2.75rem;
+  margin-top: auto;
   align-items: center;
   font-size: var(--text-interface);
   color: var(--text-link);
@@ -4250,6 +4270,17 @@ a.site-menu__brand {
 .journal-preview__entry:hover h3 {
   text-decoration: underline;
   text-underline-offset: .15em;
+}
+@container (max-width: 18rem) {
+  .journal-preview h2 {
+    font-size: clamp(1.6rem, 12cqi, 2.5rem);
+  }
+  .journal-preview .journal-preview__entry {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .journal-preview__media {
+    width: min(100%, 12rem);
+  }
 }
 .journal-page .ship-log {
   padding-top: clamp(2rem, 4vw, 4rem);
@@ -4317,9 +4348,24 @@ a.site-menu__brand {
   }
   .journal-preview__list {
     grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
   }
   .journal-preview__entry {
-    grid-template-columns: min(20vw, 5rem) minmax(0, 1fr);
+    grid-template-columns: min(31vw, 8.5rem) minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 1.25rem;
+  }
+  .journal-preview__media {
+    height: auto;
+    align-items: start;
+  }
+  .journal-preview__entry img {
+    width: 100%;
+    height: auto;
+  }
+  .journal-preview__entry h3 {
+    font-size: clamp(1.35rem, 4.7vw, 1.75rem);
+    margin-bottom: .5rem;
   }
   .source-hero > .sea-motion-toggle {
     bottom: 1.25rem;

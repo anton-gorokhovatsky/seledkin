@@ -269,10 +269,10 @@ test("home exposes the core customer jobs", () => {
   assert.match(hero, /href="catalog\/"/);
   assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
-  assert.match(hero, /href="journal\/#journal-entry-684"/);
-  assert.match(hero, /data-source-image="assets\/journal-684\.jpg"/);
-  assert.match(hero, /datetime="2026-08-29"/);
-  assert.match(hero, /Икряная камбала холодного копчения уже в&nbsp;Селёдкине/);
+  assert.match(hero, /href="journal\/#journal-entry-694"/);
+  assert.match(hero, /data-source-image="assets\/journal-694\.jpg"/);
+  assert.match(hero, /datetime="2026-09-22"/);
+  assert.match(hero, /Нежнейшая ряпушка холодного копчения/);
   assert.doesNotMatch(hero, /src="assets\/about-main\.jpg"/);
   assert.doesNotMatch(hero, /Из ассортимента лавки/);
   assert.match(home, /метро «Вавиловская»/);
@@ -295,7 +295,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     /Переключайте записи кнопками или клавишами со стрелками влево и вправо\./,
   );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 5);
-  for (const id of [688, 687, 686, 685, 684]) {
+  for (const id of [694, 693, 692, 691, 690]) {
     assert.match(hero, new RegExp("href=\"journal/#journal-entry-" + id + "\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }
@@ -699,8 +699,8 @@ test("the typographic scale protects reading and interface text", () => {
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(journalPage, /id="journal"/);
   assert.match(journalPage, /<h1 id="journal-title">Судовой журнал<\/h1>/);
-  assert.equal((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 9);
-  for (const id of [688, 687, 686, 685, 684, 683, 682, 681, 680]) {
+  assert.equal((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 15);
+  for (const id of [694, 693, 692, 691, 690, 689, 688, 687, 686, 685, 684, 683, 682, 681, 680]) {
     assert.match(
       journalPage,
       new RegExp(
@@ -711,7 +711,7 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.match(journalPage, /https:\/\/t\.me\/kapitanseledkin"/);
 
   let cursor = -1;
-  for (const id of [688, 687, 686, 685, 684, 683, 682, 681, 680]) {
+  for (const id of [694, 693, 692, 691, 690, 689, 688, 687, 686, 685, 684, 683, 682, 681, 680]) {
     const next = journalPage.indexOf(`https://t.me/kapitanseledkin/${id}`, cursor + 1);
     assert.ok(next > cursor, `Запись ${id} должна идти в обратной хронологии`);
     assert.match(journalPage, new RegExp(`assets/journal-${id}\\.jpg`));
@@ -1694,17 +1694,18 @@ test("Night Watch keeps the original blue logo ink instead of inverting it", () 
 
 test("the custom 404 resolves assets and actions from the deployment root", () => {
   const baseBootstrap = notFoundPage.indexOf(
-    `const base = document.createElement("base")`,
+    `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=mobile-journal-second-screen-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=journal-september-23-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);
   assert.ok(firstRelativeAsset > baseBootstrap);
+  assert.match(notFoundPage, /<base href="\/" \/>/);
   assert.match(
     notFoundPage,
-    /window\.location\.hostname\.endsWith\("\.github\.io"\)[\s\S]*?"\/seledkin\/"[\s\S]*?document\.head\.append\(base\)/,
+    /window\.location\.hostname\.endsWith\("\.github\.io"\)[\s\S]*?"\/seledkin\/"[\s\S]*?: "\/"/,
   );
 });
 
@@ -1947,8 +1948,8 @@ test("the agreed source assets stay unchanged", async () => {
   }
 });
 
-test("main and catalog publish Pages-native social metadata", () => {
-  const root = "https://anton-gorokhovatsky.github.io/seledkin/";
+test("main and catalog publish custom-domain social metadata", () => {
+  const root = "https://ks.fish/";
   const image = root + "assets/share-card-primary.jpg";
   const imageAlt =
     "Свежая рыба со специями и логотип Рыбной лавки капитана Селедкина";
@@ -2012,13 +2013,13 @@ test("main and catalog publish Pages-native social metadata", () => {
   assert.match(shareCardSource, /href="logo-redrawn\.svg"/);
   assert.doesNotMatch(shareCardSource, /logo-redrawn-night\.svg/);
   assert.match(shareCardSource, /fill="#ffffff"/);
-  assert.doesNotMatch(home + catalogPage, /https:\/\/ks\.fish\//);
+  assert.doesNotMatch(home + catalogPage + aboutPage + journalPage, /https:\/\/anton-gorokhovatsky\.github\.io\/seledkin\//);
   assert.ok(home.includes(`"url": "${root}"`));
   assert.ok(home.includes(`"image": "${image}"`));
 });
 
 test("search engines receive the current four-page public map", () => {
-  const root = "https://anton-gorokhovatsky.github.io/seledkin/";
+  const root = "https://ks.fish/";
   assert.match(robots, /^User-agent: \*\nAllow: \/\n/m);
   assert.ok(robots.includes(`Sitemap: ${root}sitemap.xml`));
   assert.match(sitemap, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
@@ -2027,4 +2028,15 @@ test("search engines receive the current four-page public map", () => {
   assert.ok(sitemap.includes(`<loc>${root}journal/</loc>`));
   assert.ok(sitemap.includes(`<loc>${root}about/</loc>`));
   assert.equal((sitemap.match(/<url>/g) ?? []).length, 4);
+});
+
+test("the custom domain is consistent across all pages and the deployment artifact", async () => {
+  assert.equal((await readFile(new URL("../CNAME", import.meta.url), "utf8")).trim(), "ks.fish");
+  for (const [html, path] of [[home, ""], [catalogPage, "catalog/"], [aboutPage, "about/"], [journalPage, "journal/"]]) {
+    assert.ok(html.includes(`<link rel="canonical" href="https://ks.fish/${path}" />`));
+    assert.ok(html.includes(`<meta property="og:url" content="https://ks.fish/${path}" />`));
+    assert.doesNotMatch(html, /https:\/\/anton-gorokhovatsky\.github\.io\/seledkin\//);
+  }
+  const workflow = await readFile(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8");
+  assert.match(workflow, /cp index\.html 404\.html robots\.txt sitemap\.xml CNAME \.nojekyll _site\//);
 });

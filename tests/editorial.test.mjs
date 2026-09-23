@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { catalog } from "../assets/catalog-data.js";
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 const [home, about, journal, originals] = await Promise.all([
   read("index.html"), read("about/index.html"), read("journal/index.html"),
@@ -20,11 +21,11 @@ test("every original editorial paragraph survives on its published page", () => 
 });
 
 test("all journal entries retain their source and a draft about that exact product", () => {
-  const names = ["Паштет", "Уха", "Черноморский бычок", "Филе форели", "Икряная камбала", "Филе сельди", "тугунок", "Икра дикого кижуча", "барабуля"];
+  const names = ["Ряпушка", "Стейк чилийского лосося", "Филе трески", "Радужная форель", "Скумбрия", "Чир", "Паштет", "Уха", "Черноморский бычок", "Филе форели", "Икряная камбала", "Филе сельди", "тугунок", "Икра дикого кижуча", "барабуля"];
   const entries = [...journal.matchAll(/<article\s+class="ship-log-entry[\s\S]*?<\/article>/g)].map(match => match[0]);
-  assert.equal(entries.length, 9);
+  assert.equal(entries.length, 15);
   entries.forEach((entry, index) => {
-    const id = 688 - index;
+    const id = 694 - index;
     const inquiry = entry.match(/href="(https:\/\/t\.me\/\+79166751452\?text=[^"]+)"/)[1];
     const draft = new URL(inquiry).searchParams.get("text");
     assert.ok(draft.includes(names[index]));
@@ -45,5 +46,18 @@ test("September updates preserve each dated author paragraph and source", async 
     assert.ok(entry.includes(`href="${post.source}"`));
     assert.ok(plain(entry).includes(plain(post.title)));
     for (const paragraph of post.paragraphs) assert.ok(plain(entry).includes(plain(paragraph)), `Changed author text in ${post.id}: ${paragraph}`);
+  }
+});
+
+test("catalog prices agree with the five unambiguous September source updates", () => {
+  const products = catalog.flatMap(category => category.items);
+  for (const [name, price] of [
+    ["Чир", "2200 ₽/кг"],
+    ["Филе трески", "2480 ₽/кг"],
+    ["Стейк лосося", "2990 ₽/кг"],
+    ["Скумбрия горячего копчения", "1640 ₽/кг"],
+    ["Скумбрия холодного копчения", "1640 ₽/кг"],
+  ]) {
+    assert.equal(products.find(product => product.name === name)?.price, price, name);
   }
 });

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://anton-gorokhovatsky.github.io/seledkin/sitemap.xml
+Sitemap: https://ks.fish/sitemap.xml
