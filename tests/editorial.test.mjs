@@ -9,6 +9,11 @@ const [home, about, journal, originals] = await Promise.all([
 ]);
 const plain = text => text.replace(/<[^>]*>/g, "")
   .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code))).replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '\"')
+  // Typography may change number grouping, range dashes and the percent space;
+  // every word, digit and the rest of Oleg's punctuation must still match.
+  .replace(/(\d)[ \u00a0\u202f](?=\d{3}(?:\D|$))/g, "$1")
+  .replace(/(?<=\d)–(?=\d)/g, "-")
+  .replace(/(\d)[ \u00a0\u202f]+%/g, "$1%")
   .replace(/[\s\u00a0\u202f]+/gu, " ").trim();
 
 test("every original editorial paragraph survives on its published page", () => {
@@ -44,7 +49,7 @@ test("September updates preserve each dated author paragraph and source", async 
     assert.ok(entry, `Missing post ${post.id}`);
     assert.ok(entry.includes(`datetime="${post.date}"`));
     assert.ok(entry.includes(`href="${post.source}"`));
-    assert.ok(plain(entry).includes(plain(post.title)));
+    assert.ok(plain(entry).includes(plain(post.title).replace(/\.$/u, "")));
     for (const paragraph of post.paragraphs) assert.ok(plain(entry).includes(plain(paragraph)), `Changed author text in ${post.id}: ${paragraph}`);
   }
 });

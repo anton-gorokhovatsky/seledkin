@@ -17,7 +17,7 @@ test("a missing nested URL retains the catalog route and images without JavaScri
   const body = await readFile(new URL("../../404.html", import.meta.url), "utf8");
   await page.route(missing, route => route.fulfill({ status: 404, contentType: "text/html", body }));
   await page.goto(missing);
-  await expect(page.locator("h1")).toHaveText("Такой страницы в лавке нет.");
+  await expect(page.locator("h1")).toHaveText("Такой страницы в лавке нет");
   await expect(page.locator(".not-found-source__brand img")).toHaveJSProperty("naturalWidth", 3600);
   const catalog = page.getByRole("link", { name: "Открыть каталог", exact: true });
   expect(await catalog.evaluate(link => link.href)).toBe(new URL("catalog/", baseURL).href);

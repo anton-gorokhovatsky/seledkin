@@ -1,4 +1,4 @@
-import "./typography.js";
+import { typographText } from "./typography.js?v=typography-23-1";
 import "./theme.js?v=shop-journeys-2";
 import { syncMenuSeaVideo } from "./sea-motion.js?v=hero-priority-1";
 
@@ -217,18 +217,18 @@ if (
     heroJournalAll.tabIndex = hasNext ? -1 : 0;
 
     const position =
-      String(currentIndex + 1) + " из " + String(heroJournalCards.length);
+      typographText(String(currentIndex + 1) + " из " + String(heroJournalCards.length));
     if (heroJournalCounter) {
       heroJournalCounter.textContent = position;
     }
     if (heroJournalStatus) {
       heroJournalStatus.textContent =
-        "Запись " +
+        typographText("Запись " +
         position +
         " выбранных" +
         ": " +
         titles[currentIndex] +
-        (hasNext ? "" : ". Следующее действие — открыть весь Судовой журнал.");
+        (hasNext ? "" : ". Следующее действие — открыть весь Судовой журнал."));
     }
   };
 

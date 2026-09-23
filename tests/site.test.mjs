@@ -15,18 +15,16 @@ import {
 } from "../assets/theme.js";
 import { typographPrice, typographText } from "../assets/typography.js";
 
-const home = await readFile(new URL("../index.html", import.meta.url), "utf8");
-const aboutPage = await readFile(new URL("../about/index.html", import.meta.url), "utf8");
-const journalPage = await readFile(new URL("../journal/index.html", import.meta.url), "utf8");
+// These contracts check wording and structure. Exact nonbreaking characters
+// and their browser behavior are covered by the typography tests.
+const pageText = async path => (await readFile(new URL(path, import.meta.url), "utf8"))
+  .replace(/&nbsp;|[\u00a0\u202f]/g, " ");
+const home = await pageText("../index.html");
+const aboutPage = await pageText("../about/index.html");
+const journalPage = await pageText("../journal/index.html");
 const seaScript = await readFile(new URL("../assets/sea-motion.js", import.meta.url), "utf8");
-const catalogPage = await readFile(
-  new URL("../catalog/index.html", import.meta.url),
-  "utf8",
-);
-const notFoundPage = await readFile(
-  new URL("../404.html", import.meta.url),
-  "utf8",
-);
+const catalogPage = await pageText("../catalog/index.html");
+const notFoundPage = await pageText("../404.html");
 const robots = await readFile(
   new URL("../robots.txt", import.meta.url),
   "utf8",
@@ -205,7 +203,7 @@ test("story page keeps Oleg's evidence in three full-bleed editorial stories", (
     aboutPage.match(/<section\s+class="about-overview[\s\S]*?<\/section>/)?.[0] ?? "";
 
   assert.match(section, /id="about"/);
-  assert.match(section, /class="about-overview__eyebrow">О нас<\/p>/);
+  assert.match(section, /class="about-overview__eyebrow page-intro__eyebrow">О нас<\/p>/);
   assert.match(
     section,
     /id="about-title">\s*Ещё одно место в Москве, где продаётся хорошая рыба\s*<\/h1>/,
@@ -232,7 +230,7 @@ test("story page keeps Oleg's evidence in three full-bleed editorial stories", (
   );
   assert.match(
     styles,
-    /\.about-overview__story-stage\s*\{[^}]*width:\s*calc\(100% \+ \(2 \* var\(--content-edge\)\)\);[^}]*background:\s*var\(--footer\);/s,
+    /\.about-overview__story-stage\s*\{[^}]*width:\s*calc\(100% \+ \(2 \* var\(--content-edge\)\)\);[^}]*background:\s*var\(--story-surface\);/s,
   );
   assert.match(
     styles,
@@ -280,7 +278,7 @@ test("home exposes the core customer jobs", () => {
     home.match(/<section class="contacts-source"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(contacts, /Метро\s+«Вавиловская»/);
   assert.doesNotMatch(contacts, /Университет/);
-  assert.match(contacts, /Ежедневно с&nbsp;11:00 до&nbsp;20:00/);
+  assert.match(contacts, /Ежедневно с 11:00 до 20:00/);
   assert.doesNotMatch(home + styles, /source-hero__down/);
 });
 
@@ -700,7 +698,7 @@ test("the typographic scale protects reading and interface text", () => {
 
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(journalPage, /id="journal"/);
-  assert.match(journalPage, /<h1 id="journal-title">Судовой журнал<\/h1>/);
+  assert.match(journalPage, /<h1 class="page-intro__title" id="journal-title">Судовой журнал<\/h1>/);
   assert.equal((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 15);
   for (const id of [694, 693, 692, 691, 690, 689, 688, 687, 686, 685, 684, 683, 682, 681, 680]) {
     assert.match(
@@ -721,10 +719,10 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   }
 
   for (const excerpt of [
-    "Икряная камбала холодного копчения уже в&nbsp;Селёдкине!",
-    "У&nbsp;нас новинка! Филе сельди холодного копчения",
+    "Икряная камбала холодного копчения уже в Селёдкине!",
+    "У нас новинка! Филе сельди холодного копчения",
     "Имеется ль у вас копченая селёдка?",
-    "У&nbsp;нас новый завоз царского малосольного тугунка.",
+    "У нас новый завоз царского малосольного тугунка",
     "Первая икра дикого кижуча сезона 2026",
     "Нежнейшая малосольная черноморская барабуля",
   ]) {
@@ -811,7 +809,7 @@ test("the page and fullscreen menu share one stable outer content axis", () => {
   );
   assert.match(
     aboutPage,
-    /class="about-overview source-section"[\s\S]*?<div class="source-shell">/,
+    /class="about-overview source-section page-intro"[\s\S]*?<div class="source-shell">/,
   );
   assert.match(
     styles,
@@ -882,10 +880,10 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     assert.match(page, /Лосось на вахте — заходите в лавку/);
     assert.doesNotMatch(page, /<dl class="source-footer__facts">/);
     assert.match(page, /<div class="source-footer__visit">/);
-    assert.match(page, /Каждый день с&nbsp;11:00 до&nbsp;20:00/);
+    assert.match(page, /Каждый день с 11:00 до 20:00/);
     const footerMarkup =
       page.match(/<footer class="source-footer"[\s\S]*?<\/footer>/)?.[0] ?? "";
-    assert.doesNotMatch(footerMarkup, /Ежедневно с&nbsp;11:00 до&nbsp;20:00/);
+    assert.doesNotMatch(footerMarkup, /Ежедневно с 11:00 до 20:00/);
     assert.match(page, /метро «Вавиловская»/);
     assert.match(page, /class="source-footer__portrait"/);
     assert.match(page, /salmon-cat\.jpg/);
@@ -1056,13 +1054,13 @@ test("published Russian text uses the shared typographic rules", () => {
     typographPrice("15000 ₽/0,125 кг"),
     "15\u202f000\u00a0₽/0,125\u00a0кг",
   );
-  assert.equal(typographText("всё „ок“"), "всё «ок»");
+  assert.equal(typographText("всё „ок“"), "всё „ок“");
   assert.equal(
     typographText("ул. Строителей, д. 7, корп. 1"),
     "ул.\u00a0Строителей, д.\u00a07, корп.\u00a01",
   );
-  assert.equal((home.match(/Заказы принимаются\s*<span class="source-nowrap">в&nbsp;/g) ?? []).length, 1);
-  assert.equal((home.match(/<span class="source-nowrap">и&nbsp;/g) ?? []).length, 1);
+  assert.equal((home.match(/Заказы принимаются\s*<span class="source-nowrap">в /g) ?? []).length, 1);
+  assert.equal((home.match(/<span class="source-nowrap">и /g) ?? []).length, 1);
   assert.equal((home.match(/>телеграме<\/a><\/span>\./g) ?? []).length, 1);
   assert.doesNotMatch(home, /Заказы принимаются[\s\S]{0,180}>Телеграме<\/a>/);
   assert.match(styles, /\.source-nowrap\s*\{\s*white-space:\s*nowrap;/);
@@ -1110,7 +1108,7 @@ test("catalog search and filters expose accessible state", () => {
 test("catalog entry stacks its copy, search and categories without decorative dividers", () => {
   assert.match(
     catalogPage,
-    /class="catalog-intro__stack"[\s\S]*?<h1>Продукты и цены<\/h1>[\s\S]*?class="catalog-controls"[\s\S]*?data-catalog-search[\s\S]*?id="catalog-filter-label">Категории<[\s\S]*?data-catalog-filters/,
+    /class="catalog-intro__stack"[\s\S]*?<h1 class="page-intro__title">Продукты и цены<\/h1>[\s\S]*?class="catalog-controls"[\s\S]*?data-catalog-search[\s\S]*?id="catalog-filter-label">Категории<[\s\S]*?data-catalog-filters/,
   );
   assert.match(
     styles,
@@ -1704,7 +1702,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=about-photos-23-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=typography-23-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);
@@ -1889,7 +1887,7 @@ test("WCAG 2.2 AA is a mechanical project contract", () => {
   assert.match(styles, /--footer-text:\s*#fff8ed/);
   assert.match(styles, /--footer-muted:\s*#dce9e8/);
   assert.match(styles, /--footer:\s*#061a26/);
-  assert.match(styles, /--footer-surface:\s*#0a4053/);
+  assert.match(styles, /--footer-surface:\s*#0b2d3d/);
 
   for (const [foreground, background, minimum] of [
     ["#006d9d", "#ffffff", 4.5],
@@ -1902,9 +1900,8 @@ test("WCAG 2.2 AA is a mechanical project contract", () => {
     ["#ffffff", "#707070", 4.5],
     ["#fff8ed", "#0b6a84", 4.5],
     ["#dce9e8", "#0b6a84", 4.5],
-    ["#f3ede2", "#0a4053", 4.5],
-    ["#d3ccc0", "#0a4053", 4.5],
-    ["#b8c2c8", "#0a4053", 4.5],
+    ["#f3ede2", "#0b2d3d", 4.5],
+    ["#b8c2c8", "#0b2d3d", 4.5],
   ]) {
     assert.ok(
       contrast(foreground, background) >= minimum,

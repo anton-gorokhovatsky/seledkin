@@ -44,6 +44,6 @@ test("local page links resolve to existing pages and fragments", () => {
 });
 
 test("editorial skip links name the content they actually open", () => {
-  assert.match(pages.get("about/"), /class="skip-link" href="#main">Перейти к истории лавки</);
-  assert.match(pages.get("journal/"), /class="skip-link" href="#main">Перейти к журналу</);
+  assert.match(pages.get("about/"), /class="skip-link" href="#main">Перейти к\sистории лавки</);
+  assert.match(pages.get("journal/"), /class="skip-link" href="#main">Перейти к\sжурналу</);
 });

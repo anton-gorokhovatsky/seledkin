@@ -1,4 +1,4 @@
-import { typographPrice, typographText } from "./typography.js";
+import { typographPrice, typographText } from "./typography.js?v=typography-23-1";
 
 export function normalizeSearch(value) {
   return value.toLocaleLowerCase("ru-RU").replaceAll("ё", "е")
@@ -39,10 +39,10 @@ export function matchesSearch(text, query) {
 export function positionCount(value) {
   const lastTwo = value % 100;
   const last = value % 10;
-  if (lastTwo >= 11 && lastTwo <= 14) return `${value} позиций`;
-  if (last === 1) return `${value} позиция`;
-  if (last >= 2 && last <= 4) return `${value} позиции`;
-  return `${value} позиций`;
+  if (lastTwo >= 11 && lastTwo <= 14) return `${value}\u00a0позиций`;
+  if (last === 1) return `${value}\u00a0позиция`;
+  if (last >= 2 && last <= 4) return `${value}\u00a0позиции`;
+  return `${value}\u00a0позиций`;
 }
 
 export function orderLinks(product) {

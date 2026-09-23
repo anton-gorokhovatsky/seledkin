@@ -14,6 +14,11 @@
   --on-image: #ffffff;
   --footer: #073d55;
   --footer-surface: #0b6a84;
+  --footer-glow: rgb(126 211 228 / 18%);
+  --footer-background:
+    radial-gradient(circle at 12% 8%, var(--footer-glow), transparent 33rem),
+    linear-gradient(135deg, var(--footer-surface), var(--footer) 76%);
+  --story-surface: var(--footer);
   --footer-text: #fff8ed;
   --footer-muted: #dce9e8;
   --footer-base: #dce9e8;
@@ -78,6 +83,10 @@
   --text-catalog: 1rem;
   --text-interface: 0.875rem;
   --text-meta: 0.8125rem;
+  --control-label-offset: 0.04em;
+  --page-intro-space: clamp(2rem, 1.5rem + 1vw, 3rem);
+  --page-title-size: clamp(2.65rem, 1.5rem + 3vw, 4.5rem);
+  --page-title-leading: 1.02;
 }
 
 :root[data-theme="dark"] {
@@ -90,9 +99,11 @@
   --text-link: #83d8b8;
   --brass: #d6b46c;
   --footer: #061a26;
-  --footer-surface: #0a4053;
+  --footer-surface: #0b2d3d;
+  --footer-background: linear-gradient(180deg, var(--paper), var(--footer-surface) 45%, var(--footer));
+  --story-surface: var(--paper);
   --footer-text: #f3ede2;
-  --footer-muted: #d3ccc0;
+  --footer-muted: var(--muted);
   --footer-base: #b8c2c8;
   --footer-line: rgb(243 237 226 / 34%);
   --map-fallback: #243843;
@@ -118,11 +129,11 @@
   --menu-sea-veil: rgb(3 20 30 / 74%);
   --shoal-primary: #7dccf2;
   --shoal-tonal: hsl(201 30% 18%);
-  --shoal-on-sea: rgb(243 237 226 / 13%);
+  --shoal-on-sea: rgb(243 237 226 / 8%);
   --surface-water:
-    radial-gradient(ellipse at 14% 0%, rgb(74 158 171 / 7%), transparent 34rem),
+    radial-gradient(ellipse 40rem 34rem at 14% 0%, rgb(74 158 171 / 7%), transparent),
     var(--paper);
-  --hero-shade: linear-gradient(rgb(0 15 24 / 24%), rgb(0 8 14 / 44%));
+  --hero-shade: linear-gradient(rgb(0 15 24 / 24%), rgb(0 8 14 / 44%) calc(100% - 6rem), var(--paper));
   --hero-sea-static-image: url("hero-sea-night-poster.webp");
   --bioluminescence-display: block;
   --bioluminescence-opacity: 0.72;
@@ -143,9 +154,11 @@
     --text-link: #83d8b8;
     --brass: #d6b46c;
     --footer: #061a26;
-    --footer-surface: #0a4053;
+    --footer-surface: #0b2d3d;
+    --footer-background: linear-gradient(180deg, var(--paper), var(--footer-surface) 45%, var(--footer));
+    --story-surface: var(--paper);
     --footer-text: #f3ede2;
-    --footer-muted: #d3ccc0;
+    --footer-muted: var(--muted);
     --footer-base: #b8c2c8;
     --footer-line: rgb(243 237 226 / 34%);
     --map-fallback: #243843;
@@ -171,11 +184,11 @@
     --menu-sea-veil: rgb(3 20 30 / 74%);
     --shoal-primary: #7dccf2;
     --shoal-tonal: hsl(201 30% 18%);
-    --shoal-on-sea: rgb(243 237 226 / 13%);
+    --shoal-on-sea: rgb(243 237 226 / 8%);
     --surface-water:
-      radial-gradient(ellipse at 14% 0%, rgb(74 158 171 / 7%), transparent 34rem),
+      radial-gradient(ellipse 40rem 34rem at 14% 0%, rgb(74 158 171 / 7%), transparent),
       var(--paper);
-    --hero-shade: linear-gradient(rgb(0 15 24 / 24%), rgb(0 8 14 / 44%));
+    --hero-shade: linear-gradient(rgb(0 15 24 / 24%), rgb(0 8 14 / 44%) calc(100% - 6rem), var(--paper));
     --hero-sea-static-image: url("hero-sea-night-poster.webp");
     --bioluminescence-display: block;
     --bioluminescence-opacity: 0.72;
@@ -490,6 +503,14 @@ a.source-brand {
 .source-button__label {
   display: block;
   min-width: 0;
+}
+
+.source-button__label,
+.theme-toggle [data-theme-label],
+.floating-menu__label,
+.source-hero__journal-control--all > span {
+  /* Golos capitals need a small optical correction after metric centring. */
+  transform: translateY(var(--control-label-offset));
 }
 
 @supports (text-box: trim-both cap alphabetic) and (padding-block: calc((1lh - 1cap) / 2)) {
@@ -1040,16 +1061,6 @@ a.source-brand {
   grid-column: 1;
 }
 
-.about-overview__header :is(h1, h2) {
-  max-width: 15ch;
-  margin: 0;
-  font-family: var(--serif);
-  font-size: clamp(3rem, 3.9vw, 4.35rem);
-  font-weight: 400;
-  line-height: 0.98;
-  text-wrap: balance;
-}
-
 .about-overview__eyebrow {
   margin: 0 0 1.25rem;
   color: var(--muted);
@@ -1121,7 +1132,7 @@ a.source-brand {
   width: calc(100% + (2 * var(--content-edge)));
   margin-left: calc(-1 * var(--content-edge));
   margin-top: clamp(3.5rem, 5vw, 5.25rem);
-  background: var(--footer);
+  background: var(--story-surface);
   color: var(--footer-text);
 }
 
@@ -1208,18 +1219,6 @@ a.source-brand {
   grid-column: 2;
   grid-row: 1;
   padding: 0;
-}
-
-.about-overview__chapter--advice .about-overview__number {
-  margin-bottom: 1rem;
-  font-size: clamp(3rem, 2rem + 2vw, 4.5rem);
-  line-height: 1;
-}
-
-.about-overview__chapter--advice .about-overview__reason h3 {
-  max-width: 20ch;
-  font-size: clamp(2rem, 1.25rem + 1.5vw, 3rem);
-  line-height: 1.12;
 }
 
 @media (max-width: 50rem) {
@@ -1832,9 +1831,7 @@ a.source-brand {
   position: relative;
   z-index: 1;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 12% 8%, rgb(126 211 228 / 18%), transparent 33rem),
-    linear-gradient(135deg, var(--footer-surface), var(--footer) 76%);
+  background: var(--footer-background);
   color: var(--footer-text);
 }
 
@@ -2536,9 +2533,6 @@ a.site-menu__brand {
 }
 
 .catalog-intro h1 {
-  margin: 0 0 1.25rem;
-  font-size: clamp(3.25rem, 5.4vw, 5.5rem);
-  line-height: 0.96;
   overflow-wrap: normal;
 }
 
@@ -3361,11 +3355,6 @@ a.site-menu__brand {
     gap: 2rem;
   }
 
-  .about-overview__header :is(h1, h2) {
-    max-width: 16ch;
-    font-size: clamp(3rem, 7.2vw, 4.5rem);
-  }
-
   .about-overview__introduction {
     max-width: 43rem;
     padding-top: 0;
@@ -3691,11 +3680,6 @@ a.site-menu__brand {
     width: 100%;
   }
 
-  .catalog-intro h1 {
-    margin-bottom: 1rem;
-    font-size: clamp(2.65rem, 13vw, 3.25rem);
-  }
-
   .catalog-intro p {
     line-height: 1.55;
   }
@@ -3749,12 +3733,6 @@ a.site-menu__brand {
 
   .about-overview {
     padding: 3.75rem 0 5rem;
-  }
-
-  .about-overview__header :is(h1, h2) {
-    max-width: 13ch;
-    font-size: clamp(2.65rem, 11.5vw, 3.45rem);
-    line-height: 1;
   }
 
   .about-overview__introduction {
@@ -4290,7 +4268,7 @@ a.site-menu__brand {
   gap: 1.5rem;
   margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
-.journal-preview h2, .journal-page .ship-log__header h1 {
+.journal-preview h2 {
   font-size: clamp(2.5rem, 5.4vw, 5rem);
   font-weight: 400;
   line-height: 1.05;
@@ -4366,7 +4344,7 @@ a.site-menu__brand {
   }
 }
 .journal-page .ship-log {
-  padding-top: clamp(2rem, 4vw, 4rem);
+  border-top: 0;
 }
 .journal-page .ship-log__header {
   margin-bottom: 3rem;
@@ -4497,5 +4475,54 @@ a.site-menu__brand {
 @media (max-width: 61.1875rem) and (prefers-reduced-motion: no-preference) {
   .js .source-hero__journal {
     padding-bottom: 5.25rem;
+  }
+}
+
+/* Internal pages share their entry rhythm and heading level. Their second
+   columns keep the page's actual purpose: search, photograph or introduction. */
+:is(.catalog-intro, .about-overview, .ship-log).page-intro {
+  padding-top: var(--page-intro-space);
+}
+
+.page-intro .page-intro__title {
+  max-width: 18ch;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: var(--page-title-size);
+  font-weight: 400;
+  line-height: var(--page-title-leading);
+  text-wrap: balance;
+}
+
+.page-intro .page-intro__eyebrow {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  font-size: var(--text-meta);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.page-intro .catalog-intro__copy > .page-intro__title {
+  margin-bottom: 1.5rem;
+}
+
+.page-intro > .source-shell,
+.page-intro .ship-log__header {
+  align-items: start;
+}
+
+.page-intro .about-overview__introduction {
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 61.1875rem) {
+  :root {
+    --page-intro-space: calc(var(--masthead-top-inset) + var(--masthead-control-size) + 2rem);
+  }
+
+  .page-intro .page-intro__eyebrow {
+    margin-bottom: 1rem;
   }
 }

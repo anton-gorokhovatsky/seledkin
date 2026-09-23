@@ -310,7 +310,7 @@ for (const required of [
   "--footer-text: #fff8ed",
   "--footer-muted: #dce9e8",
   "--footer: #061a26",
-  "--footer-surface: #0a4053",
+  "--footer-surface: #0b2d3d",
   ".site-menu__masthead",
   ".site-menu__layout",
   "height: 100dvh",
@@ -404,7 +404,8 @@ for (const [file, page] of [
     "https://t.me/+79166751452",
     "https://wa.me/79166751452",
   ]) {
-    if (!page.includes(required)) {
+    const readable = value => value.replace(/&nbsp;|[\u00a0\u202f]/g, " ");
+    if (!readable(page).includes(readable(required))) {
       fail(`${file}: содержательный подвал не содержит ${required}`);
     }
   }

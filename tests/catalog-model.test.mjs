@@ -9,7 +9,7 @@ test("search accepts category terms, reversed words, ё and whitespace", () => {
   assert.ok(matchesSearch("Селёдка слабосолёная", "  СЕЛЕДКА\u00a0слабо  "));
   assert.ok(matchesSearch("Морепродукты Осьминог", "морепродукты"));
   assert.equal(matchesSearch("Икра", "рыба"), false);
-  assert.equal(positionCount(114), "114 позиций");
+  assert.equal(positionCount(114), "114\u00a0позиций");
 });
 
 const findProducts = (query) => catalog.flatMap((category) => category.items
