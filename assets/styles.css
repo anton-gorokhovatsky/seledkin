@@ -1134,6 +1134,12 @@ a.source-brand {
   align-self: center;
 }
 
+.about-overview__chapter-media--pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  align-items: start;
+}
+
 .about-overview__reason {
   display: flex;
   width: 100%;

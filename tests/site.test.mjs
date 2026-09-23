@@ -249,9 +249,10 @@ test("story page keeps Oleg's evidence in three full-bleed editorial stories", (
   assert.doesNotMatch(siteScript, /aboutStor(?:y|ies)/);
   for (const asset of [
     "flounder.jpg",
-    "about-main.jpg",
-    "about-small-2.jpg",
-    "gallery-small-2.jpg",
+    "gallery-small-1.jpg",
+    "about-small-1.jpg",
+    "cutting-tuna.jpg",
+    "quote-pan.jpg",
   ]) {
     assert.match(section, new RegExp(`data-source-image="../assets/${asset.replace(".", "\\.")}"`));
   }
@@ -596,9 +597,10 @@ test("home prioritizes shopping before its editorial story and keeps local image
     "caviar-slab.jpg",
     "fish-pattern.svg",
     "flounder.jpg",
-    "about-main.jpg",
-    "about-small-2.jpg",
-    "gallery-small-2.jpg",
+    "gallery-small-1.jpg",
+    "about-small-1.jpg",
+    "cutting-tuna.jpg",
+    "quote-pan.jpg",
     "oleg-gugunava.jpg",
     "delivery-basket.jpg",
   ]) {

@@ -576,5 +576,77 @@
     "bytes": 126230,
     "width": 600,
     "height": 800
+  },
+  {
+    "file": "gallery-small-1-480.webp",
+    "source": "gallery-small-1.jpg",
+    "sourceSha256": "9a8622f360de5a63db17bc42bab158dce7207c19f077d1999b77bbaf57f2f857",
+    "sha256": "acee6d3adc36f96509be597dc0a555273c72fe869bce10d89e502b2ef75b863e",
+    "bytes": 39992,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "gallery-small-1-960.webp",
+    "source": "gallery-small-1.jpg",
+    "sourceSha256": "9a8622f360de5a63db17bc42bab158dce7207c19f077d1999b77bbaf57f2f857",
+    "sha256": "be0074508eb7d8d0190d4cc6bec3295ee4c257d4a5ae10a443d4e620d0827cb6",
+    "bytes": 119780,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "about-small-1-480.webp",
+    "source": "about-small-1.jpg",
+    "sourceSha256": "cda9c15a7edda0770b80c4ede271dae5f1586657388687800ac6eeab0c797298",
+    "sha256": "6017b2f0fc08c16ab7b1bdf6af5cfe9fa42f46e79ee48bb373373fbae1ccb1d7",
+    "bytes": 41892,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "about-small-1-960.webp",
+    "source": "about-small-1.jpg",
+    "sourceSha256": "cda9c15a7edda0770b80c4ede271dae5f1586657388687800ac6eeab0c797298",
+    "sha256": "a12f8a87b0cb9aaed83abf750b42a6acb7e027c2121bcc3ec6e0aec8053e725f",
+    "bytes": 142384,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "cutting-tuna-480.webp",
+    "source": "cutting-tuna.jpg",
+    "sourceSha256": "2a7d097dd40b0c7fdfb2e11a610544e7eae465d73db6f2bdadef5b7e8d7a55a8",
+    "sha256": "f3db6a5c64ce0336249085c64f50f6f804f98632405e5eefa4b22561c83b406a",
+    "bytes": 30028,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "cutting-tuna-960.webp",
+    "source": "cutting-tuna.jpg",
+    "sourceSha256": "2a7d097dd40b0c7fdfb2e11a610544e7eae465d73db6f2bdadef5b7e8d7a55a8",
+    "sha256": "e211be5c77cb44f93a5defb65c3cb98005141bff50d43f2a621047c593419f16",
+    "bytes": 112170,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "quote-pan-480.webp",
+    "source": "quote-pan.jpg",
+    "sourceSha256": "a457bad475d7df5ff402081b605afff228918f7ff34ea273a8948508f6254ded",
+    "sha256": "2d0457435c660049c4be69538af32993eec42e49c7b9ee966196ad5dc07fe14e",
+    "bytes": 71974,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "quote-pan-960.webp",
+    "source": "quote-pan.jpg",
+    "sourceSha256": "a457bad475d7df5ff402081b605afff228918f7ff34ea273a8948508f6254ded",
+    "sha256": "a01032bdda642d3b92b5cb490ca6810d17586d2e8fb6131c587fbebecf678111",
+    "bytes": 256052,
+    "width": 960,
+    "height": 960
   }
 ]
