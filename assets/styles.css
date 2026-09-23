@@ -4458,10 +4458,22 @@ a.site-menu__brand {
     padding-bottom: .75rem;
   }
   .catalog-intro__stack {
-    gap: 1.25rem;
+    gap: 1rem;
   }
   .catalog-intro p {
     font-size: var(--text-body);
+  }
+  .catalog-controls .controls-grid {
+    gap: .75rem;
+  }
+  .catalog-result-line {
+    min-height: 2rem;
+  }
+  .catalog-category:first-child {
+    padding-top: .25rem;
+  }
+  .catalog-category-header {
+    margin-bottom: .5rem;
   }
   .ship-log-entry__actions {
     align-items: stretch;
@@ -4523,6 +4535,12 @@ a.site-menu__brand {
   }
 
   .page-intro .page-intro__eyebrow {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 34rem) {
+  .page-intro .catalog-intro__copy > .page-intro__title {
     margin-bottom: 1rem;
   }
 }
