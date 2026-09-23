@@ -836,12 +836,17 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
   assert.match(sectionRule, /grid-template-columns:\s*1fr/);
   assert.match(sectionRule, /grid-template-rows:\s*auto clamp\(22rem, 46svh, 30rem\)/);
   assert.match(sectionRule, /margin-bottom:\s*clamp\(4rem, 7vw, 7rem\)/);
-  assert.match(home, /map-widget\/v1\/\?oid=1784904240&amp;ol=biz/);
-  assert.doesNotMatch(home, /[?&]pt=/);
-  assert.doesNotMatch(home, /map-widget\/v1\/\?[^"\s]*text=/);
+  const mapSource = home.match(/<iframe\b[^>]*src="([^"]+)"/)?.[1];
+  const mapUrl = new URL(mapSource.replaceAll("&amp;", "&"));
+  assert.equal(mapUrl.origin, "https://www.openstreetmap.org");
+  assert.equal(mapUrl.pathname, "/export/embed.html");
+  assert.equal(mapUrl.searchParams.get("marker"), "55.685849,37.536554");
+  assert.equal(mapUrl.searchParams.get("layer"), "mapnik");
+  assert.doesNotMatch(home, /(?:src|data-src)="https:\/\/[^\"]*yandex[^\"]*map-widget/);
   const contactCard =
     home.match(/<address class="contacts-source__card">([\s\S]*?)<\/address>/)?.[1] ?? "";
   assert.match(contactCard, /class="contacts-source__details"/);
+  assert.match(contactCard, /href="https:\/\/yandex\.ru\/maps\/org\/1784904240\/"/);
   assert.doesNotMatch(contactCard, /<strong>|href="tel:/);
   assert.doesNotMatch(contactCard, /Телефон:|Адрес лавки:|Время работы:/);
   const mapRule =

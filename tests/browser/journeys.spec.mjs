@@ -68,6 +68,10 @@ test("search, category, shared URL and browser history retain the same selection
 });
 
 test("contact anchor is clear of the menu; Escape only closes the top interaction", async ({ page, browserName }) => {
+  const advertisingWidgets = [];
+  page.on("request", request => {
+    if (request.url().includes("yandex.ru/map-widget/")) advertisingWidgets.push(request.url());
+  });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("");
   await page.evaluate(() => document.fonts.ready);
@@ -100,6 +104,8 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   await page.keyboard.press("Escape");
   await expect(map).toBeFocused();
   await expect(map).toHaveAttribute("aria-pressed", "false");
+  expect(advertisingWidgets).toEqual([]);
+  await expect(page.locator("#store-map-frame")).toHaveAttribute("src", /^https:\/\/www\.openstreetmap\.org\/export\/embed\.html\?/);
 });
 
 test("the complete journal follows the first mobile screen and desktop controls remain stable", async ({ page }, testInfo) => {

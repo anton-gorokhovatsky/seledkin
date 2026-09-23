@@ -1671,9 +1671,11 @@ a.source-brand {
 .contacts-source__map-toggle {
   position: absolute;
   z-index: 2;
-  right: 1rem;
-  bottom: 1rem;
+  top: 1rem;
+  left: 1rem;
   display: inline-flex;
+  /* The embedded map's zoom controls keep their own fixed pixel size. */
+  max-width: calc(100% - 1rem - 52px);
   min-height: 44px;
   align-items: center;
   justify-content: center;
@@ -3434,11 +3436,6 @@ a.site-menu__brand {
     grid-template-rows: auto;
     gap: 1rem 2rem;
     padding: 0 0 1.5rem;
-  }
-
-  .contacts-source__map-toggle {
-    right: 1rem;
-    bottom: 1rem;
   }
 
   .contacts-source__card h2 {
