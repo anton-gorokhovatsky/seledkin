@@ -4348,10 +4348,10 @@ a.site-menu__brand {
   }
   .journal-preview__list {
     grid-template-columns: minmax(0, 1fr);
-    gap: 2rem;
+    gap: 1.5rem;
   }
   .journal-preview__entry {
-    grid-template-columns: min(31vw, 8.5rem) minmax(0, 1fr);
+    grid-template-columns: min(28vw, 8rem) minmax(0, 1fr);
     grid-template-rows: auto;
     gap: 1.25rem;
   }
