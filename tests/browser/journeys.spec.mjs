@@ -9,6 +9,7 @@ async function noOverflow(page) {
 test("prices and product-specific order links survive unavailable JavaScript", async ({ browser, baseURL }) => {
   for (const mode of ["disabled", "failed-module"]) {
     const context = await browser.newContext({ javaScriptEnabled: mode !== "disabled", viewport: { width: 390, height: 844 } });
+    await context.route("https://mc.yandex.ru/**", route => route.abort());
     const page = await context.newPage();
     if (mode === "failed-module") await page.route("**/catalog/catalog.js*", (route) => route.abort());
     await page.goto(`${baseURL}catalog/`);
@@ -194,6 +195,7 @@ test("the complete journal follows the first mobile screen and desktop controls 
 
 test("the full journal remains directly available without JavaScript", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 664 } });
+  await context.route("https://mc.yandex.ru/**", route => route.abort());
   const page = await context.newPage();
   await page.goto(baseURL);
   const archive = page.locator('[data-hero-journal-all]');

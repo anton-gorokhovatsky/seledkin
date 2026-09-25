@@ -42,6 +42,7 @@ test("metro stays with the station at narrow widths and enlarged text", async ({
     await expectMetroWithStation(page.locator(".site-menu__service address"));
   }
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1440, height: 900 } });
+  await context.route("https://mc.yandex.ru/**", route => route.abort());
   const plain = await context.newPage();
   await plain.goto(page.url());
   await plain.evaluate(() => document.fonts.ready);

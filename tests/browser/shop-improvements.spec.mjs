@@ -34,6 +34,7 @@ test("the journal preview leads to its full story and a product-specific inquiry
 
 test("complete editorial pages and inquiry links work without JavaScript", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+  await context.route("https://mc.yandex.ru/**", route => route.abort());
   const page = await context.newPage();
   await page.goto(`${baseURL}journal/`);
   await expect(page.locator(".ship-log-entry")).toHaveCount(15);

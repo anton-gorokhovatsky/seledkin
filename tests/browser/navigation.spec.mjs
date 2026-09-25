@@ -12,6 +12,7 @@ const routes = [
 
 test("a missing nested URL retains the catalog route and images without JavaScript on the custom domain", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
+  await context.route("https://mc.yandex.ru/**", route => route.abort());
   const page = await context.newPage();
   const missing = new URL("missing/old-tilda-page/", baseURL).href;
   const body = await readFile(new URL("../../404.html", import.meta.url), "utf8");

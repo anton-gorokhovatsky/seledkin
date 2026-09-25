@@ -58,6 +58,7 @@ jobs:
         run: |
           mkdir -p _site/assets _site/catalog _site/journal _site/about
           cp index.html 404.html robots.txt sitemap.xml CNAME .nojekyll _site/
+          cp yandex_a89bf574e33f8d22.html _site/
           cp assets/* _site/assets/
           cp catalog/index.html catalog/catalog.js _site/catalog/
           cp journal/index.html _site/journal/
