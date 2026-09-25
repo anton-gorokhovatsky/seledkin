@@ -73,7 +73,7 @@
     <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="../assets/styles.css?v=home-flow-23-2" />
+    <link rel="stylesheet" href="../assets/styles.css?v=controls-25-1" />
     <script type="module" src="../assets/site.js?v=journal-integrated-23-2"></script>
     <script type="module" src="../assets/interface-motion.js"></script>
     <script type="module" src="catalog.js?v=typography-23-1"></script>
@@ -191,7 +191,7 @@
               <h3 id="menu-service-title">Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
               <address>
                 Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
-                Метро «Вавиловская» и «Университет»
+                Метро «Вави&shy;ловская» и «Университет»
               </address>
               <div class="site-menu__actions">
                 <a
@@ -272,13 +272,19 @@
               <div class="controls-grid">
                 <label class="catalog-search">
                   <span>Найти товар</span>
-                  <input
-                    type="search"
-                    inputmode="search"
-                    autocomplete="off"
-                    placeholder="Например, нерка"
-                    data-catalog-search
-                  />
+                  <span class="catalog-search__field">
+                    <svg class="catalog-search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true" focusable="false">
+                      <circle cx="10.5" cy="10.5" r="6.5" />
+                      <path d="m15.5 15.5 4.5 4.5" />
+                    </svg>
+                    <input
+                      type="search"
+                      inputmode="search"
+                      autocomplete="off"
+                      placeholder="Например, нерка"
+                      data-catalog-search
+                    />
+                  </span>
                 </label>
                 <div class="catalog-filter-field">
                   <span id="catalog-filter-label">Категории</span>
@@ -300,6 +306,7 @@
                 </div>
                 <label class="catalog-select">
                   <span>Категория</span>
+                  <span class="catalog-select__field">
                   <select data-catalog-select><!-- catalog-options:start -->
                     <option value="all">Весь ассортимент</option>
                     <option value="caviar">Икра</option>
@@ -310,6 +317,10 @@
                     <option value="prepared-fish">Рыба сл/с, гк и хк</option>
                     <option value="other">Новинки и прочее</option>
                 <!-- catalog-options:end --></select>
+                    <svg class="catalog-select__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </span>
                 </label>
               </div>
             </section>
@@ -1659,7 +1670,7 @@
             Каждый день с 11:00 до 20:00. Можно приехать за рыбой и деликатесами или заказать доставку.
           </p>
           <div class="source-footer__visit">
-            <p>Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1; метро «Вавиловская» и «Университет»</p>
+            <p>Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1; метро «Вави&shy;ловская» и «Университет»</p>
           </div>
           <div class="source-footer__actions" aria-label="Связаться с лавкой">
             <a class="source-button source-button--footer-contact" href="tel:+79166751452">

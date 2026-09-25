@@ -2511,16 +2511,45 @@ a.site-menu__brand {
   font-weight: 600;
 }
 
+.catalog-search__field,
+.catalog-select__field {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.catalog-search__icon,
+.catalog-select__icon {
+  position: absolute;
+  top: 50%;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--muted);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.catalog-search__icon {
+  left: 0.85rem;
+}
+
+.catalog-select__icon {
+  right: 0.25rem;
+  color: var(--ink);
+}
+
 .catalog-search input {
   width: 100%;
   min-width: 0;
   max-width: 100%;
   min-height: 3rem;
   padding: 0.65rem 0.85rem;
+  padding-inline-start: 2.7rem;
   border: 1px solid var(--brass);
   border-radius: 0;
   background: var(--paper);
   font-size: var(--text-catalog);
+  font-weight: 400;
   transition: border-color 180ms ease-out;
 }
 
@@ -3448,12 +3477,15 @@ a.site-menu__brand {
   }
 
   .catalog-select select {
+    appearance: none;
     width: 100%;
     min-height: 3rem;
-    padding: 0.65rem 2.5rem 0.65rem 0.85rem;
-    border: 1px solid var(--brass);
+    padding: 0.65rem 2rem 0.65rem 0.25rem;
+    border: 0;
+    border-bottom: 1px solid var(--brass);
     border-radius: 0;
-    background: var(--paper);
+    background: transparent;
+    cursor: pointer;
     font-size: var(--text-catalog);
     transition: border-color 180ms ease-out;
   }

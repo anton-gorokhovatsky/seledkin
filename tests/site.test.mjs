@@ -18,7 +18,8 @@ import { typographPrice, typographText } from "../assets/typography.js";
 // These contracts check wording and structure. Exact nonbreaking characters
 // and their browser behavior are covered by the typography tests.
 const pageText = async path => (await readFile(new URL(path, import.meta.url), "utf8"))
-  .replace(/&nbsp;|[\u00a0\u202f]/g, " ");
+  .replace(/&nbsp;|[\u00a0\u202f]/g, " ")
+  .replace(/&shy;|\u00ad/g, "");
 const home = await pageText("../index.html");
 const aboutPage = await pageText("../about/index.html");
 const journalPage = await pageText("../journal/index.html");
@@ -1641,7 +1642,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=home-flow-23-2"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=controls-25-1"`,
   );
 
   assert.ok(baseBootstrap >= 0);

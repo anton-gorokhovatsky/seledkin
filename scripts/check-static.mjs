@@ -404,7 +404,8 @@ for (const [file, page] of [
     "https://t.me/+79166751452",
     "https://wa.me/79166751452",
   ]) {
-    const readable = value => value.replace(/&nbsp;|[\u00a0\u202f]/g, " ");
+    const readable = value => value.replace(/&nbsp;|[\u00a0\u202f]/g, " ")
+      .replace(/&shy;|\u00ad/g, "");
     if (!readable(page).includes(readable(required))) {
       fail(`${file}: содержательный подвал не содержит ${required}`);
     }
