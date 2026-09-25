@@ -871,7 +871,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     styles.match(/\.source-footer__postscript\s*\{([^}]*)\}/s)?.[1] ?? "";
   assert.match(
     footerContentRule,
-    /padding-block:\s*clamp\(5rem, 9vw, 8rem\) clamp\(2rem, 3vw, 3rem\)/,
+    /padding-block:\s*clamp\(3rem, 5vw, 5rem\) clamp\(2rem, 3vw, 3rem\)/,
   );
   assert.match(
     footerPostscriptRule,
@@ -891,7 +891,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
   );
   assert.match(
     styles,
-    /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__content\s*\{[^}]*padding-block:\s*4rem 1\.25rem;/,
+    /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__content\s*\{[^}]*padding-block:\s*2\.75rem 1\.5rem;/,
   );
   assert.match(
     styles,
@@ -1235,7 +1235,7 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
     )?.[1] ?? "";
   const catalogSearchHover =
     hoverMedia.match(
-      /\.catalog-search input:hover,[\s\S]*?\.catalog-select select:hover\s*\{([^}]*)\}/,
+      /\.catalog-search input:hover,[\s\S]*?\.catalog-select select:hover \+ \.catalog-select__value\s*\{([^}]*)\}/,
     )?.[1] ?? "";
   assert.doesNotMatch(catalogSearchHover, /background/);
   assert.doesNotMatch(
@@ -1323,7 +1323,8 @@ test("menu, focus and reduced motion remain accessible", () => {
   ]) {
     assert.match(page, /aria-controls="primary-navigation"/);
     assert.equal((page.match(/data-menu-toggle/g) ?? []).length, 1);
-    assert.doesNotMatch(page, /data-menu-close|site-menu__close/);
+    assert.equal((page.match(/data-menu-close/g) ?? []).length, 1);
+    assert.match(page, /data-menu-fallback-link/);
     assert.doesNotMatch(page, /Навигационный мостик|site-menu__deck/);
     assert.ok(page.includes('<h2 id="menu-title">Куда держим курс?</h2>'));
     assert.match(page, /class="site-menu__masthead"/);
@@ -1367,15 +1368,13 @@ test("menu, focus and reduced motion remain accessible", () => {
 
   assert.match(siteScript, /event\.key === "Escape"/);
   assert.match(siteScript, /event\.key !== "Tab"/);
-  assert.match(siteScript, /menuButtonLabel\.textContent = "Закрыть"/);
-  assert.match(siteScript, /menuButtonLabel\.textContent = "Меню"/);
-  assert.doesNotMatch(siteScript, /menuClose/);
+  assert.match(siteScript, /menuClose\.focus\(\{ preventScroll: true \}\)/);
   assert.match(siteScript, /menuPanel\.scrollTop = 0/);
-  assert.match(siteScript, /element\.inert = value/);
-  assert.equal((siteScript.match(/menuButton\.focus\(\)/g) ?? []).length, 1);
+  assert.match(siteScript, /element\.inert = true/);
+  assert.match(siteScript, /menuButton\.focus\(\{ preventScroll: true \}\)/);
   const openMenuBody =
     siteScript.match(/function openMenu\(\)\s*\{([\s\S]*?)\n\}/)?.[1] ?? "";
-  assert.doesNotMatch(openMenuBody, /\.focus\(/);
+  assert.match(openMenuBody, /menuClose\.focus\(/);
   assert.match(siteScript, /closeMenu\(\{ returnFocus: true \}\)/);
   assert.match(styles, /--masthead-control-size:\s*3\.375rem/);
   assert.match(styles, /--masthead-panel-height:\s*11rem/);
@@ -1642,7 +1641,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=controls-25-1"`,
+    `<link rel="stylesheet" href="assets/styles.css?v=`,
   );
 
   assert.ok(baseBootstrap >= 0);

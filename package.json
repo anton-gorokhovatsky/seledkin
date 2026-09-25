@@ -12,10 +12,11 @@
     "build:icons": "node scripts/vendor-morphicons.mjs",
     "build:logo-drafts": "node scripts/build-logo-variants.mjs",
     "dev": "python3 -m http.server 4173",
-    "lint": "node scripts/build-catalog.mjs --check && node scripts/build-media.mjs --check && node scripts/check-static.mjs",
+    "lint": "node scripts/build-site.mjs --check && node scripts/build-catalog.mjs --check && node scripts/build-media.mjs --check && node scripts/check-static.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:browser": "playwright test",
-    "build:media": "node scripts/build-media.mjs"
+    "build:media": "node scripts/build-media.mjs",
+    "build:site": "node scripts/build-site.mjs && node scripts/build-catalog.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",

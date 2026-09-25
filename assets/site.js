@@ -15,9 +15,10 @@ if (isAbout && location.hash === "#watch-catch") {
 }
 
 const menuButton = document.querySelector("[data-menu-toggle]");
-const menuButtonLabel = menuButton?.querySelector(".floating-menu__label");
 const menu = document.querySelector("[data-menu]");
+const menuClose = menu?.querySelector("[data-menu-close]");
 const menuPanel = menu?.querySelector(".site-menu__panel");
+const inertBeforeMenu = new Map();
 const map = document.querySelector("[data-map]");
 const mapToggle = map?.querySelector("[data-map-toggle]");
 const mapToggleLabel = mapToggle?.querySelector("[data-map-toggle-label]");
@@ -68,7 +69,6 @@ function focusableMenuItems() {
   if (!menu) return [];
 
   return [
-    ...(menuButton ? [menuButton] : []),
     ...menu.querySelectorAll(
       'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
     ),
@@ -81,26 +81,31 @@ function setPageInert(value) {
   for (const element of document.body.children) {
     if (
       !(element instanceof HTMLElement) ||
-      element === menu ||
-      element === menuButton
+      element === menu
     ) {
       continue;
     }
     if (element.tagName === "SCRIPT") continue;
-    element.inert = value;
+    if (value) {
+      inertBeforeMenu.set(element, element.inert);
+      element.inert = true;
+    } else if (inertBeforeMenu.has(element)) {
+      element.inert = inertBeforeMenu.get(element);
+    }
   }
+  if (!value) inertBeforeMenu.clear();
 }
 
 function openMenu() {
-  if (!menuButton || !menu) return;
+  if (!menuButton || !menu || !menuClose) return;
 
   menu.hidden = false;
   if (menuPanel instanceof HTMLElement) menuPanel.scrollTop = 0;
   menuButton.setAttribute("aria-expanded", "true");
-  menuButton.setAttribute("aria-label", "Закрыть меню");
-  if (menuButtonLabel) menuButtonLabel.textContent = "Закрыть";
+  menuButton.hidden = true;
   document.body.classList.add("menu-open");
   setPageInert(true);
+  menuClose.focus({ preventScroll: true });
   syncMenuSeaVideo();
 }
 
@@ -109,29 +114,23 @@ function closeMenu({ returnFocus = false } = {}) {
 
   setPageInert(false);
   menu.hidden = true;
+  menuButton.hidden = false;
   menuButton.setAttribute("aria-expanded", "false");
-  menuButton.setAttribute("aria-label", "Открыть меню");
-  if (menuButtonLabel) menuButtonLabel.textContent = "Меню";
   document.body.classList.remove("menu-open");
   syncMenuSeaVideo();
 
   if (returnFocus) {
-    menuButton.focus();
+    menuButton.focus({ preventScroll: true });
   }
 }
 
-if (menuButton && menu) {
-  menuButton.addEventListener("click", () => {
-    if (menuButton.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-    } else {
-      openMenu();
-    }
-  });
+if (menuButton && menu && menuClose) {
+  menuButton.addEventListener("click", openMenu);
+  menuClose.addEventListener("click", () => closeMenu({ returnFocus: true }));
 
   menu.addEventListener("click", (event) => {
     if (event.target === menu) {
-      closeMenu();
+      closeMenu({ returnFocus: true });
       return;
     }
 
@@ -156,19 +155,25 @@ if (menuButton && menu) {
     if (event.key !== "Tab") return;
 
     const items = focusableMenuItems();
-    const first = items.at(0);
-    const last = items.at(-1);
-
-    if (!first || !last) return;
-
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
+    if (!items.length) return;
+    // WebKit may omit links/buttons from native Tab order depending on the
+    // system keyboard-navigation setting. The modal owns a complete local cycle.
+    const current = items.indexOf(document.activeElement);
+    const next = current < 0 ? 0 : (current + (event.shiftKey ? -1 : 1) + items.length) % items.length;
+    event.preventDefault();
+    items[next].focus();
   });
+
+  // Keep focus in the active dialog even if a script tries to focus its background.
+  document.addEventListener("focusin", (event) => {
+    if (!menu.hidden && !menu.contains(event.target)) menuClose.focus({ preventScroll: true });
+  });
+
+  // The source navigation also works if this module (or one of its imports) fails.
+  // Hide it only after the modal handlers have been installed successfully.
+  document.querySelectorAll("[data-menu-fallback], [data-menu-fallback-link]")
+    .forEach(element => { element.hidden = true; });
+  menuButton.hidden = false;
 }
 
 if (

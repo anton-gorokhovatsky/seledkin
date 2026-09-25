@@ -45,6 +45,7 @@
       href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!-- shared:theme:start -->
     <script>
       (() => {
         document.documentElement.classList.add("js");
@@ -84,13 +85,14 @@
           : "#ffffff";
       })();
     </script>
+<!-- shared:theme:end -->
     <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="../assets/styles.css?v=controls-25-1" />
-    <script type="module" src="../assets/site.js?v=journal-integrated-23-2"></script>
+    <link rel="stylesheet" href="../assets/styles.css?v=accessibility-25-2" />
+    <script type="module" src="../assets/site.js?v=accessibility-25-2"></script>
     <script type="module" src="../assets/interface-motion.js"></script>
-    <script type="module" src="catalog.js?v=typography-23-1"></script>
+    <script type="module" src="catalog.js?v=accessibility-25-2"></script>
     <title>Каталог и цены — Рыбная лавка капитана Селедкина</title>
   </head>
   <body class="catalog-page">
@@ -113,6 +115,11 @@
       </div>
     </header>
 
+    <!-- shared:menu:start -->
+    <a class="floating-menu" href="#site-navigation-fallback" aria-label="Перейти к меню сайта" data-menu-fallback-link>
+      <span class="floating-menu__mark" aria-hidden="true"></span>
+      <span class="floating-menu__label">Меню</span>
+    </a>
     <button
       class="floating-menu"
       type="button"
@@ -120,6 +127,7 @@
       aria-controls="primary-navigation"
       aria-label="Открыть меню"
       data-menu-toggle
+      hidden
     >
       <span class="floating-menu__mark" aria-hidden="true"></span>
       <span class="floating-menu__label">Меню</span>
@@ -134,6 +142,10 @@
       data-menu
       hidden
     >
+      <button class="floating-menu" type="button" aria-label="Закрыть меню" data-menu-close>
+        <span class="floating-menu__mark" aria-hidden="true"></span>
+        <span class="floating-menu__label">Закрыть</span>
+      </button>
       <div class="site-menu__panel">
         <header class="site-menu__masthead">
           <a class="site-menu__brand brand-jelly brand-jelly--panel" href="../">
@@ -178,7 +190,7 @@
                 <span aria-hidden="true">01</span>
                 <span>Что продаём</span>
               </a>
-              <a href="./" aria-current="page">
+              <a href="../catalog/" aria-current="page">
                 <span aria-hidden="true">02</span>
                 <span>Продукты и цены</span>
               </a>
@@ -269,6 +281,7 @@
         </div>
       </div>
     </div>
+<!-- shared:menu:end -->
 
     <main id="main" tabindex="-1">
       <section class="catalog-intro page-intro">
@@ -315,7 +328,7 @@
                     <button type="button" data-category="frozen-fish" aria-pressed="false">Свежемороженая рыба</button>
                     <button type="button" data-category="fillet" aria-pressed="false">Филе</button>
                     <button type="button" data-category="steaks" aria-pressed="false">Рыбные стейки</button>
-                    <button type="button" data-category="prepared-fish" aria-pressed="false">Рыба сл/с, гк и хк</button>
+                    <button type="button" data-category="prepared-fish" aria-pressed="false">Слабосоленая и копченая рыба</button>
                     <button type="button" data-category="other" aria-pressed="false">Новинки и прочее</button>
                 <!-- catalog-filters:end --></div>
                 </div>
@@ -329,9 +342,10 @@
                     <option value="frozen-fish">Свежемороженая рыба</option>
                     <option value="fillet">Филе</option>
                     <option value="steaks">Рыбные стейки</option>
-                    <option value="prepared-fish">Рыба сл/с, гк и хк</option>
+                    <option value="prepared-fish">Слабосоленая и копченая рыба</option>
                     <option value="other">Новинки и прочее</option>
                 <!-- catalog-options:end --></select>
+                    <span class="catalog-select__value" data-catalog-selected-label aria-hidden="true">Весь ассортимент</span>
                     <svg class="catalog-select__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                       <path d="m6 9 6 6 6-6" />
                     </svg>
@@ -1222,7 +1236,7 @@
               <p class="catalog-category-count">12 позиций</p>
             </div>
             <div class="catalog-product-grid">
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Форель слабосоленая ">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Форель слабосоленая ">
                 <div class="catalog-product-head"><h4>Форель слабосоленая</h4><strong>3 400 ₽/кг</strong></div>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Форель слабосоленая, 3 400 ₽/кг</span></summary>
@@ -1232,7 +1246,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Омуль холодного копчения Красноярск">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Омуль холодного копчения Красноярск">
                 <div class="catalog-product-head"><h4>Омуль холодного копчения</h4><strong>2 100 ₽/кг</strong></div>
                 <p>Красноярск</p>
                 <details class="catalog-product-order">
@@ -1243,7 +1257,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Осетр горячего копчения Нарезка или кусок">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Осетр горячего копчения Нарезка или кусок">
                 <div class="catalog-product-head"><h4>Осетр горячего копчения</h4><strong>5 900 ₽/кг</strong></div>
                 <p>Нарезка или кусок</p>
                 <details class="catalog-product-order">
@@ -1254,7 +1268,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Скумбрия горячего копчения ПБГ">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Скумбрия горячего копчения ПБГ">
                 <div class="catalog-product-head"><h4>Скумбрия горячего копчения</h4><strong>1 640 ₽/кг</strong></div>
                 <p>ПБГ</p>
                 <details class="catalog-product-order">
@@ -1265,7 +1279,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Палтус холодного копчения ПБГ">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Палтус холодного копчения ПБГ">
                 <div class="catalog-product-head"><h4>Палтус холодного копчения</h4><strong>3 700 ₽/кг</strong></div>
                 <p>ПБГ</p>
                 <details class="catalog-product-order">
@@ -1276,7 +1290,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Форель холодного копчения ">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Форель холодного копчения ">
                 <div class="catalog-product-head"><h4>Форель холодного копчения</h4><strong>3 400 ₽/кг</strong></div>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Форель холодного копчения, 3 400 ₽/кг</span></summary>
@@ -1286,7 +1300,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Лосось слабосоленый ">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Лосось слабосоленый ">
                 <div class="catalog-product-head"><h4>Лосось слабосоленый</h4><strong>3 800 ₽/кг</strong></div>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Лосось слабосоленый, 3 800 ₽/кг</span></summary>
@@ -1296,7 +1310,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Сельдь слабосоленая Атлантическая. Солим сами, без консервантов и созревателей">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Сельдь слабосоленая Атлантическая. Солим сами, без консервантов и созревателей">
                 <div class="catalog-product-head"><h4>Сельдь слабосоленая</h4><strong>699 ₽/кг</strong></div>
                 <p>Атлантическая. Солим сами, без консервантов и созревателей</p>
                 <details class="catalog-product-order">
@@ -1307,7 +1321,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Муксун холодного копчения Красноярск">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Муксун холодного копчения Красноярск">
                 <div class="catalog-product-head"><h4>Муксун холодного копчения</h4><strong>2 100 ₽/кг</strong></div>
                 <p>Красноярск</p>
                 <details class="catalog-product-order">
@@ -1318,7 +1332,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Скумбрия холодного копчения ПБГ">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Скумбрия холодного копчения ПБГ">
                 <div class="catalog-product-head"><h4>Скумбрия холодного копчения</h4><strong>1 640 ₽/кг</strong></div>
                 <p>ПБГ</p>
                 <details class="catalog-product-order">
@@ -1329,7 +1343,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Рулет из брюшков осетра ">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Рулет из брюшков осетра ">
                 <div class="catalog-product-head"><h4>Рулет из брюшков осетра</h4><strong>3 400 ₽/кг</strong></div>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Рулет из брюшков осетра, 3 400 ₽/кг</span></summary>
@@ -1339,7 +1353,7 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Рыба сл/с, гк и хк Языки трески ">
+              <article class="catalog-product" data-search-text="Слабосоленая и копченая рыба Слабосоленая и копченая рыба Языки трески ">
                 <div class="catalog-product-head"><h4>Языки трески</h4><strong>990 ₽/0,5 кг</strong></div>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Языки трески, 990 ₽/0,5 кг</span></summary>
@@ -1676,6 +1690,15 @@
       </section>
     </main>
 
+    <!-- shared:footer:start -->
+    <nav class="site-navigation-fallback source-shell" id="site-navigation-fallback" aria-label="Разделы сайта" tabindex="-1" data-menu-fallback>
+      <a href="../#assortment">Что продаём</a>
+      <a href="../catalog/" aria-current="page">Продукты и цены</a>
+      <a href="../#delivery">Доставка</a>
+      <a href="../#contacts">Контакты</a>
+      <a href="../about/">О нас</a>
+      <a href="../journal/">Судовой журнал</a>
+    </nav>
     <footer class="source-footer" aria-labelledby="catalog-footer-title">
       <div class="source-footer__content source-shell">
         <div class="source-footer__details">
@@ -1749,6 +1772,7 @@
         <a href="#top">В начало</a>
       </div>
     </footer>
+<!-- shared:footer:end -->
 
   </body>
 </html>

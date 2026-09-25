@@ -1821,8 +1821,8 @@ a.source-brand {
   display: grid;
   grid-template-columns: minmax(18rem, 0.82fr) minmax(0, 1.18fr);
   align-items: center;
-  gap: clamp(4rem, 9vw, 8rem);
-  padding-block: clamp(5rem, 9vw, 8rem) clamp(2rem, 3vw, 3rem);
+  gap: clamp(3rem, 6vw, 6rem);
+  padding-block: clamp(3rem, 5vw, 5rem) clamp(2rem, 3vw, 3rem);
 }
 
 .source-footer__details {
@@ -1840,16 +1840,17 @@ a.source-brand {
 }
 
 .source-footer__details h2 {
-  margin-bottom: 1.75rem;
+  max-width: 20ch;
+  margin-bottom: 1.25rem;
   color: var(--footer-text);
-  font-size: clamp(3.5rem, 6vw, 6rem);
-  font-weight: 500;
-  line-height: 0.94;
+  font-size: clamp(2rem, 1.4rem + 2vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.08;
 }
 
 .source-footer__lead {
   max-width: 38rem;
-  margin-bottom: clamp(2.5rem, 4vw, 4rem);
+  margin-bottom: 1.5rem;
   color: var(--footer-muted);
   font-size: clamp(1.125rem, 1.6vw, 1.3rem);
   line-height: 1.6;
@@ -1859,7 +1860,7 @@ a.source-brand {
   display: grid;
   max-width: 42rem;
   gap: 0.65rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .source-footer__visit p {
@@ -2118,6 +2119,32 @@ a.source-brand {
   background: transparent;
 }
 
+.floating-menu[data-menu-close] .floating-menu__mark {
+  background: transparent;
+}
+
+.floating-menu[data-menu-close] .floating-menu__mark::before {
+  transform: rotate(45deg);
+}
+
+.floating-menu[data-menu-close] .floating-menu__mark::after {
+  transform: rotate(-45deg);
+}
+
+.site-navigation-fallback {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  padding-block: 2rem;
+  scroll-margin-top: calc(var(--masthead-top-inset) + var(--masthead-control-size) + 1rem);
+}
+
+.site-navigation-fallback a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
 .floating-menu[aria-expanded="true"] .floating-menu__mark::before {
   transform: rotate(45deg);
 }
@@ -2161,6 +2188,8 @@ a.source-brand {
   white-space: nowrap;
 }
 
+.floating-menu[hidden],
+.site-navigation-fallback[hidden],
 .site-menu[hidden] {
   display: none;
 }
@@ -3405,18 +3434,14 @@ a.site-menu__brand {
 
   .source-footer__content {
     grid-template-columns: 1fr;
-    gap: 4rem;
-    padding-block: 6rem 2rem;
+    gap: 2.5rem;
+    padding-block: 3rem 2rem;
   }
 
   .source-footer__details,
   .source-footer__portrait {
     grid-column: auto;
     grid-row: auto;
-  }
-
-  .source-footer__details h2 {
-    max-width: 42rem;
   }
 
   .source-footer__portrait {
@@ -3478,16 +3503,32 @@ a.site-menu__brand {
 
   .catalog-select select {
     appearance: none;
+    position: absolute;
+    inset: 0;
+    z-index: 1;
     width: 100%;
-    min-height: 3rem;
-    padding: 0.65rem 2rem 0.65rem 0.25rem;
-    border: 0;
-    border-bottom: 1px solid var(--brass);
-    border-radius: 0;
-    background: transparent;
+    height: 100%;
+    opacity: 0;
     cursor: pointer;
     font-size: var(--text-catalog);
+  }
+
+  /* The native select owns focus, keyboard and touch; its visible value can wrap. */
+  .catalog-select__value {
+    display: block;
+    min-height: 3rem;
+    padding: 0.65rem 2rem 0.65rem 0.25rem;
+    border-bottom: 1px solid var(--brass);
+    font-size: var(--text-catalog);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    hyphens: auto;
     transition: border-color 180ms ease-out;
+  }
+
+  .catalog-select select:focus-visible + .catalog-select__value {
+    outline: 3px solid var(--focus);
+    outline-offset: 4px;
   }
 
   .catalog-results {
@@ -3613,12 +3654,8 @@ a.site-menu__brand {
   }
 
   .source-footer__content {
-    gap: 3rem;
-    padding-block: 4rem 1.25rem;
-  }
-
-  .source-footer__details h2 {
-    font-size: clamp(1.3rem, 15vw, 4.5rem);
+    gap: 2rem;
+    padding-block: 2.75rem 1.5rem;
   }
 
   .source-footer__actions {
@@ -3772,7 +3809,7 @@ a.site-menu__brand {
   }
 
   .catalog-search input:hover,
-  .catalog-select select:hover {
+  .catalog-select select:hover + .catalog-select__value {
     border-color: var(--ink);
   }
 

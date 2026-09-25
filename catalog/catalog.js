@@ -3,6 +3,7 @@ import { matchesSearch, positionCount } from "../assets/catalog-model.js?v=typog
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");
 const select = document.querySelector("[data-catalog-select]");
+const selectedLabel = document.querySelector("[data-catalog-selected-label]");
 const list = document.querySelector("[data-catalog-list]");
 const count = document.querySelector("[data-catalog-count]");
 const reset = document.querySelector("[data-catalog-reset]");
@@ -55,6 +56,7 @@ function render() {
     button.setAttribute("aria-pressed", String(button.dataset.category === activeCategory));
   });
   select.value = activeCategory;
+  selectedLabel.textContent = select.selectedOptions[0].textContent;
 }
 
 filters.addEventListener("click", (event) => {

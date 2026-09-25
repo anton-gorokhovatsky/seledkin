@@ -45,6 +45,7 @@
       href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <!-- shared:theme:start -->
     <script>
       (() => {
         document.documentElement.classList.add("js");
@@ -84,11 +85,12 @@
           : "#ffffff";
       })();
     </script>
+<!-- shared:theme:end -->
     <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="../assets/styles.css?v=controls-25-1" />
-    <script type="module" src="../assets/site.js?v=journal-integrated-23-2"></script>
+    <link rel="stylesheet" href="../assets/styles.css?v=accessibility-25-2" />
+    <script type="module" src="../assets/site.js?v=accessibility-25-2"></script>
     <script type="module" src="../assets/interface-motion.js"></script>
     <title>О лавке и её капитане — Рыбная лавка капитана Селедкина</title>
   </head>
@@ -112,6 +114,11 @@
       </div>
     </header>
 
+    <!-- shared:menu:start -->
+    <a class="floating-menu" href="#site-navigation-fallback" aria-label="Перейти к меню сайта" data-menu-fallback-link>
+      <span class="floating-menu__mark" aria-hidden="true"></span>
+      <span class="floating-menu__label">Меню</span>
+    </a>
     <button
       class="floating-menu"
       type="button"
@@ -119,6 +126,7 @@
       aria-controls="primary-navigation"
       aria-label="Открыть меню"
       data-menu-toggle
+      hidden
     >
       <span class="floating-menu__mark" aria-hidden="true"></span>
       <span class="floating-menu__label">Меню</span>
@@ -133,6 +141,10 @@
       data-menu
       hidden
     >
+      <button class="floating-menu" type="button" aria-label="Закрыть меню" data-menu-close>
+        <span class="floating-menu__mark" aria-hidden="true"></span>
+        <span class="floating-menu__label">Закрыть</span>
+      </button>
       <div class="site-menu__panel">
         <header class="site-menu__masthead">
           <a class="site-menu__brand brand-jelly brand-jelly--panel" href="../">
@@ -189,7 +201,7 @@
                 <span aria-hidden="true">04</span>
                 <span>Контакты</span>
               </a>
-              <a href="./" aria-current="page">
+              <a href="../about/" aria-current="page">
                 <span aria-hidden="true">05</span>
                 <span>О нас</span>
               </a>
@@ -268,6 +280,7 @@
         </div>
       </div>
     </div>
+<!-- shared:menu:end -->
 
     <main id="main" tabindex="-1">
       <section
@@ -468,6 +481,15 @@
       </section>
     </main>
 
+    <!-- shared:footer:start -->
+    <nav class="site-navigation-fallback source-shell" id="site-navigation-fallback" aria-label="Разделы сайта" tabindex="-1" data-menu-fallback>
+      <a href="../#assortment">Что продаём</a>
+      <a href="../catalog/">Продукты и цены</a>
+      <a href="../#delivery">Доставка</a>
+      <a href="../#contacts">Контакты</a>
+      <a href="../about/" aria-current="page">О нас</a>
+      <a href="../journal/">Судовой журнал</a>
+    </nav>
     <footer class="source-footer" aria-labelledby="footer-title">
       <div class="source-footer__content source-shell">
         <div class="source-footer__details">
@@ -541,6 +563,7 @@
         <a href="#top">В начало</a>
       </div>
     </footer>
+<!-- shared:footer:end -->
 
   </body>
 </html>

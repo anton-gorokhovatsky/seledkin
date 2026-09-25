@@ -219,8 +219,8 @@ for (const file of htmlFiles) {
     if ((html.match(/data-menu-toggle/g) ?? []).length !== 1) {
       fail(`${file}: должна быть ровно одна закреплённая кнопка меню`);
     }
-    if (/data-menu-close|site-menu__close/.test(html)) {
-      fail(`${file}: отдельная кнопка закрытия дублирует управление меню`);
+    if ((html.match(/data-menu-close/g) ?? []).length !== 1 || !html.includes("data-menu-fallback-link")) {
+      fail(`${file}: меню должно иметь внутреннее закрытие и статическую навигацию`);
     }
     if (/source-header__top|source-header__address|source-header__action|source-navigation|theme-toggle--header/.test(html)) {
       fail(`${file}: компактная шапка содержит старую дублирующую навигацию`);
@@ -324,10 +324,10 @@ for (const required of [
 
 const siteScript = readFileSync(join(root, "assets/site.js"), "utf8");
 for (const required of [
-  "element.inert = value",
+  "element.inert = true",
   'event.key === "Escape"',
-  'menuButtonLabel.textContent = "Закрыть"',
-  'menuButtonLabel.textContent = "Меню"',
+  'menuClose.focus({ preventScroll: true })',
+  'menuButton.focus({ preventScroll: true })',
   "menuPanel.scrollTop = 0",
   'window.matchMedia("(prefers-reduced-motion: reduce)")',
   'import "./theme.js?v=shop-journeys-2"',

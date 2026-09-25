@@ -68,7 +68,7 @@ test("search, category, shared URL and browser history retain the same selection
   await noOverflow(page);
 });
 
-test("contact anchor is clear of the menu; Escape only closes the top interaction", async ({ page, browserName }) => {
+test("contact anchor is clear of the menu; Escape only closes the top interaction", async ({ page }) => {
   const advertisingWidgets = [];
   page.on("request", request => {
     if (request.url().includes("yandex.ru/map-widget/")) advertisingWidgets.push(request.url());
@@ -90,13 +90,7 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   await menu.click();
   await expect(page.locator("main")).toHaveJSProperty("inert", true);
   await expect(map).toHaveAttribute("aria-pressed", "true");
-  if (browserName === "chromium") {
-    await menu.focus();
-    const targets = await page.locator("[data-menu] a[href]:visible, [data-menu] button:visible").count();
-    for (let i = 0; i <= targets; i += 1) await page.keyboard.press("Tab");
-    await expect(menu).toBeFocused();
-  }
-  await menu.focus();
+  await expect(page.getByRole("dialog").getByRole("button", { name: "Закрыть меню" })).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(menu).toBeFocused();
   await expect(map).toHaveAttribute("aria-pressed", "true");
@@ -188,7 +182,23 @@ test("the complete journal follows the first mobile screen and desktop controls 
     await expect(counter).toHaveText("5 из 5");
     await noOverflow(page);
     await page.screenshot({ path: testInfo.outputPath(`hero-${width}-${height}-journal.png`) });
-    await page.locator("[data-hero-journal-all]").click();
+    const allEntries = page.locator("[data-hero-journal-all]");
+    await allEntries.scrollIntoViewIfNeeded();
+    // Focus and scrollIntoView can start native smooth scrolling in WebKit.
+    // Wait for its actual position to settle before choosing a pointer coordinate.
+    await page.evaluate(() => new Promise((resolve, reject) => {
+      const start = performance.now();
+      let position = scrollY;
+      let stableSince = start;
+      function frame(now) {
+        if (scrollY !== position) { position = scrollY; stableSince = now; }
+        if (now - stableSince >= 150) return resolve();
+        if (now - start > 5000) return reject(new Error("Journal navigation scroll did not settle"));
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }));
+    await allEntries.click();
     await expect(page).toHaveURL(/journal\/$/);
   }
 });

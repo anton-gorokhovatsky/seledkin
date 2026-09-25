@@ -1,0 +1,15 @@
+{
+  "address": {
+    "city": "Москва",
+    "street": "ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1",
+    "metro": "«Вави&shy;ловская» и «Университет»"
+  },
+  "routes": [
+    { "href": "#assortment", "label": "Что продаём" },
+    { "href": "catalog/", "label": "Продукты и цены" },
+    { "href": "#delivery", "label": "Доставка" },
+    { "href": "#contacts", "label": "Контакты" },
+    { "href": "about/", "label": "О нас" },
+    { "href": "journal/", "label": "Судовой журнал" }
+  ]
+}

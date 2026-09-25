@@ -1,0 +1,73 @@
+    <footer class="source-footer" aria-labelledby="{{footerId}}">
+      <div class="source-footer__content source-shell">
+        <div class="source-footer__details">
+          <p class="source-footer__kicker">До встречи на Вавиловской</p>
+          <h2 id="{{footerId}}">Лосось на вахте — заходите в лавку</h2>
+          <p class="source-footer__lead">
+            Каждый день с 11:00 до 20:00. Можно приехать за рыбой и деликатесами или заказать доставку.
+          </p>
+          <div class="source-footer__visit">
+            <p>{{footerAddress}}</p>
+          </div>
+          <div class="source-footer__actions" aria-label="Связаться с лавкой">
+            <a class="source-button source-button--footer-contact" href="tel:+79166751452">
+              <span class="source-button__label">Позвонить</span>
+            </a>
+            <a class="source-button source-button--footer-contact" href="https://t.me/+79166751452">
+              <span class="source-button__label">Заказать в Телеграме</span>
+            </a>
+            <a class="source-button source-button--footer-contact" href="https://wa.me/79166751452">
+              <span class="source-button__label">Заказать в WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
+        <figure class="source-footer__portrait">
+          <img
+            src="{{root}}assets/salmon-cat-480.webp"
+                srcset="{{root}}assets/salmon-cat-480.webp 480w, {{root}}assets/salmon-cat-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="{{root}}assets/salmon-cat.jpg"
+                decoding="async"
+            alt="Кот Лосось греется на солнце с закрытыми глазами"
+            width="1536"
+            height="2048"
+            loading="lazy"
+          />
+          <figcaption>Лосось принимает солнечную ванну между вахтами.</figcaption>
+        </figure>
+      </div>
+
+      <div class="source-footer__postscript source-shell">
+        <p>
+          P. S.: а ещё мы публикуем советы по приготовлению и обработке
+          рыбы, все наши новости, в т. ч. об ассортименте, в наших
+          социальных сетях. Подписывайтесь!
+        </p>
+        <nav class="source-footer__channels" aria-label="Социальные сети и каналы лавки">
+          <a class="source-footer__channel--primary" href="https://t.me/kapitanseledkin">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="{{root}}assets/social-icons.svg#telegram"></use>
+            </svg>
+            <span>Телеграм-канал</span>
+          </a>
+          <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="{{root}}assets/social-icons.svg#youtube"></use>
+            </svg>
+            <span>YouTube</span>
+          </a>
+          <a href="https://soundcloud.com/kapitanseledkin">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="{{root}}assets/social-icons.svg#soundcloud"></use>
+            </svg>
+            <span>SoundCloud</span>
+          </a>
+        </nav>
+      </div>
+      <div class="source-footer__base source-shell">
+        <small>© «Рыбная лавка капитана Селедкина», 2026</small>
+        <a class="source-footer__credit" href="https://anton-gorokhovatsky.github.io/design/">Дизайн и разработка</a>
+        <a href="#top">В начало</a>
+      </div>
+    </footer>
