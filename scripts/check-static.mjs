@@ -362,10 +362,11 @@ const seaScript = readFileSync(join(root, "assets/sea-motion.js"), "utf8");
 for (const required of ["video.pause()", "video.currentTime = 0", "IntersectionObserver", "data-sea-toggle"]) {
   if (!seaScript.includes(required)) fail(`assets/sea-motion.js: нет обязательного поведения ${required}`);
 }
-if ((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length !== 15) {
-  fail("journal/index.html: «Судовой журнал» должен содержать пятнадцать отобранных записей");
+const journalEntries = JSON.parse(readFileSync(join(root, "content/journal.json"), "utf8"));
+if (!journalEntries.length || (journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length !== journalEntries.length) {
+  fail("journal/index.html: «Судовой журнал» не совпадает с отобранными записями");
 }
-for (const id of [694, 693, 692, 691, 690, 689, 688, 687, 686, 685, 684, 683, 682, 681, 680]) {
+for (const { id } of journalEntries) {
   for (const required of [
     `assets/journal-${id}.jpg`,
     `https://t.me/kapitanseledkin/${id}`,

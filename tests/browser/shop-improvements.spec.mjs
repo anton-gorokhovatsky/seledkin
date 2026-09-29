@@ -14,14 +14,14 @@ test("customer vocabulary finds existing products and preserves precise filters"
 
 test("the journal preview leads to its full story and a product-specific inquiry", async ({ page }) => {
   await page.goto("");
-  await page.locator('.journal-preview__entry[href="journal/#journal-entry-694"]').click();
-  await expect(page).toHaveURL(/journal\/#journal-entry-694$/);
-  const entry = page.locator("#journal-entry-694");
+  await page.locator('.journal-preview__entry[href="journal/#journal-entry-698"]').click();
+  await expect(page).toHaveURL(/journal\/#journal-entry-698$/);
+  const entry = page.locator("#journal-entry-698");
   const inquiry = entry.getByRole("link", { name: /Спросить о наличии/ });
   const url = new URL(await inquiry.getAttribute("href"));
-  expect(url.searchParams.get("text")).toContain("Ряпушка холодного копчения");
-  expect(url.searchParams.get("text")).toContain("https://t.me/kapitanseledkin/694");
-  await expect(entry.getByRole("link", { name: "Читать запись в Телеграме" })).toHaveAttribute("href", "https://t.me/kapitanseledkin/694");
+  expect(url.searchParams.get("text")).toContain("Малосольный каспийский залом");
+  expect(url.searchParams.get("text")).toContain("https://t.me/kapitanseledkin/698");
+  await expect(entry.getByRole("link", { name: "Читать запись в Телеграме" })).toHaveAttribute("href", "https://t.me/kapitanseledkin/698");
   await page.goto("#journal-entry-680");
   await expect(page).toHaveURL(/journal\/#journal-entry-680$/);
   await page.goto("#journal-entry-683");
@@ -37,8 +37,8 @@ test("complete editorial pages and inquiry links work without JavaScript", async
   await context.route("https://mc.yandex.ru/**", route => route.abort());
   const page = await context.newPage();
   await page.goto(`${baseURL}journal/`);
-  await expect(page.locator(".ship-log-entry")).toHaveCount(15);
-  await expect(page.getByRole("link", { name: /Спросить о наличии/ })).toHaveCount(15);
+  await expect(page.locator(".ship-log-entry")).toHaveCount(19);
+  await expect(page.getByRole("link", { name: /Спросить о наличии/ })).toHaveCount(19);
   await page.goto(`${baseURL}about/`);
   await expect(page.locator(".about-overview__chapter")).toHaveCount(3);
   await expect(page.locator(".founder-source")).toBeVisible();
@@ -83,7 +83,7 @@ test("journal previews keep whole photographs, aligned desktop reading lines and
     await entries.first().focus();
     await expect(entries.first()).toBeFocused();
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(/journal\/#journal-entry-694$/);
+    await expect(page).toHaveURL(/journal\/#journal-entry-698$/);
   }
 });
 

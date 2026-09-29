@@ -25,7 +25,11 @@ function run(command, args) {
 function probe(file) {
   return JSON.parse(run("ffprobe", ["-v", "error", "-show_entries", "stream=width,height,nb_frames,r_frame_rate", "-show_entries", "format=duration", "-of", "json", path(file)]));
 }
-const manifest = [];
+const requestedSources = new Set(process.argv.filter(arg => arg.startsWith("--source=")).map(arg => arg.slice(9)));
+const selected = source => !requestedSources.size || requestedSources.has(source);
+const manifest = requestedSources.size
+  ? JSON.parse(readFileSync(path(manifestName), "utf8")).filter(item => !selected(item.source))
+  : [];
 const python = process.env.MEDIA_PYTHON || "python3";
 function imageVariant(source, file, width, quality = 82) {
   run(python, ["-c", `from PIL import Image, ImageOps
@@ -40,8 +44,13 @@ im.save(sys.argv[2], format="WEBP", quality=int(sys.argv[4]), method=6, icc_prof
 function record(file, source, extra = {}) {
   manifest.push({ file, source, sourceSha256: hash(source), sha256: hash(file), bytes: readFileSync(path(file)).length, ...extra });
 }
-const photos = ["about-main.jpg", "about-small-1.jpg", "about-small-2.jpg", "caviar-slab.jpg", "cutting-tuna.jpg", "delivery-basket.jpg", "flounder.jpg", "gallery-small-1.jpg", "gallery-small-2.jpg", "journal-680.jpg", "journal-681.jpg", "journal-682.jpg", "journal-683.jpg", "journal-684.jpg", "journal-685.jpg", "journal-686.jpg", "journal-687.jpg", "journal-688.jpg", "journal-689.jpg", "journal-690.jpg", "journal-691.jpg", "journal-692.jpg", "journal-693.jpg", "journal-694.jpg", "oleg-gugunava.jpg", "quote-pan.jpg", "salmon-cat.jpg"];
-for (const source of photos) {
+const journalPhotos = JSON.parse(readFileSync(resolve(root, "content/journal.json"), "utf8")).map(entry => entry.image);
+const photos = ["about-main.jpg", "about-small-1.jpg", "about-small-2.jpg", "caviar-slab.jpg", "cutting-tuna.jpg", "delivery-basket.jpg", "flounder.jpg", "gallery-small-1.jpg", "gallery-small-2.jpg", ...journalPhotos, "oleg-gugunava.jpg", "quote-pan.jpg", "salmon-cat.jpg"];
+const videos = ["hero-sea.mp4", "hero-sea-night.mp4"];
+for (const source of requestedSources) {
+  if (![...photos, ...videos, "hero-sea-night-poster.jpg"].includes(source)) throw new Error(`Unknown media source: ${source}`);
+}
+for (const source of photos.filter(selected)) {
   const info = probe(source).streams[0];
   const widths = [...new Set([Math.min(480, info.width), Math.min(960, info.width)])];
   if (source.startsWith("journal-")) widths.push(32);
@@ -53,7 +62,7 @@ for (const source of photos) {
   }
   console.log(`Фотография: ${source}`);
 }
-for (const source of ["hero-sea.mp4", "hero-sea-night.mp4"]) {
+for (const source of videos.filter(selected)) {
   const file = source.replace(".mp4", "-web.mp4");
   run("ffmpeg", ["-v", "error", "-y", "-i", path(source), "-map", "0:v:0", "-an", "-c:v", "libx264", "-preset", "slow", "-crf", "30", "-pix_fmt", "yuv420p", "-movflags", "+faststart", path(file)]);
   const before = probe(source), after = probe(file);
@@ -61,6 +70,8 @@ for (const source of ["hero-sea.mp4", "hero-sea-night.mp4"]) {
   record(file, source, after.streams[0]);
   console.log(`Море: ${source}`);
 }
-imageVariant("hero-sea-night-poster.jpg", "hero-sea-night-poster.webp", 0);
-record("hero-sea-night-poster.webp", "hero-sea-night-poster.jpg");
+if (selected("hero-sea-night-poster.jpg")) {
+  imageVariant("hero-sea-night-poster.jpg", "hero-sea-night-poster.webp", 0);
+  record("hero-sea-night-poster.webp", "hero-sea-night-poster.jpg");
+}
 writeFileSync(path(manifestName), JSON.stringify(manifest, null, 2) + "\n");

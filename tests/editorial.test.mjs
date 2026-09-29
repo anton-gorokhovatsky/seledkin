@@ -9,6 +9,7 @@ const [home, about, journal, originals] = await Promise.all([
 ]);
 const plain = text => text.replace(/<[^>]*>/g, "")
   .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code))).replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '\"')
+  .replace(/&shy;|\u00ad/g, "")
   // Typography may change number grouping, range dashes and the percent space;
   // every word, digit and the rest of Oleg's punctuation must still match.
   .replace(/(\d)[ \u00a0\u202f](?=\d{3}(?:\D|$))/g, "$1")
@@ -38,11 +39,11 @@ test("all homepage price examples agree with the current catalog", () => {
 });
 
 test("all journal entries retain their source and a draft about that exact product", () => {
-  const names = ["Ряпушка", "Стейк чилийского лосося", "Филе трески", "Радужная форель", "Скумбрия", "Чир", "Паштет", "Уха", "Черноморский бычок", "Филе форели", "Икряная камбала", "Филе сельди", "тугунок", "Икра дикого кижуча", "барабуля"];
+  const names = ["Малосольный каспийский залом", "Риеты и паштеты", "Малосольный каспийский залом", "Филе форели", "Ряпушка", "Стейк чилийского лосося", "Филе трески", "Радужная форель", "Скумбрия", "Чир", "Паштет", "Уха", "Черноморский бычок", "Филе форели", "Икряная камбала", "Филе сельди", "тугунок", "Икра дикого кижуча", "барабуля"];
   const entries = [...journal.matchAll(/<article\s+class="ship-log-entry[\s\S]*?<\/article>/g)].map(match => match[0]);
-  assert.equal(entries.length, 15);
+  assert.equal(entries.length, 19);
   entries.forEach((entry, index) => {
-    const id = 694 - index;
+    const id = 698 - index;
     const inquiry = entry.match(/href="(https:\/\/t\.me\/\+79166751452\?text=[^"]+)"/)[1];
     const draft = new URL(inquiry).searchParams.get("text");
     assert.ok(draft.includes(names[index]));

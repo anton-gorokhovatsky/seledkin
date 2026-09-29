@@ -23,6 +23,7 @@ const pageText = async path => (await readFile(new URL(path, import.meta.url), "
 const home = await pageText("../index.html");
 const aboutPage = await pageText("../about/index.html");
 const journalPage = await pageText("../journal/index.html");
+const journalEntries = JSON.parse(await readFile(new URL("../content/journal.json", import.meta.url), "utf8"));
 const seaScript = await readFile(new URL("../assets/sea-motion.js", import.meta.url), "utf8");
 const catalogPage = await pageText("../catalog/index.html");
 const notFoundPage = await pageText("../404.html");
@@ -231,10 +232,10 @@ test("home exposes the core customer jobs", () => {
   assert.match(hero, /href="catalog\/"/);
   assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
-  assert.match(hero, /href="journal\/#journal-entry-694"/);
-  assert.match(hero, /data-source-image="assets\/journal-694\.jpg"/);
-  assert.match(hero, /datetime="2026-09-22"/);
-  assert.match(hero, /Нежнейшая ряпушка холодного копчения/);
+  assert.match(hero, /href="journal\/#journal-entry-698"/);
+  assert.match(hero, /data-source-image="assets\/journal-698\.jpg"/);
+  assert.match(hero, /datetime="2026-09-29"/);
+  assert.match(hero, /У нас новый завоз малосольного каспийского залома/);
   assert.doesNotMatch(hero, /src="assets\/about-main\.jpg"/);
   assert.doesNotMatch(hero, /Из ассортимента лавки/);
   assert.match(home, /метро «Вавиловская»/);
@@ -256,7 +257,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     /Переключайте записи кнопками или клавишами со стрелками влево и вправо\./,
   );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 5);
-  for (const id of [694, 693, 692, 691, 690]) {
+  for (const { id } of journalEntries.slice(0, 5)) {
     assert.match(hero, new RegExp("href=\"journal/#journal-entry-" + id + "\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }
@@ -639,8 +640,8 @@ test("the typographic scale protects reading and interface text", () => {
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(journalPage, /id="journal"/);
   assert.match(journalPage, /<h1 class="page-intro__title" id="journal-title">Судовой журнал<\/h1>/);
-  assert.equal((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, 15);
-  for (const id of [694, 693, 692, 691, 690, 689, 688, 687, 686, 685, 684, 683, 682, 681, 680]) {
+  assert.equal((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, journalEntries.length);
+  for (const { id } of journalEntries) {
     assert.match(
       journalPage,
       new RegExp(
@@ -651,7 +652,7 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.match(journalPage, /https:\/\/t\.me\/kapitanseledkin"/);
 
   let cursor = -1;
-  for (const id of [694, 693, 692, 691, 690, 689, 688, 687, 686, 685, 684, 683, 682, 681, 680]) {
+  for (const { id } of journalEntries) {
     const next = journalPage.indexOf(`https://t.me/kapitanseledkin/${id}`, cursor + 1);
     assert.ok(next > cursor, `Запись ${id} должна идти в обратной хронологии`);
     assert.match(journalPage, new RegExp(`assets/journal-${id}\\.jpg`));
