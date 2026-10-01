@@ -4481,6 +4481,36 @@ a.site-menu__brand {
 .journal-story .ship-log-entry__body {
   overflow-wrap: anywhere;
 }
+.journal-story .ship-log-entry__body a {
+  color: var(--text-link);
+  text-decoration-thickness: 0.05em;
+}
+.journal-story .ship-log-entry__body a:hover {
+  text-decoration-thickness: 0.1em;
+}
+.journal-story .ship-log-entry__body a[href^="tel:"] {
+  display: inline-flex;
+  max-width: 100%;
+  min-height: 44px;
+  align-items: center;
+}
+.journal-story .journal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.75rem;
+}
+.journal-story .journal-tags a {
+  display: inline-flex;
+  min-width: 44px;
+  max-width: 100%;
+  min-height: 44px;
+  align-items: center;
+  font: 400 var(--text-interface) / 1.5 var(--sans);
+  text-decoration: none;
+}
+.journal-story .journal-tags a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+}
 .journal-story__next {
   display: flex;
   flex-wrap: wrap;
@@ -4490,19 +4520,43 @@ a.site-menu__brand {
   border-top: 1px solid var(--line);
 }
 .journal-story__next a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   flex: 1 1 16rem;
   min-width: 0;
   min-height: 44px;
   max-width: 32rem;
-  color: var(--text-link);
+  color: var(--ink);
   font: 400 clamp(1.35rem, 1rem + 1vw, 2rem) / 1.25 var(--serif);
+  text-decoration: none;
   overflow-wrap: anywhere;
 }
-.journal-story__next span {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--muted);
+.journal-story__next a[rel="next"] {
+  margin-inline-start: auto;
+}
+.journal-story__direction {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--text-link);
   font: 400 var(--text-meta) / 1.5 var(--sans);
+}
+.journal-story__direction svg {
+  flex: 0 0 2rem;
+  width: 2rem;
+  height: 1.125rem;
+}
+.journal-story__neighbor-title {
+  text-wrap: balance;
+}
+.journal-story__next a[rel="prev"] svg {
+  transform: rotate(180deg);
+}
+.journal-story__next a:is(:hover, :focus-visible) .journal-story__neighbor-title {
+  text-decoration: underline;
+  text-decoration-thickness: 0.05em;
+  text-underline-offset: 0.18em;
 }
 @media (max-width: 61.1875rem) {
   .ship-log-entry.journal-story {

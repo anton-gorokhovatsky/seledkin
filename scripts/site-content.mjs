@@ -152,8 +152,12 @@ export function renderJournalPage(entry) {
   const url = `https://ks.fish/journal/${entry.id}/`;
   const native = media.filter(item => item.source === entry.image).sort((a, b) => b.width - a.width)[0];
   const index = entries.findIndex(item => item.id === entry.id);
-  const neighbors = [entries[index - 1], entries[index + 1]].filter(Boolean).map(item =>
-    `<a href="../${item.id}/"><span>${item.id > entry.id ? "Следующая запись" : "Предыдущая запись"}</span>${item.title}</a>`).join("\n");
+  const harpoon = `<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg>`;
+  const neighbors = [entries[index + 1], entries[index - 1]].filter(Boolean).map(item => {
+    const previous = item.id < entry.id;
+    const label = previous ? `${harpoon}Предыдущая запись` : `Следующая запись${harpoon}`;
+    return `<a href="../${item.id}/" rel="${previous ? "prev" : "next"}"><span class="journal-story__direction">${label}</span><span class="journal-story__neighbor-title">${item.title}</span></a>`;
+  }).join("\n");
   return template("journal-page", {
     theme: renderTheme("journal"), menu: renderMenu("journal", "../../"), footer: renderFooter("journal", "../../"),
     article: renderJournal([entry], "article"), neighbors,
