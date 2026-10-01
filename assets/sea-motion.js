@@ -3,6 +3,13 @@ const menuVideo = document.querySelector("[data-menu-sea-video]");
 const menu = document.querySelector("[data-menu]");
 const toggles = [...document.querySelectorAll("[data-sea-toggle]")];
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+const connection = navigator.connection;
+// Explicit consent is scoped to this page. A new visit honours the current data preference again.
+let requestedPlayback = false;
+const conserveData = () => Boolean(connection?.saveData)
+  || ["slow-2g", "2g"].includes(connection?.effectiveType);
+let wasConserving = conserveData();
+const dataBlocked = () => conserveData() && !requestedPlayback;
 let paused = false;
 try { paused = localStorage.getItem("seledkin-sea-paused") === "true"; } catch {}
 let heroVisible = false;
@@ -11,24 +18,35 @@ let readyToPlay = false;
 function updateControls() {
   for (const button of toggles) {
     button.hidden = reducedMotion.matches;
-    button.textContent = paused ? "Включить море" : "Остановить море";
-    button.setAttribute("aria-label", paused ? "Включить движение моря" : "Остановить движение моря");
+    const stopped = paused || dataBlocked();
+    button.textContent = stopped ? "Включить море" : "Остановить море";
+    button.setAttribute("aria-label", stopped ? "Включить движение моря" : "Остановить движение моря");
   }
 }
 
-function play(video) {
+function selectSource(video) {
   const source = video.querySelector("[data-theme-video-source]");
   const nextSource = document.documentElement.dataset.theme === "dark"
     ? source?.dataset.srcDark : source?.dataset.srcLight;
   if (source && nextSource && source.getAttribute("src") !== nextSource) {
     source.setAttribute("src", nextSource);
+    video.classList.remove("is-ready");
     video.load();
   }
-  video.play().catch(() => {});
 }
 
 function sync(video, visible) {
   if (!(video instanceof HTMLVideoElement)) return;
+  if (dataBlocked()) {
+    video.pause();
+    const source = video.querySelector("[data-theme-video-source]");
+    if (source?.hasAttribute("src")) {
+      source.removeAttribute("src");
+      video.load();
+    }
+    video.classList.remove("is-ready");
+    return;
+  }
   if (paused || reducedMotion.matches || document.hidden || !visible) {
     video.pause();
     if (reducedMotion.matches) {
@@ -37,7 +55,8 @@ function sync(video, visible) {
     }
     return;
   }
-  play(video);
+  selectSource(video);
+  video.play().catch(() => {});
 }
 
 export function syncHeroVideo() {
@@ -54,12 +73,18 @@ function syncAll() {
 }
 
 for (const button of toggles) button.addEventListener("click", () => {
-  paused = !paused;
+  if (reducedMotion.matches) return;
+  if (dataBlocked()) {
+    requestedPlayback = true;
+    paused = false;
+  } else paused = !paused;
   try { localStorage.setItem("seledkin-sea-paused", String(paused)); } catch {}
   syncAll();
 });
 for (const video of [heroVideo, menuVideo]) {
-  video?.addEventListener("loadeddata", () => video.classList.add("is-ready"));
+  video?.addEventListener("loadeddata", () => {
+    if (!dataBlocked() && !reducedMotion.matches) video.classList.add("is-ready");
+  });
 }
 if (heroVideo instanceof HTMLVideoElement) {
   const section = heroVideo.closest(".source-hero");
@@ -86,7 +111,21 @@ if (heroVideo instanceof HTMLVideoElement) {
 }
 reducedMotion.addEventListener("change", syncAll);
 document.addEventListener("visibilitychange", syncAll);
-document.addEventListener("seledkin:themechange", syncAll);
+document.addEventListener("seledkin:themechange", () => {
+  // Keep already loaded paused media in the selected watch, without loading dormant media.
+  if (!dataBlocked() && !reducedMotion.matches) {
+    for (const video of [heroVideo, menuVideo]) {
+      if (video?.querySelector("[data-theme-video-source]")?.hasAttribute("src")) selectSource(video);
+    }
+  }
+  syncAll();
+});
+connection?.addEventListener?.("change", () => {
+  const nextConserving = conserveData();
+  if (nextConserving && !wasConserving) requestedPlayback = false;
+  wasConserving = nextConserving;
+  syncAll();
+});
 window.addEventListener("storage", event => {
   if (event.key === "seledkin-sea-paused") {
     paused = event.newValue === "true";

@@ -56,6 +56,13 @@
   --surface-water: var(--paper);
   --hero-shade: linear-gradient(rgb(0 10 16 / 32%), rgb(0 8 13 / 70%));
   --hero-sea-static-image: url("hero-sea-poster.webp");
+  --sea-silver: 0;
+  --sea-warmth: 0;
+  --sea-light-position: 50%;
+  --sea-light-strength: 1;
+  --sea-light-field:
+    radial-gradient(ellipse 85% 38% at var(--sea-light-position) 22%, rgb(242 247 249 / var(--sea-silver)), transparent 100%),
+    radial-gradient(ellipse 100% 24% at var(--sea-light-position) 20%, rgb(236 184 111 / var(--sea-warmth)), transparent 100%);
   --bioluminescence-display: none;
   --bioluminescence-opacity: 0;
   --bioluminescence-wake: transparent;
@@ -135,6 +142,7 @@
     var(--paper);
   --hero-shade: linear-gradient(rgb(0 15 24 / 24%), rgb(0 8 14 / 44%) calc(100% - 6rem), var(--paper));
   --hero-sea-static-image: url("hero-sea-night-poster.webp");
+  --sea-light-strength: 0.25;
   --bioluminescence-display: block;
   --bioluminescence-opacity: 0.72;
   --bioluminescence-wake: rgb(82 190 191 / 14%);
@@ -190,6 +198,7 @@
       var(--paper);
     --hero-shade: linear-gradient(rgb(0 15 24 / 24%), rgb(0 8 14 / 44%) calc(100% - 6rem), var(--paper));
     --hero-sea-static-image: url("hero-sea-night-poster.webp");
+    --sea-light-strength: 0.25;
     --bioluminescence-display: block;
     --bioluminescence-opacity: 0.72;
     --bioluminescence-wake: rgb(82 190 191 / 14%);
@@ -579,6 +588,18 @@ a.source-brand {
   opacity: 1;
 }
 
+.source-hero::before,
+.site-menu__layout::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: var(--sea-light-field);
+  opacity: var(--sea-light-strength);
+  pointer-events: none;
+  content: "";
+}
+
+/* Lighting sits below the existing readability veil and never affects text or photos. */
 .source-hero__shade {
   position: absolute;
   z-index: 1;
@@ -3971,6 +3992,10 @@ a.site-menu__brand {
 }
 
 @media (prefers-contrast: more) {
+  .source-hero::before,
+  .site-menu__layout::before {
+    display: none;
+  }
   :root {
     --line: #757575;
     --muted: #3a3a3a;
@@ -4016,6 +4041,10 @@ a.site-menu__brand {
 }
 
 @media (forced-colors: active) {
+  .source-hero::before,
+  .site-menu__layout::before {
+    display: none;
+  }
   .source-footer::after,
   .site-menu__service::after {
     display: none;

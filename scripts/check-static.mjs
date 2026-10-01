@@ -40,6 +40,10 @@ const requiredFiles = [
   "catalog/catalog.js",
   "assets/catalog-model.js",
   "assets/sea-motion.js",
+  "assets/store-data.js",
+  "assets/store-time.js",
+  "assets/store-environment.js",
+  "assets/sea-light.js",
   "assets/media-variants.json",
   "scripts/build-catalog.mjs",
   "playwright.config.mjs",
@@ -331,7 +335,7 @@ for (const required of [
   'menuButton.focus({ preventScroll: true })',
   "menuPanel.scrollTop = 0",
   'window.matchMedia("(prefers-reduced-motion: reduce)")',
-  'import "./theme.js?v=shop-journeys-2"',
+  'import "./theme.js?v=sea-hours-1"',
 ]) {
   if (!siteScript.includes(required)) fail(`assets/site.js: нет обязательного поведения ${required}`);
 }
@@ -339,7 +343,7 @@ for (const required of [
 const themeScript = readFileSync(join(root, "assets/theme.js"), "utf8");
 for (const required of [
   'export const themeStorageKey = "seledkin-theme"',
-  'export const storeTimeZone = "Europe/Moscow"',
+  'export const storeTimeZone = store.timeZone',
   'window.matchMedia("(prefers-color-scheme: dark)")',
   "localStorage.setItem(themeStorageKey, explicitTheme)",
   "scheduledTheme(new Date())",

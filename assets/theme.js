@@ -1,70 +1,31 @@
-export const themeStorageKey = "seledkin-theme";
-export const storeTimeZone = "Europe/Moscow";
-export const storeOpenHour = 11;
-export const storeCloseHour = 20;
+import { store } from "./store-data.js?v=sea-hours-1";
+import { storeClock } from "./store-time.js?v=sea-hours-1";
 
-let moscowClockFormatter = null;
+export const themeStorageKey = "seledkin-theme";
+export const storeTimeZone = store.timeZone;
+export const storeOpenHour = Number(store.hours.open.slice(0, 2));
+export const storeCloseHour = Number(store.hours.close.slice(0, 2));
+const timeMs = time => (Number(time.slice(0, 2)) * 60 + Number(time.slice(3))) * 60_000;
 
 export function normalizeTheme(value) {
   return value === "light" || value === "dark" ? value : null;
 }
 
-function moscowClock(date) {
-  if (!(date instanceof Date) || !Number.isFinite(date.getTime())) return null;
-
-  try {
-    moscowClockFormatter ??= new Intl.DateTimeFormat("en-GB", {
-      timeZone: storeTimeZone,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hourCycle: "h23",
-    });
-    const values = Object.fromEntries(
-      moscowClockFormatter
-        .formatToParts(date)
-        .filter(({ type }) => type !== "literal")
-        .map(({ type, value }) => [type, Number(value)]),
-    );
-    if (![values.hour, values.minute, values.second].every(Number.isFinite)) {
-      return null;
-    }
-    return {
-      hour: values.hour % 24,
-      minute: values.minute,
-      second: values.second,
-    };
-  } catch {
-    return null;
-  }
-}
-
+// The automatic watch follows regular hours; holiday status and manual theme are independent.
 export function scheduledTheme(date = new Date()) {
-  const clock = moscowClock(date);
+  const clock = storeClock(date);
   if (!clock) return null;
-  return clock.hour >= storeOpenHour && clock.hour < storeCloseHour
-    ? "light"
-    : "dark";
+  return clock.elapsed >= timeMs(store.hours.open) && clock.elapsed < timeMs(store.hours.close)
+    ? "light" : "dark";
 }
 
 export function millisecondsUntilThemeShift(date = new Date()) {
-  const clock = moscowClock(date);
+  const clock = storeClock(date);
   if (!clock) return null;
-
-  const elapsed =
-    ((clock.hour * 60 + clock.minute) * 60 + clock.second) * 1000 +
-    date.getMilliseconds();
-  const opening = storeOpenHour * 60 * 60 * 1000;
-  const closing = storeCloseHour * 60 * 60 * 1000;
-  const day = 24 * 60 * 60 * 1000;
-  const nextBoundary =
-    elapsed < opening
-      ? opening
-      : elapsed < closing
-        ? closing
-        : day + opening;
-
-  return Math.max(50, nextBoundary - elapsed + 50);
+  const opening = timeMs(store.hours.open);
+  const closing = timeMs(store.hours.close);
+  const next = clock.elapsed < opening ? opening : clock.elapsed < closing ? closing : 86_400_000 + opening;
+  return Math.max(50, next - clock.elapsed + 50);
 }
 
 export function effectiveTheme(
@@ -108,26 +69,11 @@ function initTheme() {
     for (const video of themeVideos) {
       if (!(video instanceof HTMLVideoElement)) continue;
 
-      const source = video.querySelector("[data-theme-video-source]");
-      const nextPoster = isDark
-        ? video.dataset.posterDark
-        : video.dataset.posterLight;
-      const nextSource = isDark
-        ? source?.dataset.srcDark
-        : source?.dataset.srcLight;
-      let sourceChanged = false;
-
+      const nextPoster = isDark ? video.dataset.posterDark : video.dataset.posterLight;
       if (nextPoster && video.getAttribute("poster") !== nextPoster) {
         video.setAttribute("poster", nextPoster);
       }
-      if (source?.hasAttribute("src") && nextSource && source.getAttribute("src") !== nextSource) {
-        source.setAttribute("src", nextSource);
-        sourceChanged = true;
-      }
-      if (sourceChanged) {
-        video.classList.remove("is-ready");
-        video.load();
-      }
+      // Source loading belongs to sea-motion, where traffic and motion preferences are known.
     }
   }
 

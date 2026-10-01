@@ -4,6 +4,12 @@
     "street": "ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1",
     "metro": "«Вави&shy;ловская» и «Университет»"
   },
+  "store": {
+    "timeZone": "Europe/Moscow",
+    "coordinates": { "latitude": 55.685849, "longitude": 37.536554 },
+    "hours": { "open": "11:00", "close": "20:00" },
+    "exceptions": {}
+  },
   "routes": [
     { "href": "#assortment", "label": "Что продаём" },
     { "href": "catalog/", "label": "Продукты и цены" },

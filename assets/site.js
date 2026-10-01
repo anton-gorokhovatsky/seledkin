@@ -1,6 +1,7 @@
 import { typographText } from "./typography.js?v=typography-23-1";
-import "./theme.js?v=shop-journeys-2";
-import { syncMenuSeaVideo } from "./sea-motion.js?v=hero-priority-1";
+import "./theme.js?v=sea-hours-1";
+import "./store-environment.js?v=sea-hours-1";
+import { syncMenuSeaVideo } from "./sea-motion.js?v=sea-hours-1";
 
 const root = new URL("../", import.meta.url);
 const isHome = location.pathname === root.pathname || location.pathname === `${root.pathname}index.html`;

@@ -3,6 +3,18 @@ import { typographText } from "../assets/typography.js";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const site = JSON.parse(read("content/site.json"));
+export const store = site.store;
+const validHours = hours => hours && /^([01]\d|2[0-3]):[0-5]\d$/.test(hours.open)
+  && /^([01]\d|2[0-3]):[0-5]\d$/.test(hours.close) && hours.open < hours.close;
+if (store.timeZone !== "Europe/Moscow" || !validHours(store.hours)) throw new Error("Invalid regular shop hours");
+for (const [date, hours] of Object.entries(store.exceptions)) {
+  const parsed = new Date(`${date}T12:00:00Z`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Number.isFinite(parsed.getTime())
+    || parsed.toISOString().slice(0, 10) !== date || (hours !== null && !validHours(hours))) {
+    throw new Error(`Invalid shop-hours exception: ${date}`);
+  }
+}
+export const regularHours = `Ежедневно с&nbsp;${store.hours.open} до&nbsp;${store.hours.close}`;
 const media = JSON.parse(read("assets/media-variants.json"));
 export const entries = JSON.parse(read("content/journal.json")).map(entry => ({
   ...entry,
@@ -44,6 +56,7 @@ export function renderMenu(page, root) {
       : `<a class="site-menu__brand brand-jelly brand-jelly--panel" href="${root}">`,
     brandClose: page === "home" ? "</div>" : "</a>",
     routes: routeLinks(page, root, true),
+    regularHours,
     menuAddress: `${street}<br />\n                Метро ${site.address.metro}`,
   });
 }
@@ -54,12 +67,14 @@ ${routeLinks(page, root, false)}
     </nav>`;
   return `${fallback}\n${template("footer", {
     root, footerId: page === "catalog" ? "catalog-footer-title" : "footer-title",
+    regularHours: `Каждый день с ${store.hours.open} до ${store.hours.close}`,
     footerAddress: `${street}; ${metro}`,
   })}`;
 }
 
 export function renderTheme(page) {
   return template("theme-bootstrap", {
+    themeSchedule: JSON.stringify({ timeZone: store.timeZone, ...store.hours }),
     baseSetup: page === "404" ? `        const base = document.querySelector("base");
         base.href = window.location.hostname.endsWith(".github.io")
           ? "/seledkin/"

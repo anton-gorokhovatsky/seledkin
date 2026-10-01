@@ -9,16 +9,20 @@
         } catch {}
         let scheduleTheme = null;
         try {
-          const hourPart = new Intl.DateTimeFormat("en-GB", {
-            timeZone: "Europe/Moscow",
+          const schedule = {{themeSchedule}};
+          const parts = new Intl.DateTimeFormat("en-GB", {
+            timeZone: schedule.timeZone,
             hour: "2-digit",
+            minute: "2-digit",
             hourCycle: "h23",
           })
-            .formatToParts(new Date())
-            .find(({ type }) => type === "hour");
-          const hour = Number(hourPart?.value);
-          if (Number.isFinite(hour)) {
-            scheduleTheme = hour >= 11 && hour < 20 ? "light" : "dark";
+            .formatToParts(new Date());
+          const hour = Number(parts.find(({ type }) => type === "hour")?.value);
+          const minute = Number(parts.find(({ type }) => type === "minute")?.value);
+          const minutes = time => Number(time.slice(0, 2)) * 60 + Number(time.slice(3));
+          if (Number.isFinite(hour) && Number.isFinite(minute)) {
+            const now = (hour % 24) * 60 + minute;
+            scheduleTheme = now >= minutes(schedule.open) && now < minutes(schedule.close) ? "light" : "dark";
           }
         } catch {}
         const theme =

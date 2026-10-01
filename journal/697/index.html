@@ -57,16 +57,20 @@
         } catch {}
         let scheduleTheme = null;
         try {
-          const hourPart = new Intl.DateTimeFormat("en-GB", {
-            timeZone: "Europe/Moscow",
+          const schedule = {"timeZone":"Europe/Moscow","open":"11:00","close":"20:00"};
+          const parts = new Intl.DateTimeFormat("en-GB", {
+            timeZone: schedule.timeZone,
             hour: "2-digit",
+            minute: "2-digit",
             hourCycle: "h23",
           })
-            .formatToParts(new Date())
-            .find(({ type }) => type === "hour");
-          const hour = Number(hourPart?.value);
-          if (Number.isFinite(hour)) {
-            scheduleTheme = hour >= 11 && hour < 20 ? "light" : "dark";
+            .formatToParts(new Date());
+          const hour = Number(parts.find(({ type }) => type === "hour")?.value);
+          const minute = Number(parts.find(({ type }) => type === "minute")?.value);
+          const minutes = time => Number(time.slice(0, 2)) * 60 + Number(time.slice(3));
+          if (Number.isFinite(hour) && Number.isFinite(minute)) {
+            const now = (hour % 24) * 60 + minute;
+            scheduleTheme = now >= minutes(schedule.open) && now < minutes(schedule.close) ? "light" : "dark";
           }
         } catch {}
         const theme =
@@ -89,8 +93,8 @@
     <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="../../assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="../../assets/styles.css?v=journal-links-1" />
-    <script type="module" src="../../assets/site.js?v=catalog-journal-1"></script>
+    <link rel="stylesheet" href="../../assets/styles.css?v=sea-hours-1" />
+    <script type="module" src="../../assets/site.js?v=sea-hours-1"></script>
     <script type="module" src="../../assets/analytics.js?v=catalog-journal-1"></script>
     <script type="module" src="../../assets/interface-motion.js"></script>
     <title>Риеты и паштеты из копченого балтийского угря — Рыбная лавка капитана Селедкина</title>
@@ -214,7 +218,7 @@
 
           <section class="site-menu__service" aria-labelledby="menu-service-title">
             <div class="site-menu__service-inner">
-              <h3 id="menu-service-title">Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
+              <h3 id="menu-service-title" data-store-status>Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
               <address>
                 Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
                 Метро «Вави&shy;ловская» и «Университет»
@@ -322,7 +326,7 @@
           <p class="source-footer__kicker">До встречи на Вавиловской</p>
           <h2 id="footer-title">Лосось на вахте — заходите в лавку</h2>
           <p class="source-footer__lead">
-            Каждый день с 11:00 до 20:00. Можно приехать за рыбой и деликатесами или заказать доставку.
+            <span data-store-status>Каждый день с 11:00 до 20:00</span>. Можно приехать за рыбой и деликатесами или заказать доставку.
           </p>
           <div class="source-footer__visit">
             <p>Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1; метро «Вави&shy;ловская» и «Университет»</p>

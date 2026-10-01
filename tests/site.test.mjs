@@ -1523,11 +1523,11 @@ test("theme follows store hours and a deliberate choice persists across pages", 
     30_050,
   );
 
-  assert.match(siteScript, /import "\.\/theme\.js\?v=shop-journeys-2"/);
+  assert.match(siteScript, /import "\.\/theme\.js\?v=sea-hours-1"/);
   for (const page of [home, catalogPage, notFoundPage]) {
     assert.match(page, /localStorage\.getItem\("seledkin-theme"\)/);
-    assert.match(page, /timeZone:\s*"Europe\/Moscow"/);
-    assert.match(page, /hour >= 11 && hour < 20/);
+    assert.match(page, /"timeZone":"Europe\/Moscow"/);
+    assert.match(page, /"open":"11:00","close":"20:00"/);
     assert.match(page, /dataset\.themeSource = "explicit"/);
     assert.match(page, /data-theme-toggle/);
     assert.match(page, /Ночная вахта/);
@@ -1571,9 +1571,9 @@ test("Night Watch switches the hero and menu to a dedicated night sea file", asy
   }
 
   assert.match(themeScript, /document\.querySelectorAll\("\[data-theme-video\]"\)/);
-  assert.match(themeScript, /source\?\.dataset\.srcDark/);
-  assert.match(themeScript, /source\?\.dataset\.srcLight/);
-  assert.match(themeScript, /video\.load\(\)/);
+  assert.match(seaScript, /source\?\.dataset\.srcDark/);
+  assert.match(seaScript, /source\?\.dataset\.srcLight/);
+  assert.match(seaScript, /video\.load\(\)/);
   assert.match(themeScript, /seledkin:themechange/);
   assert.match(seaScript, /document\.addEventListener\("seledkin:themechange"/);
   assert.match(projectRules, /Ночное море — отдельный медиавариант/);
