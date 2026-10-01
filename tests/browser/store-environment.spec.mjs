@@ -10,7 +10,8 @@ async function connection(page, saveData, effectiveType = "4g") {
 }
 
 test("shop status crosses Moscow boundaries without overriding an explicit watch", async ({ page }) => {
-  await page.clock.install({ time: new Date("2026-10-01T07:59:58Z") });
+  await page.clock.install({ time: new Date("2026-10-01T07:59:00Z") });
+  await page.clock.pauseAt(new Date("2026-10-01T07:59:58Z"));
   await page.addInitScript(() => localStorage.setItem("seledkin-theme", "dark"));
   await page.goto("");
   await expect(page.locator("#contacts [data-store-status]")).toHaveText("Откроемся сегодня в 11:00");
