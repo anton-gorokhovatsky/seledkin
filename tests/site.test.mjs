@@ -834,7 +834,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     }
     assert.match(
       page,
-      /href="https:\/\/anton-gorokhovatsky\.github\.io\/design\/">Дизайн и разработка<\/a>/,
+      /href="https:\/\/gorokhovatsky\.tech\/\?point=ks-fish">Дизайн и разработка<\/a>/,
     );
     const channels =
       page.match(/<nav class="source-footer__channels"[\s\S]*?<\/nav>/)?.[0] ?? "";
