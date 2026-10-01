@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { matchesSearch, orderLinks, positionCount } from "../assets/catalog-model.js";
+import { matchesSearch, orderLinks, positionCount, productSearchText } from "../assets/catalog-model.js";
 import { catalog } from "../assets/catalog-data.js";
 
 test("search accepts category terms, reversed words, ё and whitespace", () => {
@@ -14,7 +14,7 @@ test("search accepts category terms, reversed words, ё and whitespace", () => {
 
 const findProducts = (query) => catalog.flatMap((category) => category.items
   .filter((product) => matchesSearch(
-    [category.label, category.shortLabel, product.name, product.description].filter(Boolean).join(" "),
+    productSearchText(category, product),
     query,
   )).map((product) => product.name));
 
@@ -27,6 +27,16 @@ test("customers find stocked products using everyday names and inflected words",
   assert.deepEqual(findProducts("СЕВЕРНЫЕ, креветки"), ["Креветка северная в/м"]);
   assert.deepEqual(findProducts("филе лосось"), ["Филе лосося"]);
   assert.equal(findProducts("командорские кальмары").length, 2);
+  assert.deepEqual(findProducts("тунец"), ["Филе тунца"]);
+  assert.deepEqual(findProducts("щука"), ["Икра щуки"]);
+  assert.deepEqual(findProducts("осетр"), findProducts("осетра"));
+});
+
+test("preparation terms describe the actual product, not its mixed category", () => {
+  assert.deepEqual(findProducts("слабосоленая"), ["Форель слабосоленая", "Лосось слабосоленый", "Сельдь слабосоленая"]);
+  assert.deepEqual(findProducts("горячего копчения"), ["Осетр горячего копчения", "Скумбрия горячего копчения"]);
+  assert.deepEqual(findProducts("креветка без головы"), ["Креветка тигровая б/г"]);
+  assert.deepEqual(findProducts("вареные креветки"), ["Креветка северная в/м"]);
 });
 
 test("search keeps partial words and combines terms without mixing different products", () => {

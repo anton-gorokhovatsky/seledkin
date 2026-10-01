@@ -77,7 +77,7 @@ test("recipes are on the homepage and each featured product opens matching catal
 test("journal actions follow all text fragments with a readable gap", async ({ page }) => {
   for (const width of [390, 1024, 1440, 1624]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto("journal/");
+    await page.goto("journal/682/");
     await page.evaluate(() => document.fonts.ready);
     const gaps = await page.locator(".ship-log-entry").evaluateAll(entries => entries.map(entry => {
       const body = entry.querySelector(".ship-log-entry__body");
@@ -87,6 +87,7 @@ test("journal actions follow all text fragments with a readable gap", async ({ p
       const actions = entry.querySelector(".ship-log-entry__actions").getBoundingClientRect();
       return { id: entry.id, gap: actions.top - textBottom };
     }));
+    expect(gaps).toHaveLength(1);
     for (const { id, gap } of gaps) expect(gap, `${width}px ${id}`).toBeGreaterThanOrEqual(23);
   }
 });

@@ -3,10 +3,12 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
-const [home, about, journal, originals] = await Promise.all([
+const [home, about, archive, originals] = await Promise.all([
   read("index.html"), read("about/index.html"), read("journal/index.html"),
   read("tests/fixtures/editorial-paragraphs.json").then(JSON.parse),
 ]);
+const ids = JSON.parse(await read("content/journal.json"));
+const journal = (await Promise.all(ids.map(entry => read(`journal/${entry.id}/index.html`)))).join("\n");
 const plain = text => text.replace(/<[^>]*>/g, "")
   .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code))).replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '\"')
   .replace(/&shy;|\u00ad/g, "")
@@ -18,7 +20,7 @@ const plain = text => text.replace(/<[^>]*>/g, "")
   .replace(/[\s\u00a0\u202f]+/gu, " ").trim();
 
 test("every original editorial paragraph survives on its published page", () => {
-  const paragraphs = [...(home + about + journal).matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(match => plain(match[1]));
+  const paragraphs = [...(home + about + archive + journal).matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(match => plain(match[1]));
   // Catalog UI labels are not author paragraphs. Published price examples
   // are checked against the current catalog data below.
   assert.equal(originals.length, 43);

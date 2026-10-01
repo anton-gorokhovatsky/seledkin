@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <!-- Yandex.Metrika counter -->
+    <script>
+      // Keep local previews and automated checks out of the production counter.
+      if (location.hostname === "ks.fish" || location.hostname === "www.ks.fish") {
+        (function(m,e,t,r,i,k,a){
+          m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+          m[i].l=1*new Date();
+          for (var j=0;j<document.scripts.length;j++) {if (document.scripts[j].src===r) {return;}}
+          k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
+        })(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
+        ym(70820554,'init',{webvisor:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});
+      }
+    </script>
+    <!-- /Yandex.Metrika counter -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="{{description}}"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="article" />
+    <meta property="article:published_time" content="{{published}}" />
+    <meta name="author" content="Олег Гугунава" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="Рыбная лавка капитана Селедкина" />
+    <meta property="og:title" content="{{title}} — Рыбная лавка капитана Селедкина" />
+    <meta property="og:description" content="{{description}}" />
+    <meta property="og:url" content="{{url}}" />
+    <meta property="og:image" content="{{shareImage}}" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="{{imageWidth}}" />
+    <meta property="og:image:height" content="{{imageHeight}}" />
+    <meta property="og:image:alt" content="{{alt}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{title}} — Рыбная лавка капитана Селедкина" />
+    <meta name="twitter:description" content="{{description}}" />
+    <meta name="twitter:image" content="{{shareImage}}" />
+    <meta name="twitter:image:alt" content="{{alt}}" />
+    <link rel="canonical" href="{{url}}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    {{theme}}
+    <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="../../assets/favicon-16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../../assets/styles.css?v=catalog-journal-1" />
+    <script type="module" src="../../assets/site.js?v=catalog-journal-1"></script>
+    <script type="module" src="../../assets/analytics.js?v=catalog-journal-1"></script>
+    <script type="module" src="../../assets/interface-motion.js"></script>
+    <title>{{title}} — Рыбная лавка капитана Селедкина</title>
+  </head>
+  <body class="journal-page journal-story-page">
+    <noscript><div><img src="https://mc.yandex.ru/watch/70820554" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <a class="skip-link" href="#main">Перейти к записи</a>
+
+    <header class="source-header" id="top">
+      <div class="source-header__bar">
+        <a class="source-brand brand-jelly brand-jelly--page" href="../../" aria-label="Рыбная лавка капитана Селедкина — на главную">
+          <img
+            src="../../assets/logo-redrawn-sea.svg"
+            data-theme-logo
+            data-logo-light="../../assets/logo-redrawn-sea.svg"
+            data-logo-dark="../../assets/logo-redrawn-sea.svg"
+            alt="Рыбная лавка капитана Селедкина"
+            width="3600"
+            height="1784"
+          />
+        </a>
+      </div>
+    </header>
+
+    {{menu}}
+
+    <main id="main" tabindex="-1" class="journal-story-main source-shell">
+      <nav class="journal-story__back" aria-label="Судовой журнал"><a href="../">Все записи журнала</a></nav>
+{{article}}
+      <nav class="journal-story__next" aria-label="Другие записи журнала">{{neighbors}}</nav>
+    </main>
+
+    {{footer}}
+
+  </body>
+</html>

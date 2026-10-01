@@ -1,5 +1,5 @@
-import { readFileSync, writeFileSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderJournal, contactAddress } from "./site-content.mjs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { entries, renderMenu, renderFooter, renderTheme, renderJournal, renderJournalPage, contactAddress } from "./site-content.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
 const hero = entries.slice(0, 5);
@@ -16,6 +16,7 @@ for (const [path, page, root] of pages) {
     "contact-address": contactAddress,
   });
   if (page === "journal") regions["journal-archive"] = renderJournal(entries, "archive");
+  if (page === "catalog") regions["journal-search"] = renderJournal(entries, "search");
   let result = original;
   for (const [key, content] of Object.entries(regions)) {
     const pattern = new RegExp(`(<!-- shared:${key}:start -->)[\\s\\S]*?(<!-- shared:${key}:end -->)`, "g");
@@ -30,3 +31,20 @@ for (const [path, page, root] of pages) {
     }
   } else if (result !== original) writeFileSync(file, result);
 }
+
+function generated(path, content) {
+  const file = new URL(`../${path}`, import.meta.url);
+  const original = existsSync(file) ? readFileSync(file, "utf8") : "";
+  if (process.argv.includes("--check")) {
+    if (original !== content) {
+      console.error(`${path}: выполните pnpm build:site.`);
+      process.exitCode = 1;
+    }
+  } else if (original !== content) {
+    mkdirSync(new URL(".", file), { recursive: true });
+    writeFileSync(file, content);
+  }
+}
+for (const entry of entries) generated(`journal/${entry.id}/index.html`, renderJournalPage(entry));
+const routes = ["", "catalog/", "journal/", "about/", ...entries.map(entry => `journal/${entry.id}/`)];
+generated("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map(path => `  <url>\n    <loc>https://ks.fish/${path}</loc>\n  </url>`).join("\n")}\n</urlset>\n`);

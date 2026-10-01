@@ -246,7 +246,7 @@ test("all pages and open navigation pass axe in both watches", async ({ browser,
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
     await context.addInitScript(value => localStorage.setItem("seledkin-theme", value), theme);
     const page = await context.newPage();
-    for (const path of ["", "catalog/", "about/", "journal/", "404.html"]) {
+    for (const path of ["", "catalog/", "about/", "journal/", "journal/698/", "journal/683/", "404.html"]) {
       await page.goto(`${baseURL}${path}`);
       await page.evaluate(() => document.fonts.ready);
       await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
@@ -296,7 +296,7 @@ test("ordinary sections share one continuous surface and delivery keeps its cont
 
 test("320px reflow, enlarged text, custom spacing and contrast retain controls", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 });
-  for (const path of ["", "catalog/", "about/", "journal/", "404.html"]) {
+  for (const path of ["", "catalog/", "about/", "journal/", "journal/698/", "journal/683/", "404.html"]) {
     for (const mode of ["text", "spacing", "contrast", "forced"]) {
       await page.emulateMedia({ reducedMotion: "reduce", contrast: mode === "contrast" ? "more" : "no-preference", forcedColors: mode === "forced" ? "active" : "none" });
       await page.goto(path);

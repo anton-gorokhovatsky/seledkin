@@ -135,7 +135,8 @@ for (const forbidden of ["next/", "next.js", "react-dom", "from \"react\"", "til
   }
 }
 
-const htmlFiles = ["index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html"];
+const journalEntries = JSON.parse(readFileSync(join(root, "content/journal.json"), "utf8"));
+const htmlFiles = [...journalEntries.map(entry => `journal/${entry.id}/index.html`), "index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html"];
 const pageTitles = new Map();
 for (const file of htmlFiles) {
   const path = join(root, file);
@@ -362,17 +363,18 @@ const seaScript = readFileSync(join(root, "assets/sea-motion.js"), "utf8");
 for (const required of ["video.pause()", "video.currentTime = 0", "IntersectionObserver", "data-sea-toggle"]) {
   if (!seaScript.includes(required)) fail(`assets/sea-motion.js: нет обязательного поведения ${required}`);
 }
-const journalEntries = JSON.parse(readFileSync(join(root, "content/journal.json"), "utf8"));
-if (!journalEntries.length || (journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length !== journalEntries.length) {
+
+if (!journalEntries.length || (journalPage.match(/class="journal-index-entry(?:\s|")/g) ?? []).length !== journalEntries.length) {
   fail("journal/index.html: «Судовой журнал» не совпадает с отобранными записями");
 }
 for (const { id } of journalEntries) {
+  const article = readFileSync(join(root, `journal/${id}/index.html`), "utf8");
   for (const required of [
     `assets/journal-${id}.jpg`,
     `https://t.me/kapitanseledkin/${id}`,
   ]) {
-    if (!journalPage.includes(required)) {
-      fail(`journal/index.html: в «Судовом журнале» нет ${required}`);
+    if (!article.includes(required)) {
+      fail(`journal/${id}/index.html: в «Судовом журнале» нет ${required}`);
     }
   }
 }

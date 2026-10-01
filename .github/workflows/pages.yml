@@ -61,7 +61,7 @@ jobs:
           cp yandex_a89bf574e33f8d22.html _site/
           cp assets/* _site/assets/
           cp catalog/index.html catalog/catalog.js _site/catalog/
-          cp journal/index.html _site/journal/
+          cp -R journal/. _site/journal/
           cp about/index.html _site/about/
 
       - name: Upload Pages artifact

@@ -1,4 +1,4 @@
-import { matchesSearch, positionCount } from "../assets/catalog-model.js?v=typography-23-1";
+import { matchesSearch, positionCount } from "../assets/catalog-model.js?v=catalog-journal-1";
 
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");
@@ -9,6 +9,8 @@ const count = document.querySelector("[data-catalog-count]");
 const reset = document.querySelector("[data-catalog-reset]");
 const controls = document.querySelector("[data-catalog-controls]");
 const empty = document.querySelector("[data-catalog-empty]");
+const journal = document.querySelector("[data-catalog-journal]");
+const journalEntries = [...journal.querySelectorAll("[data-journal-result]")];
 const categories = [...list.querySelectorAll(".catalog-category")].map((section) => ({
   section,
   slug: section.dataset.category,
@@ -17,6 +19,19 @@ const categories = [...list.querySelectorAll(".catalog-category")].map((section)
 }));
 let activeCategory = "all";
 let query = "";
+let results = { products: 0, journal: 0 };
+let searchTimer;
+let lastTrackedSearch = "";
+
+function reportSearch() {
+  clearTimeout(searchTimer);
+  const key = `${activeCategory}:${query.trim().toLocaleLowerCase("ru-RU")}`;
+  if (!query.trim() || key === lastTrackedSearch) return;
+  lastTrackedSearch = key;
+  const params = { category: activeCategory, query_length: query.trim().length, products: results.products, journal: results.journal };
+  document.dispatchEvent(new CustomEvent("shop:goal", { detail: { goal: "catalog_search", params } }));
+  if (!results.products) document.dispatchEvent(new CustomEvent("shop:goal", { detail: { goal: "catalog_search_empty", params } }));
+}
 
 function readUrl() {
   const url = new URL(location.href);
@@ -49,8 +64,15 @@ function render() {
     category.count.textContent = positionCount(categoryCount);
     visibleCount += categoryCount;
   }
-  count.textContent = visibleCount ? positionCount(visibleCount) : "Ничего не найдено";
-  empty.hidden = visibleCount > 0;
+  let journalCount = 0;
+  for (const entry of journalEntries) {
+    entry.hidden = !query.trim() || !matchesSearch(entry.dataset.searchText, query);
+    if (!entry.hidden) journalCount += 1;
+  }
+  journal.hidden = journalCount === 0;
+  results = { products: visibleCount, journal: journalCount };
+  count.textContent = `${visibleCount ? positionCount(visibleCount) : journalCount ? "В каталоге нет совпадений" : "Ничего не найдено"}${journalCount ? ` · Из журнала: ${journalCount}` : ""}`;
+  empty.hidden = visibleCount > 0 || journalCount > 0;
   reset.hidden = activeCategory === "all" && query === "";
   filters.querySelectorAll("button").forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.category === activeCategory));
@@ -65,21 +87,28 @@ filters.addEventListener("click", (event) => {
   activeCategory = button.dataset.category;
   writeUrl();
   render();
+  reportSearch();
 });
 search.addEventListener("input", () => {
   query = search.value;
   writeUrl(true);
   render();
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(reportSearch, 800);
 });
+search.addEventListener("change", reportSearch);
 select.addEventListener("change", () => {
   activeCategory = select.value;
   writeUrl();
   render();
+  reportSearch();
 });
 reset.addEventListener("click", () => {
   activeCategory = "all";
   query = "";
   search.value = "";
+  clearTimeout(searchTimer);
+  lastTrackedSearch = "";
   writeUrl();
   render();
   search.focus();

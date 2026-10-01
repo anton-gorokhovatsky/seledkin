@@ -4392,3 +4392,124 @@ a.site-menu__brand {
     margin-bottom: 1rem;
   }
 }
+
+/* One compact archive; each selected story keeps its complete author material. */
+.journal-index-entry {
+  min-width: 0;
+  padding-block: clamp(1.35rem, 2.5vw, 2rem);
+  border-bottom: 1px solid var(--line);
+  scroll-margin-top: 6rem;
+}
+.journal-index-entry__link {
+  display: grid;
+  grid-template-columns: clamp(5rem, 12vw, 9rem) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: start;
+  color: var(--ink);
+  text-decoration: none;
+}
+.journal-index-entry__link img {
+  width: 100%;
+  height: auto;
+}
+.journal-index-entry time {
+  color: var(--muted);
+  font-size: var(--text-meta);
+}
+.journal-index-entry :is(h2, h3) {
+  max-width: 36ch;
+  margin: 0.5rem 0;
+  font: 400 clamp(1.45rem, 1.1rem + 1.4vw, 2.5rem) / 1.15 var(--serif);
+  text-wrap: balance;
+}
+.journal-index-entry__read {
+  display: inline-block;
+  padding-block: 0.5rem;
+  color: var(--text-link);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.journal-index-entry__link:hover :is(h2, h3) {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+.catalog-journal {
+  margin-top: 2.5rem;
+}
+.catalog-journal > h2 {
+  margin-bottom: 1rem;
+  font: 400 clamp(2rem, 1.5rem + 1vw, 2.5rem) / 1.1 var(--serif);
+}
+.catalog-journal__note {
+  max-width: 45rem;
+  color: var(--muted);
+}
+.catalog-journal .journal-index-entry :is(h2, h3) {
+  font-size: clamp(1.35rem, 1.1rem + 0.8vw, 2rem);
+}
+.catalog-journal .journal-index-entry__link {
+  grid-template-columns: 5rem minmax(0, 1fr);
+}
+.journal-story-main {
+  padding-block: var(--page-intro-space) clamp(3rem, 6vw, 6rem);
+}
+.journal-story__back a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-link);
+}
+.ship-log-entry.journal-story {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  padding-top: 1.5rem;
+  border-bottom: 0;
+}
+.journal-story__header {
+  grid-column: 1 / -1;
+  max-width: 68rem;
+}
+.journal-story__header .page-intro__title {
+  max-width: 24ch;
+}
+.journal-story__header .ship-log-entry__meta {
+  margin: 1.5rem 0 0;
+}
+.journal-story > img {
+  border: 0;
+}
+.journal-story .ship-log-entry__body {
+  overflow-wrap: anywhere;
+}
+.journal-story__next {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 4rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+.journal-story__next a {
+  flex: 1 1 16rem;
+  min-width: 0;
+  min-height: 44px;
+  max-width: 32rem;
+  color: var(--text-link);
+  font: 400 clamp(1.35rem, 1rem + 1vw, 2rem) / 1.25 var(--serif);
+  overflow-wrap: anywhere;
+}
+.journal-story__next span {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--muted);
+  font: 400 var(--text-meta) / 1.5 var(--sans);
+}
+@media (max-width: 61.1875rem) {
+  .ship-log-entry.journal-story {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .journal-story > img {
+    max-width: 38rem;
+    margin-inline: auto;
+  }
+}

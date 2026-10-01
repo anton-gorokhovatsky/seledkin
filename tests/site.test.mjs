@@ -144,6 +144,7 @@ function pngDimensions(buffer) {
   };
 }
 
+const journalStories = (await Promise.all(journalEntries.map(entry => pageText(`../journal/${entry.id}/index.html`)))).join("\n");
 test("the site is plain HTML, CSS and JavaScript", () => {
   assert.match(home, /^<!doctype html>/i);
   assert.match(catalogPage, /^<!doctype html>/i);
@@ -232,7 +233,7 @@ test("home exposes the core customer jobs", () => {
   assert.match(hero, /href="catalog\/"/);
   assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
-  assert.match(hero, /href="journal\/#journal-entry-698"/);
+  assert.match(hero, /href="journal\/698\/"/);
   assert.match(hero, /data-source-image="assets\/journal-698\.jpg"/);
   assert.match(hero, /datetime="2026-09-29"/);
   assert.match(hero, /У нас новый завоз малосольного каспийского залома/);
@@ -258,7 +259,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
   );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 5);
   for (const { id } of journalEntries.slice(0, 5)) {
-    assert.match(hero, new RegExp("href=\"journal/#journal-entry-" + id + "\""));
+    assert.match(hero, new RegExp("href=\"journal/" + id + "/\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }
   assert.doesNotMatch(hero, /https:\/\/t\.me\/kapitanseledkin\/68[0-4]/);
@@ -640,7 +641,7 @@ test("the typographic scale protects reading and interface text", () => {
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(journalPage, /id="journal"/);
   assert.match(journalPage, /<h1 class="page-intro__title" id="journal-title">Судовой журнал<\/h1>/);
-  assert.equal((journalPage.match(/class="ship-log-entry(?:\s|")/g) ?? []).length, journalEntries.length);
+  assert.equal((journalPage.match(/class="journal-index-entry(?:\s|")/g) ?? []).length, journalEntries.length);
   for (const { id } of journalEntries) {
     assert.match(
       journalPage,
@@ -653,7 +654,7 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
 
   let cursor = -1;
   for (const { id } of journalEntries) {
-    const next = journalPage.indexOf(`https://t.me/kapitanseledkin/${id}`, cursor + 1);
+    const next = journalPage.indexOf(`href="${id}/"`, cursor + 1);
     assert.ok(next > cursor, `Запись ${id} должна идти в обратной хронологии`);
     assert.match(journalPage, new RegExp(`assets/journal-${id}\\.jpg`));
     cursor = next;
@@ -667,7 +668,7 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
     "Первая икра дикого кижуча сезона 2026",
     "Нежнейшая малосольная черноморская барабуля",
   ]) {
-    assert.ok(journalPage.includes(excerpt), `Не сохранена авторская формулировка: ${excerpt}`);
+    assert.ok(journalStories.includes(excerpt), `Не сохранена авторская формулировка: ${excerpt}`);
   }
   assert.doesNotMatch(journalPage, /telegram-widget|tgme_widget|Feed not found/i);
 });
@@ -1962,7 +1963,7 @@ test("main and catalog publish custom-domain social metadata", () => {
   assert.ok(home.includes(`"image": "${image}"`));
 });
 
-test("search engines receive the current four-page public map", () => {
+test("search engines receive every public page including full journal articles", () => {
   const root = "https://ks.fish/";
   assert.match(robots, /^User-agent: \*\nAllow: \/\n/m);
   assert.ok(robots.includes(`Sitemap: ${root}sitemap.xml`));
@@ -1971,7 +1972,8 @@ test("search engines receive the current four-page public map", () => {
   assert.ok(sitemap.includes(`<loc>${root}catalog/</loc>`));
   assert.ok(sitemap.includes(`<loc>${root}journal/</loc>`));
   assert.ok(sitemap.includes(`<loc>${root}about/</loc>`));
-  assert.equal((sitemap.match(/<url>/g) ?? []).length, 4);
+  assert.equal((sitemap.match(/<url>/g) ?? []).length, 4 + journalEntries.length);
+  for (const entry of journalEntries) assert.ok(sitemap.includes(`<loc>${root}journal/${entry.id}/</loc>`));
 });
 
 test("the custom domain is consistent across all pages and the deployment artifact", async () => {

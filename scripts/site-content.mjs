@@ -11,7 +11,8 @@ export const entries = JSON.parse(read("content/journal.json")).map(entry => ({
 
 const escape = value => String(value).replaceAll("&", "&amp;").replaceAll('"', "&quot;")
   .replaceAll("<", "&lt;").replaceAll(">", "&gt;");
-const text = value => escape(typographText(value));
+const plain = value => value.replaceAll("&nbsp;", "\u00a0").replaceAll("&amp;", "&").replaceAll("&quot;", '"');
+const text = value => escape(typographText(plain(value)));
 function template(name, values) {
   return read(`templates/${name}.html`).trimEnd().replace(/{{(\w+)}}/g, (_, key) => {
     if (!(key in values)) throw new Error(`Missing ${name} template value: ${key}`);
@@ -95,13 +96,13 @@ function image(entry, root, sizes, deferred = false, hero = false) {
 export function renderJournal(list, view) {
   return list.map((entry, index) => {
     const { id, title } = entry;
-    if (view === "hero") return `              <a class="source-hero__proof source-hero__journal-card" href="journal/#journal-entry-${id}" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: ${title}"${index ? ' aria-hidden="true" tabindex="-1"' : ""} data-hero-journal-card data-stack-position="${index}">
+    if (view === "hero") return `              <a class="source-hero__proof source-hero__journal-card" href="journal/${id}/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: ${title}"${index ? ' aria-hidden="true" tabindex="-1"' : ""} data-hero-journal-card data-stack-position="${index}">
                 <figure>
                   ${image(entry, "", "(max-width: 61.1875rem) min(88vw, 340px), 288px", index > 0, true)}
                   <figcaption><span class="source-hero__proof-meta"><time datetime="${entry.date}">${date(entry, false)}</time></span><strong>${title}</strong></figcaption>
                 </figure>
               </a>`;
-    if (view === "preview") return `            <a class="journal-preview__entry" href="journal/#journal-entry-${id}" aria-labelledby="journal-preview-${id}">
+    if (view === "preview") return `            <a class="journal-preview__entry" href="journal/${id}/" aria-labelledby="journal-preview-${id}">
               <div class="journal-preview__media">
                 ${image(entry, "", "(max-width: 22rem) calc(100vw - 36px), (max-width: 61.1875rem) min(28vw, 128px), 368px")}
               </div>
@@ -111,22 +112,53 @@ export function renderJournal(list, view) {
                 <span class="journal-preview__link">Читать запись</span>
               </div>
             </a>`;
-    if (view !== "archive") throw new Error(`Unknown journal view: ${view}`);
+    if (view === "archive" || view === "search") {
+      const root = "../";
+      return `            <article class="journal-index-entry" id="journal-entry-${id}" tabindex="-1"${view === "search" ? ` data-journal-result data-search-text="${text(`${entry.title} ${entry.product}`)}" hidden` : ""}>
+              <a class="journal-index-entry__link" href="${view === "search" ? "../journal/" : ""}${id}/" aria-labelledby="entry-title-${id}">
+                ${image(entry, root, "(max-width: 34rem) 80px, 144px")}
+                <div>
+                  <time datetime="${entry.date}">${date(entry)}</time>
+                  <${view === "search" ? "h3" : "h2"} id="entry-title-${id}">${title}</${view === "search" ? "h3" : "h2"}>
+                  <span class="journal-index-entry__read">Читать запись</span>
+                </div>
+              </a>
+            </article>`;
+    }
+    if (view !== "article") throw new Error(`Unknown journal view: ${view}`);
     const source = `https://t.me/kapitanseledkin/${id}`;
     const inquiry = `Здравствуйте! Подскажите, пожалуйста, есть ли в наличии:\n${entry.product}\nУвидел(а) в Судовом журнале: ${source}`;
-    return `            <article class="ship-log-entry" id="journal-entry-${id}" tabindex="-1">
-              ${image(entry, "../", `(max-width: 61.1875rem) calc(100vw - 36px), ${entry.archiveImageWidth}px`)}
-              <div class="ship-log-entry__content">
+    return `            <article class="ship-log-entry journal-story" data-journal-id="${id}" id="journal-entry-${id}" tabindex="-1">
+              <header class="journal-story__header page-intro">
+                <p class="page-intro__eyebrow">Судовой журнал · Олег Гугунава</p>
+                <h1 class="page-intro__title">${title}</h1>
                 <p class="ship-log-entry__meta"><time datetime="${entry.date}">${date(entry)}</time> <span>Запись №&nbsp;${id}</span></p>
-                <h2>${title}</h2>
+              </header>
+              ${image(entry, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, true)}
+              <div class="ship-log-entry__content">
                 <div class="ship-log-entry__body">
 ${entry.body.split("\n").map(line => `                  ${line}`).join("\n")}
                 </div>
                 <div class="ship-log-entry__actions">
-                  <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=${encodeURIComponent(inquiry)}"><span class="source-button__label">Спросить о наличии<span class="visually-hidden"> в Телеграме: ${text(entry.product)}</span></span></a>
+                  <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}"><span class="source-button__label">Спросить о наличии<span class="visually-hidden"> в Телеграме: ${text(entry.product)}</span></span></a>
                   <a class="ship-log-entry__link" href="${source}">Читать запись в Телеграме</a>
                 </div>
               </div>
             </article>`;
   }).join(view === "archive" ? "\n\n" : "\n");
+}
+
+export function renderJournalPage(entry) {
+  const url = `https://ks.fish/journal/${entry.id}/`;
+  const native = media.filter(item => item.source === entry.image).sort((a, b) => b.width - a.width)[0];
+  const index = entries.findIndex(item => item.id === entry.id);
+  const neighbors = [entries[index - 1], entries[index + 1]].filter(Boolean).map(item =>
+    `<a href="../${item.id}/"><span>${item.id > entry.id ? "Следующая запись" : "Предыдущая запись"}</span>${item.title}</a>`).join("\n");
+  return template("journal-page", {
+    theme: renderTheme("journal"), menu: renderMenu("journal", "../../"), footer: renderFooter("journal", "../../"),
+    article: renderJournal([entry], "article"), neighbors,
+    url, title: text(entry.title), description: text(`${plain(entry.title).replace(/[.!?]+$/u, "")}. Запись Олега Гугунавы от ${date(entry)} в Судовом журнале Рыбной лавки капитана Селедкина.`),
+    shareImage: `https://ks.fish/assets/${entry.image}`, alt: text(entry.alt),
+    imageWidth: native.width, imageHeight: native.height, published: entry.date,
+  }) + "\n";
 }

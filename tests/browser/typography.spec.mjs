@@ -84,7 +84,7 @@ test("internal sections and the three reasons retain their shared heading levels
 test("button labels use the same optical centre in every page and open menu", async ({ page }) => {
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const route of ["", "catalog/", "about/", "journal/", "404.html"]) {
+    for (const route of ["", "catalog/", "about/", "journal/", "journal/698/", "journal/683/", "404.html"]) {
       await page.goto(route);
       await page.evaluate(() => document.fonts.ready);
       for (const menu of [false, true]) {
