@@ -17,9 +17,13 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      scope: ${{ steps.scope.outputs.scope }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
@@ -37,17 +41,30 @@ jobs:
       - name: Test
         run: pnpm run test
 
+      - name: Choose checks for published changes
+        id: scope
+        env:
+          BASE_SHA: ${{ github.event.before }}
+        run: |
+          if [ -n "$BASE_SHA" ] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA" || true
+          fi
+          node scripts/release-scope.mjs "$BASE_SHA"
+
       - name: Install browser test dependencies
+        if: steps.scope.outputs.browser_required == 'true'
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Install browsers
+        if: steps.scope.outputs.browser_required == 'true'
         run: pnpm exec playwright install --with-deps chromium webkit
 
       - name: Verify customer journeys in Chromium and WebKit
+        if: steps.scope.outputs.browser_required == 'true'
         run: pnpm run test:browser
 
       - name: Keep browser evidence
-        if: always()
+        if: always() && steps.scope.outputs.browser_required == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: browser-evidence
@@ -55,6 +72,7 @@ jobs:
           retention-days: 14
 
       - name: Package static files
+        if: steps.scope.outputs.scope != 'none'
         run: |
           mkdir -p _site/assets _site/catalog _site/journal _site/about
           cp index.html 404.html robots.txt sitemap.xml CNAME .nojekyll _site/
@@ -65,11 +83,13 @@ jobs:
           cp about/index.html _site/about/
 
       - name: Upload Pages artifact
+        if: steps.scope.outputs.scope != 'none'
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
   deploy:
+    if: needs.build.outputs.scope != 'none'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
