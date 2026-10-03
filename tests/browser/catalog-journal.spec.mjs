@@ -28,10 +28,10 @@ test("catalog separates dated journal matches from current price rows", async ({
 
 test("archive is compact, full articles preserve photographs and survive enlarged text", async ({ page }) => {
   await page.goto("journal/");
-  await expect(page.locator(".journal-index-entry")).toHaveCount(19);
+  await expect(page.locator(".journal-index-entry")).toHaveCount(20);
   await expect(page.locator(".ship-log-entry__body")).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThan(7000);
-  for (const path of ["journal/698/", "journal/683/"]) {
+  for (const path of ["journal/699/", "journal/683/"]) {
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto(path);
     await page.addStyleTag({ content: "html { font-size:200% !important; } p { line-height:1.5 !important; margin-bottom:2em !important; } * { letter-spacing:0.12em !important; word-spacing:0.16em !important; }" });

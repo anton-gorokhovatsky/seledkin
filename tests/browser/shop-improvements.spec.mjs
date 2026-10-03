@@ -37,9 +37,9 @@ test("complete editorial pages and inquiry links work without JavaScript", async
   await context.route("https://mc.yandex.ru/**", route => route.abort());
   const page = await context.newPage();
   await page.goto(`${baseURL}journal/`);
-  await expect(page.locator(".journal-index-entry")).toHaveCount(19);
+  await expect(page.locator(".journal-index-entry")).toHaveCount(20);
   await page.locator(".journal-index-entry__link").first().click();
-  await expect(page.locator(".ship-log-entry__body")).toContainText("Рыба продается целиком");
+  await expect(page.locator(".ship-log-entry__body")).toContainText("получаем охлажденную эталонную форель из Карелии");
   await expect(page.getByRole("link", { name: /Спросить о наличии/ })).toHaveCount(1);
   await page.goto(`${baseURL}about/`);
   await expect(page.locator(".about-overview__chapter")).toHaveCount(3);
@@ -85,7 +85,7 @@ test("journal previews keep whole photographs, aligned desktop reading lines and
     await entries.first().focus();
     await expect(entries.first()).toBeFocused();
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(/journal\/698\/$/);
+    await expect(page).toHaveURL(/journal\/699\/$/);
   }
 });
 

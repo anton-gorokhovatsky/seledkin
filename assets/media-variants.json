@@ -756,5 +756,32 @@
     "bytes": 598,
     "width": 32,
     "height": 41
+  },
+  {
+    "file": "journal-699-480.webp",
+    "source": "journal-699.jpg",
+    "sourceSha256": "60f18f380a6c176f9520529f743616a541c3df32553ddc7ff04dc977f10c338b",
+    "sha256": "154d4955e34620605ead6935c842dfc6e13a865932628fc89dedd6ccd368faff",
+    "bytes": 27206,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "journal-699-800.webp",
+    "source": "journal-699.jpg",
+    "sourceSha256": "60f18f380a6c176f9520529f743616a541c3df32553ddc7ff04dc977f10c338b",
+    "sha256": "29fd72894e3be77db5070a9458ec5cbfc8a273d617acec850777759c62fe6368",
+    "bytes": 49274,
+    "width": 800,
+    "height": 800
+  },
+  {
+    "file": "journal-699-32.webp",
+    "source": "journal-699.jpg",
+    "sourceSha256": "60f18f380a6c176f9520529f743616a541c3df32553ddc7ff04dc977f10c338b",
+    "sha256": "71191387adaa817f9eb23f078cc0260759c9a9ce6a1b307f7b8de9409d4c9953",
+    "bytes": 290,
+    "width": 32,
+    "height": 32
   }
 ]

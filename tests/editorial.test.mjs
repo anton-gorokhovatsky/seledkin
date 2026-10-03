@@ -41,11 +41,11 @@ test("all homepage price examples agree with the current catalog", () => {
 });
 
 test("all journal entries retain their source and a draft about that exact product", () => {
-  const names = ["Малосольный каспийский залом", "Риеты и паштеты", "Малосольный каспийский залом", "Филе форели", "Ряпушка", "Стейк чилийского лосося", "Филе трески", "Радужная форель", "Скумбрия", "Чир", "Паштет", "Уха", "Черноморский бычок", "Филе форели", "Икряная камбала", "Филе сельди", "тугунок", "Икра дикого кижуча", "барабуля"];
+  const names = ["Охлажденная форель из Карелии", "Малосольный каспийский залом", "Риеты и паштеты", "Малосольный каспийский залом", "Филе форели", "Ряпушка", "Стейк чилийского лосося", "Филе трески", "Радужная форель", "Скумбрия", "Чир", "Паштет", "Уха", "Черноморский бычок", "Филе форели", "Икряная камбала", "Филе сельди", "тугунок", "Икра дикого кижуча", "барабуля"];
   const entries = [...journal.matchAll(/<article\s+class="ship-log-entry[\s\S]*?<\/article>/g)].map(match => match[0]);
-  assert.equal(entries.length, 19);
+  assert.equal(entries.length, 20);
   entries.forEach((entry, index) => {
-    const id = 698 - index;
+    const id = 699 - index;
     const inquiry = entry.match(/href="(https:\/\/t\.me\/\+79166751452\?text=[^"]+)"/)[1];
     const draft = new URL(inquiry).searchParams.get("text");
     assert.ok(draft.includes(names[index]));
@@ -57,8 +57,9 @@ test("all journal entries retain their source and a draft about that exact produ
 });
 
 
-test("September updates preserve each dated author paragraph and source", async () => {
-  const posts = JSON.parse(await read("tests/fixtures/journal-september-2026.json"));
+test("journal updates preserve each dated author paragraph and source", async () => {
+  const posts = (await Promise.all(["september", "october"].map(month =>
+    read(`tests/fixtures/journal-${month}-2026.json`).then(JSON.parse)))).flat();
   for (const post of posts) {
     const entry = journal.match(new RegExp(`<article[^>]+id="journal-entry-${post.id}"[\\s\\S]*?</article>`))?.[0];
     assert.ok(entry, `Missing post ${post.id}`);
