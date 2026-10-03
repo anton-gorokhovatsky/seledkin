@@ -61,7 +61,14 @@ jobs:
 
       - name: Verify customer journeys in Chromium and WebKit
         if: steps.scope.outputs.browser_required == 'true'
-        run: pnpm run test:browser
+        env:
+          RELEASE_SCOPE: ${{ steps.scope.outputs.scope }}
+        run: |
+          if [ "$RELEASE_SCOPE" = "journal" ]; then
+            pnpm exec playwright test --grep @journal
+          else
+            pnpm run test:browser
+          fi
 
       - name: Keep browser evidence
         if: always() && steps.scope.outputs.browser_required == 'true'

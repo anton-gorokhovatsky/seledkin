@@ -37,6 +37,42 @@ test("tooling and documentation do not republish an unchanged site", () => {
     "scripts/release-scope.mjs", "tests/release-scope.test.mjs"].map(path => ({ path }))), "none");
 });
 
+const region = (name, text) => `<!-- shared:${name}:start -->${text}<!-- shared:${name}:end -->`;
+const journalUpdate = () => [
+  { path: "content/journal/700.html", after: "<p>Новая авторская запись</p>" },
+  { path: "content/journal.json", before: "[]", after: '[{"id":700}]' },
+  { path: "journal/700/index.html", after: "<h1>Новая запись</h1>" },
+  { path: "assets/journal-700.jpg" },
+  { path: "assets/journal-700-480.webp" },
+  { path: "assets/media-variants.json", before: '[{"file":"hero.mp4"}]', after: '[{"file":"hero.mp4"},{"file":"journal-700-480.webp"}]' },
+  ...Object.entries({ "index.html": ["journal-hero", "journal-preview"], "catalog/index.html": ["journal-search"], "journal/index.html": ["journal-archive"] })
+    .map(([path, names]) => ({ path, before: `<main>${names.map(name => region(name, "old")).join("")}</main>`, after: `<main>${names.map(name => region(name, "new")).join("")}</main>` })),
+  { path: "sitemap.xml", before: '<urlset><url><loc>https://ks.fish/</loc></url></urlset>', after: '<urlset><url><loc>https://ks.fish/</loc></url><url><loc>https://ks.fish/journal/700/</loc></url></urlset>' },
+];
+
+test("a journal publication and its generated previews use the focused browser suite", () => {
+  assert.equal(classifyRelease(journalUpdate()), "journal");
+  assert.equal(classifyRelease([...journalUpdate(), { path: "tests/fixtures/journal-november-2026.json" }, { path: "README.md" }]), "journal");
+});
+
+test("journal updates cannot hide changes to layout, templates, runtime or other media", () => {
+  for (const path of ["assets/styles.css", "assets/site.js", "templates/journal-story.html", "scripts/site-content.mjs", "content/site.json", "assets/hero.mp4", ".github/workflows/pages.yml"]) {
+    assert.equal(classifyRelease([...journalUpdate(), { path }]), "full", path);
+  }
+  for (const path of ["index.html", "catalog/index.html", "journal/index.html", "sitemap.xml", "assets/media-variants.json"]) {
+    const changes = journalUpdate();
+    const change = changes.find(item => item.path === path);
+    change.after = path.endsWith(".json") ? '[{"file":"hero.mp4","changed":true}]' : change.after + "<!-- changed outside journal -->";
+    assert.equal(classifyRelease(changes), "full", path);
+  }
+  const scripted = journalUpdate();
+  scripted[0].after += "<script>newBehavior()</script>";
+  assert.equal(classifyRelease(scripted), "full");
+  const deleted = journalUpdate();
+  deleted.find(item => item.path === "journal/700/index.html").after = null;
+  assert.equal(classifyRelease(deleted), "full");
+});
+
 test("missing or unavailable comparison bases cannot skip the full gate", () => {
   for (const base of [undefined, "", "0".repeat(40), "f".repeat(40)]) {
     assert.equal(classifyRelease(readReleaseChanges(base)), "full");

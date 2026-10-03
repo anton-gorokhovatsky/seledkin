@@ -233,10 +233,11 @@ test("home exposes the core customer jobs", () => {
   assert.match(hero, /href="catalog\/"/);
   assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
-  assert.match(hero, /href="journal\/699\/"/);
-  assert.match(hero, /data-source-image="assets\/journal-699\.jpg"/);
-  assert.match(hero, /datetime="2026-10-01"/);
-  assert.match(hero, /Охлажденная эталонная форель из Карелии/);
+  const latest = journalEntries[0];
+  assert.ok(hero.includes(`href="journal/${latest.id}/"`));
+  assert.ok(hero.includes(`data-source-image="assets/${latest.image}"`));
+  assert.ok(hero.includes(`datetime="${latest.date}"`));
+  assert.ok(hero.includes(latest.title.replace(/\s/gu, " ")));
   assert.doesNotMatch(hero, /src="assets\/about-main\.jpg"/);
   assert.doesNotMatch(hero, /Из ассортимента лавки/);
   assert.match(home, /метро «Вавиловская»/);

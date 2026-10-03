@@ -1,4 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+
+const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8"));
+const latest = journal[0];
+const latestRoute = new RegExp(`/journal/${latest.id}/$`);
 
 test("customer vocabulary finds existing products and preserves precise filters", async ({ page }) => {
   await page.goto("catalog/");
@@ -12,16 +17,16 @@ test("customer vocabulary finds existing products and preserves precise filters"
   await expect(page.locator("[data-catalog-empty]")).toBeVisible();
 });
 
-test("the journal preview leads to its full story and a product-specific inquiry", async ({ page }) => {
+test("the journal preview leads to its full story and a product-specific inquiry", { tag: "@journal" }, async ({ page }) => {
   await page.goto("");
-  await page.locator('.journal-preview__entry[href="journal/698/"]').click();
-  await expect(page).toHaveURL(/journal\/698\/$/);
-  const entry = page.locator("#journal-entry-698");
+  await page.locator(".journal-preview__entry").first().click();
+  await expect(page).toHaveURL(latestRoute);
+  const entry = page.locator(`#journal-entry-${latest.id}`);
   const inquiry = entry.getByRole("link", { name: /Спросить о наличии/ });
   const url = new URL(await inquiry.getAttribute("href"));
-  expect(url.searchParams.get("text")).toContain("Малосольный каспийский залом");
-  expect(url.searchParams.get("text")).toContain("https://t.me/kapitanseledkin/698");
-  await expect(entry.getByRole("link", { name: "Читать запись в Телеграме" })).toHaveAttribute("href", "https://t.me/kapitanseledkin/698");
+  expect(url.searchParams.get("text")).toContain(latest.product);
+  expect(url.searchParams.get("text")).toContain(`https://t.me/kapitanseledkin/${latest.id}`);
+  await expect(entry.getByRole("link", { name: "Читать запись в Телеграме" })).toHaveAttribute("href", `https://t.me/kapitanseledkin/${latest.id}`);
   await page.goto("#journal-entry-680");
   await expect(page).toHaveURL(/journal\/680\/$/);
   await page.goto("#journal-entry-683");
@@ -32,14 +37,15 @@ test("the journal preview leads to its full story and a product-specific inquiry
   await expect(page.locator("h1")).toHaveText("Судовой журнал");
 });
 
-test("complete editorial pages and inquiry links work without JavaScript", async ({ browser, baseURL }) => {
+test("complete editorial pages and inquiry links work without JavaScript", { tag: "@journal" }, async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   await context.route("https://mc.yandex.ru/**", route => route.abort());
   const page = await context.newPage();
   await page.goto(`${baseURL}journal/`);
-  await expect(page.locator(".journal-index-entry")).toHaveCount(20);
+  await expect(page.locator(".journal-index-entry")).toHaveCount(journal.length);
   await page.locator(".journal-index-entry__link").first().click();
-  await expect(page.locator(".ship-log-entry__body")).toContainText("получаем охлажденную эталонную форель из Карелии");
+  await expect(page).toHaveURL(latestRoute);
+  await expect(page.locator("h1")).toHaveText(latest.title);
   await expect(page.getByRole("link", { name: /Спросить о наличии/ })).toHaveCount(1);
   await page.goto(`${baseURL}about/`);
   await expect(page.locator(".about-overview__chapter")).toHaveCount(3);
@@ -47,7 +53,7 @@ test("complete editorial pages and inquiry links work without JavaScript", async
   await context.close();
 });
 
-test("journal previews keep whole photographs, aligned desktop reading lines and readable enlarged text", async ({ page }) => {
+test("journal previews keep whole photographs, aligned desktop reading lines and readable enlarged text", { tag: "@journal" }, async ({ page }) => {
   for (const [width, enlarged] of [[1440, false], [390, false], [320, true]]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("");
@@ -85,7 +91,7 @@ test("journal previews keep whole photographs, aligned desktop reading lines and
     await entries.first().focus();
     await expect(entries.first()).toBeFocused();
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(/journal\/699\/$/);
+    await expect(page).toHaveURL(latestRoute);
   }
 });
 

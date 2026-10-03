@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
@@ -41,14 +41,13 @@ test("all homepage price examples agree with the current catalog", () => {
 });
 
 test("all journal entries retain their source and a draft about that exact product", () => {
-  const names = ["Охлажденная форель из Карелии", "Малосольный каспийский залом", "Риеты и паштеты", "Малосольный каспийский залом", "Филе форели", "Ряпушка", "Стейк чилийского лосося", "Филе трески", "Радужная форель", "Скумбрия", "Чир", "Паштет", "Уха", "Черноморский бычок", "Филе форели", "Икряная камбала", "Филе сельди", "тугунок", "Икра дикого кижуча", "барабуля"];
   const entries = [...journal.matchAll(/<article\s+class="ship-log-entry[\s\S]*?<\/article>/g)].map(match => match[0]);
-  assert.equal(entries.length, 20);
+  assert.equal(entries.length, ids.length);
   entries.forEach((entry, index) => {
-    const id = 699 - index;
+    const { id, product } = ids[index];
     const inquiry = entry.match(/href="(https:\/\/t\.me\/\+79166751452\?text=[^"]+)"/)[1];
     const draft = new URL(inquiry).searchParams.get("text");
-    assert.ok(draft.includes(names[index]));
+    assert.ok(draft.includes(product));
     assert.ok(draft.includes(`https://t.me/kapitanseledkin/${id}`));
     assert.match(draft, /есть ли в наличии/);
     assert.doesNotMatch(draft, /[₽]|руб/);
@@ -58,8 +57,8 @@ test("all journal entries retain their source and a draft about that exact produ
 
 
 test("journal updates preserve each dated author paragraph and source", async () => {
-  const posts = (await Promise.all(["september", "october"].map(month =>
-    read(`tests/fixtures/journal-${month}-2026.json`).then(JSON.parse)))).flat();
+  const fixtures = (await readdir(new URL("fixtures/", import.meta.url))).filter(name => /^journal-.*-\d{4}\.json$/.test(name));
+  const posts = (await Promise.all(fixtures.map(name => read(`tests/fixtures/${name}`).then(JSON.parse)))).flat();
   for (const post of posts) {
     const entry = journal.match(new RegExp(`<article[^>]+id="journal-entry-${post.id}"[\\s\\S]*?</article>`))?.[0];
     assert.ok(entry, `Missing post ${post.id}`);
