@@ -55,7 +55,7 @@ test("published HTML retains typography even before the page scripts run", async
     }
     assert.doesNotMatch(html, /(?<!\d)10-15(?:\s|&nbsp;)граммов/);
     for (const [, text] of html.matchAll(/<time\b[^>]*>([^<]+)<\/time>/g)) {
-      assert.match(text, /\d\u00a0(?:сентября|августа)/);
+      assert.match(text, /^\d{1,2}\u00a0(?:января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)(?:\u00a0\d{4})?$/u);
     }
     if (path !== "404.html") {
       assert.match(html, /Позвонить в\u00a0лавку: \+7\u00a0916\u00a0675‑14‑52/);
