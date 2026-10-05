@@ -12,6 +12,7 @@ function update() {
   const status = storeStatus(now);
   for (const node of statuses) {
     if (status && node.textContent !== status.label) node.textContent = status.label;
+    node.hidden = !status;
   }
   const light = seaLight(now);
   if (light) {

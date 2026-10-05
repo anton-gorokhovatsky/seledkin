@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
+import { catalogPrice, matchesSearch, productSearchText } from "../assets/catalog-model.js";
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 const [home, about, archive, originals] = await Promise.all([
   read("index.html"), read("about/index.html"), read("journal/index.html"),
@@ -32,11 +33,16 @@ test("every original editorial paragraph survives on its published page", () => 
 
 test("all homepage price examples agree with the current catalog", () => {
   const preview = home.match(/<section class="price-preview"[\s\S]*?<\/section>/)?.[0] ?? '';
-  const products = [...preview.matchAll(/<h4>([^<]+)<\/h4><strong>([^<]+)<\/strong>/g)];
+  const products = [...preview.matchAll(/<h4><a href="([^"]+)">([^<]+)<\/a><\/h4><strong>([^<]+)<\/strong>/g)];
   assert.equal(products.length, 6);
   const comparable = value => plain(value).replaceAll('ё', 'е');
-  for (const [, name, price] of products) {
-    assert.ok(catalog.some(category => category.items.some(item => comparable(item.name) === comparable(name) && comparable(item.price) === comparable(price))), `Homepage disagrees with catalog: ${plain(name)} ${plain(price)}`);
+  for (const [, href, name, price] of products) {
+    const url = new URL(href.replaceAll("&amp;", "&"), "https://ks.fish/");
+    assert.equal(url.pathname, "/catalog/");
+    const category = catalog.find(item => item.slug === url.searchParams.get("category"));
+    assert.ok(category?.items.some(item => comparable(item.name) === comparable(name)
+      && comparable(catalogPrice(item.price)) === comparable(price)
+      && matchesSearch(productSearchText(category, item), url.searchParams.get("q"))), `Homepage disagrees with catalog: ${plain(name)} ${plain(price)}`);
   }
 });
 

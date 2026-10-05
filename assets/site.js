@@ -1,6 +1,6 @@
 import { typographText } from "./typography.js?v=typography-23-1";
 import "./theme.js?v=sea-hours-1";
-import "./store-environment.js?v=sea-hours-1";
+import "./store-environment.js?v=buyer-paths-1";
 import { syncMenuSeaVideo } from "./sea-motion.js?v=sea-hours-1";
 
 const root = new URL("../", import.meta.url);

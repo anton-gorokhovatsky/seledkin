@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { typographText } from "../assets/typography.js";
+import { catalog } from "../assets/catalog-data.js";
+import { catalogPrice, productNotes } from "../assets/catalog-model.js";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const site = JSON.parse(read("content/site.json"));
@@ -25,6 +27,36 @@ const escape = value => String(value).replaceAll("&", "&amp;").replaceAll('"', "
   .replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const plain = value => value.replaceAll("&nbsp;", "\u00a0").replaceAll("&amp;", "&").replaceAll("&quot;", '"');
 const text = value => escape(typographText(plain(value)));
+
+export function renderDelivery(view) {
+  const { area, priceRub, minimumOrderRub } = site.delivery;
+  const price = text(`${priceRub} ₽`);
+  if (view === "home") return `Стоимость доставки ${text(area)} — <strong>${price}.</strong> ${minimumOrderRub === 0
+    ? "Минимальной суммы заказа нет, это удобно."
+    : `Минимальная сумма заказа — ${text(`${minimumOrderRub} ₽`)}.`}`;
+  return `Доставка по Москве ${text(area)} — ${price}, ${minimumOrderRub === 0
+    ? "без минимальной суммы заказа."
+    : `от ${text(`${minimumOrderRub} ₽`)} за заказ.`}`;
+}
+
+export function renderPricePreview() {
+  return site.pricePreview.map(selection => {
+    const category = catalog.find(item => item.slug === selection.category);
+    // When sizes share a name, the first listed size is the homepage example.
+    const product = category?.items.find(item => item.name === selection.name);
+    if (!product) throw new Error(`Missing preview product: ${selection.name}`);
+    const query = new URLSearchParams({ q: product.name, category: category.slug });
+    const notes = productNotes(product);
+    return `              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4><a href="catalog/?${escape(query)}">${text(selection.label ?? product.name)}</a></h4><strong>${escape(catalogPrice(product.price))}</strong>
+                </div>
+                <p>${text(selection.description ?? product.description)}</p>${notes ? `
+                <p>${escape(notes)}</p>` : ""}
+              </article>`;
+  }).join("\n");
+}
+
 function template(name, values) {
   return read(`templates/${name}.html`).trimEnd().replace(/{{(\w+)}}/g, (_, key) => {
     if (!(key in values)) throw new Error(`Missing ${name} template value: ${key}`);

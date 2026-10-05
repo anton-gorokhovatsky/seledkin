@@ -1039,7 +1039,7 @@ test("catalog search and filters expose accessible state", () => {
   assert.match(catalogPage, /data-catalog-select/);
   assert.match(catalogScript, /aria-pressed/);
   assert.match(catalogScript, /select\.value = activeCategory/);
-  assert.match(catalogScript, /Ничего не найдено/);
+  assert.match(catalogScript, /В каталоге нет совпадений/);
   assert.doesNotMatch(catalogScript, /Уточнить наличие|productMessage|catalog-product__action/);
   for (const category of catalog) {
     for (const product of category.items) {

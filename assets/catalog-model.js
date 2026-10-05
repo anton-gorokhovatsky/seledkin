@@ -89,12 +89,26 @@ export function positionCount(value) {
   return `${value}\u00a0позиций`;
 }
 
+export function catalogPrice(value) {
+  // Express sub-kilogram portions in grams without changing the price or quantity.
+  return typographPrice(value.replace(/\/0,(\d{1,3})\s*кг(?!\p{L})/gu,
+    (_, fraction) => ` за ${Number(fraction.padEnd(3, "0"))} г`));
+}
+
+export function productNotes(product) {
+  return [
+    [/(?<!\p{L})в\/м(?!\p{L})/iu, "В/м — варёно-мороженый продукт"],
+    [/(?<!\p{L})б\/г(?!\p{L})/iu, "Б/г — без головы"],
+  ].filter(([pattern]) => pattern.test(`${product.name} ${product.description ?? ""}`))
+    .map(([, label]) => typographText(label)).join(". ");
+}
+
 export function orderLinks(product) {
   const text = [
     "Здравствуйте! Хочу заказать:",
     typographText(product.name),
     product.description ? typographText(product.description) : null,
-    typographPrice(product.price),
+    catalogPrice(product.price),
     "Подскажите, пожалуйста, наличие.",
   ].filter(Boolean).join("\n");
   const draft = encodeURIComponent(text);

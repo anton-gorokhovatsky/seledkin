@@ -93,11 +93,11 @@
     <link rel="icon" href="../assets/favicon-32.png" sizes="32x32" type="image/png" />
     <link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
-    <link rel="stylesheet" href="../assets/styles.css?v=sea-hours-1" />
-    <script type="module" src="../assets/site.js?v=sea-hours-1"></script>
+    <link rel="stylesheet" href="../assets/styles.css?v=buyer-paths-1" />
+    <script type="module" src="../assets/site.js?v=buyer-paths-1"></script>
     <script type="module" src="../assets/analytics.js?v=catalog-journal-1"></script>
     <script type="module" src="../assets/interface-motion.js"></script>
-    <script type="module" src="catalog.js?v=catalog-journal-1"></script>
+    <script type="module" src="catalog.js?v=buyer-paths-1"></script>
     <title>Каталог и цены — Рыбная лавка капитана Селедкина</title>
   </head>
   <body class="catalog-page">
@@ -220,7 +220,10 @@
 
           <section class="site-menu__service" aria-labelledby="menu-service-title">
             <div class="site-menu__service-inner">
-              <h3 id="menu-service-title" data-store-status>Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
+              <div class="store-hours">
+                <h3 id="menu-service-title">Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
+                <p class="store-status" data-store-status hidden></p>
+              </div>
               <address>
                 Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
                 Метро «Вави&shy;ловская» и «Университет»
@@ -382,89 +385,89 @@
             </div>
             <div class="catalog-product-grid">
               <article class="catalog-product" data-search-text="Икра Черная икра Осетровая (забойная) высшего качества" data-product-name="Черная икра" data-product-category="caviar">
-                <div class="catalog-product-head"><h4>Черная икра</h4><strong>6 000 ₽/0,05 кг</strong></div>
+                <div class="catalog-product-head"><h4>Черная икра</h4><strong>6 000 ₽ за 50 г</strong></div>
                 <p>Осетровая (забойная) высшего качества</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Черная икра, 6 000 ₽/0,05 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Черная икра, 6 000 ₽ за 50 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A6%E2%80%AF000%C2%A0%E2%82%BD%2F0%2C05%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A6%E2%80%AF000%C2%A0%E2%82%BD%2F0%2C05%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A6%E2%80%AF000%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A050%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A6%E2%80%AF000%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A050%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Икра Черная икра Осетровая (забойная) высшего качества" data-product-name="Черная икра" data-product-category="caviar">
-                <div class="catalog-product-head"><h4>Черная икра</h4><strong>15 000 ₽/0,125 кг</strong></div>
+                <div class="catalog-product-head"><h4>Черная икра</h4><strong>15 000 ₽ за 125 г</strong></div>
                 <p>Осетровая (забойная) высшего качества</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Черная икра, 15 000 ₽/0,125 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Черная икра, 15 000 ₽ за 125 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A15%E2%80%AF000%C2%A0%E2%82%BD%2F0%2C125%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A15%E2%80%AF000%C2%A0%E2%82%BD%2F0%2C125%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A15%E2%80%AF000%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0125%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A15%E2%80%AF000%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0125%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Икра Черная икра Осетровая (забойная) высшего качества" data-product-name="Черная икра" data-product-category="caviar">
-                <div class="catalog-product-head"><h4>Черная икра</h4><strong>30 000 ₽/0,250 кг</strong></div>
+                <div class="catalog-product-head"><h4>Черная икра</h4><strong>30 000 ₽ за 250 г</strong></div>
                 <p>Осетровая (забойная) высшего качества</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Черная икра, 30 000 ₽/0,250 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Черная икра, 30 000 ₽ за 250 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A30%E2%80%AF000%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A30%E2%80%AF000%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A30%E2%80%AF000%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A30%E2%80%AF000%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Икра Черная икра Осетровая (забойная) высшего качества" data-product-name="Черная икра" data-product-category="caviar">
-                <div class="catalog-product-head"><h4>Черная икра</h4><strong>60 000 ₽/0,500 кг</strong></div>
+                <div class="catalog-product-head"><h4>Черная икра</h4><strong>60 000 ₽ за 500 г</strong></div>
                 <p>Осетровая (забойная) высшего качества</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Черная икра, 60 000 ₽/0,500 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Черная икра, 60 000 ₽ за 500 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A60%E2%80%AF000%C2%A0%E2%82%BD%2F0%2C500%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A60%E2%80%AF000%C2%A0%E2%82%BD%2F0%2C500%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A60%E2%80%AF000%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9E%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%20(%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9%D0%BD%D0%B0%D1%8F)%20%D0%B2%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A60%E2%80%AF000%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Икра Красная икра Форель, кижуч, нерка, кета, горбуша" data-product-name="Красная икра" data-product-category="caviar">
-                <div class="catalog-product-head"><h4>Красная икра</h4><strong>3 500 ₽/0,250 кг</strong></div>
+                <div class="catalog-product-head"><h4>Красная икра</h4><strong>3 500 ₽ за 250 г</strong></div>
                 <p>Форель, кижуч, нерка, кета, горбуша</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Красная икра, 3 500 ₽/0,250 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Красная икра, 3 500 ₽ за 250 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%2C%20%D0%BA%D0%B8%D0%B6%D1%83%D1%87%2C%20%D0%BD%D0%B5%D1%80%D0%BA%D0%B0%2C%20%D0%BA%D0%B5%D1%82%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B0%0A3%E2%80%AF500%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%2C%20%D0%BA%D0%B8%D0%B6%D1%83%D1%87%2C%20%D0%BD%D0%B5%D1%80%D0%BA%D0%B0%2C%20%D0%BA%D0%B5%D1%82%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B0%0A3%E2%80%AF500%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%2C%20%D0%BA%D0%B8%D0%B6%D1%83%D1%87%2C%20%D0%BD%D0%B5%D1%80%D0%BA%D0%B0%2C%20%D0%BA%D0%B5%D1%82%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B0%0A3%E2%80%AF500%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%2C%20%D0%BA%D0%B8%D0%B6%D1%83%D1%87%2C%20%D0%BD%D0%B5%D1%80%D0%BA%D0%B0%2C%20%D0%BA%D0%B5%D1%82%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B0%0A3%E2%80%AF500%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Икра Икра кеты Малосольная, замороженная, без консервантов" data-product-name="Икра кеты" data-product-category="caviar">
-                <div class="catalog-product-head"><h4>Икра кеты</h4><strong>3 600 ₽/0,2 кг</strong></div>
+                <div class="catalog-product-head"><h4>Икра кеты</h4><strong>3 600 ₽ за 200 г</strong></div>
                 <p>Малосольная, замороженная, без консервантов</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Икра кеты, 3 600 ₽/0,2 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Икра кеты, 3 600 ₽ за 200 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%BA%D0%B5%D1%82%D1%8B%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%2C%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F%2C%20%D0%B1%D0%B5%D0%B7%C2%A0%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%0A3%E2%80%AF600%C2%A0%E2%82%BD%2F0%2C2%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%BA%D0%B5%D1%82%D1%8B%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%2C%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F%2C%20%D0%B1%D0%B5%D0%B7%C2%A0%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%0A3%E2%80%AF600%C2%A0%E2%82%BD%2F0%2C2%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%BA%D0%B5%D1%82%D1%8B%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%2C%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F%2C%20%D0%B1%D0%B5%D0%B7%C2%A0%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%0A3%E2%80%AF600%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0200%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%BA%D0%B5%D1%82%D1%8B%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%2C%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F%2C%20%D0%B1%D0%B5%D0%B7%C2%A0%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B0%D0%BD%D1%82%D0%BE%D0%B2%0A3%E2%80%AF600%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0200%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Икра Икра горбуши В железной банке" data-product-name="Икра горбуши" data-product-category="caviar">
-                <div class="catalog-product-head"><h4>Икра горбуши</h4><strong>2 142 ₽/0,140 кг</strong></div>
+                <div class="catalog-product-head"><h4>Икра горбуши</h4><strong>2 142 ₽ за 140 г</strong></div>
                 <p>В железной банке</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Икра горбуши, 2 142 ₽/0,140 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Икра горбуши, 2 142 ₽ за 140 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B8%0A%D0%92%C2%A0%D0%B6%D0%B5%D0%BB%D0%B5%D0%B7%D0%BD%D0%BE%D0%B9%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B5%0A2%E2%80%AF142%C2%A0%E2%82%BD%2F0%2C140%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B8%0A%D0%92%C2%A0%D0%B6%D0%B5%D0%BB%D0%B5%D0%B7%D0%BD%D0%BE%D0%B9%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B5%0A2%E2%80%AF142%C2%A0%E2%82%BD%2F0%2C140%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B8%0A%D0%92%C2%A0%D0%B6%D0%B5%D0%BB%D0%B5%D0%B7%D0%BD%D0%BE%D0%B9%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B5%0A2%E2%80%AF142%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0140%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B8%0A%D0%92%C2%A0%D0%B6%D0%B5%D0%BB%D0%B5%D0%B7%D0%BD%D0%BE%D0%B9%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B5%0A2%E2%80%AF142%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0140%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Икра Икра щуки" data-product-name="Икра щуки" data-product-category="caviar">
-                <div class="catalog-product-head"><h4>Икра щуки</h4><strong>1 400 ₽/0,1 кг</strong></div>
+                <div class="catalog-product-head"><h4>Икра щуки</h4><strong>1 400 ₽ за 100 г</strong></div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Икра щуки, 1 400 ₽/0,1 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Икра щуки, 1 400 ₽ за 100 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D1%89%D1%83%D0%BA%D0%B8%0A1%E2%80%AF400%C2%A0%E2%82%BD%2F0%2C1%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D1%89%D1%83%D0%BA%D0%B8%0A1%E2%80%AF400%C2%A0%E2%82%BD%2F0%2C1%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D1%89%D1%83%D0%BA%D0%B8%0A1%E2%80%AF400%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0100%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D1%89%D1%83%D0%BA%D0%B8%0A1%E2%80%AF400%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0100%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
@@ -480,6 +483,7 @@
               <article class="catalog-product" data-search-text="Морепродукты Клешни краба в/м варено мороженая Камчатка" data-product-name="Клешни краба в/м" data-product-category="seafood">
                 <div class="catalog-product-head"><h4>Клешни краба в/м</h4><strong>6 500 ₽/кг</strong></div>
                 <p>Камчатка</p>
+                <p>В/м — варёно-мороженый продукт</p>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Клешни краба в/м, 6 500 ₽/кг</span></summary>
                   <div class="catalog-product-order__channels">
@@ -491,6 +495,7 @@
               <article class="catalog-product" data-search-text="Морепродукты Мясо краба, первая фаланга в/м варено мороженая Камчатка" data-product-name="Мясо краба, первая фаланга в/м" data-product-category="seafood">
                 <div class="catalog-product-head"><h4>Мясо краба, первая фаланга в/м</h4><strong>7 999 ₽/кг</strong></div>
                 <p>Камчатка</p>
+                <p>В/м — варёно-мороженый продукт</p>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Мясо краба, первая фаланга в/м, 7 999 ₽/кг</span></summary>
                   <div class="catalog-product-order__channels">
@@ -511,35 +516,35 @@
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Морепродукты Мясо краба Консервированное в стекле" data-product-name="Мясо краба" data-product-category="seafood">
-                <div class="catalog-product-head"><h4>Мясо краба</h4><strong>2 500 ₽/0,220 кг</strong></div>
+                <div class="catalog-product-head"><h4>Мясо краба</h4><strong>2 500 ₽ за 220 г</strong></div>
                 <p>Консервированное в стекле</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Мясо краба, 2 500 ₽/0,220 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Мясо краба, 2 500 ₽ за 220 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A2%E2%80%AF500%C2%A0%E2%82%BD%2F0%2C220%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A2%E2%80%AF500%C2%A0%E2%82%BD%2F0%2C220%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A2%E2%80%AF500%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0220%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A2%E2%80%AF500%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0220%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Морепродукты Мясо краба Консервированное в стекле" data-product-name="Мясо краба" data-product-category="seafood">
-                <div class="catalog-product-head"><h4>Мясо краба</h4><strong>4 200 ₽/0,370 кг</strong></div>
+                <div class="catalog-product-head"><h4>Мясо краба</h4><strong>4 200 ₽ за 370 г</strong></div>
                 <p>Консервированное в стекле</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Мясо краба, 4 200 ₽/0,370 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Мясо краба, 4 200 ₽ за 370 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A4%E2%80%AF200%C2%A0%E2%82%BD%2F0%2C370%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A4%E2%80%AF200%C2%A0%E2%82%BD%2F0%2C370%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A4%E2%80%AF200%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0370%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A4%E2%80%AF200%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0370%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Морепродукты Мясо краба Консервированное в стекле" data-product-name="Мясо краба" data-product-category="seafood">
-                <div class="catalog-product-head"><h4>Мясо краба</h4><strong>6 200 ₽/0,5 кг</strong></div>
+                <div class="catalog-product-head"><h4>Мясо краба</h4><strong>6 200 ₽ за 500 г</strong></div>
                 <p>Консервированное в стекле</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Мясо краба, 6 200 ₽/0,5 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Мясо краба, 6 200 ₽ за 500 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A6%E2%80%AF200%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A6%E2%80%AF200%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A6%E2%80%AF200%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%0A%D0%9A%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%C2%A0%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%B5%0A6%E2%80%AF200%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
@@ -557,6 +562,7 @@
               <article class="catalog-product" data-search-text="Морепродукты Мидии в/м варено мороженая в створках Чили" data-product-name="Мидии в/м в створках" data-product-category="seafood">
                 <div class="catalog-product-head"><h4>Мидии в/м в створках</h4><strong>630 ₽/кг</strong></div>
                 <p>Чили</p>
+                <p>В/м — варёно-мороженый продукт</p>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Мидии в/м в створках, 630 ₽/кг</span></summary>
                   <div class="catalog-product-order__channels">
@@ -633,6 +639,7 @@
               <article class="catalog-product" data-search-text="Морепродукты Креветка северная в/м варено мороженая Магадан" data-product-name="Креветка северная в/м" data-product-category="seafood">
                 <div class="catalog-product-head"><h4>Креветка северная в/м</h4><strong>3 200 ₽/кг</strong></div>
                 <p>Магадан</p>
+                <p>В/м — варёно-мороженый продукт</p>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Креветка северная в/м, 3 200 ₽/кг</span></summary>
                   <div class="catalog-product-order__channels">
@@ -644,6 +651,7 @@
               <article class="catalog-product" data-search-text="Морепродукты Креветка тигровая б/г без головы Свежемороженая" data-product-name="Креветка тигровая б/г" data-product-category="seafood">
                 <div class="catalog-product-head"><h4>Креветка тигровая б/г</h4><strong>2 200 ₽/кг</strong></div>
                 <p>Свежемороженая</p>
+                <p>Б/г — без головы</p>
                 <details class="catalog-product-order">
                   <summary>Заказать<span class="visually-hidden">: Креветка тигровая б/г, 2 200 ₽/кг</span></summary>
                   <div class="catalog-product-order__channels">
@@ -1359,12 +1367,12 @@
                 </details>
               </article>
               <article class="catalog-product" data-search-text="рыба Языки трески" data-product-name="Языки трески" data-product-category="prepared-fish">
-                <div class="catalog-product-head"><h4>Языки трески</h4><strong>990 ₽/0,5 кг</strong></div>
+                <div class="catalog-product-head"><h4>Языки трески</h4><strong>990 ₽ за 500 г</strong></div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Языки трески, 990 ₽/0,5 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Языки трески, 990 ₽ за 500 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%AF%D0%B7%D1%8B%D0%BA%D0%B8%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%0A990%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%AF%D0%B7%D1%8B%D0%BA%D0%B8%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%0A990%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%AF%D0%B7%D1%8B%D0%BA%D0%B8%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%0A990%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%AF%D0%B7%D1%8B%D0%BA%D0%B8%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%0A990%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
@@ -1422,97 +1430,97 @@
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Печень трески ж. б. Сделано в море" data-product-name="Печень трески ж. б." data-product-category="other">
-                <div class="catalog-product-head"><h4>Печень трески ж. б.</h4><strong>700 ₽/0,250 кг</strong></div>
+                <div class="catalog-product-head"><h4>Печень трески ж. б.</h4><strong>700 ₽ за 250 г</strong></div>
                 <p>Сделано в море</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Печень трески ж. б., 700 ₽/0,250 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Печень трески ж. б., 700 ₽ за 250 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D0%B6.%C2%A0%D0%B1.%0A%D0%A1%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BE%20%D0%B2%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%0A700%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D0%B6.%C2%A0%D0%B1.%0A%D0%A1%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BE%20%D0%B2%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%0A700%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D0%B6.%C2%A0%D0%B1.%0A%D0%A1%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BE%20%D0%B2%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%0A700%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D0%B6.%C2%A0%D0%B1.%0A%D0%A1%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BE%20%D0%B2%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%0A700%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Печень трески ст. б. Мурманск, сделано в море" data-product-name="Печень трески ст. б." data-product-category="other">
-                <div class="catalog-product-head"><h4>Печень трески ст. б.</h4><strong>1 990 ₽/0,5 кг</strong></div>
+                <div class="catalog-product-head"><h4>Печень трески ст. б.</h4><strong>1 990 ₽ за 500 г</strong></div>
                 <p>Мурманск, сделано в море</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Печень трески ст. б., 1 990 ₽/0,5 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Печень трески ст. б., 1 990 ₽ за 500 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D1%81%D1%82.%C2%A0%D0%B1.%0A%D0%9C%D1%83%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%2C%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BE%20%D0%B2%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%0A1%E2%80%AF990%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D1%81%D1%82.%C2%A0%D0%B1.%0A%D0%9C%D1%83%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%2C%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BE%20%D0%B2%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%0A1%E2%80%AF990%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D1%81%D1%82.%C2%A0%D0%B1.%0A%D0%9C%D1%83%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%2C%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BE%20%D0%B2%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%0A1%E2%80%AF990%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D1%81%D1%82.%C2%A0%D0%B1.%0A%D0%9C%D1%83%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%2C%20%D1%81%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BE%20%D0%B2%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%0A1%E2%80%AF990%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Печень трески по-мурмански" data-product-name="Печень трески по-мурмански" data-product-category="other">
-                <div class="catalog-product-head"><h4>Печень трески по-мурмански</h4><strong>310 ₽/0,110 кг</strong></div>
+                <div class="catalog-product-head"><h4>Печень трески по-мурмански</h4><strong>310 ₽ за 110 г</strong></div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Печень трески по-мурмански, 310 ₽/0,110 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Печень трески по-мурмански, 310 ₽ за 110 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D0%BF%D0%BE-%D0%BC%D1%83%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%0A310%C2%A0%E2%82%BD%2F0%2C110%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D0%BF%D0%BE-%D0%BC%D1%83%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%0A310%C2%A0%E2%82%BD%2F0%2C110%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D0%BF%D0%BE-%D0%BC%D1%83%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%0A310%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0110%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%87%D0%B5%D0%BD%D1%8C%20%D1%82%D1%80%D0%B5%D1%81%D0%BA%D0%B8%20%D0%BF%D0%BE-%D0%BC%D1%83%D1%80%D0%BC%D0%B0%D0%BD%D1%81%D0%BA%D0%B8%0A310%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0110%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Ряпушка копченая в масле" data-product-name="Ряпушка копченая в масле" data-product-category="other">
-                <div class="catalog-product-head"><h4>Ряпушка копченая в масле</h4><strong>860 ₽/0,350 кг</strong></div>
+                <div class="catalog-product-head"><h4>Ряпушка копченая в масле</h4><strong>860 ₽ за 350 г</strong></div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Ряпушка копченая в масле, 860 ₽/0,350 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Ряпушка копченая в масле, 860 ₽ за 350 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D1%8F%D0%BF%D1%83%D1%88%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%20%D0%B2%C2%A0%D0%BC%D0%B0%D1%81%D0%BB%D0%B5%0A860%C2%A0%E2%82%BD%2F0%2C350%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D1%8F%D0%BF%D1%83%D1%88%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%20%D0%B2%C2%A0%D0%BC%D0%B0%D1%81%D0%BB%D0%B5%0A860%C2%A0%E2%82%BD%2F0%2C350%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D1%8F%D0%BF%D1%83%D1%88%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%20%D0%B2%C2%A0%D0%BC%D0%B0%D1%81%D0%BB%D0%B5%0A860%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0350%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D1%8F%D0%BF%D1%83%D1%88%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%20%D0%B2%C2%A0%D0%BC%D0%B0%D1%81%D0%BB%D0%B5%0A860%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0350%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Мясо краба ст. б. Рыбные консервы" data-product-name="Мясо краба ст. б." data-product-category="other">
-                <div class="catalog-product-head"><h4>Мясо краба ст. б.</h4><strong>3 995 ₽/0,48 кг</strong></div>
+                <div class="catalog-product-head"><h4>Мясо краба ст. б.</h4><strong>3 995 ₽ за 480 г</strong></div>
                 <p>Рыбные консервы</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Мясо краба ст. б., 3 995 ₽/0,48 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Мясо краба ст. б., 3 995 ₽ за 480 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%20%D1%81%D1%82.%C2%A0%D0%B1.%0A%D0%A0%D1%8B%D0%B1%D0%BD%D1%8B%D0%B5%20%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D1%8B%0A3%E2%80%AF995%C2%A0%E2%82%BD%2F0%2C48%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%20%D1%81%D1%82.%C2%A0%D0%B1.%0A%D0%A0%D1%8B%D0%B1%D0%BD%D1%8B%D0%B5%20%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D1%8B%0A3%E2%80%AF995%C2%A0%E2%82%BD%2F0%2C48%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%20%D1%81%D1%82.%C2%A0%D0%B1.%0A%D0%A0%D1%8B%D0%B1%D0%BD%D1%8B%D0%B5%20%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D1%8B%0A3%E2%80%AF995%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0480%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D1%8F%D1%81%D0%BE%20%D0%BA%D1%80%D0%B0%D0%B1%D0%B0%20%D1%81%D1%82.%C2%A0%D0%B1.%0A%D0%A0%D1%8B%D0%B1%D0%BD%D1%8B%D0%B5%20%D0%BA%D0%BE%D0%BD%D1%81%D0%B5%D1%80%D0%B2%D1%8B%0A3%E2%80%AF995%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0480%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Шпроты в масле" data-product-name="Шпроты в масле" data-product-category="other">
-                <div class="catalog-product-head"><h4>Шпроты в масле</h4><strong>199 ₽/0,175 кг</strong></div>
+                <div class="catalog-product-head"><h4>Шпроты в масле</h4><strong>199 ₽ за 175 г</strong></div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Шпроты в масле, 199 ₽/0,175 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Шпроты в масле, 199 ₽ за 175 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A8%D0%BF%D1%80%D0%BE%D1%82%D1%8B%20%D0%B2%C2%A0%D0%BC%D0%B0%D1%81%D0%BB%D0%B5%0A199%C2%A0%E2%82%BD%2F0%2C175%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A8%D0%BF%D1%80%D0%BE%D1%82%D1%8B%20%D0%B2%C2%A0%D0%BC%D0%B0%D1%81%D0%BB%D0%B5%0A199%C2%A0%E2%82%BD%2F0%2C175%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A8%D0%BF%D1%80%D0%BE%D1%82%D1%8B%20%D0%B2%C2%A0%D0%BC%D0%B0%D1%81%D0%BB%D0%B5%0A199%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0175%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A8%D0%BF%D1%80%D0%BE%D1%82%D1%8B%20%D0%B2%C2%A0%D0%BC%D0%B0%D1%81%D0%BB%D0%B5%0A199%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0175%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Килька копченая в томатном соусе" data-product-name="Килька копченая в томатном соусе" data-product-category="other">
-                <div class="catalog-product-head"><h4>Килька копченая в томатном соусе</h4><strong>190 ₽/0,175 кг</strong></div>
+                <div class="catalog-product-head"><h4>Килька копченая в томатном соусе</h4><strong>190 ₽ за 175 г</strong></div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Килька копченая в томатном соусе, 190 ₽/0,175 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Килька копченая в томатном соусе, 190 ₽ за 175 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B8%D0%BB%D1%8C%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%20%D0%B2%C2%A0%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BD%D0%BE%D0%BC%20%D1%81%D0%BE%D1%83%D1%81%D0%B5%0A190%C2%A0%E2%82%BD%2F0%2C175%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B8%D0%BB%D1%8C%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%20%D0%B2%C2%A0%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BD%D0%BE%D0%BC%20%D1%81%D0%BE%D1%83%D1%81%D0%B5%0A190%C2%A0%E2%82%BD%2F0%2C175%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B8%D0%BB%D1%8C%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%20%D0%B2%C2%A0%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BD%D0%BE%D0%BC%20%D1%81%D0%BE%D1%83%D1%81%D0%B5%0A190%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0175%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B8%D0%BB%D1%8C%D0%BA%D0%B0%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B0%D1%8F%20%D0%B2%C2%A0%D1%82%D0%BE%D0%BC%D0%B0%D1%82%D0%BD%D0%BE%D0%BC%20%D1%81%D0%BE%D1%83%D1%81%D0%B5%0A190%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0175%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Каперсы с ножкой Италия" data-product-name="Каперсы с ножкой" data-product-category="other">
-                <div class="catalog-product-head"><h4>Каперсы с ножкой</h4><strong>816 ₽/0,530 кг</strong></div>
+                <div class="catalog-product-head"><h4>Каперсы с ножкой</h4><strong>816 ₽ за 530 г</strong></div>
                 <p>Италия</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Каперсы с ножкой, 816 ₽/0,530 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Каперсы с ножкой, 816 ₽ за 530 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D0%BF%D0%B5%D1%80%D1%81%D1%8B%20%D1%81%C2%A0%D0%BD%D0%BE%D0%B6%D0%BA%D0%BE%D0%B9%0A%D0%98%D1%82%D0%B0%D0%BB%D0%B8%D1%8F%0A816%C2%A0%E2%82%BD%2F0%2C530%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D0%BF%D0%B5%D1%80%D1%81%D1%8B%20%D1%81%C2%A0%D0%BD%D0%BE%D0%B6%D0%BA%D0%BE%D0%B9%0A%D0%98%D1%82%D0%B0%D0%BB%D0%B8%D1%8F%0A816%C2%A0%E2%82%BD%2F0%2C530%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D0%BF%D0%B5%D1%80%D1%81%D1%8B%20%D1%81%C2%A0%D0%BD%D0%BE%D0%B6%D0%BA%D0%BE%D0%B9%0A%D0%98%D1%82%D0%B0%D0%BB%D0%B8%D1%8F%0A816%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0530%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D0%BF%D0%B5%D1%80%D1%81%D1%8B%20%D1%81%C2%A0%D0%BD%D0%BE%D0%B6%D0%BA%D0%BE%D0%B9%0A%D0%98%D1%82%D0%B0%D0%BB%D0%B8%D1%8F%0A816%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0530%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Ростки бамбука Таиланд" data-product-name="Ростки бамбука" data-product-category="other">
-                <div class="catalog-product-head"><h4>Ростки бамбука</h4><strong>190 ₽/0,540 кг</strong></div>
+                <div class="catalog-product-head"><h4>Ростки бамбука</h4><strong>190 ₽ за 540 г</strong></div>
                 <p>Таиланд</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Ростки бамбука, 190 ₽/0,540 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Ростки бамбука, 190 ₽ за 540 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D0%BE%D1%81%D1%82%D0%BA%D0%B8%20%D0%B1%D0%B0%D0%BC%D0%B1%D1%83%D0%BA%D0%B0%0A%D0%A2%D0%B0%D0%B8%D0%BB%D0%B0%D0%BD%D0%B4%0A190%C2%A0%E2%82%BD%2F0%2C540%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D0%BE%D1%81%D1%82%D0%BA%D0%B8%20%D0%B1%D0%B0%D0%BC%D0%B1%D1%83%D0%BA%D0%B0%0A%D0%A2%D0%B0%D0%B8%D0%BB%D0%B0%D0%BD%D0%B4%0A190%C2%A0%E2%82%BD%2F0%2C540%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D0%BE%D1%81%D1%82%D0%BA%D0%B8%20%D0%B1%D0%B0%D0%BC%D0%B1%D1%83%D0%BA%D0%B0%0A%D0%A2%D0%B0%D0%B8%D0%BB%D0%B0%D0%BD%D0%B4%0A190%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0540%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D0%BE%D1%81%D1%82%D0%BA%D0%B8%20%D0%B1%D0%B0%D0%BC%D0%B1%D1%83%D0%BA%D0%B0%0A%D0%A2%D0%B0%D0%B8%D0%BB%D0%B0%D0%BD%D0%B4%0A190%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0540%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
@@ -1539,46 +1547,46 @@
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Фарш форели Высшего качества" data-product-name="Фарш форели" data-product-category="other">
-                <div class="catalog-product-head"><h4>Фарш форели</h4><strong>750 ₽/0,5 кг</strong></div>
+                <div class="catalog-product-head"><h4>Фарш форели</h4><strong>750 ₽ за 500 г</strong></div>
                 <p>Высшего качества</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Фарш форели, 750 ₽/0,5 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Фарш форели, 750 ₽ за 500 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B0%D1%80%D1%88%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%0A%D0%92%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A750%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B0%D1%80%D1%88%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%0A%D0%92%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A750%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B0%D1%80%D1%88%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%0A%D0%92%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A750%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B0%D1%80%D1%88%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%0A%D0%92%D1%8B%D1%81%D1%88%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%B0%D1%87%D0%B5%D1%81%D1%82%D0%B2%D0%B0%0A750%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Перец халапеньо Маринованный, развесной" data-product-name="Перец халапеньо" data-product-category="other">
-                <div class="catalog-product-head"><h4>Перец халапеньо</h4><strong>299 ₽/0,250 кг</strong></div>
+                <div class="catalog-product-head"><h4>Перец халапеньо</h4><strong>299 ₽ за 250 г</strong></div>
                 <p>Маринованный, развесной</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Перец халапеньо, 299 ₽/0,250 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Перец халапеньо, 299 ₽ за 250 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%80%D0%B5%D1%86%20%D1%85%D0%B0%D0%BB%D0%B0%D0%BF%D0%B5%D0%BD%D1%8C%D0%BE%0A%D0%9C%D0%B0%D1%80%D0%B8%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9%2C%20%D1%80%D0%B0%D0%B7%D0%B2%D0%B5%D1%81%D0%BD%D0%BE%D0%B9%0A299%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%80%D0%B5%D1%86%20%D1%85%D0%B0%D0%BB%D0%B0%D0%BF%D0%B5%D0%BD%D1%8C%D0%BE%0A%D0%9C%D0%B0%D1%80%D0%B8%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9%2C%20%D1%80%D0%B0%D0%B7%D0%B2%D0%B5%D1%81%D0%BD%D0%BE%D0%B9%0A299%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%80%D0%B5%D1%86%20%D1%85%D0%B0%D0%BB%D0%B0%D0%BF%D0%B5%D0%BD%D1%8C%D0%BE%0A%D0%9C%D0%B0%D1%80%D0%B8%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9%2C%20%D1%80%D0%B0%D0%B7%D0%B2%D0%B5%D1%81%D0%BD%D0%BE%D0%B9%0A299%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B5%D1%80%D0%B5%D1%86%20%D1%85%D0%B0%D0%BB%D0%B0%D0%BF%D0%B5%D0%BD%D1%8C%D0%BE%0A%D0%9C%D0%B0%D1%80%D0%B8%D0%BD%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9%2C%20%D1%80%D0%B0%D0%B7%D0%B2%D0%B5%D1%81%D0%BD%D0%BE%D0%B9%0A299%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Сливки кокосовые Таиланд" data-product-name="Сливки кокосовые" data-product-category="other">
-                <div class="catalog-product-head"><h4>Сливки кокосовые</h4><strong>240 ₽/0,4 кг</strong></div>
+                <div class="catalog-product-head"><h4>Сливки кокосовые</h4><strong>240 ₽ за 400 г</strong></div>
                 <p>Таиланд</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Сливки кокосовые, 240 ₽/0,4 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Сливки кокосовые, 240 ₽ за 400 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D0%BB%D0%B8%D0%B2%D0%BA%D0%B8%20%D0%BA%D0%BE%D0%BA%D0%BE%D1%81%D0%BE%D0%B2%D1%8B%D0%B5%0A%D0%A2%D0%B0%D0%B8%D0%BB%D0%B0%D0%BD%D0%B4%0A240%C2%A0%E2%82%BD%2F0%2C4%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D0%BB%D0%B8%D0%B2%D0%BA%D0%B8%20%D0%BA%D0%BE%D0%BA%D0%BE%D1%81%D0%BE%D0%B2%D1%8B%D0%B5%0A%D0%A2%D0%B0%D0%B8%D0%BB%D0%B0%D0%BD%D0%B4%0A240%C2%A0%E2%82%BD%2F0%2C4%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D0%BB%D0%B8%D0%B2%D0%BA%D0%B8%20%D0%BA%D0%BE%D0%BA%D0%BE%D1%81%D0%BE%D0%B2%D1%8B%D0%B5%0A%D0%A2%D0%B0%D0%B8%D0%BB%D0%B0%D0%BD%D0%B4%0A240%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0400%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D0%BB%D0%B8%D0%B2%D0%BA%D0%B8%20%D0%BA%D0%BE%D0%BA%D0%BE%D1%81%D0%BE%D0%B2%D1%8B%D0%B5%0A%D0%A2%D0%B0%D0%B8%D0%BB%D0%B0%D0%BD%D0%B4%0A240%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0400%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Майонез Домашний, настоящий" data-product-name="Майонез" data-product-category="other">
-                <div class="catalog-product-head"><h4>Майонез</h4><strong>299 ₽/0,3 кг</strong></div>
+                <div class="catalog-product-head"><h4>Майонез</h4><strong>299 ₽ за 300 г</strong></div>
                 <p>Домашний, настоящий</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Майонез, 299 ₽/0,3 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Майонез, 299 ₽ за 300 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D0%B0%D0%B9%D0%BE%D0%BD%D0%B5%D0%B7%0A%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B8%D0%B9%2C%20%D0%BD%D0%B0%D1%81%D1%82%D0%BE%D1%8F%D1%89%D0%B8%D0%B9%0A299%C2%A0%E2%82%BD%2F0%2C3%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D0%B0%D0%B9%D0%BE%D0%BD%D0%B5%D0%B7%0A%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B8%D0%B9%2C%20%D0%BD%D0%B0%D1%81%D1%82%D0%BE%D1%8F%D1%89%D0%B8%D0%B9%0A299%C2%A0%E2%82%BD%2F0%2C3%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D0%B0%D0%B9%D0%BE%D0%BD%D0%B5%D0%B7%0A%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B8%D0%B9%2C%20%D0%BD%D0%B0%D1%81%D1%82%D0%BE%D1%8F%D1%89%D0%B8%D0%B9%0A299%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0300%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D0%B0%D0%B9%D0%BE%D0%BD%D0%B5%D0%B7%0A%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B8%D0%B9%2C%20%D0%BD%D0%B0%D1%81%D1%82%D0%BE%D1%8F%D1%89%D0%B8%D0%B9%0A299%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0300%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
@@ -1605,12 +1613,12 @@
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Тушенка из оленины" data-product-name="Тушенка из оленины" data-product-category="other">
-                <div class="catalog-product-head"><h4>Тушенка из оленины</h4><strong>430 ₽/0,290 кг</strong></div>
+                <div class="catalog-product-head"><h4>Тушенка из оленины</h4><strong>430 ₽ за 290 г</strong></div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Тушенка из оленины, 430 ₽/0,290 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Тушенка из оленины, 430 ₽ за 290 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A2%D1%83%D1%88%D0%B5%D0%BD%D0%BA%D0%B0%20%D0%B8%D0%B7%C2%A0%D0%BE%D0%BB%D0%B5%D0%BD%D0%B8%D0%BD%D1%8B%0A430%C2%A0%E2%82%BD%2F0%2C290%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A2%D1%83%D1%88%D0%B5%D0%BD%D0%BA%D0%B0%20%D0%B8%D0%B7%C2%A0%D0%BE%D0%BB%D0%B5%D0%BD%D0%B8%D0%BD%D1%8B%0A430%C2%A0%E2%82%BD%2F0%2C290%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A2%D1%83%D1%88%D0%B5%D0%BD%D0%BA%D0%B0%20%D0%B8%D0%B7%C2%A0%D0%BE%D0%BB%D0%B5%D0%BD%D0%B8%D0%BD%D1%8B%0A430%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0290%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A2%D1%83%D1%88%D0%B5%D0%BD%D0%BA%D0%B0%20%D0%B8%D0%B7%C2%A0%D0%BE%D0%BB%D0%B5%D0%BD%D0%B8%D0%BD%D1%8B%0A430%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0290%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
@@ -1625,32 +1633,33 @@
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Соус для рыбы и морепродуктов" data-product-name="Соус для рыбы и морепродуктов" data-product-category="other">
-                <div class="catalog-product-head"><h4>Соус для рыбы и морепродуктов</h4><strong>250 ₽/0,250 кг</strong></div>
+                <div class="catalog-product-head"><h4>Соус для рыбы и морепродуктов</h4><strong>250 ₽ за 250 г</strong></div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Соус для рыбы и морепродуктов, 250 ₽/0,250 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Соус для рыбы и морепродуктов, 250 ₽ за 250 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D0%BE%D1%83%D1%81%20%D0%B4%D0%BB%D1%8F%C2%A0%D1%80%D1%8B%D0%B1%D1%8B%20%D0%B8%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%82%D0%BE%D0%B2%0A250%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D0%BE%D1%83%D1%81%20%D0%B4%D0%BB%D1%8F%C2%A0%D1%80%D1%8B%D0%B1%D1%8B%20%D0%B8%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%82%D0%BE%D0%B2%0A250%C2%A0%E2%82%BD%2F0%2C250%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D0%BE%D1%83%D1%81%20%D0%B4%D0%BB%D1%8F%C2%A0%D1%80%D1%8B%D0%B1%D1%8B%20%D0%B8%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%82%D0%BE%D0%B2%0A250%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D0%BE%D1%83%D1%81%20%D0%B4%D0%BB%D1%8F%C2%A0%D1%80%D1%8B%D0%B1%D1%8B%20%D0%B8%C2%A0%D0%BC%D0%BE%D1%80%D0%B5%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%82%D0%BE%D0%B2%0A250%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Вонголе в/м варено мороженая" data-product-name="Вонголе в/м" data-product-category="other">
-                <div class="catalog-product-head"><h4>Вонголе в/м</h4><strong>470 ₽/0,5 кг</strong></div>
+                <div class="catalog-product-head"><h4>Вонголе в/м</h4><strong>470 ₽ за 500 г</strong></div>
+                <p>В/м — варёно-мороженый продукт</p>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Вонголе в/м, 470 ₽/0,5 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Вонголе в/м, 470 ₽ за 500 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%92%D0%BE%D0%BD%D0%B3%D0%BE%D0%BB%D0%B5%20%D0%B2%2F%D0%BC%0A470%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%92%D0%BE%D0%BD%D0%B3%D0%BE%D0%BB%D0%B5%20%D0%B2%2F%D0%BC%0A470%C2%A0%E2%82%BD%2F0%2C5%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%92%D0%BE%D0%BD%D0%B3%D0%BE%D0%BB%D0%B5%20%D0%B2%2F%D0%BC%0A470%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%92%D0%BE%D0%BD%D0%B3%D0%BE%D0%BB%D0%B5%20%D0%B2%2F%D0%BC%0A470%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
               <article class="catalog-product" data-search-text="Новинки и прочее Чай цейлонский" data-product-name="Чай цейлонский" data-product-category="other">
-                <div class="catalog-product-head"><h4>Чай цейлонский</h4><strong>300 ₽/0,1 кг</strong></div>
+                <div class="catalog-product-head"><h4>Чай цейлонский</h4><strong>300 ₽ за 100 г</strong></div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: Чай цейлонский, 300 ₽/0,1 кг</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: Чай цейлонский, 300 ₽ за 100 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B0%D0%B9%20%D1%86%D0%B5%D0%B9%D0%BB%D0%BE%D0%BD%D1%81%D0%BA%D0%B8%D0%B9%0A300%C2%A0%E2%82%BD%2F0%2C1%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B0%D0%B9%20%D1%86%D0%B5%D0%B9%D0%BB%D0%BE%D0%BD%D1%81%D0%BA%D0%B8%D0%B9%0A300%C2%A0%E2%82%BD%2F0%2C1%C2%A0%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B0%D0%B9%20%D1%86%D0%B5%D0%B9%D0%BB%D0%BE%D0%BD%D1%81%D0%BA%D0%B8%D0%B9%0A300%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0100%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B0%D0%B9%20%D1%86%D0%B5%D0%B9%D0%BB%D0%BE%D0%BD%D1%81%D0%BA%D0%B8%D0%B9%0A300%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0100%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                   </div>
                 </details>
               </article>
@@ -1668,6 +1677,13 @@
             </div>
           </section>
                 <!-- catalog-products:end -->
+        </div>
+        <div class="catalog-empty" data-catalog-empty hidden>
+          <p data-catalog-empty-message>В каталоге нет совпадений.</p>
+          <p data-catalog-empty-hint>Попробуйте другое название или спросите у лавки.</p>
+          <button type="button" class="source-button source-button--outline" data-catalog-all-categories hidden>
+            <span class="source-button__label">Искать во всём каталоге</span>
+          </button>
         </div>
         <section class="catalog-journal" aria-labelledby="catalog-journal-title" data-catalog-journal hidden>
           <h2 id="catalog-journal-title">Из журнала</h2>
@@ -1877,7 +1893,6 @@
 <!-- shared:journal-search:end -->
           </div>
         </section>
-        <p class="catalog-empty" data-catalog-empty hidden>Ничего не найдено. Попробуйте другое название или откройте весь ассортимент.</p>
 
         <noscript>
           <p class="catalog-noscript">
@@ -1889,14 +1904,19 @@
 
       <section class="catalog-order">
         <div class="source-shell catalog-order-grid">
-          <h2>Нашли нужное?</h2>
-          <p>Спросите о наличии конкретной позиции или сразу оформите заказ.</p>
+          <h2 data-catalog-order-title>Нашли нужное?</h2>
+          <div class="catalog-order-copy">
+            <p data-catalog-order-copy>Спросите о наличии конкретной позиции или сразу оформите заказ.</p>
+            <p class="catalog-order-delivery"><!-- shared:delivery-summary:start -->
+Доставка по Москве в пределах МКАД — 490 ₽, без минимальной суммы заказа.
+<!-- shared:delivery-summary:end --> <a href="../#delivery">Условия доставки</a></p>
+          </div>
           <div class="catalog-order-actions">
             <a class="source-button source-button--telegram" href="https://t.me/+79166751452">
-              <span class="source-button__label">Заказать в Телеграме</span>
+              <span class="source-button__label" data-catalog-order-channel="Телеграме">Заказать в Телеграме</span>
             </a>
             <a class="source-button source-button--whatsapp" href="https://wa.me/79166751452">
-              <span class="source-button__label">Заказать в WhatsApp</span>
+              <span class="source-button__label" data-catalog-order-channel="WhatsApp">Заказать в WhatsApp</span>
             </a>
           </div>
         </div>
@@ -1918,8 +1938,9 @@
           <p class="source-footer__kicker">До встречи на Вавиловской</p>
           <h2 id="catalog-footer-title">Лосось на вахте — заходите в лавку</h2>
           <p class="source-footer__lead">
-            <span data-store-status>Каждый день с 11:00 до 20:00</span>. Можно приехать за рыбой и деликатесами или заказать доставку.
+            Каждый день с 11:00 до 20:00. Можно приехать за рыбой и деликатесами или заказать доставку.
           </p>
+          <p class="store-status" data-store-status hidden></p>
           <div class="source-footer__visit">
             <p>Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1; метро «Вави&shy;ловская» и «Университет»</p>
           </div>

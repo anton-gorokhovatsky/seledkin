@@ -23,7 +23,7 @@ test("prices and product-specific order links survive unavailable JavaScript", a
       const url = new URL(await link.getAttribute("href"));
       expect(url.searchParams.get("text")).toContain("Хочу заказать");
       expect(url.searchParams.get("text")).toContain("икра");
-      expect(url.searchParams.get("text")).toContain("0,05");
+      expect(url.searchParams.get("text")).toContain("50 г");
     }
     await noOverflow(page);
     await context.close();
@@ -45,12 +45,12 @@ test("search, category, shared URL and browser history retain the same selection
   await expect(shared.locator("[data-catalog-count]")).toHaveText("2 позиции");
   await shared.close();
   await page.locator("[data-catalog-select]").selectOption("seafood");
-  await expect(count).toHaveText("Ничего не найдено");
+  await expect(count).toHaveText("0 позиций");
   await page.goBack();
   await expect(count).toHaveText("2 позиции");
   await expect(page.locator("[data-catalog-select]")).toHaveValue("all");
   await page.goForward();
-  await expect(count).toHaveText("Ничего не найдено");
+  await expect(count).toHaveText("0 позиций");
   await page.locator("[data-catalog-reset]").click();
   await expect(count).toHaveText("114 позиций");
   await search.fill("морепродукты");

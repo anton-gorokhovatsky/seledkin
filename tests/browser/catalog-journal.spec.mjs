@@ -3,6 +3,68 @@ import { readFileSync } from "node:fs";
 
 const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8"));
 
+test("an empty category search can broaden without losing the query or browser history", async ({ page }, testInfo) => {
+  await page.goto("catalog/");
+  const search = page.getByRole("searchbox", { name: "Найти товар" });
+  await search.fill("креветки вареные");
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
+  await page.locator("[data-catalog-select]").selectOption("caviar");
+  await expect(page.locator("[data-catalog-empty-message]")).toHaveText("В категории «Икра» совпадений нет.");
+  await expect(page.locator("[data-catalog-order-title]")).toHaveText("Помочь с выбором?");
+  const broaden = page.getByRole("button", { name: "Искать во всём каталоге" });
+  await broaden.press("Enter");
+  await expect(search).toHaveValue("креветки вареные");
+  await expect(search).toBeFocused();
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
+  await expect(page.locator(".catalog-product:visible")).toContainText("В/м — варёно-мороженый продукт");
+  expect(new URL(page.url()).searchParams.get("category")).toBeNull();
+  await expect(page.locator("[data-catalog-order-title]")).toHaveText("Нашли нужное?");
+  await page.goBack();
+  await expect(search).toHaveValue("креветки вареные");
+  await expect(page.locator("[data-catalog-select]")).toHaveValue("caviar");
+  await expect(broaden).toBeVisible();
+  await page.locator("[data-catalog-reset]").click();
+  await expect(search).toHaveValue("");
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(114);
+  await search.fill("такойрыбынет");
+  await expect(page.locator("[data-catalog-empty]")).toBeVisible();
+  await expect(broaden).toBeHidden();
+  // Journal matches do not conceal recovery from a selected product category.
+  await search.fill("риет");
+  await page.locator("[data-catalog-select]").selectOption("caviar");
+  await expect(broaden).toBeVisible();
+  await expect(page.locator("[data-journal-result]:visible")).toHaveCount(1);
+  await page.setViewportSize({ width: 320, height: 800 });
+  for (const [mode, content] of [
+    ["text", "html { font-size:200% !important; }"],
+    ["spacing", "* { line-height:1.5 !important; letter-spacing:.12em !important; word-spacing:.16em !important; } p { margin-bottom:2em !important; }"],
+  ]) {
+    const style = await page.addStyleTag({ content });
+    await page.evaluate(() => document.fonts.ready);
+    await search.focus();
+    await broaden.focus();
+    await expect(broaden).toBeInViewport();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    const bounds = await broaden.boundingBox();
+    expect(bounds.width).toBeGreaterThanOrEqual(44);
+    expect(bounds.height).toBeGreaterThanOrEqual(44);
+    await page.screenshot({ path: testInfo.outputPath(`recovery-${mode}.png`) });
+    await style.evaluate(node => node.remove());
+  }
+});
+
+test("homepage prices continue to matching products and delivery terms stay beside the order", async ({ page }) => {
+  await page.goto("#prices");
+  await page.locator(".price-preview").getByRole("link", { name: "Чёрная икра" }).click();
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(4);
+  const product = page.locator(".catalog-product:visible").first();
+  await expect(product.locator("strong")).toHaveText("6 000 ₽ за 50 г");
+  await expect(page.locator(".catalog-order-delivery")).toContainText("Доставка по Москве в пределах МКАД — 490 ₽, без минимальной суммы заказа.");
+  await page.getByRole("link", { name: "Условия доставки", exact: true }).click();
+  await expect(page).toHaveURL(/\/#delivery$/);
+  await expect(page.locator(".delivery-source__terms")).toContainText("Стоимость доставки в пределах МКАД — 490 ₽.");
+});
+
 test("catalog separates dated journal matches from current price rows", async ({ page }) => {
   await page.goto("catalog/");
   const search = page.getByRole("searchbox", { name: "Найти товар" });
@@ -39,7 +101,17 @@ test("archive is compact, full articles preserve photographs and survive enlarge
     await page.goto(path);
     await page.addStyleTag({ content: "html { font-size:200% !important; } p { line-height:1.5 !important; margin-bottom:2em !important; } * { letter-spacing:0.12em !important; word-spacing:0.16em !important; }" });
     await page.evaluate(() => document.fonts.ready);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    const overflow = await page.evaluate(() => {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const items = [];
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        const range = document.createRange(); range.selectNodeContents(node);
+        if (range.getBoundingClientRect().right > innerWidth + 1) items.push(`${node.parentElement.tagName}.${node.parentElement.className}: ${node.textContent.trim().slice(0, 100)}`);
+      }
+      return { width: document.documentElement.scrollWidth - innerWidth, items };
+    });
+    expect(overflow.width, `${mode}: ${overflow.items.join("; ")}`).toBeLessThanOrEqual(1);
     const photo = page.locator(".journal-story > img");
     expect(await photo.evaluate(image => getComputedStyle(image).objectFit)).not.toBe("cover");
     const inquiry = page.locator(".ship-log-entry__actions a").first();

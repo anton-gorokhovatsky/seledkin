@@ -23,6 +23,9 @@ test("shop status crosses Moscow boundaries without overriding an explicit watch
     await expect(node).toHaveText("Откроемся завтра в 11:00");
     await expect(node).not.toHaveAttribute("aria-live");
   }
+  await expect(page.locator("#contacts .contacts-source__details")).toContainText("Ежедневно с 11:00 до 20:00");
+  await expect(page.locator("#menu-service-title")).toHaveText("Ежедневно с 11:00 до 20:00");
+  await expect(page.locator(".source-footer__lead")).toContainText("Каждый день с 11:00 до 20:00");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.clock.fastForward(4 * 3_600_000);
   await expect(page.locator("#contacts [data-store-status]")).toHaveText("Откроемся сегодня в 11:00");

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { matchesSearch, orderLinks, positionCount, productSearchText } from "../assets/catalog-model.js";
+import { catalogPrice, matchesSearch, orderLinks, positionCount, productNotes, productSearchText } from "../assets/catalog-model.js";
 import { catalog } from "../assets/catalog-data.js";
 
 test("search accepts category terms, reversed words, ё and whitespace", () => {
@@ -59,7 +59,28 @@ test("both order channels carry the exact product and package, without sending i
     assert.equal(telegram.searchParams.get("text"), whatsapp.searchParams.get("text"));
     assert.match(telegram.searchParams.get("text"), /Хочу заказать/);
     assert.match(telegram.searchParams.get("text"), /₽/);
+    assert.ok(telegram.searchParams.get("text").includes(catalogPrice(product.price)));
   }
+});
+
+test("portion prices use grams without rounding the quantity or changing other units", () => {
+  for (const [source, expected] of [
+    ["6000 ₽/0,05 кг", "6 000 ₽ за 50 г"],
+    ["15 000 ₽/0,125 кг", "15 000 ₽ за 125 г"],
+    ["990 ₽/0,5 кг", "990 ₽ за 500 г"],
+    ["240 ₽/0,4 кг", "240 ₽ за 400 г"],
+    ["190 ₽/0,175 кг", "190 ₽ за 175 г"],
+    ["3200 ₽/кг", "3 200 ₽/кг"],
+    ["450 ₽/0,9 л", "450 ₽/0,9 л"],
+    ["330 ₽/0,450 мл", "330 ₽/0,450 мл"],
+  ]) assert.equal(catalogPrice(source), expected);
+});
+
+test("abbreviation notes appear only for confirmed preparation terms", () => {
+  assert.equal(productNotes({ name: "Креветка северная в/м" }), "В/м — варёно-мороженый продукт");
+  assert.equal(productNotes({ name: "Креветка тигровая б/г" }), "Б/г — без головы");
+  assert.equal(productNotes({ name: "Скумбрия", description: "ПБГ" }), "");
+  assert.equal(productNotes({ name: "Филе трески" }), "");
 });
 
 test("checked-in HTML catalog is generated from current prices", () => {

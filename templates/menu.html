@@ -74,7 +74,10 @@
 
           <section class="site-menu__service" aria-labelledby="menu-service-title">
             <div class="site-menu__service-inner">
-              <h3 id="menu-service-title" data-store-status>{{regularHours}}</h3>
+              <div class="store-hours">
+                <h3 id="menu-service-title">{{regularHours}}</h3>
+                <p class="store-status" data-store-status hidden></p>
+              </div>
               <address>
                 {{menuAddress}}
               </address>

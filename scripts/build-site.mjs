@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderJournal, renderJournalPage, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, renderMenu, renderFooter, renderTheme, renderJournal, renderJournalPage, renderDelivery, renderPricePreview, contactAddress, regularHours, store } from "./site-content.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
 const hero = entries.slice(0, 5);
@@ -15,9 +15,13 @@ for (const [path, page, root] of pages) {
     "journal-hero": renderJournal(hero, "hero"), "journal-preview": renderJournal(preview, "preview"),
     "contact-address": contactAddress,
     "contact-hours": regularHours,
+    "delivery-terms": renderDelivery("home"),
+    "price-preview": renderPricePreview(),
   });
   if (page === "journal") regions["journal-archive"] = renderJournal(entries, "archive");
-  if (page === "catalog") regions["journal-search"] = renderJournal(entries, "search");
+  if (page === "catalog") Object.assign(regions, {
+    "journal-search": renderJournal(entries, "search"), "delivery-summary": renderDelivery("catalog"),
+  });
   let result = original;
   for (const [key, content] of Object.entries(regions)) {
     const pattern = new RegExp(`(<!-- shared:${key}:start -->)[\\s\\S]*?(<!-- shared:${key}:end -->)`, "g");

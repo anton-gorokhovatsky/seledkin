@@ -1,8 +1,8 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { catalog } from "../assets/catalog-data.js";
-import { orderLinks, positionCount, productSearchText } from "../assets/catalog-model.js";
-import { typographPrice, typographText } from "../assets/typography.js";
+import { catalogPrice, orderLinks, positionCount, productNotes, productSearchText } from "../assets/catalog-model.js";
+import { typographText } from "../assets/typography.js";
 
 const path = fileURLToPath(new URL("../catalog/index.html", import.meta.url));
 const original = readFileSync(path, "utf8");
@@ -19,12 +19,14 @@ const products = catalog.map((category) => `
             <div class="catalog-product-grid">${category.items.map((product) => {
   const links = orderLinks(product);
   const keywords = productSearchText(category, product);
+  const notes = productNotes(product);
   return `
               <article class="catalog-product" data-search-text="${escape(keywords)}" data-product-name="${escape(product.name)}" data-product-category="${category.slug}">
-                <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(typographPrice(product.price))}</strong></div>${product.description ? `
-                <p>${text(product.description)}</p>` : ""}
+                <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description ? `
+                <p>${text(product.description)}</p>` : ""}${notes ? `
+                <p>${escape(notes)}</p>` : ""}
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: ${text(product.name)}, ${escape(typographPrice(product.price))}</span></summary>
+                  <summary>Заказать<span class="visually-hidden">: ${text(product.name)}, ${escape(catalogPrice(product.price))}</span></summary>
                   <div class="catalog-product-order__channels">
                     <a href="${escape(links.telegram)}">В&nbsp;Телеграме</a>
                     <a href="${escape(links.whatsapp)}">В&nbsp;WhatsApp</a>

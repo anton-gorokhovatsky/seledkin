@@ -10,6 +10,19 @@
     "hours": { "open": "11:00", "close": "20:00" },
     "exceptions": {}
   },
+  "delivery": {
+    "area": "в пределах МКАД",
+    "priceRub": 490,
+    "minimumOrderRub": 0
+  },
+  "pricePreview": [
+    { "category": "caviar", "name": "Черная икра", "label": "Чёрная икра", "description": "Осетровая, забойная, высшего качества" },
+    { "category": "seafood", "name": "Креветка северная в/м" },
+    { "category": "frozen-fish", "name": "Нерка" },
+    { "category": "fillet", "name": "Филе трески" },
+    { "category": "steaks", "name": "Стейк лосося" },
+    { "category": "prepared-fish", "name": "Сельдь слабосоленая" }
+  ],
   "routes": [
     { "href": "#assortment", "label": "Что продаём" },
     { "href": "catalog/", "label": "Продукты и цены" },
