@@ -101,17 +101,7 @@ test("archive is compact, full articles preserve photographs and survive enlarge
     await page.goto(path);
     await page.addStyleTag({ content: "html { font-size:200% !important; } p { line-height:1.5 !important; margin-bottom:2em !important; } * { letter-spacing:0.12em !important; word-spacing:0.16em !important; }" });
     await page.evaluate(() => document.fonts.ready);
-    const overflow = await page.evaluate(() => {
-      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-      const items = [];
-      while (walker.nextNode()) {
-        const node = walker.currentNode;
-        const range = document.createRange(); range.selectNodeContents(node);
-        if (range.getBoundingClientRect().right > innerWidth + 1) items.push(`${node.parentElement.tagName}.${node.parentElement.className}: ${node.textContent.trim().slice(0, 100)}`);
-      }
-      return { width: document.documentElement.scrollWidth - innerWidth, items };
-    });
-    expect(overflow.width, `${mode}: ${overflow.items.join("; ")}`).toBeLessThanOrEqual(1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
     const photo = page.locator(".journal-story > img");
     expect(await photo.evaluate(image => getComputedStyle(image).objectFit)).not.toBe("cover");
     const inquiry = page.locator(".ship-log-entry__actions a").first();
