@@ -88,6 +88,7 @@ jobs:
           cp catalog/index.html catalog/catalog.js _site/catalog/
           cp -R journal/. _site/journal/
           cp about/index.html _site/about/
+          node scripts/package-legacy.mjs _site
 
       - name: Upload Pages artifact
         if: steps.scope.outputs.scope != 'none'

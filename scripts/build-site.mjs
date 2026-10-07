@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderJournal, renderJournalPage, renderDelivery, renderPricePreview, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalPage, renderDelivery, renderPricePreview, contactAddress, regularHours, store } from "./site-content.mjs";
+import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
 const hero = entries.slice(0, 5);
@@ -9,7 +10,7 @@ const pages = [["index.html", "home", ""], ["catalog/index.html", "catalog", "..
 for (const [path, page, root] of pages) {
   const file = new URL(`../${path}`, import.meta.url);
   const original = readFileSync(file, "utf8");
-  const regions = { theme: renderTheme(page) };
+  const regions = { theme: renderTheme(page), analytics: renderAnalytics(root) };
   if (page !== "404") Object.assign(regions, { menu: renderMenu(page, root), footer: renderFooter(page, root) });
   if (page === "home") Object.assign(regions, {
     "journal-hero": renderJournal(hero, "hero"), "journal-preview": renderJournal(preview, "preview"),
@@ -63,5 +64,6 @@ function generated(path, content) {
 }
 generated("assets/store-data.js", `// Generated from content/site.json by pnpm build:site.\nexport const store = ${JSON.stringify(store, null, 2)};\n`);
 for (const entry of entries) generated(`journal/${entry.id}/index.html`, renderJournalPage(entry));
+for (const route of legacyRoutes) generated(`${route.path}/index.html`, renderLegacyRoute(route));
 const routes = ["", "catalog/", "journal/", "about/", ...entries.map(entry => `journal/${entry.id}/`)];
 generated("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map(path => `  <url>\n    <loc>https://ks.fish/${path}</loc>\n  </url>`).join("\n")}\n</urlset>\n`);

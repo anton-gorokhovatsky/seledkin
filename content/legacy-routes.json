@@ -1,0 +1,6 @@
+[
+  { "path": "collection", "target": "catalog/", "label": "Каталог и цены" },
+  { "path": "svezhemorozhenaya-ryba", "target": "catalog/?category=frozen-fish", "label": "Свежемороженая рыба" },
+  { "path": "solenaja-kopchenaja-vjalenaja-ryba", "target": "catalog/?category=prepared-fish", "label": "Слабосолёная и копчёная рыба" },
+  { "path": "polufabrikaty", "target": "catalog/", "label": "Каталог и цены" }
+]

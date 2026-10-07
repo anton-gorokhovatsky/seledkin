@@ -13,6 +13,14 @@ test("committed shared regions are current and building twice is unnecessary", (
   assert.equal(new Set(versions).size, 1);
 });
 
+test("every page initializes analytics once through the guarded shared module", () => {
+  for (const path of ["index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html", ...entries.map(entry => `journal/${entry.id}/index.html`)]) {
+    const html = readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
+    assert.equal((html.match(/src="[^"]*assets\/analytics\.js\?/g) ?? []).length, 1, path);
+    assert.ok(!html.includes("mc.yandex.ru"), `Unconditional counter in ${path}`);
+  }
+});
+
 test("one journal edit propagates to all views without shortening its body", () => {
   assert.equal(new Set(entries.map(entry => entry.id)).size, entries.length);
   const changed = { ...entries[0], title: "Проверка общего заголовка", product: "Проверка продукта" };

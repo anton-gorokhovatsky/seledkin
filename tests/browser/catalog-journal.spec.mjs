@@ -115,6 +115,7 @@ test("archive is compact, full articles preserve photographs and survive enlarge
 test("analytics reports intent once, ignores social reading, and excludes arbitrary search text", async ({ page }) => {
   // Route the public host to local static files; replace only the vendor tag with
   // an in-memory recorder so QA cannot pollute the production counter.
+  await page.addInitScript(() => Object.defineProperty(navigator, "webdriver", { get: () => false }));
   await page.route("https://ks.fish/**", async route => {
     const url = new URL(route.request().url());
     const response = await page.request.get(`http://127.0.0.1:4173${url.pathname}${url.search}`);
@@ -125,6 +126,7 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
   await expect.poll(() => page.evaluate(() => Array.isArray(window.goalCalls))).toBe(true);
   const search = page.locator("[data-catalog-search]");
   await search.fill("тунец");
+  await search.press("Enter");
   await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "catalog_search").length)).toBe(1);
   await page.locator(".catalog-product:visible summary").click();
   await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").length)).toBe(1);
@@ -137,7 +139,7 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
   const calls = await page.evaluate(() => window.goalCalls.filter(call => call[1] === "reachGoal"));
   expect(calls.filter(call => call[2] === "catalog_search")).toHaveLength(2);
   expect(JSON.stringify(calls)).not.toContain("риет");
-  expect(calls.find(call => call[2] === "catalog_search_empty")[3]).toMatchObject({products:0,journal:1});
+  expect(calls.find(call => call[2] === "catalog_search_empty")[3]).toMatchObject({schema:2,products:0,journal:1,total_products:0,result:"journal_only"});
   await page.getByRole("link",{name:"Телеграм-канал",exact:true}).click();
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "order_click").length)).toBe(1);
   await page.goto("https://ks.fish/#contacts");

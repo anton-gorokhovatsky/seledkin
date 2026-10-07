@@ -120,6 +120,10 @@ export function renderTheme(page) {
   }).replaceAll(/\n\n/g, "\n");
 }
 
+export function renderAnalytics(root) {
+  return `    <script type="module" src="${root}assets/analytics.js?v=analytics-2"></script>`;
+}
+
 function date(entry, year = true) {
   const parts = new Intl.DateTimeFormat("ru-RU", {
     day: "numeric", month: "long", ...(year ? { year: "numeric" } : {}), timeZone: "UTC",
@@ -206,7 +210,7 @@ export function renderJournalPage(entry) {
     return `<a href="../${item.id}/" rel="${previous ? "prev" : "next"}"><span class="journal-story__direction">${label}</span><span class="journal-story__neighbor-title">${item.title}</span></a>`;
   }).join("\n");
   return template("journal-page", {
-    theme: renderTheme("journal"), menu: renderMenu("journal", "../../"), footer: renderFooter("journal", "../../"),
+    theme: renderTheme("journal"), analytics: renderAnalytics("../../"), menu: renderMenu("journal", "../../"), footer: renderFooter("journal", "../../"),
     article: renderJournal([entry], "article"), neighbors,
     url, title: text(entry.title), description: text(`${plain(entry.title).replace(/[.!?]+$/u, "")}. Запись Олега Гугунавы от ${date(entry)} в Судовом журнале Рыбной лавки капитана Селедкина.`),
     shareImage: `https://ks.fish/assets/${entry.image}`, alt: text(entry.alt),

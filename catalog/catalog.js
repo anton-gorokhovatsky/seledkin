@@ -1,5 +1,6 @@
 import { matchesSearch, positionCount } from "../assets/catalog-model.js?v=buyer-paths-1";
 import { typographText } from "../assets/typography.js?v=typography-23-1";
+import { createSearchTracker } from "../assets/catalog-analytics.js?v=analytics-2";
 
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");
@@ -27,18 +28,13 @@ const categories = [...list.querySelectorAll(".catalog-category")].map((section)
 }));
 let activeCategory = "all";
 let query = "";
-let results = { products: 0, journal: 0 };
-let searchTimer;
-let lastTrackedSearch = "";
+let results = { products: 0, journal: 0, totalProducts: 0 };
+const searchTracker = createSearchTracker((goal, params) => {
+  document.dispatchEvent(new CustomEvent("shop:goal", { detail: { goal, params } }));
+});
 
-function reportSearch() {
-  clearTimeout(searchTimer);
-  const key = `${activeCategory}:${query.trim().toLocaleLowerCase("ru-RU")}`;
-  if (!query.trim() || key === lastTrackedSearch) return;
-  lastTrackedSearch = key;
-  const params = { category: activeCategory, query_length: query.trim().length, products: results.products, journal: results.journal };
-  document.dispatchEvent(new CustomEvent("shop:goal", { detail: { goal: "catalog_search", params } }));
-  if (!results.products) document.dispatchEvent(new CustomEvent("shop:goal", { detail: { goal: "catalog_search_empty", params } }));
+function reportSearch(trigger) {
+  searchTracker.track({ query, category: activeCategory, ...results }, trigger);
 }
 
 function readUrl() {
@@ -61,11 +57,13 @@ function writeUrl(replace = false) {
 
 function render() {
   let visibleCount = 0;
+  let totalProducts = 0;
   for (const category of categories) {
     let categoryCount = 0;
     for (const product of category.products) {
-      product.hidden = (activeCategory !== "all" && activeCategory !== category.slug)
-        || !matchesSearch(product.dataset.searchText, query);
+      const matches = matchesSearch(product.dataset.searchText, query);
+      if (matches) totalProducts += 1;
+      product.hidden = (activeCategory !== "all" && activeCategory !== category.slug) || !matches;
       if (!product.hidden) categoryCount += 1;
     }
     category.section.hidden = categoryCount === 0;
@@ -78,7 +76,7 @@ function render() {
     if (!entry.hidden) journalCount += 1;
   }
   journal.hidden = journalCount === 0;
-  results = { products: visibleCount, journal: journalCount };
+  results = { products: visibleCount, journal: journalCount, totalProducts };
   select.value = activeCategory;
   selectedLabel.textContent = select.selectedOptions[0].textContent;
   const categoryRestricted = activeCategory !== "all";
@@ -110,28 +108,29 @@ filters.addEventListener("click", (event) => {
   activeCategory = button.dataset.category;
   writeUrl();
   render();
-  reportSearch();
+  reportSearch("category");
 });
 search.addEventListener("input", () => {
   query = search.value;
+  if (!query.trim()) searchTracker.reset();
   writeUrl(true);
   render();
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(reportSearch, 800);
 });
-search.addEventListener("change", reportSearch);
+search.addEventListener("blur", () => reportSearch("blur"));
+search.addEventListener("keydown", event => {
+  if (event.key === "Enter") reportSearch("enter");
+});
 select.addEventListener("change", () => {
   activeCategory = select.value;
   writeUrl();
   render();
-  reportSearch();
+  reportSearch("category");
 });
 reset.addEventListener("click", () => {
   activeCategory = "all";
   query = "";
   search.value = "";
-  clearTimeout(searchTimer);
-  lastTrackedSearch = "";
+  searchTracker.reset();
   writeUrl();
   render();
   search.focus();
@@ -140,7 +139,7 @@ allCategories.addEventListener("click", () => {
   activeCategory = "all";
   writeUrl();
   render();
-  reportSearch();
+  reportSearch("broaden");
   search.focus();
 });
 function restore() {
@@ -149,5 +148,8 @@ function restore() {
 }
 window.addEventListener("popstate", restore);
 window.addEventListener("hashchange", restore);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden" && document.activeElement === search) reportSearch("leave");
+});
 restore();
 controls.hidden = false;

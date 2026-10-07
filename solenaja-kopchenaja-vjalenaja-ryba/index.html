@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Слабосолёная и копчёная рыба — Рыбная лавка капитана Селедкина</title>
+    <link rel="canonical" href="https://ks.fish/catalog/?category=prepared-fish" />
+    <meta http-equiv="refresh" content="0; url=../catalog/?category=prepared-fish" />
+    <script>
+      // Pages has no server redirect rules. Preserve query and service markers
+      // in the browser, and let the meta refresh work without JavaScript.
+      const destination = new URL("../catalog/?category=prepared-fish", location.href);
+      new URL(location.href).searchParams.forEach((value, key) => {
+        if (!destination.searchParams.has(key)) destination.searchParams.set(key, value);
+      });
+      location.replace(destination.href);
+    </script>
+    <link rel="stylesheet" href="../assets/styles.css?v=buyer-paths-1" />
+  </head>
+  <body class="not-found-page">
+    <main class="not-found-source">
+      <h1>Слабосолёная и копчёная рыба</h1>
+      <p>Этот раздел теперь в каталоге лавки.</p>
+      <a class="source-button source-button--outline" href="../catalog/?category=prepared-fish"><span class="source-button__label">Открыть каталог</span></a>
+    </main>
+  </body>
+</html>
