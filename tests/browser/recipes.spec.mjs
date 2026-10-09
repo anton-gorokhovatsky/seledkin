@@ -57,7 +57,8 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
     await context.addInitScript(value => localStorage.setItem("seledkin-theme", value), theme);
     const page = await context.newPage();
     await page.goto(`${baseURL}recipes/?audit=recipes`);
-    await expect(page.locator("#recipes .recipe-card")).toHaveCount(15);
+    await expect(page.locator(".recipe-editorial-opening article")).toHaveCount(3);
+    await expect(page.locator("#recipes .recipe-card")).toHaveCount(13);
     await expect(page.locator("#advice .recipe-card")).toHaveCount(4);
     await expect(page.locator("#meals .meal-collection")).toHaveCount(3);
     await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
@@ -66,8 +67,9 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
       await page.setViewportSize({ width, height: 900 });
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
-      const image = page.locator(".recipe-feature img");
-      expect(await image.evaluate(img => Math.abs(img.getBoundingClientRect().width / img.getBoundingClientRect().height - Number(img.getAttribute("width")) / Number(img.getAttribute("height"))))).toBeLessThan(0.02);
+      for (const image of await page.locator(".recipe-editorial-opening img").all()) {
+        expect(await image.evaluate(img => Math.abs(img.getBoundingClientRect().width / img.getBoundingClientRect().height - Number(img.getAttribute("width")) / Number(img.getAttribute("height"))))).toBeLessThan(0.02);
+      }
       await page.screenshot({ path: testInfo.outputPath(`${theme}-${width}.png`) });
     }
     await page.addStyleTag({ content: "html { font-size:200% !important; }" });

@@ -24,6 +24,7 @@
     <link rel="icon" href="../assets/favicon-16.png" sizes="16x16" type="image/png" />
     <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
     <link rel="stylesheet" href="../assets/styles.css?v=recipes-menu-1" />
+    <link rel="stylesheet" href="../assets/recipes-editorial.css?v=editorial-1" />
     <script type="module" src="../assets/site.js?v=recipes-menu-1"></script>
     <script type="module" src="../assets/interface-motion.js"></script>
     <title>Рецепты и советы — Рыбная лавка капитана Селедкина</title>
@@ -38,10 +39,10 @@
     {{menu}}
     <main id="main" tabindex="-1" class="recipes-main source-shell">
       <header class="recipes-intro page-intro">
-        <div><p class="page-intro__eyebrow">На кухне с Олегом</p><h1 class="page-intro__title">Рецепты и советы</h1></div>
+        <div><p class="page-intro__eyebrow">Рецепты и советы</p><h1 class="page-intro__title">На кухне <em>с Олегом</em></h1></div>
         <div class="recipes-intro__copy"><p>Как приготовить рыбу и морепродукты — из авторского канала Олега Гугунавы. Полные тексты, фотографии и ссылки на первоисточник.</p><p>Записи сохранены с датами публикации. Действующие цены — в каталоге лавки.</p></div>
       </header>
-      <nav class="recipe-jump" aria-label="На этой странице"><a href="#recipes">Рецепты</a><a href="#advice">Советы о рыбе</a><a href="#meals">Что купить к ужину</a></nav>
+      <nav class="recipe-jump" aria-label="На этой странице">{{recipeJump}}</nav>
       {{groups}}
       {{collections}}
     </main>
