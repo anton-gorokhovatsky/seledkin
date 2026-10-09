@@ -22,9 +22,9 @@ const plain = text => text.replace(/<[^>]*>/g, "")
 
 test("every original editorial paragraph survives on its published page", () => {
   const paragraphs = [...(home + about + archive + journal).matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(match => plain(match[1]));
-  // Catalog UI labels are not author paragraphs. Published price examples
-  // are checked against the current catalog data below.
-  assert.equal(originals.length, 43);
+  // Site UI labels (the replaced preview eyebrow and four item numbers) are not
+  // Oleg's paragraphs. Prices are checked against the current catalog below.
+  assert.equal(originals.length, 38);
   for (const paragraph of originals) assert.ok(paragraphs.includes(plain(paragraph)), `Lost author paragraph: ${paragraph.slice(0, 80)}`);
   assert.match(home, /href="about\/"/);
   assert.match(home, /href="journal\/"/);
