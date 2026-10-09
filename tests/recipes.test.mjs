@@ -45,6 +45,9 @@ test("recipes point to the right product variant and use live catalog prices", (
       assert.ok(matches.some(result => result.product === product));
       const story = read(`journal/${recipe.id}/index.html`);
       assert.ok(story.includes(catalogPrice(product.price)));
+      const context = story.match(/<section class="recipe-current"[\s\S]*?<\/section>/)?.[0];
+      assert.ok(context, "A recipe's matching product must have catalog context");
+      assert.ok(!context.includes(`href="../../journal/${recipe.id}/"`), "Product context must not loop back to the same recipe");
     }
   }
   const seafood = catalog.find(category => category.slug === "seafood");

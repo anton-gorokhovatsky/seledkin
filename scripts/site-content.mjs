@@ -227,9 +227,9 @@ const recipeEntry = recipe => {
   return entry;
 };
 
-function currentProduct(selection, root, heading = "h3") {
+function currentProduct(selection, root, heading = "h3", includeRecipe = true) {
   const { category, product } = resolveProduct(selection);
-  const related = productRecipeLinks(category, product).find(recipe => recipe.kind === "recipe");
+  const related = includeRecipe ? productRecipeLinks(category, product).find(recipe => recipe.kind === "recipe") : null;
   return `<article class="meal-product">
       <${heading}><a href="${escape(productCatalogHref(selection, root))}">${text(product.name)}</a></${heading}>
       <p>${text(product.description ?? category.label)}</p>
@@ -247,7 +247,7 @@ function renderRecipeContext(entry) {
   </figure>`).join("\n") ?? "";
   const current = recipe.products.length ? `<section class="recipe-current" aria-labelledby="recipe-current-title">
     <header><p class="page-intro__eyebrow">${recipe.kind === "recipe" ? "Для этого рецепта" : "В рассказе Олега"}</p><h2 id="recipe-current-title">В каталоге лавки</h2></header>
-    <div class="meal-products">${recipe.products.map(selection => currentProduct(selection, "../../")).join("\n")}</div>
+    <div class="meal-products">${recipe.products.map(selection => currentProduct(selection, "../../", "h3", false)).join("\n")}</div>
   </section>` : "";
   return `\n${sequence}${recipe.videoSource ? `<p class="recipe-video-source"><a class="editorial-link" href="${recipe.videoSource}">Смотреть авторское видео в Телеграме${harpoon}</a></p>` : ""}${current}`;
 }
