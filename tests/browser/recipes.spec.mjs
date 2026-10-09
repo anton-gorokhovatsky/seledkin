@@ -49,7 +49,7 @@ test("desktop category photographs respond to pointer and keyboard while a touch
   await touch.close();
 });
 
-test("the recipe directory remains readable in both watches, narrow reflow and enlarged text", async ({ browser, baseURL }, testInfo) => {
+test("the recipe directory remains readable in both watches, narrow reflow and enlarged text @typography", async ({ browser, baseURL }, testInfo) => {
   test.setTimeout(90000);
   for (const theme of ["light", "dark"]) {
     const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: "reduce" });

@@ -64,12 +64,24 @@ function onlyAnchorTargets(before, after) {
   );
 }
 
+function onlyTypography(before, after) {
+  if (before == null || after == null) return false;
+  // Only discretionary hyphens and nonbreaking spaces in text may differ.
+  // Tags, attributes, scripts and styles must remain byte-for-byte identical.
+  const tags = /<(?:[^>"']|"[^"]*"|'[^']*')*>/g;
+  if (JSON.stringify(before.match(tags)) !== JSON.stringify(after.match(tags))) return false;
+  if (JSON.stringify(before.match(activeContent)) !== JSON.stringify(after.match(activeContent))) return false;
+  const normalize = html => html.replace(/\u00ad/g, "").replace(/\u00a0/g, " ");
+  return normalize(before) === normalize(after);
+}
+
 export function classifyRelease(changes) {
-  // Unknown bases and manually requested runs retain the full gate.
+  // Unknown comparison bases retain the full gate.
   if (!changes) return "full";
   const published = changes.filter(({ path }) => !tooling.test(path));
   if (!published.length) return "none";
   if (journalOnly(changes)) return "journal";
+  if (published.every(({ path, before, after }) => path.endsWith(".html") && onlyTypography(before, after))) return "typography";
   return published.every(({ path, before, after }) => path.endsWith(".html") && onlyAnchorTargets(before, after))
     ? "links" : "full";
 }
@@ -90,8 +102,10 @@ export function readReleaseChanges(base) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-  const scope = classifyRelease(readReleaseChanges(process.argv[2]));
-  const output = `scope=${scope}\nbrowser_required=${scope === "full" || scope === "journal"}\n`;
+  const changes = readReleaseChanges(process.argv[2]);
+  const scope = process.argv[3] === "full" ? "full" : classifyRelease(changes);
+  const pages = scope === "typography" ? changes.filter(({ path }) => !tooling.test(path)).map(({ path }) => path) : [];
+  const output = `scope=${scope}\nbrowser_required=${["full", "journal", "typography"].includes(scope)}\ntypography_pages=${JSON.stringify(pages)}\n`;
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, output);
   process.stdout.write(output);
 }

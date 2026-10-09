@@ -4,9 +4,16 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      checks:
+        description: Check changed scope or explicitly run the full suite
+        type: choice
+        default: auto
+        options: [auto, full]
 
 permissions:
   contents: read
+  deployments: read
   pages: write
   id-token: write
 
@@ -44,12 +51,14 @@ jobs:
       - name: Choose checks for published changes
         id: scope
         env:
-          BASE_SHA: ${{ github.event.before }}
+          GITHUB_TOKEN: ${{ github.token }}
+          CHECKS: ${{ inputs.checks }}
         run: |
+          BASE_SHA=$(node scripts/published-base.mjs)
           if [ -n "$BASE_SHA" ] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags --depth=1 origin "$BASE_SHA" || true
           fi
-          node scripts/release-scope.mjs "$BASE_SHA"
+          node scripts/release-scope.mjs "$BASE_SHA" "$CHECKS"
 
       - name: Install browser test dependencies
         if: steps.scope.outputs.browser_required == 'true'
@@ -69,9 +78,12 @@ jobs:
         if: steps.scope.outputs.browser_required == 'true'
         env:
           RELEASE_SCOPE: ${{ steps.scope.outputs.scope }}
+          TYPOGRAPHY_PAGES: ${{ steps.scope.outputs.typography_pages }}
         run: |
           if [ "$RELEASE_SCOPE" = "journal" ]; then
             pnpm exec playwright test --grep @journal
+          elif [ "$RELEASE_SCOPE" = "typography" ]; then
+            pnpm exec playwright test --grep @typography
           else
             pnpm run test:browser
           fi

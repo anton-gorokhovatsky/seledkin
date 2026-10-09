@@ -6,6 +6,23 @@ const before = '<footer><a class="credit" href="https://example.com/">Дизай
 const after = before.replace("https://example.com/", "https://gorokhovatsky.tech/?point=ks-fish");
 const page = (path = "index.html", content = after) => ({ path, before, after: content });
 
+test("soft hyphens and nonbreaking spaces in copy use the focused typographic gate", () => {
+  const original = '<main><h3 id="meal">Ужин с морепродуктами</h3></main>';
+  assert.equal(classifyRelease([{ path: "recipes/index.html", before: original,
+    after: original.replace("с морепродуктами", "с\u00a0морепро\u00adдуктами") },
+    { path: "content/recipes.json" }, { path: "tests/browser/recipes.spec.mjs" }]), "typography");
+});
+
+test("the typographic gate cannot hide changes to words, attributes, code or CSS", () => {
+  const original = '<h3 class="meal">Ужин с морепродуктами</h3><script>const label = "a b";</script><style>.a { color: red; }</style>';
+  for (const changed of [original.replace("Ужин", "Обед"), original.replace('class="meal"', 'class="mea\u00adl"'),
+    original.replace('"a b"', '"a\u00a0b"'), original.replace("color: red", "color:\u00a0red"), original + "<p>Текст</p>"]) {
+    assert.equal(classifyRelease([{ path: "recipes/index.html", before: original, after: changed }]), "full");
+  }
+  assert.equal(classifyRelease([{ path: "recipes/index.html", before: original, after: original.replace("морепро", "морепро\u00ad") },
+    { path: "assets/recipes-editorial.css" }]), "full");
+});
+
 test("a shared link destination uses the short gate even when generated on every page", () => {
   assert.equal(classifyRelease([
     page(), page("catalog/index.html"), page("journal/698/index.html"),
