@@ -641,7 +641,7 @@ test("the typographic scale protects reading and interface text", () => {
 
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(journalPage, /id="journal"/);
-  assert.match(journalPage, /<h1 class="page-intro__title" id="journal-title">Судовой журнал<\/h1>/);
+  assert.match(journalPage.replaceAll("\u00ad", ""), /<h1 class="page-intro__title" id="journal-title">Судовой <em>журнал<\/em><\/h1>/);
   assert.equal((journalPage.match(/class="journal-index-entry(?:\s|")/g) ?? []).length, journalEntries.length);
   for (const { id } of journalEntries) {
     assert.match(

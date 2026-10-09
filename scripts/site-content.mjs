@@ -164,14 +164,14 @@ export function renderJournal(list, view) {
                 <span class="journal-preview__link">Читать запись</span>
               </div>
             </a>`;
-    if (view === "archive" || view === "search") {
+    if (view === "archive" || view === "earlier" || view === "search") {
       const root = "../";
       return `            <article class="journal-index-entry" id="journal-entry-${id}" tabindex="-1"${view === "search" ? ` data-journal-result data-search-text="${text(`${entry.title} ${entry.product}`)}" hidden` : ""}>
               <a class="journal-index-entry__link" href="${view === "search" ? "../journal/" : ""}${id}/" aria-labelledby="entry-title-${id}">
                 ${image(entry, root, "(max-width: 34rem) 80px, 144px")}
                 <div>
                   <time datetime="${entry.date}">${date(entry)}</time>
-                  <${view === "search" ? "h3" : "h2"} id="entry-title-${id}">${title}</${view === "search" ? "h3" : "h2"}>
+                  <${view === "archive" ? "h2" : "h3"} id="entry-title-${id}">${title}</${view === "archive" ? "h2" : "h3"}>
                   <span class="journal-index-entry__read">Читать запись</span>
                 </div>
               </a>
@@ -198,6 +198,64 @@ ${entry.body.split("\n").map(line => `                  ${line}`).join("\n")}
               </div>
             </article>`;
   }).join(view === "archive" ? "\n\n" : "\n");
+}
+
+// The selected Photoatlas is the entrance, not a replacement for the full archive.
+// The data itself remains a manual editorial selection; no live channel feed.
+export function renderJournalAtlas(list) {
+  const recent = list.slice(0, 5);
+  const earlier = list.slice(recent.length);
+  const hyphens = {
+    Охлажденная: "Ох\u00adлаж\u00adденная", эталонная: "эта\u00adлонная", Карелии: "Ка\u00adре\u00adлии",
+    малосольного: "мало\u00adсоль\u00adного", каспийского: "кас\u00adпий\u00adского", паштеты: "паш\u00adтеты",
+    копченого: "коп\u00adче\u00adного", балтийского: "бал\u00adтий\u00adского", Диаметр: "Диа\u00adметр",
+    тарелки: "та\u00adрелки", сантиметров: "сан\u00adти\u00adмет\u00adров",
+  };
+  const title = entry => text(entry.title.replace(/Охлажденная|эталонная|Карелии|малосольного|каспийского|паштеты|копченого|балтийского|Диаметр|тарелки|сантиметров/g, word => hyphens[word]));
+  const sizes = ["(max-width: 34rem) calc(100vw - 36px), (max-width: 52rem) 62vw, 55vw",
+    "(max-width: 34rem) calc(100vw - 36px), (max-width: 52rem) 62vw, 31vw",
+    "(max-width: 34rem) calc(100vw - 36px), (max-width: 52rem) 70vw, 31vw",
+    "(max-width: 34rem) calc(100vw - 36px), (max-width: 52rem) 70vw, 40vw",
+    "(max-width: 34rem) calc(100vw - 36px), (max-width: 52rem) calc(100vw - 36px), 62vw"];
+  return `          <header class="journal-atlas__header">
+            <div>
+              <p class="page-intro__eyebrow">Записи Олега Гугунавы</p>
+              <h1 class="page-intro__title" id="journal-title">Су­до­вой <em>жур­нал</em></h1>
+            </div>
+            <div class="journal-atlas__introduction">
+              <span class="journal-atlas__count" aria-hidden="true">${String(recent.length).padStart(2, "0")}</span>
+              <p>${text("Пять последних записей. Рыба, детали, жизнь лавки — в авторском кадре.")}</p>
+              ${earlier.length ? `<a class="editorial-link" href="#journal-earlier">Ранее в журнале${harpoon}</a>` : ""}
+            </div>
+          </header>
+          <div class="journal-atlas__grid">
+${recent.map((entry, index) => `            <article class="journal-index-entry atlas-record atlas-record--${index + 1}" id="journal-entry-${entry.id}" tabindex="-1">
+              <a class="journal-index-entry__link" href="${entry.id}/" aria-labelledby="entry-title-${entry.id}" aria-describedby="entry-date-${entry.id}">
+                <div class="atlas-record__number" aria-hidden="true"><span>№</span>${entry.id}</div>
+                <figure>
+                  ${image(entry, "../", sizes[index], false, index === 0)}
+                  <figcaption>
+                    <time id="entry-date-${entry.id}" datetime="${entry.date}">${date(entry)}</time>
+                    <h2 id="entry-title-${entry.id}">${title(entry)}</h2>
+                    <span class="atlas-record__read">Читать запись${harpoon}</span>
+                  </figcaption>
+                </figure>
+              </a>
+            </article>`).join("\n")}
+          </div>
+${earlier.length ? `          <section class="journal-atlas__earlier" id="journal-earlier" aria-labelledby="journal-earlier-title" tabindex="-1">
+            <header class="journal-atlas__archive-heading">
+              <div><p class="page-intro__eyebrow">${text(`${earlier.length} более ранних записей`)}</p><h2 id="journal-earlier-title">Ранее в журнале</h2></div>
+              <a class="editorial-link" href="#journal">К свежим записям${harpoon}</a>
+            </header>
+            <div class="ship-log__grid">
+${renderJournal(earlier, "earlier")}
+            </div>
+          </section>` : ""}
+          <aside class="journal-atlas__source" aria-label="Авторский канал">
+            <p>Полный архив — в авторском телеграм-канале Олега.</p>
+            <a class="editorial-link" href="https://t.me/kapitanseledkin">Читать весь журнал в Телеграме${harpoon}</a>
+          </aside>`;
 }
 
 export function renderJournalPage(entry) {

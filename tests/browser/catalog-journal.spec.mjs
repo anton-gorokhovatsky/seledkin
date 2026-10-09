@@ -91,15 +91,45 @@ test("catalog separates dated journal matches from current price rows", async ({
   await expect(page.locator("[data-catalog-journal]")).toBeHidden();
 });
 
-test("archive is compact, full articles preserve photographs and survive enlarged text", { tag: "@journal" }, async ({ page }) => {
+test("the photoatlas leads to a compact older archive and complete, accessible stories", { tag: "@journal" }, async ({ page }) => {
   await page.goto("journal/");
   await expect(page.locator(".journal-index-entry")).toHaveCount(journal.length);
   await expect(page.locator(".ship-log-entry__body")).toHaveCount(0);
   await page.evaluate(() => document.fonts.ready);
-  // Check row density independently of how many selected posts the archive holds.
-  const rowHeights = await page.locator(".journal-index-entry").evaluateAll(rows => rows.map(row => row.getBoundingClientRect().height));
+  // The chosen five-photo entrance has a different role from the older index.
+  // Keep all records reachable, with the remaining list easy to scan.
+  await expect(page.locator(".atlas-record")).toHaveCount(5);
+  const rowHeights = await page.locator(".journal-atlas__earlier .journal-index-entry").evaluateAll(rows => rows.map(row => row.getBoundingClientRect().height));
   expect(Math.max(...rowHeights)).toBeLessThan(300);
   expect(rowHeights.reduce((sum, height) => sum + height, 0) / rowHeights.length).toBeLessThan(220);
+  for (const [width, enlarged] of [[1440, false], [768, false], [390, false], [320, true]]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("journal/");
+    if (enlarged) await page.addStyleTag({ content: "html { font-size:200% !important; } p { line-height:1.5 !important; margin-bottom:2em !important; } * { letter-spacing:0.12em !important; word-spacing:0.16em !important; }" });
+    await page.evaluate(() => document.fonts.ready);
+    const overflow = await page.evaluate(() => ({
+      excess: document.documentElement.scrollWidth - innerWidth,
+      elements: [...document.querySelectorAll('main *')].filter(el => {
+        const r = el.getBoundingClientRect(); return r.width > 0 && r.right > innerWidth + 1;
+      }).map(el => ({ tag: el.tagName, cls: el.className, text: el.textContent.slice(0, 90) })),
+    }));
+    expect(overflow.excess, JSON.stringify(overflow.elements)).toBeLessThanOrEqual(1);
+    for (const photo of await page.locator(".atlas-record img").all()) {
+      await photo.scrollIntoViewIfNeeded();
+      const frame = await photo.evaluate(async image => {
+        await image.decode();
+        return { rendered: image.clientWidth / image.clientHeight, original: image.naturalWidth / image.naturalHeight, fit: getComputedStyle(image).objectFit };
+      });
+      expect(frame.fit).not.toBe("cover");
+      expect(Math.abs(frame.rendered - frame.original)).toBeLessThan(.02);
+    }
+  }
+  const recent = page.locator(".atlas-record > a").first();
+  await recent.focus();
+  await expect(recent).toBeFocused();
+  await expect(recent).toBeInViewport();
+  await recent.press("Enter");
+  await expect(page).toHaveURL(new RegExp(`/journal/${journal[0].id}/$`));
   for (const path of [`journal/${journal[0].id}/`, "journal/683/"]) {
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto(path);

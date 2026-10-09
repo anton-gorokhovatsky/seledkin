@@ -34,7 +34,7 @@ test("the journal preview leads to its full story and a product-specific inquiry
   await page.goto("index.html#journal-entry-682");
   await expect(page).toHaveURL(/journal\/682\/$/);
   await page.goto("journal/#journal-entry-999");
-  await expect(page.locator("h1")).toHaveText("Судовой журнал");
+  expect((await page.locator("h1").textContent()).replaceAll("\u00ad", "")).toBe("Судовой журнал");
 });
 
 test("complete editorial pages and inquiry links work without JavaScript", { tag: "@journal" }, async ({ browser, baseURL }) => {

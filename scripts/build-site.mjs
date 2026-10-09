@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalPage, renderDelivery, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, contactAddress, regularHours, store } from "./site-content.mjs";
 import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
@@ -20,7 +20,7 @@ for (const [path, page, root] of pages) {
     "price-preview": renderPricePreview(),
     "recipe-home": renderRecipeHome(), "assortment-media": renderAssortmentMedia(),
   });
-  if (page === "journal") regions["journal-archive"] = renderJournal(entries, "archive");
+  if (page === "journal") regions["journal-archive"] = renderJournalAtlas(entries);
   if (page === "catalog") Object.assign(regions, {
     "journal-search": renderJournal(entries, "search"), "delivery-summary": renderDelivery("catalog"),
   });

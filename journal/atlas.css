@@ -1,0 +1,108 @@
+/* Selected Photoatlas: shared page entry, complete photographs, then a calm archive.
+   Only the journal entrance uses these rules; stories and catalog results retain
+   their own reading roles. */
+.journal-atlas {
+  --atlas-column-gap: clamp(1.5rem, 3.4vw, 3rem);
+  --atlas-row-gap: clamp(3rem, 5vw, 5rem);
+  --atlas-heading-size: clamp(2rem, 1.1rem + 2vw, 3.5rem);
+  --atlas-folio-size: clamp(3rem, 1.8rem + 3vw, 5.5rem);
+  padding-block: var(--page-intro-space) var(--section-gap);
+}
+.journal-atlas__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+  align-items: start;
+  gap: var(--section-gap);
+  margin-bottom: var(--section-gap);
+}
+.journal-atlas .page-intro__title em { display: block; font-weight: 400; }
+.journal-atlas .page-intro__title { overflow-wrap: normal; hyphens: manual; }
+.journal-atlas__introduction { text-align: right; }
+.journal-atlas__count {
+  display: block;
+  color: var(--brass);
+  font: italic 400 var(--atlas-folio-size) / 1 var(--serif);
+}
+.journal-atlas__introduction p {
+  max-width: 26ch;
+  margin: 1.5rem 0 .5rem auto;
+  color: var(--muted);
+  font-size: var(--text-interface);
+}
+.journal-atlas__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--atlas-row-gap) var(--atlas-column-gap);
+}
+.journal-atlas .atlas-record { min-width: 0; padding: 0; border: 0; }
+.atlas-record--1 { grid-column: 1 / 8; }
+.atlas-record--2 { grid-column: 9 / 13; margin-top: 8rem; }
+.atlas-record--3 { grid-column: 2 / 6; }
+.atlas-record--4 { grid-column: 7 / 12; margin-top: 7rem; }
+.atlas-record--5 { grid-column: 3 / 11; }
+.journal-atlas .atlas-record > a { display: block; text-decoration: none; }
+.atlas-record__number {
+  margin-bottom: 1.5rem;
+  color: var(--brass);
+  font: italic 400 var(--atlas-folio-size) / 1 var(--serif);
+}
+.atlas-record__number > span { padding-right: .6rem; font: 400 var(--text-meta) / 1 var(--sans); }
+.atlas-record figure { margin: 0; }
+.atlas-record figure img { display: block; width: 100%; height: auto; }
+.atlas-record figcaption { margin-top: 1rem; }
+.journal-atlas .atlas-record h2 {
+  max-width: 36ch;
+  margin: .5rem 0;
+  font: 400 var(--atlas-heading-size) / 1.1 var(--serif);
+  letter-spacing: -.018em;
+  overflow-wrap: normal;
+  hyphens: manual;
+}
+.atlas-record__read {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 44px;
+  margin-top: .25rem;
+  color: var(--text-link);
+  font: 500 var(--text-interface) / 1.5 var(--sans);
+}
+.atlas-record__read svg { width: 2rem; height: 1.125rem; flex: 0 0 auto; }
+.journal-atlas .atlas-record > a:is(:hover, :focus-visible) h2 { color: var(--text-link); text-decoration: none; }
+.atlas-record > a:is(:hover, :focus-visible) .atlas-record__read { text-decoration: underline; text-underline-offset: .2em; }
+.journal-atlas__earlier { margin-top: var(--section-gap); scroll-margin-top: 6rem; }
+.journal-atlas__archive-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem 3rem;
+  padding-top: var(--section-gap);
+  margin-bottom: 1rem;
+  border-top: 1px solid var(--line);
+}
+.journal-atlas__archive-heading h2 { margin: 0; font: 400 var(--atlas-heading-size) / 1.1 var(--serif); }
+.journal-atlas__archive-heading .page-intro__eyebrow { margin-bottom: 1rem; }
+.journal-atlas__source { margin-top: var(--section-gap); }
+.journal-atlas__source p { margin-bottom: .5rem; color: var(--muted); }
+.journal-atlas__source .editorial-link { flex-wrap: wrap; }
+/* Wrap the older rows when enlarged text no longer fits beside a thumbnail. */
+.journal-atlas__earlier .journal-index-entry__link { display: flex; flex-wrap: wrap; }
+.journal-atlas__earlier .journal-index-entry__link img { width: clamp(5rem, 12vw, 9rem); max-width: 100%; }
+.journal-atlas__earlier .journal-index-entry__link > div { min-width: 0; flex: 1 1 10rem; }
+@media (max-width: 52rem) {
+  .journal-atlas__header { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .journal-atlas__introduction { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; text-align: left; }
+  .journal-atlas__introduction p { flex: 1 1 12rem; max-width: 28ch; margin: 0; }
+  .journal-atlas__introduction > a { flex-basis: 100%; }
+  .journal-atlas__count { font-size: 3.5rem; }
+  .atlas-record--1 { grid-column: 1 / 9; }
+  .atlas-record--2 { grid-column: 5 / 13; margin-top: 0; }
+  .atlas-record--3 { grid-column: 1 / 10; }
+  .atlas-record--4 { grid-column: 4 / 13; margin-top: 0; }
+  .atlas-record--5 { grid-column: 1 / 13; }
+}
+@media (max-width: 34rem) {
+  .journal-atlas__grid { grid-template-columns: minmax(0, 1fr); }
+  .journal-atlas .atlas-record { grid-column: 1; margin: 0; }
+}
