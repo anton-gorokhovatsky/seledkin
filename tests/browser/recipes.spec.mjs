@@ -66,6 +66,8 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
     for (const width of [1920, 1512, 1440, 1024, 980, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
       await page.evaluate(() => document.fonts.ready);
+      // WebKit updates the balanced text layout on the next rendered frames.
+      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
       const brokenWords = await page.locator(".meal-collection > header h3").evaluateAll(headings => headings.flatMap(heading => {
         const text = heading.firstChild;
