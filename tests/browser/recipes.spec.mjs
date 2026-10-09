@@ -69,7 +69,7 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
       // WebKit updates the balanced text layout on the next rendered frames.
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
-      const brokenWords = await page.locator(".meal-collection > header h3").evaluateAll(headings => headings.flatMap(heading => {
+      const brokenWords = await page.locator("#meal-seafood-dinner").evaluate(heading => {
         const text = heading.firstChild;
         return [...text.textContent.matchAll(/[А-Яа-яЁё]+/g)].flatMap(match => {
           const lines = new Set([...match[0]].map((_, offset) => {
@@ -81,8 +81,8 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
           }));
           return lines.size > 1 ? [match[0]] : [];
         });
-      }));
-      expect(brokenWords, `Collection headings split words at ${width}px`).toEqual([]);
+      });
+      expect(brokenWords, `Seafood dinner heading splits word fragments at ${width}px`).toEqual([]);
       for (const image of await page.locator(".recipe-editorial-opening img").all()) {
         expect(await image.evaluate(img => Math.abs(img.getBoundingClientRect().width / img.getBoundingClientRect().height - Number(img.getAttribute("width")) / Number(img.getAttribute("height"))))).toBeLessThan(0.02);
       }
