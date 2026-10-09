@@ -37,15 +37,17 @@ test("sunlight shares one state between the hero and menu, below their text", as
   await page.addInitScript(() => localStorage.setItem("seledkin-theme", "light"));
   await page.goto("");
   await expect(page.locator("html")).toHaveAttribute("data-sea-light", "evening");
+  // WebKit can expose the new root state before painting its inherited styles.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const heroField = await page.locator(".source-hero").evaluate(node => getComputedStyle(node, "::before").backgroundImage);
   await page.locator("[data-menu-toggle]").click();
-  expect(await page.locator(".site-menu__layout").evaluate(node => getComputedStyle(node, "::before").backgroundImage)).toBe(heroField);
+  await expect.poll(() => page.locator(".site-menu__layout").evaluate(node => getComputedStyle(node, "::before").backgroundImage)).toBe(heroField);
   await page.locator("[data-menu] [data-theme-toggle]").click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute("data-sea-light", "evening");
   await expect.poll(() => page.locator(".site-menu__layout").evaluate(node => getComputedStyle(node, "::before").opacity)).toBe("0.25");
   await page.emulateMedia({ contrast: "more" });
-  expect(await page.locator(".site-menu__layout").evaluate(node => getComputedStyle(node, "::before").display)).toBe("none");
+  await expect.poll(() => page.locator(".site-menu__layout").evaluate(node => getComputedStyle(node, "::before").display)).toBe("none");
 });
 
 test("save-data prevents video requests through theme changes and navigation until an explicit start", async ({ page }) => {
