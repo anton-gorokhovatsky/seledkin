@@ -27,6 +27,9 @@ test("a buyer can cook the right shrimp variant and return to its current price"
 test("desktop category photographs respond to pointer and keyboard while a touch opens the catalog directly", async ({ page, browser, baseURL }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("?audit=recipes#assortment");
+  // Keep the pointer on the intended link after the web fonts settle.
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const photos = page.locator(".assortment-overview__photos");
   const original = await photos.boundingBox();
   await page.locator('.assortment-directory__link[href$="category-seafood"]').hover();
