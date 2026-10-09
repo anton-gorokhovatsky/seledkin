@@ -57,7 +57,13 @@ jobs:
 
       - name: Install browsers
         if: steps.scope.outputs.browser_required == 'true'
-        run: pnpm exec playwright install --with-deps chromium webkit
+        run: |
+          # The Azure Ubuntu mirror was exceptionally slow in the release job.
+          for seledkin_ubuntu_source in /etc/apt/sources.list /etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/*.list; do
+            [ -f "$seledkin_ubuntu_source" ] || continue
+            sudo sed -i -E 's#https?://azure\.archive\.ubuntu\.com/ubuntu#https://archive.ubuntu.com/ubuntu#g' "$seledkin_ubuntu_source"
+          done
+          pnpm exec playwright install --with-deps chromium webkit
 
       - name: Verify customer journeys in Chromium and WebKit
         if: steps.scope.outputs.browser_required == 'true'

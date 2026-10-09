@@ -21,6 +21,7 @@ const menuButton = document.querySelector("[data-menu-toggle]");
 const menu = document.querySelector("[data-menu]");
 const menuClose = menu?.querySelector("[data-menu-close]");
 const menuPanel = menu?.querySelector(".site-menu__panel");
+const menuServiceScroll = menu?.querySelector(".site-menu__service-inner");
 const inertBeforeMenu = new Map();
 const map = document.querySelector("[data-map]");
 const mapToggle = map?.querySelector("[data-map-toggle]");
@@ -104,6 +105,7 @@ function openMenu() {
 
   menu.hidden = false;
   if (menuPanel instanceof HTMLElement) menuPanel.scrollTop = 0;
+  if (menuServiceScroll instanceof HTMLElement) menuServiceScroll.scrollTop = 0;
   menuButton.setAttribute("aria-expanded", "true");
   menuButton.hidden = true;
   document.body.classList.add("menu-open");

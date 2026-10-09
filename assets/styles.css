@@ -2391,12 +2391,14 @@ a.source-brand {
 }
 
 .site-menu__panel {
+  position: relative;
   width: 100%;
   height: 100dvh;
   min-height: 100%;
   background: var(--surface-water);
   overflow-y: auto;
   overscroll-behavior: contain;
+  scroll-padding-block: 1rem;
 }
 
 .site-menu__masthead {
@@ -2555,6 +2557,28 @@ a.site-menu__brand {
   padding: clamp(3rem, 6vw, 6rem) clamp(2rem, 5vw, 4.5rem);
   flex-direction: column;
   justify-content: center;
+}
+
+@media (width > 61.1875rem) {
+  .site-menu__service {
+    position: sticky;
+    top: 0;
+    display: flex;
+    height: 100dvh;
+    align-self: start;
+    padding-top: calc(var(--masthead-top-inset) + var(--masthead-control-size) + 1.5rem);
+    flex-direction: column;
+  }
+
+  .site-menu__service-inner {
+    min-height: 0;
+    padding-top: 0;
+    flex: 1;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-padding-block: 1rem;
+  }
 }
 
 .site-menu__service .site-menu__kicker {
@@ -3317,8 +3341,13 @@ a.site-menu__brand {
     pointer-events: auto;
   }
 
+  .site-menu__panel {
+    scroll-padding-top: calc(var(--masthead-control-size) + var(--masthead-top-inset) * 2 + 1rem);
+  }
+
   .site-menu__brand {
     width: clamp(6.25rem, 29vw, 7rem);
+    max-width: calc((var(--masthead-control-size) + var(--masthead-top-inset)) * 2);
   }
 
   .site-menu__layout {
