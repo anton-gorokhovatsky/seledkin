@@ -23,7 +23,10 @@ test("selected archive texts retain every author word, source date and original 
   for (const source of sources) {
     const entry = entries.find(item => item.id === source.id);
     assert.equal(entry.date, source.date);
-    assert.equal(normalize(entry.body), normalize(source.text), `Author text changed: ${entry.id}`);
+    // The user explicitly approved removing the abandoned lone hashtag in 73.
+    const sourceText = source.id === 73 ? source.text.replace(/\n\s*#\s*$/, "") : source.text;
+    assert.equal(normalize(entry.body), normalize(sourceText), `Author text changed: ${entry.id}`);
+    if (source.id === 73) assert.ok(!entry.body.includes('class="journal-tags"'), "An abandoned hashtag must not leave an empty tag row");
     assert.ok(entry.alt);
     assert.ok(media.some(item => item.source === entry.image && item.width > 32));
     assert.ok(read(`journal/${entry.id}/index.html`).includes(source.source));

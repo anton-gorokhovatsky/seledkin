@@ -41,14 +41,14 @@ for (const mode of ["no-js", "failed-module"]) {
     const page = await context.newPage();
     for (const width of [390, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      for (const route of ["", "catalog/", "about/", "journal/"]) {
+      for (const route of ["", "catalog/", "about/", "journal/", "recipes/"]) {
         await page.goto(new URL(route, baseURL).href);
         await expect(page.locator("[data-menu-toggle]")).toBeHidden();
         const menuLink = page.getByRole("link", { name: "Перейти к меню сайта" });
         await menuLink.click();
         const navigation = page.getByRole("navigation", { name: "Разделы сайта", exact: true });
         await expect(navigation).toBeInViewport();
-        await expect(navigation.getByRole("link")).toHaveCount(6);
+        await expect(navigation.getByRole("link")).toHaveCount(7);
         await navigation.getByRole("link", { name: "Продукты и цены" }).click();
         await expect(page).toHaveURL(new URL("catalog/", baseURL).href);
         await expect(page.locator(".catalog-product")).toHaveCount(115);

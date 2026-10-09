@@ -95,7 +95,11 @@ test("archive is compact, full articles preserve photographs and survive enlarge
   await page.goto("journal/");
   await expect(page.locator(".journal-index-entry")).toHaveCount(journal.length);
   await expect(page.locator(".ship-log-entry__body")).toHaveCount(0);
-  expect(await page.evaluate(() => document.documentElement.scrollHeight)).toBeLessThan(7000);
+  await page.evaluate(() => document.fonts.ready);
+  // Check row density independently of how many selected posts the archive holds.
+  const rowHeights = await page.locator(".journal-index-entry").evaluateAll(rows => rows.map(row => row.getBoundingClientRect().height));
+  expect(Math.max(...rowHeights)).toBeLessThan(300);
+  expect(rowHeights.reduce((sum, height) => sum + height, 0) / rowHeights.length).toBeLessThan(220);
   for (const path of [`journal/${journal[0].id}/`, "journal/683/"]) {
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto(path);
