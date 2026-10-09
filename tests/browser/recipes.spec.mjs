@@ -34,7 +34,10 @@ test("desktop category photographs respond to pointer and keyboard while a touch
   const original = await photos.boundingBox();
   await page.locator('.assortment-directory__link[href$="category-seafood"]').hover();
   await expect(photos.locator('[data-assortment-photo="seafood"]')).toBeVisible();
+  // Focusing scrolls the page: a parked pointer must not hover another category.
+  await page.mouse.move(0, 0);
   await page.locator('.assortment-directory__link[href$="category-fillet"]').focus();
+  await expect(page.locator('.assortment-directory__link[href$="category-fillet"]')).toBeFocused();
   await expect(photos.locator('[data-assortment-photo="fillet"]')).toBeVisible();
   const frame = await photos.boundingBox();
   expect(frame.height).toBeCloseTo(original.height, 0);
