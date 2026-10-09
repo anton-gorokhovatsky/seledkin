@@ -60,6 +60,13 @@
 .recipe-editorial-story .recipe-editorial-pull { margin-bottom: 1.75rem; }
 .recipes-page #recipes-title { scroll-margin-top: 2rem; }
 
+/* Collection names need enough space for whole words before emergency wrapping. */
+@media (width > 61.1875rem) {
+  .recipes-page .meal-collection {
+    grid-template-columns: minmax(min(100%, 22rem), 1fr) minmax(0, 2fr);
+  }
+}
+
 @media (width <= 46rem) {
   .recipes-intro { gap: 1.5rem; }
   .recipes-intro__copy { padding: 0; }

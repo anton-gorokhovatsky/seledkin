@@ -63,14 +63,25 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
     await expect(page.locator("#meals .meal-collection")).toHaveCount(3);
     await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
     expect(await page.evaluate(async () => (await axe.run({ runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] } })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })))).toEqual([]);
-    for (const width of [1440, 390, 320]) {
+    for (const width of [1920, 1512, 1440, 1024, 980, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+      const brokenWords = await page.locator(".meal-collection > header h3").evaluateAll(headings => headings.flatMap(heading => {
+        const text = heading.firstChild;
+        return [...text.textContent.matchAll(/[А-Яа-яЁё]+/g)].flatMap(match => {
+          const range = document.createRange();
+          range.setStart(text, match.index);
+          range.setEnd(text, match.index + match[0].length);
+          const lines = new Set([...range.getClientRects()].map(rect => Math.round(rect.top)));
+          return lines.size > 1 ? [match[0]] : [];
+        });
+      }));
+      expect(brokenWords, `Collection headings split words at ${width}px`).toEqual([]);
       for (const image of await page.locator(".recipe-editorial-opening img").all()) {
         expect(await image.evaluate(img => Math.abs(img.getBoundingClientRect().width / img.getBoundingClientRect().height - Number(img.getAttribute("width")) / Number(img.getAttribute("height"))))).toBeLessThan(0.02);
       }
-      await page.screenshot({ path: testInfo.outputPath(`${theme}-${width}.png`) });
+      if ([1440, 390, 320].includes(width)) await page.screenshot({ path: testInfo.outputPath(`${theme}-${width}.png`) });
     }
     await page.addStyleTag({ content: "html { font-size:200% !important; }" });
     await page.getByRole("navigation", { name: "На этой странице" }).getByRole("link", { name: "Что купить к ужину" }).click();
