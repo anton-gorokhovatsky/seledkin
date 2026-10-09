@@ -253,7 +253,7 @@ ${renderJournal(earlier, "earlier")}
             </div>
           </section>` : ""}
           <aside class="journal-atlas__source" aria-label="Авторский канал">
-            <p>Полный архив — в авторском телеграм-канале Олега.</p>
+            <p>${text("Поставки, рецепты и жизнь лавки — от самого капитана. Полный архив — в авторском телеграм-канале.")}</p>
             <a class="editorial-link" href="https://t.me/kapitanseledkin">Читать весь журнал в Телеграме${harpoon}</a>
           </aside>`;
 }
