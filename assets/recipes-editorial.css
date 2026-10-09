@@ -59,6 +59,7 @@
 .recipe-editorial-story__copy > p:not(.recipe-meta) { max-width: 46ch; }
 .recipe-editorial-story .recipe-editorial-pull { margin-bottom: 1.75rem; }
 .recipes-page #recipes-title { scroll-margin-top: 2rem; }
+.recipes-page .meal-collection > header h3 { hyphens: manual; }
 
 @media (width <= 46rem) {
   .recipes-intro { gap: 1.5rem; }

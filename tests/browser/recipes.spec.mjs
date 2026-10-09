@@ -72,10 +72,13 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
       const brokenWords = await page.locator(".meal-collection > header h3").evaluateAll(headings => headings.flatMap(heading => {
         const text = heading.firstChild;
         return [...text.textContent.matchAll(/[А-Яа-яЁё]+/g)].flatMap(match => {
-          const range = document.createRange();
-          range.setStart(text, match.index);
-          range.setEnd(text, match.index + match[0].length);
-          const lines = new Set([...range.getClientRects()].map(rect => Math.round(rect.top)));
+          const lines = new Set([...match[0]].map((_, offset) => {
+            const range = document.createRange();
+            range.setStart(text, match.index + offset);
+            range.setEnd(text, match.index + offset + 1);
+            // Chromium includes the preceding soft-hyphen glyph in a range.
+            return Math.round([...range.getClientRects()].at(-1).top);
+          }));
           return lines.size > 1 ? [match[0]] : [];
         });
       }));
