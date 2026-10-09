@@ -60,10 +60,11 @@
 .recipe-editorial-story .recipe-editorial-pull { margin-bottom: 1.75rem; }
 .recipes-page #recipes-title { scroll-margin-top: 2rem; }
 
-/* Collection names need enough space for whole words before emergency wrapping. */
+/* Keep whole words when balancing headings; break only for narrow text reflow. */
+.recipes-page .meal-collection > header h3 { overflow-wrap: break-word; }
 @media (width > 61.1875rem) {
   .recipes-page .meal-collection {
-    grid-template-columns: minmax(min(100%, 22rem), 1fr) minmax(0, 2fr);
+    grid-template-columns: minmax(min(100%, 24rem), 1fr) minmax(0, 2fr);
   }
 }
 
