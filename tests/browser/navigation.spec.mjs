@@ -7,6 +7,7 @@ const routes = [
   ["Доставка", "#delivery", "#delivery h2"],
   ["Контакты", "#contacts", "#contacts h2"],
   ["О нас", "about/", "main h1"],
+  ["Рецепты и советы", "recipes/", "main h1"],
   ["Судовой журнал", "journal/", "main h1"],
 ];
 
@@ -23,7 +24,7 @@ test("a missing nested URL retains the catalog route and images without JavaScri
   const catalog = page.getByRole("link", { name: "Открыть каталог", exact: true });
   expect(await catalog.evaluate(link => link.href)).toBe(new URL("catalog/", baseURL).href);
   await catalog.click();
-  await expect(page.locator(".catalog-product")).toHaveCount(114);
+  await expect(page.locator(".catalog-product")).toHaveCount(115);
   await context.close();
 });
 
@@ -58,15 +59,11 @@ test("recipes are on the homepage and each featured product opens matching catal
   await expect(page.locator('#assortment #prices .catalog-product')).toHaveCount(6);
   await expect(page.locator('#assortment > .source-shell > h2, #assortment h2')).toHaveCount(1);
   await expect(page.locator('#prices h3')).toHaveText('Цены в лавке');
-  await expect(stories.locator(".watch-catch__item")).toHaveCount(4);
-  await expect(stories.locator('.watch-catch__product')).toHaveCount(0);
-  expect(await stories.locator('.watch-catch__links').evaluateAll(groups => groups.map(group => group.querySelector('a').href))).toEqual([506, 412, 610, 377].map(id => `https://t.me/kapitanseledkin/${id}`));
-  const links = await stories.getByRole("link", { name: "Открыть в каталоге", exact: true }).evaluateAll(items => items.map(item => item.href));
-  for (const [index, name] of ["Сельдь слабосоленая", "Креветка северная в/м", "Кальмар командорский", "Осьминог"].entries()) {
-    await page.goto(links[index]);
-    await expect(page.locator(".catalog-product:visible").getByRole("heading", { name, exact: true })).toBeVisible();
-    await expect(page.locator("[data-catalog-empty]")).toBeHidden();
-  }
+  await expect(stories.locator(".recipe-feature")).toHaveCount(1);
+  await expect(stories.locator(".watch-catch__item")).toHaveCount(3);
+  await stories.getByRole("link", { name: "Филе трески в каталоге", exact: true }).click();
+  await expect(page.locator(".catalog-product:visible").getByRole("heading", { name: "Филе трески", exact: true })).toBeVisible();
+  await expect(page.locator("[data-catalog-empty]")).toBeHidden();
   for (const source of ["about/#watch-catch", "about/index.html#watch-catch"]) {
     await page.goto(source);
     await expect(page).toHaveURL(/\/#watch-catch$/);

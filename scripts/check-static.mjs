@@ -37,6 +37,7 @@ const requiredFiles = [
   "catalog/index.html",
   "about/index.html",
   "journal/index.html",
+  "recipes/index.html",
   "catalog/catalog.js",
   "assets/catalog-model.js",
   "assets/sea-motion.js",
@@ -140,7 +141,7 @@ for (const forbidden of ["next/", "next.js", "react-dom", "from \"react\"", "til
 }
 
 const journalEntries = JSON.parse(readFileSync(join(root, "content/journal.json"), "utf8"));
-const htmlFiles = [...journalEntries.map(entry => `journal/${entry.id}/index.html`), "index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html"];
+const htmlFiles = [...journalEntries.map(entry => `journal/${entry.id}/index.html`), "index.html", "catalog/index.html", "about/index.html", "journal/index.html", "recipes/index.html", "404.html"];
 const pageTitles = new Map();
 for (const file of htmlFiles) {
   const path = join(root, file);

@@ -29,6 +29,7 @@
     { "href": "#delivery", "label": "Доставка" },
     { "href": "#contacts", "label": "Контакты" },
     { "href": "about/", "label": "О нас" },
+    { "href": "recipes/", "label": "Рецепты и советы" },
     { "href": "journal/", "label": "Судовой журнал" }
   ]
 }

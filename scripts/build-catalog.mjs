@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { catalog } from "../assets/catalog-data.js";
 import { catalogPrice, orderLinks, positionCount, productNotes, productSearchText } from "../assets/catalog-model.js";
 import { typographText } from "../assets/typography.js";
+import { recipeContent, productRecipeLinks, matchesProduct } from "./recipe-content.mjs";
 
 const path = fileURLToPath(new URL("../catalog/index.html", import.meta.url));
 const original = readFileSync(path, "utf8");
@@ -20,6 +21,11 @@ const products = catalog.map((category) => `
   const links = orderLinks(product);
   const keywords = productSearchText(category, product);
   const notes = productNotes(product);
+  const advice = productRecipeLinks(category, product).slice(0, 2).map(recipe =>
+    `<a href="../journal/${recipe.id}/">${text(recipe.title)}</a>`);
+  for (const story of recipeContent.productStories.filter(story => story.products.some(selection => matchesProduct(selection, category, product)))) {
+    advice.push(`<a href="${story.source}">${text(story.label)}</a>`);
+  }
   return `
               <article class="catalog-product" data-search-text="${escape(keywords)}" data-product-name="${escape(product.name)}" data-product-category="${category.slug}">
                 <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description ? `
@@ -31,7 +37,8 @@ const products = catalog.map((category) => `
                     <a href="${escape(links.telegram)}">В&nbsp;Телеграме</a>
                     <a href="${escape(links.whatsapp)}">В&nbsp;WhatsApp</a>
                   </div>
-                </details>
+                </details>${advice.length ? `
+                <div class="catalog-product-advice"><span>Олег советует</span>${advice.join("\n                  ")}</div>` : ""}
               </article>`;
 }).join("")}
             </div>

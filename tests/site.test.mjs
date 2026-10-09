@@ -175,11 +175,11 @@ test("home assortment links directly to every catalog section", () => {
 
   assert.match(section, /id="assortment"/);
   assert.match(section, /id="assortment-title">Что продаём<\/h2>/);
-  assert.match(section, /7 разделов · 114 позиций/);
+  assert.match(section, /7 разделов · 115 позиций/);
   assert.doesNotMatch(section, />Весь каталог<\/span>/);
 
   for (const [slug, label, count] of [
-    ["caviar", "Икра", 8],
+    ["caviar", "Икра", 9],
     ["seafood", "Морепродукты", 20],
     ["frozen-fish", "Свежемороженая рыба", 35],
     ["fillet", "Филе", 7],
@@ -674,35 +674,16 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.doesNotMatch(journalPage, /telegram-widget|tgme_widget|Feed not found/i);
 });
 
-test("the watch catch keeps its product stories without rejected draft art", () => {
-  const section =
-    home.match(
-      /<section\s+class="watch-catch source-section"[\s\S]*?<\/section>/,
-    )?.[0] ?? "";
-
+test("the recipe preview gives one full photograph and direct access to complete author stories", () => {
+  const section = home.match(/<section\s+class="watch-catch source-section"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(section, /<h2 id="watch-catch-title">Рецепты и советы<\/h2>/);
-  assert.equal((section.match(/class="watch-catch__item"/g) ?? []).length, 4);
-  assert.doesNotMatch(section, /<img\b|watch-catch-(?:herring|shrimp|squid|octopus)\.svg/);
-  assert.doesNotMatch(
-    section,
-    /Первый лист серии|Каждый знак|Сменная серия|Действующие цены|watch-catch__kicker/,
-  );
-
-  for (const path of [
-    "catalog/?q=Сельдь%20слабосоленая",
-    "catalog/?q=Креветка%20северная",
-    "catalog/?q=Кальмар%20командорский",
-    "catalog/?q=Осьминог%20Марокко",
-  ]) {
-    assert.ok(section.includes(path), "Нет предметной ссылки каталога " + path);
-  }
-
-  for (const id of [506, 412, 610, 377]) {
-    assert.match(
-      section,
-      new RegExp("https://t\\.me/kapitanseledkin/" + id),
-    );
-  }
+  assert.equal((section.match(/class="recipe-feature"/g) ?? []).length, 1);
+  assert.equal((section.match(/class="watch-catch__item"/g) ?? []).length, 3);
+  assert.match(section, /href="recipes\/"/);
+  assert.match(section, /data-source-image="assets\/journal-692\.jpg"/);
+  assert.doesNotMatch(section, /watch-catch-(?:herring|shrimp|squid|octopus)\.svg/);
+  for (const id of [692, 377, 412, 664]) assert.ok(section.includes(`href="journal/${id}/"`));
+  for (const id of [506, 610]) assert.ok(catalogPage.includes(`https://t.me/kapitanseledkin/${id}`));
 });
 
 test("the wide shell and linear Ship's Log avoid narrow nested cards", () => {
@@ -955,16 +936,16 @@ test("menu and footer channels use one precise local SVG set with Telegram first
   );
 });
 
-test("the complete catalog has stable categories and 114 priced items", () => {
+test("the complete catalog has stable categories and 115 priced items", () => {
   assert.equal(catalog.length, 7);
   assert.equal(
     catalog.reduce((total, category) => total + category.items.length, 0),
-    114,
+    115,
   );
   assert.deepEqual(
     catalog.map((category) => [category.slug, category.items.length]),
     [
-      ["caviar", 8],
+      ["caviar", 9],
       ["seafood", 20],
       ["frozen-fish", 35],
       ["fillet", 7],
@@ -1366,7 +1347,7 @@ test("menu, focus and reduced motion remain accessible", () => {
     const routes = page.match(
       /<section class="site-menu__routes">([\s\S]*?)<\/section>/,
     )?.[1] ?? "";
-    assert.equal((routes.match(/<a\s/g) ?? []).length, 6);
+    assert.equal((routes.match(/<a\s/g) ?? []).length, 7);
   }
 
   assert.match(siteScript, /event\.key === "Escape"/);
@@ -1973,7 +1954,8 @@ test("search engines receive every public page including full journal articles",
   assert.ok(sitemap.includes(`<loc>${root}catalog/</loc>`));
   assert.ok(sitemap.includes(`<loc>${root}journal/</loc>`));
   assert.ok(sitemap.includes(`<loc>${root}about/</loc>`));
-  assert.equal((sitemap.match(/<url>/g) ?? []).length, 4 + journalEntries.length);
+  assert.ok(sitemap.includes(`<loc>${root}recipes/</loc>`));
+  assert.equal((sitemap.match(/<url>/g) ?? []).length, 5 + journalEntries.length);
   for (const entry of journalEntries) assert.ok(sitemap.includes(`<loc>${root}journal/${entry.id}/</loc>`));
 });
 

@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalPage, renderDelivery, renderPricePreview, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalPage, renderDelivery, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, contactAddress, regularHours, store } from "./site-content.mjs";
 import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
@@ -18,6 +18,7 @@ for (const [path, page, root] of pages) {
     "contact-hours": regularHours,
     "delivery-terms": renderDelivery("home"),
     "price-preview": renderPricePreview(),
+    "recipe-home": renderRecipeHome(), "assortment-media": renderAssortmentMedia(),
   });
   if (page === "journal") regions["journal-archive"] = renderJournal(entries, "archive");
   if (page === "catalog") Object.assign(regions, {
@@ -64,6 +65,7 @@ function generated(path, content) {
 }
 generated("assets/store-data.js", `// Generated from content/site.json by pnpm build:site.\nexport const store = ${JSON.stringify(store, null, 2)};\n`);
 for (const entry of entries) generated(`journal/${entry.id}/index.html`, renderJournalPage(entry));
+generated("recipes/index.html", renderRecipesPage());
 for (const route of legacyRoutes) generated(`${route.path}/index.html`, renderLegacyRoute(route));
-const routes = ["", "catalog/", "journal/", "about/", ...entries.map(entry => `journal/${entry.id}/`)];
+const routes = ["", "catalog/", "journal/", "recipes/", "about/", ...entries.map(entry => `journal/${entry.id}/`)];
 generated("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map(path => `  <url>\n    <loc>https://ks.fish/${path}</loc>\n  </url>`).join("\n")}\n</urlset>\n`);

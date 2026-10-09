@@ -4,7 +4,7 @@ import test from "node:test";
 
 const base = new URL("https://example.com/seledkin/");
 const entries = JSON.parse(await readFile(new URL("../content/journal.json", import.meta.url), "utf8"));
-const paths = ["", "catalog/", "about/", "journal/", ...entries.map(entry => `journal/${entry.id}/`)];
+const paths = ["", "catalog/", "about/", "recipes/", "journal/", ...entries.map(entry => `journal/${entry.id}/`)];
 const pages = new Map(await Promise.all(paths.map(async path => [path, await readFile(new URL(`../${path}index.html`, import.meta.url), "utf8")])));
 const routes = [
   ["Что продаём", "#assortment"],
@@ -12,6 +12,7 @@ const routes = [
   ["Доставка", "#delivery"],
   ["Контакты", "#contacts"],
   ["О нас", "about/"],
+  ["Рецепты и советы", "recipes/"],
   ["Судовой журнал", "journal/"],
 ];
 const plain = text => text.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();

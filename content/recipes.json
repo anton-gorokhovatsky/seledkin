@@ -1,0 +1,331 @@
+{
+  "featured": 692,
+  "home": [
+    377,
+    412,
+    664
+  ],
+  "recipes": [
+    {
+      "id": 692,
+      "title": "Филе трески на сковороде",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "fillet",
+          "name": "Филе трески"
+        }
+      ],
+      "sequence": [
+        {
+          "image": "gallery-small-1.jpg",
+          "alt": "Коробка филе трески с надписью Frozen At Sea",
+          "caption": "Филе трески судовой заморозки — фотография из архива лавки",
+          "source": "https://ks.fish/about/"
+        }
+      ]
+    },
+    {
+      "id": 377,
+      "title": "Осьминог без секретов",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "seafood",
+          "name": "Осьминог"
+        }
+      ]
+    },
+    {
+      "id": 574,
+      "title": "Мидии с рисом",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "seafood",
+          "name": "Мясо мидий"
+        }
+      ]
+    },
+    {
+      "id": 556,
+      "title": "«Эх» из судака",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "fillet",
+          "name": "Филе судака"
+        }
+      ]
+    },
+    {
+      "id": 378,
+      "title": "Тунец с рисом и васаби",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "fillet",
+          "name": "Филе тунца"
+        }
+      ],
+      "sequence": [
+        {
+          "image": "cutting-tuna.jpg",
+          "alt": "Нарезка красного филе тунца на деревянной доске",
+          "caption": "Нарезка тунца — фотография из архива лавки",
+          "source": "https://ks.fish/about/"
+        }
+      ]
+    },
+    {
+      "id": 375,
+      "title": "Стейки палтуса",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "steaks",
+          "name": "Стейк палтуса"
+        }
+      ]
+    },
+    {
+      "id": 360,
+      "title": "Корюшка «солнышком»",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "frozen-fish",
+          "name": "Корюшка",
+          "description": "Санкт-Петербург"
+        }
+      ]
+    },
+    {
+      "id": 150,
+      "title": "Горбуша на винном пару",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "frozen-fish",
+          "name": "Горбуша",
+          "description": "Камчатка"
+        }
+      ]
+    },
+    {
+      "id": 138,
+      "title": "Мидии в томатном соусе",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "seafood",
+          "name": "Мясо мидий"
+        }
+      ]
+    },
+    {
+      "id": 120,
+      "title": "Три идеи для филе хека",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "fillet",
+          "name": "Филе хека"
+        }
+      ]
+    },
+    {
+      "id": 412,
+      "title": "«Лос Дымос Креветос»",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "seafood",
+          "name": "Креветка северная в/м"
+        }
+      ]
+    },
+    {
+      "id": 464,
+      "title": "Патагонские креветки с чесноком",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "seafood",
+          "name": "Креветка патагонская",
+          "description": "Глубоководная, очищенная, свежемороженая"
+        }
+      ]
+    },
+    {
+      "id": 627,
+      "title": "Командир счастливой «Щуки»",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "caviar",
+          "name": "Икра щуки"
+        }
+      ]
+    },
+    {
+      "id": 664,
+      "title": "Предельно простая паста",
+      "kind": "recipe",
+      "products": []
+    },
+    {
+      "id": 423,
+      "title": "Перепелиные яйца с креветочной икрой",
+      "kind": "recipe",
+      "products": [
+        {
+          "category": "seafood",
+          "name": "Креветка северная в/м"
+        }
+      ]
+    },
+    {
+      "id": 382,
+      "title": "Камбала белобрюшка на сковороде",
+      "kind": "recipe",
+      "products": []
+    },
+    {
+      "id": 453,
+      "title": "Как разделать камбалу",
+      "kind": "advice",
+      "products": [
+        {
+          "category": "frozen-fish",
+          "name": "Камбала"
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "title": "Как подать северную креветку",
+      "kind": "advice",
+      "products": [
+        {
+          "category": "seafood",
+          "name": "Креветка северная в/м"
+        }
+      ]
+    },
+    {
+      "id": 588,
+      "title": "Как выбрать палтуса",
+      "kind": "advice",
+      "products": [
+        {
+          "category": "frozen-fish",
+          "name": "Палтус"
+        },
+        {
+          "category": "steaks",
+          "name": "Стейк палтуса"
+        }
+      ]
+    },
+    {
+      "id": 608,
+      "title": "Почему важна упаковка хека",
+      "kind": "advice",
+      "products": [
+        {
+          "category": "frozen-fish",
+          "name": "Хек"
+        }
+      ],
+      "videoSource": "https://t.me/kapitanseledkin/608"
+    }
+  ],
+  "productStories": [
+    {
+      "source": "https://t.me/kapitanseledkin/506",
+      "label": "Олег о селёдке",
+      "products": [
+        {
+          "category": "prepared-fish",
+          "name": "Сельдь слабосоленая"
+        }
+      ]
+    },
+    {
+      "source": "https://t.me/kapitanseledkin/610",
+      "label": "Олег о командорском кальмаре",
+      "products": [
+        {
+          "category": "seafood",
+          "name": "Кальмар командорский"
+        },
+        {
+          "category": "seafood",
+          "name": "Филе командорского кальмара"
+        }
+      ]
+    }
+  ],
+  "collections": [
+    {
+      "slug": "for-pan",
+      "title": "Рыба на сковороду",
+      "description": "Филе, целая рыба и рецепты Олега",
+      "products": [
+        {
+          "category": "fillet",
+          "name": "Филе трески"
+        },
+        {
+          "category": "frozen-fish",
+          "name": "Горбуша",
+          "description": "Камчатка"
+        },
+        {
+          "category": "frozen-fish",
+          "name": "Корюшка",
+          "description": "Санкт-Петербург"
+        }
+      ]
+    },
+    {
+      "slug": "seafood-dinner",
+      "title": "Ужин с морепродуктами",
+      "description": "Мидии, осьминог и северные креветки",
+      "products": [
+        {
+          "category": "seafood",
+          "name": "Мясо мидий"
+        },
+        {
+          "category": "seafood",
+          "name": "Осьминог"
+        },
+        {
+          "category": "seafood",
+          "name": "Креветка северная в/м"
+        }
+      ]
+    },
+    {
+      "slug": "ready-to-serve",
+      "title": "Готовое к столу",
+      "description": "Малосольная и копчёная рыба из каталога",
+      "products": [
+        {
+          "category": "prepared-fish",
+          "name": "Сельдь слабосоленая"
+        },
+        {
+          "category": "prepared-fish",
+          "name": "Форель слабосоленая"
+        },
+        {
+          "category": "prepared-fish",
+          "name": "Осетр горячего копчения"
+        }
+      ]
+    }
+  ]
+}

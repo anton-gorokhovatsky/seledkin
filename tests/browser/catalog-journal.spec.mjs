@@ -25,7 +25,7 @@ test("an empty category search can broaden without losing the query or browser h
   await expect(broaden).toBeVisible();
   await page.locator("[data-catalog-reset]").click();
   await expect(search).toHaveValue("");
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(114);
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(115);
   await search.fill("такойрыбынет");
   await expect(page.locator("[data-catalog-empty]")).toBeVisible();
   await expect(broaden).toBeHidden();
@@ -87,7 +87,7 @@ test("catalog separates dated journal matches from current price rows", async ({
   await expect(page.locator("[data-catalog-empty]")).toBeVisible();
   await expect(page.locator("[data-catalog-journal]")).toBeHidden();
   await page.locator("[data-catalog-reset]").click();
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(114);
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(115);
   await expect(page.locator("[data-catalog-journal]")).toBeHidden();
 });
 

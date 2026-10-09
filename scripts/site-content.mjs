@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { typographText } from "../assets/typography.js";
 import { catalog } from "../assets/catalog-data.js";
 import { catalogPrice, productNotes } from "../assets/catalog-model.js";
+import { recipeContent, recipes, resolveProduct, productCatalogHref, productRecipeLinks } from "./recipe-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const site = JSON.parse(read("content/site.json"));
@@ -131,7 +132,7 @@ function date(entry, year = true) {
   return parts.filter(part => ["day", "month", "year"].includes(part.type)).map(part => part.value).join(" ");
 }
 
-function image(entry, root, sizes, deferred = false, hero = false) {
+export function image(entry, root, sizes, deferred = false, hero = false) {
   const variants = media.filter(item => item.source === entry.image && item.width > 32).sort((a, b) => a.width - b.width);
   if (!variants.length) throw new Error(`No media variants for journal entry ${entry.id}`);
   const srcset = variants.map(item => `${root}assets/${item.file} ${item.width}w`).join(", ");
@@ -139,7 +140,7 @@ function image(entry, root, sizes, deferred = false, hero = false) {
   const source = `${root}assets/${entry.image}`;
   const src = `${root}assets/${variants[0].file}`;
   const attrs = deferred
-    ? `src="${source.replace(/\.jpg$/, "-32.webp")}" data-full-src="${src}" data-full-srcset="${srcset}"`
+    ? `src="${media.find(item => item.source === entry.image && item.width === 32) ? source.replace(/\.jpg$/, "-32.webp") : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E"}" data-full-src="${src}" data-full-srcset="${srcset}"`
     : `src="${src}" srcset="${srcset}"`;
   return `<img ${attrs} sizes="${sizes}" data-source-image="${source}" decoding="async" alt="${entry.alt}" width="${width}" height="${height}"${hero ? (deferred ? "" : ' fetchpriority="high"') : ' loading="lazy"'} />`;
 }
@@ -187,7 +188,7 @@ export function renderJournal(list, view) {
               </header>
               ${image(entry, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, true)}
               <div class="ship-log-entry__content">
-                <div class="ship-log-entry__body">
+${recipes.some(recipe => recipe.id === id) ? `                <p class="recipe-archive-note">Цены и условия в авторском тексте относятся к дате публикации. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>\n` : ""}                <div class="ship-log-entry__body">
 ${entry.body.split("\n").map(line => `                  ${line}`).join("\n")}
                 </div>
                 <div class="ship-log-entry__actions">
@@ -211,9 +212,114 @@ export function renderJournalPage(entry) {
   }).join("\n");
   return template("journal-page", {
     theme: renderTheme("journal"), analytics: renderAnalytics("../../"), menu: renderMenu("journal", "../../"), footer: renderFooter("journal", "../../"),
-    article: renderJournal([entry], "article"), neighbors,
+    article: renderJournal([entry], "article") + renderRecipeContext(entry), neighbors,
+    recipeBack: recipes.some(recipe => recipe.id === entry.id) ? '<a href="../../recipes/">Рецепты и советы</a>' : "",
     url, title: text(entry.title), description: text(`${plain(entry.title).replace(/[.!?]+$/u, "")}. Запись Олега Гугунавы от ${date(entry)} в Судовом журнале Рыбной лавки капитана Селедкина.`),
     shareImage: `https://ks.fish/assets/${entry.image}`, alt: text(entry.alt),
     imageWidth: native.width, imageHeight: native.height, published: entry.date,
-  }) + "\n";
+  }).replace(/[ \t]+$/gm, "") + "\n";
+}
+
+const harpoon = `<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg>`;
+const recipeEntry = recipe => {
+  const entry = entries.find(item => item.id === recipe.id);
+  if (!entry) throw new Error(`Missing recipe story: ${recipe.id}`);
+  return entry;
+};
+
+function currentProduct(selection, root, heading = "h3") {
+  const { category, product } = resolveProduct(selection);
+  const related = productRecipeLinks(category, product).find(recipe => recipe.kind === "recipe");
+  return `<article class="meal-product">
+      <${heading}><a href="${escape(productCatalogHref(selection, root))}">${text(product.name)}</a></${heading}>
+      <p>${text(product.description ?? category.label)}</p>
+      <strong>${escape(catalogPrice(product.price))}</strong>
+      ${related ? `<a class="editorial-link" href="${root}journal/${related.id}/">${text(related.title)}${harpoon}</a>` : ""}
+    </article>`;
+}
+
+function renderRecipeContext(entry) {
+  const recipe = recipes.find(item => item.id === entry.id);
+  if (!recipe) return "";
+  const sequence = recipe.sequence?.map(shot => `<figure class="recipe-sequence">
+    ${image(shot, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 640px")}
+    <figcaption>${text(shot.caption)}</figcaption>
+  </figure>`).join("\n") ?? "";
+  const current = recipe.products.length ? `<section class="recipe-current" aria-labelledby="recipe-current-title">
+    <header><p class="page-intro__eyebrow">${recipe.kind === "recipe" ? "Для этого рецепта" : "В рассказе Олега"}</p><h2 id="recipe-current-title">В каталоге лавки</h2></header>
+    <div class="meal-products">${recipe.products.map(selection => currentProduct(selection, "../../")).join("\n")}</div>
+  </section>` : "";
+  return `\n${sequence}${recipe.videoSource ? `<p class="recipe-video-source"><a class="editorial-link" href="${recipe.videoSource}">Смотреть авторское видео в Телеграме${harpoon}</a></p>` : ""}${current}`;
+}
+
+const recipeQuote = "Его не нужно обваливать в муке и жарить в кляре. Его даже не нужно солить. Просто немного прогреть на растительном масле на слабом огне без крышки. Буквально три-четыре минуты.";
+function recipeFeature(root, heading = "h3") {
+  const recipe = recipes.find(item => item.id === recipeContent.featured);
+  const entry = recipeEntry(recipe);
+  return `<article class="recipe-feature" aria-labelledby="recipe-feature-title">
+    <a class="recipe-feature__photo" href="${root}journal/${entry.id}/" aria-label="Рецепт: ${text(recipe.title)}">${image(entry, root, "(max-width: 61.1875rem) calc(100vw - 36px), 520px")}</a>
+    <div class="recipe-feature__copy">
+      <p class="recipe-meta">Рецепт Олега · <time datetime="${entry.date}">${date(entry)}</time></p>
+      <${heading} id="recipe-feature-title">${text(recipe.title)}</${heading}>
+      <blockquote><p>${text(recipeQuote)}</p></blockquote>
+      <a class="editorial-link" href="${root}journal/${entry.id}/">Приготовить по рецепту${harpoon}</a>
+      <a class="editorial-link recipe-feature__catalog" href="${escape(productCatalogHref(recipe.products[0], root))}">Филе трески в каталоге${harpoon}</a>
+    </div>
+  </article>`;
+}
+
+export function renderRecipeHome() {
+  return `<header class="watch-catch__header">
+    <h2 id="watch-catch-title">Рецепты и советы</h2>
+    <a class="editorial-link" href="recipes/">Все рецепты и советы${harpoon}</a>
+  </header>
+  ${recipeFeature("")}
+  <ul class="watch-catch__list">${recipeContent.home.map(id => {
+    const recipe = recipes.find(item => item.id === id);
+    return `<li class="watch-catch__item"><a href="journal/${id}/"><span class="recipe-meta">Рецепт Олега</span><span class="watch-catch__name">${text(recipe.title)}</span>${harpoon}</a></li>`;
+  }).join("\n")}</ul>`;
+}
+
+export function renderRecipesPage() {
+  const groups = [["recipes", "Рецепты", "recipe"], ["advice", "Советы о рыбе", "advice"]].map(([id, title, kind]) => `<section class="recipe-directory" id="${id}" aria-labelledby="${id}-title">
+    <header class="recipe-section-heading"><h2 id="${id}-title">${title}</h2><p>${recipes.filter(item => item.kind === kind).length} ${kind === "recipe" ? "рецептов" : "совета"}</p></header>
+    ${kind === "recipe" ? recipeFeature("../") : ""}
+    <div class="recipe-directory__grid">${recipes.filter(recipe => recipe.kind === kind && recipe.id !== recipeContent.featured).map(recipe => {
+      const entry = recipeEntry(recipe);
+      return `<a class="recipe-card" href="../journal/${entry.id}/" aria-labelledby="recipe-title-${entry.id}">
+        ${image(entry, "../", "(max-width: 34rem) calc(100vw - 36px), (max-width: 61.1875rem) 42vw, 320px")}
+        <span class="recipe-meta"><time datetime="${entry.date}">${date(entry)}</time></span>
+        <h3 id="recipe-title-${entry.id}">${text(recipe.title)}</h3>
+        <span class="recipe-card__read">${kind === "recipe" ? "Читать рецепт" : "Читать совет"}${harpoon}</span>
+      </a>`;
+    }).join("\n")}</div>
+  </section>`).join("\n");
+  const collections = `<section class="meal-collections" id="meals" aria-labelledby="meals-title">
+    <header class="recipe-section-heading"><h2 id="meals-title">Что купить к ужину</h2><p>Выбор из каталога</p></header>
+    ${recipeContent.collections.map(collection => `<section class="meal-collection" id="${collection.slug}" aria-labelledby="meal-${collection.slug}">
+      <header><h3 id="meal-${collection.slug}">${text(collection.title)}</h3><p>${text(collection.description)}</p></header>
+      <div class="meal-products">${collection.products.map(selection => currentProduct(selection, "../", "h4")).join("\n")}</div>
+    </section>`).join("\n")}
+    <a class="editorial-link" href="../catalog/">Открыть весь каталог${harpoon}</a>
+  </section>`;
+  return template("recipes-page", {
+    theme: renderTheme("recipes"), analytics: renderAnalytics("../"), menu: renderMenu("recipes", "../"), footer: renderFooter("recipes", "../"),
+    groups, collections,
+  }).replace(/[ \t]+$/gm, "") + "\n";
+}
+
+export function renderAssortmentMedia() {
+  const shots = [
+    { category: "caviar", image: "caviar-slab.jpg", alt: "Пласт красной икры", caption: "Красная икра" },
+    { category: "seafood", ...recipeEntry(recipes.find(r => r.id === 412)), caption: "Северные креветки" },
+    { category: "frozen-fish", image: "flounder.jpg", alt: "Камбала целиком на разделочной доске", caption: "Камбала" },
+    { category: "fillet", image: "gallery-small-1.jpg", alt: "Коробка филе трески судовой заморозки", caption: "Филе трески судовой заморозки" },
+    { category: "steaks", ...entries.find(entry => entry.id === 693), caption: "Стейки лосося" },
+    { category: "prepared-fish", ...entries.find(entry => entry.id === 695), caption: "Форель холодного копчения" },
+    { category: "other", image: "about-small-2.jpg", alt: "Полки с чаем, соусами и консервами в лавке", caption: "Чай, соусы и консервы" },
+  ];
+  return shots.map((shot, index) => `<figure class="assortment-overview__media" data-assortment-photo="${shot.category}"${index ? " hidden" : ""}>
+    ${image(shot, "", "(max-width: 61.1875rem) calc(100vw - 36px), 520px", index > 0)}
+    <figcaption>${text(shot.caption)}</figcaption>
+  </figure>`).join("\n");
 }

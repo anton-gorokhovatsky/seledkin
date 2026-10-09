@@ -13,9 +13,9 @@ test("prices and product-specific order links survive unavailable JavaScript", a
     const page = await context.newPage();
     if (mode === "failed-module") await page.route("**/catalog/catalog.js*", (route) => route.abort());
     await page.goto(`${baseURL}catalog/`);
-    await expect(page.locator(".catalog-product")).toHaveCount(114);
+    await expect(page.locator(".catalog-product")).toHaveCount(115);
     await expect(page.locator("[data-catalog-controls]")).toBeHidden();
-    await expect(page.locator("[data-catalog-count]")).toHaveText("114 позиций");
+    await expect(page.locator("[data-catalog-count]")).toHaveText("115 позиций");
     const product = page.locator(".catalog-product").first();
     await product.locator("summary").click();
     await expect(product.getByRole("link")).toHaveCount(2);
@@ -52,7 +52,7 @@ test("search, category, shared URL and browser history retain the same selection
   await page.goForward();
   await expect(count).toHaveText("0 позиций");
   await page.locator("[data-catalog-reset]").click();
-  await expect(count).toHaveText("114 позиций");
+  await expect(count).toHaveText("115 позиций");
   await search.fill("морепродукты");
   await expect(count).toHaveText("20 позиций");
   await search.fill("НЕСУЩЕСТВУЮЩИЙ ТОВАР");
