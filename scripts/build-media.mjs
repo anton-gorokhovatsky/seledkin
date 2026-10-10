@@ -45,7 +45,7 @@ function record(file, source, extra = {}) {
   manifest.push({ file, source, sourceSha256: hash(source), sha256: hash(file), bytes: readFileSync(path(file)).length, ...extra });
 }
 const journalPhotos = JSON.parse(readFileSync(resolve(root, "content/journal.json"), "utf8")).map(entry => entry.image);
-const photos = ["about-main.jpg", "about-small-1.jpg", "about-small-2.jpg", "caviar-slab.jpg", "cutting-tuna.jpg", "delivery-basket.jpg", "flounder.jpg", "gallery-small-1.jpg", "gallery-small-2.jpg", ...journalPhotos, "oleg-gugunava.jpg", "quote-pan.jpg", "salmon-cat.jpg"];
+const photos = ["about-main.jpg", "about-small-1.jpg", "about-small-2.jpg", "caviar-slab.jpg", "cutting-tuna.jpg", "delivery-basket.jpg", "flounder.jpg", "gallery-small-1.jpg", "gallery-small-2.jpg", "journal-679.jpg", ...journalPhotos, "oleg-gugunava.jpg", "quote-pan.jpg", "salmon-cat.jpg"];
 const videos = ["hero-sea.mp4", "hero-sea-night.mp4"];
 for (const source of requestedSources) {
   if (![...photos, ...videos, "hero-sea-night-poster.jpg"].includes(source)) throw new Error(`Unknown media source: ${source}`);

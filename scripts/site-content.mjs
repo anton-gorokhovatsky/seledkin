@@ -401,13 +401,14 @@ export function renderRecipesPage() {
 
 export function renderAssortmentMedia() {
   const shots = [
-    { category: "caviar", image: "caviar-slab.jpg", alt: "Пласт красной икры", caption: "Красная икра" },
+    { category: "caviar", ...entries.find(entry => entry.id === 681), caption: "Икра дикого кижуча" },
     { category: "seafood", ...recipeEntry(recipes.find(r => r.id === 412)), caption: "Северные креветки" },
-    { category: "frozen-fish", image: "flounder.jpg", alt: "Камбала целиком на разделочной доске", caption: "Камбала" },
+    // Oleg's frozen catch after defrosting: https://t.me/kapitanseledkin/679.
+    { category: "frozen-fish", image: "journal-679.jpg", alt: "Мурманская пятнистая камбала после размораживания на деревянной доске рядом с ножом", caption: "Мурманская пятнистая камбала" },
     { category: "fillet", image: "gallery-small-1.jpg", alt: "Коробка филе трески судовой заморозки", caption: "Филе трески судовой заморозки" },
     { category: "steaks", ...entries.find(entry => entry.id === 693), caption: "Стейки лосося" },
     { category: "prepared-fish", ...entries.find(entry => entry.id === 695), caption: "Форель холодного копчения" },
-    { category: "other", image: "about-small-2.jpg", alt: "Полки с чаем, соусами и консервами в лавке", caption: "Чай, соусы и консервы" },
+    { category: "other", ...entries.find(entry => entry.id === 687), alt: "Банки рыбной ухи нескольких видов на полке лавки", caption: "Уха в банках" },
   ];
   return shots.map((shot, index) => `<figure class="assortment-overview__media" data-assortment-photo="${shot.category}"${index ? " hidden" : ""}>
     ${image(shot, "", "(max-width: 61.1875rem) calc(100vw - 36px), 520px", index > 0)}
