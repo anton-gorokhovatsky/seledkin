@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { createMorph } from "../assets/morphicons-dom.js";
 import { iconPaths, iconSpring } from "../assets/interface-motion.js";
+import { versionAssets } from "../scripts/build-assets.mjs";
 
 function clock(run) {
   const original = Object.fromEntries(["matchMedia", "requestAnimationFrame", "cancelAnimationFrame"].map(key => [key, globalThis[key]]));
@@ -65,10 +66,14 @@ test("reduced motion swaps both pairs immediately, without scheduling a frame", 
 }));
 
 test("enhancement is independent of navigation, local on every page, and preserves static fallbacks", async () => {
+  const assets = new Map(await Promise.all(["assets/styles.css", "assets/interface-motion.js"].map(async file =>
+    [file, await readFile(new URL(`../${file}`, import.meta.url), "utf8")])));
   for (const file of ["index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html"]) {
     const page = await readFile(new URL(`../${file}`, import.meta.url), "utf8");
     assert.match(page, /<script type="module" src="(?:\.\.\/)?assets\/interface-motion\.js"><\/script>/);
-    assert.match(page, /styles\.css\?v=[a-z0-9-]+/, "new enhancement must not combine with stale CSS");
+    const publication = versionAssets(new Map([...assets, [file, page]]));
+    assert.ok(publication.files.get(file).includes(`styles.css?v=${publication.version}`), "CSS is versioned during assembly");
+    assert.ok(publication.files.get(file).includes(`interface-motion.js?v=${publication.version}`), "the enhancement and CSS share the publication version");
     assert.match(page, /class="theme-toggle__moon"/);
     assert.match(page, /class="theme-toggle__sun"/);
   }
