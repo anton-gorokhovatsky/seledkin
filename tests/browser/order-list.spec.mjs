@@ -203,8 +203,11 @@ test("a denied single-product copy retains the full selectable request @catalog"
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("catalog/?product=fillet-006&audit=product-order#product-fillet-006");
   const product = page.locator("#product-fillet-006");
-  await product.locator("summary").click();
-  await product.getByRole("link", { name: "Скопировать и открыть Телеграм" }).click();
+  await expect(product).toBeFocused();
+  // Test the clipboard denial and keyboard recovery independently of WebKit's
+  // delayed anchor scrolling. The preceding request test covers pointer use.
+  await product.locator("summary").press("Enter");
+  await product.getByRole("link", { name: "Скопировать и открыть Телеграм" }).press("Enter");
   const field = product.getByRole("textbox", { name: "Текст для сообщения" });
   await expect(field).toBeFocused();
   expect(await field.inputValue()).toContain("Филе тунца");
