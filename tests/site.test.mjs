@@ -540,7 +540,9 @@ test("home prioritizes shopping before its editorial story and keeps local image
   for (const asset of [
     "hero-sea-poster.webp",
     "hero-sea-web.mp4",
-    "caviar-slab.jpg",
+    "journal-681.jpg",
+    "journal-679.jpg",
+    "journal-687.jpg",
     "fish-pattern.svg",
     "flounder.jpg",
     "gallery-small-1.jpg",
