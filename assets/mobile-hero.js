@@ -37,8 +37,8 @@ export function setupMobileHero() {
     frame.href = product.href = current.dataset.href;
     order.href = current.dataset.order;
     count.textContent = `${index + 1}/${photos.length}`;
-    frame.setAttribute("aria-label", `Смотреть ${current.dataset.caption} в каталоге, ${current.dataset.price}`);
-    product.setAttribute("aria-label", `Смотреть ${current.dataset.caption} в каталоге`);
+    frame.setAttribute("aria-label", `Открыть ${current.dataset.caption} в каталоге, ${current.dataset.price}`);
+    product.setAttribute("aria-label", `Открыть ${current.dataset.caption} в каталоге`);
     change.hidden = false;
   }
 

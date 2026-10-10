@@ -4859,11 +4859,11 @@ a.site-menu__brand {
   .afisha__print[data-position="2"] { z-index: 1; transform: translate(-50%, -50%) rotate(-6deg); }
   .afisha__print[hidden] { display: none; }
   .afisha__frame img { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; filter: none; }
-  .afisha__gallery figcaption { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: .25rem 1rem; margin-top: .35rem; font: 400 .75rem/1.4 var(--sans); }
-  .afisha__caption { display: grid; align-content: center; min-width: 0; min-height: 4rem; gap: .1rem; }
+  .afisha__gallery figcaption { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: .25rem 1rem; margin-top: .35rem; font: 400 .75rem/1.4 var(--sans); }
+  .afisha__caption { display: grid; align-content: start; min-width: 0; min-height: 4rem; gap: .1rem; }
   .afisha__name { font: italic 400 1.05rem/1.25 var(--serif); }
   .afisha__price { font: 400 .75rem/1.4 var(--sans); }
-  .afisha__change { display: flex; align-items: center; gap: .65rem; min-height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; }
+  .afisha__change { display: flex; align-items: baseline; gap: .65rem; min-height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; line-height: 1.75; }
   .afisha__change[hidden] { display: none; }
   .afisha__status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .afisha__count { font-variant-numeric: tabular-nums; }
@@ -4871,12 +4871,23 @@ a.site-menu__brand {
   .afisha__actions { display: grid; gap: .2rem; }
   .afisha__actions a { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-width: 0; min-height: 44px; color: inherit; text-decoration: none; }
   .afisha__actions a > span { min-width: 0; }
-  .afisha__catalog { padding: .6rem 0; border-block: 1px solid currentColor; font: 400 clamp(1.65rem, 1.15rem + 2vw, 2rem)/1.15 var(--serif); }
+  .afisha__catalog { padding: .6rem 0; font: 400 clamp(1.65rem, 1.15rem + 2vw, 2rem)/1.15 var(--serif); }
   .afisha__secondary { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .2rem 1rem; font: 500 .9rem/1.4 var(--sans); }
   .afisha__secondary a { padding-block: .3rem; font: inherit; }
   .afisha__actions svg { flex: 0 0 32px; width: 32px; height: auto; }
-  .afisha__actions a:hover > span, .afisha__change:hover > span:first-child { text-decoration: underline; text-underline-offset: .2em; }
   .afisha a:focus-visible, .afisha button:focus-visible, .afisha__frame:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  :root[data-input-modality="pointer"] .afisha :is(a, button):focus-visible { outline: none; }
+  /* A hash destination is reading context, not an interactive control. */
+  .catalog-product[tabindex="-1"]:focus { outline: none; }
+  .catalog-product-order summary,
+  .catalog-product-order__channels a { text-decoration: none; }
+  .catalog-product-order summary::after {
+    content: "+";
+    margin-inline-start: .5rem;
+    font-weight: 400;
+  }
+  .catalog-product-order[open] summary::after { content: "−"; }
+  :root[data-input-modality="pointer"] .catalog-product-order :is(summary, a):focus-visible { outline: none; }
   @container afisha (max-width: 18rem) {
     .afisha__caption { min-height: 5.25rem; }
   }

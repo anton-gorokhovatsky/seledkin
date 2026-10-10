@@ -168,14 +168,14 @@ export function renderMobileHero() {
             <div class="afisha__brand brand-jelly brand-jelly--sea"><img src="assets/logo-redrawn-sea.svg" alt="Рыбная лавка капитана Селедкина" width="3600" height="1784"></div>
             <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каждый день,</em> море&shy;про&shy;дукты и&nbsp;рыбные дели&shy;ка&shy;тесы в&nbsp;Москве</p>
             <figure class="afisha__gallery">
-              <a class="afisha__frame" href="${escape(firstHref)}" aria-label="Смотреть ${text(photos[0].caption)} в каталоге">
+              <a class="afisha__frame" href="${escape(firstHref)}" aria-label="Открыть ${text(photos[0].caption)} в каталоге">
 ${prints}
               </a>
-              <figcaption><div class="afisha__caption"><span class="afisha__name">${text(photos[0].caption)}</span><span class="afisha__price">${escape(catalogPrice(first.price))}</span></div><button class="afisha__change" type="button" hidden><span>Другой товар</span><span class="afisha__count" aria-hidden="true">1/${photos.length}</span>${arrow}</button></figcaption>
+              <figcaption><div class="afisha__caption"><span class="afisha__name">${text(photos[0].caption)}</span><span class="afisha__price">${escape(catalogPrice(first.price))}</span></div><button class="afisha__change" type="button" hidden><span>Ещё из лавки</span><span class="afisha__count" aria-hidden="true">1/${photos.length}</span>${arrow}</button></figcaption>
               <span class="afisha__status" role="status" aria-live="polite"></span>
             </figure>
             <nav class="afisha__actions" aria-label="Основные действия">
-              <a class="afisha__catalog" href="${escape(firstHref)}"><span>Смотреть товар</span>${arrow}</a>
+              <a class="afisha__catalog" href="${escape(firstHref)}"><span>Открыть в каталоге</span>${arrow}</a>
               <div class="afisha__secondary"><a class="afisha__all" href="catalog/">Весь каталог</a><a class="afisha__order" href="${escape(orderLinks(first).telegram)}">Заказать в&nbsp;Телеграме</a></div>
             </nav>
           </div>`;
