@@ -7,7 +7,7 @@ async function noOverflow(page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
 }
 
-test("prices and product-specific order links survive unavailable JavaScript", async ({ browser, baseURL }) => {
+test("prices and product-specific order links survive unavailable JavaScript @catalog", async ({ browser, baseURL }) => {
   for (const mode of ["disabled", "failed-module"]) {
     const context = await browser.newContext({ javaScriptEnabled: mode !== "disabled", viewport: { width: 390, height: 844 } });
     await context.route("https://mc.yandex.ru/**", route => route.abort());
@@ -31,7 +31,7 @@ test("prices and product-specific order links survive unavailable JavaScript", a
   }
 });
 
-test("search, category, shared URL and browser history retain the same selection", async ({ page, context }) => {
+test("search, category, shared URL and browser history retain the same selection @catalog", async ({ page, context }) => {
   await page.goto("catalog/");
   const search = page.locator("[data-catalog-search]");
   const count = page.locator("[data-catalog-count]");
@@ -69,7 +69,7 @@ test("search, category, shared URL and browser history retain the same selection
   await noOverflow(page);
 });
 
-test("contact anchor is clear of the menu; Escape only closes the top interaction", async ({ page }) => {
+test("contact anchor is clear of the menu; Escape only closes the top interaction @contacts", async ({ page }) => {
   await stubStoreMap(page);
   const advertisingWidgets = [];
   page.on("request", request => {
@@ -105,7 +105,7 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   await expect(zoom).not.toHaveAttribute("tabindex", "-1");
 });
 
-test("the mobile afisha leads directly to shopping and desktop journal controls remain stable", async ({ page }, testInfo) => {
+test("the mobile afisha leads directly to shopping and desktop journal controls remain stable @afisha", async ({ page }, testInfo) => {
   for (const [width, height] of [[320, 568], [390, 664], [390, 844], [1440, 900]]) {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.setViewportSize({ width, height });
@@ -324,7 +324,7 @@ test("320px reflow, enlarged text, custom spacing and contrast retain controls",
 });
 
 
-test("a photographed product opens its own catalog position, price and order", async ({ page }) => {
+test("a photographed product opens its own catalog position, price and order @afisha", async ({ page }) => {
   await page.goto("");
   const frame = page.locator(".afisha__frame");
   const expected = ["Каспийский залом", "Икра форели", "Стейк лосося", "Форель холодного копчения", "Скумбрия горячего копчения"];

@@ -6,7 +6,7 @@ test.beforeEach(async ({ context }) => {
   await context.route("https://mc.yandex.ru/**", route => route.abort());
 });
 
-test("a buyer can cook the right shrimp variant and return to its current price", async ({ page }) => {
+test("a buyer can cook the right shrimp variant and return to its current price @journal", async ({ page }) => {
   await page.goto("catalog/?q=патагонская&category=seafood&audit=recipes");
   const products = page.locator(".catalog-product:visible");
   await expect(products).toHaveCount(2);
@@ -17,6 +17,9 @@ test("a buyer can cook the right shrimp variant and return to its current price"
   await expect(page).toHaveURL(/journal\/464\/$/);
   await expect(page.locator(".ship-log-entry__body")).toContainText("Можно размораживать в прохладной воде");
   await expect(page.locator(".recipe-archive-note")).toContainText("к дате публикации");
+  await expect(page.getByRole("complementary", { name: "Условия из публикации" })).toContainText("Заказы принимаются только в WhatsApp");
+  await expect(page.locator(".journal-historical__current")).toContainText("Сейчас заказ можно оформить");
+  await expect(page.locator(".journal-historical__current").getByRole("link", { name: "Телеграме" })).toHaveAttribute("href", /^https:\/\/t.me\/\+79166751452\?text=/);
   expect(await page.getByRole("link", { name: "Читать запись в Телеграме", exact: true }).getAttribute("href")).toBe("https://t.me/kapitanseledkin/464");
   await page.locator(".recipe-current").getByRole("link", { name: "Креветка патагонская", exact: true }).click();
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);

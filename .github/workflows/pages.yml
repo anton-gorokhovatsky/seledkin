@@ -83,11 +83,14 @@ jobs:
         env:
           RELEASE_SCOPE: ${{ steps.scope.outputs.scope }}
           TYPOGRAPHY_PAGES: ${{ steps.scope.outputs.typography_pages }}
+          BROWSER_GREP: ${{ steps.scope.outputs.browser_grep }}
         run: |
           if [ "$RELEASE_SCOPE" = "journal" ]; then
             pnpm exec playwright test --grep @journal
           elif [ "$RELEASE_SCOPE" = "typography" ]; then
             pnpm exec playwright test --grep @typography
+          elif [ "$RELEASE_SCOPE" = "scoped" ]; then
+            pnpm exec playwright test --grep "$BROWSER_GREP"
           else
             pnpm run test:browser
           fi

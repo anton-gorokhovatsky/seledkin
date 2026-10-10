@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { catalogPrice, matchesSearch, orderLinks, positionCount, productNotes, productSearchText } from "../assets/catalog-model.js";
+import { catalogPrice, matchesSearch, orderLinks, positionCount, productKey, productNotes, productSearchText } from "../assets/catalog-model.js";
 import { catalog } from "../assets/catalog-data.js";
 
 test("search accepts category terms, reversed words, ё and whitespace", () => {
@@ -79,11 +79,26 @@ test("portion prices use grams without rounding the quantity or changing other u
 test("abbreviation notes appear only for confirmed preparation terms", () => {
   assert.equal(productNotes({ name: "Креветка северная в/м" }), "В/м — варёно-мороженый продукт");
   assert.equal(productNotes({ name: "Креветка тигровая б/г" }), "Б/г — без головы");
-  assert.equal(productNotes({ name: "Скумбрия", description: "ПБГ" }), "");
+  assert.equal(productNotes({ name: "Скумбрия", description: "ПБГ" }), "ПБГ — потрошёная рыба без головы");
   assert.equal(productNotes({ name: "Филе трески" }), "");
 });
 
 test("checked-in HTML catalog is generated from current prices", () => {
   const result = spawnSync(process.execPath, ["scripts/build-catalog.mjs", "--check"], { encoding: "utf8" });
   assert.equal(result.status, 0, result.stderr);
+});
+
+test("an order list preserves distinct packages and uses current prices", () => {
+  const category = catalog.find(category => category.slug === "caviar");
+  const products = category.items.slice(0, 2);
+  assert.notEqual(productKey(category, products[0]), productKey(category, products[1]));
+  assert.equal(productKey(category, products[0]), productKey(category, { ...products[0], price: "7000 ₽/0,05 кг" }));
+  const keys = catalog.flatMap(category => category.items.map(product => productKey(category, product)));
+  assert.equal(new Set(keys).size, keys.length);
+  const links = orderLinks(products);
+  const draft = new URL(links.telegram).searchParams.get("text");
+  assert.equal(draft, new URL(links.whatsapp).searchParams.get("text"));
+  for (const product of products) assert.ok(draft.includes(catalogPrice(product.price)));
+  assert.equal(draft.match(/Хочу заказать/g).length, 1);
+  assert.ok(matchesSearch(productSearchText({ slug: "prepared-fish" }, { name: "Скумбрия", description: "ПБГ" }), "без головы"));
 });

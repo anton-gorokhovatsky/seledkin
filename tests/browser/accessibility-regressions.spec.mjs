@@ -61,7 +61,7 @@ for (const mode of ["no-js", "failed-module"]) {
   });
 }
 
-test("the complete selected category stays legible at 320px with enlarged text and spacing", async ({ page }) => {
+test("the complete selected category stays legible at 320px with enlarged text and spacing @catalog", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 });
   for (const mode of ["normal", "text", "spacing", "forced"]) {
     await page.emulateMedia({ forcedColors: mode === "forced" ? "active" : "none" });

@@ -64,7 +64,8 @@ export function productSearchText(category, product) {
   const categoryTerms = category.slug === "prepared-fish" ? "рыба" : category.label;
   return [categoryTerms, product.name, product.description].filter(Boolean).join(" ")
     .replace(/(?<!\p{L})в\/м(?!\p{L})/gu, "в/м варено мороженая")
-    .replace(/(?<!\p{L})б\/г(?!\p{L})/gu, "б/г без головы");
+    .replace(/(?<!\p{L})б\/г(?!\p{L})/gu, "б/г без головы")
+    .replace(/(?<!\p{L})пбг(?!\p{L})/giu, "ПБГ потрошеная без головы");
 }
 
 export function matchesSearch(text, query) {
@@ -99,16 +100,24 @@ export function productNotes(product) {
   return [
     [/(?<!\p{L})в\/м(?!\p{L})/iu, "В/м — варёно-мороженый продукт"],
     [/(?<!\p{L})б\/г(?!\p{L})/iu, "Б/г — без головы"],
+    [/(?<!\p{L})пбг(?!\p{L})/iu, "ПБГ — потрошёная рыба без головы"],
   ].filter(([pattern]) => pattern.test(`${product.name} ${product.description ?? ""}`))
     .map(([, label]) => typographText(label)).join(". ");
 }
 
-export function orderLinks(product) {
+export function productKey(category, product) {
+  // Identity includes the package, not the changing price. Stored selections
+  // resolve against today's catalog; stale descriptions never enter a draft.
+  return [category.slug, product.name, product.description ?? "", product.price.split("₽")[1] ?? ""].join("|");
+}
+
+export function orderLinks(productOrProducts) {
+  const products = Array.isArray(productOrProducts) ? productOrProducts : [productOrProducts];
   const text = [
     "Здравствуйте! Хочу заказать:",
-    typographText(product.name),
-    product.description ? typographText(product.description) : null,
-    catalogPrice(product.price),
+    ...products.map(product => [typographText(product.name),
+      product.description ? typographText(product.description) : null,
+      catalogPrice(product.price)].filter(Boolean).join("\n")),
     "Подскажите, пожалуйста, наличие.",
   ].filter(Boolean).join("\n");
   const draft = encodeURIComponent(text);

@@ -122,7 +122,7 @@ export function renderTheme(page) {
 }
 
 export function renderAnalytics(root) {
-  return `    <script type="module" src="${root}assets/analytics.js?v=analytics-2"></script>`;
+  return `    <script type="module" src="${root}assets/analytics.js?v=customer-paths-1"></script>`;
 }
 
 function date(entry, year = true) {
@@ -151,7 +151,7 @@ export function renderMobileHero() {
   const prints = photos.map((photo, i) => {
     const { product } = resolveProduct(photo.product);
     if (!product.id) throw new Error(`Hero product needs a stable anchor: ${product.name}`);
-    const href = `${productCatalogHref(photo.product)}#product-${product.id}`;
+    const href = `${productCatalogHref(photo.product)}&from=afisha#product-${product.id}`;
     const variants = media.filter(item => item.source === photo.image && item.width > 32);
     const { width, height } = variants.at(-1);
     let img = image({ ...photo, alt: text(photo.alt) }, "", "(max-width: 61.1875rem) calc(100vw - 60px), 1px", i > 0, true);
@@ -160,11 +160,11 @@ export function renderMobileHero() {
       const srcset = img.match(/srcset="([^"]+)"/)[1];
       img = `<picture><source media="(max-width: 61.1875rem)" srcset="${srcset}">${img.replace(/ srcset="[^"]+"/, "").replace(/src="[^"]+"/, `src="assets/${photo.image.replace(/\.jpg$/, "-32.webp")}"`)}</picture>`;
     }
-    return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-caption="${text(product.name)}" data-source="https://t.me/kapitanseledkin/${photo.id}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}" data-order="${escape(orderLinks(product).telegram)}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
+    return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-caption="${text(product.name)}" data-category="${photo.product.category}" data-product-id="${product.id}" data-source="https://t.me/kapitanseledkin/${photo.id}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}" data-order="${escape(orderLinks(product).telegram)}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
   }).join("\n");
   const first = resolveProduct(photos[0].product).product;
-  const firstHref = `${productCatalogHref(photos[0].product)}#product-${first.id}`;
-  return `          <div class="afisha">
+  const firstHref = `${productCatalogHref(photos[0].product)}&from=afisha#product-${first.id}`;
+  return `          <div class="afisha" data-product-name="${text(first.name)}" data-product-category="${photos[0].product.category}" data-product-id="${first.id}" data-photo-index="1">
             <div class="afisha__brand brand-jelly brand-jelly--sea"><img src="assets/logo-redrawn-sea.svg" alt="Рыбная лавка капитана Селедкина" width="3600" height="1784"></div>
             <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каждый день,</em> море&shy;про&shy;дукты и&nbsp;рыбные дели&shy;ка&shy;тесы в&nbsp;Москве</p>
             <figure class="afisha__gallery">
@@ -179,6 +179,19 @@ ${prints}
               <div class="afisha__secondary"><a class="afisha__all" href="catalog/">Весь каталог</a><a class="afisha__order" href="${escape(orderLinks(first).telegram)}">Заказать в&nbsp;Телеграме</a></div>
             </nav>
           </div>`;
+}
+
+function journalBody(entry, inquiry) {
+  const lines = entry.body.split("\n");
+  const historical = recipes.some(recipe => recipe.id === entry.id)
+    ? lines.findIndex(line => /Заказы принимаются только.*WhatsApp/.test(line)) : -1;
+  if (historical < 0) return lines.map(line => `                  ${line}`).join("\n");
+  return `${lines.slice(0, historical).map(line => `                  ${line}`).join("\n")}
+                  <aside class="journal-historical" aria-label="Условия из публикации">
+                    <p class="journal-historical__label">Условия из публикации · ${date(entry)}</p>
+${lines.slice(historical).map(line => `                    ${line}`).join("\n")}
+                  </aside>
+                  <p class="journal-historical__current">Сейчас заказ можно оформить в <a href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}">Телеграме</a> или <a href="https://wa.me/79166751452?text=${encodeURIComponent(plain(inquiry))}">WhatsApp</a>. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>`;
 }
 
 export function renderJournal(list, view) {
@@ -225,7 +238,7 @@ export function renderJournal(list, view) {
               ${image(entry, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, true)}
               <div class="ship-log-entry__content">
 ${recipes.some(recipe => recipe.id === id) ? `                <p class="recipe-archive-note">Цены и условия в авторском тексте относятся к дате публикации. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>\n` : ""}                <div class="ship-log-entry__body">
-${entry.body.split("\n").map(line => `                  ${line}`).join("\n")}
+${journalBody(entry, inquiry)}
                 </div>
                 <div class="ship-log-entry__actions">
                   <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}"><span class="source-button__label">Спросить о наличии<span class="visually-hidden"> в Телеграме: ${text(entry.product)}</span></span></a>

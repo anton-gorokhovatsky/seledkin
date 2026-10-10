@@ -32,27 +32,36 @@ export function setupMobileHero() {
       }
     });
     const current = photos[index];
+    const afisha = gallery.closest(".afisha");
+    afisha.dataset.productName = current.dataset.caption;
+    afisha.dataset.productCategory = current.dataset.category;
+    afisha.dataset.productId = current.dataset.productId;
+    afisha.dataset.photoIndex = String(index + 1);
     name.textContent = current.dataset.caption;
     price.textContent = current.dataset.price;
     frame.href = product.href = current.dataset.href;
     order.href = current.dataset.order;
     count.textContent = `${index + 1}/${photos.length}`;
     frame.setAttribute("aria-label", `Открыть ${current.dataset.caption} в каталоге, ${current.dataset.price}`);
-    product.setAttribute("aria-label", `Открыть ${current.dataset.caption} в каталоге`);
+    product.setAttribute("aria-label", `Открыть в каталоге: ${current.dataset.caption}`);
     change.hidden = false;
   }
 
-  function move(step) {
+  function move(step, method) {
     index = (index + step + photos.length) % photos.length;
     show();
     status.textContent = `Товар ${index + 1} из ${photos.length}: ${photos[index].dataset.caption}, ${photos[index].dataset.price}`;
+    document.dispatchEvent(new CustomEvent("shop:goal", { detail: { goal: "product_select", params: {
+      context: "afisha", action: "preview", method, product: photos[index].dataset.caption,
+      category: photos[index].dataset.category, product_id: photos[index].dataset.productId, photo: index + 1,
+    } } }));
   }
 
-  change.addEventListener("click", () => move(1));
+  change.addEventListener("click", () => move(1, "button"));
   frame.addEventListener("keydown", event => {
     if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
     event.preventDefault();
-    move(event.key === "ArrowLeft" ? -1 : 1);
+    move(event.key === "ArrowLeft" ? -1 : 1, "keyboard");
   });
   frame.addEventListener("pointerdown", event => {
     if (event.isPrimary) pointerStart = { id: event.pointerId, x: event.clientX, y: event.clientY };
@@ -65,7 +74,7 @@ export function setupMobileHero() {
     if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
     blockClick = true;
     event.preventDefault();
-    move(dx < 0 ? 1 : -1);
+    move(dx < 0 ? 1 : -1, "swipe");
     setTimeout(() => { blockClick = false; }, 0);
   });
   frame.addEventListener("pointercancel", () => { pointerStart = null; });

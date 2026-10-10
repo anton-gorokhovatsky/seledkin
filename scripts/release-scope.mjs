@@ -75,6 +75,95 @@ function onlyTypography(before, after) {
   return normalize(before) === normalize(after);
 }
 
+// A resource version can change without changing the component's public shape.
+const resourceVersions = value => value?.replace(/((?:assets\/)?[\w./-]+\.(?:css|js)\?v=)[\w.-]+/g, "$1VERSION");
+const componentScripts = {
+  "assets/mobile-hero.js": ["@afisha"],
+  "assets/analytics.js": ["@analytics"],
+  "assets/catalog-model.js": ["@catalog", "@afisha"],
+  "assets/order-list.js": ["@catalog"],
+  "catalog/catalog.js": ["@catalog"],
+};
+
+function cssRules(source, context = "", rules = new Map()) {
+  if (source == null) throw new Error("Missing CSS comparison");
+  source = source.replace(/\/\*[\s\S]*?\*\//g, "");
+  let position = 0;
+  while (position < source.length) {
+    const open = source.indexOf("{", position);
+    if (open < 0) {
+      if (source.slice(position).trim()) throw new Error("Unknown CSS statement");
+      break;
+    }
+    const selector = source.slice(position, open).trim();
+    let depth = 1, quote = "", end = open + 1;
+    for (; end < source.length && depth; end++) {
+      const char = source[end];
+      if (char === "\\") { end++; continue; }
+      if (quote) { if (char === quote) quote = ""; continue; }
+      if (char === '"' || char === "'") { quote = char; continue; }
+      if (char === "{") depth++;
+      if (char === "}") depth--;
+    }
+    if (depth) throw new Error("Unbalanced CSS");
+    const body = source.slice(open + 1, end - 1);
+    if (/^@(media|supports|container|layer)\b/.test(selector)) cssRules(body, `${context}${selector}/`, rules);
+    else {
+      const key = `${context}|${selector}`;
+      rules.set(key, { selector, body: `${rules.get(key)?.body ?? ""}\n${body}` });
+    }
+    position = end;
+  }
+  return rules;
+}
+
+function cssTags(before, after) {
+  try {
+    const oldRules = cssRules(before), newRules = cssRules(after), tags = new Set();
+    for (const key of new Set([...oldRules.keys(), ...newRules.keys()])) {
+      if (oldRules.get(key)?.body === newRules.get(key)?.body) continue;
+      for (const selector of (newRules.get(key) ?? oldRules.get(key)).selector.split(",")) {
+        const tag = /^\s*\.contacts-source(?=[\s_.#[:]|$)/.test(selector) ? "@contacts"
+          : /^\s*\.catalog-(?:[\w-]+)(?=[\s.#[:]|$)/.test(selector) ? "@catalog"
+          : /^\s*\.(?:journal-historical|recipe-archive-note)(?=[\s_.#[:]|$)/.test(selector) ? "@journal"
+          : /^\s*\.afisha(?=[\s_.#[:]|$)/.test(selector) ? "@afisha" : null;
+        if (!tag) return null;
+        tags.add(tag);
+      }
+    }
+    // Moving otherwise identical rules can change the cascade; be conservative.
+    const common = map => [...map.keys()].filter(key => oldRules.has(key) && newRules.has(key));
+    if (JSON.stringify(common(oldRules)) !== JSON.stringify(common(newRules))) return null;
+    return [...tags];
+  } catch { return null; }
+}
+
+export function scopedBrowserTags(changes) {
+  if (!changes) return null;
+  const tags = new Set();
+  for (const { path, before, after } of changes) {
+    if (tooling.test(path)) continue;
+    if (path === "assets/styles.css") {
+      const affected = cssTags(before, after);
+      if (!affected) return null;
+      affected.forEach(tag => tags.add(tag));
+    } else if (componentScripts[path] && after != null) {
+      componentScripts[path].forEach(tag => tags.add(tag));
+    } else if (path === "assets/site.js" && before != null && resourceVersions(before) === resourceVersions(after)) {
+      continue;
+    } else if (path.endsWith(".html") && before != null && after != null) {
+      const oldHtml = resourceVersions(before), newHtml = resourceVersions(after);
+      if (oldHtml === newHtml) continue;
+      const region = path === "index.html" ? /<!-- shared:mobile-hero:start -->[\s\S]*?<!-- shared:mobile-hero:end -->/
+        : path === "catalog/index.html" || /^journal\/\d+\/index\.html$/.test(path) ? /<main\b[^>]*>[\s\S]*?<\/main>/ : null;
+      if (!region || !region.test(oldHtml) || !region.test(newHtml)
+        || oldHtml.replace(region, "COMPONENT") !== newHtml.replace(region, "COMPONENT")) return null;
+      tags.add(path === "index.html" ? "@afisha" : path === "catalog/index.html" ? "@catalog" : "@journal");
+    } else return null;
+  }
+  return [...tags].sort();
+}
+
 export function classifyRelease(changes) {
   // Unknown comparison bases retain the full gate.
   if (!changes) return "full";
@@ -82,8 +171,9 @@ export function classifyRelease(changes) {
   if (!published.length) return "none";
   if (journalOnly(changes)) return "journal";
   if (published.every(({ path, before, after }) => path.endsWith(".html") && onlyTypography(before, after))) return "typography";
-  return published.every(({ path, before, after }) => path.endsWith(".html") && onlyAnchorTargets(before, after))
-    ? "links" : "full";
+  if (published.every(({ path, before, after }) => path.endsWith(".html") && onlyAnchorTargets(before, after))) return "links";
+  const tags = scopedBrowserTags(changes);
+  return tags?.length ? "scoped" : "full";
 }
 
 export function readReleaseChanges(base) {
@@ -94,7 +184,7 @@ export function readReleaseChanges(base) {
     const content = (ref, path) => {
       try { return git(["show", `${ref}:${path}`]); } catch { return null; }
     };
-    return paths.map(path => ({ path, ...(/\.(?:html|json|xml)$/.test(path)
+    return paths.map(path => ({ path, ...(/\.(?:html|json|xml|css|js)$/.test(path)
       ? { before: content(base, path), after: content("HEAD", path) } : {}) }));
   } catch {
     return null;
@@ -105,7 +195,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
   const changes = readReleaseChanges(process.argv[2]);
   const scope = process.argv[3] === "full" ? "full" : classifyRelease(changes);
   const pages = scope === "typography" ? changes.filter(({ path }) => !tooling.test(path)).map(({ path }) => path) : [];
-  const output = `scope=${scope}\nbrowser_required=${["full", "journal", "typography"].includes(scope)}\ntypography_pages=${JSON.stringify(pages)}\n`;
+  const grep = scope === "scoped" ? scopedBrowserTags(changes).join("|") : "";
+  const output = `scope=${scope}\nbrowser_required=${["full", "journal", "typography", "scoped"].includes(scope)}\nbrowser_grep=${grep}\ntypography_pages=${JSON.stringify(pages)}\n`;
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, output);
   process.stdout.write(output);
 }

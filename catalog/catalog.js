@@ -1,6 +1,7 @@
-import { matchesSearch, positionCount } from "../assets/catalog-model.js?v=buyer-paths-1";
+import { matchesSearch, positionCount } from "../assets/catalog-model.js?v=customer-paths-1";
 import { typographText } from "../assets/typography.js?v=typography-23-1";
-import { createSearchTracker } from "../assets/catalog-analytics.js?v=analytics-2";
+import { createSearchTracker } from "../assets/catalog-analytics.js?v=customer-paths-1";
+import { setupOrderList } from "../assets/order-list.js?v=customer-paths-1";
 
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");
@@ -18,6 +19,7 @@ const orderTitle = document.querySelector("[data-catalog-order-title]");
 const orderCopy = document.querySelector("[data-catalog-order-copy]");
 const orderLabels = [...document.querySelectorAll("[data-catalog-order-channel]")];
 const defaultOrder = { title: orderTitle.textContent, copy: orderCopy.textContent };
+const orderList = setupOrderList(render);
 const journal = document.querySelector("[data-catalog-journal]");
 const journalEntries = [...journal.querySelectorAll("[data-journal-result]")];
 const categories = [...list.querySelectorAll(".catalog-category")].map((section) => ({
@@ -91,11 +93,13 @@ function render() {
     : "Попробуйте другое название или спросите у лавки.");
   allCategories.hidden = !categoryRestricted;
   const needsHelp = visibleCount === 0;
-  orderTitle.textContent = needsHelp ? "Помочь с выбором?" : defaultOrder.title;
-  orderCopy.textContent = needsHelp
-    ? "Напишите, что ищете: уточним наличие и подскажем подходящие продукты."
-    : defaultOrder.copy;
-  for (const label of orderLabels) label.textContent = `${needsHelp ? "Спросить" : "Заказать"} в ${label.dataset.catalogOrderChannel}`;
+  if (!orderList.hasItems()) {
+    orderTitle.textContent = needsHelp ? "Помочь с выбором?" : defaultOrder.title;
+    orderCopy.textContent = needsHelp
+      ? "Напишите, что ищете: уточним наличие и подскажем подходящие продукты."
+      : defaultOrder.copy;
+    for (const label of orderLabels) label.textContent = `${needsHelp ? "Спросить" : "Заказать"} в ${label.dataset.catalogOrderChannel}`;
+  }
   reset.hidden = activeCategory === "all" && query === "";
   filters.querySelectorAll("button").forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.category === activeCategory));

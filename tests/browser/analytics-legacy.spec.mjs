@@ -1,11 +1,11 @@
 import { test, expect } from "@playwright/test";
 import { legacyRoutes } from "../../scripts/legacy-routes.mjs";
 
-async function publicFixture(page, ordinary = true) {
+async function publicFixture(page, baseURL, ordinary = true) {
   if (ordinary) await page.addInitScript(() => Object.defineProperty(navigator, "webdriver", { get: () => false }));
   await page.route("https://ks.fish/**", async route => {
     const url = new URL(route.request().url());
-    const response = await page.request.get(`http://127.0.0.1:4173${url.pathname}${url.search}`);
+    const response = await page.request.get(new URL(`${url.pathname}${url.search}`, baseURL).href);
     await route.fulfill({ response });
   });
   const requests = [];
@@ -16,8 +16,8 @@ async function publicFixture(page, ordinary = true) {
   return requests;
 }
 
-test("typing is not a failed search, and broadening records a successful recovery", async ({ page }) => {
-  await publicFixture(page);
+test("typing is not a failed search, and broadening records a successful recovery @analytics", async ({ page, baseURL }) => {
+  await publicFixture(page, baseURL);
   await page.goto("https://ks.fish/catalog/?category=caviar");
   const search = page.getByRole("searchbox", { name: "Найти товар" });
   await search.fill("креветки");
@@ -40,8 +40,30 @@ test("typing is not a failed search, and broadening records a successful recover
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "catalog_search_recovered").length)).toBe(1);
 });
 
-test("service entry excludes the whole tab, but an explicit ordinary visit can resume measurement", async ({ page }) => {
-  const requests = await publicFixture(page);
+test("afisha records the photographed product through catalog and order list @analytics", async ({ page, baseURL }) => {
+  await publicFixture(page, baseURL);
+  await page.goto("https://ks.fish/");
+  await expect.poll(() => page.evaluate(() => Array.isArray(window.goalCalls))).toBe(true);
+  await page.locator(".afisha__change").click();
+  await expect.poll(() => page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")?.[3].action)).toBe("preview");
+  expect(await page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")[3])).toMatchObject({context:"afisha",product:"Икра форели",method:"button",photo:2});
+  await page.evaluate(() => document.addEventListener("click", event => { if (event.target.closest(".afisha__catalog")) event.preventDefault(); }));
+  const href = await page.locator(".afisha__catalog").getAttribute("href");
+  await page.locator(".afisha__catalog").click();
+  expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").at(-1)[3])).toMatchObject({context:"afisha",action:"open_catalog",product:"Икра форели",photo:2});
+  await page.goto(new URL(href, page.url()).href);
+  await page.locator(".catalog-product:visible summary").click();
+  await expect.poll(() => page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")?.[3].source)).toBe("afisha");
+  await page.locator(".catalog-product:visible").getByRole("checkbox").check();
+  await page.getByRole("link", { name: "Список заказа · 1 позиция" }).click();
+  await page.evaluate(() => document.addEventListener("click", event => { if (event.target.closest('#order-list a[href^="https://t.me"]')) event.preventDefault(); }));
+  await page.locator("#order-list").getByRole("link", { name: "Отправить список в Телеграме" }).click();
+  expect(await page.evaluate(() => window.goalCalls.find(call => call[2] === "order_click")[3])).toMatchObject({context:"order_list",channel:"telegram",source:"afisha",count:1});
+  expect(JSON.stringify(await page.evaluate(() => window.goalCalls))).not.toContain("Хочу заказать");
+});
+
+test("service entry excludes the whole tab, but an explicit ordinary visit can resume measurement @analytics", async ({ page, baseURL }) => {
+  const requests = await publicFixture(page, baseURL);
   await page.goto("https://ks.fish/?audit=analytics-check");
   await page.getByRole("link", { name: "Весь каталог", exact: true }).click();
   await expect(page.getByRole("searchbox", { name: "Найти товар" })).toBeVisible();
@@ -53,8 +75,8 @@ test("service entry excludes the whole tab, but an explicit ordinary visit can r
   await expect.poll(() => requests.length).toBe(1);
 });
 
-test("automated public visits cannot start the vendor counter", async ({ page }) => {
-  const requests = await publicFixture(page, false);
+test("automated public visits cannot start the vendor counter @analytics", async ({ page, baseURL }) => {
+  const requests = await publicFixture(page, baseURL, false);
   await page.goto("https://ks.fish/catalog/");
   await page.getByRole("searchbox", { name: "Найти товар" }).fill("тунец");
   await page.getByRole("searchbox", { name: "Найти товар" }).press("Enter");
@@ -62,7 +84,7 @@ test("automated public visits cannot start the vendor counter", async ({ page })
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
 });
 
-test("old categories reach current prices and preserve the search and service markers", async ({ page }) => {
+test("old categories reach current prices and preserve the search and service markers", async ({ page, baseURL }) => {
   for (const route of legacyRoutes) {
     await page.goto(`${route.path}/?audit=legacy-check`);
     const target = new URL(route.target, "http://127.0.0.1:4173/");

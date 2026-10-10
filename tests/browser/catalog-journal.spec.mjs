@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 
 const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8"));
 
-test("an empty category search can broaden without losing the query or browser history", async ({ page }, testInfo) => {
+test("an empty category search can broaden without losing the query or browser history @catalog", async ({ page }, testInfo) => {
   await page.goto("catalog/");
   const search = page.getByRole("searchbox", { name: "Найти товар" });
   await search.fill("креветки вареные");
@@ -54,7 +54,7 @@ test("an empty category search can broaden without losing the query or browser h
   }
 });
 
-test("homepage prices continue to matching products and delivery terms stay beside the order", async ({ page }) => {
+test("homepage prices continue to matching products and delivery terms stay beside the order @catalog", async ({ page }) => {
   await page.goto("#prices");
   await page.locator(".price-preview").getByRole("link", { name: "Чёрная икра" }).click();
   await expect(page.locator(".catalog-product:visible")).toHaveCount(4);
@@ -66,7 +66,7 @@ test("homepage prices continue to matching products and delivery terms stay besi
   await expect(page.locator(".delivery-source__terms")).toContainText("Стоимость доставки в пределах МКАД — 490 ₽.");
 });
 
-test("catalog separates dated journal matches from current price rows", async ({ page }) => {
+test("catalog separates dated journal matches from current price rows @catalog", async ({ page }) => {
   await page.goto("catalog/");
   const search = page.getByRole("searchbox", { name: "Найти товар" });
   for (const [query, count] of [["тунец", 1], ["щука", 1], ["слабосоленая", 3]]) {
@@ -147,7 +147,7 @@ test("the photoatlas leads to a compact older archive and complete, accessible s
   }
 });
 
-test("analytics reports intent once, ignores social reading, and excludes arbitrary search text", async ({ page, baseURL }) => {
+test("analytics reports intent once, ignores social reading, and excludes arbitrary search text @analytics", async ({ page, baseURL }) => {
   // Route the public host to local static files; replace only the vendor tag with
   // an in-memory recorder so QA cannot pollute the production counter.
   await page.addInitScript(() => Object.defineProperty(navigator, "webdriver", { get: () => false }));
@@ -186,7 +186,7 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "map_open").length)).toBe(1);
 });
 
-test("blocking analytics leaves shopping and navigation usable", async ({ page }) => {
+test("blocking analytics leaves shopping and navigation usable @analytics", async ({ page }) => {
   await page.route("**/assets/analytics.js*", route => route.abort());
   await page.goto("catalog/");
   await page.locator("[data-catalog-search]").fill("щука");

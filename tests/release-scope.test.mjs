@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { classifyRelease, readReleaseChanges } from "../scripts/release-scope.mjs";
+import { classifyRelease, readReleaseChanges, scopedBrowserTags } from "../scripts/release-scope.mjs";
 
 const before = '<footer><a class="credit" href="https://example.com/">Дизайн и разработка</a></footer>';
 const after = before.replace("https://example.com/", "https://gorokhovatsky.tech/?point=ks-fish");
@@ -94,4 +94,28 @@ test("missing or unavailable comparison bases cannot skip the full gate", () => 
   for (const base of [undefined, "", "0".repeat(40), "f".repeat(40)]) {
     assert.equal(classifyRelease(readReleaseChanges(base)), "full");
   }
+});
+
+test("component changes select customer scenarios, including responsive CSS", () => {
+  const changes = [
+    { path: "assets/styles.css", before: ':root{--ink:black}.catalog-order{gap:1rem}',
+      after: ':root{--ink:black}.catalog-order{gap:2rem}@container contacts (max-width:38rem){.contacts-source__card{display:block}}' },
+    { path: "assets/order-list.js", after: "setupOrderList()" },
+    { path: "assets/mobile-hero.js", after: "setupMobileHero()" },
+    { path: "assets/analytics.js", after: "reachGoal()" },
+    { path: "about/index.html", before: '<script src="../assets/site.js?v=old"></script>', after: '<script src="../assets/site.js?v=new"></script>' },
+    { path: "journal/377/index.html", before: '<header>header</header><main>original</main><footer>footer</footer>', after: '<header>header</header><main>original plus historical context</main><footer>footer</footer>' },
+  ];
+  assert.equal(classifyRelease(changes), "scoped");
+  assert.deepEqual(scopedBrowserTags(changes), ["@afisha", "@analytics", "@catalog", "@contacts", "@journal"]);
+});
+
+test("shared tokens, mixed selectors, moved rules and unknown modules retain the full gate", () => {
+  for (const [before, after] of [
+    [':root{--ink:black}', ':root{--ink:blue}'],
+    ['.catalog-order, .source-button{color:blue}', '.catalog-order, .source-button{color:red}'],
+    ['.catalog-order{color:blue}.catalog-product{color:red}', '.catalog-product{color:red}.catalog-order{color:blue}'],
+  ]) assert.equal(classifyRelease([{ path:"assets/styles.css", before, after }]), "full");
+  assert.equal(classifyRelease([{ path:"assets/new-runtime.js", after:"newBehavior()" }]), "full");
+  assert.equal(classifyRelease([{ path:"catalog/index.html", before:'<main>catalog</main><footer>old</footer>', after:'<main>catalog</main><footer>new</footer>' }]), "full");
 });

@@ -30,23 +30,33 @@ export function reachGoal(goal, params = {}) {
 if (typeof document !== "undefined") {
   document.addEventListener("shop:goal", event => reachGoal(event.detail.goal, event.detail.params));
   document.addEventListener("click", event => {
+    if (event.defaultPrevented) return;
     const link = event.target.closest("a[href]");
     if (!link) return;
     const url = new URL(link.href);
+    const afisha = link.closest(".afisha");
+    const source = afisha || new URL(location.href).searchParams.get("from") === "afisha" ? "afisha" : undefined;
+    if (afisha && link.matches(".afisha__frame, .afisha__catalog")) {
+      reachGoal("product_select", { context: "afisha", action: "open_catalog", product: afisha.dataset.productName,
+        category: afisha.dataset.productCategory, product_id: afisha.dataset.productId, photo: Number(afisha.dataset.photoIndex) });
+    }
     let channel;
     if (url.hostname === "t.me" && url.pathname === "/+79166751452") channel = "telegram";
     if (url.hostname === "wa.me" && url.pathname === "/79166751452") channel = "whatsapp";
     if (url.protocol === "tel:") channel = "phone";
     if (channel) {
-      const product = link.closest("[data-product-name]");
+      const product = link.closest(".catalog-product[data-product-name]");
       const entry = link.closest("[data-journal-id]");
-      reachGoal("order_click", { channel, context: product ? "catalog" : entry ? "journal" : link.closest("[data-menu]") ? "menu" : "page", ...(product ? { product: product.dataset.productName } : {}), ...(entry ? { entry: entry.dataset.journalId } : {}) });
+      const count = Number(link.dataset.orderListCount);
+      reachGoal("order_click", { channel, context: count ? "order_list" : afisha ? "afisha" : product ? "catalog" : entry ? "journal" : link.closest("[data-menu]") ? "menu" : "page",
+        ...(source ? { source } : {}), ...(count ? { count } : {}), ...(product || afisha ? { product: (product ?? afisha).dataset.productName } : {}), ...(entry ? { entry: entry.dataset.journalId } : {}) });
     }
     if (url.hostname === "yandex.ru" && url.pathname.startsWith("/maps")) reachGoal("map_open", { mode: "route" });
   });
   document.addEventListener("toggle", event => {
     if (!event.target.matches(".catalog-product details[open]")) return;
     const product = event.target.closest("[data-product-name]");
-    if (product) reachGoal("product_select", { product: product.dataset.productName, category: product.dataset.productCategory });
+    if (product) reachGoal("product_select", { context: "catalog", action: "order_channels", product: product.dataset.productName, category: product.dataset.productCategory,
+      ...(new URL(location.href).searchParams.get("from") === "afisha" ? { source: "afisha" } : {}) });
   }, true);
 }

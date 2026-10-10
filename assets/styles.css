@@ -4900,3 +4900,35 @@ a.site-menu__brand {
 }
 
 .catalog-product[id] { scroll-margin-top: 6rem; }
+/* Customer tasks: contacts reflow, a draft list and dated ordering conditions. */
+.contacts-source { container: contacts / inline-size; }
+.contacts-source__card .source-button { min-width: 0; max-width: 100%; }
+@container contacts (max-width: 68rem) {
+  .contacts-source__card { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 2rem; }
+  .contacts-source__card h2 { grid-column: 1 / -1; }
+  .contacts-source__details { grid-column: 1; }
+  .contacts-source__card .source-button { grid-column: 2; align-self: start; }
+}
+@container contacts (max-width: 38rem) {
+  .contacts-source__card { grid-template-columns: minmax(0, 1fr); }
+  .contacts-source__details, .contacts-source__card .source-button { grid-column: 1; }
+}
+.catalog-product-save {
+  display: inline-flex; align-items: center; gap: .6rem; min-height: 44px;
+  margin-top: .5rem; font-size: var(--text-interface); cursor: pointer;
+}
+.catalog-product-save[hidden], .catalog-order-shortcut[hidden], .catalog-order-list[hidden] { display: none; }
+.catalog-product-save input { width: 1.15rem; height: 1.15rem; margin: 0; accent-color: var(--text-link); }
+.catalog-order-shortcut { display: inline-flex; align-items: center; gap: .6rem; min-height: 44px; color: var(--text-link); text-decoration: none; }
+.catalog-order-shortcut svg { width: 1.6rem; height: .9rem; fill: currentColor; }
+.catalog-order-list { list-style: none; margin: 1rem 0; padding: 0; text-align: left; }
+.catalog-order-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 1rem; padding: .6rem 0; }
+.catalog-order-list strong, .catalog-order-list li > span > span { display: block; }
+.catalog-order-list li > span > span { color: var(--muted); font-size: var(--text-interface); }
+.catalog-order-list button { min-width: 44px; min-height: 44px; padding: .35rem 0 .35rem .5rem; border: 0; background: none; color: var(--text-link); font: inherit; font-size: var(--text-interface); cursor: pointer; }
+.catalog-order-list-note { color: var(--muted); font-size: var(--text-interface); }
+.catalog-order:focus { outline: none; }
+.journal-historical { margin: 2rem 0; padding-left: 1rem; border-left: 2px solid var(--line); color: var(--muted); }
+.journal-historical .journal-historical__label { font-size: var(--text-interface); font-weight: 600; }
+.journal-historical p:last-child { margin-bottom: 0; }
+.journal-historical__current { margin-top: 2rem; }

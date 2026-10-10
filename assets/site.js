@@ -1,6 +1,6 @@
 import { typographText } from "./typography.js?v=typography-23-1";
 import { setupAssortmentPreview } from "./assortment-preview.js";
-import { setupMobileHero } from "./mobile-hero.js?v=afisha-controls-1";
+import { setupMobileHero } from "./mobile-hero.js?v=customer-paths-1";
 import "./theme.js?v=sea-hours-1";
 import "./store-environment.js?v=buyer-paths-1";
 import { syncMenuSeaVideo } from "./sea-motion.js?v=mobile-afisha-1";
