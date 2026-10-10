@@ -152,6 +152,10 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
   // Route the public host to local static files; replace only the vendor tag with
   // an in-memory recorder so QA cannot pollute the production counter.
   await page.addInitScript(() => Object.defineProperty(navigator, "webdriver", { get: () => false }));
+  // Clipboard behavior has its own order tests. Here the completed desktop
+  // handoff must report one intent and leave the analytics recorder available.
+  await page.addInitScript(() => Object.defineProperty(navigator, "clipboard", { value: { async writeText() {} } }));
+  await page.route("https://t.me/+79166751452?**", route => route.fulfill({ status: 204 }));
   await page.route("https://ks.fish/**", async route => {
     const url = new URL(route.request().url());
     const response = await page.request.get(new URL(`${url.pathname}${url.search}`, baseURL).href);
@@ -169,7 +173,7 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
   await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").length)).toBe(1);
   await page.evaluate(() => document.addEventListener("click", event => { if(event.target.closest('a[href^="https://t.me"],a[href^="https://wa.me"]')) event.preventDefault(); }));
   await page.locator('.catalog-product:visible a[href^="https://t.me"]').click();
-  expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "order_click")[0][3])).toMatchObject({channel:"telegram",context:"catalog",product:"Филе тунца"});
+  await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "order_click")[0]?.[3])).toMatchObject({channel:"telegram",context:"catalog",product:"Филе тунца"});
   await search.fill("риет");
   await search.blur();
   await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "catalog_search_empty").length)).toBe(1);
