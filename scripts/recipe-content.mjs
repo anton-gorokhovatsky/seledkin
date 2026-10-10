@@ -4,6 +4,15 @@ import { productHref } from "../assets/catalog-model.js";
 
 export const recipeContent = JSON.parse(readFileSync(new URL("../content/recipes.json", import.meta.url), "utf8"));
 export const recipes = recipeContent.recipes;
+export const recipeIngredients = [
+  ["all", "Все материалы"], ["fish", "Рыба"], ["mussels", "Мидии"],
+  ["shrimp", "Креветки"], ["octopus", "Осьминог"], ["roe", "Икра"], ["pasta", "Паста"],
+];
+for (const recipe of recipes) {
+  if (!recipeIngredients.some(([slug]) => slug !== "all" && slug === recipe.ingredient)) {
+    throw new Error(`Missing recipe ingredient: ${recipe.id}`);
+  }
+}
 
 export function resolveProduct(selection) {
   const category = catalog.find(item => item.slug === selection.category);

@@ -61,12 +61,15 @@ test("the order shortcut keeps its label, count and harpoon together on narrow s
 test("a buyer builds one order with distinct packages, filters, persistence and keyboard removal @catalog", async ({ page }, testInfo) => {
   await page.goto("catalog/?q=черная+икра&audit=order-list");
   const products = page.locator(".catalog-product:visible");
-  const first = products.filter({ hasText: "6 000" }).getByRole("checkbox");
-  const second = products.filter({ hasText: "15 000" }).getByRole("checkbox");
+  const first = products.filter({ hasText: "6 000" }).locator("[data-order-add]");
+  const second = products.filter({ hasText: "15 000" }).locator("[data-order-add]");
   await first.press("Space");
-  await second.check();
+  await second.click();
   await expect(page.getByRole("link", { name: "К списку заказа · 2 позиции" })).toBeVisible();
   const list = page.locator("#order-list");
+  await first.press("Enter");
+  await expect(list).toBeFocused();
+  await expect(list.locator("li")).toHaveCount(2);
   await list.getByRole("textbox", { name: /Количество.*6\s000/ }).fill("2");
   await list.getByRole("textbox", { name: /Количество.*15\s000/ }).fill("1");
   const shortcut = page.getByRole("link", { name: "К списку заказа · 2 позиции" });
@@ -97,6 +100,14 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
   await expect(list.getByRole("link", { name: "Скопировать и открыть Телеграм" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   await list.screenshot({ path: testInfo.outputPath("order-list-320-dark.png") });
+  const header = list.locator(".catalog-order-item__header").first();
+  const aligned = await header.evaluate(el => {
+    const product = el.querySelector("strong").getBoundingClientRect();
+    const remove = el.querySelector("button").getBoundingClientRect();
+    return { difference: Math.abs(product.top - remove.top), removeBottom: remove.bottom, quantityTop: el.nextElementSibling.getBoundingClientRect().top };
+  });
+  expect(aligned.difference).toBeLessThan(10);
+  expect(aligned.removeBottom).toBeLessThanOrEqual(aligned.quantityTop);
   await auditOrderList(page);
   await list.getByRole("button", { name: /Убрать.*6\s000/ }).press("Enter");
   await expect(list.getByRole("button", { name: /Убрать.*15\s000/ })).toBeFocused();
@@ -114,7 +125,7 @@ test("an existing saved order migrates to current product IDs @catalog", async (
   ])));
   await page.goto("catalog/?q=черная+икра&audit=order-list");
   await expect(page.getByRole("link", { name: "К списку заказа · 2 позиции" })).toBeVisible();
-  await expect(page.locator(".catalog-product:visible").getByRole("checkbox", { checked: true })).toHaveCount(2);
+  await expect(page.locator(".catalog-product:visible").locator("[data-order-add][data-selected=\"true\"]")).toHaveCount(2);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seledkin-order-list")))).toEqual(["caviar-001", "caviar-002"]);
   await expect(page.locator("#order-list").getByRole("list")).toContainText("15 000 ₽ за 125 г");
 });
@@ -124,7 +135,7 @@ test("blocked storage leaves the order list usable during a visit @catalog", asy
     Object.defineProperty(window, "localStorage", { get() { throw new Error("Storage blocked"); } });
   });
   await page.goto("catalog/?q=тунец&audit=order-list");
-  await page.locator(".catalog-product:visible").getByRole("checkbox").check();
+  await page.locator(".catalog-product:visible").locator("[data-order-add]").click();
   await page.locator("#order-list").scrollIntoViewIfNeeded();
   await expect(page.locator("[data-order-note]")).toContainText("сохранение недоступно");
   const draft = new URL(await page.locator("#order-list").getByRole("link", { name: "Скопировать и открыть Телеграм" }).getAttribute("href"));
@@ -159,7 +170,7 @@ test("denied copying leaves the draft selectable and invalid weight blocks hando
     Object.defineProperty(navigator, "clipboard", { value: { async writeText() { throw new Error("Clipboard denied"); } } });
   });
   await page.goto("catalog/?product=fillet-006&audit=order-list#product-fillet-006");
-  await page.locator(".catalog-product:visible").getByRole("checkbox").check();
+  await page.locator(".catalog-product:visible").locator("[data-order-add]").click();
   const list = page.locator("#order-list");
   const weight = list.getByRole("textbox", { name: /Вес.*Филе тунца/ });
   await weight.fill("0");

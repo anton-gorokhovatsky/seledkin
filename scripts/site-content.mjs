@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { typographText } from "../assets/typography.js";
 import { catalog } from "../assets/catalog-data.js";
 import { catalogPrice, productNotes, orderLinks, productHref } from "../assets/catalog-model.js";
-import { recipeContent, recipes, resolveProduct, productCatalogHref, productRecipeLinks } from "./recipe-content.mjs";
+import { recipeContent, recipes, recipeIngredients, resolveProduct, productCatalogHref, productRecipeLinks } from "./recipe-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const site = JSON.parse(read("content/site.json"));
@@ -418,19 +418,32 @@ function renderRecipeEditorial(root) {
 
 export function renderRecipesPage() {
   const featuredIds = new Set(recipeContent.editorial.map(item => item.id));
-  const groups = [["recipes", "Ещё рецепты", "recipe"], ["advice", "Советы о рыбе", "advice"]].map(([id, title, kind]) => `<section class="recipe-directory${kind === "recipe" ? " recipe-directory--editorial" : ""}" id="${id}" ${kind === "recipe" ? 'aria-label="Рецепты Олега"' : `aria-labelledby="${id}-title"`}>
-    ${kind === "recipe" ? renderRecipeEditorial("../") : ""}
-    <header class="recipe-section-heading"><h2 id="${id}-title">${title}</h2><p>${recipes.filter(item => item.kind === kind && !featuredIds.has(item.id)).length} ${kind === "recipe" ? "рецептов" : "совета"}</p></header>
-    <div class="recipe-directory__grid">${recipes.filter(recipe => recipe.kind === kind && !featuredIds.has(recipe.id)).map(recipe => {
+  const chooser = `<section class="recipe-chooser" aria-labelledby="recipe-chooser-title" data-recipe-chooser hidden>
+    <h2 id="recipe-chooser-title">Что есть на кухне?</h2>
+    <div class="recipe-ingredients" role="group" aria-label="Выбрать продукт">${recipeIngredients.map(([slug, label]) => `<button type="button" data-ingredient="${slug}" aria-pressed="${slug === "all"}">${label}<span>${slug === "all" ? recipes.length : recipes.filter(recipe => recipe.ingredient === slug).length}</span></button>`).join("")}</div>
+    <p class="recipe-filter-status" role="status" aria-live="polite" data-recipe-filter-status>${recipes.filter(recipe => recipe.kind === "recipe").length} рецептов и ${recipes.filter(recipe => recipe.kind === "advice").length} совета</p>
+  </section>`;
+  const wordBreaks = { "сковороде": "ско­во­ро­де", "томатном": "то­мат­ном", "Осьминог": "Ось­ми­ног", "Патагонские": "Пата­гон­ские", "Перепелиные": "Пере­пе­ли­ные", "креветочной": "кре­ве­точной", "креветки": "кре­вет­ки", "креветку": "кре­вет­ку", "белобрюшка": "бело­брюш­ка", "Командир": "Коман­дир", "счастливой": "счаст­ливой", "Предельно": "Пре­дель­но", "упаковка": "упа­ков­ка", "разделать": "раз­делать" };
+  const recordTitle = title => Object.entries(wordBreaks).reduce((result, [word, hyphenated]) => result.replaceAll(word, hyphenated), text(title));
+  const groups = `${chooser}<section class="recipe-directory recipe-directory--editorial" aria-label="Три авторских разворота" data-recipe-opening>
+    ${renderRecipeEditorial("../")}
+  </section>
+  <section class="recipe-record-directory" id="recipes" aria-labelledby="recipes-title">
+    <header class="recipe-record-heading"><h2 id="recipes-title" data-recipe-directory-title>Ещё на кухне</h2><p>Рецепты и советы Олега</p></header>
+    <div class="recipe-records">${recipes.map(recipe => {
       const entry = recipeEntry(recipe);
-      return `<a class="recipe-card" href="../journal/${entry.id}/" aria-labelledby="recipe-title-${entry.id}">
-        ${image(entry, "../", "(max-width: 34rem) calc(100vw - 36px), (max-width: 61.1875rem) 42vw, 320px")}
-        <span class="recipe-meta"><time datetime="${entry.date}">${date(entry)}</time></span>
-        <h3 id="recipe-title-${entry.id}">${text(recipe.title)}</h3>
-        <span class="recipe-card__read">${kind === "recipe" ? "Читать рецепт" : "Читать совет"}${harpoon}</span>
-      </a>`;
+      const buying = recipe.products.length ? recipe.products.map(selection => {
+        const { product } = resolveProduct(selection);
+        return `<a class="recipe-record-product" href="${escape(productCatalogHref(selection, "../"))}"><span>${text(product.name)}</span><span class="recipe-record-product__price">${escape(catalogPrice(product.price)).replace("/", "<wbr>/")}${harpoon}</span></a>`;
+      }).join("") : `<p class="recipe-record-unlinked">Весь ассортимент — <a href="../catalog/">в каталоге лавки</a>.</p>`;
+      return `<article class="recipe-record"${recipe.id === 453 ? ' id="advice"' : ""} data-recipe-material="${recipe.id}" data-ingredient-group="${recipe.ingredient}" data-kind="${recipe.kind}"${featuredIds.has(recipe.id) ? ' data-featured hidden' : ""} aria-labelledby="recipe-title-${recipe.id}">
+        <a class="recipe-record-photo" href="../journal/${recipe.id}/" tabindex="-1" aria-hidden="true">${image(entry, "../", "(max-width: 46rem) 92px, 160px")}</a>
+        <div><p class="recipe-record-meta">${recipe.kind === "advice" ? "Совет" : "Рецепт"} Олега · <time datetime="${entry.date}">${date(entry)}</time></p>
+        <h3 id="recipe-title-${recipe.id}"><a href="../journal/${recipe.id}/">${recordTitle(recipe.title)}</a></h3>
+        <a class="recipe-record-read" href="../journal/${recipe.id}/">${recipe.kind === "advice" ? "Читать совет" : "Читать рецепт"}${harpoon}</a>${buying}</div>
+      </article>`;
     }).join("\n")}</div>
-  </section>`).join("\n");
+  </section>`;
   const collections = `<section class="meal-collections" id="meals" aria-labelledby="meals-title">
     <header class="recipe-section-heading"><h2 id="meals-title">Что купить к ужину</h2><p>Выбор из каталога</p></header>
     ${recipeContent.collections.map(collection => `<section class="meal-collection" id="${collection.slug}" aria-labelledby="meal-${collection.slug}">
@@ -442,7 +455,7 @@ export function renderRecipesPage() {
   return template("recipes-page", {
     theme: renderTheme("recipes"), analytics: renderAnalytics("../"), menu: renderMenu("recipes", "../"), footer: renderFooter("recipes", "../"),
     groups, collections,
-    recipeJump: [["recipes-title", "Ещё рецепты"], ["advice", "Советы о рыбе"], ["meals", "Что купить к ужину"]]
+    recipeJump: [["recipes-title", "Ещё рецепты и советы"], ["advice", "Советы о рыбе"], ["meals", "Что купить к ужину"]]
       .map(([id, label]) => `<a href="#${id}">${label}${harpoon}</a>`).join(""),
   }).replace(/[ \t]+$/gm, "") + "\n";
 }

@@ -39,7 +39,8 @@ test("catalog advice previews retain the full photograph, keyboard access and di
   await page.keyboard.press("Escape");
   await expect(photo).toBeHidden();
   await page.mouse.move(0, 0);
-  await product.getByRole("checkbox").focus();
+  // Start from the last purchase control, directly before the editorial links.
+  await product.locator("summary").focus();
   // Safari on macOS includes links with Option–Tab unless full keyboard
   // navigation is enabled; preserve the browser's native preference.
   await page.keyboard.press(testInfo.project.name === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab");
@@ -114,6 +115,30 @@ test("desktop category photographs respond to pointer and keyboard while a touch
   await touch.close();
 });
 
+test("ingredients retain the editorial spreads, browser history and an exact catalog product", async ({ page }) => {
+  await page.goto("recipes/?audit=ingredients");
+  await expect(page.locator("[data-recipe-opening]")).toBeVisible();
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(17);
+  const mussels = page.getByRole("button", { name: /^Мидии/ });
+  await mussels.press("Enter");
+  await expect(mussels).toBeFocused();
+  await expect(mussels).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("[data-recipe-opening]")).toBeHidden();
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(2);
+  await expect(page.locator("[data-recipe-filter-status]")).toHaveText("2 материала");
+  await page.reload();
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(2);
+  await page.getByRole("button", { name: /^Все материалы/ }).press("Enter");
+  await expect(page.locator("[data-recipe-opening]")).toBeVisible();
+  await page.goBack();
+  await expect(mussels).toHaveAttribute("aria-pressed", "true");
+  await page.locator('[data-recipe-material="574"] .recipe-record-product').click();
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
+  await expect(page.locator(".catalog-product:visible h4")).toHaveText("Мясо мидий");
+  await page.goBack();
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(2);
+});
+
 test("the recipe directory remains readable in both watches, narrow reflow and enlarged text @typography", async ({ browser, baseURL }, testInfo) => {
   test.setTimeout(90000);
   for (const theme of ["light", "dark"]) {
@@ -123,8 +148,8 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
     const page = await context.newPage();
     await page.goto(`${baseURL}recipes/?audit=recipes`);
     await expect(page.locator(".recipe-editorial-opening article")).toHaveCount(3);
-    await expect(page.locator("#recipes .recipe-card")).toHaveCount(13);
-    await expect(page.locator("#advice .recipe-card")).toHaveCount(4);
+    await expect(page.locator('.recipe-record[data-kind="recipe"]:visible')).toHaveCount(13);
+    await expect(page.locator('.recipe-record[data-kind="advice"]:visible')).toHaveCount(4);
     await expect(page.locator("#meals .meal-collection")).toHaveCount(3);
     await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
     expect(await page.evaluate(async () => (await axe.run({ runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] } })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })))).toEqual([]);

@@ -54,7 +54,7 @@ test("afisha records the photographed product through catalog and order list @an
   await page.goto(new URL(href, page.url()).href);
   await page.locator(".catalog-product:visible summary").click();
   await expect.poll(() => page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")?.[3].source)).toBe("afisha");
-  await page.locator(".catalog-product:visible").getByRole("checkbox").check();
+  await page.locator(".catalog-product:visible").locator("[data-order-add]").click();
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select" && call[3].action === "list_start").map(call => call[3]))).toEqual([
     {context:"order_list", action:"list_start", product_id:"trout-roe", category:"caviar", count:1, source:"afisha"},
   ]);
@@ -64,7 +64,7 @@ test("afisha records the photographed product through catalog and order list @an
   expect(await page.evaluate(() => window.goalCalls.find(call => call[2] === "order_click")[3])).toMatchObject({context:"order_list",channel:"whatsapp",source:"afisha",count:1});
   expect(JSON.stringify(await page.evaluate(() => window.goalCalls))).not.toContain("Хочу заказать");
   await page.reload();
-  await expect(page.locator(".catalog-product:visible").getByRole("checkbox")).toBeChecked();
+  await expect(page.locator(".catalog-product:visible").locator("[data-order-add]")).toHaveAttribute("data-selected", "true");
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select" && call[3].action === "list_start"))).toEqual([]);
 });
 

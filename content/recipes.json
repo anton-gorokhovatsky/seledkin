@@ -46,7 +46,8 @@
           "caption": "Филе трески судовой заморозки — фотография из архива лавки",
           "source": "https://ks.fish/about/"
         }
-      ]
+      ],
+      "ingredient": "fish"
     },
     {
       "id": 377,
@@ -57,7 +58,8 @@
           "category": "seafood",
           "name": "Осьминог"
         }
-      ]
+      ],
+      "ingredient": "octopus"
     },
     {
       "id": 574,
@@ -68,7 +70,8 @@
           "category": "seafood",
           "name": "Мясо мидий"
         }
-      ]
+      ],
+      "ingredient": "mussels"
     },
     {
       "id": 556,
@@ -79,7 +82,8 @@
           "category": "fillet",
           "name": "Филе судака"
         }
-      ]
+      ],
+      "ingredient": "fish"
     },
     {
       "id": 378,
@@ -98,7 +102,8 @@
           "caption": "Нарезка тунца — фотография из архива лавки",
           "source": "https://ks.fish/about/"
         }
-      ]
+      ],
+      "ingredient": "fish"
     },
     {
       "id": 375,
@@ -109,7 +114,8 @@
           "category": "steaks",
           "name": "Стейк палтуса"
         }
-      ]
+      ],
+      "ingredient": "fish"
     },
     {
       "id": 360,
@@ -121,7 +127,8 @@
           "name": "Корюшка",
           "description": "Санкт-Петербург"
         }
-      ]
+      ],
+      "ingredient": "fish"
     },
     {
       "id": 150,
@@ -133,7 +140,8 @@
           "name": "Горбуша",
           "description": "Камчатка"
         }
-      ]
+      ],
+      "ingredient": "fish"
     },
     {
       "id": 138,
@@ -144,7 +152,8 @@
           "category": "seafood",
           "name": "Мясо мидий"
         }
-      ]
+      ],
+      "ingredient": "mussels"
     },
     {
       "id": 120,
@@ -155,7 +164,8 @@
           "category": "fillet",
           "name": "Филе хека"
         }
-      ]
+      ],
+      "ingredient": "fish"
     },
     {
       "id": 412,
@@ -166,7 +176,8 @@
           "category": "seafood",
           "name": "Креветка северная в/м"
         }
-      ]
+      ],
+      "ingredient": "shrimp"
     },
     {
       "id": 464,
@@ -178,7 +189,8 @@
           "name": "Креветка патагонская",
           "description": "Глубоководная, очищенная, свежемороженая"
         }
-      ]
+      ],
+      "ingredient": "shrimp"
     },
     {
       "id": 627,
@@ -189,13 +201,15 @@
           "category": "caviar",
           "name": "Икра щуки"
         }
-      ]
+      ],
+      "ingredient": "roe"
     },
     {
       "id": 664,
       "title": "Предельно простая паста",
       "kind": "recipe",
-      "products": []
+      "products": [],
+      "ingredient": "pasta"
     },
     {
       "id": 423,
@@ -206,13 +220,15 @@
           "category": "seafood",
           "name": "Креветка северная в/м"
         }
-      ]
+      ],
+      "ingredient": "shrimp"
     },
     {
       "id": 382,
       "title": "Камбала белобрюшка на сковороде",
       "kind": "recipe",
-      "products": []
+      "products": [],
+      "ingredient": "fish"
     },
     {
       "id": 453,
@@ -223,7 +239,8 @@
           "category": "frozen-fish",
           "name": "Камбала"
         }
-      ]
+      ],
+      "ingredient": "fish"
     },
     {
       "id": 73,
@@ -234,7 +251,8 @@
           "category": "seafood",
           "name": "Креветка северная в/м"
         }
-      ]
+      ],
+      "ingredient": "shrimp"
     },
     {
       "id": 588,
@@ -249,7 +267,8 @@
           "category": "steaks",
           "name": "Стейк палтуса"
         }
-      ]
+      ],
+      "ingredient": "fish"
     },
     {
       "id": 608,
@@ -261,7 +280,8 @@
           "name": "Хек"
         }
       ],
-      "videoSource": "https://t.me/kapitanseledkin/608"
+      "videoSource": "https://t.me/kapitanseledkin/608",
+      "ingredient": "fish"
     }
   ],
   "productStories": [

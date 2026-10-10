@@ -8,7 +8,8 @@ export function setupOrderList() {
   if (!region) return;
   const items = region.querySelector("[data-order-items]");
   const note = region.querySelector("[data-order-note]");
-  const inputs = [...document.querySelectorAll("[data-order-add]")];
+  const addButtons = [...document.querySelectorAll("[data-order-add]")];
+  const removeButtons = [...document.querySelectorAll("[data-order-remove]")];
   const products = new Map(catalog.flatMap(category => category.items.map(product =>
     [productKey(category, product), { ...product, category: category.slug }])));
   const selected = new Set();
@@ -136,12 +137,22 @@ export function setupOrderList() {
 
   function render() {
     const chosen = selection();
-    for (const input of inputs) { input.checked = selected.has(input.value); input.closest("label").hidden = false; }
+    for (const button of addButtons) {
+      const isSelected = selected.has(button.value), product = products.get(button.value);
+      button.dataset.selected = String(isSelected);
+      button.querySelector("span").textContent = isSelected ? "Открыть список" : "В список заказа";
+      button.setAttribute("aria-label", typographText(`${isSelected ? "Открыть список заказа" : "В список заказа"}: ${product.name}, ${catalogPrice(product.price)}`));
+      const actions = button.closest(".catalog-product-actions");
+      actions.hidden = false;
+      actions.querySelector("[data-order-added]").hidden = !isSelected;
+      actions.querySelector("[data-order-remove]").hidden = !isSelected;
+    }
     items.replaceChildren();
     for (const key of selected) {
       const product = products.get(key);
       const row = document.createElement("li");
       const text = document.createElement("span");
+      text.className = "catalog-order-item__product";
       const name = document.createElement("strong");
       name.textContent = typographText(product.name);
       const price = document.createElement("span");
@@ -195,7 +206,10 @@ export function setupOrderList() {
         const target = [...items.querySelectorAll("button")].find(button => button.getAttribute("aria-label") === next);
         (target ?? channels[0]).focus();
       });
-      row.append(text, quantity, remove);
+      const header = document.createElement("div");
+      header.className = "catalog-order-item__header";
+      header.append(text, remove);
+      row.append(header, quantity);
       items.append(row);
     }
     const hasItems = chosen.length > 0;
@@ -235,16 +249,26 @@ export function setupOrderList() {
     render();
     status.textContent = typographText(`${message}. В списке ${positionCount(selected.size)}.${selected.size === 1 ? " Чтобы продолжить, откройте список заказа." : ""}`);
   }
-  for (const input of inputs) input.addEventListener("change", () => {
+  for (const button of addButtons) button.addEventListener("click", () => {
+    if (selected.has(button.value)) {
+      region.scrollIntoView({ block: "start", behavior: "instant" });
+      region.focus({ preventScroll: true });
+      return;
+    }
     const wasEmpty = selected.size === 0;
-    input.checked ? selected.add(input.value) : selected.delete(input.value);
-    if (!input.checked) amounts.delete(input.value);
-    if (input.checked && wasEmpty) document.dispatchEvent(new CustomEvent("shop:goal", { detail: {
-      goal: "product_select", params: { context: "order_list", action: "list_start", product_id: input.value,
-        category: products.get(input.value).category, count: 1,
+    selected.add(button.value);
+    if (wasEmpty) document.dispatchEvent(new CustomEvent("shop:goal", { detail: {
+      goal: "product_select", params: { context: "order_list", action: "list_start", product_id: button.value,
+        category: products.get(button.value).category, count: 1,
         ...(new URL(location.href).searchParams.get("from") === "afisha" ? { source: "afisha" } : {}) },
     } }));
-    update(`${input.checked ? "Добавлено" : "Убрано"}: ${products.get(input.value).name}`);
+    update(`Добавлено: ${products.get(button.value).name}`);
+  });
+  for (const button of removeButtons) button.addEventListener("click", () => {
+    selected.delete(button.value);
+    amounts.delete(button.value);
+    update(`Убрано: ${products.get(button.value).name}`);
+    addButtons.find(add => add.value === button.value).focus({ preventScroll: true });
   });
   shortcut.addEventListener("click", () => region.focus({ preventScroll: true }));
   render();

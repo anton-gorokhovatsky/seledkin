@@ -39,14 +39,18 @@ const products = catalog.map((category) => `
                 <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description ? `
                 <p>${text(product.description)}</p>` : ""}${notes ? `
                 <p>${escape(notes)}</p>` : ""}
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="${escape(productKey(category, product))}"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="${escape(productKey(category, product))}" aria-label="Убрать из списка: ${text(product.name)}, ${escape(catalogPrice(product.price))}" hidden>Убрать</button>
+                </div>
                 <details class="catalog-product-order">
-                  <summary>Заказать<span class="visually-hidden">: ${text(product.name)}, ${escape(catalogPrice(product.price))}</span></summary>
+                  <summary>Уточнить наличие<span class="visually-hidden">: ${text(product.name)}, ${escape(catalogPrice(product.price))}</span></summary>
                   <div class="catalog-product-order__channels">
                     <a href="${escape(links.telegram)}">В&nbsp;Телеграме</a>
                     <a href="${escape(links.whatsapp)}">В&nbsp;WhatsApp</a>
                   </div>
-                </details>
-                <label class="catalog-product-save" hidden><input type="checkbox" data-order-add value="${escape(productKey(category, product))}">В список заказа<span class="visually-hidden">: ${text(product.name)}, ${escape(catalogPrice(product.price))}</span></label>${advice.length ? `
+                </details>${advice.length ? `
                 <div class="catalog-product-advice"><span>Олег советует</span>${advice.join("\n                  ")}</div>` : ""}
               </article>`;
 }).join("")}
