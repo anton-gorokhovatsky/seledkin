@@ -10,6 +10,37 @@ async function auditOrderList(page) {
   })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })))).toEqual([]);
 }
 
+test("the order shortcut keeps its label, count and harpoon together on narrow screens @catalog", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.addInitScript(() => localStorage.setItem("seledkin-order-list", JSON.stringify([
+    "caviar-001", "caviar-002", "caviar-003", "caviar-004", "caviar-005", "trout-roe",
+    "caviar-007", "caviar-008", "caviar-009", "seafood-001", "seafood-002",
+  ])));
+  await page.goto("catalog/?audit=order-shortcut");
+  const shortcut = page.getByRole("link", { name: "К списку заказа · 11 позиций" });
+  for (const theme of ["light", "dark"]) {
+    await page.evaluate(theme => localStorage.setItem("seledkin-theme", theme), theme);
+    await page.reload();
+    await expect(shortcut).toBeVisible();
+    await expect(shortcut.locator(".catalog-order-shortcut__count")).toHaveText("11");
+    const layout = await shortcut.evaluate(el => {
+      const rect = el.getBoundingClientRect();
+      return { height: rect.height, left: rect.left, right: rect.right, harpoon: el.querySelector("svg").getBBox().width };
+    });
+    expect(layout.height).toBeGreaterThanOrEqual(44);
+    expect(layout.height).toBeLessThan(65);
+    expect(layout.left).toBeGreaterThanOrEqual(0);
+    expect(layout.right).toBeLessThanOrEqual(320);
+    expect(layout.harpoon).toBeGreaterThan(20);
+    await page.screenshot({ path: testInfo.outputPath(`order-shortcut-320-${theme}.png`) });
+  }
+  await page.evaluate(() => document.documentElement.style.fontSize = "200%");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({ path: testInfo.outputPath("order-shortcut-320-large-text.png") });
+  await shortcut.press("Enter");
+  await expect(page.locator("#order-list")).toBeFocused();
+});
+
 test("a buyer builds one order with distinct packages, filters, persistence and keyboard removal @catalog", async ({ page }, testInfo) => {
   await page.goto("catalog/?q=черная+икра&audit=order-list");
   const products = page.locator(".catalog-product:visible");

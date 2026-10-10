@@ -4943,8 +4943,10 @@ a.site-menu__brand {
 }
 .catalog-product-save[hidden], .catalog-order-shortcut[hidden], .catalog-order-list[hidden] { display: none; }
 .catalog-product-save input { width: 1.15rem; height: 1.15rem; margin: 0; accent-color: var(--text-link); }
-.catalog-order-shortcut { position: fixed; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 60; display: inline-flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 48px; max-width: calc(100% - 2rem); padding: .65rem 1.1rem; border: 1px solid var(--jelly-glass-border); border-radius: 3rem; background: var(--jelly-glass-surface); box-shadow: var(--jelly-glass-shadow); backdrop-filter: var(--jelly-glass-filter); -webkit-backdrop-filter: var(--jelly-glass-filter); transform: translateX(-50%); color: var(--ink); font-size: var(--text-interface); text-decoration: none; }
-.catalog-order-shortcut svg { width: 1.6rem; height: .9rem; fill: currentColor; }
+.catalog-order-shortcut { position: fixed; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 60; display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .45rem .75rem; width: max-content; min-height: 48px; max-width: calc(100% - 2rem); padding: .6rem 1.1rem; border: 1px solid var(--jelly-glass-border); border-radius: 3rem; background: var(--jelly-glass-surface); box-shadow: var(--jelly-glass-shadow); backdrop-filter: var(--jelly-glass-filter); -webkit-backdrop-filter: var(--jelly-glass-filter); transform: translateX(-50%); color: var(--ink); font-size: var(--text-interface); text-decoration: none; }
+.catalog-order-shortcut__label { min-width: 0; font-weight: 500; }
+.catalog-order-shortcut__count { display: inline-grid; place-items: center; flex: none; min-width: 1.75rem; min-height: 1.75rem; padding: .2rem .4rem; border-radius: 2rem; background: var(--ink); color: var(--paper); font-size: .875em; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.catalog-order-shortcut svg { flex: none; width: 2rem; height: 1.125rem; fill: currentColor; }
 .catalog-order-list { list-style: none; margin: 1rem 0; padding: 0; text-align: left; }
 .catalog-order-list li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 10rem) auto; align-items: start; gap: 1rem; padding: 1rem 0; }
 .catalog-order-list strong, .catalog-order-list li > span > span { display: block; }

@@ -42,7 +42,7 @@ export function setupOrderList() {
   shortcut.className = "catalog-order-shortcut";
   shortcut.href = "#order-list";
   shortcut.hidden = true;
-  shortcut.innerHTML = '<span></span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon"></use></svg>';
+  shortcut.innerHTML = '<span class="catalog-order-shortcut__label">Список заказа</span><span class="catalog-order-shortcut__count" aria-hidden="true"></span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg>';
   toolbar.append(shortcut);
   const status = document.createElement("p");
   status.className = "visually-hidden";
@@ -198,7 +198,8 @@ export function setupOrderList() {
     copyButton.hidden = !hasItems;
     if (!hasItems) { manualCopy.hidden = true; copyStatus.textContent = ""; }
     updateShortcut();
-    shortcut.querySelector("span").textContent = typographText(`К списку заказа · ${positionCount(chosen.length)}`);
+    shortcut.setAttribute("aria-label", typographText(`К списку заказа · ${positionCount(chosen.length)}`));
+    shortcut.querySelector(".catalog-order-shortcut__count").textContent = String(chosen.length);
     if (hasItems) {
       title.textContent = "Список заказа";
       copy.textContent = "Проверьте выбранные товары. Вес и количество можно указать сейчас или дописать в сообщении.";
