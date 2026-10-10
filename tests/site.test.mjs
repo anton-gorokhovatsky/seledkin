@@ -156,7 +156,7 @@ test("the site is plain HTML, CSS and JavaScript", () => {
 test("one drawn harpoon marks every directional transition", () => {
   assert.match(home, /<symbol id="icon-harpoon" viewBox="0 0 32 18">/);
   assert.match(home, /M23 9H8\.5C4\.6 9 2\.5 10\.8 2\.5 13\.2/);
-  assert.equal((home.match(/href="#icon-harpoon"/g) ?? []).length, 10);
+  assert.equal((home.match(/href="#icon-harpoon"/g) ?? []).length, 12);
   assert.doesNotMatch(home, /M2 8h20M16 2l6 6-6 6/);
   assert.match(
     styles,
@@ -184,7 +184,7 @@ test("home assortment links directly to every catalog section", () => {
     ["frozen-fish", "Свежемороженая рыба", 35],
     ["fillet", "Филе", 7],
     ["steaks", "Рыбные стейки", 5],
-    ["prepared-fish", "Слабосоленая и копченая рыба", 12],
+    ["prepared-fish", "Слабосоленая и копченая рыба", 13],
     ["other", "Новинки и прочее", 27],
   ]) {
     assert.match(section, new RegExp(`href="catalog\\/#category-${slug}"`));
@@ -1621,10 +1621,10 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
 
 test("every rendered logo keeps exact geometry across contextual jelly modes", async () => {
   const logoClass = /class="[^"]*\bbrand-jelly(?=\s|")/g;
-  assert.equal((home.match(logoClass) ?? []).length, 3);
+  assert.equal((home.match(logoClass) ?? []).length, 4);
   assert.equal((catalogPage.match(logoClass) ?? []).length, 2);
   assert.equal((notFoundPage.match(logoClass) ?? []).length, 1);
-  assert.equal((home.match(/brand-jelly--sea/g) ?? []).length, 2);
+  assert.equal((home.match(/brand-jelly--sea/g) ?? []).length, 3);
   assert.equal((home.match(/brand-jelly--panel/g) ?? []).length, 1);
   assert.equal((catalogPage.match(/brand-jelly--page/g) ?? []).length, 1);
   assert.equal((catalogPage.match(/brand-jelly--panel/g) ?? []).length, 1);
