@@ -356,6 +356,7 @@ if (
     );
     mapFrame.tabIndex = enabled ? 0 : -1;
     mapFrame.setAttribute("aria-hidden", String(!enabled));
+    mapFrame.contentWindow?.postMessage({ type: "seledkin:map-interaction", enabled }, location.origin);
     if (mapToggleLabel) {
       mapToggleLabel.textContent = enabled
         ? "Отключить карту"
@@ -381,4 +382,21 @@ if (
   });
 
   setMapInteractive(false);
+  mapFrame.addEventListener("load", () => {
+    mapFrame.contentWindow?.postMessage({
+      type: "seledkin:map-interaction", enabled: mapToggle.getAttribute("aria-pressed") === "true",
+    }, location.origin);
+  });
+  window.addEventListener("message", event => {
+    if (event.origin !== location.origin || event.source !== mapFrame.contentWindow) return;
+    if (event.data?.type === "seledkin:map-escape") {
+      setMapInteractive(false);
+      mapToggle.focus();
+    }
+    if (event.data?.type === "seledkin:map-unavailable") {
+      setMapInteractive(false);
+      mapToggle.hidden = true;
+    }
+    if (event.data?.type === "seledkin:map-ready") mapToggle.hidden = false;
+  });
 }

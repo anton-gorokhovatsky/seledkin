@@ -5,6 +5,7 @@
 /coverage
 /_site
 .env*
+/assets/store-map-token.js
 /.wrangler/
 /outputs/
 /work/

@@ -761,11 +761,7 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
   assert.match(sectionRule, /grid-template-rows:\s*auto clamp\(22rem, 46svh, 30rem\)/);
   assert.match(sectionRule, /margin-bottom:\s*clamp\(4rem, 7vw, 7rem\)/);
   const mapSource = home.match(/<iframe\b[^>]*src="([^"]+)"/)?.[1];
-  const mapUrl = new URL(mapSource.replaceAll("&amp;", "&"));
-  assert.equal(mapUrl.origin, "https://www.openstreetmap.org");
-  assert.equal(mapUrl.pathname, "/export/embed.html");
-  assert.equal(mapUrl.searchParams.get("marker"), "55.685849,37.536554");
-  assert.equal(mapUrl.searchParams.get("layer"), "mapnik");
+  assert.equal(mapSource, "assets/store-map.html?v=mapbox-1");
   assert.doesNotMatch(home, /(?:src|data-src)="https:\/\/[^\"]*yandex[^\"]*map-widget/);
   const contactCard =
     home.match(/<address class="contacts-source__card">([\s\S]*?)<\/address>/)?.[1] ?? "";

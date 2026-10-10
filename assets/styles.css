@@ -24,8 +24,11 @@
   --footer-base: #dce9e8;
   --footer-line: rgb(255 248 237 / 32%);
   --about-story-number: #d6b46c;
-  --map-fallback: #e8e5dd;
-  --map-filter: saturate(0.78) contrast(0.96);
+  --map-fallback: #f1f0ec;
+  --map-building: #d6dade;
+  --map-park: #e1e9e6;
+  --map-water: #c4dce6;
+  --map-label: #334c5a;
   --jelly-glass-surface: rgb(255 255 255 / 78%);
   --jelly-glass-surface-strong: rgb(255 255 255 / 90%);
   --jelly-glass-border: rgb(17 17 17 / 16%);
@@ -113,8 +116,11 @@
   --footer-muted: var(--muted);
   --footer-base: #b8c2c8;
   --footer-line: rgb(243 237 226 / 34%);
-  --map-fallback: #243843;
-  --map-filter: brightness(0.72) saturate(0.68) contrast(1.04);
+  --map-fallback: #132a38;
+  --map-building: #263f4d;
+  --map-park: #193a40;
+  --map-water: #0b202e;
+  --map-label: #d9e3e5;
   --jelly-glass-surface: rgb(8 28 40 / 76%);
   --jelly-glass-surface-strong: rgb(14 32 43 / 91%);
   --jelly-glass-border: rgb(243 237 226 / 26%);
@@ -169,8 +175,11 @@
     --footer-muted: var(--muted);
     --footer-base: #b8c2c8;
     --footer-line: rgb(243 237 226 / 34%);
-    --map-fallback: #243843;
-    --map-filter: brightness(0.72) saturate(0.68) contrast(1.04);
+    --map-fallback: #132a38;
+    --map-building: #263f4d;
+    --map-park: #193a40;
+    --map-water: #0b202e;
+    --map-label: #d9e3e5;
     --jelly-glass-surface: rgb(8 28 40 / 76%);
     --jelly-glass-surface-strong: rgb(14 32 43 / 91%);
     --jelly-glass-border: rgb(243 237 226 / 26%);
@@ -1857,13 +1866,10 @@ a.source-brand {
   width: 100%;
   height: 100%;
   border: 0;
-  filter: var(--map-filter);
   pointer-events: none;
-  transition: filter 180ms ease-out;
 }
 
 .contacts-source__map.is-interactive iframe {
-  filter: none;
   pointer-events: auto;
 }
 
@@ -1901,6 +1907,8 @@ a.source-brand {
   background: var(--ink);
   color: var(--paper);
 }
+
+.contacts-source__map-toggle[hidden] { display: none; }
 
 .contacts-source__card {
   position: relative;

@@ -43,7 +43,11 @@ jobs:
           node-version: 22
 
       - name: Check static project
-        run: pnpm run lint
+        env:
+          MAPBOX_PUBLIC_TOKEN: ${{ secrets.MAPBOX_PUBLIC_TOKEN }}
+        run: |
+          node scripts/build-map-token.mjs --require-token
+          pnpm run lint
 
       - name: Test
         run: pnpm run test

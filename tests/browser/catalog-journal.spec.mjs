@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { stubStoreMap } from "./map-fixture.mjs";
 import { readFileSync } from "node:fs";
 
 const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8"));
@@ -155,6 +156,7 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
     const response = await page.request.get(`http://127.0.0.1:4173${url.pathname}${url.search}`);
     await route.fulfill({ response });
   });
+  await stubStoreMap(page);
   await page.route("https://mc.yandex.ru/**", route => route.fulfill({ contentType: "application/javascript", body: "window.goalCalls=[]; window.ym=(...args)=>window.goalCalls.push(args);" }));
   await page.goto("https://ks.fish/catalog/");
   await expect.poll(() => page.evaluate(() => Array.isArray(window.goalCalls))).toBe(true);

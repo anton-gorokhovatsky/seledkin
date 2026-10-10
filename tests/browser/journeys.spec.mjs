@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { createRequire } from "node:module";
+import { stubStoreMap } from "./map-fixture.mjs";
 const require = createRequire(import.meta.url);
 
 async function noOverflow(page) {
@@ -69,6 +70,7 @@ test("search, category, shared URL and browser history retain the same selection
 });
 
 test("contact anchor is clear of the menu; Escape only closes the top interaction", async ({ page }) => {
+  await stubStoreMap(page);
   const advertisingWidgets = [];
   page.on("request", request => {
     if (request.url().includes("yandex.ru/map-widget/")) advertisingWidgets.push(request.url());
@@ -100,7 +102,14 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   await expect(map).toBeFocused();
   await expect(map).toHaveAttribute("aria-pressed", "false");
   expect(advertisingWidgets).toEqual([]);
-  await expect(page.locator("#store-map-frame")).toHaveAttribute("src", /^https:\/\/www\.openstreetmap\.org\/export\/embed\.html\?/);
+  await expect(page.locator("#store-map-frame")).toHaveAttribute("src", /^assets\/store-map\.html\?/);
+  await map.click();
+  const zoom = page.frameLocator("#store-map-frame").getByRole("button", { name: "Приблизить карту" });
+  await expect(zoom).toHaveAttribute("tabindex", "0");
+  await zoom.press("Escape");
+  await expect(map).toBeFocused();
+  await expect(map).toHaveAttribute("aria-pressed", "false");
+  await expect(zoom).toHaveAttribute("tabindex", "-1");
 });
 
 test("the complete journal follows the first mobile screen and desktop controls remain stable", async ({ page }, testInfo) => {
