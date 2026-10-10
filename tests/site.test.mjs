@@ -741,16 +741,10 @@ test("the page and fullscreen menu share one stable outer content axis", () => {
   );
 });
 
-test("the compact map keeps page scrolling until deliberate activation", () => {
+test("the always-active map stays accessible without a separate activation button", () => {
   for (const required of [
     'class="contacts-source__map" data-map',
     'id="store-map-frame"',
-    'tabindex="-1"',
-    'aria-hidden="true"',
-    'data-map-toggle',
-    'aria-controls="store-map-frame"',
-    'aria-pressed="false"',
-    'data-map-toggle-label>Включить карту',
   ]) {
     assert.ok(home.includes(required), `Карта не содержит ${required}`);
   }
@@ -761,7 +755,7 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
   assert.match(sectionRule, /grid-template-rows:\s*auto clamp\(22rem, 46svh, 30rem\)/);
   assert.match(sectionRule, /margin-bottom:\s*clamp\(4rem, 7vw, 7rem\)/);
   const mapSource = home.match(/<iframe\b[^>]*src="([^"]+)"/)?.[1];
-  assert.equal(mapSource, "assets/store-map.html?v=mapbox-exit3-3");
+  assert.equal(mapSource, "assets/store-map.html?v=mapbox-stations-4");
   assert.doesNotMatch(home, /(?:src|data-src)="https:\/\/[^\"]*yandex[^\"]*map-widget/);
   const contactCard =
     home.match(/<address class="contacts-source__card">([\s\S]*?)<\/address>/)?.[1] ?? "";
@@ -778,20 +772,13 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
 
   const frameRule =
     styles.match(/\.contacts-source__map iframe\s*\{([^}]*)\}/s)?.[1] ?? "";
-  assert.match(frameRule, /pointer-events:\s*none/);
-  assert.match(
-    styles,
-    /\.contacts-source__map\.is-interactive iframe\s*\{[^}]*pointer-events:\s*auto/,
-  );
+  assert.doesNotMatch(frameRule, /pointer-events:\s*none/);
+  const iframe = home.match(/<iframe\b[^>]*id="store-map-frame"[^>]*>/s)?.[0] ?? "";
+  assert.doesNotMatch(iframe, /aria-hidden="true"|tabindex="-1"/);
+  assert.doesNotMatch(home, /data-map-toggle/);
+  assert.match(siteScript, /seledkin:map-escape/);
+  assert.match(siteScript, /mapRoute\?\.focus\(\)/);
 
-  for (const required of [
-    'map.classList.toggle("is-interactive", enabled)',
-    'mapFrame.tabIndex = enabled ? 0 : -1',
-    'mapFrame.setAttribute("aria-hidden", String(!enabled))',
-    'enabled ? "Отключить карту" : "Включить карту"',
-  ]) {
-    assert.ok(siteScript.includes(required), `Нет поведения карты ${required}`);
-  }
 });
 
 test("the footer ends both customer journeys with a useful, human invitation", () => {
@@ -1122,7 +1109,6 @@ test("one restrained jelly material serves translucent controls", () => {
   assert.match(lightRoot, /--jelly-glass-filter:\s*blur\(0\.85rem\) saturate\(106%\);/);
   for (const selector of [
     "floating-menu",
-    "contacts-source__map-toggle",
     "source-hero__journal-control",
     "site-menu__routes",
   ]) {
@@ -1176,7 +1162,6 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
     ".floating-menu:hover",
     ".catalog-search input:hover",
     ".catalog-filters button:hover",
-    ".contacts-source__map-toggle:hover",
     ".source-hero__journal-control:not([aria-disabled=\"true\"]):hover",
     ".source-hero__journal-card[data-stack-position=\"0\"]:hover img",
     ".theme-toggle:not(.theme-toggle--menu):hover",
@@ -1198,7 +1183,6 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
     ".site-menu__socials a:active",
     ".source-footer__channels a:active",
     ".floating-menu:active",
-    ".contacts-source__map-toggle:active",
     ".theme-toggle:active",
     ".catalog-filters button:active",
     ".reset-button:active",

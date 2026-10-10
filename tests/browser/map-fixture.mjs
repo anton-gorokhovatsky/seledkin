@@ -3,11 +3,7 @@
 export async function stubStoreMap(page) {
   await page.route("**/assets/store-map.html*", route => route.fulfill({
     contentType: "text/html", body: `<!doctype html><html lang="ru"><title>Карта лавки</title><body>
-      <button tabindex="-1">Приблизить карту</button><script>
-      addEventListener('message', event => {
-        if(event.source !== parent || event.origin !== location.origin) return;
-        if(event.data.type === 'seledkin:map-interaction') document.querySelector('button').tabIndex = event.data.enabled ? 0 : -1;
-      });
+      <button>Приблизить карту</button><script>
       addEventListener('keydown', event => { if(event.key === 'Escape') parent.postMessage({type:'seledkin:map-escape'},location.origin); });
       parent.postMessage({type:'seledkin:map-ready'},location.origin);
       </script></body></html>`,

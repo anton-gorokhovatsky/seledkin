@@ -24,8 +24,6 @@ const menuPanel = menu?.querySelector(".site-menu__panel");
 const menuServiceScroll = menu?.querySelector(".site-menu__service-inner");
 const inertBeforeMenu = new Map();
 const map = document.querySelector("[data-map]");
-const mapToggle = map?.querySelector("[data-map-toggle]");
-const mapToggleLabel = mapToggle?.querySelector("[data-map-toggle-label]");
 const mapFrame = map?.querySelector("iframe");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const heroJournal = document.querySelector("[data-hero-journal]");
@@ -342,61 +340,10 @@ if (
   syncJournal();
 }
 
-if (
-  map instanceof HTMLElement &&
-  mapToggle instanceof HTMLButtonElement &&
-  mapFrame instanceof HTMLIFrameElement
-) {
-  const setMapInteractive = (enabled) => {
-    map.classList.toggle("is-interactive", enabled);
-    mapToggle.setAttribute("aria-pressed", String(enabled));
-    mapToggle.setAttribute(
-      "aria-label",
-      enabled ? "Отключить карту" : "Включить карту",
-    );
-    mapFrame.tabIndex = enabled ? 0 : -1;
-    mapFrame.setAttribute("aria-hidden", String(!enabled));
-    mapFrame.contentWindow?.postMessage({ type: "seledkin:map-interaction", enabled }, location.origin);
-    if (mapToggleLabel) {
-      mapToggleLabel.textContent = enabled
-        ? "Отключить карту"
-        : "Включить карту";
-    }
-  };
-
-  mapToggle.addEventListener("click", () => {
-    if (mapToggle.getAttribute("aria-pressed") !== "true") {
-      document.dispatchEvent(new CustomEvent("shop:goal", { detail: { goal: "map_open", params: { mode: "interactive" } } }));
-    }
-    setMapInteractive(mapToggle.getAttribute("aria-pressed") !== "true");
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.defaultPrevented || event.key !== "Escape" || mapToggle.getAttribute("aria-pressed") !== "true") {
-      return;
-    }
-
-    event.preventDefault();
-    setMapInteractive(false);
-    mapToggle.focus();
-  });
-
-  setMapInteractive(false);
-  mapFrame.addEventListener("load", () => {
-    mapFrame.contentWindow?.postMessage({
-      type: "seledkin:map-interaction", enabled: mapToggle.getAttribute("aria-pressed") === "true",
-    }, location.origin);
-  });
+if (mapFrame instanceof HTMLIFrameElement) {
+  const mapRoute = map.closest("#contacts")?.querySelector(".contacts-source__card a");
   window.addEventListener("message", event => {
     if (event.origin !== location.origin || event.source !== mapFrame.contentWindow) return;
-    if (event.data?.type === "seledkin:map-escape") {
-      setMapInteractive(false);
-      mapToggle.focus();
-    }
-    if (event.data?.type === "seledkin:map-unavailable") {
-      setMapInteractive(false);
-      mapToggle.hidden = true;
-    }
-    if (event.data?.type === "seledkin:map-ready") mapToggle.hidden = false;
+    if (event.data?.type === "seledkin:map-escape") mapRoute?.focus();
   });
 }

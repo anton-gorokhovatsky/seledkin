@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { styleStoreMap } from "../assets/store-map-style.js";
-import { storeLocation, nearestMetroLocation, mapStyles, mapAccessToken } from "../assets/store-map-config.js";
+import { storeLocation, nearestMetroLocation, universityMetroLocation, mapStyles, mapAccessToken } from "../assets/store-map-config.js";
 
 test("map styling retains geographic sources and uses Russian labels in both watches", () => {
   const source = { version: 8, sources: { composite: { url: "mapbox://mapbox.mapbox-streets-v8" } }, layers: [
@@ -25,11 +25,14 @@ test("map styling retains geographic sources and uses Russian labels in both wat
 test("the public map keeps the verified shop and metro locations and visible attribution", () => {
   assert.deepEqual(storeLocation, [37.536554, 55.685849]);
   assert.deepEqual(nearestMetroLocation, [37.5393527, 55.6843472]);
+  assert.deepEqual(universityMetroLocation, [37.5351394, 55.6917002]);
   assert.ok(mapAccessToken === "" || mapAccessToken.startsWith("pk."));
   assert.equal(mapStyles.dark, "mapbox://styles/mapbox/dark-v11");
   const js = readFileSync(new URL("../assets/store-map.js", import.meta.url), "utf8");
   assert.match(js, /new window\.mapboxgl\.AttributionControl/);
   assert.match(js, /scrollZoom: false/);
+  assert.match(js, /cooperativeGestures: true/);
   assert.match(js, /seledkin:themechange/);
-  assert.match(js, /event\.origin !== location\.origin \|\| event\.source !== window\.parent/);
+  const parentJs = readFileSync(new URL("../assets/site.js", import.meta.url), "utf8");
+  assert.match(parentJs, /event\.origin !== location\.origin \|\| event\.source !== mapFrame\.contentWindow/);
 });

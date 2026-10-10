@@ -147,13 +147,13 @@ test("the photoatlas leads to a compact older archive and complete, accessible s
   }
 });
 
-test("analytics reports intent once, ignores social reading, and excludes arbitrary search text", async ({ page }) => {
+test("analytics reports intent once, ignores social reading, and excludes arbitrary search text", async ({ page, baseURL }) => {
   // Route the public host to local static files; replace only the vendor tag with
   // an in-memory recorder so QA cannot pollute the production counter.
   await page.addInitScript(() => Object.defineProperty(navigator, "webdriver", { get: () => false }));
   await page.route("https://ks.fish/**", async route => {
     const url = new URL(route.request().url());
-    const response = await page.request.get(`http://127.0.0.1:4173${url.pathname}${url.search}`);
+    const response = await page.request.get(new URL(`${url.pathname}${url.search}`, baseURL).href);
     await route.fulfill({ response });
   });
   await stubStoreMap(page);
@@ -179,9 +179,10 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
   await page.getByRole("link",{name:"Телеграм-канал",exact:true}).click();
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "order_click").length)).toBe(1);
   await page.goto("https://ks.fish/#contacts");
-  await page.locator("[data-map-toggle]").click();
-  await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "map_open").length)).toBe(1);
-  await page.locator("[data-map-toggle]").click();
+  // Loading the always-active map is not an intentional route request.
+  expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "map_open").length)).toBe(0);
+  await page.evaluate(() => document.addEventListener("click", event => { if(event.target.closest('a[href^="https://yandex.ru/maps/"]')) event.preventDefault(); }));
+  await page.getByRole("link", { name: "Открыть в Яндекс Картах" }).click();
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "map_open").length)).toBe(1);
 });
 

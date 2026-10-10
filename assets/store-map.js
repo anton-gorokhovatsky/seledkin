@@ -1,4 +1,4 @@
-import { mapAccessToken, mapStyles, storeLocation, nearestMetroLocation } from "./store-map-config.js?v=mapbox-exit3-3";
+import { mapAccessToken, mapStyles, storeLocation, nearestMetroLocation, universityMetroLocation } from "./store-map-config.js?v=mapbox-stations-4";
 import { styleStoreMap } from "./store-map-style.js";
 
 const root = document.documentElement;
@@ -10,7 +10,6 @@ const sourceRoot = sourceDocument.documentElement;
 const styleCache = new Map();
 let map;
 let revision = 0;
-let interactive = false;
 let ready = false;
 
 function notify(type) {
@@ -49,18 +48,9 @@ async function getStyle(theme) {
   return styleStoreMap(styleCache.get(theme), colors());
 }
 
-function setInteractive(enabled) {
-  interactive = enabled;
-  if (!map) return;
-  for (const handler of [map.dragPan, map.doubleClickZoom, map.boxZoom, map.keyboard, map.touchZoomRotate]) {
-    handler[enabled ? "enable" : "disable"]();
-  }
+function prepareMapControls() {
   map.touchZoomRotate.disableRotation();
-  map.getCanvas().tabIndex = enabled ? 0 : -1;
-  for (const control of container.querySelectorAll("button, a")) {
-    control.tabIndex = enabled ? 0 : -1;
-  }
-  if (!enabled) fitNeighborhood();
+  map.getCanvas().tabIndex = 0;
 }
 
 async function updateTheme() {
@@ -74,9 +64,12 @@ async function updateTheme() {
 }
 
 function fitNeighborhood() {
-  // Keep the shop and the nearest metro in view, including on a narrow screen.
-  map.fitBounds([[37.5355, 55.68355], [37.5417, 55.68615]], {
-    padding: { top: 78, right: 64, bottom: 60, left: 36 },
+  // Include both metro exits, with room for labels to the right of each point.
+  map.fitBounds([
+    [universityMetroLocation[0], nearestMetroLocation[1]],
+    [nearestMetroLocation[0], universityMetroLocation[1]],
+  ], {
+    padding: { top: 44, right: 140, bottom: 60, left: 28 },
     maxZoom: 16.25, duration: 0,
   });
 }
@@ -88,7 +81,7 @@ async function initialize() {
     const style = await getStyle(theme);
     map = new window.mapboxgl.Map({
       container, accessToken: mapAccessToken, style, center: storeLocation, zoom: 15.5,
-      minZoom: 12, maxZoom: 19, interactive: true, scrollZoom: false,
+      minZoom: 12, maxZoom: 19, interactive: true, scrollZoom: false, cooperativeGestures: true,
       dragRotate: false, pitchWithRotate: false, touchPitch: false,
       attributionControl: false, fadeDuration: 0, projection: "mercator",
       locale: {
@@ -96,6 +89,7 @@ async function initialize() {
         "NavigationControl.ZoomIn": "Приблизить карту",
         "NavigationControl.ZoomOut": "Отдалить карту",
         "AttributionControl.ToggleAttribution": "Источники картографических данных",
+        "TouchPanBlocker.Message": "Чтобы переместить карту, используйте два пальца",
       },
     });
     map.addControl(new window.mapboxgl.NavigationControl({ showCompass: false }), "top-right");
@@ -113,47 +107,47 @@ async function initialize() {
     // Anchor the centre of the shop's ring to its actual coordinates.
     new window.mapboxgl.Marker({ element: marker, anchor: "left", offset: [-6, 0] })
       .setLngLat(storeLocation).addTo(map);
-    const metro = document.createElement("div");
-    metro.className = "store-map-metro";
-    metro.setAttribute("aria-hidden", "true");
-    const metroLogo = document.createElement("img");
-    metroLogo.src = "moscow-metro.svg";
-    metroLogo.alt = "";
-    metroLogo.width = 20;
-    metroLogo.height = 16;
-    const metroLabel = document.createElement("span");
-    metroLabel.textContent = "Вавиловская";
-    const metroExit = document.createElement("small");
-    metroExit.textContent = "выход № 3";
-    metroLabel.append(metroExit);
-    metro.append(metroLogo, metroLabel);
-    // The centre of the M, rather than the label, marks the entrance.
-    new window.mapboxgl.Marker({ element: metro, anchor: "left", offset: [-10, 0] })
-      .setLngLat(nearestMetroLocation).addTo(map);
+    for (const [name, exit, location] of [
+      ["Вавиловская", 3, nearestMetroLocation],
+      ["Университет", 2, universityMetroLocation],
+    ]) {
+      const metro = document.createElement("div");
+      metro.className = "store-map-metro";
+      metro.setAttribute("aria-hidden", "true");
+      const metroLogo = document.createElement("img");
+      metroLogo.src = "moscow-metro.svg";
+      metroLogo.alt = "";
+      metroLogo.width = 20;
+      metroLogo.height = 16;
+      const metroLabel = document.createElement("span");
+      metroLabel.textContent = name;
+      const metroExit = document.createElement("small");
+      metroExit.textContent = `выход № ${exit}`;
+      metroLabel.append(metroExit);
+      metro.append(metroLogo, metroLabel);
+      // The centre of the M, rather than the label, marks the entrance.
+      new window.mapboxgl.Marker({ element: metro, anchor: "left", offset: [-10, 0] })
+        .setLngLat(location).addTo(map);
+    }
     fitNeighborhood();
-    setInteractive(interactive);
+    prepareMapControls();
     map.on("load", () => {
       ready = true;
       status.hidden = true;
       root.dataset.mapState = "ready";
       notify("seledkin:map-ready");
-      setInteractive(interactive);
+      prepareMapControls();
       if (root.dataset.theme !== sourceRoot.dataset.theme) updateTheme();
     });
-    map.on("style.load", () => setInteractive(interactive));
+    map.on("style.load", prepareMapControls);
     map.on("error", () => { if (!ready) showUnavailable(); });
-    new ResizeObserver(() => { map.resize(); if (!interactive) fitNeighborhood(); }).observe(container);
+    new ResizeObserver(() => { map.resize(); fitNeighborhood(); }).observe(container);
     sourceDocument.addEventListener("seledkin:themechange", updateTheme);
   } catch { showUnavailable(); }
 }
 
-window.addEventListener("message", event => {
-  if (event.origin !== location.origin || event.source !== window.parent) return;
-  if (event.data?.type === "seledkin:map-interaction") setInteractive(event.data.enabled === true);
-});
-
 document.addEventListener("keydown", event => {
-  if (event.key !== "Escape" || !interactive) return;
+  if (event.key !== "Escape") return;
   event.preventDefault();
   notify("seledkin:map-escape");
 });
