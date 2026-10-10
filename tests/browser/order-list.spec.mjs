@@ -166,7 +166,10 @@ test("a homepage price opens its exact package and keeps normal catalog navigati
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await expect(page.locator("#product-caviar-001")).toContainText("6 000 ₽ за 50 г");
   await expect(page.locator("#product-caviar-001")).toBeFocused();
-  await page.getByRole("button", { name: "Весь каталог", exact: true }).click();
+  // Anchor scrolling in WebKit can move the pointer target between press and
+  // release. This history scenario uses the keyboard; reset clicks are covered
+  // by catalog-journal.spec.mjs.
+  await page.getByRole("button", { name: "Весь каталог", exact: true }).press("Enter");
   await expect(page.locator(".catalog-product:visible")).toHaveCount(116);
   await page.goBack();
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
