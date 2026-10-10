@@ -233,6 +233,8 @@ test("the desktop journal action reflows with enlarged text and custom spacing",
     for (let i = 0; i < 4; i++) await page.locator('[data-hero-journal-next]').click();
     const archive = page.locator('[data-hero-journal-all]');
     await expect(archive).toBeVisible();
+    await page.locator('[data-hero-journal-card][data-stack-position="0"] img').evaluate(image => image.decode());
+    await archive.scrollIntoViewIfNeeded();
     const boxes = await page.locator('.source-hero__journal-controls').evaluate(el => [...el.querySelectorAll('[data-hero-journal-previous], [data-hero-journal-all], .source-hero__journal-status')].map(e => e.getBoundingClientRect().toJSON()));
     for (const [i, a] of boxes.entries()) {
       expect(a.x).toBeGreaterThanOrEqual(0);
@@ -244,7 +246,10 @@ test("the desktop journal action reflows with enlarged text and custom spacing",
     // This retained desktop scenario checks the journal controls themselves.
     // Whole-page narrow reflow is covered by the 320px customer journeys below.
     expect(await page.locator('.source-hero__journal-controls').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
-    await archive.click();
+    // The link is already in view. WebKit's extra auto-scroll can move its
+    // centre between pointer-down and pointer-up; use the observed position.
+    const archiveBox = await archive.boundingBox();
+    await page.mouse.click(archiveBox.x + archiveBox.width / 2, archiveBox.y + archiveBox.height / 2);
     await expect(page).toHaveURL(/journal\/$/);
   }
 });
