@@ -1,4 +1,4 @@
-import { mapAccessToken, mapStyles, storeLocation, nearestMetroLocation } from "./store-map-config.js";
+import { mapAccessToken, mapStyles, storeLocation, nearestMetroLocation } from "./store-map-config.js?v=mapbox-exit3-3";
 import { styleStoreMap } from "./store-map-style.js";
 
 const root = document.documentElement;
@@ -121,8 +121,14 @@ async function initialize() {
     metroLogo.alt = "";
     metroLogo.width = 20;
     metroLogo.height = 16;
-    metro.append(metroLogo, "Вавиловская");
-    new window.mapboxgl.Marker({ element: metro, anchor: "top", offset: [0, 8] })
+    const metroLabel = document.createElement("span");
+    metroLabel.textContent = "Вавиловская";
+    const metroExit = document.createElement("small");
+    metroExit.textContent = "выход № 3";
+    metroLabel.append(metroExit);
+    metro.append(metroLogo, metroLabel);
+    // The centre of the M, rather than the label, marks the entrance.
+    new window.mapboxgl.Marker({ element: metro, anchor: "left", offset: [-10, 0] })
       .setLngLat(nearestMetroLocation).addTo(map);
     fitNeighborhood();
     setInteractive(interactive);

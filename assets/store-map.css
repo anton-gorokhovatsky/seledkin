@@ -71,6 +71,13 @@
   object-fit: contain;
 }
 
+.store-map-metro small {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.6875rem;
+  font-weight: 400;
+}
+
 .store-map-page .mapboxgl-ctrl-top-right {
   top: 1rem;
   right: 1rem;

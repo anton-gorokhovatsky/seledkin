@@ -24,7 +24,7 @@ test("map styling retains geographic sources and uses Russian labels in both wat
 
 test("the public map keeps the verified shop and metro locations and visible attribution", () => {
   assert.deepEqual(storeLocation, [37.536554, 55.685849]);
-  assert.deepEqual(nearestMetroLocation, [37.5408941, 55.6848912]);
+  assert.deepEqual(nearestMetroLocation, [37.5393527, 55.6843472]);
   assert.ok(mapAccessToken === "" || mapAccessToken.startsWith("pk."));
   assert.equal(mapStyles.dark, "mapbox://styles/mapbox/dark-v11");
   const js = readFileSync(new URL("../assets/store-map.js", import.meta.url), "utf8");

@@ -761,7 +761,7 @@ test("the compact map keeps page scrolling until deliberate activation", () => {
   assert.match(sectionRule, /grid-template-rows:\s*auto clamp\(22rem, 46svh, 30rem\)/);
   assert.match(sectionRule, /margin-bottom:\s*clamp\(4rem, 7vw, 7rem\)/);
   const mapSource = home.match(/<iframe\b[^>]*src="([^"]+)"/)?.[1];
-  assert.equal(mapSource, "assets/store-map.html?v=mapbox-markers-2");
+  assert.equal(mapSource, "assets/store-map.html?v=mapbox-exit3-3");
   assert.doesNotMatch(home, /(?:src|data-src)="https:\/\/[^\"]*yandex[^\"]*map-widget/);
   const contactCard =
     home.match(/<address class="contacts-source__card">([\s\S]*?)<\/address>/)?.[1] ?? "";
