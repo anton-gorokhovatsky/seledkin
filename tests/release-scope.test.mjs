@@ -101,6 +101,7 @@ test("component changes select customer scenarios, including responsive CSS", ()
     { path: "assets/styles.css", before: ':root{--ink:black}.catalog-order{gap:1rem}',
       after: ':root{--ink:black}.catalog-order{gap:2rem}@container contacts (max-width:38rem){.contacts-source__card{display:block}}' },
     { path: "assets/order-list.js", after: "setupOrderList()" },
+    { path: "assets/order-message.js", after: "setupProductTelegramOrders()" },
     { path: "assets/mobile-hero.js", after: "setupMobileHero()" },
     { path: "assets/analytics.js", after: "reachGoal()" },
     { path: "about/index.html", before: '<script src="../assets/site.js?v=old"></script>', after: '<script src="../assets/site.js?v=new"></script>' },

@@ -1,6 +1,7 @@
 import { catalog } from "./catalog-data.js";
 import { catalogPrice, orderLinks, orderText, positionCount, productKey, restoreOrderKeys, orderUnit, orderAmount } from "./catalog-model.js";
 import { typographText } from "./typography.js";
+import { copyOrderMessage } from "./order-message.js";
 
 export function setupOrderList() {
   const region = document.querySelector("#order-list");
@@ -44,12 +45,26 @@ export function setupOrderList() {
   shortcut.hidden = true;
   shortcut.innerHTML = '<span class="catalog-order-shortcut__label">Список заказа</span><span class="catalog-order-shortcut__count" aria-hidden="true"></span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg>';
   toolbar.append(shortcut);
+  const updateClearance = () => {
+    const clearance = shortcut.hidden ? 0 : innerHeight - shortcut.getBoundingClientRect().top + 16;
+    document.documentElement.style.scrollPaddingBottom = `${clearance}px`;
+  };
+  new ResizeObserver(updateClearance).observe(shortcut);
+  document.addEventListener("focusin", event => {
+    if (shortcut.hidden || shortcut.contains(event.target) || !event.target.matches("a, button, input, select, textarea, summary")) return;
+    requestAnimationFrame(() => {
+      const target = event.target.getBoundingClientRect(), control = shortcut.getBoundingClientRect();
+      if (target.right > control.left && target.left < control.right && target.bottom > control.top && target.top < control.bottom) {
+        window.scrollBy({ top: target.bottom - control.top + 16, behavior: "instant" });
+      }
+    });
+  });
   const status = document.createElement("p");
   status.className = "visually-hidden";
   status.setAttribute("role", "status");
   region.append(status);
   let orderVisible = false;
-  const updateShortcut = () => { shortcut.hidden = !selected.size || orderVisible; };
+  const updateShortcut = () => { shortcut.hidden = !selected.size || orderVisible; updateClearance(); };
   if ("IntersectionObserver" in window) new IntersectionObserver(([entry]) => {
     orderVisible = entry.isIntersecting;
     updateShortcut();
@@ -85,21 +100,13 @@ export function setupOrderList() {
   }
   async function copyDraft() {
     const draft = orderText(selection());
-    try {
-      await navigator.clipboard.writeText(draft);
+    const copied = await copyOrderMessage(draft, { manualCopy, field: draftField, status: copyStatus });
+    if (copied) {
       copiedDraft = draft;
-      manualCopy.hidden = true;
       copyButton.querySelector("span").textContent = "Список скопирован";
       copyStatus.textContent = "Список скопирован. Вставьте его в сообщение в чате лавки.";
-      return true;
-    } catch {
-      manualCopy.hidden = false;
-      draftField.value = draft;
-      draftField.focus();
-      draftField.select();
-      copyStatus.textContent = "Автоматическое копирование недоступно. Скопируйте выделенный текст и вставьте его в чат лавки.";
-      return false;
     }
+    return copied;
   }
   // Show an invalid field before pointer activation: its error can otherwise
   // move the action underneath the pointer when the field loses focus.

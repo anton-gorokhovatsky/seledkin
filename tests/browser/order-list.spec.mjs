@@ -36,7 +36,24 @@ test("the order shortcut keeps its label, count and harpoon together on narrow s
   }
   await page.evaluate(() => document.documentElement.style.fontSize = "200%");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  const enlarged = await shortcut.boundingBox();
+  expect(enlarged.height).toBeLessThan(110);
+  expect(enlarged.x + enlarged.width).toBeLessThanOrEqual(320);
+  const heading = await page.locator("main h1").evaluate(el => {
+    const text = document.createRange(); text.selectNodeContents(el);
+    return [...text.getClientRects()].map(rect => ({ left: rect.left, right: rect.right }));
+  });
+  for (const line of heading) {
+    expect(line.left).toBeGreaterThanOrEqual(0);
+    expect(line.right).toBeLessThanOrEqual(320);
+  }
   await page.screenshot({ path: testInfo.outputPath("order-shortcut-320-large-text.png") });
+  const selection = page.locator("[data-order-add]").first();
+  await selection.focus();
+  await expect.poll(async () => {
+    const item = await selection.boundingBox(), control = await shortcut.boundingBox();
+    return item.y + item.height <= control.y;
+  }).toBe(true);
   await shortcut.press("Enter");
   await expect(page.locator("#order-list")).toBeFocused();
 });
@@ -158,6 +175,43 @@ test("denied copying leaves the draft selectable and invalid weight blocks hando
   expect(await draft.evaluate(field => field.selectionEnd - field.selectionStart)).toBe((await draft.inputValue()).length);
   await expect(list.getByRole("link", { name: "Открыть чат в Телеграме" })).toBeVisible();
   await expect(page).toHaveURL(/catalog\//);
+});
+
+test("a desktop single-product request copies its package before opening Telegram @catalog", async ({ page }) => {
+  let copied;
+  await page.exposeFunction("captureProductRequest", text => { copied = text; });
+  await page.addInitScript(() => Object.defineProperty(navigator, "clipboard", { value: {
+    async writeText(text) { await window.captureProductRequest(text); },
+  } }));
+  await page.route("https://t.me/**", route => route.fulfill({ contentType: "text/html", body: "<p>Telegram contact landing fixture</p>" }));
+  await page.goto("catalog/?product=caviar-001&audit=product-order#product-caviar-001");
+  const product = page.locator("#product-caviar-001");
+  await product.locator("summary").click();
+  const telegram = product.getByRole("link", { name: "Скопировать и открыть Телеграм" });
+  const expected = new URL(await telegram.getAttribute("href")).searchParams.get("text");
+  await expect(product).toContainText("Вставьте скопированный текст");
+  await telegram.click();
+  await expect(page).toHaveURL(/^https:\/\/t\.me\/\+79166751452/);
+  expect(copied).toBe(expected);
+  expect(copied).toContain("6 000 ₽ за 50 г");
+});
+
+test("a denied single-product copy retains the full selectable request @catalog", async ({ page }, testInfo) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, "clipboard", { value: {
+    async writeText() { throw new Error("Clipboard denied"); },
+  } }));
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("catalog/?product=fillet-006&audit=product-order#product-fillet-006");
+  const product = page.locator("#product-fillet-006");
+  await product.locator("summary").click();
+  await product.getByRole("link", { name: "Скопировать и открыть Телеграм" }).click();
+  const field = product.getByRole("textbox", { name: "Текст для сообщения" });
+  await expect(field).toBeFocused();
+  expect(await field.inputValue()).toContain("Филе тунца");
+  expect(await field.evaluate(el => el.selectionEnd - el.selectionStart)).toBe((await field.inputValue()).length);
+  await expect(product.getByRole("link", { name: "Открыть чат в Телеграме" })).toBeVisible();
+  await expect(page).toHaveURL(/catalog\//);
+  await product.screenshot({ path: testInfo.outputPath("single-product-copy-fallback.png") });
 });
 
 test("a homepage price opens its exact package and keeps normal catalog navigation @catalog", async ({ page }) => {

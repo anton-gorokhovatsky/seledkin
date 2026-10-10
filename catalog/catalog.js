@@ -2,6 +2,7 @@ import { matchesSearch, positionCount } from "../assets/catalog-model.js";
 import { typographText } from "../assets/typography.js";
 import { createSearchTracker } from "../assets/catalog-analytics.js";
 import { setupOrderList } from "../assets/order-list.js";
+import { setupProductTelegramOrders } from "../assets/order-message.js";
 
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");
@@ -17,6 +18,7 @@ const emptyMessage = empty.querySelector("[data-catalog-empty-message]");
 const emptyHint = empty.querySelector("[data-catalog-empty-hint]");
 const allCategories = empty.querySelector("[data-catalog-all-categories]");
 const orderList = setupOrderList();
+setupProductTelegramOrders();
 const journal = document.querySelector("[data-catalog-journal]");
 const journalEntries = [...journal.querySelectorAll("[data-journal-result]")];
 const categories = [...list.querySelectorAll(".catalog-category")].map((section) => ({

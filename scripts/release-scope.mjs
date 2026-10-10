@@ -107,6 +107,7 @@ const componentScripts = {
   "assets/analytics.js": ["@analytics"],
   "assets/catalog-model.js": ["@catalog", "@afisha"],
   "assets/order-list.js": ["@catalog"],
+  "assets/order-message.js": ["@catalog"],
   "catalog/catalog.js": ["@catalog"],
 };
 
