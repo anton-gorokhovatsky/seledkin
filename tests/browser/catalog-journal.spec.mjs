@@ -54,11 +54,12 @@ test("an empty category search can broaden without losing the query or browser h
   }
 });
 
-test("homepage prices continue to matching products and delivery terms stay beside the order @catalog", async ({ page }) => {
+test("homepage prices continue to the exact package and delivery terms stay beside the order @catalog", async ({ page }) => {
   await page.goto("#prices");
   await page.locator(".price-preview").getByRole("link", { name: "Чёрная икра" }).click();
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(4);
-  const product = page.locator(".catalog-product:visible").first();
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
+  const product = page.locator(".catalog-product:visible");
+  await expect(product).toHaveAttribute("id", "product-caviar-001");
   await expect(product.locator("strong")).toHaveText("6 000 ₽ за 50 г");
   await expect(page.locator(".catalog-order-delivery")).toContainText("Доставка по Москве в пределах МКАД — 490 ₽, без минимальной суммы заказа.");
   await page.getByRole("link", { name: "Условия доставки", exact: true }).click();
