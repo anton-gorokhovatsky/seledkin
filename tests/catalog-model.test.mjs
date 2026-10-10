@@ -45,7 +45,7 @@ test("search keeps partial words and combines terms without mixing different pro
   assert.equal(findProducts("сельдь филе").length, 0);
   assert.equal(findProducts("несуществующая рыба").length, 0);
   assert.equal(findProducts("***").length, 0);
-  assert.equal(findProducts("").length, 115);
+  assert.equal(findProducts("").length, 116);
   assert.equal(matchesSearch("Лосось слабосоленый", "форель"), false);
 });
 

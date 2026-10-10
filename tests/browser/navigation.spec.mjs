@@ -24,7 +24,7 @@ test("a missing nested URL retains the catalog route and images without JavaScri
   const catalog = page.getByRole("link", { name: "Открыть каталог", exact: true });
   expect(await catalog.evaluate(link => link.href)).toBe(new URL("catalog/", baseURL).href);
   await catalog.click();
-  await expect(page.locator(".catalog-product")).toHaveCount(115);
+  await expect(page.locator(".catalog-product")).toHaveCount(116);
   await context.close();
 });
 

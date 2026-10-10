@@ -98,8 +98,8 @@ test("journal previews keep whole photographs, aligned desktop reading lines and
 test("mobile shopping appears earlier while original photo proportions survive", async ({ page }) => {
   await page.goto("");
   await page.evaluate(() => document.fonts.ready);
-  // The full journal now occupies its own second mobile screen.
-  const restOfHome = await page.evaluate(() => document.documentElement.scrollHeight - document.querySelector(".source-hero__journal").getBoundingClientRect().height);
+  // The mobile afisha leads directly to the assortment.
+  const restOfHome = await page.evaluate(() => document.documentElement.scrollHeight);
   expect(restOfHome).toBeLessThan(10000);
   await page.goto("catalog/");
   await page.evaluate(() => document.fonts.ready);
@@ -145,7 +145,7 @@ test("preparation and cooking photographs each have their own large frame", asyn
 });
 
 test("the sea can be paused, stops offscreen, and respects the saved choice across watches", async ({ browser, baseURL }) => {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "no-preference" });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
   await context.addInitScript(() => localStorage.setItem("seledkin-theme", "light"));
   const page = await context.newPage();
   await page.goto(baseURL);
@@ -197,7 +197,7 @@ test("reduced motion downloads no sea video and the journal loads full images on
 
 
 test("a delayed brand image does not block the prioritized poster and sea", async ({ browser, baseURL }) => {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "no-preference" });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "no-preference" });
   const page = await context.newPage();
   let releaseLogo;
   const logoGate = new Promise(resolve => { releaseLogo = resolve; });
@@ -208,7 +208,7 @@ test("a delayed brand image does not block the prioritized poster and sea", asyn
   try {
     await page.goto(baseURL, { waitUntil: "domcontentloaded" });
     await expect.poll(() => page.locator("[data-hero-video]").evaluate(video => !video.paused && video.currentTime > 0), { timeout: 15000 }).toBe(true);
-    expect(await page.locator(".source-hero__mobile-logo").evaluate(image => image.complete)).toBe(false);
+    expect(await page.locator(".source-header img").evaluate(image => image.complete)).toBe(false);
   } finally {
     releaseLogo();
     await page.waitForLoadState("load");

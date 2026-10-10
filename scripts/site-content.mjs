@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { typographText } from "../assets/typography.js";
 import { catalog } from "../assets/catalog-data.js";
-import { catalogPrice, productNotes } from "../assets/catalog-model.js";
+import { catalogPrice, productNotes, orderLinks } from "../assets/catalog-model.js";
 import { recipeContent, recipes, resolveProduct, productCatalogHref, productRecipeLinks } from "./recipe-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
@@ -143,6 +143,42 @@ export function image(entry, root, sizes, deferred = false, hero = false) {
     ? `src="${media.find(item => item.source === entry.image && item.width === 32) ? source.replace(/\.jpg$/, "-32.webp") : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E"}" data-full-src="${src}" data-full-srcset="${srcset}"`
     : `src="${src}" srcset="${srcset}"`;
   return `<img ${attrs} sizes="${sizes}" data-source-image="${source}" decoding="async" alt="${entry.alt}" width="${width}" height="${height}"${hero ? (deferred ? "" : ' fetchpriority="high"') : ' loading="lazy"'} />`;
+}
+
+export function renderMobileHero() {
+  const photos = JSON.parse(read("content/mobile-hero.json"));
+  const arrow = '<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon"></use></svg>';
+  const prints = photos.map((photo, i) => {
+    const { product } = resolveProduct(photo.product);
+    if (!product.id) throw new Error(`Hero product needs a stable anchor: ${product.name}`);
+    const href = `${productCatalogHref(photo.product)}#product-${product.id}`;
+    const variants = media.filter(item => item.source === photo.image && item.width > 32);
+    const { width, height } = variants.at(-1);
+    let img = image({ ...photo, alt: text(photo.alt) }, "", "(max-width: 61.1875rem) calc(100vw - 60px), 1px", i > 0, true);
+    if (i === 0) {
+      // The full first photograph is needed only on mobile; the tiny fallback avoids a desktop download.
+      const srcset = img.match(/srcset="([^"]+)"/)[1];
+      img = `<picture><source media="(max-width: 61.1875rem)" srcset="${srcset}">${img.replace(/ srcset="[^"]+"/, "").replace(/src="[^"]+"/, `src="assets/${photo.image.replace(/\.jpg$/, "-32.webp")}"`)}</picture>`;
+    }
+    return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-caption="${text(product.name)}" data-source="https://t.me/kapitanseledkin/${photo.id}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}" data-order="${escape(orderLinks(product).telegram)}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
+  }).join("\n");
+  const first = resolveProduct(photos[0].product).product;
+  const firstHref = `${productCatalogHref(photos[0].product)}#product-${first.id}`;
+  return `          <div class="afisha">
+            <div class="afisha__brand brand-jelly brand-jelly--sea"><img src="assets/logo-redrawn-sea.svg" alt="Рыбная лавка капитана Селедкина" width="3600" height="1784"></div>
+            <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каждый день,</em> море&shy;про&shy;дукты и&nbsp;рыбные дели&shy;ка&shy;тесы в&nbsp;Москве</p>
+            <figure class="afisha__gallery">
+              <a class="afisha__frame" href="${escape(firstHref)}" aria-label="Смотреть ${text(photos[0].caption)} в каталоге">
+${prints}
+              </a>
+              <figcaption><div class="afisha__caption"><span class="afisha__name">${text(photos[0].caption)}</span><span class="afisha__price">${escape(catalogPrice(first.price))}</span></div><button class="afisha__change" type="button" hidden><span>Другой товар</span><span class="afisha__count" aria-hidden="true">1/${photos.length}</span>${arrow}</button></figcaption>
+              <span class="afisha__status" role="status" aria-live="polite"></span>
+            </figure>
+            <nav class="afisha__actions" aria-label="Основные действия">
+              <a class="afisha__catalog" href="${escape(firstHref)}"><span>Смотреть товар</span>${arrow}</a>
+              <div class="afisha__secondary"><a class="afisha__all" href="catalog/">Весь каталог</a><a class="afisha__order" href="${escape(orderLinks(first).telegram)}">Заказать в&nbsp;Телеграме</a></div>
+            </nav>
+          </div>`;
 }
 
 export function renderJournal(list, view) {

@@ -1,11 +1,13 @@
 import { typographText } from "./typography.js?v=typography-23-1";
 import { setupAssortmentPreview } from "./assortment-preview.js";
+import { setupMobileHero } from "./mobile-hero.js?v=mobile-afisha-2";
 import "./theme.js?v=sea-hours-1";
 import "./store-environment.js?v=buyer-paths-1";
-import { syncMenuSeaVideo } from "./sea-motion.js?v=sea-hours-1";
+import { syncMenuSeaVideo } from "./sea-motion.js?v=mobile-afisha-1";
 
 const root = new URL("../", import.meta.url);
 const isHome = location.pathname === root.pathname || location.pathname === `${root.pathname}index.html`;
+setupMobileHero();
 if (isHome) setupAssortmentPreview();
 if (isHome && /^#journal-entry-\d+$/.test(location.hash)) {
   location.replace(new URL(`journal/${location.hash}`, root).href);

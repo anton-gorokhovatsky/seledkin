@@ -84,7 +84,7 @@ test("legacy routing also works without JavaScript and does not load an uncondit
   page.on("request", request => { if (request.url().includes("mc.yandex.ru")) requests.push(request.url()); });
   await page.goto("http://127.0.0.1:4173/collection/");
   await expect(page).toHaveURL("http://127.0.0.1:4173/catalog/");
-  await expect(page.locator(".catalog-product")).toHaveCount(115);
+  await expect(page.locator(".catalog-product")).toHaveCount(116);
   expect(requests).toEqual([]);
   await context.close();
 });

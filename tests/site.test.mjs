@@ -175,7 +175,7 @@ test("home assortment links directly to every catalog section", () => {
 
   assert.match(section, /id="assortment"/);
   assert.match(section, /id="assortment-title">Что продаём<\/h2>/);
-  assert.match(section, /7 разделов · 115 позиций/);
+  assert.match(section, /7 разделов · 116 позиций/);
   assert.doesNotMatch(section, />Весь каталог<\/span>/);
 
   for (const [slug, label, count] of [
@@ -921,11 +921,11 @@ test("menu and footer channels use one precise local SVG set with Telegram first
   );
 });
 
-test("the complete catalog has stable categories and 115 priced items", () => {
+test("the complete catalog has stable categories and 116 priced items", () => {
   assert.equal(catalog.length, 7);
   assert.equal(
     catalog.reduce((total, category) => total + category.items.length, 0),
-    115,
+    116,
   );
   assert.deepEqual(
     catalog.map((category) => [category.slug, category.items.length]),
@@ -935,7 +935,7 @@ test("the complete catalog has stable categories and 115 priced items", () => {
       ["frozen-fish", 35],
       ["fillet", 7],
       ["steaks", 5],
-      ["prepared-fish", 12],
+      ["prepared-fish", 13],
       ["other", 27],
     ],
   );

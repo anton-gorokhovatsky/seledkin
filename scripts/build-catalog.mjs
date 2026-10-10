@@ -27,7 +27,7 @@ const products = catalog.map((category) => `
     advice.push(`<a href="${story.source}">${text(story.label)}</a>`);
   }
   return `
-              <article class="catalog-product" data-search-text="${escape(keywords)}" data-product-name="${escape(product.name)}" data-product-category="${category.slug}">
+              <article class="catalog-product"${product.id ? ` id="product-${escape(product.id)}" tabindex="-1"` : ""} data-search-text="${escape(keywords)}" data-product-name="${escape(product.name)}" data-product-category="${category.slug}">
                 <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description ? `
                 <p>${text(product.description)}</p>` : ""}${notes ? `
                 <p>${escape(notes)}</p>` : ""}
@@ -49,7 +49,7 @@ const filters = categories.map((category) => `
                     <button type="button" data-category="${category.slug}" aria-pressed="${category.slug === "all"}">${text(category.shortLabel)}</button>`).join("");
 const options = categories.map((category) => `
                     <option value="${category.slug}">${text(category.shortLabel)}</option>`).join("");
-let result = original;
+let result = original.replace(/(data-catalog-count>\s*)[\d\s\u00a0]+позиций/, `$1${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))}`);
 for (const [key, content] of Object.entries({ products, filters, options })) {
   const pattern = new RegExp(`(<!-- catalog-${key}:start -->)[\\s\\S]*?(<!-- catalog-${key}:end -->)`);
   if (!pattern.test(result)) throw new Error(`Missing generated region: ${key}`);

@@ -14,9 +14,9 @@ test("prices and product-specific order links survive unavailable JavaScript", a
     const page = await context.newPage();
     if (mode === "failed-module") await page.route("**/catalog/catalog.js*", (route) => route.abort());
     await page.goto(`${baseURL}catalog/`);
-    await expect(page.locator(".catalog-product")).toHaveCount(115);
+    await expect(page.locator(".catalog-product")).toHaveCount(116);
     await expect(page.locator("[data-catalog-controls]")).toBeHidden();
-    await expect(page.locator("[data-catalog-count]")).toHaveText("115 позиций");
+    await expect(page.locator("[data-catalog-count]")).toHaveText("116 позиций");
     const product = page.locator(".catalog-product").first();
     await product.locator("summary").click();
     await expect(product.getByRole("link")).toHaveCount(2);
@@ -53,7 +53,7 @@ test("search, category, shared URL and browser history retain the same selection
   await page.goForward();
   await expect(count).toHaveText("0 позиций");
   await page.locator("[data-catalog-reset]").click();
-  await expect(count).toHaveText("115 позиций");
+  await expect(count).toHaveText("116 позиций");
   await search.fill("морепродукты");
   await expect(count).toHaveText("20 позиций");
   await search.fill("НЕСУЩЕСТВУЮЩИЙ ТОВАР");
@@ -105,22 +105,26 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   await expect(zoom).not.toHaveAttribute("tabindex", "-1");
 });
 
-test("the complete journal follows the first mobile screen and desktop controls remain stable", async ({ page }, testInfo) => {
+test("the mobile afisha leads directly to shopping and desktop journal controls remain stable", async ({ page }, testInfo) => {
   for (const [width, height] of [[320, 568], [390, 664], [390, 844], [1440, 900]]) {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.setViewportSize({ width, height });
     await page.goto("");
     await page.evaluate(() => document.fonts.ready);
     const journal = page.locator(".source-hero__journal");
-    await expect(journal).toBeVisible();
     if (width < 980) {
-      await expect(page.locator(".source-button--hero-primary")).toBeInViewport({ ratio: 1 });
-      await expect(page.locator(".source-button--hero-secondary")).toBeInViewport({ ratio: 1 });
-      await expect(journal.locator("[data-hero-journal-stack]")).not.toBeInViewport();
-      expect((await journal.boundingBox()).y).toBeCloseTo(height, 0);
+      await expect(journal).toBeHidden();
+      await expect(page.locator(".afisha")).toBeVisible();
+      await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", /#product-caspian-herring$/);
+      await expect(page.locator(".afisha__all")).toHaveAttribute("href", "catalog/");
+      const boundary = await page.locator(".source-hero").evaluate(e => e.getBoundingClientRect().bottom);
+      expect((await page.locator("#assortment").boundingBox()).y).toBeCloseTo(boundary, 0);
+      if (height >= 800) await expect(page.locator(".afisha__order")).toBeInViewport({ ratio: 1 });
       await page.screenshot({ path: testInfo.outputPath(`hero-${width}-${height}-first.png`) });
-      await journal.evaluate(element => window.scrollTo({ top: element.getBoundingClientRect().top + window.scrollY, behavior: "instant" }));
+      await noOverflow(page);
+      continue;
     }
+    await expect(journal).toBeVisible();
     const counter = page.locator("[data-hero-journal-counter]");
     const center = await counter.evaluate(e => { const r = e.getBoundingClientRect(); return r.x + r.width / 2; });
     const arrowCenter = await page.locator('[data-hero-journal-next] svg').evaluate(e => { const r = e.getBoundingClientRect(); return r.x + r.width / 2; });
@@ -309,5 +313,39 @@ test("320px reflow, enlarged text, custom spacing and contrast retain controls",
       const clipped = await page.locator(".source-button:visible, summary:visible, input:visible, select:visible").evaluateAll(elements => elements.filter(e => { const r = e.getBoundingClientRect(); return r.x < -1 || r.right > innerWidth + 1; }).map(e => e.textContent.trim() || e.tagName));
       expect(clipped).toEqual([]);
     }
+  }
+});
+
+
+test("a photographed product opens its own catalog position, price and order", async ({ page }) => {
+  await page.goto("");
+  const frame = page.locator(".afisha__frame");
+  const expected = ["Каспийский залом", "Икра форели", "Стейк лосося", "Форель холодного копчения", "Скумбрия горячего копчения"];
+  const destinations = [];
+  for (let i = 0; i < expected.length; i++) {
+    await expect(page.locator(".afisha__count")).toHaveText(`${i + 1}/5`);
+    const href = await frame.getAttribute("href");
+    await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", href);
+    expect(new URL(href, page.url()).searchParams.get("q")).toBe(expected[i]);
+    expect(decodeURIComponent(await page.locator(".afisha__order").getAttribute("href"))).toContain(expected[i]);
+    destinations.push({ href, price: await page.locator(".afisha__price").textContent(), name: expected[i] });
+    await frame.press("ArrowRight");
+  }
+  await expect(page.locator(".afisha__count")).toHaveText("1/5");
+  // A vertical gesture belongs to page scrolling, not product selection.
+  await frame.dispatchEvent("pointerdown", { isPrimary: true, pointerId: 1, clientX: 150, clientY: 150 });
+  await frame.dispatchEvent("pointerup", { isPrimary: true, pointerId: 1, clientX: 150, clientY: 250 });
+  await expect(page.locator(".afisha__count")).toHaveText("1/5");
+  // Following the photo is an ordinary link, including without a click handler.
+  await frame.press("Enter");
+  for (let i = 0; i < destinations.length; i++) {
+    const destination = destinations[i];
+    if (i) await page.goto(destination.href);
+    await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
+    const product = page.locator(new URL(destination.href, page.url()).hash);
+    await expect(product.locator("h4")).toHaveText(destination.name);
+    await expect(product.locator("strong")).toHaveText(destination.price);
+    await expect(product).toBeInViewport();
+    await noOverflow(page);
   }
 });

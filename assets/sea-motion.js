@@ -3,6 +3,7 @@ const menuVideo = document.querySelector("[data-menu-sea-video]");
 const menu = document.querySelector("[data-menu]");
 const toggles = [...document.querySelectorAll("[data-sea-toggle]")];
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+const mobileAfisha = document.querySelector(".afisha") ? matchMedia("(max-width: 61.1875rem)") : null;
 const connection = navigator.connection;
 // Explicit consent is scoped to this page. A new visit honours the current data preference again.
 let requestedPlayback = false;
@@ -60,7 +61,7 @@ function sync(video, visible) {
 }
 
 export function syncHeroVideo() {
-  sync(heroVideo, readyToPlay && heroVisible && (!menu || menu.hidden));
+  sync(heroVideo, readyToPlay && heroVisible && !mobileAfisha?.matches && (!menu || menu.hidden));
 }
 export function syncMenuSeaVideo() {
   sync(menuVideo, Boolean(menu && !menu.hidden));
@@ -110,6 +111,7 @@ if (heroVideo instanceof HTMLVideoElement) {
   });
 }
 reducedMotion.addEventListener("change", syncAll);
+mobileAfisha?.addEventListener("change", syncAll);
 document.addEventListener("visibilitychange", syncAll);
 document.addEventListener("seledkin:themechange", () => {
   // Keep already loaded paused media in the selected watch, without loading dormant media.

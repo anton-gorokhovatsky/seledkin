@@ -1,5 +1,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
+import { catalog } from "../assets/catalog-data.js";
+import { positionCount } from "../assets/catalog-model.js";
 import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
@@ -19,6 +21,7 @@ for (const [path, page, root] of pages) {
     "delivery-terms": renderDelivery("home"),
     "price-preview": renderPricePreview(),
     "recipe-home": renderRecipeHome(), "assortment-media": renderAssortmentMedia(),
+    "mobile-hero": renderMobileHero(),
   });
   if (page === "journal") regions["journal-archive"] = renderJournalAtlas(entries);
   if (page === "catalog") Object.assign(regions, {
@@ -30,6 +33,13 @@ for (const [path, page, root] of pages) {
     if ([...result.matchAll(pattern)].length !== 1) throw new Error(`${path}: expected one generated region ${key}`);
     result = result.replace(pattern, (_, start, end) => key === "contact-address" || key === "contact-hours"
       ? `${start}${content}${end}` : `${start}\n${content}\n${end}`);
+  }
+  if (page === "home") {
+    result = result.replace(/7[\s\u00a0]+разделов · [\d\s\u00a0]+позиций/, `7 разделов · ${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))}`);
+    for (const category of catalog) {
+      const pattern = new RegExp(`(href="catalog/#category-${category.slug}"[\\s\\S]*?class="assortment-directory__meta">)[^<]+`);
+      result = result.replace(pattern, `$1${positionCount(category.items.length)}`);
+    }
   }
   if (page === "home") result = result.replace(/(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/, (_, start, source, end) => {
     const data = JSON.parse(source);
