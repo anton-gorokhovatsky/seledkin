@@ -4958,6 +4958,10 @@ a.site-menu__brand {
 .catalog-order-list li > span > span { color: var(--muted); font-size: var(--text-interface); }
 .catalog-order-list button { min-width: 44px; min-height: 44px; padding: .35rem 0 .35rem .5rem; border: 0; background: none; color: var(--text-link); font: inherit; font-size: var(--text-interface); cursor: pointer; }
 .catalog-order-list-note { color: var(--muted); font-size: var(--text-interface); }
+.catalog-order-postscript { display: grid; gap: .6rem; max-width: 54ch; margin-top: 1.25rem; font-size: var(--text-interface); line-height: 1.5; }
+.catalog-order-postscript > p, .catalog-order-postscript .catalog-order-delivery { margin: 0; }
+.catalog-order-postscript .editorial-link { margin: 0; font-size: var(--text-interface); }
+.catalog-order[data-has-items="true"] { padding-bottom: clamp(2.5rem, 4vw, 4rem); }
 .catalog-order-quantity { display: grid; justify-items: start; gap: .3rem; font-size: var(--text-interface); }
 .catalog-order-quantity input { width: min(10rem, 100%); min-width: 0; min-height: 44px; padding: .5rem .65rem; border: 1px solid var(--brass); border-radius: 0; background: var(--paper); color: var(--ink); font: inherit; }
 .catalog-order-quantity input::placeholder { color: var(--muted); opacity: 1; }
