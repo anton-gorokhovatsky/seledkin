@@ -109,16 +109,19 @@ async function initialize() {
     marker.setAttribute("aria-hidden", "true");
     const label = document.createElement("span");
     label.textContent = "Рыбная лавка";
-    const address = document.createElement("small");
-    address.textContent = "Строителей, 7 · корп. 1";
-    label.append(address);
     marker.append(label);
-    new window.mapboxgl.Marker({ element: marker, anchor: "left", offset: [-11, 0] })
+    // Anchor the centre of the shop's ring to its actual coordinates.
+    new window.mapboxgl.Marker({ element: marker, anchor: "left", offset: [-6, 0] })
       .setLngLat(storeLocation).addTo(map);
     const metro = document.createElement("div");
     metro.className = "store-map-metro";
     metro.setAttribute("aria-hidden", "true");
-    metro.textContent = "Метро «Вавиловская»";
+    const metroLogo = document.createElement("img");
+    metroLogo.src = "moscow-metro.svg";
+    metroLogo.alt = "";
+    metroLogo.width = 20;
+    metroLogo.height = 16;
+    metro.append(metroLogo, "Вавиловская");
     new window.mapboxgl.Marker({ element: metro, anchor: "top", offset: [0, 8] })
       .setLngLat(nearestMetroLocation).addTo(map);
     fitNeighborhood();

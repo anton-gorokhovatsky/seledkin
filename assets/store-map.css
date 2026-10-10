@@ -26,62 +26,49 @@
 
 .store-map-status[hidden] { display: none; }
 
-.store-map-marker {
+.store-map-marker,
+.store-map-metro {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.6rem 0.9rem 0.6rem 0.65rem;
-  border: 2px solid var(--paper);
-  border-radius: 999px;
-  background: var(--blue-deep);
-  color: var(--paper);
+  color: var(--ink);
+  /* A cartographic halo keeps names legible over streets without a panel. */
+  text-shadow:
+    1px 0 var(--map-fallback), -1px 0 var(--map-fallback),
+    0 1px var(--map-fallback), 0 -1px var(--map-fallback);
   font-family: var(--sans);
-  font-size: 0.875rem;
-  font-weight: 600;
   line-height: 1.25;
   white-space: nowrap;
   pointer-events: none;
+}
+
+.store-map-marker {
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .store-map-marker::before {
   width: 0.75rem;
   height: 0.75rem;
   flex: 0 0 auto;
-  border: 2px solid currentColor;
+  border: 2px solid var(--blue-deep);
   border-radius: 50%;
+  background: var(--map-fallback);
   content: "";
-}
-
-.store-map-marker small {
-  display: block;
-  margin-top: 0.1rem;
-  font-size: 0.7rem;
-  font-weight: 400;
 }
 
 .store-map-metro {
-  display: flex;
-  align-items: center;
   gap: 0.45rem;
-  padding: 0.45rem 0.65rem;
-  border: 1px solid var(--line);
-  border-radius: 0.25rem;
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--sans);
   font-size: 0.75rem;
   font-weight: 500;
-  line-height: 1.25;
-  white-space: nowrap;
-  pointer-events: none;
 }
 
-.store-map-metro::before {
-  width: 0.4rem;
-  height: 0.4rem;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  content: "";
+.store-map-metro img {
+  display: block;
+  width: 1.25rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  object-fit: contain;
 }
 
 .store-map-page .mapboxgl-ctrl-top-right {
@@ -160,9 +147,13 @@
 .store-map-page .mapboxgl-ctrl-logo { min-height: 44px; }
 
 @media (forced-colors: active) {
-  .store-map-marker, .store-map-page .mapboxgl-ctrl-group {
+  .store-map-marker, .store-map-metro, .store-map-page .mapboxgl-ctrl-group {
     border-color: ButtonText;
     background: Canvas;
     color: CanvasText;
   }
+
+  .store-map-marker, .store-map-metro { text-shadow: none; }
+
+  .store-map-marker::before { border-color: CanvasText; }
 }
