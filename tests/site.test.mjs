@@ -1949,5 +1949,9 @@ test("the custom domain is consistent across all pages and the deployment artifa
     assert.doesNotMatch(html, /https:\/\/anton-gorokhovatsky\.github\.io\/seledkin\//);
   }
   const workflow = await readFile(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8");
-  assert.match(workflow, /cp index\.html 404\.html robots\.txt sitemap\.xml CNAME \.nojekyll _site\//);
+  assert.ok(workflow.includes("pnpm run package:site"));
+  assert.ok(workflow.includes("PLAYWRIGHT_SITE_DIR: _site"));
+  assert.ok(workflow.indexOf("Package static files") < workflow.indexOf("Verify customer journeys"));
+  const packager = await readFile(new URL("../scripts/package-site.mjs", import.meta.url), "utf8");
+  assert.match(packager, /"CNAME"/);
 });

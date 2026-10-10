@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { catalogPrice, matchesSearch, orderLinks, positionCount, productKey, legacyProductKey, restoreOrderKeys, productNotes, productSearchText } from "../assets/catalog-model.js";
+import { catalogPrice, matchesSearch, orderLinks, orderText, orderUnit, orderAmount, productHref, positionCount, productKey, legacyProductKey, restoreOrderKeys, productNotes, productSearchText } from "../assets/catalog-model.js";
 import { catalog } from "../assets/catalog-data.js";
 
 test("search accepts category terms, reversed words, ё and whitespace", () => {
@@ -111,4 +111,34 @@ test("saved orders migrate to permanent IDs and survive name, description, price
   assert.deepEqual(restoreOrderKeys([product.id, second.id], edited), [product.id]);
   assert.equal(productKey(edited[0], edited[0].items[0]), product.id);
   assert.deepEqual(restoreOrderKeys(null, catalog), []);
+});
+
+test("exact product links preserve the chosen package independently of its name and price", () => {
+  const product = catalog[0].items[0];
+  const href = productHref(product);
+  assert.equal(productHref({ ...product, name: "Новое название", price: "7000 ₽/0,05 кг" }), href);
+  const url = new URL(href, "https://ks.fish/");
+  assert.equal(url.searchParams.get("product"), product.id);
+  assert.equal(url.hash, `#product-${product.id}`);
+  assert.equal(new URL(productHref(product, "../", "afisha"), "https://ks.fish/recipes/").searchParams.get("from"), "afisha");
+});
+
+test("optional amounts accept fractional weight and whole package counts, without inventing totals", () => {
+  const weight = { name: "Филе тунца", price: "2800 ₽/кг" };
+  const pack = catalog[0].items[0];
+  assert.equal(orderUnit(weight).whole, false);
+  assert.equal(orderUnit(pack).whole, true);
+  for (const value of ["0,5", "0.5", " 00,500 "]) assert.equal(orderAmount(value, weight), "0,5");
+  assert.equal(orderAmount("", weight), "");
+  assert.equal(orderAmount("2", pack), "2");
+  for (const value of ["0", "-1", "abc", "1e3", "0.0001"]) assert.equal(orderAmount(value, weight), null);
+  for (const value of ["0", "-1", "0,5", "2.0"]) assert.equal(orderAmount(value, pack), null);
+  const products = [{ ...pack, amount: "2" }, { ...weight, amount: "0.5" }];
+  const text = orderText(products);
+  assert.match(text, /Количество: 2 шт\./);
+  assert.match(text, /Вес: 0,5 кг/);
+  assert.ok(text.includes(catalogPrice(pack.price)));
+  assert.equal(new URL(orderLinks(products).telegram).searchParams.get("text"), text);
+  assert.equal(new URL(orderLinks(products).whatsapp).searchParams.get("text"), text);
+  assert.doesNotMatch(orderText(pack), /Количество|Вес:|Итого/);
 });

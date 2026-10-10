@@ -49,14 +49,14 @@ if (typeof document !== "undefined") {
       const entry = link.closest("[data-journal-id]");
       const count = Number(link.dataset.orderListCount);
       reachGoal("order_click", { channel, context: count ? "order_list" : afisha ? "afisha" : product ? "catalog" : entry ? "journal" : link.closest("[data-menu]") ? "menu" : "page",
-        ...(source ? { source } : {}), ...(count ? { count } : {}), ...(product || afisha ? { product: (product ?? afisha).dataset.productName } : {}), ...(entry ? { entry: entry.dataset.journalId } : {}) });
+        ...(source ? { source } : {}), ...(count ? { count } : {}), ...(product || afisha ? { product: (product ?? afisha).dataset.productName, product_id: (product ?? afisha).dataset.productId } : {}), ...(entry ? { entry: entry.dataset.journalId } : {}) });
     }
     if (url.hostname === "yandex.ru" && url.pathname.startsWith("/maps")) reachGoal("map_open", { mode: "route" });
   });
   document.addEventListener("toggle", event => {
     if (!event.target.matches(".catalog-product details[open]")) return;
     const product = event.target.closest("[data-product-name]");
-    if (product) reachGoal("product_select", { context: "catalog", action: "order_channels", product: product.dataset.productName, category: product.dataset.productCategory,
+    if (product) reachGoal("product_select", { context: "catalog", action: "order_channels", product: product.dataset.productName, product_id: product.dataset.productId, category: product.dataset.productCategory,
       ...(new URL(location.href).searchParams.get("from") === "afisha" ? { source: "afisha" } : {}) });
   }, true);
 }

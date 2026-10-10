@@ -44,8 +44,8 @@ test("recipes point to the right product variant and use live catalog prices", (
       const { category, product } = resolveProduct(selection);
       assert.ok(productRecipeLinks(category, product).includes(recipe));
       const url = new URL(productCatalogHref(selection), "https://ks.fish/");
-      const matches = findProducts(url.searchParams.get("q"), selection.category);
-      assert.ok(matches.some(result => result.product === product));
+      assert.equal(url.searchParams.get("product"), product.id);
+      assert.equal(url.hash, `#product-${product.id}`);
       const story = read(`journal/${recipe.id}/index.html`);
       assert.ok(story.includes(catalogPrice(product.price)));
       const context = story.match(/<section class="recipe-current"[\s\S]*?<\/section>/)?.[0];
@@ -70,5 +70,6 @@ test("dinner collections and the fresh caviar price share catalog facts", () => 
   assert.equal(trout.price, "4990 ₽/0,250 кг");
   assert.equal(trout.source, "https://t.me/kapitanseledkin/700");
   assert.ok(read("sitemap.xml").includes("https://ks.fish/recipes/"));
-  assert.ok(read(".github/workflows/pages.yml").includes("cp recipes/index.html _site/recipes/"));
+  assert.ok(read(".github/workflows/pages.yml").includes("pnpm run package:site"));
+  assert.ok(read("scripts/package-site.mjs").includes('"recipes"'));
 });

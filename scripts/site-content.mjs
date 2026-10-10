@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { typographText } from "../assets/typography.js";
 import { catalog } from "../assets/catalog-data.js";
-import { catalogPrice, productNotes, orderLinks } from "../assets/catalog-model.js";
+import { catalogPrice, productNotes, orderLinks, productHref } from "../assets/catalog-model.js";
 import { recipeContent, recipes, resolveProduct, productCatalogHref, productRecipeLinks } from "./recipe-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
@@ -46,11 +46,10 @@ export function renderPricePreview() {
     // When sizes share a name, the first listed size is the homepage example.
     const product = category?.items.find(item => item.name === selection.name);
     if (!product) throw new Error(`Missing preview product: ${selection.name}`);
-    const query = new URLSearchParams({ q: product.name, category: category.slug });
     const notes = productNotes(product);
     return `              <article class="catalog-product">
                 <div class="catalog-product-head">
-                  <h4><a href="catalog/?${escape(query)}">${text(selection.label ?? product.name)}</a></h4><strong>${escape(catalogPrice(product.price))}</strong>
+                  <h4><a href="${escape(productHref(product))}">${text(selection.label ?? product.name)}</a></h4><strong>${escape(catalogPrice(product.price))}</strong>
                 </div>
                 <p>${text(selection.description ?? product.description)}</p>${notes ? `
                 <p>${escape(notes)}</p>` : ""}
@@ -151,7 +150,7 @@ export function renderMobileHero() {
   const prints = photos.map((photo, i) => {
     const { product } = resolveProduct(photo.product);
     if (!product.id) throw new Error(`Hero product needs a stable anchor: ${product.name}`);
-    const href = `${productCatalogHref(photo.product)}&from=afisha#product-${product.id}`;
+    const href = productCatalogHref(photo.product, "", "afisha");
     const variants = media.filter(item => item.source === photo.image && item.width > 32);
     const { width, height } = variants.at(-1);
     let img = image({ ...photo, alt: text(photo.alt) }, "", "(max-width: 61.1875rem) calc(100vw - 60px), 1px", i > 0, true);
@@ -163,7 +162,7 @@ export function renderMobileHero() {
     return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-caption="${text(product.name)}" data-category="${photo.product.category}" data-product-id="${product.id}" data-source="https://t.me/kapitanseledkin/${photo.id}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}" data-order="${escape(orderLinks(product).telegram)}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
   }).join("\n");
   const first = resolveProduct(photos[0].product).product;
-  const firstHref = `${productCatalogHref(photos[0].product)}&from=afisha#product-${first.id}`;
+  const firstHref = productCatalogHref(photos[0].product, "", "afisha");
   return `          <div class="afisha" data-product-name="${text(first.name)}" data-product-category="${photos[0].product.category}" data-product-id="${first.id}" data-photo-index="1">
             <div class="afisha__brand brand-jelly brand-jelly--sea"><img src="assets/logo-redrawn-sea.svg" alt="Рыбная лавка капитана Селедкина" width="3600" height="1784"></div>
             <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каждый день,</em> море&shy;про&shy;дукты и&nbsp;рыбные дели&shy;ка&shy;тесы в&nbsp;Москве</p>

@@ -130,3 +130,15 @@ test("automatic publication versions do not turn a catalog change into a full-si
   assert.equal(classifyRelease([{ path: "assets/theme.js", before: 'import "./store-time.js?v=old"; oldLogic();', after: 'import "./store-time.js"; newLogic();' }]), "full");
   assert.equal(classifyRelease([{ path: "assets/theme.js", before: 'import "https://external.example/module.js?v=old";', after: 'import "https://external.example/module.js?v=new";' }]), "full");
 });
+
+test("exact catalog links and gallery destinations select the catalog journey without hiding other changes", () => {
+  const original = '<main><a href="../../catalog/?q=икра">Цена</a><img data-href="../../catalog/?q=икра"></main>';
+  const exact = original.replaceAll("../../catalog/?q=икра", "../../catalog/?product=caviar-001#product-caviar-001");
+  assert.deepEqual(scopedBrowserTags([{ path: "journal/700/index.html", before: original, after: exact }]), ["@catalog"]);
+  const home = '<a href="catalog/?q=икра">Цена</a><img data-href="catalog/?q=икра">';
+  const exactHome = home.replaceAll("catalog/?q=икра", "catalog/?product=caviar-001#product-caviar-001");
+  assert.deepEqual(scopedBrowserTags([{ path: "index.html", before: home, after: exactHome }]), ["@catalog"]);
+  for (const changed of [exactHome.replace("Цена", "Другая цена"), exactHome.replace("#product-caviar-001", "#other"), exactHome.replaceAll("catalog/?", "journal/?")]) {
+    assert.equal(classifyRelease([{ path: "index.html", before: home, after: changed }]), "full");
+  }
+});

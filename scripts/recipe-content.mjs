@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { catalog } from "../assets/catalog-data.js";
+import { productHref } from "../assets/catalog-model.js";
 
 export const recipeContent = JSON.parse(readFileSync(new URL("../content/recipes.json", import.meta.url), "utf8"));
 export const recipes = recipeContent.recipes;
@@ -22,13 +23,8 @@ export function productRecipeLinks(category, product) {
   return recipes.filter(recipe => recipe.products.some(selection => matchesProduct(selection, category, product)));
 }
 
-export function productCatalogHref(selection, root = "") {
-  resolveProduct(selection);
-  const query = new URLSearchParams({
-    q: `${selection.name}${selection.description ? ` ${selection.description}` : ""}`,
-    category: selection.category,
-  });
-  return `${root}catalog/?${query}`;
+export function productCatalogHref(selection, root = "", source = "") {
+  return productHref(resolveProduct(selection).product, root, source);
 }
 
 for (const selection of [...recipes.flatMap(recipe => recipe.products),

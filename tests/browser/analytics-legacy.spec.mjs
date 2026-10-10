@@ -55,11 +55,17 @@ test("afisha records the photographed product through catalog and order list @an
   await page.locator(".catalog-product:visible summary").click();
   await expect.poll(() => page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")?.[3].source)).toBe("afisha");
   await page.locator(".catalog-product:visible").getByRole("checkbox").check();
-  await page.getByRole("link", { name: "Список заказа · 1 позиция" }).click();
-  await page.evaluate(() => document.addEventListener("click", event => { if (event.target.closest('#order-list a[href^="https://t.me"]')) event.preventDefault(); }));
-  await page.locator("#order-list").getByRole("link", { name: "Отправить список в Телеграме" }).click();
-  expect(await page.evaluate(() => window.goalCalls.find(call => call[2] === "order_click")[3])).toMatchObject({context:"order_list",channel:"telegram",source:"afisha",count:1});
+  expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select" && call[3].action === "list_start").map(call => call[3]))).toEqual([
+    {context:"order_list", action:"list_start", product_id:"trout-roe", category:"caviar", count:1, source:"afisha"},
+  ]);
+  await page.locator("#order-list").scrollIntoViewIfNeeded();
+  await page.evaluate(() => document.addEventListener("click", event => { if (event.target.closest('#order-list a[href^="https://wa.me"]')) event.preventDefault(); }));
+  await page.locator("#order-list").getByRole("link", { name: "Открыть список в WhatsApp" }).click();
+  expect(await page.evaluate(() => window.goalCalls.find(call => call[2] === "order_click")[3])).toMatchObject({context:"order_list",channel:"whatsapp",source:"afisha",count:1});
   expect(JSON.stringify(await page.evaluate(() => window.goalCalls))).not.toContain("Хочу заказать");
+  await page.reload();
+  await expect(page.locator(".catalog-product:visible").getByRole("checkbox")).toBeChecked();
+  expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select" && call[3].action === "list_start"))).toEqual([]);
 });
 
 test("service entry excludes the whole tab, but an explicit ordinary visit can resume measurement @analytics", async ({ page, baseURL }) => {

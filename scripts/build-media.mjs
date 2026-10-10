@@ -46,7 +46,8 @@ function record(file, source, extra = {}) {
 }
 const journalPhotos = JSON.parse(readFileSync(resolve(root, "content/journal.json"), "utf8")).map(entry => entry.image);
 const heroPhotos = JSON.parse(readFileSync(resolve(root, "content/mobile-hero.json"), "utf8")).map(photo => photo.image);
-const photos = [...new Set(["about-main.jpg", "about-small-1.jpg", "about-small-2.jpg", "caviar-slab.jpg", "cutting-tuna.jpg", "delivery-basket.jpg", "flounder.jpg", "gallery-small-1.jpg", "gallery-small-2.jpg", "journal-679.jpg", ...journalPhotos, ...heroPhotos, "oleg-gugunava.jpg", "quote-pan.jpg", "salmon-cat.jpg"])];
+const advicePhotos = JSON.parse(readFileSync(resolve(root, "content/recipes.json"), "utf8")).productStories.map(story => story.image).filter(Boolean);
+const photos = [...new Set(["about-main.jpg", "about-small-1.jpg", "about-small-2.jpg", "caviar-slab.jpg", "cutting-tuna.jpg", "delivery-basket.jpg", "flounder.jpg", "gallery-small-1.jpg", "gallery-small-2.jpg", "journal-679.jpg", ...journalPhotos, ...heroPhotos, ...advicePhotos, "oleg-gugunava.jpg", "quote-pan.jpg", "salmon-cat.jpg"])];
 const videos = ["hero-sea.mp4", "hero-sea-night.mp4"];
 for (const source of requestedSources) {
   if (![...photos, ...videos, "hero-sea-night-poster.jpg"].includes(source)) throw new Error(`Unknown media source: ${source}`);

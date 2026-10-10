@@ -123,16 +123,42 @@ export function restoreOrderKeys(saved, catalog) {
   return Array.isArray(saved) ? [...new Set(saved.map(key => current.has(key) ? key : legacy.get(key)).filter(Boolean))] : [];
 }
 
-export function orderLinks(productOrProducts) {
+export function productHref(product, root = "", source = "") {
+  const query = new URLSearchParams({ product: product.id });
+  if (source) query.set("from", source);
+  return `${root}catalog/?${query}#product-${product.id}`;
+}
+
+export function orderUnit(product) {
+  return /\/кг\s*$/u.test(product.price)
+    ? { label: "Вес, кг", unit: "кг", example: "0,5", whole: false }
+    : { label: "Количество, шт.", unit: "шт.", example: "2", whole: true };
+}
+
+// Empty is a valid optional amount; null is an invalid entered amount.
+export function orderAmount(value, product) {
+  const input = String(value ?? "").trim().replace(",", ".");
+  if (!input) return "";
+  const pattern = orderUnit(product).whole ? /^\d+$/u : /^\d+(?:\.\d{1,3})?$/u;
+  const amount = Number(input);
+  return pattern.test(input) && Number.isFinite(amount) && amount > 0 && amount <= Number.MAX_SAFE_INTEGER
+    ? String(amount).replace(".", ",") : null;
+}
+
+export function orderText(productOrProducts) {
   const products = Array.isArray(productOrProducts) ? productOrProducts : [productOrProducts];
-  const text = [
+  return [
     "Здравствуйте! Хочу заказать:",
     ...products.map(product => [typographText(product.name),
       product.description ? typographText(product.description) : null,
-      catalogPrice(product.price)].filter(Boolean).join("\n")),
+      catalogPrice(product.price),
+      orderAmount(product.amount, product) ? typographText(`${orderUnit(product).whole ? "Количество" : "Вес"}: ${orderAmount(product.amount, product)} ${orderUnit(product).unit}`) : null].filter(Boolean).join("\n")),
     "Подскажите, пожалуйста, наличие.",
   ].filter(Boolean).join("\n");
-  const draft = encodeURIComponent(text);
+}
+
+export function orderLinks(productOrProducts) {
+  const draft = encodeURIComponent(orderText(productOrProducts));
   return {
     telegram: `https://t.me/+79166751452?text=${draft}`,
     whatsapp: `https://wa.me/79166751452?text=${draft}`,

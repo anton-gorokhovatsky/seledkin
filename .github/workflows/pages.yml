@@ -64,6 +64,10 @@ jobs:
           fi
           node scripts/release-scope.mjs "$BASE_SHA" "$CHECKS"
 
+      - name: Package static files
+        if: steps.scope.outputs.scope != 'none'
+        run: pnpm run package:site
+
       - name: Install browser test dependencies
         if: steps.scope.outputs.browser_required == 'true'
         run: pnpm install --frozen-lockfile --ignore-scripts
@@ -84,6 +88,7 @@ jobs:
           RELEASE_SCOPE: ${{ steps.scope.outputs.scope }}
           TYPOGRAPHY_PAGES: ${{ steps.scope.outputs.typography_pages }}
           BROWSER_GREP: ${{ steps.scope.outputs.browser_grep }}
+          PLAYWRIGHT_SITE_DIR: _site
         run: |
           if [ "$RELEASE_SCOPE" = "journal" ]; then
             pnpm exec playwright test --grep @journal
@@ -102,20 +107,6 @@ jobs:
           name: browser-evidence
           path: test-results/
           retention-days: 14
-
-      - name: Package static files
-        if: steps.scope.outputs.scope != 'none'
-        run: |
-          mkdir -p _site/assets _site/catalog _site/journal _site/about _site/recipes
-          cp index.html 404.html robots.txt sitemap.xml CNAME .nojekyll _site/
-          cp yandex_a89bf574e33f8d22.html _site/
-          cp assets/* _site/assets/
-          cp catalog/index.html catalog/catalog.js _site/catalog/
-          cp -R journal/. _site/journal/
-          cp about/index.html _site/about/
-          cp recipes/index.html _site/recipes/
-          node scripts/package-legacy.mjs _site
-          node scripts/build-assets.mjs _site
 
       - name: Upload Pages artifact
         if: steps.scope.outputs.scope != 'none'

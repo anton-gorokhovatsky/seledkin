@@ -75,6 +75,28 @@ function onlyTypography(before, after) {
   return normalize(before) === normalize(after);
 }
 
+function onlyProductTargets(before, after) {
+  if (before == null || after == null) return false;
+  const targets = [[], []];
+  const stripped = [before, after].map((html, index) => html.replace(
+    /(\s(?:href|data-href)=)(["'])([^"'<>]*)\2/gi,
+    (_, prefix, quote, href) => {
+      targets[index].push(href);
+      return `${prefix}${quote}PRODUCT_TARGET${quote}`;
+    },
+  ));
+  return stripped[0] === stripped[1] && targets[1].some((href, i) => href !== targets[0][i])
+    && targets[1].every((href, i) => {
+      if (href === targets[0][i]) return true;
+      if (/^(?:[a-z]+:|\/\/)/i.test(href)) return false;
+      const old = new URL(targets[0][i].replaceAll("&amp;", "&"), "https://ks.fish/");
+      const next = new URL(href.replaceAll("&amp;", "&"), "https://ks.fish/");
+      const id = next.searchParams.get("product");
+      return old.pathname === "/catalog/" && next.pathname === "/catalog/"
+        && /^[a-z0-9-]+$/.test(id ?? "") && next.hash === `#product-${id}`;
+    });
+}
+
 // A resource version can change without changing the component's public shape.
 // Local resource versions belong to publication assembly. Removing a former
 // manual version does not change the module or page's customer behaviour.
@@ -159,6 +181,7 @@ export function scopedBrowserTags(changes) {
     } else if (path.endsWith(".html") && before != null && after != null) {
       const oldHtml = resourceVersions(before), newHtml = resourceVersions(after);
       if (oldHtml === newHtml) continue;
+      if (onlyProductTargets(oldHtml, newHtml)) { tags.add("@catalog"); continue; }
       const region = path === "index.html" ? /<!-- shared:mobile-hero:start -->[\s\S]*?<!-- shared:mobile-hero:end -->/
         : path === "catalog/index.html" || /^journal\/\d+\/index\.html$/.test(path) ? /<main\b[^>]*>[\s\S]*?<\/main>/ : null;
       if (!region || !region.test(oldHtml) || !region.test(newHtml)

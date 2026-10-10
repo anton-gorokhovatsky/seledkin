@@ -268,6 +268,8 @@
     {
       "source": "https://t.me/kapitanseledkin/506",
       "label": "Олег о селёдке",
+      "image": "journal-506.jpg",
+      "alt": "Сельдь в руке в перчатке на красном фоне",
       "products": [
         {
           "category": "prepared-fish",
@@ -278,6 +280,8 @@
     {
       "source": "https://t.me/kapitanseledkin/610",
       "label": "Олег о командорском кальмаре",
+      "image": "journal-610.jpg",
+      "alt": "Командорский кальмар в упаковке",
       "products": [
         {
           "category": "seafood",

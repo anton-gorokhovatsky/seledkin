@@ -6,6 +6,62 @@ test.beforeEach(async ({ context }) => {
   await context.route("https://mc.yandex.ru/**", route => route.abort());
 });
 
+test("catalog advice previews retain the full photograph, keyboard access and direct touch navigation @catalog", async ({ page, browser, baseURL }, testInfo) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem("seledkin-theme")) localStorage.setItem("seledkin-theme", "light");
+  });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("catalog/?q=мясо+мидий&category=seafood&audit=advice");
+  await page.evaluate(() => document.fonts.ready);
+  const product = page.locator(".catalog-product:visible");
+  const recipe = product.getByRole("link", { name: "Мидии с рисом", exact: true });
+  const photo = recipe.locator(".catalog-advice-photo");
+  await recipe.hover();
+  await expect(photo).toBeVisible();
+  await expect(photo.locator("img")).toHaveJSProperty("complete", true);
+  const frame = await photo.locator("img").evaluate(img => ({ natural: img.naturalWidth / img.naturalHeight, rendered: img.clientWidth / img.clientHeight }));
+  expect(Math.abs(frame.natural - frame.rendered)).toBeLessThan(.02);
+  const bounds = await photo.boundingBox();
+  expect(bounds.x).toBeGreaterThanOrEqual(12);
+  expect(bounds.x + bounds.width).toBeLessThanOrEqual(1440 - 12);
+  expect(bounds.y).toBeGreaterThanOrEqual(12);
+  expect(bounds.y + bounds.height).toBeLessThanOrEqual(1000 - 12);
+  await page.screenshot({ path: testInfo.outputPath("advice-hover-1440-light.png") });
+  await page.evaluate(() => localStorage.setItem("seledkin-theme", "dark"));
+  await page.reload();
+  await page.evaluate(() => document.fonts.ready);
+  await recipe.hover();
+  await expect(photo).toBeVisible();
+  await expect(photo.locator("img")).toHaveJSProperty("complete", true);
+  await page.screenshot({ path: testInfo.outputPath("advice-hover-1440-dark.png") });
+  await photo.hover();
+  await expect(photo).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(photo).toBeHidden();
+  await page.mouse.move(0, 0);
+  await product.getByRole("checkbox").focus();
+  // Safari on macOS includes links with Option–Tab unless full keyboard
+  // navigation is enabled; preserve the browser's native preference.
+  await page.keyboard.press(testInfo.project.name === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab");
+  await expect(recipe).toBeFocused();
+  await expect(photo).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(photo).toBeHidden();
+  await expect(recipe).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/journal\/574\/$/);
+
+  await page.goto("catalog/?q=кальмар&category=seafood&audit=advice");
+  await page.locator('.catalog-advice-link[href="https://t.me/kapitanseledkin/610"]').first().hover();
+  await expect(page.locator(".catalog-advice-link.is-previewing img")).toHaveAttribute("src", /journal-610-/);
+  const phoneContext = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
+  const phone = await phoneContext.newPage();
+  await phone.goto(`${baseURL}catalog/?q=мясо+мидий&category=seafood&audit=advice`);
+  await phone.locator(".catalog-product:visible").getByRole("link", { name: "Мидии с рисом", exact: true }).tap();
+  await expect(phone).toHaveURL(/journal\/574\/$/);
+  await phoneContext.close();
+});
+
 test("a buyer can cook the right shrimp variant and return to its current price @journal", async ({ page }) => {
   await page.goto("catalog/?q=патагонская&category=seafood&audit=recipes");
   const products = page.locator(".catalog-product:visible");

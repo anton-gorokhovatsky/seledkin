@@ -16,7 +16,8 @@
     "test": "node scripts/build-map-token.mjs && node --test tests/*.test.mjs",
     "test:browser": "playwright test",
     "build:media": "node scripts/build-media.mjs",
-    "build:site": "node scripts/build-site.mjs && node scripts/build-catalog.mjs"
+    "build:site": "node scripts/build-site.mjs && node scripts/build-catalog.mjs",
+    "package:site": "node scripts/build-map-token.mjs && node scripts/package-site.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",

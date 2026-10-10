@@ -333,7 +333,8 @@ test("a photographed product opens its own catalog position, price and order @af
     await expect(page.locator(".afisha__count")).toHaveText(`${i + 1}/5`);
     const href = await frame.getAttribute("href");
     await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", href);
-    expect(new URL(href, page.url()).searchParams.get("q")).toBe(expected[i]);
+    const destinationUrl = new URL(href, page.url());
+    expect(destinationUrl.hash).toBe(`#product-${destinationUrl.searchParams.get("product")}`);
     expect(decodeURIComponent(await page.locator(".afisha__order").getAttribute("href"))).toContain(expected[i]);
     destinations.push({ href, price: await page.locator(".afisha__price").textContent(), name: expected[i] });
     await frame.press("ArrowRight");

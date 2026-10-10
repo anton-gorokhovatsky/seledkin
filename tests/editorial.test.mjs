@@ -39,10 +39,10 @@ test("all homepage price examples agree with the current catalog", () => {
   for (const [, href, name, price] of products) {
     const url = new URL(href.replaceAll("&amp;", "&"), "https://ks.fish/");
     assert.equal(url.pathname, "/catalog/");
-    const category = catalog.find(item => item.slug === url.searchParams.get("category"));
-    assert.ok(category?.items.some(item => comparable(item.name) === comparable(name)
-      && comparable(catalogPrice(item.price)) === comparable(price)
-      && matchesSearch(productSearchText(category, item), url.searchParams.get("q"))), `Homepage disagrees with catalog: ${plain(name)} ${plain(price)}`);
+    const product = catalog.flatMap(category => category.items).find(item => item.id === url.searchParams.get("product"));
+    assert.ok(product && comparable(product.name) === comparable(name)
+      && comparable(catalogPrice(product.price)) === comparable(price), `Homepage disagrees with catalog: ${plain(name)} ${plain(price)}`);
+    assert.equal(url.hash, `#product-${product.id}`);
   }
 });
 

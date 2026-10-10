@@ -11,6 +11,7 @@ const list = document.querySelector("[data-catalog-list]");
 const count = document.querySelector("[data-catalog-count]");
 const reset = document.querySelector("[data-catalog-reset]");
 const controls = document.querySelector("[data-catalog-controls]");
+const closeAdvicePreview = setupAdvicePreviews();
 const empty = document.querySelector("[data-catalog-empty]");
 const emptyMessage = empty.querySelector("[data-catalog-empty-message]");
 const emptyHint = empty.querySelector("[data-catalog-empty-hint]");
@@ -26,6 +27,7 @@ const categories = [...list.querySelectorAll(".catalog-category")].map((section)
 }));
 let activeCategory = "all";
 let query = "";
+let activeProduct = "";
 let results = { products: 0, journal: 0, totalProducts: 0 };
 const searchTracker = createSearchTracker((goal, params) => {
   document.dispatchEvent(new CustomEvent("shop:goal", { detail: { goal, params } }));
@@ -40,26 +42,35 @@ function readUrl() {
   const category = url.searchParams.get("category") ?? url.hash.replace(/^#category-/, "");
   activeCategory = categories.some(({ slug }) => slug === category) ? category : "all";
   query = url.searchParams.get("q")?.trim() ?? "";
+  activeProduct = url.searchParams.get("product") ?? "";
+  const categoryOfProduct = categories.find(category => category.products.some(product => product.dataset.productId === activeProduct));
+  if (categoryOfProduct) {
+    activeCategory = categoryOfProduct.slug;
+    query = categoryOfProduct.products.find(product => product.dataset.productId === activeProduct).dataset.productName;
+  } else activeProduct = "";
   search.value = query;
 }
 
 function writeUrl(replace = false) {
   const url = new URL(location.href);
+  activeProduct = "";
+  url.searchParams.delete("product");
   query.trim() ? url.searchParams.set("q", query.trim()) : url.searchParams.delete("q");
   activeCategory === "all" ? url.searchParams.delete("category") : url.searchParams.set("category", activeCategory);
-  if (url.hash.startsWith("#category-")) url.hash = "";
+  if (/^#(?:category|product)-/.test(url.hash)) url.hash = "";
   if (url.href !== location.href) {
     history[replace ? "replaceState" : "pushState"](null, "", url);
   }
 }
 
 function render() {
+  closeAdvicePreview();
   let visibleCount = 0;
   let totalProducts = 0;
   for (const category of categories) {
     let categoryCount = 0;
     for (const product of category.products) {
-      const matches = matchesSearch(product.dataset.searchText, query);
+      const matches = activeProduct ? product.dataset.productId === activeProduct : matchesSearch(product.dataset.searchText, query);
       if (matches) totalProducts += 1;
       product.hidden = (activeCategory !== "all" && activeCategory !== category.slug) || !matches;
       if (!product.hidden) categoryCount += 1;
@@ -90,6 +101,7 @@ function render() {
   allCategories.hidden = !categoryRestricted;
   orderList.setSearchState({ needsHelp: visibleCount === 0 });
   reset.hidden = activeCategory === "all" && query === "";
+  reset.textContent = activeProduct ? "Весь каталог" : "Сбросить поиск";
   filters.querySelectorAll("button").forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.category === activeCategory));
   });
@@ -138,11 +150,71 @@ allCategories.addEventListener("click", () => {
 function restore() {
   readUrl();
   render();
+  const targetId = activeProduct;
+  if (targetId) requestAnimationFrame(() => {
+    const product = document.getElementById(`product-${targetId}`);
+    if (!product || product.hidden || targetId !== activeProduct) return;
+    product.scrollIntoView({ block: "start" });
+    product.focus({ preventScroll: true });
+  });
 }
 window.addEventListener("popstate", restore);
 window.addEventListener("hashchange", restore);
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden" && document.activeElement === search) reportSearch("leave");
 });
+function setupAdvicePreviews() {
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return () => {};
+  let active = null;
+  let closeTimer;
+  const close = () => {
+    clearTimeout(closeTimer);
+    active?.classList.remove("is-previewing");
+    active = null;
+  };
+  const place = link => {
+    const panel = link.querySelector(".catalog-advice-photo");
+    const anchor = link.getBoundingClientRect();
+    const photo = panel.getBoundingClientRect();
+    const product = link.closest(".catalog-product").getBoundingClientRect();
+    const right = product.right + 16;
+    const leftOfProduct = product.left - photo.width - 16;
+    const beside = right + photo.width <= innerWidth - 12 || leftOfProduct >= 12;
+    const left = beside ? (right + photo.width <= innerWidth - 12 ? right : leftOfProduct)
+      : Math.max(12, Math.min(anchor.left, innerWidth - photo.width - 12));
+    const top = beside ? Math.max(12, Math.min(anchor.bottom - photo.height, innerHeight - photo.height - 12))
+      : anchor.top >= photo.height + 24 ? anchor.top - photo.height - 12
+        : Math.max(12, Math.min(anchor.bottom + 12, innerHeight - photo.height - 12));
+    panel.style.setProperty("--preview-left", `${left}px`);
+    panel.style.setProperty("--preview-top", `${top}px`);
+  };
+  for (const link of document.querySelectorAll(".catalog-advice-link")) {
+    const show = () => {
+      close();
+      active = link;
+      link.classList.add("is-previewing");
+      place(link);
+    };
+    const leave = () => {
+      if (!link.matches(":focus-visible")) closeTimer = setTimeout(close, 350);
+    };
+    link.addEventListener("pointerenter", show);
+    link.addEventListener("pointerleave", leave);
+    link.addEventListener("focus", () => { if (link.matches(":focus-visible")) show(); });
+    link.addEventListener("blur", close);
+    link.querySelector(".catalog-advice-photo").addEventListener("pointerenter", () => clearTimeout(closeTimer));
+    link.querySelector(".catalog-advice-photo").addEventListener("pointerleave", leave);
+    link.querySelector("img").addEventListener("load", () => { if (active === link) place(link); });
+  }
+  document.addEventListener("keydown", event => { if (event.key === "Escape" && active) close(); });
+  window.addEventListener("scroll", () => {
+    if (!active) return;
+    const bounds = active.getBoundingClientRect();
+    if (bounds.bottom < 0 || bounds.top > innerHeight) close();
+    else place(active);
+  }, { passive: true });
+  window.addEventListener("resize", close);
+  return close;
+}
 restore();
 controls.hidden = false;

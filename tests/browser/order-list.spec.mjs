@@ -17,31 +17,36 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
   const second = products.filter({ hasText: "15 000" }).getByRole("checkbox");
   await first.press("Space");
   await second.check();
-  const shortcut = page.getByRole("link", { name: "Список заказа · 2 позиции" });
-  await expect(shortcut).toBeVisible();
+  await expect(page.getByRole("link", { name: "К списку заказа · 2 позиции" })).toBeVisible();
+  const list = page.locator("#order-list");
+  await list.getByRole("textbox", { name: /Количество.*6\s000/ }).fill("2");
+  await list.getByRole("textbox", { name: /Количество.*15\s000/ }).fill("1");
+  const shortcut = page.getByRole("link", { name: "К списку заказа · 2 позиции" });
+  await expect(list.getByRole("textbox", { name: /Количество.*6\s000/ })).toHaveValue("2");
   await page.getByRole("searchbox").fill("тунец");
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await page.reload();
-  await expect(shortcut).toBeVisible();
+  await expect(list.getByRole("textbox", { name: /Количество.*6\s000/ })).toHaveValue("2");
   await page.getByRole("searchbox").fill("несуществующийтовар");
   await expect(page.locator("#order-list").getByRole("heading", { name: "Список заказа" })).toBeVisible();
-  await expect(page.locator("#order-list").getByRole("link", { name: "Отправить список в Телеграме" })).toBeVisible();
-  await page.getByRole("searchbox").fill("тунец");
+  await expect(page.locator("#order-list").getByRole("link", { name: "Скопировать и открыть Телеграм" })).toBeVisible();
+  await page.getByRole("searchbox").fill("");
   await shortcut.press("Enter");
-  const list = page.locator("#order-list");
   await expect(list).toBeFocused();
   await expect(list.getByRole("list")).toContainText("6 000 ₽ за 50 г");
   await expect(list.getByRole("list")).toContainText("15 000 ₽ за 125 г");
-  const telegram = new URL(await list.getByRole("link", { name: "Отправить список в Телеграме" }).getAttribute("href"));
-  const whatsapp = new URL(await list.getByRole("link", { name: "Отправить список в WhatsApp" }).getAttribute("href"));
+  const telegram = new URL(await list.getByRole("link", { name: "Скопировать и открыть Телеграм" }).getAttribute("href"));
+  const whatsapp = new URL(await list.getByRole("link", { name: "Открыть список в WhatsApp" }).getAttribute("href"));
   expect(telegram.searchParams.get("text")).toBe(whatsapp.searchParams.get("text"));
   expect(telegram.searchParams.get("text")).toContain("6 000 ₽ за 50 г");
   expect(telegram.searchParams.get("text")).toContain("15 000 ₽ за 125 г");
+  expect(telegram.searchParams.get("text")).toContain("Количество: 2 шт.");
+  await expect(list.locator("[data-order-note]")).toContainText("Список сохранён в этом браузере");
   await page.evaluate(() => document.documentElement.dataset.theme = "light");
   await auditOrderList(page);
   await page.setViewportSize({ width: 320, height: 844 });
   await page.evaluate(() => document.documentElement.dataset.theme = "dark");
-  await expect(list.getByRole("link", { name: "Отправить список в Телеграме" })).toBeVisible();
+  await expect(list.getByRole("link", { name: "Скопировать и открыть Телеграм" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   await list.screenshot({ path: testInfo.outputPath("order-list-320-dark.png") });
   await auditOrderList(page);
@@ -60,7 +65,7 @@ test("an existing saved order migrates to current product IDs @catalog", async (
     "removed-product",
   ])));
   await page.goto("catalog/?q=черная+икра&audit=order-list");
-  await expect(page.getByRole("link", { name: "Список заказа · 2 позиции" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "К списку заказа · 2 позиции" })).toBeVisible();
   await expect(page.locator(".catalog-product:visible").getByRole("checkbox", { checked: true })).toHaveCount(2);
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seledkin-order-list")))).toEqual(["caviar-001", "caviar-002"]);
   await expect(page.locator("#order-list").getByRole("list")).toContainText("15 000 ₽ за 125 г");
@@ -72,9 +77,69 @@ test("blocked storage leaves the order list usable during a visit @catalog", asy
   });
   await page.goto("catalog/?q=тунец&audit=order-list");
   await page.locator(".catalog-product:visible").getByRole("checkbox").check();
-  await page.getByRole("link", { name: "Список заказа · 1 позиция" }).click();
-  const draft = new URL(await page.locator("#order-list").getByRole("link", { name: "Отправить список в Телеграме" }).getAttribute("href"));
+  await page.locator("#order-list").scrollIntoViewIfNeeded();
+  await expect(page.locator("[data-order-note]")).toContainText("сохранение недоступно");
+  const draft = new URL(await page.locator("#order-list").getByRole("link", { name: "Скопировать и открыть Телеграм" }).getAttribute("href"));
   expect(draft.searchParams.get("text")).toContain("Филе тунца");
+});
+
+test("desktop handoff copies the full list before opening Telegram @catalog", async ({ page }, testInfo) => {
+  let copiedOrder;
+  await page.exposeFunction("captureCopiedOrder", text => { copiedOrder = text; });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.addInitScript(() => {
+    localStorage.setItem("seledkin-order-list", JSON.stringify(["caviar-001", "caviar-004", "caviar-009", "seafood-002", "frozen-fish-004", "other-004"]));
+    localStorage.setItem("seledkin-order-amounts", JSON.stringify({"caviar-001":"2", "seafood-002":"0,5"}));
+    Object.defineProperty(navigator, "clipboard", { value: { async writeText(text) { await window.captureCopiedOrder(text); } } });
+  });
+  await page.route("https://t.me/**", route => route.fulfill({ contentType: "text/html", body: "<p>Telegram contact landing fixture</p>" }));
+  await page.goto("catalog/?audit=order-list#order-list");
+  const list = page.locator("#order-list");
+  await expect(list.getByRole("textbox", { name: /Вес.*Мясо краба/ })).toHaveValue("0,5");
+  await list.screenshot({ path: testInfo.outputPath("order-list-1440-light.png") });
+  const expected = new URL(await list.getByRole("link", { name: "Скопировать и открыть Телеграм" }).getAttribute("href")).searchParams.get("text");
+  await list.getByRole("link", { name: "Скопировать и открыть Телеграм" }).click();
+  await expect(page).toHaveURL(/^https:\/\/t\.me\//);
+  expect(copiedOrder).toBe(expected);
+  expect(expected).toContain("Количество: 2 шт.");
+  expect(expected).toContain("Вес: 0,5 кг");
+  expect(expected).toContain("Камбала-ерш");
+});
+
+test("denied copying leaves the draft selectable and invalid weight blocks handoff @catalog", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", { value: { async writeText() { throw new Error("Clipboard denied"); } } });
+  });
+  await page.goto("catalog/?product=fillet-006&audit=order-list#product-fillet-006");
+  await page.locator(".catalog-product:visible").getByRole("checkbox").check();
+  const list = page.locator("#order-list");
+  const weight = list.getByRole("textbox", { name: /Вес.*Филе тунца/ });
+  await weight.fill("0");
+  await list.getByRole("link", { name: "Скопировать и открыть Телеграм" }).click();
+  await expect(weight).toBeFocused();
+  await expect(weight).toHaveAttribute("aria-invalid", "true");
+  await weight.fill("0,5");
+  await list.getByRole("link", { name: "Скопировать и открыть Телеграм" }).click();
+  const draft = list.getByRole("textbox", { name: "Текст для сообщения" });
+  await expect(draft).toBeVisible();
+  await expect(draft).toBeFocused();
+  expect(await draft.inputValue()).toContain("Вес: 0,5 кг");
+  expect(await draft.evaluate(field => field.selectionEnd - field.selectionStart)).toBe((await draft.inputValue()).length);
+  await expect(list.getByRole("link", { name: "Открыть чат в Телеграме" })).toBeVisible();
+  await expect(page).toHaveURL(/catalog\//);
+});
+
+test("a homepage price opens its exact package and keeps normal catalog navigation @catalog", async ({ page }) => {
+  await page.goto("?audit=order-list");
+  await page.locator(".price-preview").getByRole("link", { name: "Чёрная икра" }).click();
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
+  await expect(page.locator("#product-caviar-001")).toContainText("6 000 ₽ за 50 г");
+  await expect(page.locator("#product-caviar-001")).toBeFocused();
+  await page.getByRole("button", { name: "Весь каталог", exact: true }).click();
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(116);
+  await page.goBack();
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
+  await expect(page.locator("#product-caviar-001")).toBeFocused();
 });
 
 test("contacts retain the address and map action with 200 percent text @contacts", async ({ page }, testInfo) => {
