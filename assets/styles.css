@@ -4831,7 +4831,7 @@ a.site-menu__brand {
     overflow: visible;
     clip: auto;
     white-space: normal;
-    font: 400 clamp(1.95rem, -.65rem + 13vw, 3.2rem)/1.01 var(--serif);
+    font: 400 clamp(1.8rem, -.65rem + 12vw, 3.2rem)/1.01 var(--serif);
     letter-spacing: -.035em;
     text-shadow: none;
     color: inherit;

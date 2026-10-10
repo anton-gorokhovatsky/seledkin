@@ -40,6 +40,7 @@ test("updated search and journal counters keep their number and noun together", 
   await page.locator("[data-catalog-search]").fill("нерка");
   await expect(page.locator("[data-catalog-count]")).toHaveText("2 позиции");
   expect(await page.locator("[data-catalog-count]").textContent()).toBe("2\u00a0позиции");
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("");
   await page.locator("[data-hero-journal-next]").click();
   expect(await page.locator("[data-hero-journal-counter]").textContent()).toBe("2\u00a0из\u00a05");

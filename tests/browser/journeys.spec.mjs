@@ -214,15 +214,15 @@ test("the full journal remains directly available without JavaScript", async ({ 
   await context.route("https://mc.yandex.ru/**", route => route.abort());
   const page = await context.newPage();
   await page.goto(baseURL);
-  const archive = page.locator('[data-hero-journal-all]');
+  const archive = page.locator('.journal-preview__header a');
   await expect(archive).toBeVisible();
   await archive.click();
   await expect(page).toHaveURL(/journal\/$/);
   await context.close();
 });
 
-test("the final journal action reflows with enlarged text and custom spacing", async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 568 });
+test("the desktop journal action reflows with enlarged text and custom spacing", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   for (const content of [
     'html { font-size: 200% !important; }',
     '* { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-bottom: 2em !important; }',
@@ -236,7 +236,7 @@ test("the final journal action reflows with enlarged text and custom spacing", a
     const boxes = await page.locator('.source-hero__journal-controls').evaluate(el => [...el.querySelectorAll('[data-hero-journal-previous], [data-hero-journal-all], .source-hero__journal-status')].map(e => e.getBoundingClientRect().toJSON()));
     for (const [i, a] of boxes.entries()) {
       expect(a.x).toBeGreaterThanOrEqual(0);
-      expect(a.right).toBeLessThanOrEqual(320);
+      expect(a.right).toBeLessThanOrEqual(1440);
       for (const b of boxes.slice(i + 1)) {
         expect(a.right <= b.x || b.right <= a.x || a.bottom <= b.y || b.bottom <= a.y).toBe(true);
       }

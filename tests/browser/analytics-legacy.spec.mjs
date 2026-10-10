@@ -43,7 +43,7 @@ test("typing is not a failed search, and broadening records a successful recover
 test("service entry excludes the whole tab, but an explicit ordinary visit can resume measurement", async ({ page }) => {
   const requests = await publicFixture(page);
   await page.goto("https://ks.fish/?audit=analytics-check");
-  await page.getByRole("link", { name: "Каталог и цены", exact: true }).first().click();
+  await page.getByRole("link", { name: "Весь каталог", exact: true }).click();
   await expect(page.getByRole("searchbox", { name: "Найти товар" })).toBeVisible();
   await page.getByRole("searchbox", { name: "Найти товар" }).fill("тунец");
   await page.getByRole("searchbox", { name: "Найти товар" }).press("Enter");
