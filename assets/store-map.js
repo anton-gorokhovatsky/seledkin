@@ -1,4 +1,4 @@
-import { mapAccessToken, mapStyles, storeLocation, nearestMetroLocation, universityMetroLocation } from "./store-map-config.js?v=mapbox-stations-4";
+import { mapAccessToken, mapStyles, storeLocation, nearestMetroLocation, universityMetroLocation } from "./store-map-config.js";
 import { styleStoreMap } from "./store-map-style.js";
 
 const root = document.documentElement;

@@ -1,4 +1,4 @@
-import { normalizeSearch } from "./catalog-model.js?v=buyer-paths-1";
+import { normalizeSearch } from "./catalog-model.js";
 
 // Only committed actions are searches: leaving the field, Enter, a category
 // change, broadening or leaving the page. Pauses while typing are not failures.

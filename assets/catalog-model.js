@@ -1,4 +1,4 @@
-import { typographPrice, typographText } from "./typography.js?v=typography-23-1";
+import { typographPrice, typographText } from "./typography.js";
 
 export function normalizeSearch(value) {
   return value.toLocaleLowerCase("ru-RU").replaceAll("ё", "е")
@@ -106,9 +106,21 @@ export function productNotes(product) {
 }
 
 export function productKey(category, product) {
-  // Identity includes the package, not the changing price. Stored selections
-  // resolve against today's catalog; stale descriptions never enter a draft.
+  return product.id;
+}
+
+// Preserve orders saved before permanent product IDs were introduced.
+export function legacyProductKey(category, product) {
   return [category.slug, product.name, product.description ?? "", product.price.split("₽")[1] ?? ""].join("|");
+}
+
+export function restoreOrderKeys(saved, catalog) {
+  const current = new Set(), legacy = new Map();
+  for (const category of catalog) for (const product of category.items) {
+    current.add(product.id);
+    legacy.set(legacyProductKey(category, product), product.id);
+  }
+  return Array.isArray(saved) ? [...new Set(saved.map(key => current.has(key) ? key : legacy.get(key)).filter(Boolean))] : [];
 }
 
 export function orderLinks(productOrProducts) {

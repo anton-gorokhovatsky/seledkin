@@ -33,7 +33,7 @@ export function renderLegacyRoute({ target, label }) {
       });
       location.replace(destination.href);
     </script>
-    <link rel="stylesheet" href="../assets/styles.css?v=buyer-paths-1" />
+    <link rel="stylesheet" href="../assets/styles.css" />
   </head>
   <body class="not-found-page">
     <main class="not-found-source">

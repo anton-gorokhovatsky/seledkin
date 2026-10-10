@@ -1,5 +1,14 @@
 import { test, expect } from "@playwright/test";
+import { createRequire } from "node:module";
 import { stubStoreMap } from "./map-fixture.mjs";
+
+const require = createRequire(import.meta.url);
+async function auditOrderList(page) {
+  await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
+  expect(await page.evaluate(async () => (await axe.run("#order-list", {
+    runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] },
+  })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })))).toEqual([]);
+}
 
 test("a buyer builds one order with distinct packages, filters, persistence and keyboard removal @catalog", async ({ page }, testInfo) => {
   await page.goto("catalog/?q=черная+икра&audit=order-list");
@@ -14,6 +23,10 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await page.reload();
   await expect(shortcut).toBeVisible();
+  await page.getByRole("searchbox").fill("несуществующийтовар");
+  await expect(page.locator("#order-list").getByRole("heading", { name: "Список заказа" })).toBeVisible();
+  await expect(page.locator("#order-list").getByRole("link", { name: "Отправить список в Телеграме" })).toBeVisible();
+  await page.getByRole("searchbox").fill("тунец");
   await shortcut.press("Enter");
   const list = page.locator("#order-list");
   await expect(list).toBeFocused();
@@ -24,17 +37,33 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
   expect(telegram.searchParams.get("text")).toBe(whatsapp.searchParams.get("text"));
   expect(telegram.searchParams.get("text")).toContain("6 000 ₽ за 50 г");
   expect(telegram.searchParams.get("text")).toContain("15 000 ₽ за 125 г");
+  await page.evaluate(() => document.documentElement.dataset.theme = "light");
+  await auditOrderList(page);
   await page.setViewportSize({ width: 320, height: 844 });
   await page.evaluate(() => document.documentElement.dataset.theme = "dark");
   await expect(list.getByRole("link", { name: "Отправить список в Телеграме" })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   await list.screenshot({ path: testInfo.outputPath("order-list-320-dark.png") });
+  await auditOrderList(page);
   await list.getByRole("button", { name: /Убрать.*6\s000/ }).press("Enter");
   await expect(list.getByRole("button", { name: /Убрать.*15\s000/ })).toBeFocused();
   await list.getByRole("button", { name: /Убрать.*15\s000/ }).press("Enter");
   await expect(list.getByRole("heading", { name: "Нашли нужное?" })).toBeVisible();
   await expect(shortcut).toBeHidden();
   await expect(list.getByRole("link", { name: "Заказать в Телеграме", exact: true })).toBeFocused();
+});
+
+test("an existing saved order migrates to current product IDs @catalog", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("seledkin-order-list", JSON.stringify([
+    "caviar|Черная икра|Осетровая (забойная) высшего качества|/0,05 кг",
+    "caviar|Черная икра|Осетровая (забойная) высшего качества|/0,125 кг",
+    "removed-product",
+  ])));
+  await page.goto("catalog/?q=черная+икра&audit=order-list");
+  await expect(page.getByRole("link", { name: "Список заказа · 2 позиции" })).toBeVisible();
+  await expect(page.locator(".catalog-product:visible").getByRole("checkbox", { checked: true })).toHaveCount(2);
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seledkin-order-list")))).toEqual(["caviar-001", "caviar-002"]);
+  await expect(page.locator("#order-list").getByRole("list")).toContainText("15 000 ₽ за 125 г");
 });
 
 test("blocked storage leaves the order list usable during a visit @catalog", async ({ page }) => {

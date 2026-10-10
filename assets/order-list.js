@@ -1,8 +1,8 @@
 import { catalog } from "./catalog-data.js";
-import { catalogPrice, orderLinks, positionCount, productKey } from "./catalog-model.js?v=customer-paths-1";
-import { typographText } from "./typography.js?v=typography-23-1";
+import { catalogPrice, orderLinks, positionCount, productKey, restoreOrderKeys } from "./catalog-model.js";
+import { typographText } from "./typography.js";
 
-export function setupOrderList(onChange = () => {}) {
+export function setupOrderList() {
   const region = document.querySelector("#order-list");
   if (!region) return;
   const items = region.querySelector("[data-order-items]");
@@ -14,12 +14,14 @@ export function setupOrderList(onChange = () => {}) {
   const storageKey = "seledkin-order-list";
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey) ?? "[]");
-    if (Array.isArray(saved)) for (const key of saved) if (products.has(key)) selected.add(key);
+    for (const key of restoreOrderKeys(saved, catalog)) selected.add(key);
+    if (selected.size) localStorage.setItem(storageKey, JSON.stringify([...selected]));
   } catch { /* The list still works during this visit when storage is blocked. */ }
   const title = region.querySelector("[data-catalog-order-title]");
   const copy = region.querySelector("[data-catalog-order-copy]");
   const channels = [...region.querySelectorAll(".catalog-order-actions a")];
   const defaults = { title: title.textContent, copy: copy.textContent, urls: channels.map(a => a.href) };
+  let needsHelp = false;
   const toolbar = document.querySelector(".catalog-result-line");
   const shortcut = document.createElement("a");
   shortcut.className = "catalog-order-shortcut";
@@ -74,19 +76,18 @@ export function setupOrderList(onChange = () => {}) {
         channel.querySelector("span").textContent = `Отправить список в ${index === 0 ? "Телеграме" : "WhatsApp"}`;
       }
     } else {
-      title.textContent = defaults.title;
-      copy.textContent = defaults.copy;
+      title.textContent = needsHelp ? "Помочь с выбором?" : defaults.title;
+      copy.textContent = needsHelp ? "Напишите, что ищете: уточним наличие и подскажем подходящие продукты." : defaults.copy;
       for (const [index, channel] of channels.entries()) {
         channel.href = defaults.urls[index];
         delete channel.dataset.orderListCount;
-        channel.querySelector("span").textContent = `Заказать в ${index === 0 ? "Телеграме" : "WhatsApp"}`;
+        channel.querySelector("span").textContent = `${needsHelp ? "Спросить" : "Заказать"} в ${index === 0 ? "Телеграме" : "WhatsApp"}`;
       }
     }
   }
   function update(message) {
     try { localStorage.setItem(storageKey, JSON.stringify([...selected])); } catch {}
     render();
-    onChange();
     status.textContent = typographText(`${message}. В списке ${positionCount(selected.size)}.`);
   }
   for (const input of inputs) input.addEventListener("change", () => {
@@ -95,5 +96,5 @@ export function setupOrderList(onChange = () => {}) {
   });
   shortcut.addEventListener("click", () => region.focus({ preventScroll: true }));
   render();
-  return { hasItems: () => selected.size > 0 };
+  return { setSearchState(state) { needsHelp = state.needsHelp; render(); } };
 }

@@ -1,5 +1,5 @@
-import { store } from "./store-data.js?v=sea-hours-1";
-import { storeClock } from "./store-time.js?v=sea-hours-1";
+import { store } from "./store-data.js";
+import { storeClock } from "./store-time.js";
 
 export const themeStorageKey = "seledkin-theme";
 export const storeTimeZone = store.timeZone;

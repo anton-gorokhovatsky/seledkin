@@ -122,7 +122,7 @@ export function renderTheme(page) {
 }
 
 export function renderAnalytics(root) {
-  return `    <script type="module" src="${root}assets/analytics.js?v=customer-paths-1"></script>`;
+  return `    <script type="module" src="${root}assets/analytics.js"></script>`;
 }
 
 function date(entry, year = true) {

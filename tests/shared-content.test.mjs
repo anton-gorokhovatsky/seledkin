@@ -7,16 +7,16 @@ import { entries, renderJournal, renderMenu, renderFooter, renderTheme, renderJo
 test("committed shared regions are current and building twice is unnecessary", () => {
   // The check regenerates every shared region in memory and compares exact bytes.
   execFileSync(process.execPath, ["scripts/build-site.mjs", "--check"]);
-  const versions = ["index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html", ...entries.map(entry => `journal/${entry.id}/index.html`)]
-    .map(path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8").match(/styles\.css\?v=([^"\s]+)/)?.[1]);
-  assert.ok(versions.every(Boolean));
-  assert.equal(new Set(versions).size, 1);
+  for (const path of ["index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html", ...entries.map(entry => `journal/${entry.id}/index.html`)]) {
+    assert.match(readFileSync(new URL(`../${path}`, import.meta.url), "utf8"), /href="(?:\.\.\/)*assets\/styles\.css"/,
+      "asset versions are assigned to the publication rather than edited by hand");
+  }
 });
 
 test("every page initializes analytics once through the guarded shared module", () => {
   for (const path of ["index.html", "catalog/index.html", "about/index.html", "journal/index.html", "404.html", ...entries.map(entry => `journal/${entry.id}/index.html`)]) {
     const html = readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
-    assert.equal((html.match(/src="[^"]*assets\/analytics\.js\?/g) ?? []).length, 1, path);
+    assert.equal((html.match(/src="[^"]*assets\/analytics\.js"/g) ?? []).length, 1, path);
     assert.ok(!html.includes("mc.yandex.ru"), `Unconditional counter in ${path}`);
   }
 });

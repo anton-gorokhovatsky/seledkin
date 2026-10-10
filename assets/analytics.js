@@ -1,4 +1,4 @@
-import { analyticsAllowed } from "./analytics-policy.js?v=analytics-2";
+import { analyticsAllowed } from "./analytics-policy.js";
 
 // Goal IDs are configured in counter 70820554. A transition is not a purchase.
 // Never include search text, draft messages, URLs or contact details in params.

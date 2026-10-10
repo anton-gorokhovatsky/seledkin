@@ -1,4 +1,4 @@
-import { store } from "./store-data.js?v=sea-hours-1";
+import { store } from "./store-data.js";
 
 const dayMs = 86_400_000;
 const minutes = time => Number(time.slice(0, 2)) * 60 + Number(time.slice(3));

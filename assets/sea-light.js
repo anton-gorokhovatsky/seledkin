@@ -1,4 +1,4 @@
-import { store } from "./store-data.js?v=sea-hours-1";
+import { store } from "./store-data.js";
 
 const rad = Math.PI / 180;
 const clamp = (value, low = 0, high = 1) => Math.min(high, Math.max(low, value));

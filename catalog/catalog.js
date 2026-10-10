@@ -1,7 +1,7 @@
-import { matchesSearch, positionCount } from "../assets/catalog-model.js?v=customer-paths-1";
-import { typographText } from "../assets/typography.js?v=typography-23-1";
-import { createSearchTracker } from "../assets/catalog-analytics.js?v=customer-paths-1";
-import { setupOrderList } from "../assets/order-list.js?v=customer-paths-1";
+import { matchesSearch, positionCount } from "../assets/catalog-model.js";
+import { typographText } from "../assets/typography.js";
+import { createSearchTracker } from "../assets/catalog-analytics.js";
+import { setupOrderList } from "../assets/order-list.js";
 
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");
@@ -15,11 +15,7 @@ const empty = document.querySelector("[data-catalog-empty]");
 const emptyMessage = empty.querySelector("[data-catalog-empty-message]");
 const emptyHint = empty.querySelector("[data-catalog-empty-hint]");
 const allCategories = empty.querySelector("[data-catalog-all-categories]");
-const orderTitle = document.querySelector("[data-catalog-order-title]");
-const orderCopy = document.querySelector("[data-catalog-order-copy]");
-const orderLabels = [...document.querySelectorAll("[data-catalog-order-channel]")];
-const defaultOrder = { title: orderTitle.textContent, copy: orderCopy.textContent };
-const orderList = setupOrderList(render);
+const orderList = setupOrderList();
 const journal = document.querySelector("[data-catalog-journal]");
 const journalEntries = [...journal.querySelectorAll("[data-journal-result]")];
 const categories = [...list.querySelectorAll(".catalog-category")].map((section) => ({
@@ -92,14 +88,7 @@ function render() {
     ? "Попробуйте поиск во всех категориях или измените запрос."
     : "Попробуйте другое название или спросите у лавки.");
   allCategories.hidden = !categoryRestricted;
-  const needsHelp = visibleCount === 0;
-  if (!orderList.hasItems()) {
-    orderTitle.textContent = needsHelp ? "Помочь с выбором?" : defaultOrder.title;
-    orderCopy.textContent = needsHelp
-      ? "Напишите, что ищете: уточним наличие и подскажем подходящие продукты."
-      : defaultOrder.copy;
-    for (const label of orderLabels) label.textContent = `${needsHelp ? "Спросить" : "Заказать"} в ${label.dataset.catalogOrderChannel}`;
-  }
+  orderList.setSearchState({ needsHelp: visibleCount === 0 });
   reset.hidden = activeCategory === "all" && query === "";
   filters.querySelectorAll("button").forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.category === activeCategory));

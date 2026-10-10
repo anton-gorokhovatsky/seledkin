@@ -1,9 +1,9 @@
-import { typographText } from "./typography.js?v=typography-23-1";
+import { typographText } from "./typography.js";
 import { setupAssortmentPreview } from "./assortment-preview.js";
-import { setupMobileHero } from "./mobile-hero.js?v=customer-paths-1";
-import "./theme.js?v=sea-hours-1";
-import "./store-environment.js?v=buyer-paths-1";
-import { syncMenuSeaVideo } from "./sea-motion.js?v=mobile-afisha-1";
+import { setupMobileHero } from "./mobile-hero.js";
+import "./theme.js";
+import "./store-environment.js";
+import { syncMenuSeaVideo } from "./sea-motion.js";
 
 const root = new URL("../", import.meta.url);
 const isHome = location.pathname === root.pathname || location.pathname === `${root.pathname}index.html`;

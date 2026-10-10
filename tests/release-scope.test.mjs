@@ -119,3 +119,14 @@ test("shared tokens, mixed selectors, moved rules and unknown modules retain the
   assert.equal(classifyRelease([{ path:"assets/new-runtime.js", after:"newBehavior()" }]), "full");
   assert.equal(classifyRelease([{ path:"catalog/index.html", before:'<main>catalog</main><footer>old</footer>', after:'<main>catalog</main><footer>new</footer>' }]), "full");
 });
+
+test("automatic publication versions do not turn a catalog change into a full-site pass", () => {
+  assert.deepEqual(scopedBrowserTags([
+    { path: "assets/catalog-data.js", before: "old catalog", after: "catalog with permanent IDs" },
+    { path: "assets/theme.js", before: 'import "./store-time.js?v=old";', after: 'import "./store-time.js";' },
+    { path: "assets/site.js", before: 'const map = "assets/store-map.html?v=old";', after: 'const map = "assets/store-map.html";' },
+    { path: "about/index.html", before: '<link href="../assets/styles.css?v=old">', after: '<link href="../assets/styles.css">' },
+  ]), ["@afisha", "@catalog"]);
+  assert.equal(classifyRelease([{ path: "assets/theme.js", before: 'import "./store-time.js?v=old"; oldLogic();', after: 'import "./store-time.js"; newLogic();' }]), "full");
+  assert.equal(classifyRelease([{ path: "assets/theme.js", before: 'import "https://external.example/module.js?v=old";', after: 'import "https://external.example/module.js?v=new";' }]), "full");
+});

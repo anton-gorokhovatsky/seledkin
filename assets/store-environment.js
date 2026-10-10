@@ -1,5 +1,5 @@
-import { storeStatus } from "./store-time.js?v=sea-hours-1";
-import { seaLight } from "./sea-light.js?v=sea-hours-1";
+import { storeStatus } from "./store-time.js";
+import { seaLight } from "./sea-light.js";
 
 const root = document.documentElement;
 const statuses = [...document.querySelectorAll("[data-store-status]")];

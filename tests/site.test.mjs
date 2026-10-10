@@ -757,7 +757,7 @@ test("the always-active map stays accessible without a separate activation butto
   assert.match(sectionRule, /grid-template-rows:\s*auto clamp\(22rem, 46svh, 30rem\)/);
   assert.match(sectionRule, /margin-bottom:\s*clamp\(4rem, 7vw, 7rem\)/);
   const mapSource = home.match(/<iframe\b[^>]*src="([^"]+)"/)?.[1];
-  assert.equal(mapSource, "assets/store-map.html?v=mapbox-stations-4");
+  assert.equal(mapSource, "assets/store-map.html");
   assert.doesNotMatch(home, /(?:src|data-src)="https:\/\/[^\"]*yandex[^\"]*map-widget/);
   const contactCard =
     home.match(/<address class="contacts-source__card">([\s\S]*?)<\/address>/)?.[1] ?? "";
@@ -1487,7 +1487,7 @@ test("theme follows store hours and a deliberate choice persists across pages", 
     30_050,
   );
 
-  assert.match(siteScript, /import "\.\/theme\.js\?v=sea-hours-1"/);
+  assert.match(siteScript, /import "\.\/theme\.js"/);
   for (const page of [home, catalogPage, notFoundPage]) {
     assert.match(page, /localStorage\.getItem\("seledkin-theme"\)/);
     assert.match(page, /"timeZone":"Europe\/Moscow"/);
@@ -1607,7 +1607,7 @@ test("the custom 404 resolves assets and actions from the deployment root", () =
     `const base = document.querySelector("base")`,
   );
   const firstRelativeAsset = notFoundPage.indexOf(
-    `<link rel="stylesheet" href="assets/styles.css?v=`,
+    `<link rel="stylesheet" href="assets/styles.css"`,
   );
 
   assert.ok(baseBootstrap >= 0);

@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { catalogPrice, matchesSearch, orderLinks, positionCount, productKey, productNotes, productSearchText } from "../assets/catalog-model.js";
+import { catalogPrice, matchesSearch, orderLinks, positionCount, productKey, legacyProductKey, restoreOrderKeys, productNotes, productSearchText } from "../assets/catalog-model.js";
 import { catalog } from "../assets/catalog-data.js";
 
 test("search accepts category terms, reversed words, ё and whitespace", () => {
@@ -94,6 +94,7 @@ test("an order list preserves distinct packages and uses current prices", () => 
   assert.notEqual(productKey(category, products[0]), productKey(category, products[1]));
   assert.equal(productKey(category, products[0]), productKey(category, { ...products[0], price: "7000 ₽/0,05 кг" }));
   const keys = catalog.flatMap(category => category.items.map(product => productKey(category, product)));
+  assert.ok(keys.every(key => /^[a-z0-9-]+$/.test(key)), "every product has an explicit permanent ID");
   assert.equal(new Set(keys).size, keys.length);
   const links = orderLinks(products);
   const draft = new URL(links.telegram).searchParams.get("text");
@@ -101,4 +102,13 @@ test("an order list preserves distinct packages and uses current prices", () => 
   for (const product of products) assert.ok(draft.includes(catalogPrice(product.price)));
   assert.equal(draft.match(/Хочу заказать/g).length, 1);
   assert.ok(matchesSearch(productSearchText({ slug: "prepared-fish" }, { name: "Скумбрия", description: "ПБГ" }), "без головы"));
+});
+
+test("saved orders migrate to permanent IDs and survive name, description, price and category edits", () => {
+  const category = catalog[0], product = category.items[0], second = category.items[1];
+  assert.deepEqual(restoreOrderKeys([legacyProductKey(category, product), product.id, second.id, "removed"], catalog), [product.id, second.id]);
+  const edited = [{ ...category, slug: "another-category", items: [{ ...product, name: "Новое название", description: "Новое описание", price: "7100 ₽/0,050 кг" }] }];
+  assert.deepEqual(restoreOrderKeys([product.id, second.id], edited), [product.id]);
+  assert.equal(productKey(edited[0], edited[0].items[0]), product.id);
+  assert.deepEqual(restoreOrderKeys(null, catalog), []);
 });

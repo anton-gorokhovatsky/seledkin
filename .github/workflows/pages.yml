@@ -115,6 +115,7 @@ jobs:
           cp about/index.html _site/about/
           cp recipes/index.html _site/recipes/
           node scripts/package-legacy.mjs _site
+          node scripts/build-assets.mjs _site
 
       - name: Upload Pages artifact
         if: steps.scope.outputs.scope != 'none'

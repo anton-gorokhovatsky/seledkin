@@ -76,8 +76,11 @@ function onlyTypography(before, after) {
 }
 
 // A resource version can change without changing the component's public shape.
-const resourceVersions = value => value?.replace(/((?:assets\/)?[\w./-]+\.(?:css|js)\?v=)[\w.-]+/g, "$1VERSION");
+// Local resource versions belong to publication assembly. Removing a former
+// manual version does not change the module or page's customer behaviour.
+const resourceVersions = value => value?.replace(/(["'`])([\w./-]+\.(?:css|js)|[\w./-]*store-map\.html)\?v=[\w.-]+(?=\1)/g, "$1$2");
 const componentScripts = {
+  "assets/catalog-data.js": ["@catalog", "@afisha"],
   "assets/mobile-hero.js": ["@afisha"],
   "assets/analytics.js": ["@analytics"],
   "assets/catalog-model.js": ["@catalog", "@afisha"],
@@ -143,7 +146,9 @@ export function scopedBrowserTags(changes) {
   const tags = new Set();
   for (const { path, before, after } of changes) {
     if (tooling.test(path)) continue;
-    if (path === "assets/styles.css") {
+    if (/\.(?:js|html)$/.test(path) && before != null && after != null && resourceVersions(before) === resourceVersions(after)) {
+      continue;
+    } else if (path === "assets/styles.css") {
       const affected = cssTags(before, after);
       if (!affected) return null;
       affected.forEach(tag => tags.add(tag));

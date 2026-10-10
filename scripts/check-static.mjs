@@ -336,7 +336,7 @@ for (const required of [
   'menuButton.focus({ preventScroll: true })',
   "menuPanel.scrollTop = 0",
   'window.matchMedia("(prefers-reduced-motion: reduce)")',
-  'import "./theme.js?v=sea-hours-1"',
+  'import "./theme.js"',
 ]) {
   if (!siteScript.includes(required)) fail(`assets/site.js: нет обязательного поведения ${required}`);
 }
