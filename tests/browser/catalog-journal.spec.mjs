@@ -77,7 +77,7 @@ test("catalog separates dated journal matches from current price rows @catalog",
   await expect(page.locator(".catalog-product:visible")).toHaveCount(0);
   await expect(page.locator("[data-catalog-empty]")).toBeHidden();
   await expect(page.locator("[data-journal-result]:visible")).toHaveCount(1);
-  await expect(page.getByRole("status")).toHaveText("В каталоге нет совпадений · Из журнала: 1");
+  await expect(page.locator("[data-catalog-count]")).toHaveText("В каталоге нет совпадений · Из журнала: 1");
   await expect(page.locator("[data-journal-result]:visible time")).toHaveAttribute("datetime", "2026-09-27");
   await page.locator("[data-journal-result]:visible a").click();
   await expect(page).toHaveURL(/journal\/697\/$/);
