@@ -255,6 +255,7 @@ test("the desktop journal action reflows with enlarged text and custom spacing",
 });
 
 test("all pages and open navigation pass axe in both watches", async ({ browser, baseURL }, testInfo) => {
+  test.setTimeout(120000); // Fourteen pages, plus open-menu audits, in two themes.
   for (const theme of ["light", "dark"]) {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
     await context.addInitScript(value => localStorage.setItem("seledkin-theme", value), theme);

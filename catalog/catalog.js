@@ -3,6 +3,7 @@ import { typographText } from "../assets/typography.js";
 import { createSearchTracker } from "../assets/catalog-analytics.js";
 import { setupOrderList } from "../assets/order-list.js";
 import { setupProductTelegramOrders } from "../assets/order-message.js";
+import { revealChange } from "../assets/interaction-feedback.js";
 
 const search = document.querySelector("[data-catalog-search]");
 const filters = document.querySelector("[data-catalog-filters]");
@@ -65,7 +66,7 @@ function writeUrl(replace = false) {
   }
 }
 
-function render() {
+function render(animate = false) {
   closeAdvicePreview();
   let visibleCount = 0;
   let totalProducts = 0;
@@ -107,6 +108,7 @@ function render() {
   filters.querySelectorAll("button").forEach((button) => {
     button.setAttribute("aria-pressed", String(button.dataset.category === activeCategory));
   });
+  if (animate) revealChange([list, empty.hidden ? null : empty]);
 }
 
 filters.addEventListener("click", (event) => {
@@ -114,7 +116,7 @@ filters.addEventListener("click", (event) => {
   if (!button) return;
   activeCategory = button.dataset.category;
   writeUrl();
-  render();
+  render(true);
   reportSearch("category");
 });
 search.addEventListener("input", () => {
@@ -130,7 +132,7 @@ search.addEventListener("keydown", event => {
 select.addEventListener("change", () => {
   activeCategory = select.value;
   writeUrl();
-  render();
+  render(true);
   reportSearch("category");
 });
 reset.addEventListener("click", () => {
@@ -139,13 +141,13 @@ reset.addEventListener("click", () => {
   search.value = "";
   searchTracker.reset();
   writeUrl();
-  render();
+  render(true);
   search.focus();
 });
 allCategories.addEventListener("click", () => {
   activeCategory = "all";
   writeUrl();
-  render();
+  render(true);
   reportSearch("broaden");
   search.focus();
 });
@@ -198,11 +200,13 @@ function setupAdvicePreviews() {
       place(link);
     };
     const leave = () => {
-      if (!link.matches(":focus-visible")) closeTimer = setTimeout(close, 350);
+      if (!(document.activeElement === link && document.documentElement.dataset.inputModality === "keyboard")) closeTimer = setTimeout(close, 350);
     };
     link.addEventListener("pointerenter", show);
     link.addEventListener("pointerleave", leave);
-    link.addEventListener("focus", () => { if (link.matches(":focus-visible")) show(); });
+    link.addEventListener("focus", () => {
+      if (document.documentElement.dataset.inputModality === "keyboard" || link.matches(":focus-visible")) show();
+    });
     link.addEventListener("blur", close);
     link.querySelector(".catalog-advice-photo").addEventListener("pointerenter", () => clearTimeout(closeTimer));
     link.querySelector(".catalog-advice-photo").addEventListener("pointerleave", leave);

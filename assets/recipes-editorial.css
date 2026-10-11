@@ -58,6 +58,9 @@
 .recipe-editorial-actions .recipe-editorial-actions__catalog { color: var(--muted); font-weight: 400; }
 .recipe-editorial-pair { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr); gap: clamp(3rem, 8vw, 8rem); margin-top: var(--recipe-space); align-items: start; }
 .recipe-editorial-story:nth-child(2) { padding-top: clamp(2rem, 6vw, 6rem); }
+.recipe-editorial-opening:has(> .recipe-editorial-lead[hidden]) .recipe-editorial-pair { margin-top: 0; }
+.recipe-editorial-pair:has(> [hidden]) { grid-template-columns: minmax(0, 1fr); }
+.recipe-editorial-pair:has(> [hidden]) .recipe-editorial-story { max-width: 38rem; padding-top: 0; }
 .recipe-editorial-story__copy { padding-top: 2rem; }
 .recipe-editorial-story__copy > p:not(.recipe-meta) { max-width: 46ch; }
 .recipe-editorial-story .recipe-editorial-pull { margin-bottom: 1.75rem; }

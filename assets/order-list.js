@@ -3,6 +3,7 @@ import { catalogPrice, productLabel, orderLinks, orderText, positionCount, produ
 import { sharedOrderStore } from "./order-store.js";
 import { typographText } from "./typography.js";
 import { copyOrderMessage } from "./order-message.js";
+import { confirmAction, revealChange } from "./interaction-feedback.js";
 
 export function setupOrderList() {
   const region = document.querySelector("#order-list");
@@ -277,6 +278,8 @@ export function setupOrderList() {
         ...(new URL(location.href).searchParams.get("from") === "afisha" ? { source: "afisha" } : {}) },
     } }));
     update(`Добавлено: ${productLabel(products.get(button.value))}`);
+    confirmAction(button);
+    revealChange([button.closest(".catalog-product-actions").querySelector("[data-order-added]"), shortcut.querySelector(".catalog-order-shortcut__count")]);
   });
   for (const button of removeButtons) button.addEventListener("click", () => {
     store.remove(button.value);

@@ -14,7 +14,7 @@ const footer = `<div class="delivery-study__finish"><div class="delivery-source_
 const waybill = `<section class="delivery-study delivery-waybill" id="delivery" aria-labelledby="delivery-title">
   <header class="delivery-study__heading"><p class="delivery-study__eyebrow">Из лавки — к вашему столу</p><h2 id="delivery-title">Доставка <em>домой или в офис</em></h2></header>
   <div class="delivery-waybill__receipt"><p class="delivery-waybill__price">490<span> ₽</span></p><dl><div><dt>Куда</dt><dd>Москва, в пределах МКАД</dd></div><div><dt>Когда</dt><dd>В течение двух часов</dd></div><div><dt>Сумма заказа</dt><dd>Без минимальной суммы</dd></div></dl></div>
-  <div class="delivery-waybill__body"><figure>${photo}<figcaption>Корзина с продуктами лавки</figcaption></figure><div class="delivery-study__copy"><p class="delivery-study__lead">${lead}</p><p>${terms}</p>${footer}</div></div>
+  <div class="delivery-waybill__body">${footer}<figure>${photo}<figcaption>Корзина с продуктами лавки</figcaption></figure></div>
 </section>`;
 const path = `<section class="delivery-study delivery-path" id="delivery" aria-labelledby="delivery-title">
   <header class="delivery-study__heading"><p class="delivery-study__eyebrow">От выбора до доставки</p><h2 id="delivery-title">Доставка <em>в три шага</em></h2><p>${lead}</p></header>

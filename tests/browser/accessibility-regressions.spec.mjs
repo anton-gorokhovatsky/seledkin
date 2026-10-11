@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 test("each modal owns initial focus, every Tab stop and its close action", async ({ page }) => {
+  test.setTimeout(90000); // Eight visits, including every focus stop in each modal.
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     for (const route of ["", "catalog/", "about/", "journal/"]) {
@@ -35,6 +36,7 @@ test("each modal owns initial focus, every Tab stop and its close action", async
 
 for (const mode of ["no-js", "failed-module"]) {
   test(`navigation remains usable with ${mode}`, async ({ browser, baseURL }) => {
+    test.setTimeout(90000); // Ten visits and their fallback navigation journeys.
     const context = await browser.newContext({ javaScriptEnabled: mode !== "no-js", reducedMotion: "reduce" });
     await context.route("https://mc.yandex.ru/**", route => route.abort());
     if (mode === "failed-module") await context.route("**/assets/site.js*", route => route.abort());

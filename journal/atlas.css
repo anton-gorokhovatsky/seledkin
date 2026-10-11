@@ -88,7 +88,7 @@
 .journal-atlas__source .editorial-link { flex-wrap: wrap; }
 /* Wrap the older rows when enlarged text no longer fits beside a thumbnail. */
 .journal-atlas__earlier .journal-index-entry__link { display: flex; flex-wrap: wrap; }
-.journal-atlas__earlier .journal-index-entry__link img { width: clamp(5rem, 12vw, 9rem); max-width: 100%; }
+.journal-atlas__earlier .journal-index-entry__link img { width: clamp(6rem, 26vw, 12rem); max-width: 100%; }
 .journal-atlas__earlier .journal-index-entry__link > div { min-width: 0; flex: 1 1 10rem; }
 @media (max-width: 52rem) {
   .journal-atlas__header { grid-template-columns: minmax(0, 1fr); gap: 2rem; }

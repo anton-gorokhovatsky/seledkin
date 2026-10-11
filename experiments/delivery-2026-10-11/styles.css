@@ -6,7 +6,7 @@
 .delivery-study figure { margin: 0; }
 .delivery-study figure img { display: block; width: 100%; height: auto; }
 .delivery-study figcaption { margin-top: .75rem; color: var(--muted); font-size: var(--text-meta); }
-.delivery-waybill__receipt { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: var(--delivery-study-gap); margin-bottom: clamp(2.5rem, 5vw, 5rem); padding-block: 2rem; border-block: 1px solid var(--line); }
+.delivery-waybill__receipt { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: var(--delivery-study-gap); margin-bottom: 2rem; }
 .delivery-waybill__price { margin: 0; color: var(--blue); font: 400 clamp(6.5rem, 4rem + 8vw, 12rem) / .82 var(--serif); white-space: nowrap; }
 .delivery-waybill__price span { font-size: .48em; }
 .delivery-waybill dl { margin: 0; }
@@ -14,10 +14,8 @@
 .delivery-waybill dt { color: var(--muted); }
 .delivery-waybill dd { margin: 0; }
 .delivery-waybill__body { display: grid; grid-template-columns: 1fr 1fr; gap: var(--delivery-study-gap); align-items: start; }
-.delivery-study__copy { display: flex; flex-direction: column; align-items: start; }
-.delivery-study__lead { margin: 0 0 1.5rem; font: 400 clamp(1.8rem, 1.2rem + 1.8vw, 3rem) / 1.18 var(--serif); text-wrap: pretty; }
-.delivery-study__copy > p:not(.delivery-study__lead) { max-width: 32rem; }
 .delivery-study__finish { margin-top: 1.5rem; }
+.delivery-waybill .delivery-study__finish { margin-top: 0; }
 .delivery-study__finish .editorial-link { margin-top: 1rem; }
 .delivery-path__heading { max-width: 56rem; }
 .delivery-path .delivery-study__heading > p:last-child { max-width: 40rem; margin: 1.5rem 0 0; font-size: var(--text-reading); }

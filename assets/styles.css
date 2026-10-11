@@ -88,6 +88,10 @@
   --fish-shoal-width: clamp(36rem, 58vw, 52rem);
   --focus: #a35d00;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --feedback-duration: 160ms;
+  --reveal-duration: 220ms;
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-state: cubic-bezier(0.4, 0, 0.2, 1);
   --text-reading: 1.125rem;
   --text-body: 1.0625rem;
   --text-catalog: 1rem;
@@ -1591,7 +1595,8 @@ a.source-brand {
 .recipe-jump + .recipe-directory { margin-top: 0; }
 .recipe-directory .recipe-feature { margin-bottom: clamp(3rem, 6vw, 5rem); }
 .recipe-feature__copy :is(h2, h3), .recipe-card h3,
-.watch-catch__name, .recipe-current h2, .recipe-section-heading h2 { overflow-wrap: anywhere; }
+.recipe-current h2, .recipe-section-heading h2 { overflow-wrap: anywhere; }
+.watch-catch__name { overflow-wrap: normal; hyphens: manual; }
 .recipe-archive-note { color: var(--muted); font-size: var(--text-meta); }
 .recipe-archive-note a { color: var(--text-link); text-underline-offset: 0.2em; }
 .recipe-section-heading p { margin: 0; color: var(--muted); font-size: var(--text-meta); }
@@ -2052,14 +2057,14 @@ a.source-brand {
 }
 
 .source-footer__actions {
-  display: grid;
+  display: flex;
   width: min(100%, 46rem);
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  flex-wrap: wrap;
   gap: 0.75rem;
 }
 
 .source-footer__actions .source-button {
-  width: 100%;
+  flex: 1 1 max-content;
   min-height: 3.25rem;
   padding-inline: 1rem;
 }
@@ -3064,7 +3069,7 @@ a.site-menu__brand {
 .catalog-order {
   position: relative;
   overflow: hidden;
-  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+  padding: clamp(2.5rem, 4vw, 4rem) 0;
   border-top: 1px solid var(--line);
 }
 
@@ -3076,7 +3081,7 @@ a.site-menu__brand {
     "title actions"
     "copy actions";
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
+  align-items: start;
   justify-items: start;
   gap: 0.75rem clamp(3rem, 7vw, 7rem);
   text-align: left;
@@ -3085,7 +3090,7 @@ a.site-menu__brand {
 .catalog-order h2 {
   grid-area: title;
   margin-bottom: 0;
-  font-size: clamp(2.4rem, 4vw, 3.5rem);
+  font-size: clamp(2.4rem, 1.6rem + 2vw, 3.5rem);
 }
 
 .catalog-order-copy {
@@ -3099,6 +3104,9 @@ a.site-menu__brand {
 }
 
 .catalog-order .catalog-order-delivery {
+  display: grid;
+  justify-items: start;
+  gap: 0.25rem;
   margin-top: 1rem;
   color: var(--muted);
   font-size: var(--text-interface);
@@ -3719,15 +3727,22 @@ a.site-menu__brand {
 
   .source-footer__base {
     min-height: 7rem;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: flex-start;
-    gap: 0.25rem;
+    gap: 0.75rem 1rem;
     padding-block: 1.5rem;
   }
 
-  .source-footer__credit,
-  .source-footer__base > a:last-child {
+  .source-footer__base > small {
+    grid-column: 1 / -1;
+  }
+
+  .source-footer__credit {
     justify-self: start;
+  }
+
+  .source-footer__base > a:last-child {
+    justify-self: end;
   }
 
   .catalog-intro {
@@ -3821,13 +3836,13 @@ a.site-menu__brand {
       "copy"
       "actions";
     grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
+    justify-items: start;
+    text-align: left;
   }
 
   .catalog-order-actions {
     justify-self: stretch;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
   }
 }
 
@@ -3918,8 +3933,8 @@ a.site-menu__brand {
     padding-block: 2.75rem 1.5rem;
   }
 
-  .source-footer__actions {
-    grid-template-columns: 1fr;
+  .source-footer__actions .source-button {
+    flex-basis: 100%;
   }
 
   .contacts-source__card {
@@ -4504,7 +4519,7 @@ a.site-menu__brand {
     gap: 1.5rem;
   }
   .journal-preview__entry {
-    grid-template-columns: min(28vw, 8rem) minmax(0, 1fr);
+    grid-template-columns: clamp(6rem, 32vw, 14rem) minmax(0, 1fr);
     grid-template-rows: auto;
     gap: 1.25rem;
   }
@@ -4646,7 +4661,7 @@ a.site-menu__brand {
 }
 .journal-index-entry__link {
   display: grid;
-  grid-template-columns: clamp(5rem, 12vw, 9rem) minmax(0, 1fr);
+  grid-template-columns: clamp(6rem, 26vw, 12rem) minmax(0, 1fr);
   gap: clamp(1rem, 3vw, 2.5rem);
   align-items: start;
   color: var(--ink);
@@ -4947,6 +4962,27 @@ a.site-menu__brand {
 }
 
 .catalog-product[id] { scroll-margin-top: 6rem; }
+/* Repeated controls share brief, functional feedback across the site. */
+@media (prefers-reduced-motion: no-preference) {
+  :where(.recipe-ingredients button, .catalog-product-add, .catalog-product-remove,
+         .catalog-order-copy-button, .catalog-order-quantity input, .editorial-link,
+         .recipe-record-read, .recipe-record-product) {
+    transition: color var(--feedback-duration) var(--ease-state),
+      background-color var(--feedback-duration) var(--ease-state),
+      border-color var(--feedback-duration) var(--ease-state),
+      transform var(--feedback-duration) var(--ease-state);
+  }
+  :where(.recipe-ingredients button, .catalog-product-add, .catalog-product-remove,
+         .catalog-order-copy-button):active { transform: scale(.98); }
+  :where(.editorial-link, .recipe-record-read, .recipe-record-product) svg {
+    transition: transform var(--feedback-duration) var(--ease-state);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    :where(.editorial-link, .recipe-record-read, .recipe-record-product):is(:hover, :focus-visible) svg {
+      transform: translateX(3px);
+    }
+  }
+}
 /* Customer tasks: contacts reflow, a draft list and dated ordering conditions. */
 .contacts-source { container: contacts / inline-size; }
 .contacts-source__card .source-button { min-width: 0; max-width: 100%; }
