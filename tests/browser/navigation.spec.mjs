@@ -2,13 +2,13 @@ import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
 const routes = [
-  ["Что продаём", "#assortment", "#assortment h2"],
   ["Продукты и цены", "catalog/", "main h1"],
+  ["Что продаём", "#assortment", "#assortment h2"],
   ["Доставка", "#delivery", "#delivery h2"],
   ["Контакты", "#contacts", "#contacts h2"],
-  ["О нас", "about/", "main h1"],
   ["Рецепты и советы", "recipes/", "main h1"],
   ["Судовой журнал", "journal/", "main h1"],
+  ["О нас", "about/", "main h1"],
 ];
 
 test("a missing nested URL retains the catalog route and images without JavaScript on the custom domain", async ({ browser, baseURL }) => {

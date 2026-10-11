@@ -111,6 +111,22 @@ test("component changes select customer scenarios, including responsive CSS", ()
   assert.deepEqual(scopedBrowserTags(changes), ["@afisha", "@analytics", "@catalog", "@contacts", "@journal"]);
 });
 
+test("recipe pages, dedicated styles and filtering select recipe journeys", () => {
+  const original = '<header>shared</header><main><h1>Recipes</h1></main><footer>shared</footer>';
+  const changes = [
+    { path: "recipes/index.html", before: original, after: original.replace('Recipes', 'Compact recipe introduction') },
+    { path: "assets/recipes-directory.js", before: "oldFilter()", after: "filter()" },
+    { path: "assets/recipes-editorial.css", before: '.recipes-intro{gap:2rem}', after: '.recipes-intro{gap:1rem}@media(width<=46rem){.recipe-jump{gap:0}}' },
+    { path: "assets/recipes-directory.css", before: '.recipe-chooser{margin:2rem}', after: '.recipe-chooser{margin:1rem}' },
+  ];
+  assert.equal(classifyRelease(changes), "scoped");
+  assert.deepEqual(scopedBrowserTags(changes), ["@recipes"]);
+  for (const changed of [original.replace('shared', 'new menu'), original + '<script>newBehavior()</script>']) {
+    assert.equal(classifyRelease([{ path: 'recipes/index.html', before: original, after: changed }]), "full");
+  }
+  assert.equal(classifyRelease([{ path: 'assets/recipes-editorial.css', before: '.recipes-intro{gap:2rem}', after: ':root{--ink:red}.recipes-intro{gap:1rem}' }]), "full");
+});
+
 test("shared tokens, mixed selectors, moved rules and unknown modules retain the full gate", () => {
   for (const [before, after] of [
     [':root{--ink:black}', ':root{--ink:blue}'],
@@ -127,7 +143,7 @@ test("automatic publication versions do not turn a catalog change into a full-si
     { path: "assets/theme.js", before: 'import "./store-time.js?v=old";', after: 'import "./store-time.js";' },
     { path: "assets/site.js", before: 'const map = "assets/store-map.html?v=old";', after: 'const map = "assets/store-map.html";' },
     { path: "about/index.html", before: '<link href="../assets/styles.css?v=old">', after: '<link href="../assets/styles.css">' },
-  ]), ["@afisha", "@catalog"]);
+  ]), ["@afisha", "@catalog", "@recipes"]);
   assert.equal(classifyRelease([{ path: "assets/theme.js", before: 'import "./store-time.js?v=old"; oldLogic();', after: 'import "./store-time.js"; newLogic();' }]), "full");
   assert.equal(classifyRelease([{ path: "assets/theme.js", before: 'import "https://external.example/module.js?v=old";', after: 'import "https://external.example/module.js?v=new";' }]), "full");
 });

@@ -7,13 +7,13 @@ const entries = JSON.parse(await readFile(new URL("../content/journal.json", imp
 const paths = ["", "catalog/", "about/", "recipes/", "journal/", ...entries.map(entry => `journal/${entry.id}/`)];
 const pages = new Map(await Promise.all(paths.map(async path => [path, await readFile(new URL(`../${path}index.html`, import.meta.url), "utf8")])));
 const routes = [
-  ["Что продаём", "#assortment"],
   ["Продукты и цены", "catalog/"],
+  ["Что продаём", "#assortment"],
   ["Доставка", "#delivery"],
   ["Контакты", "#contacts"],
-  ["О нас", "about/"],
   ["Рецепты и советы", "recipes/"],
   ["Судовой журнал", "journal/"],
+  ["О нас", "about/"],
 ];
 const plain = text => text.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 

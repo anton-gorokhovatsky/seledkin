@@ -455,7 +455,7 @@ export function renderRecipesPage() {
   return template("recipes-page", {
     theme: renderTheme("recipes"), analytics: renderAnalytics("../"), menu: renderMenu("recipes", "../"), footer: renderFooter("recipes", "../"),
     groups, collections,
-    recipeJump: [["recipes-title", "Ещё рецепты и советы"], ["advice", "Советы о рыбе"], ["meals", "Что купить к ужину"]]
+    recipeJump: [["recipes-title", "Ещё рецепты"], ["advice", "Советы о рыбе"], ["meals", "Что купить к ужину"]]
       .map(([id, label]) => `<a href="#${id}">${label}${harpoon}</a>`).join(""),
   }).replace(/[ \t]+$/gm, "") + "\n";
 }

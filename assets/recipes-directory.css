@@ -35,7 +35,9 @@
   .recipe-record h3 { font-size: 1.7rem; }
   .recipe-record .recipe-record-product { font-size: .85rem; }
   .recipe-record-heading { margin-bottom: 1.5rem; }
-  .recipe-chooser { margin-bottom: 2rem; }
+  .recipe-chooser { margin-bottom: 1.25rem; }
+  .recipe-chooser h2 { margin-bottom: .75rem; }
+  .recipe-filter-status { margin-top: .5rem; }
 }
 @media (width <= 28rem) {
   .recipe-record { grid-template-columns: minmax(0, 72px) minmax(0, 1fr); gap: .8rem; }

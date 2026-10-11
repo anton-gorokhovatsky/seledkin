@@ -24,12 +24,12 @@
     { "category": "prepared-fish", "name": "Сельдь слабосоленая" }
   ],
   "routes": [
-    { "href": "#assortment", "label": "Что продаём" },
     { "href": "catalog/", "label": "Продукты и цены" },
+    { "href": "#assortment", "label": "Что продаём" },
     { "href": "#delivery", "label": "Доставка" },
     { "href": "#contacts", "label": "Контакты" },
-    { "href": "about/", "label": "О нас" },
     { "href": "recipes/", "label": "Рецепты и советы" },
-    { "href": "journal/", "label": "Судовой журнал" }
+    { "href": "journal/", "label": "Судовой журнал" },
+    { "href": "about/", "label": "О нас" }
   ]
 }

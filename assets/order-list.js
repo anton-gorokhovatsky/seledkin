@@ -1,5 +1,6 @@
 import { catalog } from "./catalog-data.js";
-import { catalogPrice, productLabel, orderLinks, orderText, positionCount, productKey, restoreOrderKeys, orderUnit, orderAmount } from "./catalog-model.js";
+import { catalogPrice, productLabel, orderLinks, orderText, positionCount, productKey, orderUnit, orderAmount } from "./catalog-model.js";
+import { createOrderStore } from "./order-store.js";
 import { typographText } from "./typography.js";
 import { copyOrderMessage } from "./order-message.js";
 
@@ -12,21 +13,8 @@ export function setupOrderList() {
   const removeButtons = [...document.querySelectorAll("[data-order-remove]")];
   const products = new Map(catalog.flatMap(category => category.items.map(product =>
     [productKey(category, product), { ...product, category: category.slug }])));
-  const selected = new Set();
-  const amounts = new Map();
-  const storageKey = "seledkin-order-list";
-  const amountStorageKey = "seledkin-order-amounts";
-  let storageAvailable = true;
-  try {
-    const saved = JSON.parse(localStorage.getItem(storageKey) ?? "[]");
-    for (const key of restoreOrderKeys(saved, catalog)) selected.add(key);
-    if (selected.size) localStorage.setItem(storageKey, JSON.stringify([...selected]));
-    const savedAmounts = JSON.parse(localStorage.getItem(amountStorageKey) ?? "{}");
-    for (const key of selected) {
-      const value = savedAmounts?.[key];
-      if (typeof value === "string" && orderAmount(value, products.get(key))) amounts.set(key, value);
-    }
-  } catch { storageAvailable = false; }
+  const store = createOrderStore(products, catalog);
+  let { selected, amounts } = store.read();
   const title = region.querySelector("[data-catalog-order-title]");
   const copy = region.querySelector("[data-catalog-order-copy]");
   const channels = [...region.querySelectorAll(".catalog-order-actions a")];
@@ -73,15 +61,12 @@ export function setupOrderList() {
 
   const selection = () => [...selected].map(key => ({ ...products.get(key), amount: amounts.get(key) ?? "" }));
   function updateNote() {
-    note.textContent = typographText(`${storageAvailable ? "Список сохранён в этом браузере." : "В этом браузере сохранение недоступно: список останется до закрытия или обновления страницы."} У фасованных товаров количество означает число упаковок.`);
+    note.textContent = typographText(`${store.available ? "Список сохранён в этом браузере." : "В этом браузере сохранение недоступно: список останется до закрытия или обновления страницы."} У фасованных товаров количество означает число упаковок.`);
   }
-  function persist() {
-    try {
-      localStorage.setItem(storageKey, JSON.stringify([...selected]));
-      localStorage.setItem(amountStorageKey, JSON.stringify(Object.fromEntries(amounts)));
-      storageAvailable = true;
-    } catch { storageAvailable = false; }
-    updateNote();
+  function readStore() {
+    const previous = JSON.stringify([[...selected], [...amounts]]);
+    ({ selected, amounts } = store.read());
+    return previous !== JSON.stringify([[...selected], [...amounts]]);
   }
   function updateLinks() {
     const links = orderLinks(selection());
@@ -147,10 +132,23 @@ export function setupOrderList() {
       actions.querySelector("[data-order-added]").hidden = !isSelected;
       actions.querySelector("[data-order-remove]").hidden = !isSelected;
     }
-    items.replaceChildren();
+    const previousRows = new Map([...items.children].map(row => [row.dataset.orderKey, row]));
+    const active = document.activeElement;
+    const removedFocus = active.closest?.('[data-order-key]')?.dataset.orderKey;
+    for (const [key, row] of previousRows) if (!selected.has(key)) row.remove();
+    let index = 0;
     for (const key of selected) {
+      const existing = previousRows.get(key);
+      if (existing) {
+        const input = existing.querySelector('input');
+        if (!(input === active && input.dataset.editing === "true") && input.validity.valid) input.value = amounts.get(key) ?? "";
+        if (items.children[index] !== existing) items.insertBefore(existing, items.children[index] ?? null);
+        index++;
+        continue;
+      }
       const product = products.get(key);
       const row = document.createElement("li");
+      row.dataset.orderKey = key;
       const text = document.createElement("span");
       text.className = "catalog-order-item__product";
       const name = document.createElement("strong");
@@ -187,15 +185,23 @@ export function setupOrderList() {
         error.hidden = value !== null || !showError;
         if (!error.hidden) amount.setAttribute("aria-invalid", "true");
         else amount.removeAttribute("aria-invalid");
-        value ? amounts.set(key, value) : amounts.delete(key);
-        persist();
-        updateLinks();
+        const previousKeys = [...selected].join("|");
+        // A product removed in another tab must not reappear on a late blur.
+        readStore();
+        if (selected.has(key)) store.set(key, value ?? "");
+        readStore();
+        if (previousKeys !== [...selected].join("|")) render();
+        else { updateNote(); updateLinks(); }
         return value;
       }
-      amount.addEventListener("input", () => validate(amount.hasAttribute("aria-invalid")));
+      amount.addEventListener("input", () => {
+        amount.dataset.editing = "true";
+        validate(amount.hasAttribute("aria-invalid"));
+      });
       amount.addEventListener("blur", () => {
         const value = validate(true);
         if (value !== null) amount.value = value;
+        delete amount.dataset.editing;
       });
       quantity.append(label, amount, error);
       const remove = document.createElement("button");
@@ -205,8 +211,7 @@ export function setupOrderList() {
       remove.addEventListener("click", () => {
         const next = row.nextElementSibling?.querySelector("button")?.getAttribute("aria-label")
           ?? row.previousElementSibling?.querySelector("button")?.getAttribute("aria-label");
-        selected.delete(key);
-        amounts.delete(key);
+        store.remove(key);
         update(`Убрано: ${productLabel(product)}`);
         const target = [...items.querySelectorAll("button")].find(button => button.getAttribute("aria-label") === next);
         (target ?? channels[0]).focus();
@@ -215,7 +220,7 @@ export function setupOrderList() {
       header.className = "catalog-order-item__header";
       header.append(text, remove);
       row.append(header, quantity);
-      items.append(row);
+      items.insertBefore(row, items.children[index++] ?? null);
     }
     const hasItems = chosen.length > 0;
     region.dataset.hasItems = String(hasItems);
@@ -248,20 +253,23 @@ export function setupOrderList() {
         channel.querySelector("span").textContent = `${needsHelp ? "Спросить" : "Заказать"} в ${index === 0 ? "Телеграме" : "WhatsApp"}`;
       }
     }
+    if (removedFocus && !selected.has(removedFocus)) (items.querySelector('input') ?? channels[0]).focus();
   }
   function update(message) {
-    persist();
+    readStore();
     render();
     status.textContent = typographText(`${message}. В списке ${positionCount(selected.size)}.${selected.size === 1 ? " Чтобы продолжить, откройте список заказа." : ""}`);
   }
   for (const button of addButtons) button.addEventListener("click", () => {
+    readStore();
     if (selected.has(button.value)) {
+      render();
       region.scrollIntoView({ block: "start", behavior: "instant" });
       region.focus({ preventScroll: true });
       return;
     }
     const wasEmpty = selected.size === 0;
-    selected.add(button.value);
+    store.set(button.value);
     if (wasEmpty) document.dispatchEvent(new CustomEvent("shop:goal", { detail: {
       goal: "product_select", params: { context: "order_list", action: "list_start", product_id: button.value,
         category: products.get(button.value).category, count: 1,
@@ -270,12 +278,19 @@ export function setupOrderList() {
     update(`Добавлено: ${productLabel(products.get(button.value))}`);
   });
   for (const button of removeButtons) button.addEventListener("click", () => {
-    selected.delete(button.value);
-    amounts.delete(button.value);
+    store.remove(button.value);
     update(`Убрано: ${productLabel(products.get(button.value))}`);
     addButtons.find(add => add.value === button.value).focus({ preventScroll: true });
   });
   shortcut.addEventListener("click", () => region.focus({ preventScroll: true }));
+  function sync() {
+    if (!readStore()) return;
+    render();
+    status.textContent = typographText(`Список обновлён в другой вкладке. В списке ${positionCount(selected.size)}.`);
+  }
+  window.addEventListener("storage", event => { if (store.isStorageEvent(event)) sync(); });
+  window.addEventListener("pageshow", sync);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) sync(); });
   render();
   return { setSearchState(state) { needsHelp = state.needsHelp; render(); } };
 }

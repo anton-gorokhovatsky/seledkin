@@ -102,12 +102,14 @@ function onlyProductTargets(before, after) {
 // manual version does not change the module or page's customer behaviour.
 const resourceVersions = value => value?.replace(/(["'`])([\w./-]+\.(?:css|js)|[\w./-]*store-map\.html)\?v=[\w.-]+(?=\1)/g, "$1$2");
 const componentScripts = {
-  "assets/catalog-data.js": ["@catalog", "@afisha"],
+  "assets/catalog-data.js": ["@catalog", "@afisha", "@recipes"],
   "assets/mobile-hero.js": ["@afisha"],
   "assets/analytics.js": ["@analytics"],
-  "assets/catalog-model.js": ["@catalog", "@afisha"],
+  "assets/catalog-model.js": ["@catalog", "@afisha", "@recipes"],
   "assets/order-list.js": ["@catalog"],
+  "assets/order-store.js": ["@catalog"],
   "assets/order-message.js": ["@catalog"],
+  "assets/recipes-directory.js": ["@recipes"],
   "catalog/catalog.js": ["@catalog"],
 };
 
@@ -143,13 +145,14 @@ function cssRules(source, context = "", rules = new Map()) {
   return rules;
 }
 
-function cssTags(before, after) {
+function cssTags(before, after, recipeSheet = false) {
   try {
     const oldRules = cssRules(before), newRules = cssRules(after), tags = new Set();
     for (const key of new Set([...oldRules.keys(), ...newRules.keys()])) {
       if (oldRules.get(key)?.body === newRules.get(key)?.body) continue;
       for (const selector of (newRules.get(key) ?? oldRules.get(key)).selector.split(",")) {
-        const tag = /^\s*\.contacts-source(?=[\s_.#[:]|$)/.test(selector) ? "@contacts"
+        const tag = recipeSheet && /^\s*(?:\.(?:recipes?-)[\w-]+|\[data-recipe-)[^,]*$/.test(selector) ? "@recipes"
+          : /^\s*\.contacts-source(?=[\s_.#[:]|$)/.test(selector) ? "@contacts"
           : /^\s*\.catalog-(?:[\w-]+)(?=[\s.#[:]|$)/.test(selector) ? "@catalog"
           : /^\s*\.(?:journal-historical|recipe-archive-note)(?=[\s_.#[:]|$)/.test(selector) ? "@journal"
           : /^\s*\.afisha(?=[\s_.#[:]|$)/.test(selector) ? "@afisha" : null;
@@ -175,6 +178,10 @@ export function scopedBrowserTags(changes) {
       const affected = cssTags(before, after);
       if (!affected) return null;
       affected.forEach(tag => tags.add(tag));
+    } else if (["assets/recipes-directory.css", "assets/recipes-editorial.css"].includes(path)) {
+      const affected = cssTags(before, after, true);
+      if (!affected || affected.some(tag => tag !== "@recipes")) return null;
+      affected.forEach(tag => tags.add(tag));
     } else if (componentScripts[path] && after != null) {
       componentScripts[path].forEach(tag => tags.add(tag));
     } else if (path === "assets/site.js" && before != null && resourceVersions(before) === resourceVersions(after)) {
@@ -184,10 +191,10 @@ export function scopedBrowserTags(changes) {
       if (oldHtml === newHtml) continue;
       if (onlyProductTargets(oldHtml, newHtml)) { tags.add("@catalog"); continue; }
       const region = path === "index.html" ? /<!-- shared:mobile-hero:start -->[\s\S]*?<!-- shared:mobile-hero:end -->/
-        : path === "catalog/index.html" || /^journal\/\d+\/index\.html$/.test(path) ? /<main\b[^>]*>[\s\S]*?<\/main>/ : null;
+        : ["catalog/index.html", "recipes/index.html"].includes(path) || /^journal\/\d+\/index\.html$/.test(path) ? /<main\b[^>]*>[\s\S]*?<\/main>/ : null;
       if (!region || !region.test(oldHtml) || !region.test(newHtml)
         || oldHtml.replace(region, "COMPONENT") !== newHtml.replace(region, "COMPONENT")) return null;
-      tags.add(path === "index.html" ? "@afisha" : path === "catalog/index.html" ? "@catalog" : "@journal");
+      tags.add(path === "index.html" ? "@afisha" : path === "catalog/index.html" ? "@catalog" : path === "recipes/index.html" ? "@recipes" : "@journal");
     } else return null;
   }
   return [...tags].sort();

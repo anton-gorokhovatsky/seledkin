@@ -63,7 +63,7 @@ test("catalog advice previews retain the full photograph, keyboard access and di
   await phoneContext.close();
 });
 
-test("a buyer can cook the right shrimp variant and return to its current price @journal", async ({ page }) => {
+test("a buyer can cook the right shrimp variant and return to its current price @journal @recipes", async ({ page }) => {
   await page.goto("catalog/?q=патагонская&category=seafood&audit=recipes");
   const products = page.locator(".catalog-product:visible");
   await expect(products).toHaveCount(2);
@@ -115,7 +115,7 @@ test("desktop category photographs respond to pointer and keyboard while a touch
   await touch.close();
 });
 
-test("ingredients retain the editorial spreads, browser history and an exact catalog product", async ({ page }) => {
+test("ingredients retain the editorial spreads, browser history and an exact catalog product @recipes", async ({ page }) => {
   await page.goto("recipes/?audit=ingredients");
   await expect(page.locator("[data-recipe-opening]")).toBeVisible();
   await expect(page.locator(".recipe-record:visible")).toHaveCount(17);
@@ -139,7 +139,7 @@ test("ingredients retain the editorial spreads, browser history and an exact cat
   await expect(page.locator(".recipe-record:visible")).toHaveCount(2);
 });
 
-test("the recipe directory remains readable in both watches, narrow reflow and enlarged text @typography", async ({ browser, baseURL }, testInfo) => {
+test("the recipe directory remains readable in both watches, narrow reflow and enlarged text @typography @recipes", async ({ browser, baseURL }, testInfo) => {
   test.setTimeout(90000);
   for (const theme of ["light", "dark"]) {
     const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: "reduce" });

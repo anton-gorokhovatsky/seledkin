@@ -141,6 +141,48 @@ test("same-name fish retain their origin in the list, accessible controls and dr
   await expect(list.getByRole("button", { name: /^Убрать из списка: Горбуша, Сахалин/ })).toBeFocused();
 });
 
+test("two catalog tabs share products and amounts without losing an active field @catalog", async ({ page, context }, testInfo) => {
+  const other = await context.newPage();
+  await page.goto("catalog/?product=caviar-001&audit=order-tabs");
+  await other.goto("catalog/?product=seafood-009&audit=order-tabs");
+  const firstList = page.locator("#order-list");
+  const otherList = other.locator("#order-list");
+  await page.locator(".catalog-product:visible [data-order-add]").click();
+  await expect(otherList.locator("li")).toHaveCount(1);
+  const quantity = firstList.getByRole("textbox", { name: /^Количество.*Черная икра/ });
+  await quantity.fill("2");
+  await expect(quantity).toBeFocused();
+  await other.locator(".catalog-product:visible [data-order-add]").click();
+  await expect(firstList.locator("li")).toHaveCount(2);
+  await expect(quantity).toBeFocused();
+  await expect(quantity).toHaveValue("2");
+  const weight = otherList.getByRole("textbox", { name: /^Вес.*Мясо мидий/ });
+  await weight.fill("0,5");
+  await weight.press("Tab");
+  await expect(firstList.getByRole("textbox", { name: /^Вес.*Мясо мидий/ })).toHaveValue("0,5");
+  await page.reload();
+  await expect(firstList.locator("li")).toHaveCount(2);
+  await expect(quantity).toHaveValue("2");
+  await quantity.focus();
+  await otherList.getByRole("textbox", { name: /^Количество.*Черная икра/ }).fill("4");
+  await expect(quantity).toHaveValue("4");
+  await expect(quantity).toBeFocused();
+  // A remote update must not silently clear an invalid local entry.
+  await quantity.fill("0");
+  await weight.fill("1");
+  await expect(quantity).toHaveValue("0");
+  await expect(quantity).toBeFocused();
+  await expect(firstList.getByRole("textbox", { name: /^Вес.*Мясо мидий/ })).toHaveValue("1");
+  await quantity.fill("3");
+  await otherList.getByRole("button", { name: /^Убрать.*Черная икра/ }).click();
+  await expect(firstList.locator("li")).toHaveCount(1);
+  await other.reload();
+  await expect(otherList.locator("li")).toHaveCount(1);
+  await expect(otherList).toContainText("Мясо мидий");
+  await page.screenshot({ path: testInfo.outputPath("shared-order-tabs.png") });
+  await other.close();
+});
+
 test("an existing saved order migrates to current product IDs @catalog", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("seledkin-order-list", JSON.stringify([
     "caviar|Черная икра|Осетровая (забойная) высшего качества|/0,05 кг",
@@ -159,6 +201,7 @@ test("blocked storage leaves the order list usable during a visit @catalog", asy
     Object.defineProperty(window, "localStorage", { get() { throw new Error("Storage blocked"); } });
   });
   await page.goto("catalog/?q=тунец&audit=order-list");
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await page.locator(".catalog-product:visible").locator("[data-order-add]").click();
   await page.locator("#order-list").scrollIntoViewIfNeeded();
   await expect(page.locator("[data-order-note]")).toContainText("сохранение недоступно");
