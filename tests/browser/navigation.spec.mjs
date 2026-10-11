@@ -55,7 +55,7 @@ for (const source of ["", "catalog/", "about/", "journal/"]) {
 test("recipes are on the homepage and each featured product opens matching catalog results", async ({ page }) => {
   await page.goto("#watch-catch");
   const stories = page.locator("#watch-catch");
-  await expect(stories.locator("h2")).toHaveText("Рецепты и советы");
+  await expect(stories.locator("h2")).toHaveText("Рецепты и советы Олега");
   await expect(page.locator('#assortment #prices .catalog-product')).toHaveCount(6);
   await expect(page.locator('#assortment > .source-shell > h2, #assortment h2')).toHaveCount(1);
   await expect(page.locator('#prices h3')).toHaveText('Цены в лавке');
