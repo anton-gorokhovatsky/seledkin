@@ -102,3 +102,41 @@ test("a single recipe uses the full desktop spread and a complete narrow reading
     }
   }
 });
+
+test("repeated photograph and text blocks share their axes on the homepage and across page footers", async ({ page }) => {
+  const homeAxes = new Map();
+  await page.goto("?audit=shared-photo-axes");
+  await page.evaluate(() => document.fonts.ready);
+  for (const width of [1512, 1024, 800, 736, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    const blocks = await page.evaluate(() => [
+      [".recipe-feature__photo img", ".recipe-feature__copy"],
+      [".about-preview img", ".about-preview__copy"],
+      [".source-footer__portrait img", ".source-footer__details"],
+    ].map(([photoSelector, copySelector]) => {
+      const photo = document.querySelector(photoSelector), copy = document.querySelector(copySelector);
+      return { photo: photo.getBoundingClientRect().toJSON(), copy: copy.getBoundingClientRect().toJSON(),
+        ratio: Number(photo.getAttribute("width")) / Number(photo.getAttribute("height")) };
+    }));
+    homeAxes.set(width, blocks[0]);
+    for (const block of blocks) {
+      expect(block.photo.left).toBeCloseTo(blocks[0].photo.left, 0);
+      expect(block.photo.width).toBeCloseTo(blocks[0].photo.width, 0);
+      expect(block.photo.width / block.photo.height).toBeCloseTo(block.ratio, 2);
+      expect(block.copy.left).toBeCloseTo(blocks[0].copy.left, 0);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  }
+  for (const route of ["catalog/?audit=shared-photo-axes", "about/?audit=shared-photo-axes", "journal/664/?audit=shared-photo-axes", "recipes/?ingredient=pasta&audit=shared-photo-axes"]) {
+    await page.goto(route);
+    await page.evaluate(() => document.fonts.ready);
+    for (const width of [1512, 800, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const photo = await page.locator(".source-footer__portrait img").boundingBox();
+      const copy = await page.locator(".source-footer__details").boundingBox();
+      expect(photo.x).toBeCloseTo(homeAxes.get(width).photo.left, 0);
+      expect(photo.width).toBeCloseTo(homeAxes.get(width).photo.width, 0);
+      expect(copy.x).toBeCloseTo(homeAxes.get(width).copy.left, 0);
+    }
+  }
+});

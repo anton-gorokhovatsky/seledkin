@@ -78,6 +78,8 @@
   --sans: "Golos Text", Arial, Helvetica, sans-serif;
   --shell: 84rem;
   --section-gap: clamp(3rem, 6vw, 6rem);
+  --photo-copy-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  --photo-copy-gap: clamp(2rem, 5vw, 5rem);
   --wide: 87.5rem;
   --page-inset: 2.5rem;
   --page-outer: 5rem;
@@ -1451,8 +1453,8 @@ a.source-brand {
 }
 .recipe-feature {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(2rem, 5vw, 5rem);
+  grid-template-columns: var(--photo-copy-columns);
+  gap: var(--photo-copy-gap);
   align-items: center;
 }
 .recipe-feature__photo img,
@@ -1653,7 +1655,7 @@ a.source-brand {
 .recipe-current .meal-products { width: min(100%, 40rem); }
 @media (max-width: 61.1875rem) {
   .assortment-overview { --shop-columns: minmax(0, 1fr); --shop-column-gap: 2rem; }
-  .recipe-feature, .recipes-intro, .meal-collection { grid-template-columns: minmax(0, 1fr); }
+  .recipes-intro, .meal-collection { grid-template-columns: minmax(0, 1fr); }
   .recipe-directory__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 34rem) {
@@ -2134,9 +2136,9 @@ a.source-brand {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(18rem, 0.82fr) minmax(0, 1.18fr);
+  grid-template-columns: var(--photo-copy-columns);
   align-items: center;
-  gap: clamp(3rem, 6vw, 6rem);
+  gap: var(--photo-copy-gap);
   padding-block: clamp(3rem, 5vw, 5rem) clamp(2rem, 3vw, 3rem);
 }
 
@@ -2225,7 +2227,7 @@ a.source-brand {
 }
 
 .source-footer__portrait {
-  width: min(100%, 28rem);
+  width: 100%;
   margin: 0;
   grid-column: 1;
   grid-row: 1;
@@ -3804,19 +3806,7 @@ a.site-menu__brand {
   }
 
   .source-footer__content {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
     padding-block: 3rem 2rem;
-  }
-
-  .source-footer__details,
-  .source-footer__portrait {
-    grid-column: auto;
-    grid-row: auto;
-  }
-
-  .source-footer__portrait {
-    width: min(100%, 28rem);
   }
 
   .source-footer__postscript {
@@ -4028,7 +4018,6 @@ a.site-menu__brand {
   }
 
   .source-footer__content {
-    gap: 2rem;
     padding-block: 2.75rem 1.5rem;
   }
 
@@ -4436,9 +4425,9 @@ a.site-menu__brand {
 }
 .about-preview__layout {
   display: grid;
-  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  grid-template-columns: var(--photo-copy-columns);
   align-items: center;
-  gap: clamp(2rem, 6vw, 6rem);
+  gap: var(--photo-copy-gap);
 }
 .about-preview figure {
   margin: 0;
@@ -4631,13 +4620,18 @@ a.site-menu__brand {
 .sea-motion-toggle[hidden] {
   display: none;
 }
+@media (width <= 46rem) {
+  :root {
+    --photo-copy-columns: minmax(0, 1fr);
+    --photo-copy-gap: 2rem;
+  }
+  .source-footer__details,
+  .source-footer__portrait {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
 @media (max-width: 61.1875rem) {
-  .about-preview__layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .about-preview figure {
-    width: min(100%, 24rem);
-  }
   .journal-preview__header {
     align-items: start;
     flex-direction: column;
