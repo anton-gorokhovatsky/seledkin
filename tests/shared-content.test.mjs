@@ -50,12 +50,21 @@ test("shared navigation keeps page-specific routes and the same contact informat
   assert.ok(!renderTheme("catalog").includes("posterPreload"));
 });
 
-test("every story is independently shareable and preserves every source line", () => {
+test("every story is shareable and preserves author text outside approved old contact tails", () => {
+  const oldRecipeContacts = new Set([375, 377, 378, 382, 464, 556]);
   for (const entry of entries) {
     const page = renderJournalPage(entry);
     assert.ok(page.includes(`rel="canonical" href="https://ks.fish/journal/${entry.id}/"`));
     assert.ok(page.includes(`property="og:image" content="https://ks.fish/assets/${entry.image}"`));
     assert.equal((page.match(/<h1\b/g) ?? []).length, 1);
-    for (const line of entry.body.split("\n")) assert.ok(page.includes(line), `Lost line in ${entry.id}`);
+    const lines = entry.body.split("\n");
+    const contactStart = oldRecipeContacts.has(entry.id)
+      ? lines.findIndex(line => line.includes("Заказы принимаются только")) : -1;
+    const authorLines = contactStart < 0 ? lines : lines.slice(0, contactStart);
+    for (const line of authorLines) assert.ok(page.includes(line), `Lost author line in ${entry.id}`);
+    if (contactStart >= 0) {
+      assert.ok(!page.includes("Заказы принимаются только"), `Outdated ordering conditions in ${entry.id}`);
+      assert.ok(page.includes(`href="https://t.me/kapitanseledkin/${entry.id}"`), "The complete original stays linked");
+    }
   }
 });
