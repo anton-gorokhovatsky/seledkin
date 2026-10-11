@@ -19,7 +19,7 @@ test("prices and product-specific order links survive unavailable JavaScript @ca
     await expect(page.locator("[data-catalog-count]")).toHaveText("116 позиций");
     const product = page.locator(".catalog-product").first();
     await product.locator("summary").click();
-    await expect(product.getByRole("link")).toHaveCount(3);
+    await expect(product.locator(".catalog-product-order__channels").getByRole("link")).toHaveCount(3);
     await expect(product.getByRole("link", { name: "Позвонить", exact: true })).toHaveAttribute("href", "tel:+79166751452");
     for (const link of await product.locator('.catalog-product-order a:not([href^="tel:"])').all()) {
       const url = new URL(await link.getAttribute("href"));

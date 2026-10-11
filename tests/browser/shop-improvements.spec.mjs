@@ -98,10 +98,11 @@ test("journal previews keep whole photographs, aligned desktop reading lines and
 test("mobile shopping appears earlier while original photo proportions survive", async ({ page }) => {
   await page.goto("");
   await page.evaluate(() => document.fonts.ready);
-  // The mobile afisha leads directly to the assortment.
-  const restOfHome = await page.evaluate(() => document.documentElement.scrollHeight);
-  expect(restOfHome).toBeLessThan(10000);
-  await page.goto("catalog/");
+  // The shopping entry stays in the mobile afisha even as later stories grow.
+  await expect(page.locator(".afisha")).toBeVisible();
+  expect(await page.locator("#assortment").evaluate(section => section.previousElementSibling.classList.contains("source-hero"))).toBe(true);
+  await page.locator(".afisha__all").click();
+  await expect(page).toHaveURL(/\/catalog\/$/);
   await page.evaluate(() => document.fonts.ready);
   expect((await page.locator(".catalog-product").first().boundingBox()).y).toBeLessThan(650);
   // Available serif fonts differ across platforms; two title lines must still
