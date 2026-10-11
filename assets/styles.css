@@ -1531,22 +1531,32 @@ a.source-brand {
 .watch-catch__list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.5rem, 3vw, 3rem);
+  gap: 1.25rem clamp(1.5rem, 3vw, 3rem);
   padding: 0;
   margin: clamp(2.5rem, 5vw, 4rem) 0 0;
   list-style: none;
 }
-.watch-catch__item { min-width: 0; }
+.watch-catch__item {
+  min-width: 0;
+  container-type: inline-size;
+}
 .watch-catch__item a {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.3rem 1rem;
+  grid-template-columns: clamp(5.5rem, 7vw, 7.5rem) minmax(0, 1fr);
+  align-items: start;
+  gap: 1rem;
+  min-width: 0;
   min-height: 44px;
-  padding-block: 0.5rem;
   color: var(--ink);
   text-decoration: none;
 }
-.watch-catch__item .recipe-meta { grid-column: 1 / -1; margin: 0; }
+.watch-catch__photo img { display: block; width: 100%; height: auto; }
+.watch-catch__caption {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 1rem;
+}
 .watch-catch__name {
   font-family: var(--serif);
   font-size: clamp(1.6rem, 1.3rem + 0.7vw, 2rem);
@@ -1554,6 +1564,11 @@ a.source-brand {
   text-wrap: balance;
 }
 .watch-catch__item svg { align-self: center; color: var(--text-link); }
+@container (max-width: 14rem) {
+  .watch-catch__item a { grid-template-columns: minmax(0, 1fr); }
+  .watch-catch__photo { width: min(7.5rem, 30%); }
+  .watch-catch__caption { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+}
 .assortment-overview__photos {
   position: relative;
   aspect-ratio: 1 / 1;
@@ -1697,10 +1712,10 @@ a.source-brand {
   .assortment-overview { --shop-columns: minmax(0, 1fr); --shop-column-gap: 2rem; }
   .recipes-intro, .meal-collection { grid-template-columns: minmax(0, 1fr); }
   .recipe-directory__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .watch-catch__list { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
 }
 @media (max-width: 34rem) {
-  .watch-catch__list, .recipe-directory__grid { grid-template-columns: minmax(0, 1fr); }
-  .watch-catch__list { gap: 1rem; }
+  .recipe-directory__grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 .ship-log {
@@ -1957,11 +1972,6 @@ a.source-brand {
   text-wrap: balance;
 }
 
-.delivery-waybill h2 em {
-  display: block;
-  font-weight: 400;
-}
-
 .delivery-waybill__receipt {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -1980,22 +1990,21 @@ a.source-brand {
   font-size: 0.48em;
 }
 
-.delivery-waybill dl {
-  margin: 0;
-}
-
-.delivery-waybill dl div {
+.delivery-waybill__charge {
   display: grid;
-  grid-template-columns: minmax(8rem, 0.8fr) 1.4fr;
-  gap: 1.5rem;
-  margin-top: 1rem;
+  gap: 1rem;
 }
 
-.delivery-waybill dt {
+.delivery-waybill__area {
+  margin: 0;
   color: var(--muted);
 }
 
-.delivery-waybill dd {
+.delivery-waybill__receipt :is(.delivery-source__lead, .delivery-source__terms) {
+  margin: 0;
+}
+
+.delivery-waybill .delivery-source__actions {
   margin: 0;
 }
 
@@ -2024,23 +2033,6 @@ a.source-brand {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .delivery-waybill dl div {
-    grid-template-columns: minmax(7rem, 0.8fr) 1.2fr;
-    gap: 0.75rem;
-  }
-
-  .delivery-waybill .delivery-source__actions {
-    align-items: start;
-    flex-direction: column;
-  }
-}
-
-@container delivery-copy (width < 22rem) {
-  .delivery-waybill dl div {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.25rem;
-    margin-top: 1.25rem;
-  }
 }
 
 .contacts-source {

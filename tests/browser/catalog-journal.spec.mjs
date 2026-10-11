@@ -65,7 +65,9 @@ test("homepage prices continue to the exact package and delivery terms stay besi
   await page.getByRole("link", { name: "Условия доставки", exact: true }).click();
   await expect(page).toHaveURL(/\/#delivery$/);
   await expect(page.locator(".delivery-waybill__price")).toHaveText("490 ₽");
-  await expect(page.locator("#delivery dd")).toHaveText(["Москва, в пределах МКАД", "В течение двух часов", "Без ми­ни­мальной суммы"]);
+  await expect(page.locator("#delivery .delivery-source__lead")).toHaveText("Мы доставляем нашу продукцию домой или в офис в течение двух часов.");
+  await expect(page.locator("#delivery .delivery-waybill__area")).toHaveText("Москва, в пределах МКАД");
+  await expect(page.locator("#delivery .delivery-source__terms")).toHaveText("Минимальной суммы заказа нет, это удобно.");
 });
 
 test("catalog separates dated journal matches from current price rows @catalog", async ({ page }) => {

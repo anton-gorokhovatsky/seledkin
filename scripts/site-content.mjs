@@ -32,13 +32,14 @@ const text = value => escape(typographText(plain(value)));
 export function renderDelivery(view) {
   const { area, priceRub, timing, minimumOrderRub } = site.delivery;
   const price = text(`${priceRub} ₽`);
-  if (view === "waybill") return `<p class="delivery-waybill__price">${price.replace(/( ₽)$/, "<span>$1</span>")}</p>
-            <dl>
-              <div><dt>Куда</dt><dd>${text(`${site.address.city}, ${area}`)}</dd></div>
-              <div><dt>Когда</dt><dd>${text(timing)}</dd></div>
-              <div><dt>Сумма заказа</dt><dd>${minimumOrderRub === 0
-    ? text("Без ми­ни­мальной суммы") : text(`От ${minimumOrderRub} ₽`)}</dd></div>
-            </dl>`;
+  if (view === "waybill") return `<p class="delivery-source__lead">${text("Мы доставляем нашу продукцию домой или в офис")} <em>${text(`${timing[0].toLowerCase()}${timing.slice(1)}.`)}</em></p>
+            <div class="delivery-waybill__charge">
+              <p class="delivery-waybill__price">${price.replace(/( ₽)$/, "<span>$1</span>")}</p>
+              <p class="delivery-waybill__area">${text(`${site.address.city}, ${area}`)}</p>
+            </div>
+            <p class="delivery-source__terms">${minimumOrderRub === 0
+    ? "Минимальной суммы заказа нет, это удобно."
+    : `Минимальная сумма заказа — ${text(`${minimumOrderRub} ₽`)}.`}</p>`;
   if (view === "home") return `Стоимость доставки ${text(area)} — <strong>${price}.</strong> ${minimumOrderRub === 0
     ? "Минимальной суммы заказа нет, это удобно."
     : `Минимальная сумма заказа — ${text(`${minimumOrderRub} ₽`)}.`}`;
@@ -84,14 +85,14 @@ function contactActions({ phone = true, phoneName = false, classes = "", catalog
   })).join("\n");
 }
 
-export const renderDeliveryActions = () => contactActions({ phone: false, classes: "delivery-source__order" });
+export const renderDeliveryActions = () => contactActions({ phoneName: true, classes: "delivery-source__order" });
 export const renderCatalogOrderActions = () => contactActions({ phone: false, catalogOrder: true });
 
 export function renderAboutPreview(root = "", shell = true) {
   return template("about-preview", {
     root, shell: shell ? "source-shell " : "",
     action: template("button", {
-      href: `${root}about/`, label: "История лавки и её капитана", variant: "outline",
+      href: `${root}about/`, label: "О лавке и капитане", variant: "outline",
       classes: "", attributes: "", labelAttributes: "",
     }),
   });
@@ -414,7 +415,8 @@ export function renderRecipeHome() {
   ${recipeFeature("")}
   <ul class="watch-catch__list">${recipeContent.home.map(id => {
     const recipe = recipes.find(item => item.id === id);
-    return `<li class="watch-catch__item"><a href="journal/${id}/"><span class="watch-catch__name">${text(recipe.title).replace("секретов", "секре­тов")}</span>${harpoon}</a></li>`;
+    const entry = recipeEntry(recipe);
+    return `<li class="watch-catch__item"><a href="journal/${id}/" aria-label="${text(recipe.title)}"><span class="watch-catch__photo">${image(entry, "", "(max-width: 1257px) 88px, (max-width: 1714px) 7vw, 120px")}</span><span class="watch-catch__caption"><span class="watch-catch__name">${text(recipe.title).replace("секретов", "секре­тов")}</span>${harpoon}</span></a></li>`;
   }).join("\n")}</ul>`;
 }
 

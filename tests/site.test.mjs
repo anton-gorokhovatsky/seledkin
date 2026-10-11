@@ -676,12 +676,13 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.doesNotMatch(journalPage, /telegram-widget|tgme_widget|Feed not found/i);
 });
 
-test("the recipe preview gives one full photograph and direct access to complete author stories", () => {
+test("the recipe preview gives full photographs and direct access to complete author stories", () => {
   const section = home.match(/<section\s+class="watch-catch source-section"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(section, /<h2 id="watch-catch-title">Рецепты и советы Олега<\/h2>/);
   assert.doesNotMatch(section, /Рецепт Олега/);
   assert.equal((section.match(/class="recipe-feature"/g) ?? []).length, 1);
   assert.equal((section.match(/class="watch-catch__item"/g) ?? []).length, 3);
+  assert.equal((section.match(/data-source-image="assets\/journal-(?:692|377|412|664)\.jpg"/g) ?? []).length, 4);
   assert.match(section, /href="recipes\/"/);
   assert.match(section, /data-source-image="assets\/journal-692\.jpg"/);
   assert.doesNotMatch(section, /watch-catch-(?:herring|shrimp|squid|octopus)\.svg/);
@@ -972,6 +973,8 @@ test("published Russian text uses the shared typographic rules", () => {
   const deliveryActions = home.match(/<!-- shared:delivery-actions:start -->([\s\S]*?)<!-- shared:delivery-actions:end -->/)[1];
   assert.match(deliveryActions, />Заказать в Телеграме<\/span>/);
   assert.match(deliveryActions, />Заказать в WhatsApp<\/span>/);
+  assert.match(deliveryActions, />Позвонить<\/span>/);
+  assert.match(deliveryActions, /href="tel:\+79166751452"/);
   assert.match(styles, /\.source-nowrap\s*\{\s*white-space:\s*nowrap;/);
 });
 

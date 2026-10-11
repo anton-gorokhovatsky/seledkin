@@ -67,12 +67,24 @@ test("equal order channels keep the same appearance in delivery, catalog, menu a
       const style = getComputedStyle(button);
       return Object.fromEntries(["fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing", "padding", "borderRadius", "backgroundColor", "color"].map(name => [name, style[name]]));
     }));
-    const delivery = await styles(".delivery-source__actions .source-button");
+    const delivery = await styles(".delivery-source__actions .source-button:not([href^='tel:'])");
     expect(delivery).toHaveLength(2);
     expect(delivery[0]).toEqual(delivery[1]);
+    const phone = page.locator('.delivery-source__actions a[href="tel:+79166751452"]');
+    await expect(phone).toHaveText("Позвонить");
+    await expect(phone).toHaveAccessibleName("Позвонить в лавку: +7 916 675‑14‑52");
+    expect(await styles('.delivery-source__actions a[href^="tel:"]')).toEqual(await styles('.source-footer__actions a[href^="tel:"]'));
+    const layout = await page.locator(".delivery-waybill__copy").evaluate(copy => ({
+      terms: [...copy.querySelectorAll(".delivery-source__lead, .delivery-waybill__charge, .delivery-source__terms")].map(term => term.getBoundingClientRect().left),
+      buttons: [...copy.querySelectorAll(".source-button")].map(button => button.getBoundingClientRect().toJSON()),
+    }));
+    expect(layout.terms).toHaveLength(3);
+    for (const left of layout.terms) expect(Math.abs(left - layout.buttons[0].left)).toBeLessThan(1);
+    for (const button of layout.buttons) expect(Math.abs(button.top - layout.buttons[0].top)).toBeLessThan(1);
     expect(await styles(".source-footer__actions .source-button:not([href^='tel:'])")).toEqual(delivery);
     await page.getByRole("button", { name: "Открыть меню", exact: true }).click();
     expect(await styles(".site-menu__actions .source-button:not([href^='tel:'])")).toEqual(delivery);
+    expect(await styles('.site-menu__actions a[href^="tel:"]')).toEqual(await styles('.delivery-source__actions a[href^="tel:"]'));
     await page.getByRole("button", { name: "Закрыть меню", exact: true }).click();
     if (theme === "dark") await page.locator("#delivery").screenshot({ path: testInfo.outputPath("delivery-common-buttons-dark.png") });
     await page.goto("catalog/?audit=shared-order-buttons");

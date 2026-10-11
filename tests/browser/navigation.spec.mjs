@@ -61,6 +61,26 @@ test("recipes are on the homepage and each featured product opens matching catal
   await expect(page.locator('#prices h3')).toHaveText('Цены в лавке');
   await expect(stories.locator(".recipe-feature")).toHaveCount(1);
   await expect(stories.locator(".watch-catch__item")).toHaveCount(3);
+  for (const width of [1440, 638, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    const cards = stories.locator(".watch-catch__item");
+    for (const card of await cards.all()) {
+      const photo = card.locator("img");
+      await photo.scrollIntoViewIfNeeded();
+      const frame = await photo.evaluate(async image => {
+        await image.decode();
+        const box = image.getBoundingClientRect();
+        return { ratio: box.width / box.height, source: image.naturalWidth / image.naturalHeight };
+      });
+      expect(Math.abs(frame.ratio - frame.source)).toBeLessThan(.01);
+      await expect(card.locator("a")).toHaveAttribute("href", /^journal\/(377|412|664)\/$/);
+    }
+    if (width > 979) {
+      const lines = await cards.locator(".watch-catch__name").evaluateAll(names => names.map(name => name.getBoundingClientRect().top));
+      expect(Math.max(...lines) - Math.min(...lines)).toBeLessThan(1);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  }
   await stories.getByRole("link", { name: "Филе трески в каталоге", exact: true }).click();
   await expect(page.locator(".catalog-product:visible").getByRole("heading", { name: "Филе трески", exact: true })).toBeVisible();
   await expect(page.locator("[data-catalog-empty]")).toBeHidden();
