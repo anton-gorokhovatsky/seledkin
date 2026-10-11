@@ -823,7 +823,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     const footerVisit =
       page.match(/<div class="source-footer__visit">([\s\S]*?)<\/div>/)?.[1] ?? "";
     assert.doesNotMatch(footerVisit, /tel:|\+7\s*916\s*675/);
-    assert.doesNotMatch(page, /<dt>|<dd>/);
+    assert.doesNotMatch(footerMarkup, /<dt>|<dd>/);
   }
 
   const catRule =
@@ -968,10 +968,9 @@ test("published Russian text uses the shared typographic rules", () => {
     typographText("ул. Строителей, д. 7, корп. 1"),
     "ул.\u00a0Строителей, д.\u00a07, корп.\u00a01",
   );
-  assert.equal((home.match(/Заказы принимаются\s*<span class="source-nowrap">в /g) ?? []).length, 1);
-  assert.equal((home.match(/<span class="source-nowrap">и /g) ?? []).length, 1);
-  assert.equal((home.match(/>телеграме<\/a><\/span>\./g) ?? []).length, 1);
-  assert.doesNotMatch(home, /Заказы принимаются[\s\S]{0,180}>Телеграме<\/a>/);
+  const deliveryActions = home.match(/<!-- shared:delivery-actions:start -->([\s\S]*?)<!-- shared:delivery-actions:end -->/)[1];
+  assert.match(deliveryActions, />Заказать в Телеграме<\/span>/);
+  assert.match(deliveryActions, />Заказать в WhatsApp<\/span>/);
   assert.match(styles, /\.source-nowrap\s*\{\s*white-space:\s*nowrap;/);
 });
 
@@ -1134,14 +1133,14 @@ test("one restrained jelly material serves translucent controls", () => {
     /background|backdrop-filter|box-shadow/,
     "У листа журнала не должно быть подложки: материал разрешён только контролам",
   );
-  assert.match(styles, /\.source-button--menu-primary\s*\{[^}]*background:\s*var\(--footer-text\);/s);
+  assert.match(styles, /\.source-button--primary,[\s\S]*?\{[^}]*background:\s*var\(--telegram\);/s);
   assert.match(
     styles,
     /\.source-button--hero-primary\s*\{[^}]*background:\s*var\(--sea-jelly-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
   );
   assert.match(
     styles,
-    /\.source-button--hero-secondary,[\s\S]*?\.source-button--footer-contact,[\s\S]*?\{[^}]*background:\s*var\(--jelly-glass-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
+    /\.source-button--secondary,[\s\S]*?\.source-button--hero-secondary[\s\S]*?\{[^}]*background:\s*var\(--jelly-glass-surface\);[^}]*backdrop-filter:\s*var\(--jelly-glass-filter\);/s,
   );
   assert.match(projectRules, /один токенизированный материал «медуза»/);
   assert.doesNotMatch(styles, /--jelly-glass-on-blue/);
@@ -1221,7 +1220,7 @@ test("pointer hover, pressed state and keyboard focus stay visibly distinct", ()
 
   assert.match(
     styles,
-    /\.source-button--hero-secondary:hover,[\s\S]*?\.source-button--footer-contact:hover,[\s\S]*?\{[^}]*background:\s*var\(--jelly-glass-surface-strong\);/s,
+    /\.source-button--secondary:hover,[\s\S]*?\.source-button--hero-secondary:hover[\s\S]*?\{[^}]*background:\s*var\(--jelly-glass-surface-strong\);/s,
   );
   assert.match(
     pressedStates,

@@ -258,19 +258,9 @@
                 Метро «Вави&shy;ловская» и «Университет»
               </address>
               <div class="site-menu__actions">
-                <a
-                  class="source-button source-button--menu-call"
-                  href="tel:+79166751452"
-                  aria-label="Позвонить в лавку: +7 916 675‑14‑52"
-                >
-                  <span class="source-button__label">Позвонить</span>
-                </a>
-                <a class="source-button source-button--menu-primary" href="https://t.me/+79166751452">
-                  <span class="source-button__label">Заказать в Телеграме</span>
-                </a>
-                <a class="source-button source-button--menu-secondary" href="https://wa.me/79166751452">
-                  <span class="source-button__label">Заказать в WhatsApp</span>
-                </a>
+<a class="source-button source-button--secondary" href="tel:+79166751452" aria-label="Позвонить в лавку: +7 916 675‑14‑52"><span class="source-button__label">Позвонить</span></a>
+<a class="source-button source-button--primary" href="https://t.me/+79166751452"><span class="source-button__label">Заказать в Телеграме</span></a>
+<a class="source-button source-button--secondary" href="https://wa.me/79166751452"><span class="source-button__label">Заказать в WhatsApp</span></a>
               </div>
               <div class="site-menu__networks">
                 <a class="site-menu__channel" href="https://t.me/kapitanseledkin">
@@ -297,22 +287,24 @@
                   </a>
                 </nav>
               </div>
-              <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить море</button>
-              <button
-                class="theme-toggle theme-toggle--menu"
-                type="button"
-                aria-label="Включить ночную вахту"
-                data-theme-toggle
-              >
-                <svg class="theme-toggle__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path class="theme-toggle__moon" d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8a8.5 8.5 0 1 0 11.6 11.6Z" />
-                  <g class="theme-toggle__sun">
-                    <circle cx="12" cy="12" r="3.5" />
-                    <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6 6 6M18 18l1.4 1.4M19.4 4.6 18 6M6 18l-1.4 1.4" />
-                  </g>
-                </svg>
-                <span data-theme-label>Ночная вахта</span>
-              </button>
+              <div class="site-menu__preferences" role="group" aria-label="Настройки страницы">
+                <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить море</button>
+                <button
+                  class="theme-toggle theme-toggle--menu"
+                  type="button"
+                  aria-label="Включить ночную вахту"
+                  data-theme-toggle
+                >
+                  <svg class="theme-toggle__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path class="theme-toggle__moon" d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8a8.5 8.5 0 1 0 11.6 11.6Z" />
+                    <g class="theme-toggle__sun">
+                      <circle cx="12" cy="12" r="3.5" />
+                      <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6 6 6M18 18l1.4 1.4M19.4 4.6 18 6M6 18l-1.4 1.4" />
+                    </g>
+                  </svg>
+                  <span data-theme-label>Ночная вахта</span>
+                </button>
+              </div>
             </div>
           </section>
         </div>
@@ -706,9 +698,11 @@
           height="1680"
           loading="lazy"
         /><figcaption>Корзина с продуктами лавки</figcaption></figure><ol class="delivery-path__steps"><li><span class="delivery-path__number" aria-hidden="true">01</span><div><h3>Выберите рыбу</h3><p>Добавьте продукты в список заказа и укажите вес или количество упаковок.</p><a class="editorial-link" href="/catalog/">Собрать список<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor"/></svg></a></div></li><li><span class="delivery-path__number" aria-hidden="true">02</span><div><h3>Пришлите список</h3><p>В Телеграме или WhatsApp уточним наличие и договоримся о заказе.</p><div class="delivery-source__actions">
-            <a class="source-button source-button--telegram delivery-source__order" href="https://t.me/+79166751452"><span class="source-button__label">Заказать в Телеграме</span></a>
-            <a class="source-button source-button--whatsapp delivery-source__order" href="https://wa.me/79166751452"><span class="source-button__label">Заказать в WhatsApp</span></a>
-          </div></div></li><li><span class="delivery-path__number" aria-hidden="true">03</span><div><h3>Встречайте доставку</h3><p>
+<!-- shared:delivery-actions:start -->
+<a class="source-button source-button--primary delivery-source__order" href="https://t.me/+79166751452"><span class="source-button__label">Заказать в Телеграме</span></a>
+<a class="source-button source-button--secondary delivery-source__order" href="https://wa.me/79166751452"><span class="source-button__label">Заказать в WhatsApp</span></a>
+<!-- shared:delivery-actions:end -->
+            </div></div></li><li><span class="delivery-path__number" aria-hidden="true">03</span><div><h3>Встречайте доставку</h3><p>
 <!-- shared:delivery-terms:start -->
 Стоимость доставки в пределах МКАД — <strong>490 ₽.</strong> Минимальной суммы заказа нет, это удобно.
 <!-- shared:delivery-terms:end -->
@@ -839,16 +833,10 @@
             <p>Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1; метро «Вави&shy;ловская» и «Университет»</p>
           </div>
           <div class="source-footer__actions" aria-label="Связаться с лавкой">
-            <a class="source-button source-button--footer-contact" href="tel:+79166751452">
-              <span class="source-button__label">Позвонить</span>
-            </a>
-            <a class="source-button source-button--footer-contact" href="https://t.me/+79166751452">
-              <span class="source-button__label">Заказать в Телеграме</span>
-            </a>
-            <a class="source-button source-button--footer-contact" href="https://wa.me/79166751452">
-              <span class="source-button__label">Заказать в WhatsApp</span>
-            </a>
-          </div>
+<a class="source-button source-button--secondary source-button--footer-contact" href="tel:+79166751452"><span class="source-button__label">Позвонить</span></a>
+<a class="source-button source-button--primary source-button--footer-contact" href="https://t.me/+79166751452"><span class="source-button__label">Заказать в Телеграме</span></a>
+<a class="source-button source-button--secondary source-button--footer-contact" href="https://wa.me/79166751452"><span class="source-button__label">Заказать в WhatsApp</span></a>
+              </div>
         </div>
 
         <figure class="source-footer__portrait">

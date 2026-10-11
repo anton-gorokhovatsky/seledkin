@@ -13,6 +13,7 @@
   "delivery": {
     "area": "в пределах МКАД",
     "priceRub": 490,
+    "timing": "В течение двух часов",
     "minimumOrderRub": 0
   },
   "pricePreview": [

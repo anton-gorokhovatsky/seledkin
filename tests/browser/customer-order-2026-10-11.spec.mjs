@@ -58,6 +58,24 @@ test("footer icons stay centered beside their labels in both watches", async ({ 
   }
 });
 
+test("order actions keep the same appearance in delivery, menu and footer", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  for (const theme of ["light", "dark"]) {
+    await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
+    await page.goto("?audit=shared-order-buttons#delivery");
+    const styles = selector => page.locator(selector).evaluateAll(buttons => buttons.map(button => {
+      const style = getComputedStyle(button);
+      return Object.fromEntries(["fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing", "padding", "borderRadius", "backgroundColor", "color"].map(name => [name, style[name]]));
+    }));
+    const delivery = await styles(".delivery-source__actions .source-button");
+    expect(await styles(".source-footer__actions .source-button:not([href^='tel:'])")).toEqual(delivery);
+    await page.getByRole("button", { name: "Открыть меню", exact: true }).click();
+    expect(await styles(".site-menu__actions .source-button:not([href^='tel:'])")).toEqual(delivery);
+    await page.getByRole("button", { name: "Закрыть меню", exact: true }).click();
+    if (theme === "dark") await page.locator("#delivery").screenshot({ path: testInfo.outputPath("delivery-common-buttons-dark.png") });
+  }
+});
+
 test("recipe sequence photographs share one column and a short gap @journal", async ({ page }, testInfo) => {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });

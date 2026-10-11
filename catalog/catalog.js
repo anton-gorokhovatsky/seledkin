@@ -10,6 +10,12 @@ const filters = document.querySelector("[data-catalog-filters]");
 const select = document.querySelector("[data-catalog-select]");
 const selectedLabel = document.querySelector("[data-catalog-selected-label]");
 const list = document.querySelector("[data-catalog-list]");
+// WebKit can scroll a newly focused control between mouse press and release.
+// Preserve the pointer target while leaving native activation and keyboard focus intact.
+list.addEventListener("pointerdown", event => {
+  if (event.pointerType !== "mouse" || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+  event.target.closest("summary, button, a[href]")?.focus({ preventScroll: true });
+});
 const count = document.querySelector("[data-catalog-count]");
 const reset = document.querySelector("[data-catalog-reset]");
 const controls = document.querySelector("[data-catalog-controls]");
@@ -158,7 +164,7 @@ function restore() {
   if (targetId) requestAnimationFrame(() => {
     const product = document.getElementById(`product-${targetId}`);
     if (!product || product.hidden || targetId !== activeProduct) return;
-    product.scrollIntoView({ block: "start" });
+    product.scrollIntoView({ block: "start", behavior: "instant" });
     product.focus({ preventScroll: true });
   });
 }

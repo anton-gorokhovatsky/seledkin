@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
 import { catalog } from "../assets/catalog-data.js";
 import { positionCount } from "../assets/catalog-model.js";
 import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
@@ -18,7 +18,8 @@ for (const [path, page, root] of pages) {
     "journal-hero": renderJournal(hero, "hero"), "journal-preview": renderJournal(preview, "preview"),
     "contact-address": contactAddress,
     "contact-hours": regularHours,
-    "delivery-terms": renderDelivery("home"),
+    "delivery-terms": renderDelivery("waybill"),
+    "delivery-actions": renderDeliveryActions(),
     "price-preview": renderPricePreview(),
     "recipe-home": renderRecipeHome(), "assortment-media": renderAssortmentMedia(),
     "mobile-hero": renderMobileHero(),

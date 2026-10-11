@@ -30,8 +30,15 @@ const plain = value => value.replaceAll("&nbsp;", "\u00a0").replaceAll("&amp;", 
 const text = value => escape(typographText(plain(value)));
 
 export function renderDelivery(view) {
-  const { area, priceRub, minimumOrderRub } = site.delivery;
+  const { area, priceRub, timing, minimumOrderRub } = site.delivery;
   const price = text(`${priceRub} ₽`);
+  if (view === "waybill") return `<p class="delivery-waybill__price">${price.replace(/( ₽)$/, "<span>$1</span>")}</p>
+            <dl>
+              <div><dt>Куда</dt><dd>${text(`${site.address.city}, ${area}`)}</dd></div>
+              <div><dt>Когда</dt><dd>${text(timing)}</dd></div>
+              <div><dt>Сумма заказа</dt><dd>${minimumOrderRub === 0
+    ? text("Без ми­ни­мальной суммы") : text(`От ${minimumOrderRub} ₽`)}</dd></div>
+            </dl>`;
   if (view === "home") return `Стоимость доставки ${text(area)} — <strong>${price}.</strong> ${minimumOrderRub === 0
     ? "Минимальной суммы заказа нет, это удобно."
     : `Минимальная сумма заказа — ${text(`${minimumOrderRub} ₽`)}.`}`;
@@ -64,6 +71,20 @@ function template(name, values) {
   });
 }
 
+function contactActions({ phone = true, phoneName = false, classes = "" } = {}) {
+  const actions = [
+    ...(phone ? [{ href: "tel:+79166751452", label: "Позвонить", variant: "secondary", name: phoneName ? "Позвонить в лавку: +7 916 675‑14‑52" : "" }] : []),
+    { href: "https://t.me/+79166751452", label: "Заказать в Телеграме", variant: "primary" },
+    { href: "https://wa.me/79166751452", label: "Заказать в WhatsApp", variant: "secondary" },
+  ];
+  return actions.map(({ href, label, variant, name }) => template("button", {
+    href, label: text(label), variant, classes: classes ? ` ${classes}` : "",
+    attributes: name ? ` aria-label="${text(name)}"` : "",
+  })).join("\n");
+}
+
+export const renderDeliveryActions = () => contactActions({ phone: false, classes: "delivery-source__order" });
+
 const street = `${site.address.city}, ${site.address.street}`;
 const metro = `метро ${site.address.metro}`;
 export const contactAddress = `${street}. Метро ${site.address.metro}.`;
@@ -89,6 +110,7 @@ export function renderMenu(page, root) {
     brandClose: page === "home" ? "</div>" : "</a>",
     routes: routeLinks(page, root, true),
     regularHours,
+    menuActions: contactActions({ phoneName: true }),
     menuAddress: `${street}<br />\n                Метро ${site.address.metro}`,
   });
 }
@@ -101,6 +123,7 @@ ${routeLinks(page, root, false)}
     root, footerId: page === "catalog" ? "catalog-footer-title" : "footer-title",
     regularHours: `Каждый день с ${store.hours.open} до ${store.hours.close}`,
     footerAddress: `${street}; ${metro}`,
+    footerActions: contactActions({ classes: "source-button--footer-contact" }),
   })}`;
 }
 

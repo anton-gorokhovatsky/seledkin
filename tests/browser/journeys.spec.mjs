@@ -293,8 +293,9 @@ test("ordinary sections share one continuous surface and delivery keeps its cont
       expect(surfaces).toHaveLength(5);
       expect(surfaces.every(s => s.image === "none" && s.color === "rgba(0, 0, 0, 0)")).toBe(true);
       const delivery = page.locator("#delivery");
-      await expect(delivery.locator(".delivery-source__lead")).toHaveText("Мы доставляем нашу продукцию домой или в офис в течение двух часов.");
-      await expect(delivery.locator(".delivery-source__terms")).toHaveText("Стоимость доставки в пределах МКАД — 490 ₽. Минимальной суммы заказа нет, это удобно.");
+      await expect(delivery.locator("h2")).toHaveText("Дос­тавка домой или в офис");
+      await expect(delivery.locator(".delivery-waybill__price")).toHaveText("490 ₽");
+      await expect(delivery.locator("dd")).toHaveText(["Москва, в пределах МКАД", "В течение двух часов", "Без ми­ни­мальной суммы"]);
       const photo = await delivery.locator("img").boundingBox();
       expect(photo.width / photo.height).toBeCloseTo(1, 2);
       const order = delivery.getByRole("link", { name: "Заказать в Телеграме", exact: true });
