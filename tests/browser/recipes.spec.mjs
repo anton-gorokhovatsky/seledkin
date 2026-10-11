@@ -131,7 +131,9 @@ test("ingredients retain the editorial spreads, browser history and an exact cat
   await expect(page.locator("[data-recipe-opening]")).toBeVisible();
   await page.goBack();
   await expect(mussels).toHaveAttribute("aria-pressed", "true");
-  await page.locator('[data-recipe-material="574"] .recipe-record-product').click();
+  const product = page.locator('[data-recipe-material="574"] .recipe-record-product');
+  await product.click();
+  await expect(page).toHaveURL(/catalog\/\?product=seafood-009#product-seafood-009$/);
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await expect(page.locator(".catalog-product:visible h4")).toHaveText("Мясо мидий");
   await page.goBack();

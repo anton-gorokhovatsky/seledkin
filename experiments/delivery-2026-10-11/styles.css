@@ -6,14 +6,17 @@
 .delivery-study figure { margin: 0; }
 .delivery-study figure img { display: block; width: 100%; height: auto; }
 .delivery-study figcaption { margin-top: .75rem; color: var(--muted); font-size: var(--text-meta); }
-.delivery-waybill__receipt { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: var(--delivery-study-gap); margin-bottom: 2rem; }
-.delivery-waybill__price { margin: 0; color: var(--blue); font: 400 clamp(6.5rem, 4rem + 8vw, 12rem) / .82 var(--serif); white-space: nowrap; }
+.delivery-waybill { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--delivery-study-gap); align-items: start; }
+.delivery-waybill__copy { min-width: 0; container: delivery-copy / inline-size; }
+.delivery-waybill .delivery-study__heading { margin-bottom: 2rem; }
+.delivery-waybill h2 { font-size: clamp(3.1rem, 2rem + 4.2cqi, 6.5rem); overflow-wrap: normal; hyphens: manual; }
+.delivery-waybill__receipt { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; margin-bottom: 1.5rem; }
+.delivery-waybill__price { margin: 0; color: var(--blue); font: 400 clamp(4rem, 3rem + 10cqi, 10rem) / .9 var(--serif); white-space: nowrap; }
 .delivery-waybill__price span { font-size: .48em; }
 .delivery-waybill dl { margin: 0; }
 .delivery-waybill dl div { display: grid; grid-template-columns: minmax(8rem, .8fr) 1.4fr; gap: 1.5rem; margin-top: 1rem; }
 .delivery-waybill dt { color: var(--muted); }
 .delivery-waybill dd { margin: 0; }
-.delivery-waybill__body { display: grid; grid-template-columns: 1fr 1fr; gap: var(--delivery-study-gap); align-items: start; }
 .delivery-study__finish { margin-top: 1.5rem; }
 .delivery-waybill .delivery-study__finish { margin-top: 0; }
 .delivery-study__finish .editorial-link { margin-top: 1rem; }
@@ -26,7 +29,8 @@
 .delivery-path h3 { margin: 0 0 .75rem; font: 400 clamp(1.75rem, 1.2rem + 1.5vw, 2.8rem) / 1.1 var(--serif); text-wrap: balance; }
 .delivery-path__steps p { margin: 0 0 .75rem; max-width: 34rem; }
 .delivery-study .delivery-source__actions { justify-content: start; flex-wrap: wrap; }
-.delivery-study .source-button { font-size: var(--text-interface); }
+.delivery-study .source-button { font-size: var(--text-interface); padding-inline: .75rem; }
+.delivery-study .source-button__label { overflow-wrap: normal; hyphens: manual; }
 .delivery-study .editorial-link svg { width: 2rem; height: 1.25rem; }
 .delivery-board { max-width: 1400px; margin: 0 auto; padding: 2.5rem clamp(1rem, 4vw, 4rem); }
 .delivery-board h1 { max-width: 50rem; margin: .5rem 0 1.5rem; font: 400 clamp(2.75rem, 2rem + 3vw, 5rem)/1.05 var(--serif); }
@@ -47,8 +51,7 @@
 .delivery-board__frames[data-screen="wide"] iframe { height: 880px; }
 .delivery-board__note { min-height: 3rem; max-width: 60rem; }
 @media (max-width: 46rem) {
-  .delivery-waybill__receipt, .delivery-waybill__body, .delivery-path__body { grid-template-columns: 1fr; }
-  .delivery-waybill__price { font-size: clamp(6rem, 20vw, 9rem); }
+  .delivery-waybill, .delivery-path__body { grid-template-columns: 1fr; }
   .delivery-waybill dl div { grid-template-columns: minmax(7rem,.8fr) 1.2fr; gap: .75rem; }
   .delivery-path__steps li { grid-template-columns: 2.5rem minmax(0,1fr); gap: .75rem; }
   .delivery-path__number { font-size: 2rem; }
@@ -56,4 +59,7 @@
   .delivery-study .delivery-source__actions { align-items: start; flex-direction: column; }
   .delivery-study .source-button { max-width: 100%; white-space: normal; }
   .delivery-board__frames { grid-template-columns: 1fr; }
+}
+@container delivery-copy (width < 22rem) {
+  .delivery-waybill dl div { grid-template-columns: minmax(0, 1fr); gap: .25rem; margin-top: 1.25rem; }
 }

@@ -13,6 +13,13 @@ if (chooser) {
   const heading = document.querySelector("[data-recipe-directory-title]");
   const status = chooser.querySelector("[data-recipe-filter-status]");
   const allStatus = status.textContent;
+  // WebKit can scroll a restored results page when mouse focus arrives between
+  // pointerdown and pointerup. Keep the link under the pointer; its native click,
+  // keyboard navigation and modified clicks still perform the normal action.
+  directory.addEventListener("pointerdown", event => {
+    if (event.pointerType !== "mouse" || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+    event.target.closest("a[href]")?.focus({ preventScroll: true });
+  });
   function render(animate = false) {
     const requested = new URL(location.href).searchParams.get("ingredient");
     const ingredient = buttons.some(button => button.dataset.ingredient === requested) ? requested : "all";

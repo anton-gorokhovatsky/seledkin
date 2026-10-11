@@ -3151,16 +3151,16 @@ a.site-menu__brand {
 }
 
 .not-found-source::before {
-  width: min(100%, 36rem);
+  width: min(100%, 22rem);
   aspect-ratio: 7940 / 2494;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   content: "";
   --shoal-color: var(--shoal-primary);
 }
 
 .not-found-source__brand {
-  width: min(68vw, 20rem);
-  margin-bottom: 2rem;
+  width: min(68vw, 15rem);
+  margin-bottom: 1.5rem;
 }
 
 .not-found-source__brand img {
