@@ -11,7 +11,7 @@
 .journal-atlas__header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
-  align-items: start;
+  align-items: last baseline;
   gap: var(--section-gap);
   margin-bottom: var(--section-gap);
 }
@@ -74,7 +74,7 @@
 .journal-atlas__archive-heading {
   display: flex;
   flex-wrap: wrap;
-  align-items: end;
+  align-items: last baseline;
   justify-content: space-between;
   gap: 1.5rem 3rem;
   padding-top: var(--section-gap);

@@ -11,7 +11,7 @@
 .recipe-filter-status { margin: 1rem 0 0; color: var(--muted); font-size: var(--text-meta); }
 .recipe-record-directory { margin-top: clamp(3rem, 5vw, 5rem); container: recipe-records / inline-size; }
 .recipes-page[data-ingredient]:not([data-ingredient="all"]) .recipe-record-directory { margin-top: 0; }
-.recipe-record-heading { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .75rem 2rem; margin-bottom: 2rem; }
+.recipe-record-heading { display: flex; justify-content: space-between; align-items: last baseline; flex-wrap: wrap; gap: .75rem 2rem; margin-bottom: 2rem; }
 .recipe-record-heading h2 { margin: 0; font: 400 clamp(2.25rem, 1.65rem + 1.7vw, 3.5rem) / 1.1 var(--serif); }
 .recipe-record-heading p, .recipe-record-meta { margin: 0; color: var(--muted); font-size: var(--text-meta); line-height: 1.5; }
 .recipe-records { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem clamp(2rem, 5vw, 5rem); }

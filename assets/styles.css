@@ -953,7 +953,7 @@ a.source-brand {
 }
 
 .assortment-overview__header p {
-  margin: 0 0 0.45rem;
+  margin: 0;
   color: var(--muted);
   font-size: var(--text-body);
   text-align: right;
@@ -996,7 +996,7 @@ a.source-brand {
   min-height: 4.75rem;
   grid-template-areas: "label meta icon";
   grid-template-columns: minmax(0, 1fr) max-content auto;
-  align-items: center;
+  align-items: last baseline;
   padding: 0.75rem 0.75rem 0.75rem 0.7rem;
   margin-left: -0.7rem;
   column-gap: clamp(0.85rem, 2vw, 1.5rem);
@@ -1402,7 +1402,7 @@ a.source-brand {
 }
 .editorial-link {
   display: inline-flex;
-  align-items: center;
+  align-items: last baseline;
   gap: 0.8rem;
   min-height: 44px;
   max-width: 100%;
@@ -1941,7 +1941,7 @@ a.source-brand {
 }
 
 .contacts-source__card .source-button {
-  align-self: end;
+  align-self: auto;
   grid-column: 3;
   margin: 0;
 }
@@ -2159,7 +2159,7 @@ a.source-brand {
 .source-footer__channels a {
   display: inline-flex;
   min-height: 44px;
-  align-items: center;
+  align-items: last baseline;
   gap: 0.65rem;
   padding-block: 0.3rem;
   color: var(--footer-text);
@@ -4582,6 +4582,15 @@ a.site-menu__brand {
 
 /* Internal pages share their entry rhythm and heading level. Their second
    columns keep the page's actual purpose: search, photograph or introduction. */
+/* A heading and its companion use the last text baseline, rather than the
+   bottoms of boxes with different line heights or padded hit areas. Product
+   names and prices retain the first baseline for scanning long product names. */
+:is(.assortment-overview__header, .watch-catch__header, .recipe-section-heading,
+    .journal-preview__header, .contacts-source__card, .source-footer__postscript,
+    .catalog-category-header) {
+  align-items: last baseline;
+}
+
 :is(.catalog-intro, .about-overview, .ship-log).page-intro {
   padding-top: var(--page-intro-space);
 }

@@ -55,7 +55,9 @@ test("internal sections and the three reasons retain their shared heading levels
       await page.evaluate(() => document.fonts.ready);
       headings.push(await page.locator("main h1").evaluate(el => {
         const s = getComputedStyle(el), r = el.getBoundingClientRect();
-        return { size: s.fontSize, weight: s.fontWeight, leading: s.lineHeight, family: s.fontFamily, x: r.x, y: r.y };
+        // The shared type scale and left edge stay equal. A page's title can
+        // move vertically to align with its own final caption or action line.
+        return { size: s.fontSize, weight: s.fontWeight, leading: s.lineHeight, family: s.fontFamily, x: r.x };
       }));
       if (route === "about/") {
         for (const selector of [".about-overview__reason h3", ".about-overview__number"]) {
@@ -80,6 +82,60 @@ test("internal sections and the three reasons retain their shared heading levels
     await page.goto('');
     await expect(page.locator('#contacts h2')).toHaveCSS('font-weight', '400');
   }
+});
+
+// A zero-height inline probe measures the actual text baseline. Wrapping the
+// final text node preserves the anonymous flex item used by editorial links.
+async function textBaseline(locator) {
+  return locator.evaluate(el => {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let text, node;
+    while ((node = walker.nextNode())) if (node.textContent.trim()) text = node;
+    if (!text) throw new Error("No visible text for baseline measurement");
+    const wrapper = document.createElement("span");
+    const probe = document.createElement("span");
+    probe.style.cssText = "display:inline-block;width:0;height:0;padding:0;margin:0;border:0;vertical-align:baseline";
+    text.replaceWith(wrapper);
+    // A probe after the source's trailing newline can create an empty last
+    // line in WebKit. Measure after the final visible character instead.
+    wrapper.append(document.createTextNode(text.textContent.trimEnd()), probe);
+    const baseline = probe.getBoundingClientRect().top;
+    wrapper.replaceWith(text);
+    return baseline;
+  });
+}
+
+test("entry captions and actions meet the title's final text line @recipes @journal", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const [route, heading, companion] of [
+    ["recipes/?audit=alignment", ".recipes-intro h1", ".recipes-intro__copy p"],
+    ["journal/?audit=alignment", ".journal-atlas__header h1", ".journal-atlas__introduction .editorial-link"],
+  ]) {
+    await page.goto(route);
+    await page.evaluate(() => document.fonts.ready);
+    const titleLine = await textBaseline(page.locator(heading));
+    const companionLine = await textBaseline(page.locator(companion));
+    expect(Math.abs(titleLine - companionLine), route).toBeLessThan(1);
+  }
+});
+
+test("section headings, counts and actions share the final text line", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("?audit=alignment");
+  await page.evaluate(() => document.fonts.ready);
+  const offsets = [];
+  for (const [heading, companion] of [
+    [".assortment-overview__header h2", ".assortment-overview__header p"],
+    [".watch-catch__header h2", ".watch-catch__header a"],
+    [".journal-preview__header h2", ".journal-preview__header a"],
+    [".contacts-source__card h2", ".contacts-source__details .store-status"],
+    [".source-footer__postscript > p", ".source-footer__channels a:last-child span"],
+  ]) {
+    const titleLine = await textBaseline(page.locator(heading));
+    const companionLine = await textBaseline(page.locator(companion));
+    offsets.push({ heading, offset: Math.abs(titleLine - companionLine) });
+  }
+  expect(offsets.filter(({ offset }) => offset >= 1), JSON.stringify(offsets)).toEqual([]);
 });
 
 test("button labels use the same optical centre in every page and open menu", async ({ page }) => {
