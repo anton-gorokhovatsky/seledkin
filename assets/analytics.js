@@ -40,6 +40,10 @@ if (typeof document !== "undefined") {
       reachGoal("product_select", { context: "afisha", action: "open_catalog", product: afisha.dataset.productName,
         category: afisha.dataset.productCategory, product_id: afisha.dataset.productId, photo: Number(afisha.dataset.photoIndex) });
     }
+    if (link.dataset.recipeId && url.origin === location.origin && /\/catalog\/$/u.test(url.pathname) && url.searchParams.has("product")) {
+      reachGoal("product_select", { context: "recipes", action: "open_catalog", recipe_id: link.dataset.recipeId,
+        product_id: url.searchParams.get("product"), ingredient: document.body.dataset.ingredient ?? "all" });
+    }
     let channel;
     if (url.hostname === "t.me" && url.pathname === "/+79166751452") channel = "telegram";
     if (url.hostname === "wa.me" && url.pathname === "/79166751452") channel = "whatsapp";

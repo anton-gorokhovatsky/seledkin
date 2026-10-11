@@ -1,5 +1,5 @@
 import { catalog } from "./catalog-data.js";
-import { catalogPrice, orderLinks, orderText, positionCount, productKey, restoreOrderKeys, orderUnit, orderAmount } from "./catalog-model.js";
+import { catalogPrice, productLabel, orderLinks, orderText, positionCount, productKey, restoreOrderKeys, orderUnit, orderAmount } from "./catalog-model.js";
 import { typographText } from "./typography.js";
 import { copyOrderMessage } from "./order-message.js";
 
@@ -141,7 +141,7 @@ export function setupOrderList() {
       const isSelected = selected.has(button.value), product = products.get(button.value);
       button.dataset.selected = String(isSelected);
       button.querySelector("span").textContent = isSelected ? "Открыть список" : "В список заказа";
-      button.setAttribute("aria-label", typographText(`${isSelected ? "Открыть список заказа" : "В список заказа"}: ${product.name}, ${catalogPrice(product.price)}`));
+      button.setAttribute("aria-label", `${isSelected ? "Открыть список заказа" : "В список заказа"}: ${productLabel(product)}`);
       const actions = button.closest(".catalog-product-actions");
       actions.hidden = false;
       actions.querySelector("[data-order-added]").hidden = !isSelected;
@@ -158,6 +158,11 @@ export function setupOrderList() {
       const price = document.createElement("span");
       price.textContent = catalogPrice(product.price);
       text.append(name, price);
+      if (product.description) {
+        const description = document.createElement("span");
+        description.textContent = typographText(product.description);
+        text.append(description);
+      }
       const unit = orderUnit(product);
       const quantity = document.createElement("label");
       quantity.className = "catalog-order-quantity";
@@ -169,7 +174,7 @@ export function setupOrderList() {
       amount.autocomplete = "off";
       amount.value = amounts.get(key) ?? "";
       amount.placeholder = `Например, ${unit.example}`;
-      amount.setAttribute("aria-label", `${unit.label}: ${product.name}, ${catalogPrice(product.price)}`);
+      amount.setAttribute("aria-label", `${unit.label}: ${productLabel(product)}`);
       const error = document.createElement("small");
       error.id = `order-amount-error-${key}`;
       error.textContent = unit.whole ? "Укажите целое число больше нуля или оставьте поле пустым."
@@ -196,13 +201,13 @@ export function setupOrderList() {
       const remove = document.createElement("button");
       remove.type = "button";
       remove.textContent = "Убрать";
-      remove.setAttribute("aria-label", `Убрать из списка: ${product.name}, ${catalogPrice(product.price)}`);
+      remove.setAttribute("aria-label", `Убрать из списка: ${productLabel(product)}`);
       remove.addEventListener("click", () => {
         const next = row.nextElementSibling?.querySelector("button")?.getAttribute("aria-label")
           ?? row.previousElementSibling?.querySelector("button")?.getAttribute("aria-label");
         selected.delete(key);
         amounts.delete(key);
-        update(`Убрано: ${product.name}`);
+        update(`Убрано: ${productLabel(product)}`);
         const target = [...items.querySelectorAll("button")].find(button => button.getAttribute("aria-label") === next);
         (target ?? channels[0]).focus();
       });
@@ -262,12 +267,12 @@ export function setupOrderList() {
         category: products.get(button.value).category, count: 1,
         ...(new URL(location.href).searchParams.get("from") === "afisha" ? { source: "afisha" } : {}) },
     } }));
-    update(`Добавлено: ${products.get(button.value).name}`);
+    update(`Добавлено: ${productLabel(products.get(button.value))}`);
   });
   for (const button of removeButtons) button.addEventListener("click", () => {
     selected.delete(button.value);
     amounts.delete(button.value);
-    update(`Убрано: ${products.get(button.value).name}`);
+    update(`Убрано: ${productLabel(products.get(button.value))}`);
     addButtons.find(add => add.value === button.value).focus({ preventScroll: true });
   });
   shortcut.addEventListener("click", () => region.focus({ preventScroll: true }));

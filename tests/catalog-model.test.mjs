@@ -72,7 +72,7 @@ test("portion prices use grams without rounding the quantity or changing other u
     ["190 ₽/0,175 кг", "190 ₽ за 175 г"],
     ["3200 ₽/кг", "3 200 ₽/кг"],
     ["450 ₽/0,9 л", "450 ₽/0,9 л"],
-    ["330 ₽/0,450 мл", "330 ₽/0,450 мл"],
+    ["330 ₽/450 мл", "330 ₽/450 мл"],
   ]) assert.equal(catalogPrice(source), expected);
 });
 

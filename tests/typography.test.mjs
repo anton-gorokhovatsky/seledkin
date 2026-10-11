@@ -14,7 +14,7 @@ test("Russian copy preserves nested quotes, word hyphens and authored dialogue",
 test("shop dates, prices and whole unit names stay together without changing values", () => {
   assert.equal(typographText("22 сентября 2026"), "22\u00a0сентября\u00a02026");
   assert.equal(typographText("Килограмм стоит 2490 ₽. Вес 10–15 граммов."), "Килограмм стоит 2\u202f490\u00a0₽. Вес 10–15\u00a0граммов.");
-  assert.equal(typographPrice("330 ₽/0,450 мл"), "330\u00a0₽/0,450\u00a0мл");
+  assert.equal(typographPrice("330 ₽/450 мл"), "330\u00a0₽/450\u00a0мл");
   assert.equal(typographText("Глазировка 0%. Стоит 499 рублей."), "Глазировка 0\u00a0%. Стоит 499\u00a0рублей.");
   assert.equal(typographText("2026 год, 12 глав, 3 лавки"), "2026 год, 12 глав, 3 лавки");
 });
@@ -61,6 +61,6 @@ test("published HTML retains typography even before the page scripts run", async
       assert.match(html, /Позвонить в\u00a0лавку: \+7\u00a0916\u00a0675‑14‑52/);
     }
     if (path === "about/index.html") assert.match(html, /всё „ок“, но\u00a0неправильно/);
-    if (path === "catalog/index.html") assert.match(html, /330\u00a0₽\/0,450\u00a0мл/);
+    if (path === "catalog/index.html") assert.match(html, /330\u00a0₽\/450\u00a0мл/);
   }
 });

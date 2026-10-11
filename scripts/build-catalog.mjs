@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { catalog } from "../assets/catalog-data.js";
-import { catalogPrice, orderLinks, positionCount, productNotes, productSearchText, productKey } from "../assets/catalog-model.js";
+import { catalogPrice, productLabel, orderLinks, positionCount, productNotes, productSearchText, productKey } from "../assets/catalog-model.js";
 import { typographText } from "../assets/typography.js";
 import { recipeContent, productRecipeLinks, matchesProduct } from "./recipe-content.mjs";
 
@@ -42,10 +42,10 @@ const products = catalog.map((category) => `
                 <div class="catalog-product-actions" hidden>
                   <button type="button" class="catalog-product-add" data-order-add value="${escape(productKey(category, product))}"><span>В список заказа</span></button>
                   <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
-                  <button type="button" class="catalog-product-remove" data-order-remove value="${escape(productKey(category, product))}" aria-label="Убрать из списка: ${text(product.name)}, ${escape(catalogPrice(product.price))}" hidden>Убрать</button>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="${escape(productKey(category, product))}" aria-label="Убрать из списка: ${escape(productLabel(product))}" hidden>Убрать</button>
                 </div>
                 <details class="catalog-product-order">
-                  <summary>Уточнить наличие<span class="visually-hidden">: ${text(product.name)}, ${escape(catalogPrice(product.price))}</span></summary>
+                  <summary>Уточнить наличие<span class="visually-hidden">: ${escape(productLabel(product))}</span></summary>
                   <div class="catalog-product-order__channels">
                     <a href="${escape(links.telegram)}">В&nbsp;Телеграме</a>
                     <a href="${escape(links.whatsapp)}">В&nbsp;WhatsApp</a>

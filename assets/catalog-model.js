@@ -135,6 +135,10 @@ export function orderUnit(product) {
     : { label: "Количество, шт.", unit: "шт.", example: "2", whole: true };
 }
 
+export function productLabel(product) {
+  return typographText([product.name, product.description, catalogPrice(product.price)].filter(Boolean).join(", "));
+}
+
 // Empty is a valid optional amount; null is an invalid entered amount.
 export function orderAmount(value, product) {
   const input = String(value ?? "").trim().replace(",", ".");

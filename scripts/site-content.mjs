@@ -399,7 +399,7 @@ function renderRecipeEditorial(root) {
   });
   const meta = item => `<p class="recipe-meta">Рецепт Олега · <time datetime="${item.entry.date}">${date(item.entry)}</time></p>`;
   const title = item => `<h2 id="recipe-editorial-${item.id}">${text(item.noun)} <em>${text(item.ending)}</em></h2>`;
-  const actions = item => `<div class="recipe-editorial-actions"><a class="editorial-link" href="${root}journal/${item.id}/" aria-label="Читать рецепт: ${text(item.recipe.title)}">Читать рецепт${harpoon}</a><a class="editorial-link recipe-editorial-actions__catalog" href="${escape(productCatalogHref(item.recipe.products[0], root))}">${text(item.product.name)} в каталоге${harpoon}</a></div>`;
+  const actions = item => `<div class="recipe-editorial-actions"><a class="editorial-link" href="${root}journal/${item.id}/" aria-label="Читать рецепт: ${text(item.recipe.title)}">Читать рецепт${harpoon}</a><a class="editorial-link recipe-editorial-actions__catalog" data-recipe-id="${item.id}" href="${escape(productCatalogHref(item.recipe.products[0], root))}">${text(item.product.name)} в каталоге${harpoon}</a></div>`;
   const product = item => `<div class="recipe-editorial-product"><div><p class="recipe-editorial-product__label">Для этого рецепта</p><p class="recipe-editorial-product__name">${text(item.product.name)}</p><p class="recipe-editorial-product__origin">${text(item.product.description)}</p></div><strong>${escape(catalogPrice(item.product.price)).replace("/", "<wbr>/")}</strong></div>`;
   const [lead, ...pair] = selected;
   return `<div class="recipe-editorial-opening">
@@ -434,7 +434,7 @@ export function renderRecipesPage() {
       const entry = recipeEntry(recipe);
       const buying = recipe.products.length ? recipe.products.map(selection => {
         const { product } = resolveProduct(selection);
-        return `<a class="recipe-record-product" href="${escape(productCatalogHref(selection, "../"))}"><span>${text(product.name)}</span><span class="recipe-record-product__price">${escape(catalogPrice(product.price)).replace("/", "<wbr>/")}${harpoon}</span></a>`;
+        return `<a class="recipe-record-product" data-recipe-id="${recipe.id}" href="${escape(productCatalogHref(selection, "../"))}"><span>${text(product.name)}</span><span class="recipe-record-product__price">${escape(catalogPrice(product.price)).replace("/", "<wbr>/")}${harpoon}</span></a>`;
       }).join("") : `<p class="recipe-record-unlinked">Весь ассортимент — <a href="../catalog/">в каталоге лавки</a>.</p>`;
       return `<article class="recipe-record"${recipe.id === 453 ? ' id="advice"' : ""} data-recipe-material="${recipe.id}" data-ingredient-group="${recipe.ingredient}" data-kind="${recipe.kind}"${featuredIds.has(recipe.id) ? ' data-featured hidden' : ""} aria-labelledby="recipe-title-${recipe.id}">
         <a class="recipe-record-photo" href="../journal/${recipe.id}/" tabindex="-1" aria-hidden="true">${image(entry, "../", "(max-width: 46rem) 92px, 160px")}</a>

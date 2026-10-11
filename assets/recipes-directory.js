@@ -25,6 +25,11 @@ if (chooser) {
     url.hash = "";
     history.pushState(null, "", url);
     render();
+    document.dispatchEvent(new CustomEvent("shop:goal", { detail: {
+      goal: "product_select", params: { context: "recipes", action: "ingredient_filter",
+        ingredient: button.dataset.ingredient,
+        count: records.filter(record => button.dataset.ingredient === "all" || record.dataset.ingredientGroup === button.dataset.ingredient).length },
+    } }));
   });
   window.addEventListener("popstate", render);
   render();

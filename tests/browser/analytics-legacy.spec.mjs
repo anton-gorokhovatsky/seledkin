@@ -5,7 +5,7 @@ async function publicFixture(page, baseURL, ordinary = true) {
   if (ordinary) await page.addInitScript(() => Object.defineProperty(navigator, "webdriver", { get: () => false }));
   await page.route("https://ks.fish/**", async route => {
     const url = new URL(route.request().url());
-    const response = await page.request.get(new URL(`${url.pathname}${url.search}`, baseURL).href);
+    const response = await page.request.get(new URL(`${url.pathname}${url.search}`, baseURL).href, { maxRetries: 1 });
     await route.fulfill({ response });
   });
   const requests = [];
@@ -38,6 +38,31 @@ test("typing is not a failed search, and broadening records a successful recover
   await search.fill("тунец");
   await search.press("Enter");
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "catalog_search_recovered").length)).toBe(1);
+});
+
+test("recipe product choices and exact catalog transitions are measured without personal text @analytics", async ({ page, baseURL }) => {
+  await publicFixture(page, baseURL);
+  await page.goto("https://ks.fish/recipes/");
+  await expect.poll(() => page.evaluate(() => Array.isArray(window.goalCalls))).toBe(true);
+  await page.getByRole("button", { name: /^Мидии/ }).press("Enter");
+  await expect.poll(() => page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")?.[3])).toEqual({
+    context: "recipes", action: "ingredient_filter", ingredient: "mussels", count: 2,
+  });
+  await page.evaluate(() => document.addEventListener("click", event => {
+    if (event.target.closest(".recipe-record-product")) event.preventDefault();
+  }));
+  const product = page.locator('[data-recipe-material="574"] .recipe-record-product');
+  expect(new URL(await product.getAttribute("href"), page.url()).searchParams.get("product")).toBe("seafood-009");
+  await product.click();
+  expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").at(-1)[3])).toEqual({
+    context: "recipes", action: "open_catalog", recipe_id: "574", product_id: "seafood-009", ingredient: "mussels",
+  });
+  await page.getByRole("button", { name: /^Все материалы/ }).click();
+  expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").at(-1)[3])).toEqual({
+    context: "recipes", action: "ingredient_filter", ingredient: "all", count: 20,
+  });
+  const params = await page.evaluate(() => window.goalCalls.filter(call => call[1] === "reachGoal").map(call => call[3]));
+  for (const value of params) expect(Object.keys(value).every(key => ["context", "action", "ingredient", "count", "recipe_id", "product_id"].includes(key))).toBe(true);
 });
 
 test("afisha records the photographed product through catalog and order list @analytics", async ({ page, baseURL }) => {

@@ -117,6 +117,30 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
   await expect(list.getByRole("link", { name: "Заказать в Телеграме", exact: true })).toBeFocused();
 });
 
+test("same-name fish retain their origin in the list, accessible controls and draft @catalog", async ({ page }) => {
+  await page.goto("catalog/?q=горбуша&audit=order-origins");
+  const kamchatka = page.getByRole("button", { name: /^В список заказа: Горбуша, Камчатка/ });
+  const sakhalin = page.getByRole("button", { name: /^В список заказа: Горбуша, Сахалин/ });
+  await kamchatka.press("Enter");
+  await sakhalin.click();
+  const list = page.locator("#order-list");
+  await expect(list.locator("li")).toHaveCount(2);
+  await expect(list.locator("li").nth(0)).toContainText("Камчатка");
+  await expect(list.locator("li").nth(1)).toContainText("Сахалин");
+  await list.getByRole("textbox", { name: /^Вес, кг: Горбуша, Камчатка/ }).fill("0,5");
+  await list.getByRole("textbox", { name: /^Вес, кг: Горбуша, Сахалин/ }).fill("1");
+  await page.reload();
+  await expect(list.getByRole("textbox", { name: /^Вес, кг: Горбуша, Камчатка/ })).toHaveValue("0,5");
+  await expect(list.getByRole("textbox", { name: /^Вес, кг: Горбуша, Сахалин/ })).toHaveValue("1");
+  const draft = new URL(await list.getByRole("link", { name: "Открыть список в WhatsApp" }).getAttribute("href")).searchParams.get("text");
+  expect(draft).toContain("Камчатка");
+  expect(draft).toContain("Сахалин");
+  await list.getByRole("button", { name: /^Убрать из списка: Горбуша, Камчатка/ }).press("Enter");
+  await expect(list.locator("li")).toHaveCount(1);
+  await expect(list.locator("li")).toContainText("Сахалин");
+  await expect(list.getByRole("button", { name: /^Убрать из списка: Горбуша, Сахалин/ })).toBeFocused();
+});
+
 test("an existing saved order migrates to current product IDs @catalog", async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("seledkin-order-list", JSON.stringify([
     "caviar|Черная икра|Осетровая (забойная) высшего качества|/0,05 кг",
