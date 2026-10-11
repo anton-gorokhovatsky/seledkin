@@ -937,7 +937,6 @@ a.source-brand {
 .assortment-overview__header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
   gap: 2rem;
   margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
@@ -1380,6 +1379,14 @@ a.source-brand {
   color: var(--ink);
 }
 
+/* Companion text shares the final baseline while columns are side by side.
+   Keep this before responsive rules so stacked groups retain their left edge. */
+:is(.assortment-overview__header, .watch-catch__header, .recipe-section-heading,
+    .journal-preview__header, .contacts-source__card, .source-footer__postscript,
+    .catalog-category-header) {
+  align-items: last baseline;
+}
+
 /* Recipes continue the product story, with one full photograph as the focus. */
 .watch-catch {
   padding: clamp(2rem, 4vw, 3.5rem) 0 clamp(3.5rem, 6vw, 5.5rem);
@@ -1387,7 +1394,6 @@ a.source-brand {
 .watch-catch__header,
 .recipe-section-heading {
   display: flex;
-  align-items: end;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem 2rem;
@@ -1898,7 +1904,6 @@ a.source-brand {
   grid-column: 1;
   grid-row: 1;
   grid-template-columns: minmax(16rem, 0.72fr) minmax(20rem, 1.28fr) auto;
-  align-items: end;
   gap: 0.55rem clamp(2rem, 4vw, 4.5rem);
   padding: 0 0 2rem;
   border-bottom: 1px solid var(--line);
@@ -2136,7 +2141,6 @@ a.source-brand {
   z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: end;
   gap: clamp(2rem, 6vw, 6rem);
   padding-block: 0 clamp(2.5rem, 4vw, 3.5rem);
 }
@@ -2889,7 +2893,6 @@ a.site-menu__brand {
 
 .catalog-category-header {
   display: flex;
-  align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 2.5rem;
@@ -4353,7 +4356,6 @@ a.site-menu__brand {
 }
 .journal-preview__header {
   display: flex;
-  align-items: end;
   justify-content: space-between;
   gap: 1.5rem;
   margin-bottom: clamp(2rem, 4vw, 3.5rem);
@@ -4582,15 +4584,6 @@ a.site-menu__brand {
 
 /* Internal pages share their entry rhythm and heading level. Their second
    columns keep the page's actual purpose: search, photograph or introduction. */
-/* A heading and its companion use the last text baseline, rather than the
-   bottoms of boxes with different line heights or padded hit areas. Product
-   names and prices retain the first baseline for scanning long product names. */
-:is(.assortment-overview__header, .watch-catch__header, .recipe-section-heading,
-    .journal-preview__header, .contacts-source__card, .source-footer__postscript,
-    .catalog-category-header) {
-  align-items: last baseline;
-}
-
 :is(.catalog-intro, .about-overview, .ship-log).page-intro {
   padding-top: var(--page-intro-space);
 }

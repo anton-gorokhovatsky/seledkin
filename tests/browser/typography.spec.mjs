@@ -136,6 +136,22 @@ test("section headings, counts and actions share the final text line", async ({ 
     offsets.push({ heading, offset: Math.abs(titleLine - companionLine) });
   }
   expect(offsets.filter(({ offset }) => offset >= 1), JSON.stringify(offsets)).toEqual([]);
+  for (const width of [390, 320]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const [route, container, children] of [
+      ["catalog/?audit=alignment", ".catalog-category-header", "h3, p"],
+      ["?audit=alignment", ".journal-preview__header", ":scope > div, :scope > a"],
+    ]) {
+      await page.goto(route);
+      await page.evaluate(() => document.fonts.ready);
+      const edges = await page.locator(container).first().evaluate((el, selectors) => ({
+        left: el.getBoundingClientRect().left,
+        children: Array.from(el.querySelectorAll(selectors)).map(child => child.getBoundingClientRect().left),
+      }), children);
+      for (const left of edges.children) expect(Math.abs(left - edges.left), `${width}px ${container}`).toBeLessThan(1);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    }
+  }
 });
 
 test("button labels use the same optical centre in every page and open menu", async ({ page }) => {
