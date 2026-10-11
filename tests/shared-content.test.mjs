@@ -51,7 +51,8 @@ test("shared navigation keeps page-specific routes and the same contact informat
 });
 
 test("every story is shareable and preserves author text outside approved old contact tails", () => {
-  const oldRecipeContacts = new Set([375, 377, 378, 382, 464, 556]);
+  const oldRecipeContacts = new Set([375, 377, 378, 382, 464, 556,
+    "facebook-2018-12-15-nerka", "facebook-2018-02-16-herring"]);
   for (const entry of entries) {
     const page = renderJournalPage(entry);
     assert.ok(page.includes(`rel="canonical" href="https://ks.fish/journal/${entry.id}/"`));
@@ -59,12 +60,14 @@ test("every story is shareable and preserves author text outside approved old co
     assert.equal((page.match(/<h1\b/g) ?? []).length, 1);
     const lines = entry.body.split("\n");
     const contactStart = oldRecipeContacts.has(entry.id)
-      ? lines.findIndex(line => line.includes("Заказы принимаются только")) : -1;
+      ? lines.findIndex(line => /Заказы принимаются только|class="journal-historical-contacts"/.test(line)) : -1;
     const authorLines = contactStart < 0 ? lines : lines.slice(0, contactStart);
     for (const line of authorLines) assert.ok(page.includes(line), `Lost author line in ${entry.id}`);
     if (contactStart >= 0) {
       assert.ok(!page.includes("Заказы принимаются только"), `Outdated ordering conditions in ${entry.id}`);
-      assert.ok(page.includes(`href="https://t.me/kapitanseledkin/${entry.id}"`), "The complete original stays linked");
+      assert.ok(!page.includes('class="journal-historical-contacts"'), `Outdated contact tail in ${entry.id}`);
+      const source = (entry.source?.url ?? `https://t.me/kapitanseledkin/${entry.id}`).replaceAll("&", "&amp;");
+      assert.ok(page.includes(`href="${source}"`), "The complete original stays linked");
     }
   }
 });
