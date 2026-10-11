@@ -214,7 +214,12 @@ function setupAdvicePreviews() {
       place(link);
     };
     const leave = () => {
-      if (!(document.activeElement === link && document.documentElement.dataset.inputModality === "keyboard")) closeTimer = setTimeout(close, 350);
+      if (active !== link) return;
+      clearTimeout(closeTimer);
+      const keyboardFocus = () => document.activeElement === link && document.documentElement.dataset.inputModality === "keyboard";
+      if (!keyboardFocus()) closeTimer = setTimeout(() => {
+        if (active === link && !keyboardFocus()) close();
+      }, 350);
     };
     link.addEventListener("pointerenter", show);
     link.addEventListener("pointerleave", leave);
@@ -230,7 +235,8 @@ function setupAdvicePreviews() {
   window.addEventListener("scroll", () => {
     if (!active) return;
     const bounds = active.getBoundingClientRect();
-    if (bounds.bottom < 0 || bounds.top > innerHeight) close();
+    const keyboardFocus = document.activeElement === active && document.documentElement.dataset.inputModality === "keyboard";
+    if ((bounds.bottom < 0 || bounds.top > innerHeight) && !keyboardFocus) close();
     else place(active);
   }, { passive: true });
   window.addEventListener("resize", close);

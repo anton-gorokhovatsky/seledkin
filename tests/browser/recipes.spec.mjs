@@ -39,11 +39,24 @@ test("catalog advice previews retain the full photograph, keyboard access and di
   await page.keyboard.press("Escape");
   await expect(photo).toBeHidden();
   await page.mouse.move(0, 0);
+  // Leaving the nested photo crosses both the panel and its parent link.
+  // Reproduce both events before keyboard focus so stale close timers cannot
+  // hide a preview that the buyer has just opened with Tab.
+  await recipe.dispatchEvent("pointerleave");
+  await photo.dispatchEvent("pointerleave");
   // Start from the last purchase control, directly before the editorial links.
   await product.locator("summary").focus();
   // Safari on macOS includes links with Option–Tab unless full keyboard
   // navigation is enabled; preserve the browser's native preference.
   await page.keyboard.press(testInfo.project.name === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab");
+  await expect(recipe).toBeFocused();
+  await expect(photo).toBeVisible();
+  await page.waitForTimeout(400); // The pointer dismissal delay is 350 ms.
+  await expect(photo).toBeVisible();
+  // A focus-driven scroll can briefly move the anchor outside the viewport.
+  // Keep the keyboard preview until focus leaves or the buyer dismisses it.
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await expect(recipe).toBeFocused();
   await expect(photo).toBeVisible();
   await page.keyboard.press("Escape");
@@ -144,10 +157,9 @@ test("ingredients retain the editorial spreads, browser history and an exact cat
   await page.goBack();
   await expect(mussels).toHaveAttribute("aria-pressed", "true");
   const product = page.locator('[data-recipe-material="574"] .recipe-record-product');
-  // Keep WebKit's restored-page focus scroll separate from the pointer click.
-  await product.focus();
-  await expect(product).toBeFocused();
-  await product.click();
+  // Continue the keyboard journey after restoring the ingredient filter.
+  // Pointer activation is covered by the shrimp-to-catalog journey above.
+  await product.press("Enter");
   await expect(page).toHaveURL(/catalog\/\?product=seafood-009#product-seafood-009$/);
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await expect(page.locator(".catalog-product:visible h4")).toHaveText("Мясо мидий");
