@@ -58,3 +58,21 @@ test("readable storage with blocked writes does not erase the in-memory list", (
   assert.equal(store.read().amounts.get("caviar-001"), "2");
   assert.equal(store.available, false);
 });
+
+test("a changed sale unit preserves the item without interpreting old pieces as kilograms", () => {
+  for (const atomic of [false, true]) {
+    const saved = storage();
+    if (atomic) {
+      saved.setItem("seledkin-order-format", "2");
+      saved.setItem(orderStoragePrefix + "other-017", JSON.stringify({ amount: "2", addedAt: 1 }));
+    } else {
+      saved.setItem("seledkin-order-list", JSON.stringify(["other-017"]));
+      saved.setItem("seledkin-order-amounts", JSON.stringify({ "other-017": "2" }));
+    }
+    const store = createOrderStore(products, catalog, () => saved);
+    assert.deepEqual([...store.read().selected], ["other-017"]);
+    assert.equal(store.read().amounts.has("other-017"), false);
+    store.set("other-017", "0,25");
+    assert.equal(createOrderStore(products, catalog, () => saved).read().amounts.get("other-017"), "0,25");
+  }
+});

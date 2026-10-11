@@ -2163,7 +2163,7 @@ a.source-brand {
 .source-footer__channels a {
   display: inline-flex;
   min-height: 44px;
-  align-items: last baseline;
+  align-items: center;
   gap: 0.65rem;
   padding-block: 0.3rem;
   color: var(--footer-text);
@@ -4714,9 +4714,13 @@ a.site-menu__brand {
   min-height: 44px;
   color: var(--text-link);
 }
+.journal-story-main {
+  --journal-column-gap: clamp(2rem, 4vw, 4rem);
+  --journal-photo-width: calc((100% - var(--journal-column-gap)) * 9 / 19);
+}
 .ship-log-entry.journal-story {
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
-  gap: clamp(2rem, 4vw, 4rem);
+  gap: var(--journal-column-gap);
   padding-top: 1.5rem;
   border-bottom: 0;
 }
@@ -4732,6 +4736,13 @@ a.site-menu__brand {
 }
 .journal-story > img {
   border: 0;
+}
+.journal-story:has(+ .recipe-sequence) {
+  padding-bottom: 0;
+}
+.journal-story-main > .recipe-sequence {
+  width: var(--journal-photo-width);
+  margin: 1.5rem 0 2rem;
 }
 .journal-story .ship-log-entry__body {
   overflow-wrap: anywhere;
@@ -4818,7 +4829,12 @@ a.site-menu__brand {
     grid-template-columns: minmax(0, 1fr);
   }
   .journal-story > img {
+    width: min(100%, 38rem);
     max-width: 38rem;
+    margin-inline: auto;
+  }
+  .journal-story-main > .recipe-sequence {
+    width: min(100%, 38rem);
     margin-inline: auto;
   }
 }

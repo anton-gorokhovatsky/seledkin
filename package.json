@@ -11,7 +11,7 @@
     "build:catalog": "node scripts/build-catalog.mjs",
     "build:icons": "node scripts/vendor-morphicons.mjs",
     "build:logo-drafts": "node scripts/build-logo-variants.mjs",
-    "dev": "node scripts/build-map-token.mjs && python3 -m http.server 4173",
+    "dev": "node scripts/build-map-token.mjs && node scripts/serve-site.mjs --port 4173",
     "lint": "node scripts/build-map-token.mjs && node scripts/build-site.mjs --check && node scripts/build-catalog.mjs --check && node scripts/build-media.mjs --check && node scripts/check-static.mjs",
     "test": "node scripts/build-map-token.mjs && node --test tests/*.test.mjs",
     "test:browser": "playwright test",

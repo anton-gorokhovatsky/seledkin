@@ -6,8 +6,8 @@ export default defineConfig({
   testDir: "./tests/browser",
   timeout: 45000,
   expect: { timeout: 8000 },
-  // Avoid connection resets from the small local HTTP server's request queue.
-  workers: 1,
+  fullyParallel: true,
+  workers: Number(process.env.PLAYWRIGHT_WORKERS || 2),
   retries: 0,
   reporter: "list",
   use: {
@@ -22,7 +22,7 @@ export default defineConfig({
     { name: "webkit", use: { browserName: "webkit" } },
   ],
   webServer: process.env.TEST_BASE_URL ? undefined : {
-    command: `python3 -m http.server ${port} --bind 127.0.0.1 --directory ${process.env.PLAYWRIGHT_SITE_DIR || "."}`,
+    command: `node scripts/serve-site.mjs --port ${port} --directory ${process.env.PLAYWRIGHT_SITE_DIR || "."}`,
     url: `http://127.0.0.1:${port}/`,
     reuseExistingServer: !process.env.CI && !process.env.PLAYWRIGHT_SITE_DIR,
   },

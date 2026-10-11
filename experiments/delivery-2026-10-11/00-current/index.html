@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Качественная рыба на каждый день, морепродукты, икра и рыбные деликатесы в Москве рядом с метро «Вавиловская»."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="Рыбная лавка капитана Селедкина" />
+    <meta property="og:title" content="Рыба и морепродукты в Москве — Рыбная лавка капитана Селедкина" />
+    <meta property="og:description" content="Качественная рыба на каждый день, морепродукты, икра и рыбные деликатесы в Москве рядом с метро «Вавиловская»." />
+    <meta property="og:url" content="https://ks.fish/" />
+    <meta property="og:image" content="https://ks.fish/assets/share-card-primary.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Свежая рыба со специями и логотип Рыбной лавки капитана Селедкина" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Рыба и морепродукты в Москве — Рыбная лавка капитана Селедкина" />
+    <meta name="twitter:description" content="Качественная рыба на каждый день, морепродукты, икра и рыбные деликатесы в Москве рядом с метро «Вавиловская»." />
+    <meta name="twitter:image" content="https://ks.fish/assets/share-card-primary.jpg" />
+    <meta name="twitter:image:alt" content="Свежая рыба со специями и логотип Рыбной лавки капитана Селедкина" />
+    <meta name="robots" content="noindex,nofollow">
+    <!-- shared:theme:start -->
+    <script>
+      (() => {
+        document.documentElement.classList.add("js");
+        let explicitTheme = null;
+        try {
+          const stored = localStorage.getItem("seledkin-theme");
+          if (stored === "light" || stored === "dark") explicitTheme = stored;
+        } catch {}
+        let scheduleTheme = null;
+        try {
+          const schedule = {"timeZone":"Europe/Moscow","open":"11:00","close":"20:00"};
+          const parts = new Intl.DateTimeFormat("en-GB", {
+            timeZone: schedule.timeZone,
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23",
+          })
+            .formatToParts(new Date());
+          const hour = Number(parts.find(({ type }) => type === "hour")?.value);
+          const minute = Number(parts.find(({ type }) => type === "minute")?.value);
+          const minutes = time => Number(time.slice(0, 2)) * 60 + Number(time.slice(3));
+          if (Number.isFinite(hour) && Number.isFinite(minute)) {
+            const now = (hour % 24) * 60 + minute;
+            scheduleTheme = now >= minutes(schedule.open) && now < minutes(schedule.close) ? "light" : "dark";
+          }
+        } catch {}
+        const theme =
+          explicitTheme ??
+          scheduleTheme ??
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        const isDark = theme === "dark";
+        document.documentElement.dataset.theme = theme;
+        if (explicitTheme) {
+          document.documentElement.dataset.themeSource = "explicit";
+        }
+        document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+        const posterPreload = document.createElement("link");
+        posterPreload.rel = "preload";
+        posterPreload.as = "image";
+        posterPreload.fetchPriority = "high";
+        posterPreload.href = isDark ? "/assets/hero-sea-night-poster.webp" : "/assets/hero-sea-poster.webp";
+        document.head.append(posterPreload);
+        document.querySelector('meta[name="theme-color"]').content = isDark
+          ? "#0e202b"
+          : "#ffffff";
+      })();
+    </script>
+<!-- shared:theme:end -->
+    <!-- shared:analytics:start -->
+
+<!-- shared:analytics:end -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="/assets/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/assets/favicon-16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <script type="module" src="/assets/site.js"></script>
+    <script type="module" src="/assets/interface-motion.js"></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "Рыбная лавка капитана Селедкина",
+        "url": "https://ks.fish/",
+        "telephone": "+79166751452",
+        "image": "https://ks.fish/assets/share-card-primary.jpg",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "ул. Строителей, д. 7, корп. 1",
+          "addressLocality": "Москва",
+          "addressCountry": "RU"
+        },
+        "openingHours": "Mo-Su 11:00-20:00"
+      }
+    </script>
+    <title>Рыба и морепродукты в Москве — Рыбная лавка капитана Селедкина</title>
+  <link rel="stylesheet" href="/experiments/delivery-2026-10-11/styles.css"><script>const previewTheme=new URLSearchParams(location.search).get("theme");if(previewTheme==="light"||previewTheme==="dark"){document.documentElement.dataset.theme=previewTheme;document.documentElement.dataset.themeSource="explicit";document.documentElement.style.colorScheme=previewTheme;}</script></head>
+  <body>
+    <svg class="site-icon-sprite" aria-hidden="true" focusable="false">
+      <symbol id="icon-harpoon" viewBox="0 0 32 18">
+        <path
+          d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-width="1.5"
+        />
+        <path
+          d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z"
+          fill="currentColor"
+          stroke="none"
+        />
+      </symbol>
+    </svg>
+    <a class="skip-link" href="#main">Перейти к содержанию</a>
+
+    <header class="source-header source-header--over-media" id="top">
+      <div class="source-header__bar">
+        <div class="source-brand brand-jelly brand-jelly--sea">
+          <img
+            src="/assets/logo-redrawn-sea.svg"
+            data-theme-logo
+            data-logo-light="/assets/logo-redrawn-sea.svg"
+            data-logo-dark="/assets/logo-redrawn-sea.svg"
+            alt="Рыбная лавка капитана Селедкина"
+            width="3600"
+            height="1784"
+          />
+        </div>
+      </div>
+    </header>
+
+    <!-- shared:menu:start -->
+    <a class="floating-menu" href="#site-navigation-fallback" aria-label="Перейти к меню сайта" data-menu-fallback-link>
+      <span class="floating-menu__mark" aria-hidden="true"></span>
+      <span class="floating-menu__label">Меню</span>
+    </a>
+    <button
+      class="floating-menu"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      aria-label="Открыть меню"
+      data-menu-toggle
+      hidden
+    >
+      <span class="floating-menu__mark" aria-hidden="true"></span>
+      <span class="floating-menu__label">Меню</span>
+    </button>
+
+    <div
+      class="site-menu"
+      id="primary-navigation"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="menu-title"
+      data-menu
+      hidden
+    >
+      <button class="floating-menu" type="button" aria-label="Закрыть меню" data-menu-close>
+        <span class="floating-menu__mark" aria-hidden="true"></span>
+        <span class="floating-menu__label">Закрыть</span>
+      </button>
+      <div class="site-menu__panel">
+        <header class="site-menu__masthead">
+          <div class="site-menu__brand brand-jelly brand-jelly--panel">
+            <img
+              src="/assets/logo-redrawn-sea.svg"
+              data-theme-logo
+              data-logo-light="/assets/logo-redrawn-sea.svg"
+              data-logo-dark="/assets/logo-redrawn-sea.svg"
+              alt="Рыбная лавка капитана Селедкина"
+              width="3600"
+              height="1784"
+            />
+          </div>
+        </header>
+
+        <div class="site-menu__layout">
+          <video
+            class="site-menu__service-video"
+            data-poster-light="/assets/hero-sea-poster.webp"
+            data-poster-dark="/assets/hero-sea-night-poster.webp"
+            data-theme-video
+            data-menu-sea-video
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            <source
+              data-src-light="/assets/hero-sea-web.mp4"
+              data-src-dark="/assets/hero-sea-night-web.mp4"
+              data-theme-video-source
+              type="video/mp4"
+            />
+          </video>
+          <section class="site-menu__routes">
+            <p class="site-menu__kicker">По сайту</p>
+            <h2 id="menu-title">Куда держим курс?</h2>
+            <nav aria-label="Меню сайта">
+              <a href="/catalog/">
+                <span aria-hidden="true">01</span>
+                <span>Продукты и цены</span>
+              </a>
+              <a href="#assortment">
+                <span aria-hidden="true">02</span>
+                <span>Что продаём</span>
+              </a>
+              <a href="#delivery">
+                <span aria-hidden="true">03</span>
+                <span>Доставка</span>
+              </a>
+              <a href="#contacts">
+                <span aria-hidden="true">04</span>
+                <span>Контакты</span>
+              </a>
+              <a href="/recipes/">
+                <span aria-hidden="true">05</span>
+                <span>Рецепты и советы</span>
+              </a>
+              <a href="/journal/">
+                <span aria-hidden="true">06</span>
+                <span>Судовой журнал</span>
+              </a>
+              <a href="/about/">
+                <span aria-hidden="true">07</span>
+                <span>О нас</span>
+              </a>
+            </nav>
+          </section>
+
+          <section class="site-menu__service" aria-labelledby="menu-service-title">
+            <div class="site-menu__service-inner">
+              <div class="store-hours">
+                <h3 id="menu-service-title">Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
+                <p class="store-status" data-store-status hidden></p>
+              </div>
+              <address>
+                Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
+                Метро «Вави&shy;ловская» и «Университет»
+              </address>
+              <div class="site-menu__actions">
+                <a
+                  class="source-button source-button--menu-call"
+                  href="tel:+79166751452"
+                  aria-label="Позвонить в лавку: +7 916 675‑14‑52"
+                >
+                  <span class="source-button__label">Позвонить</span>
+                </a>
+                <a class="source-button source-button--menu-primary" href="https://t.me/+79166751452">
+                  <span class="source-button__label">Заказать в Телеграме</span>
+                </a>
+                <a class="source-button source-button--menu-secondary" href="https://wa.me/79166751452">
+                  <span class="source-button__label">Заказать в WhatsApp</span>
+                </a>
+              </div>
+              <div class="site-menu__networks">
+                <a class="site-menu__channel" href="https://t.me/kapitanseledkin">
+                  <svg class="site-menu__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <use href="/assets/social-icons.svg#telegram"></use>
+                  </svg>
+                  <span class="site-menu__channel-copy">
+                    <strong>Телеграм-канал</strong>
+                    <span>Судовой журнал капитана</span>
+                  </span>
+                </a>
+                <nav class="site-menu__socials" aria-label="Другие площадки лавки">
+                  <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <use href="/assets/social-icons.svg#youtube"></use>
+                    </svg>
+                    <span>YouTube</span>
+                  </a>
+                  <a href="https://soundcloud.com/kapitanseledkin">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <use href="/assets/social-icons.svg#soundcloud"></use>
+                    </svg>
+                    <span>SoundCloud</span>
+                  </a>
+                </nav>
+              </div>
+              <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить море</button>
+              <button
+                class="theme-toggle theme-toggle--menu"
+                type="button"
+                aria-label="Включить ночную вахту"
+                data-theme-toggle
+              >
+                <svg class="theme-toggle__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path class="theme-toggle__moon" d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8a8.5 8.5 0 1 0 11.6 11.6Z" />
+                  <g class="theme-toggle__sun">
+                    <circle cx="12" cy="12" r="3.5" />
+                    <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6 6 6M18 18l1.4 1.4M19.4 4.6 18 6M6 18l-1.4 1.4" />
+                  </g>
+                </svg>
+                <span data-theme-label>Ночная вахта</span>
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+<!-- shared:menu:end -->
+
+    <main id="main" tabindex="-1">
+      <section class="source-hero" aria-labelledby="hero-title">
+        <video
+          class="source-hero__video"
+          data-poster-light="/assets/hero-sea-poster.webp"
+          data-poster-dark="/assets/hero-sea-night-poster.webp"
+          data-theme-video
+          data-hero-video
+          muted
+          loop
+          playsinline
+          preload="none"
+          aria-hidden="true"
+          tabindex="-1"
+        >
+          <source
+            data-src-light="/assets/hero-sea-web.mp4"
+            data-src-dark="/assets/hero-sea-night-web.mp4"
+            data-theme-video-source
+            type="video/mp4"
+          />
+        </video>
+        <div class="source-hero__shade"></div>
+        <div class="source-hero__content">
+          <div class="source-hero__intro">
+            <div class="source-hero__mobile-brand brand-jelly brand-jelly--sea" aria-hidden="true">
+              <img
+                class="source-hero__mobile-logo"
+                src="/assets/logo-redrawn-sea.svg"
+                data-theme-logo
+                data-logo-light="/assets/logo-redrawn-sea.svg"
+                data-logo-dark="/assets/logo-redrawn-sea.svg"
+                alt=""
+                width="3600"
+                height="1784"
+              />
+            </div>
+            <div class="source-hero__copy">
+              <h1 id="hero-title">«Рыбная лавка капитана Селедкина»</h1>
+              <p>Качественная рыба на каждый день, морепродукты и рыбные деликатесы в Москве</p>
+              <div class="source-hero__actions" aria-label="Основные действия">
+                <a class="source-button source-button--hero-primary" href="/catalog/">
+                  <span class="source-button__label">Каталог и цены</span>
+                </a>
+                <a
+                  class="source-button source-button--hero-secondary"
+                  href="https://t.me/+79166751452"
+                >
+                  <span class="source-button__label">Заказать в Телеграме</span>
+                </a>
+              </div>
+            </div>
+          </div>
+<!-- shared:mobile-hero:start -->
+          <div class="afisha" data-product-name="Каспийский залом" data-product-category="prepared-fish" data-product-id="caspian-herring" data-photo-index="1">
+            <div class="afisha__brand brand-jelly brand-jelly--sea"><img src="/assets/logo-redrawn-sea.svg" alt="Рыбная лавка капитана Селедкина" width="3600" height="1784"></div>
+            <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каждый день,</em> море&shy;про&shy;дукты и&nbsp;рыбные дели&shy;ка&shy;тесы в&nbsp;Москве</p>
+            <figure class="afisha__gallery">
+              <a class="afisha__frame" href="/catalog/?product=caspian-herring&amp;from=afisha#product-caspian-herring" aria-label="Открыть Каспийский залом в каталоге">
+              <span class="afisha__print" style="--photo-ratio: 800 / 599" data-position="0" data-caption="Каспийский залом" data-category="prepared-fish" data-product-id="caspian-herring" data-source="https://t.me/kapitanseledkin/696" data-href="/catalog/?product=caspian-herring&amp;from=afisha#product-caspian-herring" data-price="1 600 ₽/кг" data-order="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D1%81%D0%BF%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B7%D0%B0%D0%BB%D0%BE%D0%BC%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%201%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF600%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5."><picture><source media="(max-width: 61.1875rem)" srcset="/assets/journal-696-480.webp 480w, /assets/journal-696-800.webp 800w"><img src="/assets/journal-696-32.webp" sizes="(max-width: 61.1875rem) calc(100vw - 60px), 1px" data-source-image="/assets/journal-696.jpg" decoding="async" alt="Целый каспийский залом на белой тарелке" width="800" height="599" fetchpriority="high" /></picture></span>
+              <span class="afisha__print" style="--photo-ratio: 800 / 771" data-position="1" data-caption="Икра форели" data-category="caviar" data-product-id="trout-roe" data-source="https://t.me/kapitanseledkin/700" data-href="/catalog/?product=trout-roe&amp;from=afisha#product-trout-roe" data-price="4 990 ₽ за 250 г" data-order="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%0A%D0%9F%D0%B5%D1%80%D0%B2%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%20%D1%81%D0%B5%D0%B7%D0%BE%D0%BD%D0%B0%202026%0A4%E2%80%AF990%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5." hidden aria-hidden="true"><img src="/assets/journal-700-32.webp" data-full-src="/assets/journal-700-480.webp" data-full-srcset="/assets/journal-700-480.webp 480w, /assets/journal-700-800.webp 800w" sizes="(max-width: 61.1875rem) calc(100vw - 60px), 1px" data-source-image="/assets/journal-700.jpg" decoding="async" alt="Красная икра форели в открытой банке" width="800" height="771" /></span>
+              <span class="afisha__print" style="--photo-ratio: 800 / 791" data-position="2" data-caption="Стейк лосося" data-category="steaks" data-product-id="salmon-steak" data-source="https://t.me/kapitanseledkin/566" data-href="/catalog/?product=salmon-steak&amp;from=afisha#product-salmon-steak" data-price="2 990 ₽/кг" data-order="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D1%82%D0%B5%D0%B9%D0%BA%20%D0%BB%D0%BE%D1%81%D0%BE%D1%81%D1%8F%0A%D0%9F%D0%B8%D0%BB%D0%B8%D0%BC%20%D1%81%D0%B0%D0%BC%D0%B8%2C%20%D0%B3%D0%BB%D0%B0%D0%B7%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0%200%C2%A0%25%0A2%E2%80%AF990%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5." hidden aria-hidden="true"><img src="/assets/journal-566-32.webp" data-full-src="/assets/journal-566-480.webp" data-full-srcset="/assets/journal-566-480.webp 480w, /assets/journal-566-800.webp 800w" sizes="(max-width: 61.1875rem) calc(100vw - 60px), 1px" data-source-image="/assets/journal-566.jpg" decoding="async" alt="Стейки чилийского лосося" width="800" height="791" /></span>
+              <span class="afisha__print" style="--photo-ratio: 624 / 800" data-position="3" data-caption="Форель холодного копчения" data-category="prepared-fish" data-product-id="smoked-trout" data-source="https://t.me/kapitanseledkin/695" data-href="/catalog/?product=smoked-trout&amp;from=afisha#product-smoked-trout" data-price="3 400 ₽/кг" data-order="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A3%E2%80%AF400%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5." hidden aria-hidden="true"><img src="/assets/journal-695-32.webp" data-full-src="/assets/journal-695-480.webp" data-full-srcset="/assets/journal-695-480.webp 480w, /assets/journal-695-624.webp 624w" sizes="(max-width: 61.1875rem) calc(100vw - 60px), 1px" data-source-image="/assets/journal-695.jpg" decoding="async" alt="Нарезанное филе форели холодного копчения без кожи на чёрном подносе" width="624" height="800" /></span>
+              <span class="afisha__print" style="--photo-ratio: 800 / 586" data-position="4" data-caption="Скумбрия горячего копчения" data-category="prepared-fish" data-product-id="smoked-mackerel" data-source="https://t.me/kapitanseledkin/454" data-href="/catalog/?product=smoked-mackerel&amp;from=afisha#product-smoked-mackerel" data-price="1 640 ₽/кг" data-order="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A1%D0%BA%D1%83%D0%BC%D0%B1%D1%80%D0%B8%D1%8F%20%D0%B3%D0%BE%D1%80%D1%8F%D1%87%D0%B5%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A%D0%9F%D0%91%D0%93%0A1%E2%80%AF640%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5." hidden aria-hidden="true"><img src="/assets/journal-454-32.webp" data-full-src="/assets/journal-454-480.webp" data-full-srcset="/assets/journal-454-480.webp 480w, /assets/journal-454-800.webp 800w" sizes="(max-width: 61.1875rem) calc(100vw - 60px), 1px" data-source-image="/assets/journal-454.jpg" decoding="async" alt="Ряды скумбрии горячего и холодного копчения" width="800" height="586" /></span>
+              </a>
+              <figcaption><div class="afisha__caption"><span class="afisha__name">Каспийский залом</span><span class="afisha__price">1 600 ₽/кг</span></div><button class="afisha__change" type="button" hidden><span>Ещё из лавки</span><span class="afisha__count" aria-hidden="true">1/5</span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon"></use></svg></button></figcaption>
+              <span class="afisha__status" role="status" aria-live="polite"></span>
+            </figure>
+            <nav class="afisha__actions" aria-label="Основные действия">
+              <a class="afisha__catalog" href="/catalog/?product=caspian-herring&amp;from=afisha#product-caspian-herring"><span>Открыть в каталоге</span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon"></use></svg></a>
+              <div class="afisha__secondary"><a class="afisha__all" href="/catalog/">Весь каталог</a><a class="afisha__order" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D1%81%D0%BF%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B7%D0%B0%D0%BB%D0%BE%D0%BC%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%201%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF600%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">Заказать в&nbsp;Телеграме</a></div>
+            </nav>
+          </div>
+<!-- shared:mobile-hero:end -->
+          <section
+            class="source-hero__journal"
+            aria-label="Свежие записи Судового журнала"
+            aria-describedby="hero-journal-instructions"
+            aria-roledescription="карусель"
+            data-hero-journal
+          >
+            <p class="visually-hidden" id="hero-journal-instructions">
+              Переключайте записи кнопками или клавишами со стрелками влево и вправо.
+            </p>
+            <div class="source-hero__journal-stack" data-hero-journal-stack>
+<!-- shared:journal-hero:start -->
+              <a class="source-hero__proof source-hero__journal-card" href="/journal/700/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Первая икра форели 2026 года" data-hero-journal-card data-stack-position="0">
+                <figure>
+                  <img src="/assets/journal-700-480.webp" srcset="/assets/journal-700-480.webp 480w, /assets/journal-700-800.webp 800w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="/assets/journal-700.jpg" decoding="async" alt="Красная икра форели в открытой банке" width="800" height="771" fetchpriority="high" />
+                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-10-08">8 октября</time></span><strong>Первая икра форели 2026 года</strong></figcaption>
+                </figure>
+              </a>
+              <a class="source-hero__proof source-hero__journal-card" href="/journal/699/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Охлажденная эталонная форель из Карелии" aria-hidden="true" tabindex="-1" data-hero-journal-card data-stack-position="1">
+                <figure>
+                  <img src="/assets/journal-699-32.webp" data-full-src="/assets/journal-699-480.webp" data-full-srcset="/assets/journal-699-480.webp 480w, /assets/journal-699-800.webp 800w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="/assets/journal-699.jpg" decoding="async" alt="Голова и серебристый бок форели в тёмную крапинку на розовом фоне" width="800" height="800" />
+                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-10-01">1 октября</time></span><strong>Охлажденная эталонная форель из Карелии</strong></figcaption>
+                </figure>
+              </a>
+              <a class="source-hero__proof source-hero__journal-card" href="/journal/698/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: У нас новый завоз малосольного каспийского залома" aria-hidden="true" tabindex="-1" data-hero-journal-card data-stack-position="2">
+                <figure>
+                  <img src="/assets/journal-698-32.webp" data-full-src="/assets/journal-698-480.webp" data-full-srcset="/assets/journal-698-480.webp 480w, /assets/journal-698-786.webp 786w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="/assets/journal-698.jpg" decoding="async" alt="Ломтики каспийского залома с серебристой кожей на белой тарелке" width="786" height="800" />
+                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-09-29">29 сентября</time></span><strong>У нас новый завоз малосольного каспийского залома</strong></figcaption>
+                </figure>
+              </a>
+              <a class="source-hero__proof source-hero__journal-card" href="/journal/697/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Риеты и паштеты из копченого балтийского угря" aria-hidden="true" tabindex="-1" data-hero-journal-card data-stack-position="3">
+                <figure>
+                  <img src="/assets/journal-697-32.webp" data-full-src="/assets/journal-697-480.webp" data-full-srcset="/assets/journal-697-480.webp 480w, /assets/journal-697-800.webp 800w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="/assets/journal-697.jpg" decoding="async" alt="Банки риета из копчёного угря; на передней банке этикетка «Со сладким перцем»" width="800" height="800" />
+                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-09-27">27 сентября</time></span><strong>Риеты и паштеты из копченого балтийского угря</strong></figcaption>
+                </figure>
+              </a>
+              <a class="source-hero__proof source-hero__journal-card" href="/journal/696/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Диаметр тарелки 27 сантиметров" aria-hidden="true" tabindex="-1" data-hero-journal-card data-stack-position="4">
+                <figure>
+                  <img src="/assets/journal-696-32.webp" data-full-src="/assets/journal-696-480.webp" data-full-srcset="/assets/journal-696-480.webp 480w, /assets/journal-696-800.webp 800w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="/assets/journal-696.jpg" decoding="async" alt="Каспийский залом целиком на белой тарелке, хвост и голова выступают за её края" width="800" height="599" />
+                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-09-24">24 сентября</time></span><strong>Диаметр тарелки 27 сантиметров</strong></figcaption>
+                </figure>
+              </a>
+<!-- shared:journal-hero:end -->
+            </div>
+            <div class="source-hero__journal-navigation">
+              <div class="source-hero__journal-controls">
+                <button
+                  class="source-hero__journal-control"
+                  type="button"
+                  aria-label="Показать более новую запись"
+                  aria-disabled="true"
+                  disabled
+                  hidden
+                  data-hero-journal-previous
+                >
+                  <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                    <use href="#icon-harpoon" />
+                  </svg>
+                </button>
+                <p class="source-hero__journal-status" aria-live="polite" aria-atomic="true" hidden>
+                  <span aria-hidden="true" data-hero-journal-counter>1 из 5</span>
+                  <span class="visually-hidden" data-hero-journal-status>
+                    Запись 1 из 5 выбранных: Нежнейшая ряпушка холодного копчения.
+                  </span>
+                </p>
+                <span class="source-hero__journal-next-slot">
+                  <button
+                    class="source-hero__journal-control"
+                    type="button"
+                    aria-label="Показать более старую запись"
+                    hidden
+                    data-hero-journal-next
+                  >
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </button>
+                  <a
+                    class="source-hero__journal-control source-hero__journal-control--all"
+                    href="/journal/"
+                    aria-label="Открыть весь Судовой журнал"
+                    data-hero-journal-all
+                  >
+                    <span>Журнал</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </section>
+        </div>
+        <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить море</button>
+      </section>
+
+      <section
+        class="assortment-overview source-section"
+        id="assortment"
+        aria-labelledby="assortment-title"
+      >
+        <div class="source-shell">
+          <header class="assortment-overview__header">
+            <h2 id="assortment-title">Что продаём</h2>
+            <p>7 разделов · 116 позиций</p>
+          </header>
+
+          <div class="assortment-overview__layout">
+            <div class="assortment-overview__photos">
+<!-- shared:assortment-media:start -->
+<figure class="assortment-overview__media" data-assortment-photo="caviar">
+    <img src="/assets/journal-681-480.webp" srcset="/assets/journal-681-480.webp 480w, /assets/journal-681-725.webp 725w" sizes="(max-width: 61.1875rem) calc(100vw - 36px), 520px" data-source-image="/assets/journal-681.jpg" decoding="async" alt="Красная икра дикого кижуча на ложке крупным планом" width="725" height="800" loading="lazy" />
+    <figcaption>Икра дикого кижуча</figcaption>
+  </figure>
+<figure class="assortment-overview__media" data-assortment-photo="seafood" hidden>
+    <img src="/assets/journal-412-32.webp" data-full-src="/assets/journal-412-480.webp" data-full-srcset="/assets/journal-412-480.webp 480w, /assets/journal-412-624.webp 624w" sizes="(max-width: 61.1875rem) calc(100vw - 36px), 520px" data-source-image="/assets/journal-412.jpg" decoding="async" alt="Варёно-мороженые северные креветки в коробке" width="624" height="800" loading="lazy" />
+    <figcaption>Северные креветки</figcaption>
+  </figure>
+<figure class="assortment-overview__media" data-assortment-photo="frozen-fish" hidden>
+    <img src="/assets/journal-679-32.webp" data-full-src="/assets/journal-679-480.webp" data-full-srcset="/assets/journal-679-480.webp 480w, /assets/journal-679-604.webp 604w" sizes="(max-width: 61.1875rem) calc(100vw - 36px), 520px" data-source-image="/assets/journal-679.jpg" decoding="async" alt="Мурманская пятнистая камбала после размораживания на деревянной доске рядом с ножом" width="604" height="800" loading="lazy" />
+    <figcaption>Мурманская пятнистая камбала</figcaption>
+  </figure>
+<figure class="assortment-overview__media" data-assortment-photo="fillet" hidden>
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" data-full-src="/assets/gallery-small-1-480.webp" data-full-srcset="/assets/gallery-small-1-480.webp 480w, /assets/gallery-small-1-960.webp 960w" sizes="(max-width: 61.1875rem) calc(100vw - 36px), 520px" data-source-image="/assets/gallery-small-1.jpg" decoding="async" alt="Коробка филе трески судовой заморозки" width="960" height="960" loading="lazy" />
+    <figcaption>Филе трески судовой заморозки</figcaption>
+  </figure>
+<figure class="assortment-overview__media" data-assortment-photo="steaks" hidden>
+    <img src="/assets/journal-693-32.webp" data-full-src="/assets/journal-693-480.webp" data-full-srcset="/assets/journal-693-480.webp 480w, /assets/journal-693-534.webp 534w" sizes="(max-width: 61.1875rem) calc(100vw - 36px), 520px" data-source-image="/assets/journal-693.jpg" decoding="async" alt="Стейки чилийского лосося на&nbsp;металлическом подносе" width="534" height="800" loading="lazy" />
+    <figcaption>Стейки лосося</figcaption>
+  </figure>
+<figure class="assortment-overview__media" data-assortment-photo="prepared-fish" hidden>
+    <img src="/assets/journal-695-32.webp" data-full-src="/assets/journal-695-480.webp" data-full-srcset="/assets/journal-695-480.webp 480w, /assets/journal-695-624.webp 624w" sizes="(max-width: 61.1875rem) calc(100vw - 36px), 520px" data-source-image="/assets/journal-695.jpg" decoding="async" alt="Нарезанное филе форели холодного копчения без кожи на чёрном подносе" width="624" height="800" loading="lazy" />
+    <figcaption>Форель холодного копчения</figcaption>
+  </figure>
+<figure class="assortment-overview__media" data-assortment-photo="other" hidden>
+    <img src="/assets/journal-687-32.webp" data-full-src="/assets/journal-687-480.webp" data-full-srcset="/assets/journal-687-480.webp 480w, /assets/journal-687-703.webp 703w" sizes="(max-width: 61.1875rem) calc(100vw - 36px), 520px" data-source-image="/assets/journal-687.jpg" decoding="async" alt="Банки рыбной ухи нескольких видов на полке лавки" width="703" height="800" loading="lazy" />
+    <figcaption>Уха в банках</figcaption>
+  </figure>
+<!-- shared:assortment-media:end -->
+            </div>
+
+            <nav class="assortment-directory" aria-label="Разделы каталога">
+              <ul class="assortment-directory__list">
+                <li>
+                  <a class="assortment-directory__link" href="/catalog/#category-caviar">
+                    <span class="assortment-directory__label">Икра</span>
+                    <span class="assortment-directory__meta">9 позиций</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a class="assortment-directory__link" href="/catalog/#category-seafood">
+                    <span class="assortment-directory__label">Морепродукты</span>
+                    <span class="assortment-directory__meta">20 позиций</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a class="assortment-directory__link" href="/catalog/#category-frozen-fish">
+                    <span class="assortment-directory__label">Свежемороженая рыба</span>
+                    <span class="assortment-directory__meta">35 позиций</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a class="assortment-directory__link" href="/catalog/#category-fillet">
+                    <span class="assortment-directory__label">Филе</span>
+                    <span class="assortment-directory__meta">7 позиций</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a class="assortment-directory__link" href="/catalog/#category-steaks">
+                    <span class="assortment-directory__label">Рыбные стейки</span>
+                    <span class="assortment-directory__meta">5 позиций</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a class="assortment-directory__link" href="/catalog/#category-prepared-fish">
+                    <span class="assortment-directory__label">Слабосоленая и копченая рыба</span>
+                    <span class="assortment-directory__meta">13 позиций</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a class="assortment-directory__link" href="/catalog/#category-other">
+                    <span class="assortment-directory__label">Новинки и прочее</span>
+                    <span class="assortment-directory__meta">27 позиций</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false">
+                      <use href="#icon-harpoon" />
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <section class="price-preview" id="prices" aria-labelledby="prices-title">
+            <header class="price-preview__header">
+              <h3 id="prices-title">Цены в лавке</h3>
+              <div class="price-preview__introduction">
+                <p>В полном каталоге — весь ассортимент и действующие цены.</p>
+                <a class="source-button source-button--outline" href="/catalog/">
+                  <span class="source-button__label">Открыть весь каталог</span>
+                </a>
+              </div>
+            </header>
+
+            <div
+              class="price-preview__grid"
+              role="group"
+              aria-label="Примеры товаров и цен"
+            >
+<!-- shared:price-preview:start -->
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4><a href="/catalog/?product=caviar-001#product-caviar-001">Чёрная икра</a></h4><strong>6 000 ₽ за 50 г</strong>
+                </div>
+                <p>Осетровая, забойная, высшего качества</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4><a href="/catalog/?product=seafood-015#product-seafood-015">Креветка северная в/м</a></h4><strong>3 200 ₽/кг</strong>
+                </div>
+                <p>Магадан</p>
+                <p>В/м — варёно-мороженый продукт</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4><a href="/catalog/?product=frozen-fish-007#product-frozen-fish-007">Нерка</a></h4><strong>1 820 ₽/кг</strong>
+                </div>
+                <p>Камчатка</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4><a href="/catalog/?product=fillet-001#product-fillet-001">Филе трески</a></h4><strong>2 480 ₽/кг</strong>
+                </div>
+                <p>Мурманск, судовая заморозка, глазировка 0 %</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4><a href="/catalog/?product=salmon-steak#product-salmon-steak">Стейк лосося</a></h4><strong>2 990 ₽/кг</strong>
+                </div>
+                <p>Пилим сами, глазировка 0 %</p>
+              </article>
+              <article class="catalog-product">
+                <div class="catalog-product-head">
+                  <h4><a href="/catalog/?product=prepared-fish-009#product-prepared-fish-009">Сельдь слабосоленая</a></h4><strong>699 ₽/кг</strong>
+                </div>
+                <p>Атлантическая. Солим сами, без консервантов и созревателей</p>
+              </article>
+<!-- shared:price-preview:end -->
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section
+        class="watch-catch source-section"
+        id="watch-catch"
+        aria-labelledby="watch-catch-title"
+      >
+        <div class="source-shell">
+<!-- shared:recipe-home:start -->
+<header class="watch-catch__header">
+    <h2 id="watch-catch-title">Рецепты и советы</h2>
+    <a class="editorial-link" href="/recipes/">Все рецепты и советы<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg></a>
+  </header>
+  <article class="recipe-feature" aria-labelledby="recipe-feature-title">
+    <a class="recipe-feature__photo" href="/journal/692/" aria-label="Рецепт: Филе трески на сковороде"><img src="/assets/journal-692-480.webp" srcset="/assets/journal-692-480.webp 480w, /assets/journal-692-800.webp 800w" sizes="(max-width: 61.1875rem) calc(100vw - 36px), 520px" data-source-image="/assets/journal-692.jpg" decoding="async" alt="Кусочки филе трески, подрумяненные на&nbsp;сковороде" width="800" height="800" loading="lazy" /></a>
+    <div class="recipe-feature__copy">
+      <p class="recipe-meta">Рецепт Олега · <time datetime="2026-09-15">15 сентября 2026</time></p>
+      <h3 id="recipe-feature-title">Филе трески на сковороде</h3>
+      <blockquote><p>Его не нужно обваливать в муке и жарить в кляре. Его даже не нужно солить. Просто немного прогреть на растительном масле на слабом огне без крышки. Буквально три-четыре минуты.</p></blockquote>
+      <a class="editorial-link" href="/journal/692/">Приготовить по рецепту<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg></a>
+      <a class="editorial-link recipe-feature__catalog" href="/catalog/?product=fillet-001#product-fillet-001">Филе трески в каталоге<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg></a>
+    </div>
+  </article>
+  <ul class="watch-catch__list"><li class="watch-catch__item"><a href="/journal/377/"><span class="recipe-meta">Рецепт Олега</span><span class="watch-catch__name">Осьминог без секретов</span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg></a></li>
+<li class="watch-catch__item"><a href="/journal/412/"><span class="recipe-meta">Рецепт Олега</span><span class="watch-catch__name">«Лос Дымос Креветос»</span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg></a></li>
+<li class="watch-catch__item"><a href="/journal/664/"><span class="recipe-meta">Рецепт Олега</span><span class="watch-catch__name">Предельно простая паста</span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg></a></li></ul>
+<!-- shared:recipe-home:end -->
+        </div>
+      </section>
+
+      <section class="delivery-source" id="delivery" aria-labelledby="delivery-title">
+        <img
+          src="/assets/delivery-basket-480.webp"
+                srcset="/assets/delivery-basket-480.webp 480w, /assets/delivery-basket-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="/assets/delivery-basket.jpg"
+                decoding="async"
+          alt="Корзина с рыбой, икрой и продуктами из лавки"
+          width="1680"
+          height="1680"
+          loading="lazy"
+        />
+        <div class="source-copy">
+          <h2 id="delivery-title">Доставка</h2>
+          <p class="delivery-source__lead">
+            Мы доставляем нашу продукцию домой или в офис <em>в течение двух часов.</em>
+          </p>
+          <p class="delivery-source__terms">
+<!-- shared:delivery-terms:start -->
+Стоимость доставки в пределах МКАД — <strong>490 ₽.</strong> Минимальной суммы заказа нет, это удобно.
+<!-- shared:delivery-terms:end -->
+          </p>
+          <p>
+            Заказы принимаются
+            <span class="source-nowrap">в&nbsp;<a href="https://wa.me/79166751452">WhatsApp</a></span>
+            <span class="source-nowrap">и&nbsp;<a href="https://t.me/+79166751452">телеграме</a></span>.
+          </p>
+          <div class="delivery-source__actions">
+            <a class="source-button source-button--telegram delivery-source__order" href="https://t.me/+79166751452"><span class="source-button__label">Заказать в Телеграме</span></a>
+            <a class="source-button source-button--whatsapp delivery-source__order" href="https://wa.me/79166751452"><span class="source-button__label">Заказать в WhatsApp</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="contacts-source" id="contacts" aria-labelledby="contacts-title">
+        <address class="contacts-source__card">
+          <h2 id="contacts-title">Магазин на улице Строителей</h2>
+          <div class="contacts-source__details">
+            <p>
+              <!-- shared:contact-address:start -->Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1. Метро «Вави&shy;ловская» и «Университет».<!-- shared:contact-address:end -->
+            </p>
+            <p><!-- shared:contact-hours:start -->Ежедневно с&nbsp;11:00 до&nbsp;20:00<!-- shared:contact-hours:end --><span class="store-status" data-store-status hidden></span></p>
+          </div>
+          <a
+            class="source-button source-button--outline"
+            href="https://yandex.ru/maps/org/1784904240/"
+          >
+            <span class="source-button__label">Открыть в Яндекс Картах</span>
+          </a>
+        </address>
+        <div class="contacts-source__map" data-map>
+          <iframe
+            id="store-map-frame"
+            title="Карта проезда к Рыбной лавке капитана Селедкина"
+            src="/assets/store-map.html"
+            loading="lazy"
+          ></iframe>
+        </div>
+      </section>
+      <section class="about-preview source-section" id="about" aria-labelledby="about-preview-title">
+        <div class="source-shell about-preview__layout">
+          <figure>
+            <img src="/assets/oleg-gugunava-480.webp"
+                srcset="/assets/oleg-gugunava-480.webp 480w, /assets/oleg-gugunava-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="/assets/oleg-gugunava.jpg"
+                decoding="async" alt="Олег Гугунава держит рыбу" width="960" height="960" loading="lazy" />
+            <figcaption>Олег Гугунава, владелец лавки</figcaption>
+          </figure>
+          <div class="about-preview__copy">
+            <p class="about-overview__eyebrow">О нас</p>
+            <h2 id="about-preview-title">Ещё одно место в Москве, где продаётся хорошая рыба</h2>
+
+              <p>
+                «Рыбная лавка капитана Селедкина» — небольшой магазин в нескольких минутах ходьбы от метро «Вави&shy;ловская».
+              </p>
+              <p>
+                Казалось бы, обычная торговая точка, но нас уже знают не только
+                жители окрестных домов — к нам приезжают из других районов
+                Москвы, а потом благодарят у себя в блогах.
+              </p>
+
+            <a class="source-button source-button--outline" href="/about/"><span class="source-button__label">История лавки и её капитана</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="journal-preview source-section" id="journal" aria-labelledby="journal-preview-title">
+        <div class="source-shell">
+          <header class="journal-preview__header">
+            <div>
+              <p class="ship-log__kicker">Записи Олега Гугунавы</p>
+              <h2 id="journal-preview-title">Судовой журнал</h2>
+            </div>
+            <a class="source-button source-button--outline" href="/journal/"><span class="source-button__label">Все записи журнала</span></a>
+          </header>
+          <div class="journal-preview__list">
+<!-- shared:journal-preview:start -->
+            <a class="journal-preview__entry" href="/journal/700/" aria-labelledby="journal-preview-700">
+              <div class="journal-preview__media">
+                <img src="/assets/journal-700-480.webp" srcset="/assets/journal-700-480.webp 480w, /assets/journal-700-800.webp 800w" sizes="(max-width: 22rem) calc(100vw - 36px), (max-width: 61.1875rem) min(28vw, 128px), 368px" data-source-image="/assets/journal-700.jpg" decoding="async" alt="Красная икра форели в открытой банке" width="800" height="771" loading="lazy" />
+              </div>
+              <div class="journal-preview__copy">
+                <time datetime="2026-10-08">8 октября 2026</time>
+                <h3 id="journal-preview-700">Первая икра форели 2026 года</h3>
+                <span class="journal-preview__link">Читать запись</span>
+              </div>
+            </a>
+            <a class="journal-preview__entry" href="/journal/699/" aria-labelledby="journal-preview-699">
+              <div class="journal-preview__media">
+                <img src="/assets/journal-699-480.webp" srcset="/assets/journal-699-480.webp 480w, /assets/journal-699-800.webp 800w" sizes="(max-width: 22rem) calc(100vw - 36px), (max-width: 61.1875rem) min(28vw, 128px), 368px" data-source-image="/assets/journal-699.jpg" decoding="async" alt="Голова и серебристый бок форели в тёмную крапинку на розовом фоне" width="800" height="800" loading="lazy" />
+              </div>
+              <div class="journal-preview__copy">
+                <time datetime="2026-10-01">1 октября 2026</time>
+                <h3 id="journal-preview-699">Охлажденная эталонная форель из Карелии</h3>
+                <span class="journal-preview__link">Читать запись</span>
+              </div>
+            </a>
+            <a class="journal-preview__entry" href="/journal/698/" aria-labelledby="journal-preview-698">
+              <div class="journal-preview__media">
+                <img src="/assets/journal-698-480.webp" srcset="/assets/journal-698-480.webp 480w, /assets/journal-698-786.webp 786w" sizes="(max-width: 22rem) calc(100vw - 36px), (max-width: 61.1875rem) min(28vw, 128px), 368px" data-source-image="/assets/journal-698.jpg" decoding="async" alt="Ломтики каспийского залома с серебристой кожей на белой тарелке" width="786" height="800" loading="lazy" />
+              </div>
+              <div class="journal-preview__copy">
+                <time datetime="2026-09-29">29 сентября 2026</time>
+                <h3 id="journal-preview-698">У нас новый завоз малосольного каспийского залома</h3>
+                <span class="journal-preview__link">Читать запись</span>
+              </div>
+            </a>
+<!-- shared:journal-preview:end -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- shared:footer:start -->
+    <nav class="site-navigation-fallback source-shell" id="site-navigation-fallback" aria-label="Разделы сайта" tabindex="-1" data-menu-fallback>
+      <a href="/catalog/">Продукты и цены</a>
+      <a href="#assortment">Что продаём</a>
+      <a href="#delivery">Доставка</a>
+      <a href="#contacts">Контакты</a>
+      <a href="/recipes/">Рецепты и советы</a>
+      <a href="/journal/">Судовой журнал</a>
+      <a href="/about/">О нас</a>
+    </nav>
+    <footer class="source-footer" aria-labelledby="footer-title">
+      <div class="source-footer__content source-shell">
+        <div class="source-footer__details">
+          <p class="source-footer__kicker">До встречи на Вавиловской</p>
+          <h2 id="footer-title">Лосось на вахте — заходите в лавку</h2>
+          <p class="source-footer__lead">
+            Каждый день с 11:00 до 20:00. Можно приехать за рыбой и деликатесами или заказать доставку.
+          </p>
+          <p class="store-status" data-store-status hidden></p>
+          <div class="source-footer__visit">
+            <p>Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1; метро «Вави&shy;ловская» и «Университет»</p>
+          </div>
+          <div class="source-footer__actions" aria-label="Связаться с лавкой">
+            <a class="source-button source-button--footer-contact" href="tel:+79166751452">
+              <span class="source-button__label">Позвонить</span>
+            </a>
+            <a class="source-button source-button--footer-contact" href="https://t.me/+79166751452">
+              <span class="source-button__label">Заказать в Телеграме</span>
+            </a>
+            <a class="source-button source-button--footer-contact" href="https://wa.me/79166751452">
+              <span class="source-button__label">Заказать в WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
+        <figure class="source-footer__portrait">
+          <img
+            src="/assets/salmon-cat-480.webp"
+                srcset="/assets/salmon-cat-480.webp 480w, /assets/salmon-cat-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="/assets/salmon-cat.jpg"
+                decoding="async"
+            alt="Кот Лосось греется на солнце с закрытыми глазами"
+            width="1536"
+            height="2048"
+            loading="lazy"
+          />
+          <figcaption>Лосось принимает солнечную ванну между вахтами.</figcaption>
+        </figure>
+      </div>
+
+      <div class="source-footer__postscript source-shell">
+        <p>
+          P. S.: а ещё мы публикуем советы по приготовлению и обработке
+          рыбы, все наши новости, в т. ч. об ассортименте, в наших
+          социальных сетях. Подписывайтесь!
+        </p>
+        <nav class="source-footer__channels" aria-label="Социальные сети и каналы лавки">
+          <a class="source-footer__channel--primary" href="https://t.me/kapitanseledkin">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="/assets/social-icons.svg#telegram"></use>
+            </svg>
+            <span>Телеграм-канал</span>
+          </a>
+          <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="/assets/social-icons.svg#youtube"></use>
+            </svg>
+            <span>YouTube</span>
+          </a>
+          <a href="https://soundcloud.com/kapitanseledkin">
+            <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <use href="/assets/social-icons.svg#soundcloud"></use>
+            </svg>
+            <span>SoundCloud</span>
+          </a>
+        </nav>
+      </div>
+      <div class="source-footer__base source-shell">
+        <small>© «Рыбная лавка капитана Селедкина», 2026</small>
+        <a class="source-footer__credit" href="https://gorokhovatsky.tech/?point=ks-fish">Дизайн и разработка</a>
+        <a href="#top">В начало</a>
+      </div>
+    </footer>
+<!-- shared:footer:end -->
+
+  <script type="module" src="/experiments/delivery-2026-10-11/preview.js"></script></body>
+</html>

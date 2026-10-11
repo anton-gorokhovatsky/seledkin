@@ -130,9 +130,14 @@ export function productHref(product, root = "", source = "") {
 }
 
 export function orderUnit(product) {
-  return /\/кг\s*$/u.test(product.price)
-    ? { label: "Вес, кг", unit: "кг", example: "0,5", whole: false }
-    : { label: "Количество, шт.", unit: "шт.", example: "2", whole: true };
+  const units = {
+    kg: { label: "Вес, кг", unit: "кг", example: "0,5", whole: false },
+    pack: { label: "Количество упаковок, шт.", unit: "шт.", example: "2", whole: true },
+    piece: { label: "Количество, шт.", unit: "шт.", example: "2", whole: true },
+  };
+  const unit = units[product.quantityUnit];
+  if (!unit) throw new Error(`Missing sale unit: ${product.id ?? product.name}`);
+  return unit;
 }
 
 export function productLabel(product) {

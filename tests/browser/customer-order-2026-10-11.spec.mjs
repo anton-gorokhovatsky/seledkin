@@ -1,0 +1,92 @@
+import { test, expect } from "@playwright/test";
+
+test("a loose product accepts weight and never reuses an old package count @catalog", async ({ page }) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem("seledkin-order-item:other-017")) {
+      localStorage.setItem("seledkin-order-format", "2");
+      localStorage.setItem("seledkin-order-item:other-017", JSON.stringify({ amount: "2", addedAt: 1 }));
+    }
+  });
+  await page.goto("catalog/?product=other-017&audit=order-unit");
+  const list = page.locator("#order-list");
+  const weight = list.getByRole("textbox", { name: /^Вес.*Перец халапеньо/ });
+  await expect(weight).toHaveValue("");
+  await weight.fill("0,25");
+  await page.reload();
+  await expect(weight).toHaveValue("0,25");
+  const draft = new URL(await list.getByRole("link", { name: "Открыть список в WhatsApp" }).getAttribute("href")).searchParams.get("text");
+  expect(draft).toContain("Вес: 0,25 кг");
+  expect(draft).not.toContain("Количество:");
+});
+
+test("delivery, menu and footer continue the saved order before messenger handoff @catalog", async ({ page }, testInfo) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("seledkin-order-list", JSON.stringify(["caviar-001"]));
+    localStorage.setItem("seledkin-order-amounts", JSON.stringify({ "caviar-001": "2" }));
+  });
+  await page.goto("?audit=order-continuation#delivery");
+  for (const scope of [".delivery-source__actions", ".site-menu__service", ".source-footer__actions"]) {
+    const links = page.locator(`${scope} a[href*="channel="]`);
+    await expect(links).toHaveCount(2);
+    for (const link of await links.all()) {
+      await expect(link).toHaveAttribute("href", /catalog\/\?channel=(telegram|whatsapp)#order-list$/);
+      await expect(link).toContainText("Продолжить");
+    }
+  }
+  await page.locator('.delivery-source__actions a[href*="channel=telegram"]').click();
+  await expect(page.locator("#order-list")).toBeFocused();
+  await expect(page.locator("#order-list").getByRole("textbox", { name: /^Количество.*Черная икра/ })).toHaveValue("2");
+  await page.locator("#order-list").getByRole("button", { name: /^Убрать/ }).click();
+  await expect(page.locator('.source-footer__actions a[href="https://t.me/+79166751452"]')).toHaveText("Заказать в Телеграме");
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto("?audit=order-continuation");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  await page.locator(".source-footer__channels").screenshot({ path: testInfo.outputPath("footer-socials-320.png") });
+});
+
+test("footer icons stay centered beside their labels in both watches", async ({ page }) => {
+  for (const theme of ["light", "dark"]) for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("?audit=footer-icons");
+    await page.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
+    const gaps = await page.locator(".source-footer__channels a").evaluateAll(links => links.map(link => {
+      const icon = link.querySelector("svg").getBoundingClientRect();
+      const label = link.querySelector("span").getBoundingClientRect();
+      return Math.abs(icon.y + icon.height / 2 - label.y - label.height / 2);
+    }));
+    for (const gap of gaps) expect(gap).toBeLessThan(1);
+  }
+});
+
+test("recipe sequence photographs share one column and a short gap @journal", async ({ page }, testInfo) => {
+  for (const width of [1440, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("journal/692/?audit=recipe-sequence");
+    const geometry = await page.evaluate(() => {
+      const first = document.querySelector(".journal-story > img").getBoundingClientRect();
+      const second = document.querySelector(".recipe-sequence img").getBoundingClientRect();
+      return { width: first.width - second.width, left: first.left - second.left, gap: second.top - first.bottom };
+    });
+    expect(Math.abs(geometry.width)).toBeLessThan(1);
+    expect(Math.abs(geometry.left)).toBeLessThan(1);
+    // On a narrow screen the author text belongs between the photos.
+    if (width > 980) expect(geometry.gap).toBeLessThan(33);
+    expect(await page.locator(".recipe-sequence img").evaluate(image => getComputedStyle(image).objectFit)).not.toBe("cover");
+    if (width === 1440) await page.locator(".recipe-sequence").screenshot({ path: testInfo.outputPath("recipe-sequence-1440.png") });
+  }
+});
+
+test("editorial recipe photos and titles open the complete source without a contact tail @recipes", async ({ page }) => {
+  await page.goto("recipes/?audit=recipe-links");
+  const features = page.locator(".recipe-editorial-opening article");
+  await expect(features).toHaveCount(3);
+  for (const feature of await features.all()) {
+    const photo = feature.locator("figure a"), title = feature.locator("h2 a");
+    expect(await photo.getAttribute("href")).toBe(await title.getAttribute("href"));
+    await expect(photo).toHaveAttribute("href", /journal\/\d+\/$/);
+  }
+  await features.nth(1).locator("h2 a").press("Enter");
+  await expect(page.locator(".ship-log-entry__body")).toContainText("Не нужно даже наливать воду");
+  await expect(page.locator(".ship-log-entry__body")).not.toContainText("Заказы принимаются только");
+  await expect(page.getByRole("link", { name: "Читать запись в Телеграме", exact: true })).toBeVisible();
+});

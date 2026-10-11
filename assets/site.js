@@ -4,9 +4,11 @@ import { setupMobileHero } from "./mobile-hero.js";
 import "./theme.js";
 import "./store-environment.js";
 import { syncMenuSeaVideo } from "./sea-motion.js";
+import { setupOrderContinuation } from "./order-continuation.js";
 
 const root = new URL("../", import.meta.url);
 const isHome = location.pathname === root.pathname || location.pathname === `${root.pathname}index.html`;
+setupOrderContinuation();
 setupMobileHero();
 if (isHome) setupAssortmentPreview();
 if (isHome && /^#journal-entry-\d+$/.test(location.hash)) {

@@ -72,6 +72,13 @@ jobs:
         if: steps.scope.outputs.browser_required == 'true'
         run: pnpm install --frozen-lockfile --ignore-scripts
 
+      - name: Reuse installed browsers
+        if: steps.scope.outputs.browser_required == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Install browsers
         if: steps.scope.outputs.browser_required == 'true'
         run: |
@@ -89,6 +96,7 @@ jobs:
           TYPOGRAPHY_PAGES: ${{ steps.scope.outputs.typography_pages }}
           BROWSER_GREP: ${{ steps.scope.outputs.browser_grep }}
           PLAYWRIGHT_SITE_DIR: _site
+          PLAYWRIGHT_WORKERS: 4
         run: |
           if [ "$RELEASE_SCOPE" = "journal" ]; then
             pnpm exec playwright test --grep @journal

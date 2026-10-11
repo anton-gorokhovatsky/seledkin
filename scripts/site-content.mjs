@@ -185,12 +185,9 @@ function journalBody(entry, inquiry) {
   const historical = recipes.some(recipe => recipe.id === entry.id)
     ? lines.findIndex(line => /Заказы принимаются только.*WhatsApp/.test(line)) : -1;
   if (historical < 0) return lines.map(line => `                  ${line}`).join("\n");
-  return `${lines.slice(0, historical).map(line => `                  ${line}`).join("\n")}
-                  <aside class="journal-historical" aria-label="Условия из публикации">
-                    <p class="journal-historical__label">Условия из публикации · ${date(entry)}</p>
-${lines.slice(historical).map(line => `                    ${line}`).join("\n")}
-                  </aside>
-                  <p class="journal-historical__current">Сейчас заказ можно оформить в <a href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}">Телеграме</a> или <a href="https://wa.me/79166751452?text=${encodeURIComponent(plain(inquiry))}">WhatsApp</a>. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>`;
+  // Approved recipe presentation omits the old ordering/contact tail. The
+  // archived source stays intact in content and remains linked from the page.
+  return lines.slice(0, historical).map(line => `                  ${line}`).join("\n");
 }
 
 export function renderJournal(list, view) {
@@ -398,19 +395,20 @@ function renderRecipeEditorial(root) {
     return { ...item, recipe, entry, product: resolveProduct(recipe.products[0]).product };
   });
   const meta = item => `<p class="recipe-meta">Рецепт Олега · <time datetime="${item.entry.date}">${date(item.entry)}</time></p>`;
-  const title = item => `<h2 id="recipe-editorial-${item.id}">${text(item.noun)} <em>${text(item.ending)}</em></h2>`;
+  const title = item => `<h2 id="recipe-editorial-${item.id}"><a href="${root}journal/${item.id}/">${text(item.noun)} <em>${text(item.ending)}</em></a></h2>`;
+  const photoLink = (item, photo) => `<a class="recipe-editorial-photo-link" href="${root}journal/${item.id}/" aria-label="Читать рецепт: ${text(item.recipe.title)}">${photo}</a>`;
   const actions = item => `<div class="recipe-editorial-actions"><a class="editorial-link" href="${root}journal/${item.id}/" aria-label="Читать рецепт: ${text(item.recipe.title)}">Читать рецепт${harpoon}</a><a class="editorial-link recipe-editorial-actions__catalog" data-recipe-id="${item.id}" href="${escape(productCatalogHref(item.recipe.products[0], root))}">${text(item.product.name)} в каталоге${harpoon}</a></div>`;
   const product = item => `<div class="recipe-editorial-product"><div><p class="recipe-editorial-product__label">Для этого рецепта</p><p class="recipe-editorial-product__name">${text(item.product.name)}</p><p class="recipe-editorial-product__origin">${text(item.product.description)}</p></div><strong>${escape(catalogPrice(item.product.price)).replace("/", "<wbr>/")}</strong></div>`;
   const [lead, ...pair] = selected;
   return `<div class="recipe-editorial-opening">
     <article class="recipe-feature recipe-editorial-lead" aria-labelledby="recipe-editorial-${lead.id}">
       <div class="recipe-editorial-lead__heading">${meta(lead)}${title(lead)}<blockquote class="recipe-editorial-pull"><p>«${text(lead.pull)}»</p></blockquote></div>
-      <figure class="recipe-feature__photo recipe-editorial-lead__photo">${image(lead.entry, root, "(max-width: 46rem) calc(100vw - 36px), 58vw", false, true)}<figcaption>Фотография Олега к рецепту</figcaption></figure>
+      <figure class="recipe-feature__photo recipe-editorial-lead__photo">${photoLink(lead, image(lead.entry, root, "(max-width: 46rem) calc(100vw - 36px), 58vw", false, true))}<figcaption>Фотография Олега к рецепту</figcaption></figure>
       <div class="recipe-editorial-lead__note"><p>${text(lead.excerpt)}</p>${actions(lead)}</div>
       <div class="recipe-editorial-lead__product">${product(lead)}</div>
     </article>
     <div class="recipe-editorial-pair">${pair.map(item => `<article class="recipe-editorial-story" aria-labelledby="recipe-editorial-${item.id}">
-      <figure>${image(item.entry, root, "(max-width: 46rem) calc(100vw - 36px), 46vw")}</figure>
+      <figure>${photoLink(item, image(item.entry, root, "(max-width: 46rem) calc(100vw - 36px), 46vw"))}</figure>
       <div class="recipe-editorial-story__copy">${meta(item)}${title(item)}<blockquote class="recipe-editorial-pull"><p>${text(item.pull)}.</p></blockquote><p>${text(item.excerpt)}</p>${product(item)}${actions(item)}</div>
     </article>`).join("\n")}</div>
   </div>`;

@@ -1,6 +1,6 @@
 import { catalog } from "./catalog-data.js";
 import { catalogPrice, productLabel, orderLinks, orderText, positionCount, productKey, orderUnit, orderAmount } from "./catalog-model.js";
-import { createOrderStore } from "./order-store.js";
+import { sharedOrderStore } from "./order-store.js";
 import { typographText } from "./typography.js";
 import { copyOrderMessage } from "./order-message.js";
 
@@ -13,7 +13,7 @@ export function setupOrderList() {
   const removeButtons = [...document.querySelectorAll("[data-order-remove]")];
   const products = new Map(catalog.flatMap(category => category.items.map(product =>
     [productKey(category, product), { ...product, category: category.slug }])));
-  const store = createOrderStore(products, catalog);
+  const store = sharedOrderStore(products, catalog);
   let { selected, amounts } = store.read();
   const title = region.querySelector("[data-catalog-order-title]");
   const copy = region.querySelector("[data-catalog-order-copy]");
@@ -258,6 +258,7 @@ export function setupOrderList() {
   function update(message) {
     readStore();
     render();
+    document.dispatchEvent(new Event("shop:order-change"));
     status.textContent = typographText(`${message}. В списке ${positionCount(selected.size)}.${selected.size === 1 ? " Чтобы продолжить, откройте список заказа." : ""}`);
   }
   for (const button of addButtons) button.addEventListener("click", () => {
@@ -292,5 +293,12 @@ export function setupOrderList() {
   window.addEventListener("pageshow", sync);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) sync(); });
   render();
+  const preferredChannel = new URL(location.href).searchParams.get("channel");
+  if (selected.size && location.hash === "#order-list" && ["telegram", "whatsapp"].includes(preferredChannel)) {
+    requestAnimationFrame(() => {
+      region.scrollIntoView({ block: "start", behavior: "instant" });
+      region.focus({ preventScroll: true });
+    });
+  }
   return { setSearchState(state) { needsHelp = state.needsHelp; render(); } };
 }

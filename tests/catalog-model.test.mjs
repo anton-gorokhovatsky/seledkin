@@ -124,7 +124,7 @@ test("exact product links preserve the chosen package independently of its name 
 });
 
 test("optional amounts accept fractional weight and whole package counts, without inventing totals", () => {
-  const weight = { name: "Филе тунца", price: "2800 ₽/кг" };
+  const weight = { name: "Филе тунца", price: "2800 ₽/кг", quantityUnit: "kg" };
   const pack = catalog[0].items[0];
   assert.equal(orderUnit(weight).whole, false);
   assert.equal(orderUnit(pack).whole, true);
@@ -141,4 +141,15 @@ test("optional amounts accept fractional weight and whole package counts, withou
   assert.equal(new URL(orderLinks(products).telegram).searchParams.get("text"), text);
   assert.equal(new URL(orderLinks(products).whatsapp).searchParams.get("text"), text);
   assert.doesNotMatch(orderText(pack), /Количество|Вес:|Итого/);
+});
+
+test("sale units are explicit and independent of how a price is written", () => {
+  for (const product of catalog.flatMap(category => category.items)) {
+    assert.ok(["kg", "pack", "piece"].includes(product.quantityUnit), product.id);
+    assert.equal(orderUnit({ ...product, price: "Другая запись цены" }).whole, orderUnit(product).whole);
+  }
+  const pepper = catalog.flatMap(category => category.items).find(product => product.id === "other-017");
+  assert.equal(orderUnit(pepper).label, "Вес, кг");
+  assert.equal(orderAmount("0,25", pepper), "0,25");
+  assert.match(orderText({ ...pepper, amount: "0,25" }), /Вес: 0,25 кг/);
 });
