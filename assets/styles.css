@@ -1233,6 +1233,45 @@ a.source-brand {
   margin-bottom: 0;
 }
 
+.founder-source__sources {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem var(--about-column-gap);
+  margin-top: clamp(2rem, 4vw, 3rem);
+  font-size: var(--text-reading);
+}
+
+.founder-source__source {
+  display: grid;
+  align-content: start;
+  gap: .5rem;
+  min-width: 0;
+}
+
+.founder-source__sources p {
+  margin: 0;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.founder-source__source .source-caption {
+  color: var(--muted);
+  font-size: var(--text-meta);
+}
+
+.founder-source__source-link {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 2.75rem;
+  font-weight: 600;
+}
+
+.founder-source__channels {
+  grid-column: 1 / -1;
+  color: var(--muted);
+}
+
 .about-overview__reasons-header {
   margin-bottom: clamp(2.5rem, 4vw, 4rem);
 }
@@ -1325,6 +1364,7 @@ a.source-brand {
 @media (max-width: 61.1875rem) {
   .about-overview > .source-shell,
   .founder-source__inner,
+  .founder-source__sources,
   .about-overview__chapter,
   .founder-source__closing {
     grid-template-columns: minmax(0, 1fr);
