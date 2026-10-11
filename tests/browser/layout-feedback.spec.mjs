@@ -49,6 +49,7 @@ test("compact journal photos retain their full frame and recipe words never brea
   const name = page.locator('.watch-catch__name').filter({ hasText: "Осьминог" });
   expect(await name.textContent()).toContain("секре\u00adтов");
   expect(await name.evaluate(node => getComputedStyle(node).overflowWrap)).not.toBe("anywhere");
+  expect(await page.locator('.afisha__title em').textContent()).toContain("каж\u00adдый");
   await page.goto("journal/?audit=compact-journal#journal-earlier");
   await checkPhoto(page.locator(".journal-atlas__earlier .journal-index-entry img").first(), 144);
   for (const path of ["?audit=compact-journal", "journal/?audit=compact-journal"]) {
