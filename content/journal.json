@@ -358,5 +358,29 @@
     "alt": "Крупный план северных креветок с икрой",
     "image": "journal-73.jpg",
     "archiveImageWidth": 200
+  },
+  {
+    "id": "facebook-2018-12-15-nerka",
+    "date": "2018-12-15",
+    "title": "Нерка-серебряночка",
+    "product": "Нерка",
+    "alt": "Нерка целиком, серебристая чешуя и красное филе в авторском коллаже",
+    "image": "journal-facebook-2018-12-15-nerka.jpg",
+    "source": {
+      "name": "Facebook",
+      "url": "https://www.facebook.com/photo?fbid=2199877076729662&set=a.608909054589732"
+    }
+  },
+  {
+    "id": "facebook-2018-02-16-herring",
+    "date": "2018-02-16",
+    "title": "К этой селедке даже блины не нужны",
+    "product": "Сельдь слабосоленая",
+    "alt": "Целая сельдь на деревянной доске, рядом лук и масло",
+    "image": "journal-facebook-2018-02-16-herring.jpg",
+    "source": {
+      "name": "Facebook",
+      "url": "https://www.facebook.com/kapitanseledkin/posts/pfbid034L4Pxe3ranCyHypBRotLGXUHxFxvyq3wC5i3VtRLJGvpa9N5SroDQSYr1EB4mGEdl"
+    }
   }
 ]

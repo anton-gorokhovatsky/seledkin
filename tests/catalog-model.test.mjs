@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { catalogPrice, matchesSearch, orderLinks, orderText, orderUnit, orderAmount, productHref, positionCount, productKey, legacyProductKey, restoreOrderKeys, productNotes, productSearchText } from "../assets/catalog-model.js";
+import { catalogPrice, matchesSearch, orderLinks, orderText, orderUnit, orderAmount, productHref, positionCount, productKey, legacyProductKey, restoreOrderKeys, productNotes, productDescription, productSearchText } from "../assets/catalog-model.js";
 import { catalog } from "../assets/catalog-data.js";
 
 test("search accepts category terms, reversed words, ё and whitespace", () => {
@@ -79,8 +79,20 @@ test("portion prices use grams without rounding the quantity or changing other u
 test("abbreviation notes appear only for confirmed preparation terms", () => {
   assert.equal(productNotes({ name: "Креветка северная в/м" }), "В/м — варёно-мороженый продукт");
   assert.equal(productNotes({ name: "Креветка тигровая б/г" }), "Б/г — без головы");
-  assert.equal(productNotes({ name: "Скумбрия", description: "ПБГ" }), "ПБГ — потрошёная рыба без головы");
+  assert.equal(productNotes({ name: "Скумбрия", description: "ПБГ" }), "");
+  assert.equal(productDescription({ name: "Скумбрия", description: "ПБГ" }), "Потрошёная рыба без головы");
   assert.equal(productNotes({ name: "Филе трески" }), "");
+});
+
+test("a moved product keeps saved orders and does not inherit unrelated preparation search terms", () => {
+  const fishMince = catalog.find(category => category.slug === "fillet").items.find(product => product.id === "other-016");
+  assert.deepEqual(restoreOrderKeys(["other|Фарш форели|Высшего качества|/0,5 кг", fishMince.id], catalog), [fishMince.id]);
+  assert.deepEqual(findProducts("фарш"), ["Фарш форели"]);
+  assert.deepEqual(findProducts("бульон"), ["Бульон из форели"]);
+  assert.equal(findProducts("консервы").length, 11);
+  assert.ok(catalog.find(category => category.slug === "seafood").items.some(product => product.id === "other-025"));
+  assert.ok(catalog.find(category => category.slug === "grocery").items.some(product => product.name === "Рис"));
+  assert.ok(catalog.find(category => category.slug === "accessories").items.every(product => product.quantityUnit === "piece"));
 });
 
 test("checked-in HTML catalog is generated from current prices", () => {

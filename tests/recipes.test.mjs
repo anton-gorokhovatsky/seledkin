@@ -18,7 +18,7 @@ const normalize = value => value.replace(/<br\s*\/?\s*>/g, "\n").replace(/<[^>]*
   .replace(/\s|[-—–‑]/g, "");
 
 test("selected archive texts retain every author word, source date and original full frame", () => {
-  const sources = JSON.parse(read("tests/fixtures/recipes-channel-2026.json"));
+  const sources = [...JSON.parse(read("tests/fixtures/recipes-channel-2026.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2018.json"))];
   const media = JSON.parse(read("assets/media-variants.json"));
   for (const source of sources) {
     const entry = entries.find(item => item.id === source.id);
@@ -29,14 +29,14 @@ test("selected archive texts retain every author word, source date and original 
     if (source.id === 73) assert.ok(!entry.body.includes('class="journal-tags"'), "An abandoned hashtag must not leave an empty tag row");
     assert.ok(entry.alt);
     assert.ok(media.some(item => item.source === entry.image && item.width > 32));
-    assert.ok(read(`journal/${entry.id}/index.html`).includes(source.source));
+    assert.ok(read(`journal/${entry.id}/index.html`).includes(source.source.replaceAll("&", "&amp;")));
   }
 });
 
 test("recipes point to the right product variant and use live catalog prices", () => {
   const page = renderRecipesPage();
   assert.equal(recipes.filter(recipe => recipe.kind === "recipe").length, 16);
-  assert.equal(recipes.filter(recipe => recipe.kind === "advice").length, 4);
+  assert.equal(recipes.filter(recipe => recipe.kind === "advice").length, 6);
   for (const recipe of recipes) {
     assert.ok(entries.some(entry => entry.id === recipe.id));
     assert.ok(page.includes(`href="../journal/${recipe.id}/"`));

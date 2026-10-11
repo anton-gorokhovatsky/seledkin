@@ -55,7 +55,7 @@ test("catalog advice stays readable in both watches with 320px reflow and enlarg
   for (const theme of ["light", "dark"]) {
     await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
     await page.goto("catalog/?audit=catalog-guidance");
-    await expect(page.locator(".catalog-product-advice blockquote")).toHaveCount(7);
+    await expect(page.locator(".catalog-product-advice blockquote")).toHaveCount(15);
     await page.locator("#product-fillet-001").scrollIntoViewIfNeeded();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: testInfo.outputPath(`catalog-guidance-320-${theme}.png`) });
@@ -71,6 +71,7 @@ test("catalog advice stays readable in both watches with 320px reflow and enlarg
       expect(quote.clipped).toBeLessThanOrEqual(1);
       expect(quote.linkTop).toBeGreaterThanOrEqual(quote.bottom - 1);
     }
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    const overflow = await page.evaluate(() => ({ excess: document.documentElement.scrollWidth - innerWidth, items: [...document.querySelectorAll('main *')].filter(el => el.getBoundingClientRect().right > innerWidth + 1).map(el => ({ tag: el.tagName, class: el.className, text: el.textContent.slice(0, 90) })).slice(0, 12) }));
+    expect(overflow.excess, JSON.stringify(overflow.items)).toBeLessThanOrEqual(1);
   }
 });

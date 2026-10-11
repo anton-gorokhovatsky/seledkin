@@ -1,0 +1,281 @@
+{
+  "reviewedAt": "2026-10-11",
+  "status": "research-selection-and-implementation-record",
+  "method": "Публичные публикации лавки прочитаны в Chrome на компьютере пользователя с его существующей авторизацией. Полный архив не обследован.",
+  "sourcePages": [
+    {
+      "url": "https://www.facebook.com/profile.php?id=61580098542037",
+      "note": "Страница из сообщения пользователя: справочная и экспертная информация о выборе рыбы и морепродуктов. Найденные материалы датированы 2025 годом."
+    },
+    {
+      "url": "https://www.facebook.com/kapitanseledkin",
+      "note": "Ранний архив лавки: просмотрены и отобраны авторские публикации 2018, 2019 и 2021 годов. Полный архив не обследован."
+    },
+    {
+      "url": "https://t.me/s/kapitanseledkin",
+      "note": "Сверены существующие советы и запись 262 о супе из окуня. Повторные публикации не считались новыми советами."
+    },
+    {
+      "url": "https://soundcloud.com/kapitanseledkin/tracks",
+      "note": "Проверены публичные названия, ссылки и метаданные восьми аудиозаписей. Даты загрузки не выдаются за даты эфиров; записи целиком не прослушаны."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=AjddofqCbTE",
+      "note": "Сверены описание и открытая расшифровка выпуска о выборе шпрот от 11 сентября 2020 года. Полная видеозапись не просмотрена."
+    }
+  ],
+  "selection": [
+    {
+      "topic": "Как выбирать красную икру",
+      "date": "2025-12-17",
+      "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid09Mm9oePJxeCt2iREynvkskEz5yQqYkyQsuF6qQwu96k5sJKibRfCdXHKwRxiLLzGl&id=61580098542037",
+      "quote": "Развесную икру можно попробовать перед покупкой. Подобрать ту, которая больше нравится: по размеру, консистенции, вкусу и количеству соли.",
+      "context": "Полная публикация сравнивает развесную икру, стеклянные и металлические банки и замороженную икру без консервантов. В ней также есть рекомендации о хранении, маркировке и рисках подмены.",
+      "proposedUse": "Редакционная помощь с выбором красной икры; короткая цитата и ссылка на полный разбор.",
+      "limits": "Цитата относится к развесной икре. Не представлять её как подтверждение дегустации всех нынешних фасованных позиций лавки. Утверждения о маркировке требуют актуального первоисточника при переносе в интерфейс."
+    },
+    {
+      "topic": "Северные креветки для большой компании",
+      "date": "2021-11-30",
+      "url": "https://www.facebook.com/kapitanseledkin/posts/pfbid02BH9wMugAdLXXwQpm4ouVJ6VGAqMf3xrdeEHrwjZKmZQ4ooWwoRCooEtoxYHn9poSl",
+      "quote": "Если вам нужно накормить северными креветками большую компанию, размораживайте их частями и подавайте на льду.",
+      "context": "Публикация посвящена варёно-мороженой северной креветке. Олег противопоставляет повторную варку подаче холодных уже приготовленных креветок.",
+      "proposedUse": "Дополнение к совету у варёно-мороженой северной креветки и полная запись о её подаче.",
+      "limits": "Не переносить на сырые патагонские креветки. Дата вылова и наличие относятся к партии 2021 года. Абсолютное утверждение о безопасности не отбирать для краткой цитаты."
+    },
+    {
+      "topic": "Омуль, муксун и сиг к ужину",
+      "date": "2025-09-23",
+      "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02UaMmocftdY7A7uXHE2FVFz6f2xbfxwRCPe2VAKo6YFfCXd1GvsemupQpwgSU1563l&id=61580098542037",
+      "quote": "Двадцать пять минут при ста восьмидесяти градусах в духовке — и у вас роскошный ужин, не в каждом ресторане такой подадут.",
+      "context": "Перед этой фразой автор перечисляет омуля, муксуна и сига. Большая часть публикации — отдельный рецепт засола икры, которая может оказаться внутри рыбы.",
+      "proposedUse": "Совет рядом с соответствующей северной рыбой; отдельный материал о найденной в рыбе икре.",
+      "limits": "Не отрывать время приготовления от перечисленных видов рыбы и не распространять его на весь ассортимент. Для публикации рецепта сохранять последовательность и полный авторский контекст."
+    },
+    {
+      "topic": "Настоящие фотографии продуктов лавки",
+      "date": "2019-12-27",
+      "url": "https://www.facebook.com/photo?fbid=2872319542818742&set=a.608909054589732",
+      "quote": "Всю рыбу, икру, креветки - все, что продается в Селёдкине, мы фотографируем прямо в магазине. На камеру телефона.",
+      "context": "В следующей фразе Олег говорит, что свет не выставляют и фотографии впоследствии не обрабатывают. Далее показана икра форели; есть историческая цена и упоминание дегустации.",
+      "proposedUse": "Рассказ об авторских фотографиях в разделе о лавке, с датой и источником.",
+      "limits": "Это заявление автора 2019 года. Историческую цену не переносить в текущий каталог; правила обработки всех нынешних фотографий не выводить из одной старой публикации."
+    }
+  ],
+  "duplicates": [
+    {
+      "topic": "Филе дикой патагонской креветки",
+      "date": "2024-11-23",
+      "observedAt": "https://www.facebook.com/profile/100064119273888/search/?q=%D0%BA%D1%80%D0%B5%D0%B2%D0%B5%D1%82%D0%BA%D0%B8",
+      "existingSource": "content/journal/464.html",
+      "note": "Совет о размораживании в прохладной воде и жарке уже использован в каталоге для очищенных патагонских креветок. Не считать повторную публикацию новым советом."
+    }
+  ],
+  "implementedSelection": {
+    "quotes": [
+      {
+        "product": "fillet-001",
+        "entry": 692
+      },
+      {
+        "product": "fillet-002",
+        "entry": 120
+      },
+      {
+        "product": "frozen-fish-008",
+        "entry": 150
+      },
+      {
+        "product": "frozen-fish-031",
+        "entry": 608
+      },
+      {
+        "product": "steaks-005",
+        "entry": 375
+      },
+      {
+        "product": "seafood-014",
+        "entry": 464
+      },
+      {
+        "product": "seafood-015",
+        "source": "shrimp-company"
+      },
+      {
+        "product": "frozen-fish-007",
+        "entry": "facebook-2018-12-15-nerka"
+      },
+      {
+        "product": "prepared-fish-009",
+        "entry": "facebook-2018-02-16-herring"
+      },
+      {
+        "product": "frozen-fish-003",
+        "source": "north-fish"
+      },
+      {
+        "product": "frozen-fish-019",
+        "source": "north-fish"
+      },
+      {
+        "product": "frozen-fish-022",
+        "source": "north-fish"
+      },
+      {
+        "product": "frozen-fish-013",
+        "source": "perch-broth"
+      },
+      {
+        "product": "salmon-steak",
+        "entry": 693
+      },
+      {
+        "product": "caviar-005",
+        "source": "red-roe-choice"
+      }
+    ],
+    "nativeEarlyStories": [
+      "facebook-2018-12-15-nerka",
+      "facebook-2018-02-16-herring"
+    ],
+    "audioTopics": [
+      {
+        "id": "smelt",
+        "label": "Корюшка",
+        "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-koryushka"
+      },
+      {
+        "id": "canned",
+        "label": "Рыбные консервы",
+        "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-rybnye-konservy"
+      },
+      {
+        "id": "exotic",
+        "label": "Экзотические морепродукты",
+        "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-ekzoticheskie-moreprodukty"
+      },
+      {
+        "id": "kamchatka",
+        "label": "Камчатские деликатесы",
+        "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-kamchatskie-delikatesy"
+      },
+      {
+        "id": "cod-liver",
+        "label": "Печень трески, икра сельди",
+        "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-pechen-treski-ikra-seldi"
+      },
+      {
+        "id": "tuna",
+        "label": "Тунец",
+        "url": "https://soundcloud.com/kapitanseledkin/xxvj6ccvq2pq"
+      },
+      {
+        "id": "icefish",
+        "label": "Ледяная рыба",
+        "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-ledyanaya-ryba"
+      },
+      {
+        "id": "roe",
+        "label": "Красная и чёрная икра",
+        "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-krasnaya-i-chyornaya-ikra"
+      }
+    ],
+    "video": [
+      {
+        "id": "sprats",
+        "label": "Как выбрать шпроты",
+        "url": "https://www.youtube.com/watch?v=AjddofqCbTE"
+      }
+    ],
+    "sourceFidelity": "Цитаты сверяются с сохранёнными первоисточниками при сборке. Полные авторские фотографии не кадрированы. Исторические телефоны сохранены в исходниках; в интерфейсе действуют нынешние контакты лавки."
+  },
+  "taxonomy": {
+    "reason": "Исторический раздел «Новинки и прочее» смешивал разные задачи покупателя. Пользователь попросил разделить его по смыслу и уточнил название «Бакалея».",
+    "categories": [
+      {
+        "slug": "dried-fish",
+        "label": "Вяленая рыба",
+        "count": 4
+      },
+      {
+        "slug": "canned",
+        "label": "Консервы и бульон",
+        "count": 12
+      },
+      {
+        "slug": "grocery",
+        "label": "Бакалея",
+        "count": 11
+      },
+      {
+        "slug": "accessories",
+        "label": "Кухонные принадлежности",
+        "count": 1
+      }
+    ],
+    "moves": [
+      "Фарш форели — в «Филе и фарш»",
+      "Вонголе — в «Морепродукты»",
+      "Три позиции консервированного краба — в «Консервы и бульон»"
+    ],
+    "conservation": "Сравнение с f9f2061: все 116 идентификаторов, названий, описаний, цен и единиц заказа совпадают. Старый category=other открывает прежние 27 товаров; старые ключи заказов восстанавливаются.",
+    "alignment": "По просьбе пользователя первый пункт «Икра» выровнен с фотографией. На десктопе фотография закрепляется внутри списка, на узком экране остаётся в обычном потоке."
+  },
+  "localEvidence": {
+    "wide": "Chrome 1512 × 806: каталог с новыми группами, главная с соседним контекстом, библиотека аудиозаписей и ранняя публикация.",
+    "narrow": "Chromium и WebKit: 320 px, обе вахты, увеличенный текст и пользовательские интервалы; исходные фотографии целиком, новые ссылки не выходят за экран.",
+    "automated": "Initial 62 focused unit checks and 12 browser checks; final 49 unit checks passed. Latest selected photo, archive, filter and history scenarios passed in Chromium and WebKit (14 checks). The shortened sticky interval and new journal search matches were reflected in the same candidate before CI.",
+    "limits": "Это запись проверки кандидата, а не подтверждение будущего выпуска. Проверка на физическом телефоне и визуальная приёмка пользователя не проводились.",
+    "evidenceDirectory": "/private/tmp/seledkin-enrichment-2026-10-11/",
+    "latest": [
+      "Главная: девять выбранных категорий, полный каталог сохраняет 116 товаров и пинцет.",
+      "Chrome 1512 × 806: фото масла в окружении главной; журнал без технических номеров в обеих вахтах.",
+      "Chromium и WebKit: 1440/768/390/320 px, полные фото журнала, увеличенный текст, переход к записи и фокус."
+    ]
+  },
+  "priorOrderRelease": {
+    "commit": "9fdf06ecd0dba0e6e7e6d32210f2d98a33c943cd",
+    "workflow": "https://github.com/anton-gorokhovatsky/seledkin/actions/runs/38158827658",
+    "status": "published-and-public-render-verified",
+    "checks": "117 unit tests and 186 browser scenarios passed in CI; two browser scenarios skipped. Public desktop order anchor, keyboard focus, product contact links and catalog advice viewed in Chrome at 1512 × 806. Narrow screens, increased text and both watches verified locally in Chromium and WebKit; no physical phone or external message sending verified.",
+    "evidence": [
+      "/private/tmp/seledkin-order-choice-2026-10-11/public-order-desktop.png",
+      "/private/tmp/seledkin-order-choice-2026-10-11/public-catalog-advice-desktop.png",
+      "/private/tmp/seledkin-order-choice-2026-10-11/public-catalog-order-advice-desktop.png"
+    ]
+  },
+  "assortmentPhotographs": [
+    {
+      "category": "canned",
+      "source": "https://t.me/kapitanseledkin/687",
+      "publishedAt": "2026-09-03",
+      "image": "assets/journal-687.jpg",
+      "caption": "Уха в банках",
+      "treatment": "Существующая авторская фотография целиком, без кадрирования."
+    },
+    {
+      "category": "grocery",
+      "source": "https://www.facebook.com/photo/?fbid=6102000469850617&set=a.2062052130512158",
+      "publishedAt": "2023-01-20",
+      "image": "assets/assortment-sesame-oil-2023.jpg",
+      "sourceSize": [
+        1440,
+        1800
+      ],
+      "caption": "Корейское кунжутное масло",
+      "treatment": "Исходная фотография целиком. Исторические цена и размер бутылочки не перенесены в текущий каталог."
+    }
+  ],
+  "latestUserDecisions": [
+    {
+      "place": "Главная / ассортимент",
+      "decision": "Пока не показывать категорию «Кухонные принадлежности» с единственным пинцетом. Товар и категория сохранены в полном каталоге.",
+      "declinedImage": "Кадр ролика https://t.me/kapitanseledkin/642",
+      "preservedResearch": "/private/tmp/seledkin-enrichment-2026-10-11/rejected-home-tweezers"
+    },
+    {
+      "place": "Судовой журнал",
+      "decision": "Не выдавать идентификаторы сообщений телеграма за номера журнала. В видимых подписях остаются дата и первоисточник; постоянные URL не меняются."
+    }
+  ]
+}

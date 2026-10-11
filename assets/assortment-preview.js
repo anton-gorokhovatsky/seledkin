@@ -8,7 +8,10 @@ export function setupAssortmentPreview(root = document) {
   const category = link => link && new URL(link.href).hash.replace("#category-", "");
   const show = link => {
     const selected = desktop.matches ? category(link) : null;
-    const photo = photos.find(item => item.dataset.assortmentPhoto === selected) ?? photos[0];
+    // A general shop photograph remains honest when a category has no
+    // accepted product photograph of its own.
+    const photo = photos.find(item => item.dataset.assortmentPhoto === selected)
+      ?? (selected ? photos.find(item => item.dataset.assortmentPhoto === "shop") : photos[0]);
     photos.forEach(item => { item.hidden = item !== photo; });
     const img = photo.querySelector("img");
     if (img?.dataset.fullSrc) {

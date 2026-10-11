@@ -1,11 +1,12 @@
 import { readFileSync } from "node:fs";
 import { typographText } from "../assets/typography.js";
 import { catalog } from "../assets/catalog-data.js";
-import { catalogPrice, productNotes, orderLinks, productHref } from "../assets/catalog-model.js";
+import { catalogPrice, productNotes, productDescription, orderLinks, productHref, positionCount } from "../assets/catalog-model.js";
 import { recipeContent, recipes, recipeIngredients, resolveProduct, productCatalogHref, productRecipeLinks } from "./recipe-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const site = JSON.parse(read("content/site.json"));
+const olegSources = JSON.parse(read("content/oleg-sources.json"));
 export const store = site.store;
 const validHours = hours => hours && /^([01]\d|2[0-3]):[0-5]\d$/.test(hours.open)
   && /^([01]\d|2[0-3]):[0-5]\d$/.test(hours.close) && hours.open < hours.close;
@@ -59,7 +60,7 @@ export function renderPricePreview() {
                 <div class="catalog-product-head">
                   <h4><a href="${escape(productHref(product))}">${text(selection.label ?? product.name)}</a></h4><strong>${escape(catalogPrice(product.price))}</strong>
                 </div>
-                <p>${text(selection.description ?? product.description)}</p>${notes ? `
+                <p>${text(selection.description ?? productDescription(product))}</p>${notes ? `
                 <p>${escape(notes)}</p>` : ""}
               </article>`;
   }).join("\n");
@@ -221,7 +222,7 @@ ${prints}
 function journalBody(entry, inquiry) {
   const lines = entry.body.split("\n");
   const historical = recipes.some(recipe => recipe.id === entry.id)
-    ? lines.findIndex(line => /Заказы принимаются только.*WhatsApp/.test(line)) : -1;
+    ? lines.findIndex(line => /Заказы принимаются только.*WhatsApp|class="journal-historical-contacts"/.test(line)) : -1;
   if (historical < 0) return lines.map(line => `                  ${line}`).join("\n");
   // Approved recipe presentation omits the old ordering/contact tail. The
   // archived source stays intact in content and remains linked from the page.
@@ -261,13 +262,13 @@ export function renderJournal(list, view) {
             </article>`;
     }
     if (view !== "article") throw new Error(`Unknown journal view: ${view}`);
-    const source = `https://t.me/kapitanseledkin/${id}`;
+    const source = entry.source?.url ?? `https://t.me/kapitanseledkin/${id}`;
     const inquiry = `Здравствуйте! Подскажите, пожалуйста, есть ли в наличии:\n${entry.product}\nУвидел(а) в Судовом журнале: ${source}`;
     return `            <article class="ship-log-entry journal-story" data-journal-id="${id}" id="journal-entry-${id}" tabindex="-1">
               <header class="journal-story__header page-intro">
                 <p class="page-intro__eyebrow">Судовой журнал · Олег Гугунава</p>
                 <h1 class="page-intro__title">${title}</h1>
-                <p class="ship-log-entry__meta"><time datetime="${entry.date}">${date(entry)}</time> <span>Запись №&nbsp;${id}</span></p>
+                <p class="ship-log-entry__meta"><time datetime="${entry.date}">${date(entry)}</time> <span>${text(entry.source?.name ?? "Телеграм")}</span></p>
               </header>
               ${image(entry, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, true)}
               <div class="ship-log-entry__content">
@@ -276,7 +277,7 @@ ${journalBody(entry, inquiry)}
                 </div>
                 <div class="ship-log-entry__actions">
                   <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}"><span class="source-button__label">Спросить о наличии<span class="visually-hidden"> в Телеграме: ${text(entry.product)}</span></span></a>
-                  <a class="ship-log-entry__link" href="${source}">Читать запись в Телеграме</a>
+                  <a class="ship-log-entry__link" href="${escape(source)}">${entry.source ? `Оригинал в ${text(entry.source.name)}` : "Читать запись в Телеграме"}</a>
                 </div>
               </div>
             </article>`;
@@ -314,7 +315,6 @@ export function renderJournalAtlas(list) {
           <div class="journal-atlas__grid">
 ${recent.map((entry, index) => `            <article class="journal-index-entry atlas-record atlas-record--${index + 1}" id="journal-entry-${entry.id}" tabindex="-1">
               <a class="journal-index-entry__link" href="${entry.id}/" aria-labelledby="entry-title-${entry.id}" aria-describedby="entry-date-${entry.id}">
-                <div class="atlas-record__number" aria-hidden="true"><span>№</span>${entry.id}</div>
                 <figure>
                   ${image(entry, "../", sizes[index], false, index === 0)}
                   <figcaption>
@@ -336,8 +336,9 @@ ${renderJournal(earlier, "earlier")}
             </div>
           </section>` : ""}
           <aside class="journal-atlas__source" aria-label="Авторский канал">
-            <p>${text("Поставки, рецепты и жизнь лавки — от самого капитана. Полный архив — в авторском телеграм-канале.")}</p>
+            <p>${text("Поставки, рецепты и жизнь лавки — от самого капитана. Свежие записи — в телеграм-канале, ранние — на странице лавки в Facebook.")}</p>
             <a class="editorial-link" href="https://t.me/kapitanseledkin">Читать весь журнал в Телеграме${harpoon}</a>
+            <a class="editorial-link" href="https://www.facebook.com/kapitanseledkin">Ранние записи в Facebook${harpoon}</a>
           </aside>`;
 }
 
@@ -347,7 +348,7 @@ export function renderJournalPage(entry) {
   const index = entries.findIndex(item => item.id === entry.id);
   const harpoon = `<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg>`;
   const neighbors = [entries[index + 1], entries[index - 1]].filter(Boolean).map(item => {
-    const previous = item.id < entry.id;
+    const previous = entries.indexOf(item) > index;
     const label = previous ? `${harpoon}Предыдущая запись` : `Следующая запись${harpoon}`;
     return `<a href="../${item.id}/" rel="${previous ? "prev" : "next"}"><span class="journal-story__direction">${label}</span><span class="journal-story__neighbor-title">${item.title}</span></a>`;
   }).join("\n");
@@ -373,7 +374,7 @@ function currentProduct(selection, root, heading = "h3", includeRecipe = true) {
   const related = includeRecipe ? productRecipeLinks(category, product).find(recipe => recipe.kind === "recipe") : null;
   return `<article class="meal-product">
       <${heading}><a href="${escape(productCatalogHref(selection, root))}">${text(product.name)}</a></${heading}>
-      <p>${text(product.description ?? category.label)}</p>
+      <p>${text(productDescription(product) || category.label)}</p>
       <strong>${escape(catalogPrice(product.price))}</strong>
       ${related ? `<a class="editorial-link" href="${root}journal/${related.id}/">${text(related.title)}${harpoon}</a>` : ""}
     </article>`;
@@ -514,10 +515,31 @@ export function renderAssortmentMedia() {
     { category: "fillet", image: "gallery-small-1.jpg", alt: "Коробка филе трески судовой заморозки", caption: "Филе трески судовой заморозки" },
     { category: "steaks", ...entries.find(entry => entry.id === 693), caption: "Стейки лосося" },
     { category: "prepared-fish", ...entries.find(entry => entry.id === 695), caption: "Форель холодного копчения" },
-    { category: "other", ...entries.find(entry => entry.id === 687), alt: "Банки рыбной ухи нескольких видов на полке лавки", caption: "Уха в банках" },
+    { category: "canned", ...entries.find(entry => entry.id === 687), caption: "Уха в банках" },
+    // Full author photograph: https://www.facebook.com/photo/?fbid=6102000469850617&set=a.2062052130512158.
+    { category: "grocery", image: "assortment-sesame-oil-2023.jpg", alt: "Бутылочка корейского кунжутного масла на столе в лавке", caption: "Корейское кунжутное масло" },
+    { category: "shop", image: "delivery-basket.jpg", alt: "Рыба, икра, консервы и соусы лавки в плетёной корзине", caption: "Корзина с продуктами лавки" },
   ];
   return shots.map((shot, index) => `<figure class="assortment-overview__media" data-assortment-photo="${shot.category}"${index ? " hidden" : ""}>
     ${image(shot, "", "(max-width: 61.1875rem) calc(100vw - 36px), 520px", index > 0)}
     <figcaption>${text(shot.caption)}</figcaption>
   </figure>`).join("\n");
+}
+
+export function renderAssortmentDirectory() {
+  return catalog.filter(category => category.showOnHome !== false).map(category => `                <li>
+                  <a class="assortment-directory__link" href="catalog/#category-${category.slug}">
+                    <span class="assortment-directory__label">${text(category.label)}</span>
+                    <span class="assortment-directory__meta">${positionCount(category.items.length)}</span>
+                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon" /></svg>
+                  </a>
+                </li>`).join("\n");
+}
+
+export function renderAudioLibrary() {
+  return `<div class="founder-source__library" aria-labelledby="oleg-audio-title">
+            <h3 id="oleg-audio-title">Олег о рыбе и морепродуктах</h3>
+            <p class="source-caption">Аудиозаписи на SoundCloud</p>
+            <ul>${olegSources.audio.map(audio => `<li><a class="founder-source__source-link" href="${escape(audio.url)}">${text(audio.label)}</a></li>`).join("\n              ")}</ul>
+          </div>`;
 }

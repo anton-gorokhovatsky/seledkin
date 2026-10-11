@@ -1264,13 +1264,33 @@ a.source-brand {
   display: flex;
   align-items: center;
   width: fit-content;
+  max-width: 100%;
   min-height: 2.75rem;
+  overflow-wrap: anywhere;
   font-weight: 600;
 }
 
 .founder-source__channels {
   grid-column: 1 / -1;
   color: var(--muted);
+}
+
+.founder-source__library {
+  grid-column: 1 / -1;
+}
+
+.founder-source__library h3 {
+  margin: 0 0 .5rem;
+  font-size: var(--text-interface);
+}
+
+.founder-source__library ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: .25rem var(--about-column-gap);
+  padding: 0;
+  margin: .75rem 0 0;
+  list-style: none;
 }
 
 .about-overview__reasons-header {
@@ -1596,6 +1616,17 @@ a.source-brand {
   color: var(--muted);
   font: 400 var(--text-meta) / 1.5 var(--sans);
 }
+@media (width > 61.1875rem) {
+  .assortment-overview__photos {
+    position: sticky;
+    top: var(--masthead-top-inset);
+    max-height: calc(100svh - var(--masthead-top-inset) * 2);
+  }
+  .assortment-directory__list > li:first-child .assortment-directory__link {
+    min-height: 44px;
+    padding-block-start: 0;
+  }
+}
 .catalog-product-advice {
   display: flex;
   flex-wrap: wrap;
@@ -1616,9 +1647,11 @@ a.source-brand {
 }
 .catalog-product-advice a {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   min-height: 44px;
   max-width: 100%;
+  overflow-wrap: anywhere;
   color: var(--text-link);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;

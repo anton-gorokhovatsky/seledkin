@@ -1,0 +1,157 @@
+{
+  "reviewedAt": "2026-10-11",
+  "textSources": [
+    {
+      "id": "red-roe-choice",
+      "date": "2025-12-17",
+      "site": "Facebook",
+      "label": "Как выбирать красную икру",
+      "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid09Mm9oePJxeCt2iREynvkskEz5yQqYkyQsuF6qQwu96k5sJKibRfCdXHKwRxiLLzGl&id=61580098542037",
+      "sourceFile": "facebook-caviar-2025.txt"
+    },
+    {
+      "id": "north-fish",
+      "date": "2025-09-23",
+      "site": "Facebook",
+      "label": "Омуль, муксун и сиг к ужину",
+      "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid02UaMmocftdY7A7uXHE2FVFz6f2xbfxwRCPe2VAKo6YFfCXd1GvsemupQpwgSU1563l&id=61580098542037",
+      "sourceFile": "facebook-north-2025.txt"
+    },
+    {
+      "id": "shrimp-company",
+      "date": "2021-11-30",
+      "site": "Facebook",
+      "label": "Северные креветки для большой компании",
+      "url": "https://www.facebook.com/kapitanseledkin/posts/pfbid02BH9wMugAdLXXwQpm4ouVJ6VGAqMf3xrdeEHrwjZKmZQ4ooWwoRCooEtoxYHn9poSl",
+      "sourceFile": "facebook-shrimp-2021-excerpt.txt",
+      "excerptOnly": true
+    },
+    {
+      "id": "perch-broth",
+      "date": "2023-07-15",
+      "site": "Телеграм",
+      "label": "Морской окунь и бульон",
+      "url": "https://t.me/kapitanseledkin/262",
+      "sourceFile": "telegram-262-excerpt.txt",
+      "excerptOnly": true
+    }
+  ],
+  "audio": [
+    {
+      "id": "smelt",
+      "label": "Корюшка",
+      "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-koryushka",
+      "uploaded": "2021-01-19",
+      "site": "SoundCloud",
+      "products": [
+        "frozen-fish-010",
+        "frozen-fish-015",
+        "other-001",
+        "other-003"
+      ],
+      "reviewed": "title-and-public-metadata"
+    },
+    {
+      "id": "canned",
+      "label": "Рыбные консервы",
+      "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-rybnye-konservy",
+      "uploaded": "2021-01-19",
+      "site": "SoundCloud",
+      "products": [
+        "other-008",
+        "other-009",
+        "other-010",
+        "other-011",
+        "seafood-004",
+        "seafood-005",
+        "seafood-006"
+      ],
+      "reviewed": "title-and-public-metadata"
+    },
+    {
+      "id": "exotic",
+      "label": "Экзотические морепродукты",
+      "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-ekzoticheskie-moreprodukty",
+      "uploaded": "2021-01-19",
+      "site": "SoundCloud",
+      "products": [],
+      "reviewed": "title-and-public-metadata"
+    },
+    {
+      "id": "kamchatka",
+      "label": "Камчатские деликатесы",
+      "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-kamchatskie-delikatesy",
+      "uploaded": "2021-01-19",
+      "site": "SoundCloud",
+      "products": [],
+      "reviewed": "title-and-public-metadata"
+    },
+    {
+      "id": "cod-liver",
+      "label": "Печень трески, икра сельди",
+      "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-pechen-treski-ikra-seldi",
+      "uploaded": "2021-01-19",
+      "site": "SoundCloud",
+      "products": [
+        "other-005",
+        "other-006",
+        "other-007"
+      ],
+      "reviewed": "title-and-public-metadata"
+    },
+    {
+      "id": "tuna",
+      "label": "Тунец",
+      "url": "https://soundcloud.com/kapitanseledkin/xxvj6ccvq2pq",
+      "uploaded": "2021-01-19",
+      "site": "SoundCloud",
+      "products": [
+        "fillet-006"
+      ],
+      "reviewed": "title-and-public-metadata"
+    },
+    {
+      "id": "icefish",
+      "label": "Ледяная рыба",
+      "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-ledyanaya-ryba",
+      "uploaded": "2021-01-19",
+      "site": "SoundCloud",
+      "products": [
+        "frozen-fish-029"
+      ],
+      "reviewed": "title-and-public-metadata"
+    },
+    {
+      "id": "roe",
+      "label": "Красная и чёрная икра",
+      "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-krasnaya-i-chyornaya-ikra",
+      "uploaded": "2021-01-15",
+      "site": "SoundCloud",
+      "products": [
+        "caviar-001",
+        "caviar-002",
+        "caviar-003",
+        "caviar-004",
+        "caviar-005",
+        "trout-roe",
+        "caviar-007",
+        "caviar-008",
+        "caviar-009"
+      ],
+      "reviewed": "title-and-public-metadata"
+    }
+  ],
+  "video": [
+    {
+      "id": "sprats",
+      "label": "Как выбрать шпроты",
+      "url": "https://www.youtube.com/watch?v=AjddofqCbTE",
+      "date": "2020-09-11",
+      "site": "YouTube",
+      "products": [
+        "other-010"
+      ],
+      "reviewed": "description-and-transcript"
+    }
+  ]
+}

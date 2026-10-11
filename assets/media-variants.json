@@ -1458,5 +1458,77 @@
     "bytes": 462,
     "width": 32,
     "height": 37
+  },
+  {
+    "file": "journal-facebook-2018-12-15-nerka-480.webp",
+    "source": "journal-facebook-2018-12-15-nerka.jpg",
+    "sourceSha256": "d876003749cd5f1de5bb532467d27db0c69575b1019d9fab993d3766544ced87",
+    "sha256": "ef6eaacbd86228b30059b2636985da723758bf2e0e46a2faee27075c744b296e",
+    "bytes": 49012,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "journal-facebook-2018-12-15-nerka-960.webp",
+    "source": "journal-facebook-2018-12-15-nerka.jpg",
+    "sourceSha256": "d876003749cd5f1de5bb532467d27db0c69575b1019d9fab993d3766544ced87",
+    "sha256": "b1ad45d75edbcf43241e820ca2d13892e718bd5f3cf9caa4a24e7938de0fc3e2",
+    "bytes": 175694,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "journal-facebook-2018-12-15-nerka-32.webp",
+    "source": "journal-facebook-2018-12-15-nerka.jpg",
+    "sourceSha256": "d876003749cd5f1de5bb532467d27db0c69575b1019d9fab993d3766544ced87",
+    "sha256": "6c9c87ea36b29c85a3f40c5a7adcf41cc909fa28c6624d9c0beb11f9c87c735a",
+    "bytes": 364,
+    "width": 32,
+    "height": 32
+  },
+  {
+    "file": "journal-facebook-2018-02-16-herring-480.webp",
+    "source": "journal-facebook-2018-02-16-herring.jpg",
+    "sourceSha256": "e4d68f424530fb712b993eeb044e6b6557eb0b4db60c8ebd0ac70efcd29dd40f",
+    "sha256": "92b3b1f7283e048d4c1f52f33add87f2ee47dab94c936f4a698fd0441a83e5e9",
+    "bytes": 29258,
+    "width": 480,
+    "height": 360
+  },
+  {
+    "file": "journal-facebook-2018-02-16-herring-960.webp",
+    "source": "journal-facebook-2018-02-16-herring.jpg",
+    "sourceSha256": "e4d68f424530fb712b993eeb044e6b6557eb0b4db60c8ebd0ac70efcd29dd40f",
+    "sha256": "de0d20e2366f2e82d56248e507f2c9ddfef8a011782c1e28cc68db5fdaf09269",
+    "bytes": 89898,
+    "width": 960,
+    "height": 720
+  },
+  {
+    "file": "journal-facebook-2018-02-16-herring-32.webp",
+    "source": "journal-facebook-2018-02-16-herring.jpg",
+    "sourceSha256": "e4d68f424530fb712b993eeb044e6b6557eb0b4db60c8ebd0ac70efcd29dd40f",
+    "sha256": "67dc17681efc8e75eec3456649ac10c592f1152e481db8afd624d0fd69ed6809",
+    "bytes": 372,
+    "width": 32,
+    "height": 24
+  },
+  {
+    "file": "assortment-sesame-oil-2023-480.webp",
+    "source": "assortment-sesame-oil-2023.jpg",
+    "sourceSha256": "597e930712d0abaeec4f8140c334b32679bd7ce32201fef7d2c0c86e9a3bac6d",
+    "sha256": "e8e5daed30e7638bb1f9e9ac2095a1673b59ced6f69759fbecbe3a3554980619",
+    "bytes": 47410,
+    "width": 480,
+    "height": 600
+  },
+  {
+    "file": "assortment-sesame-oil-2023-960.webp",
+    "source": "assortment-sesame-oil-2023.jpg",
+    "sourceSha256": "597e930712d0abaeec4f8140c334b32679bd7ce32201fef7d2c0c86e9a3bac6d",
+    "sha256": "009115acb0b9a245fabeda4acedffc652acb73081140515ccfa3fd513790b258",
+    "bytes": 147084,
+    "width": 960,
+    "height": 1200
   }
 ]

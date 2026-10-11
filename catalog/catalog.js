@@ -49,7 +49,9 @@ function reportSearch(trigger) {
 function readUrl() {
   const url = new URL(location.href);
   const category = url.searchParams.get("category") ?? url.hash.replace(/^#category-/, "");
-  activeCategory = categories.some(({ slug }) => slug === category) ? category : "all";
+  // An old shared URL still opens its original 27 products, now under
+  // meaningful headings. It is no longer a category in the new directory.
+  activeCategory = category === "other" || categories.some(({ slug }) => slug === category) ? category : "all";
   query = url.searchParams.get("q")?.trim() ?? "";
   activeProduct = url.searchParams.get("product") ?? "";
   const categoryOfProduct = categories.find(category => category.products.some(product => product.dataset.productId === activeProduct));
@@ -81,7 +83,9 @@ function render(animate = false) {
     for (const product of category.products) {
       const matches = activeProduct ? product.dataset.productId === activeProduct : matchesSearch(product.dataset.searchText, query);
       if (matches) totalProducts += 1;
-      product.hidden = (activeCategory !== "all" && activeCategory !== category.slug) || !matches;
+      const inCategory = activeCategory === "all" || activeCategory === category.slug
+        || (activeCategory === "other" && product.dataset.previousCategory === "other");
+      product.hidden = !inCategory || !matches;
       if (!product.hidden) categoryCount += 1;
     }
     category.section.hidden = categoryCount === 0;
@@ -95,6 +99,7 @@ function render(animate = false) {
   }
   journal.hidden = journalCount === 0;
   results = { products: visibleCount, journal: journalCount, totalProducts };
+  for (const legacyControl of document.querySelectorAll('[data-legacy-category]')) legacyControl.hidden = activeCategory !== "other";
   select.value = activeCategory;
   selectedLabel.textContent = select.selectedOptions[0].textContent;
   const categoryRestricted = activeCategory !== "all";

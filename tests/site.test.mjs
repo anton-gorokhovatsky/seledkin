@@ -156,7 +156,7 @@ test("the site is plain HTML, CSS and JavaScript", () => {
 test("one drawn harpoon marks every directional transition", () => {
   assert.match(home, /<symbol id="icon-harpoon" viewBox="0 0 32 18">/);
   assert.match(home, /M23 9H8\.5C4\.6 9 2\.5 10\.8 2\.5 13\.2/);
-  assert.equal((home.match(/href="#icon-harpoon"/g) ?? []).length, 12);
+  assert.equal((home.match(/href="#icon-harpoon"/g) ?? []).length, catalog.filter(category => category.showOnHome !== false).length + 5);
   assert.doesNotMatch(home, /M2 8h20M16 2l6 6-6 6/);
   assert.match(
     styles,
@@ -169,31 +169,35 @@ test("one drawn harpoon marks every directional transition", () => {
   assert.doesNotMatch(styles, /var\(--link\)/);
 });
 
-test("home assortment links directly to every catalog section", () => {
+test("home assortment links to its selected categories while the full catalog retains all products", () => {
   const section =
     home.match(/<section\s+class="assortment-overview[\s\S]*?<\/section>/)?.[0] ?? "";
 
   assert.match(section, /id="assortment"/);
   assert.match(section, /id="assortment-title">Что продаём<\/h2>/);
-  assert.match(section, /7 разделов · 116 позиций/);
+  assert.match(section, /116 позиций в полном каталоге/);
   assert.doesNotMatch(section, />Весь каталог<\/span>/);
 
   for (const [slug, label, count] of [
     ["caviar", "Икра", 9],
-    ["seafood", "Морепродукты", 20],
+    ["seafood", "Морепродукты", 18],
     ["frozen-fish", "Свежемороженая рыба", 35],
-    ["fillet", "Филе", 7],
+    ["fillet", "Филе и фарш", 8],
     ["steaks", "Рыбные стейки", 5],
     ["prepared-fish", "Слабосоленая и копченая рыба", 13],
-    ["other", "Новинки и прочее", 27],
+    ["dried-fish", "Вяленая рыба", 4],
+    ["canned", "Консервы и бульон", 12],
+    ["grocery", "Бакалея", 11],
   ]) {
     assert.match(section, new RegExp(`href="catalog\\/#category-${slug}"`));
     assert.match(section, new RegExp(`>${label}<\\/span>`));
-    assert.match(section, new RegExp(`>${count} позиций<\\/span>`));
+    assert.match(section, new RegExp(`>${count} ${count === 1 ? "позиция" : count < 5 ? "позиции" : "позиций"}<\\/span>`));
   }
 
-  assert.equal((section.match(/catalog\/#category-/g) ?? []).length, 7);
-  assert.equal((section.match(/class="assortment-directory__link"/g) ?? []).length, 7);
+  assert.equal((section.match(/catalog\/#category-/g) ?? []).length, 9);
+  assert.equal((section.match(/class="assortment-directory__link"/g) ?? []).length, 9);
+  assert.doesNotMatch(section, /category-accessories|assortment-tweezers/);
+  assert.ok(catalogPage.includes('id="product-other-027"'));
   assert.doesNotMatch(section, /WhatsApp|Телеграм|opening-gallery|caviar-title/);
   assert.match(
     styles,
@@ -544,6 +548,7 @@ test("home prioritizes shopping before its editorial story and keeps local image
     "journal-681.jpg",
     "journal-679.jpg",
     "journal-687.jpg",
+    "assortment-sesame-oil-2023.jpg",
     "fish-pattern.svg",
     "flounder.jpg",
     "gallery-small-1.jpg",
@@ -925,7 +930,7 @@ test("menu and footer channels use one precise local SVG set with Telegram first
 });
 
 test("the complete catalog has stable categories and 116 priced items", () => {
-  assert.equal(catalog.length, 7);
+  assert.equal(catalog.length, 10);
   assert.equal(
     catalog.reduce((total, category) => total + category.items.length, 0),
     116,
@@ -934,12 +939,15 @@ test("the complete catalog has stable categories and 116 priced items", () => {
     catalog.map((category) => [category.slug, category.items.length]),
     [
       ["caviar", 9],
-      ["seafood", 20],
+      ["seafood", 18],
       ["frozen-fish", 35],
-      ["fillet", 7],
+      ["fillet", 8],
       ["steaks", 5],
       ["prepared-fish", 13],
-      ["other", 27],
+      ["dried-fish", 4],
+      ["canned", 12],
+      ["grocery", 11],
+      ["accessories", 1],
     ],
   );
 

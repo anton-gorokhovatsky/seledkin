@@ -41,12 +41,6 @@
 .atlas-record--4 { grid-column: 7 / 12; margin-top: 7rem; }
 .atlas-record--5 { grid-column: 3 / 11; }
 .journal-atlas .atlas-record > a { display: block; text-decoration: none; }
-.atlas-record__number {
-  margin-bottom: 1.5rem;
-  color: var(--brass);
-  font: italic 400 var(--atlas-folio-size) / 1 var(--serif);
-}
-.atlas-record__number > span { padding-right: .6rem; font: 400 var(--text-meta) / 1 var(--sans); }
 .atlas-record figure { margin: 0; }
 .atlas-record figure img { display: block; width: 100%; height: auto; }
 .atlas-record figcaption { margin-top: 1rem; }

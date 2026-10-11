@@ -22,9 +22,9 @@ const plain = text => text.replace(/<[^>]*>/g, "")
 
 test("every original editorial paragraph survives on its published page", () => {
   const paragraphs = [...(home + about + archive + journal).matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(match => plain(match[1]));
-  // Site UI labels (the replaced preview eyebrow and four item numbers) are not
-  // Oleg's paragraphs. Prices are checked against the current catalog below.
-  assert.equal(originals.length, 38);
+  // The archive introduction and generated dates/platforms/record IDs are UI
+  // metadata, not Oleg's paragraphs. Current prices are checked below.
+  assert.equal(originals.length, 32);
   for (const paragraph of originals) assert.ok(paragraphs.includes(plain(paragraph)), `Lost author paragraph: ${paragraph.slice(0, 80)}`);
   assert.match(home, /href="about\/"/);
   assert.match(home, /href="journal\/"/);
@@ -47,17 +47,20 @@ test("all homepage price examples agree with the current catalog", () => {
 });
 
 test("all journal entries retain their source and a draft about that exact product", () => {
+  assert.doesNotMatch(archive, /atlas-record__number/);
+  assert.doesNotMatch(journal, /Запись №/);
   const entries = [...journal.matchAll(/<article\s+class="ship-log-entry[\s\S]*?<\/article>/g)].map(match => match[0]);
   assert.equal(entries.length, ids.length);
   entries.forEach((entry, index) => {
-    const { id, product } = ids[index];
+    const { id, product, source } = ids[index];
+    const original = source?.url ?? `https://t.me/kapitanseledkin/${id}`;
     const inquiry = entry.match(/href="(https:\/\/t\.me\/\+79166751452\?text=[^"]+)"/)[1];
     const draft = new URL(inquiry).searchParams.get("text");
     assert.ok(draft.includes(product));
-    assert.ok(draft.includes(`https://t.me/kapitanseledkin/${id}`));
+    assert.ok(draft.includes(original));
     assert.match(draft, /есть ли в наличии/);
     assert.doesNotMatch(draft, /[₽]|руб/);
-    assert.ok(entry.includes(`href="https://t.me/kapitanseledkin/${id}"`));
+    assert.ok(entry.includes(`href="${original.replaceAll("&", "&amp;")}"`));
   });
 });
 

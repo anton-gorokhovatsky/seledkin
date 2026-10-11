@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
 import { catalog } from "../assets/catalog-data.js";
 import { positionCount } from "../assets/catalog-model.js";
 import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
@@ -23,9 +23,11 @@ for (const [path, page, root] of pages) {
     "price-preview": renderPricePreview(),
     "about-preview": renderAboutPreview(),
     "recipe-home": renderRecipeHome(), "assortment-media": renderAssortmentMedia(),
+    "assortment-directory": renderAssortmentDirectory(),
     "mobile-hero": renderMobileHero(),
   });
   if (page === "journal") regions["journal-archive"] = renderJournalAtlas(entries);
+  if (page === "about") regions["audio-library"] = renderAudioLibrary();
   if (page === "catalog") Object.assign(regions, {
     "journal-search": renderJournal(entries, "search"), "delivery-summary": renderDelivery("catalog"),
     "order-actions": renderCatalogOrderActions(),
@@ -38,7 +40,7 @@ for (const [path, page, root] of pages) {
       ? `${start}${content}${end}` : `${start}\n${content}\n${end}`);
   }
   if (page === "home") {
-    result = result.replace(/7[\s\u00a0]+разделов · [\d\s\u00a0]+позиций/, `7 разделов · ${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))}`);
+    result = result.replace(/(?:\d+[\s\u00a0]+разделов · )?[\d\s\u00a0]+позиций(?: в[\s\u00a0]+полном каталоге)?/, `${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))} в полном каталоге`);
     for (const category of catalog) {
       const pattern = new RegExp(`(href="catalog/#category-${category.slug}"[\\s\\S]*?class="assortment-directory__meta">)[^<]+`);
       result = result.replace(pattern, `$1${positionCount(category.items.length)}`);

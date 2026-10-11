@@ -111,7 +111,7 @@ test("ingredient filters keep their position and the selected editorial composit
     await expect(page.locator('[data-recipe-feature="360"]')).toBeVisible();
     await expect(page.locator('[data-recipe-feature="377"]')).toBeHidden();
     await expect(page.locator('[data-recipe-material][data-featured]:visible')).toHaveCount(0);
-    await expect(page.locator("[data-recipe-filter-status]")).toHaveText("11 материалов");
+    await expect(page.locator("[data-recipe-filter-status]")).toHaveText("13 материалов");
     if (width === 1440) await page.locator("#main").screenshot({ path: testInfo.outputPath("recipes-fish-wide.png") });
     await page.getByRole("button", { name: /^Осьминог/ }).press("Enter");
     await expect(page.locator('[data-recipe-feature="377"]')).toBeVisible();
@@ -122,7 +122,7 @@ test("ingredient filters keep their position and the selected editorial composit
     await expect(lead).toBeVisible();
     await page.getByRole("button", { name: /^Все материалы/ }).press("Enter");
     await expect(page.locator("[data-recipe-feature]:visible")).toHaveCount(3);
-    await expect(page.locator(".recipe-record:visible")).toHaveCount(17);
+    await expect(page.locator(".recipe-record:visible")).toHaveCount(19);
     expect(await chooser.evaluate(node => node.getBoundingClientRect().top + scrollY)).toBeCloseTo(chooserTop, 0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   }

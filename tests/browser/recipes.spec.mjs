@@ -83,7 +83,7 @@ test("a buyer can cook the right shrimp variant and return to its current price 
   await expect(page.locator(".catalog-product:visible strong")).toHaveText("2 990 ₽/кг");
 });
 
-test("desktop category photographs respond to pointer and keyboard while a touch opens the catalog directly", async ({ page, browser, baseURL }) => {
+test("desktop category photographs respond to pointer and keyboard while a touch opens the catalog directly", async ({ page, browser, baseURL }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("?audit=recipes#assortment");
   // Keep the pointer on the intended link after the web fonts settle.
@@ -102,6 +102,17 @@ test("desktop category photographs respond to pointer and keyboard while a touch
   expect(frame.height).toBeCloseTo(original.height, 0);
   await expect(photos.locator('[data-assortment-photo="fillet"] img')).toHaveJSProperty("complete", true);
   expect(await photos.locator('[data-assortment-photo="fillet"] img').evaluate(img => img.naturalWidth)).toBeGreaterThan(32);
+  await expect(page.locator('.assortment-directory__link[href$="category-accessories"]')).toHaveCount(0);
+  for (const [category, source] of [["canned", "journal-687"], ["grocery", "assortment-sesame-oil-2023"]]) {
+    await page.locator(`.assortment-directory__link[href$="category-${category}"]`).focus();
+    const selected = photos.locator(`[data-assortment-photo="${category}"]`);
+    await expect(selected).toBeVisible();
+    await expect(selected.locator("img")).toHaveJSProperty("complete", true);
+    expect(await selected.locator("img").evaluate(img => img.currentSrc)).toContain(source);
+    expect(await selected.locator("img").evaluate(img => img.naturalWidth)).toBeGreaterThan(32);
+    await expect(selected.locator("img")).toHaveCSS("object-fit", "contain");
+    await page.screenshot({ path: testInfo.outputPath(`assortment-${category}.png`) });
+  }
   await page.locator('.assortment-directory__link[href$="category-fillet"]').press("Enter");
   await expect(page).toHaveURL(/catalog\/#category-fillet$/);
   const touch = await browser.newContext({ hasTouch: true, viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
@@ -110,14 +121,14 @@ test("desktop category photographs respond to pointer and keyboard while a touch
   await phone.goto(`${baseURL}?audit=recipes#assortment`);
   await phone.locator('.assortment-directory__link[href$="category-seafood"]').tap();
   await expect(phone).toHaveURL(/catalog\/#category-seafood$/);
-  await expect(phone.locator("[data-catalog-count]")).toHaveText("20 позиций");
+  await expect(phone.locator("[data-catalog-count]")).toHaveText("18 позиций");
   await touch.close();
 });
 
 test("ingredients retain the editorial spreads, browser history and an exact catalog product @recipes", async ({ page }) => {
   await page.goto("recipes/?audit=ingredients");
   await expect(page.locator("[data-recipe-opening]")).toBeVisible();
-  await expect(page.locator(".recipe-record:visible")).toHaveCount(17);
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(19);
   const mussels = page.getByRole("button", { name: /^Мидии/ });
   await mussels.press("Enter");
   await expect(mussels).toBeFocused();
@@ -150,7 +161,7 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
     await page.goto(`${baseURL}recipes/?audit=recipes`);
     await expect(page.locator(".recipe-editorial-opening article")).toHaveCount(3);
     await expect(page.locator('.recipe-record[data-kind="recipe"]:visible')).toHaveCount(13);
-    await expect(page.locator('.recipe-record[data-kind="advice"]:visible')).toHaveCount(4);
+    await expect(page.locator('.recipe-record[data-kind="advice"]:visible')).toHaveCount(6);
     await expect(page.locator("#meals .meal-collection")).toHaveCount(3);
     await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
     expect(await page.evaluate(async () => (await axe.run({ runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] } })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })))).toEqual([]);

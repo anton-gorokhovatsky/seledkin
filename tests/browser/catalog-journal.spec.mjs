@@ -96,7 +96,7 @@ test("catalog separates dated journal matches from current price rows @catalog",
   await expect(page.locator("[data-catalog-journal]")).toBeHidden();
 });
 
-test("the photoatlas leads to a compact older archive and complete, accessible stories", { tag: "@journal" }, async ({ page }) => {
+test("the photoatlas leads to a compact older archive and complete, accessible stories", { tag: "@journal" }, async ({ page }, testInfo) => {
   await page.goto("journal/");
   await expect(page.locator(".journal-index-entry")).toHaveCount(journal.length);
   await expect(page.locator(".ship-log-entry__body")).toHaveCount(0);
@@ -104,6 +104,7 @@ test("the photoatlas leads to a compact older archive and complete, accessible s
   // The chosen five-photo entrance has a different role from the older index.
   // Keep all records reachable, with the remaining list easy to scan.
   await expect(page.locator(".atlas-record")).toHaveCount(5);
+  await expect(page.locator(".atlas-record__number")).toHaveCount(0);
   const rowHeights = await page.locator(".journal-atlas__earlier .journal-index-entry").evaluateAll(rows => rows.map(row => row.getBoundingClientRect().height));
   expect(Math.max(...rowHeights)).toBeLessThan(300);
   expect(rowHeights.reduce((sum, height) => sum + height, 0) / rowHeights.length).toBeLessThan(220);
@@ -119,6 +120,9 @@ test("the photoatlas leads to a compact older archive and complete, accessible s
       }).map(el => ({ tag: el.tagName, cls: el.className, text: el.textContent.slice(0, 90) })),
     }));
     expect(overflow.excess, JSON.stringify(overflow.elements)).toBeLessThanOrEqual(1);
+    if (width === 1440 || width === 390) {
+      await page.screenshot({ path: testInfo.outputPath(`journal-${width}.png`) });
+    }
     for (const photo of await page.locator(".atlas-record img").all()) {
       await photo.scrollIntoViewIfNeeded();
       const frame = await photo.evaluate(async image => {
@@ -148,6 +152,7 @@ test("the photoatlas leads to a compact older archive and complete, accessible s
     await expect(inquiry).toBeFocused();
     await expect(inquiry).toBeInViewport();
     await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator(".ship-log-entry__meta")).not.toContainText("Запись №");
   }
 });
 

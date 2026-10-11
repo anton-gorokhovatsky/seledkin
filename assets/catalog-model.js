@@ -61,7 +61,7 @@ const searchForms = new Map([
 // In particular, smoked fish must not match "слабосолёная" just because of
 // the shared "Слабосоленая и копченая рыба" heading.
 export function productSearchText(category, product) {
-  const categoryTerms = category.slug === "prepared-fish" ? "рыба" : category.label;
+  const categoryTerms = product.categorySearchTerms ?? category.searchTerms ?? (category.slug === "prepared-fish" ? "рыба" : category.label);
   return [categoryTerms, product.name, product.description].filter(Boolean).join(" ")
     .replace(/(?<!\p{L})в\/м(?!\p{L})/gu, "в/м варено мороженая")
     .replace(/(?<!\p{L})б\/г(?!\p{L})/gu, "б/г без головы")
@@ -96,12 +96,20 @@ export function catalogPrice(value) {
     (_, fraction) => ` за ${Number(fraction.padEnd(3, "0"))} г`));
 }
 
+export function productDescription(product) {
+  return (product.description ?? "")
+    .replace(/(?<!\p{L})пбг(?!\p{L})/giu, "потрошёная рыба без головы")
+    .replace(/(?<!\p{L})в\/м(?!\p{L})/giu, "варёно-мороженый продукт")
+    .replace(/(?<!\p{L})б\/г(?!\p{L})/giu, "без головы")
+    .replace(/^./u, letter => letter.toLocaleUpperCase("ru-RU"));
+}
+
 export function productNotes(product) {
   return [
     [/(?<!\p{L})в\/м(?!\p{L})/iu, "В/м — варёно-мороженый продукт"],
     [/(?<!\p{L})б\/г(?!\p{L})/iu, "Б/г — без головы"],
     [/(?<!\p{L})пбг(?!\p{L})/iu, "ПБГ — потрошёная рыба без головы"],
-  ].filter(([pattern]) => pattern.test(`${product.name} ${product.description ?? ""}`))
+  ].filter(([pattern]) => pattern.test(product.name))
     .map(([, label]) => typographText(label)).join(". ");
 }
 
@@ -119,6 +127,7 @@ export function restoreOrderKeys(saved, catalog) {
   for (const category of catalog) for (const product of category.items) {
     current.add(product.id);
     legacy.set(legacyProductKey(category, product), product.id);
+    if (product.previousCategory) legacy.set(legacyProductKey({ slug: product.previousCategory }, product), product.id);
   }
   return Array.isArray(saved) ? [...new Set(saved.map(key => current.has(key) ? key : legacy.get(key)).filter(Boolean))] : [];
 }

@@ -371,11 +371,11 @@ for (const required of ["video.pause()", "video.currentTime = 0", "IntersectionO
 if (!journalEntries.length || (journalPage.match(/class="journal-index-entry(?:\s|")/g) ?? []).length !== journalEntries.length) {
   fail("journal/index.html: «Судовой журнал» не совпадает с отобранными записями");
 }
-for (const { id } of journalEntries) {
+for (const { id, source } of journalEntries) {
   const article = readFileSync(join(root, `journal/${id}/index.html`), "utf8");
   for (const required of [
     `assets/journal-${id}.jpg`,
-    `https://t.me/kapitanseledkin/${id}`,
+    (source?.url ?? `https://t.me/kapitanseledkin/${id}`).replaceAll("&", "&amp;"),
   ]) {
     if (!article.includes(required)) {
       fail(`journal/${id}/index.html: в «Судовом журнале» нет ${required}`);
