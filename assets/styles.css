@@ -1899,7 +1899,8 @@ a.source-brand {
 
 .delivery-waybill h2 {
   margin: 0;
-  font-size: clamp(3.1rem, 2rem + 4.2cqi, 6.5rem);
+  /* Enlarged type must still fit unbreakable phrases such as «в офис». */
+  font-size: clamp(min(3.1rem, 27cqi), 2rem + 4.2cqi, 6.5rem);
   line-height: 1.02;
   overflow-wrap: normal;
   hyphens: manual;

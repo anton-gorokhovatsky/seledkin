@@ -1,7 +1,41 @@
 import { test, expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 test.beforeEach(async ({ context }) => {
   await context.route("https://mc.yandex.ru/**", route => route.abort());
+});
+
+test("delivery stays inside 320px with enlarged text and a wider fallback serif @typography", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.route("**/qa-reflow-serif.ttf", async route => route.fulfill({
+    contentType: "font/ttf",
+    body: await readFile(new URL("../fixtures/fonts/DejaVuSerif.ttf", import.meta.url)),
+  }));
+  await page.goto("?audit=delivery-fallback#delivery");
+  // Linux's wider serif reproduced a 42px overflow that the Mac font hid.
+  // The test fixture does not change the site's typography or shipped assets.
+  await page.addStyleTag({ content: `
+    @font-face { font-family: "QA Reflow Serif"; src: url("/qa-reflow-serif.ttf"); }
+    html { font-size: 200% !important; }
+    .delivery-waybill h2 { font-family: "QA Reflow Serif", serif; }
+  ` });
+  await page.evaluate(() => document.fonts.ready);
+  const heading = page.locator(".delivery-waybill h2");
+  const lines = await heading.evaluate(node => {
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    return [...range.getClientRects()].map(line => ({ left: line.left, right: line.right }));
+  });
+  for (const line of lines) {
+    expect(line.left).toBeGreaterThanOrEqual(-1);
+    // Italic ink may extend into the inset, but must remain on screen.
+    expect(line.right).toBeLessThanOrEqual(320);
+  }
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  const photo = page.locator("#delivery img");
+  await photo.scrollIntoViewIfNeeded();
+  await expect.poll(() => photo.evaluate(image => image.decode().then(() => image.naturalWidth > 0, () => false))).toBe(true);
+  await page.locator("#delivery").screenshot({ path: testInfo.outputPath("delivery-320-enlarged-fallback.png") });
 });
 
 test("the empty order and footer remain grouped at intermediate width and enlarged text @catalog", async ({ page }, testInfo) => {
