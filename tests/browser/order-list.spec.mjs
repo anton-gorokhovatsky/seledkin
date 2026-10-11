@@ -125,9 +125,15 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
 
 test("same-name fish retain their origin in the list, accessible controls and draft @catalog", async ({ page }) => {
   await page.goto("catalog/?q=горбуша&audit=order-origins");
+  await page.evaluate(() => document.fonts.ready);
   const kamchatka = page.getByRole("button", { name: /^В список заказа: Горбуша, Камчатка/ });
   const sakhalin = page.getByRole("button", { name: /^В список заказа: Горбуша, Сахалин/ });
   await kamchatka.press("Enter");
+  await expect(page.getByRole("button", { name: /^Открыть список заказа: Горбуша, Камчатка/ })).toHaveAttribute("data-selected", "true");
+  // Linux WebKit can finish its focus scroll between mouse down and up.
+  // Establish focus first, then keep the actual pointer activation and result.
+  await sakhalin.focus();
+  await expect(sakhalin).toBeFocused();
   await sakhalin.click();
   const list = page.locator("#order-list");
   await expect(list.locator("li")).toHaveCount(2);

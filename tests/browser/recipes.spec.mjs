@@ -127,6 +127,7 @@ test("desktop category photographs respond to pointer and keyboard while a touch
 
 test("ingredients retain the editorial spreads, browser history and an exact catalog product @recipes", async ({ page }) => {
   await page.goto("recipes/?audit=ingredients");
+  await page.evaluate(() => document.fonts.ready);
   await expect(page.locator("[data-recipe-opening]")).toBeVisible();
   await expect(page.locator(".recipe-record:visible")).toHaveCount(19);
   const mussels = page.getByRole("button", { name: /^Мидии/ });
@@ -143,6 +144,9 @@ test("ingredients retain the editorial spreads, browser history and an exact cat
   await page.goBack();
   await expect(mussels).toHaveAttribute("aria-pressed", "true");
   const product = page.locator('[data-recipe-material="574"] .recipe-record-product');
+  // Keep WebKit's restored-page focus scroll separate from the pointer click.
+  await product.focus();
+  await expect(product).toBeFocused();
   await product.click();
   await expect(page).toHaveURL(/catalog\/\?product=seafood-009#product-seafood-009$/);
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
