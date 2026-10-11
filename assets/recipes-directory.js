@@ -16,9 +16,12 @@ if (chooser) {
   // WebKit can scroll a restored results page when mouse focus arrives between
   // pointerdown and pointerup. Keep the link under the pointer; its native click,
   // keyboard navigation and modified clicks still perform the normal action.
-  directory.addEventListener("pointerdown", event => {
-    if (event.pointerType !== "mouse" || event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
-    event.target.closest("a[href]")?.focus({ preventScroll: true });
+  directory.addEventListener("mousedown", event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+    const link = event.target.closest("a[href]");
+    if (!link) return;
+    event.preventDefault();
+    link.focus({ preventScroll: true });
   });
   function render(animate = false) {
     const requested = new URL(location.href).searchParams.get("ingredient");

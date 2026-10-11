@@ -87,6 +87,16 @@ function contactActions({ phone = true, phoneName = false, classes = "", catalog
 export const renderDeliveryActions = () => contactActions({ phone: false, classes: "delivery-source__order" });
 export const renderCatalogOrderActions = () => contactActions({ phone: false, catalogOrder: true });
 
+export function renderAboutPreview(root = "", shell = true) {
+  return template("about-preview", {
+    root, shell: shell ? "source-shell " : "",
+    action: template("button", {
+      href: `${root}about/`, label: "История лавки и её капитана", variant: "outline",
+      classes: "", attributes: "", labelAttributes: "",
+    }),
+  });
+}
+
 const street = `${site.address.city}, ${site.address.street}`;
 const metro = `метро ${site.address.metro}`;
 export const contactAddress = `${street}. Метро ${site.address.metro}.`;
@@ -387,7 +397,7 @@ function recipeFeature(root, heading = "h3") {
   return `<article class="recipe-feature" aria-labelledby="recipe-feature-title">
     <a class="recipe-feature__photo" href="${root}journal/${entry.id}/" aria-label="Рецепт: ${text(recipe.title)}">${image(entry, root, "(max-width: 61.1875rem) calc(100vw - 36px), 520px")}</a>
     <div class="recipe-feature__copy">
-      <p class="recipe-meta">Рецепт Олега · <time datetime="${entry.date}">${date(entry)}</time></p>
+      <p class="recipe-meta"><time datetime="${entry.date}">${date(entry)}</time></p>
       <${heading} id="recipe-feature-title">${text(recipe.title)}</${heading}>
       <blockquote><p>${text(recipeQuote)}</p></blockquote>
       <a class="editorial-link" href="${root}journal/${entry.id}/">Приготовить по рецепту${harpoon}</a>
@@ -398,13 +408,13 @@ function recipeFeature(root, heading = "h3") {
 
 export function renderRecipeHome() {
   return `<header class="watch-catch__header">
-    <h2 id="watch-catch-title">Рецепты и советы</h2>
+    <h2 id="watch-catch-title">Рецепты и советы Олега</h2>
     <a class="editorial-link" href="recipes/">Все рецепты и советы${harpoon}</a>
   </header>
   ${recipeFeature("")}
   <ul class="watch-catch__list">${recipeContent.home.map(id => {
     const recipe = recipes.find(item => item.id === id);
-    return `<li class="watch-catch__item"><a href="journal/${id}/"><span class="recipe-meta">Рецепт Олега</span><span class="watch-catch__name">${text(recipe.title).replace("секретов", "секре­тов")}</span>${harpoon}</a></li>`;
+    return `<li class="watch-catch__item"><a href="journal/${id}/"><span class="watch-catch__name">${text(recipe.title).replace("секретов", "секре­тов")}</span>${harpoon}</a></li>`;
   }).join("\n")}</ul>`;
 }
 
@@ -485,7 +495,7 @@ export function renderRecipesPage() {
   </section>`;
   return template("recipes-page", {
     theme: renderTheme("recipes"), analytics: renderAnalytics("../"), menu: renderMenu("recipes", "../"), footer: renderFooter("recipes", "../"),
-    chooser, groups, collections,
+    chooser, groups, collections, aboutPreview: renderAboutPreview("../", false),
     recipeJump: [["recipes-title", "Ещё рецепты"], ["advice", "Советы о рыбе"], ["meals", "Что купить к ужину"]]
       .map(([id, label]) => `<a href="#${id}">${label}${harpoon}</a>`).join(""),
   }).replace(/[ \t]+$/gm, "") + "\n";

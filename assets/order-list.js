@@ -41,6 +41,9 @@ export function setupOrderList() {
   };
   new ResizeObserver(updateClearance).observe(shortcut);
   document.addEventListener("focusin", event => {
+    // Keep a mouse/touch target still until its click completes. Keyboard
+    // focus still moves above the fixed order shortcut when it is obscured.
+    if (document.documentElement.dataset.inputModality === "pointer") return;
     if (shortcut.hidden || shortcut.contains(event.target) || !event.target.matches("a, button, input, select, textarea, summary")) return;
     requestAnimationFrame(() => {
       const target = event.target.getBoundingClientRect(), control = shortcut.getBoundingClientRect();

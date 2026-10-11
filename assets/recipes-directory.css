@@ -10,13 +10,14 @@
 .recipe-ingredients button:hover { border-color: var(--ink); }
 .recipe-filter-status { margin: 1rem 0 0; color: var(--muted); font-size: var(--text-meta); }
 .recipe-record-directory { margin-top: var(--recipe-space); }
+.recipes-page .about-preview { margin-top: var(--recipe-space); padding-bottom: 0; }
 .recipes-page[data-ingredient]:not([data-ingredient="all"]) [data-recipe-opening][hidden] + .recipe-record-directory { margin-top: 0; }
 .recipe-record-heading { margin-bottom: 2rem; }
 .recipes-page[data-recipe-count="1"] .recipe-record-heading { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .recipe-record-heading h2 { margin: 0; font: 400 clamp(2.25rem, 1.65rem + 1.7vw, 3.5rem) / 1.1 var(--serif); }
 .recipe-record-heading p, .recipe-record-meta { margin: 0; color: var(--muted); font-size: var(--text-meta); line-height: 1.5; }
 .recipe-records { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--recipe-space); }
-.recipe-record { min-width: 0; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; scroll-margin-top: 6rem; }
+.recipe-record { min-width: 0; display: grid; grid-template-columns: var(--recipe-columns); gap: var(--recipe-gutter); align-items: start; scroll-margin-top: 6rem; }
 .recipe-record-copy { min-width: 0; }
 .recipe-record-copy .recipe-record-meta { margin-bottom: 1.3rem; }
 .recipe-record-story { display: block; min-height: 44px; color: var(--ink); text-decoration: none; }
@@ -34,6 +35,12 @@
 .recipe-record-product__price { display: inline-flex; align-items: center; gap: .65rem; color: var(--muted); }
 .recipe-record-product__price svg { margin-top: .15rem; width: 1.5rem; }
 .recipe-record-product:hover > span:first-child { color: var(--text-link); }
+.recipes-page .about-preview figure, .recipes-page .source-footer__portrait { width: 100%; }
+@media (width > 46rem) {
+  .recipes-page .about-preview__layout, .recipes-page .source-footer__content { grid-template-columns: var(--recipe-columns); gap: var(--recipe-gutter); }
+  .recipes-page .source-footer__details { grid-column: 2; }
+  .recipes-page .source-footer__portrait { grid-column: 1; grid-row: 1; }
+}
 @media (hover: hover) { .recipe-record-product:hover > span:first-child { text-decoration: underline; text-underline-offset: .2em; } }
 @media (width <= 46rem) {
   .recipe-record { grid-template-columns: minmax(0, 1fr); gap: 2rem; }

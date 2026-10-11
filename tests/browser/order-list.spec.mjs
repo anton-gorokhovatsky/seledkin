@@ -37,7 +37,13 @@ test("the order shortcut keeps its label, count and harpoon together on narrow s
   await page.evaluate(() => document.documentElement.style.fontSize = "200%");
   expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   const enlarged = await shortcut.boundingBox();
-  expect(enlarged.height).toBeLessThan(110);
+  const enlargedParts = await shortcut.evaluate(el => {
+    const label = el.querySelector(".catalog-order-shortcut__label"), count = el.querySelector(".catalog-order-shortcut__count"), arrow = el.querySelector("svg");
+    return { label: label.getBoundingClientRect().toJSON(), count: count.getBoundingClientRect().toJSON(), arrow: arrow.getBoundingClientRect().toJSON(), lineHeight: parseFloat(getComputedStyle(label).lineHeight) };
+  });
+  expect(enlargedParts.label.height).toBeLessThanOrEqual(enlargedParts.lineHeight * 2 + 1);
+  expect(enlargedParts.label.right).toBeLessThan(enlargedParts.count.left);
+  expect(enlargedParts.count.right).toBeLessThan(enlargedParts.arrow.left);
   expect(enlarged.x + enlarged.width).toBeLessThanOrEqual(320);
   const heading = await page.locator("main h1").evaluate(el => {
     const text = document.createRange(); text.selectNodeContents(el);

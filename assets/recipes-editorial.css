@@ -1,5 +1,9 @@
 /* The selected culinary spread, within the site's shared header, menu and palette. */
-.recipes-page { --recipe-space: clamp(3.5rem, 7vw, 7rem); }
+.recipes-page {
+  --recipe-space: clamp(3.5rem, 7vw, 7rem);
+  --recipe-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  --recipe-gutter: clamp(2rem, 5vw, 5rem);
+}
 .recipes-intro { align-items: last baseline; }
 .recipes-intro .page-intro__title em { display: block; font-weight: 400; }
 .recipes-intro__copy p:last-child { margin-bottom: 0; color: var(--ink); font-size: inherit; }
@@ -60,7 +64,7 @@
 .recipe-editorial-story:nth-child(2) { padding-top: clamp(2rem, 6vw, 6rem); }
 .recipe-editorial-opening:has(> .recipe-editorial-lead[hidden]) .recipe-editorial-pair { margin-top: 0; }
 .recipe-editorial-pair:has(> [hidden]) { grid-template-columns: minmax(0, 1fr); }
-.recipe-editorial-pair:has(> [hidden]) .recipe-editorial-story:not([hidden]) { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2rem, 5vw, 5rem); padding-top: 0; align-items: start; }
+.recipe-editorial-pair:has(> [hidden]) .recipe-editorial-story:not([hidden]) { display: grid; grid-template-columns: var(--recipe-columns); gap: var(--recipe-gutter); padding-top: 0; align-items: start; }
 .recipe-editorial-pair:has(> [hidden]) .recipe-editorial-story__copy { padding-top: 0; }
 .recipe-editorial-story__copy { padding-top: 2rem; }
 .recipe-editorial-story__copy > p:not(.recipe-meta) { max-width: 46ch; }

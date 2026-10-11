@@ -505,7 +505,6 @@ a.source-brand {
   max-width: 100%;
   flex-grow: 0;
   justify-self: start;
-  align-self: start;
   min-height: var(--button-height);
   padding: var(--button-padding-block) var(--button-padding-inline);
 }
@@ -3411,6 +3410,7 @@ a.site-menu__brand {
     left: auto;
     height: var(--masthead-control-size);
     width: var(--masthead-control-size);
+    min-height: var(--masthead-control-size);
     gap: 0;
     padding: 0;
     border-radius: 50%;

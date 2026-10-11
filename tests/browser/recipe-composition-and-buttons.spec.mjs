@@ -87,6 +87,16 @@ test("a single recipe uses the full desktop spread and a complete narrow reading
         expect(boxes.copy.top).toBeGreaterThan(boxes.photo.bottom);
         expect(boxes.copy.left).toBeCloseTo(boxes.photo.left, 0);
       }
+      const related = await page.locator(".about-preview img, .source-footer__portrait img").evaluateAll(photos => photos.map(photo => photo.getBoundingClientRect().toJSON()));
+      for (const photo of related) {
+        expect(photo.left).toBeCloseTo(boxes.photo.left, 0);
+        expect(photo.width).toBeCloseTo(boxes.photo.width, 0);
+      }
+      if (width > 736) {
+        for (const copy of await page.locator(".about-preview__copy, .source-footer__details").all()) {
+          expect((await copy.boundingBox()).x).toBeCloseTo(boxes.copy.left, 0);
+        }
+      }
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
       if (width === 1512) await article.screenshot({ path: testInfo.outputPath(`${ingredient}-single-wide.png`) });
     }
