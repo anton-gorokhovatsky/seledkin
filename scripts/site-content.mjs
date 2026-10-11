@@ -195,10 +195,12 @@ export function renderMobileHero() {
       const srcset = img.match(/srcset="([^"]+)"/)[1];
       img = `<picture><source media="(max-width: 61.1875rem)" srcset="${srcset}">${img.replace(/ srcset="[^"]+"/, "").replace(/src="[^"]+"/, `src="assets/${photo.image.replace(/\.jpg$/, "-32.webp")}"`)}</picture>`;
     }
-    return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-caption="${text(product.name)}" data-category="${photo.product.category}" data-product-id="${product.id}" data-source="https://t.me/kapitanseledkin/${photo.id}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}" data-order="${escape(orderLinks(product).telegram)}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
+    const orderHref = href.replace(`#product-${product.id}`, `#order-${product.id}`);
+    return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-caption="${text(product.name)}" data-category="${photo.product.category}" data-product-id="${product.id}" data-source="https://t.me/kapitanseledkin/${photo.id}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}" data-order="${escape(orderHref)}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
   }).join("\n");
   const first = resolveProduct(photos[0].product).product;
   const firstHref = productCatalogHref(photos[0].product, "", "afisha");
+  const firstOrderHref = firstHref.replace(`#product-${first.id}`, `#order-${first.id}`);
   return `          <div class="afisha" data-product-name="${text(first.name)}" data-product-category="${photos[0].product.category}" data-product-id="${first.id}" data-photo-index="1">
             <div class="afisha__brand brand-jelly brand-jelly--sea"><img src="assets/logo-redrawn-sea.svg" alt="Рыбная лавка капитана Селедкина" width="3600" height="1784"></div>
             <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каж&shy;дый день,</em> море&shy;про&shy;дукты и&nbsp;рыбные дели&shy;ка&shy;тесы в&nbsp;Москве</p>
@@ -211,7 +213,7 @@ ${prints}
             </figure>
             <nav class="afisha__actions" aria-label="Основные действия">
               <a class="afisha__catalog" href="${escape(firstHref)}"><span>Открыть в каталоге</span>${arrow}</a>
-              <div class="afisha__secondary"><a class="afisha__all" href="catalog/">Весь каталог</a><a class="afisha__order" href="${escape(orderLinks(first).telegram)}">Заказать в&nbsp;Телеграме</a></div>
+              <div class="afisha__secondary"><a class="afisha__all" href="catalog/">Весь каталог</a><a class="afisha__order" href="${escape(firstOrderHref)}">Заказать</a></div>
             </nav>
           </div>`;
 }

@@ -231,7 +231,8 @@ test("home exposes the core customer jobs", () => {
   assert.match(home, /Заказать в Телеграме/);
   const hero = home.match(/<section class="source-hero"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(hero, /href="catalog\/"/);
-  assert.match(hero, /href="https:\/\/t\.me\/\+79166751452"/);
+  assert.match(hero, /href="#delivery-order"/);
+  assert.match(home, /id="delivery-order"[^>]*aria-label="Способы заказа"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
   const latest = journalEntries[0];
   assert.ok(hero.includes(`href="journal/${latest.id}/"`));

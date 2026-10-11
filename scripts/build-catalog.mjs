@@ -11,6 +11,17 @@ const escape = (value) => String(value).replaceAll("&", "&amp;").replaceAll('"',
   .replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 const text = (value) => escape(typographText(value));
 const journal = JSON.parse(readFileSync(new URL("../content/journal.json", import.meta.url), "utf8"));
+const guidance = JSON.parse(readFileSync(new URL("../content/catalog-guidance.json", import.meta.url), "utf8"));
+const normalize = value => value.replace(/<[^>]*>/g, " ").replace(/\s+/gu, " ").trim();
+const productIds = new Set(catalog.flatMap(category => category.items.map(product => product.id)));
+const guidedProducts = new Set();
+for (const item of guidance) {
+  if (!productIds.has(item.product) || guidedProducts.has(item.product)) throw new Error(`Invalid guidance product: ${item.product}`);
+  if (!journal.some(entry => entry.id === item.entry)) throw new Error(`Missing guidance source: ${item.entry}`);
+  const body = readFileSync(new URL(`../content/journal/${item.entry}.html`, import.meta.url), "utf8");
+  if (!item.quote || !normalize(body).includes(normalize(item.quote))) throw new Error(`Guidance must quote Oleg verbatim: ${item.product}`);
+  guidedProducts.add(item.product);
+}
 const media = JSON.parse(readFileSync(new URL("../assets/media-variants.json", import.meta.url), "utf8"));
 function adviceLink(href, title, photo) {
   const variants = media.filter(item => item.source === photo?.image && item.width > 32).sort((a, b) => a.width - b.width);
@@ -29,7 +40,11 @@ const products = catalog.map((category) => `
   const links = orderLinks(product);
   const keywords = productSearchText(category, product);
   const notes = productNotes(product);
-  const advice = productRecipeLinks(category, product).slice(0, 2).map(recipe =>
+  const tip = guidance.find(item => item.product === product.id);
+  const source = tip && journal.find(entry => entry.id === tip.entry);
+  const related = productRecipeLinks(category, product);
+  const adviceEntries = (source ? [source, ...related.filter(entry => entry.id !== source.id)] : related).slice(0, 2);
+  const advice = adviceEntries.map(recipe =>
     adviceLink(`../journal/${recipe.id}/`, recipe.title, journal.find(entry => entry.id === recipe.id)));
   for (const story of recipeContent.productStories.filter(story => story.products.some(selection => matchesProduct(selection, category, product)))) {
     advice.push(adviceLink(story.source, story.label, story));
@@ -45,13 +60,14 @@ const products = catalog.map((category) => `
                   <button type="button" class="catalog-product-remove" data-order-remove value="${escape(productKey(category, product))}" aria-label="Убрать из списка: ${escape(productLabel(product))}" hidden>Убрать</button>
                 </div>
                 <details class="catalog-product-order">
-                  <summary>Уточнить наличие<span class="visually-hidden">: ${escape(productLabel(product))}</span></summary>
+                  <summary id="order-${escape(product.id)}">Уточнить наличие<span class="visually-hidden">: ${escape(productLabel(product))}</span></summary>
                   <div class="catalog-product-order__channels">
                     <a href="${escape(links.telegram)}">В&nbsp;Телеграме</a>
                     <a href="${escape(links.whatsapp)}">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
                   </div>
                 </details>${advice.length ? `
-                <div class="catalog-product-advice"><span>Олег советует</span>${advice.join("\n                  ")}</div>` : ""}
+                <div class="catalog-product-advice"><span>Олег советует</span>${tip ? `<blockquote cite="../journal/${tip.entry}/">${text(tip.quote)}</blockquote>` : ""}${advice.join("\n                  ")}</div>` : ""}
               </article>`;
 }).join("")}
             </div>

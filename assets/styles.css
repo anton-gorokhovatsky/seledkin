@@ -1604,6 +1604,13 @@ a.source-brand {
   font-size: var(--text-meta);
 }
 .catalog-product-advice > span { color: var(--muted); }
+.catalog-product-advice blockquote {
+  flex-basis: 100%;
+  margin: 0.35rem 0 0;
+  font-size: var(--text-interface);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
 .catalog-product-advice a {
   display: inline-flex;
   align-items: center;
@@ -5116,6 +5123,8 @@ a.site-menu__brand {
 }
 
 .catalog-product[id] { scroll-margin-top: 6rem; }
+.catalog-product-order summary[id],
+#delivery-order { scroll-margin-top: 6rem; }
 /* Repeated controls share brief, functional feedback across the site. */
 @media (prefers-reduced-motion: no-preference) {
   :where(.recipe-ingredients button, .catalog-product-add, .catalog-product-remove,

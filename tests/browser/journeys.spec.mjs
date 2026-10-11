@@ -19,8 +19,9 @@ test("prices and product-specific order links survive unavailable JavaScript @ca
     await expect(page.locator("[data-catalog-count]")).toHaveText("116 позиций");
     const product = page.locator(".catalog-product").first();
     await product.locator("summary").click();
-    await expect(product.getByRole("link")).toHaveCount(2);
-    for (const link of await product.getByRole("link").all()) {
+    await expect(product.getByRole("link")).toHaveCount(3);
+    await expect(product.getByRole("link", { name: "Позвонить", exact: true })).toHaveAttribute("href", "tel:+79166751452");
+    for (const link of await product.locator('.catalog-product-order a:not([href^="tel:"])').all()) {
       const url = new URL(await link.getAttribute("href"));
       expect(url.searchParams.get("text")).toContain("Хочу заказать");
       expect(url.searchParams.get("text")).toContain("икра");
@@ -339,7 +340,10 @@ test("a photographed product opens its own catalog position, price and order @af
     await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", href);
     const destinationUrl = new URL(href, page.url());
     expect(destinationUrl.hash).toBe(`#product-${destinationUrl.searchParams.get("product")}`);
-    expect(decodeURIComponent(await page.locator(".afisha__order").getAttribute("href"))).toContain(expected[i]);
+    const orderUrl = new URL(await page.locator(".afisha__order").getAttribute("href"), page.url());
+    expect(orderUrl.searchParams.get("product")).toBe(destinationUrl.searchParams.get("product"));
+    expect(orderUrl.hash).toBe(`#order-${destinationUrl.searchParams.get("product")}`);
+    await expect(page.locator(".afisha__order")).toHaveText("Заказать");
     destinations.push({ href, price: await page.locator(".afisha__price").textContent(), name: expected[i] });
     await frame.press("ArrowRight");
   }

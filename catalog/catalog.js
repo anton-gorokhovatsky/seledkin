@@ -66,7 +66,7 @@ function writeUrl(replace = false) {
   url.searchParams.delete("product");
   query.trim() ? url.searchParams.set("q", query.trim()) : url.searchParams.delete("q");
   activeCategory === "all" ? url.searchParams.delete("category") : url.searchParams.set("category", activeCategory);
-  if (/^#(?:category|product)-/.test(url.hash)) url.hash = "";
+  if (/^#(?:category|product|order)-/.test(url.hash)) url.hash = "";
   if (url.href !== location.href) {
     history[replace ? "replaceState" : "pushState"](null, "", url);
   }
@@ -164,8 +164,11 @@ function restore() {
   if (targetId) requestAnimationFrame(() => {
     const product = document.getElementById(`product-${targetId}`);
     if (!product || product.hidden || targetId !== activeProduct) return;
+    const summary = product.querySelector("summary");
+    const ordering = location.hash === `#order-${targetId}`;
+    if (ordering) summary.parentElement.open = true;
     product.scrollIntoView({ block: "start", behavior: "instant" });
-    product.focus({ preventScroll: true });
+    (ordering ? summary : product).focus({ preventScroll: true });
   });
 }
 window.addEventListener("popstate", restore);
