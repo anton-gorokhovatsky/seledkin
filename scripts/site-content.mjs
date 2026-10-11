@@ -419,7 +419,7 @@ function renderRecipeEditorial(root) {
 export function renderRecipesPage() {
   const featuredIds = new Set(recipeContent.editorial.map(item => item.id));
   const chooser = `<section class="recipe-chooser" aria-labelledby="recipe-chooser-title" data-recipe-chooser hidden>
-    <h2 id="recipe-chooser-title">Что есть на кухне?</h2>
+    <h2 id="recipe-chooser-title">Из чего готовим?</h2>
     <div class="recipe-ingredients" role="group" aria-label="Выбрать продукт">${recipeIngredients.map(([slug, label]) => `<button type="button" data-ingredient="${slug}" aria-pressed="${slug === "all"}">${label}<span>${slug === "all" ? recipes.length : recipes.filter(recipe => recipe.ingredient === slug).length}</span></button>`).join("")}</div>
     <p class="recipe-filter-status" role="status" aria-live="polite" data-recipe-filter-status>${recipes.filter(recipe => recipe.kind === "recipe").length} рецептов и ${recipes.filter(recipe => recipe.kind === "advice").length} совета</p>
   </section>`;
