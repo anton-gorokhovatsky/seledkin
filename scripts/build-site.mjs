@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
 import { catalog } from "../assets/catalog-data.js";
 import { positionCount } from "../assets/catalog-model.js";
 import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
@@ -27,6 +27,7 @@ for (const [path, page, root] of pages) {
   if (page === "journal") regions["journal-archive"] = renderJournalAtlas(entries);
   if (page === "catalog") Object.assign(regions, {
     "journal-search": renderJournal(entries, "search"), "delivery-summary": renderDelivery("catalog"),
+    "order-actions": renderCatalogOrderActions(),
   });
   let result = original;
   for (const [key, content] of Object.entries(regions)) {

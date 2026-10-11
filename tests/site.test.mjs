@@ -1378,7 +1378,6 @@ test("menu, focus and reduced motion remain accessible", () => {
   assert.match(home, /aria-modal="true"/);
   assert.match(styles, /\.floating-menu\s*\{[\s\S]*?position:\s*fixed;/);
   assert.match(styles, /\.floating-menu\s*\{[\s\S]*?z-index:\s*110;/);
-  assert.match(styles, /\.floating-menu\s*\{[\s\S]*?width:\s*8\.35rem;/);
   assert.match(
     styles,
     /\.floating-menu\[aria-expanded="true"\] \.floating-menu__mark::before\s*\{[\s\S]*?rotate\(45deg\)/,

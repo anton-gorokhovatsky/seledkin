@@ -322,7 +322,6 @@ for (const required of [
   "height: 100dvh",
   "grid-template-columns: minmax(0, 1.45fr) minmax(22rem, 0.75fr)",
   ".source-header__bar",
-  "width: 8.35rem",
   '.floating-menu[aria-expanded="true"] .floating-menu__mark::before',
 ]) {
   if (!css.includes(required)) fail(`assets/styles.css: нет обязательного правила ${required}`);

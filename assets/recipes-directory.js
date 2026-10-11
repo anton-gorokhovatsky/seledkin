@@ -31,8 +31,9 @@ if (chooser) {
     opening.hidden = features.every(feature => feature.hidden);
     directory.hidden = records.every(record => record.hidden);
     collections.hidden = jump.hidden = ingredient !== "all";
-    heading.textContent = ingredient === "all" ? "Ещё на кухне" : buttons.find(button => button.dataset.ingredient === ingredient).firstChild.textContent;
+    heading.textContent = ingredient === "all" ? "Рецепты и советы" : buttons.find(button => button.dataset.ingredient === ingredient).firstChild.textContent;
     const count = records.filter(record => !record.hidden).length + features.filter(feature => !feature.hidden).length;
+    document.body.dataset.recipeCount = String(count);
     status.textContent = ingredient === "all" ? allStatus : `${count} ${count === 1 ? "материал" : count < 5 ? "материала" : "материалов"}`;
     if (animate) revealChange([opening.hidden ? null : opening, directory.hidden ? null : directory]);
   }

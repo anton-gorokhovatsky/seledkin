@@ -14,7 +14,7 @@
   --on-image: #ffffff;
   --button-height: 2.75rem;
   --button-padding-block: 0.75rem;
-  --button-padding-inline: 0.95rem;
+  --button-padding-inline: 1rem;
   --footer: #073d55;
   --footer-surface: #0b6a84;
   --footer-glow: rgb(126 211 228 / 18%);
@@ -493,14 +493,27 @@ a.source-brand {
   height: auto;
 }
 
-.source-button {
-  display: inline-flex;
-  min-height: var(--button-height);
-  align-items: center;
-  justify-content: center;
+.source-button,
+.theme-toggle,
+.floating-menu,
+.catalog-product-add,
+.recipe-ingredients button,
+.catalog-order-shortcut {
+  /* Natural width keeps the visible inset equal, including inside flex/grid. */
+  width: fit-content;
   min-width: 0;
   max-width: 100%;
+  flex-grow: 0;
+  justify-self: start;
+  align-self: start;
+  min-height: var(--button-height);
   padding: var(--button-padding-block) var(--button-padding-inline);
+}
+
+.source-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid transparent;
   border-radius: 999px;
   color: var(--on-color);
@@ -669,10 +682,6 @@ a.source-brand {
   gap: 0.85rem;
   flex-wrap: wrap;
   margin-top: 2rem;
-}
-
-.source-hero__actions .source-button {
-  min-width: 13rem;
 }
 
 .source-hero__journal {
@@ -2184,10 +2193,6 @@ a.source-brand {
   gap: 0.75rem;
 }
 
-.source-footer__actions .source-button {
-  flex: 1 1 max-content;
-}
-
 .source-button--hero-primary {
   border-color: var(--sea-jelly-border);
   background: var(--sea-jelly-surface);
@@ -2333,12 +2338,10 @@ a.source-brand {
   right: var(--content-edge);
   left: auto;
   display: flex;
-  width: 8.35rem;
   height: var(--masthead-control-size);
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
-  padding: 0.6rem 0.7rem;
   transform: none;
   border: 1px solid var(--jelly-glass-border);
   border-radius: 999px;
@@ -3298,11 +3301,9 @@ a.site-menu__brand {
 
 .theme-toggle {
   display: inline-flex;
-  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 0.7rem;
-  padding: 0.65rem 0.95rem;
   border: 1px solid currentcolor;
   border-radius: 999px;
   background: transparent;
@@ -3574,8 +3575,7 @@ a.site-menu__brand {
   }
 
   .source-hero__actions .source-button {
-    width: 100%;
-    min-width: 0;
+    align-self: center;
   }
 
   .source-hero__actions .source-button--hero-secondary {
@@ -4027,17 +4027,9 @@ a.site-menu__brand {
     font-size: clamp(2rem, 10.8vw, 2.85rem);
   }
 
-  .source-button {
-    width: 100%;
-  }
-
   .source-footer__content {
     gap: 2rem;
     padding-block: 2.75rem 1.5rem;
-  }
-
-  .source-footer__actions .source-button {
-    flex-basis: 100%;
   }
 
   .contacts-source__card {
@@ -4616,8 +4608,8 @@ a.site-menu__brand {
 .site-menu__preferences > button {
   min-width: 0;
   max-width: 100%;
-  min-height: 44px;
-  padding: 0.65rem 0.95rem;
+  min-height: var(--button-height);
+  padding: var(--button-padding-block) var(--button-padding-inline);
   border: 1px solid var(--jelly-glass-border);
   border-radius: 999px;
   background: var(--jelly-glass-surface);
@@ -5134,7 +5126,7 @@ a.site-menu__brand {
 }
 .catalog-product-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .9rem; margin-top: .75rem; }
 .catalog-product-actions[hidden], .catalog-product-remove[hidden], .catalog-product-added[hidden], .catalog-order-shortcut[hidden], .catalog-order-list[hidden] { display: none; }
-.catalog-product-add { min-height: 44px; max-width: 100%; padding: .65rem 1.15rem; border: 1px solid var(--muted); border-radius: 2rem; background: transparent; color: var(--ink); font: 400 var(--text-interface) / 1.3 var(--sans); cursor: pointer; }
+.catalog-product-add { border: 1px solid var(--muted); border-radius: 999px; background: transparent; color: var(--ink); font: 400 var(--text-interface) / 1.3 var(--sans); cursor: pointer; }
 .catalog-product-add[data-selected="true"] { border-color: var(--ink); }
 .catalog-product-add:hover { border-color: var(--ink); }
 .catalog-product-remove { min-height: 44px; border: 0; padding: .5rem 0; background: none; color: var(--text-link); font: 400 var(--text-interface) / 1.3 var(--sans); cursor: pointer; }
@@ -5142,7 +5134,7 @@ a.site-menu__brand {
 .catalog-product-actions + .catalog-product-order { margin-top: .25rem; }
 .catalog-product-actions + .catalog-product-order summary { color: var(--muted); font-weight: 400; text-decoration: none; }
 .catalog-product-actions + .catalog-product-order summary:hover { color: var(--ink); }
-.catalog-order-shortcut { position: fixed; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 60; display: inline-grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: min(.75rem, 12px); width: max-content; min-height: 48px; max-width: calc(100% - 32px); padding: min(.6rem, 10px) min(1.1rem, 18px); border: 1px solid var(--jelly-glass-border); border-radius: 3rem; background: var(--jelly-glass-surface); box-shadow: var(--jelly-glass-shadow); backdrop-filter: var(--jelly-glass-filter); -webkit-backdrop-filter: var(--jelly-glass-filter); transform: translateX(-50%); color: var(--ink); font-size: var(--text-interface); line-height: 1.25; text-decoration: none; }
+.catalog-order-shortcut { position: fixed; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 60; display: inline-grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: min(.75rem, 12px); width: max-content; max-width: calc(100% - 32px); border: 1px solid var(--jelly-glass-border); border-radius: 3rem; background: var(--jelly-glass-surface); box-shadow: var(--jelly-glass-shadow); backdrop-filter: var(--jelly-glass-filter); -webkit-backdrop-filter: var(--jelly-glass-filter); transform: translateX(-50%); color: var(--ink); font-size: var(--text-interface); line-height: 1.25; text-decoration: none; }
 .catalog-order-shortcut__label { min-width: 0; font-weight: 500; text-wrap: balance; }
 .catalog-order-shortcut__count { display: inline-grid; place-items: center; flex: none; min-width: 1.75rem; min-height: 1.75rem; padding: .2rem .4rem; border-radius: 2rem; background: var(--ink); color: var(--paper); font-size: .875em; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .catalog-order-shortcut svg { width: min(2rem, 32px); height: min(1.125rem, 18px); fill: currentColor; }

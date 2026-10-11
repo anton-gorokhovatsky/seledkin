@@ -71,19 +71,21 @@ function template(name, values) {
   });
 }
 
-function contactActions({ phone = true, phoneName = false, classes = "" } = {}) {
+function contactActions({ phone = true, phoneName = false, classes = "", catalogOrder = false } = {}) {
   const actions = [
     ...(phone ? [{ href: "tel:+79166751452", label: "Позвонить", variant: "secondary", name: phoneName ? "Позвонить в лавку: +7 916 675‑14‑52" : "" }] : []),
-    { href: "https://t.me/+79166751452", label: "Заказать в Телеграме", variant: "primary" },
-    { href: "https://wa.me/79166751452", label: "Заказать в WhatsApp", variant: "secondary" },
+    { href: "https://t.me/+79166751452", label: "Заказать в Телеграме", variant: "primary", channel: "Телеграме" },
+    { href: "https://wa.me/79166751452", label: "Заказать в WhatsApp", variant: "primary", channel: "WhatsApp" },
   ];
-  return actions.map(({ href, label, variant, name }) => template("button", {
+  return actions.map(({ href, label, variant, name, channel }) => template("button", {
     href, label: text(label), variant, classes: classes ? ` ${classes}` : "",
     attributes: name ? ` aria-label="${text(name)}"` : "",
+    labelAttributes: catalogOrder ? ` data-catalog-order-channel="${channel}"` : "",
   })).join("\n");
 }
 
 export const renderDeliveryActions = () => contactActions({ phone: false, classes: "delivery-source__order" });
+export const renderCatalogOrderActions = () => contactActions({ phone: false, catalogOrder: true });
 
 const street = `${site.address.city}, ${site.address.street}`;
 const metro = `метро ${site.address.metro}`;
@@ -450,18 +452,26 @@ export function renderRecipesPage() {
     ${renderRecipeEditorial("../")}
   </section>
   <section class="recipe-record-directory" id="recipes" aria-labelledby="recipes-title">
-    <header class="recipe-record-heading"><h2 id="recipes-title" data-recipe-directory-title>Ещё на кухне</h2></header>
+    <header class="recipe-record-heading"><h2 id="recipes-title" data-recipe-directory-title>Рецепты и советы</h2></header>
     <div class="recipe-records">${recipes.map(recipe => {
       const entry = recipeEntry(recipe);
+      const normalized = value => plain(value).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+      const excerpt = recipe.excerpt || [];
+      if (!featuredIds.has(recipe.id) && !excerpt.length) throw new Error(`Missing recipe excerpt: ${recipe.id}`);
+      for (const paragraph of excerpt) {
+        if (!normalized(entry.body).includes(normalized(paragraph))) throw new Error(`Recipe excerpt differs from Oleg's source: ${recipe.id}`);
+      }
       const buying = recipe.products.length ? recipe.products.map(selection => {
         const { product } = resolveProduct(selection);
         return `<a class="recipe-record-product" data-recipe-id="${recipe.id}" href="${escape(productCatalogHref(selection, "../"))}"><span>${text(product.name)} в каталоге</span><span class="recipe-record-product__price">${escape(catalogPrice(product.price)).replace("/", "<wbr>/")}${harpoon}</span></a>`;
       }).join("") : "";
       return `<article class="recipe-record"${recipe.id === 453 ? ' id="advice"' : ""} data-recipe-material="${recipe.id}" data-ingredient-group="${recipe.ingredient}" data-kind="${recipe.kind}"${featuredIds.has(recipe.id) ? ' data-featured hidden' : ""} aria-labelledby="recipe-title-${recipe.id}">
-        <a class="recipe-record-photo" href="../journal/${recipe.id}/" tabindex="-1" aria-hidden="true">${image(entry, "../", "(max-width: 46rem) min(25vw, 176px), 176px")}</a>
-        <div><a class="recipe-record-story" href="../journal/${recipe.id}/" aria-labelledby="recipe-title-${recipe.id}"><p class="recipe-record-meta">${recipe.kind === "advice" ? "Совет" : "Рецепт"} Олега · <time datetime="${entry.date}">${date(entry)}</time></p>
-        <h3 id="recipe-title-${recipe.id}">${recordTitle(recipe.title)}</h3>
-        <span class="recipe-record-read">${recipe.kind === "advice" ? "Читать совет" : "Читать рецепт"}${harpoon}</span></a>${buying}</div>
+        <a class="recipe-record-photo" href="../journal/${recipe.id}/" aria-label="${recipe.kind === "advice" ? "Читать совет" : "Читать рецепт"}: ${text(recipe.title)}">${image(entry, "../", "(max-width: 46rem) calc(100vw - 36px), (max-width: 1440px) 42vw, 580px")}</a>
+        <div class="recipe-record-copy"><p class="recipe-record-meta">${recipe.kind === "advice" ? "Совет" : "Рецепт"} Олега · <time datetime="${entry.date}">${date(entry)}</time></p>
+        <a class="recipe-record-story" href="../journal/${recipe.id}/" aria-labelledby="recipe-title-${recipe.id}"><h3 id="recipe-title-${recipe.id}">${recordTitle(recipe.title)}</h3></a>
+        <div class="recipe-record-excerpt">${excerpt.map(paragraph => `<p>${text(paragraph)}</p>`).join("")}</div>
+        <a class="editorial-link recipe-record-read" href="../journal/${recipe.id}/">${recipe.kind === "advice" ? "Читать совет" : "Читать рецепт"}${harpoon}</a>
+        ${buying ? `<div class="recipe-record-products">${buying}</div>` : ""}</div>
       </article>`;
     }).join("\n")}</div>
   </section>`;
