@@ -2449,13 +2449,6 @@ a.source-brand {
   visibility: visible;
 }
 
-/* Keep the entry control in the masthead, away from prices while scrolling.
-   The dialog's close control retains its fixed position. */
-.floating-menu[data-menu-toggle],
-.floating-menu[data-menu-fallback-link] {
-  position: absolute;
-}
-
 :root[data-input-modality="pointer"] .floating-menu:focus-visible {
   outline: none;
 }

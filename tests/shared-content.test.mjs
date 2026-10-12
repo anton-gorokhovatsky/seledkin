@@ -43,7 +43,8 @@ test("shared navigation keeps page-specific routes and the same contact informat
     assert.ok(menu.includes(`href="${root}#contacts"`));
     assert.ok(footer.includes(`href="${root}catalog/"`));
     assert.ok(menu.includes("data-menu-close"));
-    assert.ok(menu.includes("Университет") && footer.includes("Университет"));
+    assert.ok([menu, footer].every(html =>
+      html.replace(/&shy;|\u00ad/g, "").includes("Университет")));
     assert.equal((menu.match(/aria-current="page"/g) ?? []).length, page === "home" ? 0 : 1);
   }
   assert.ok(renderTheme("404").includes("base.href"));
