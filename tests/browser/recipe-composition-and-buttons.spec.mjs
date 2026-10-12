@@ -43,7 +43,7 @@ test("all recipes and advice retain large photographs and authored text in every
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("recipes/?audit=all-materials");
   await page.evaluate(() => document.fonts.ready);
-  for (const [ingredient, count] of [["all", 23], ["fish", 13], ["mussels", 3], ["shrimp", 4], ["octopus", 1], ["roe", 1], ["pasta", 1]]) {
+  for (const [ingredient, count] of [["all", 24], ["fish", 13], ["mussels", 3], ["shrimp", 4], ["octopus", 1], ["roe", 2], ["pasta", 1]]) {
     await page.locator(`button[data-ingredient="${ingredient}"]`).press("Enter");
     const materials = page.locator("[data-recipe-feature]:visible, .recipe-record:visible");
     await expect(materials).toHaveCount(count);
@@ -66,7 +66,8 @@ test("all recipes and advice retain large photographs and authored text in every
 test("a single recipe uses the full desktop spread and a complete narrow reading sequence @recipes", async ({ page }, testInfo) => {
   for (const width of [1512, 1024, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
-    for (const ingredient of ["octopus", "roe", "pasta"]) {
+    // Roe now has a recipe and a complete buying guide; its two-card state is checked above.
+    for (const ingredient of ["octopus", "pasta"]) {
       await page.goto(`recipes/?ingredient=${ingredient}&audit=single-spread`);
       await page.evaluate(() => document.fonts.ready);
       const article = page.locator("[data-recipe-feature]:visible, .recipe-record:visible");

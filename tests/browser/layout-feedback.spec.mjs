@@ -122,7 +122,7 @@ test("ingredient filters keep their position and the selected editorial composit
     await expect(lead).toBeVisible();
     await page.getByRole("button", { name: /^Все материалы/ }).press("Enter");
     await expect(page.locator("[data-recipe-feature]:visible")).toHaveCount(3);
-    await expect(page.locator(".recipe-record:visible")).toHaveCount(20);
+    await expect(page.locator(".recipe-record:visible")).toHaveCount(21);
     expect(await chooser.evaluate(node => node.getBoundingClientRect().top + scrollY)).toBeCloseTo(chooserTop, 0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   }

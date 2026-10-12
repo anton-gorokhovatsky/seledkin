@@ -18,7 +18,7 @@ const normalize = value => value.replace(/<br\s*\/?\s*>/g, "\n").replace(/<[^>]*
   .replace(/\s|[-—–‑]/g, "");
 
 test("selected archive texts retain every author word, source date and original full frame", () => {
-  const sources = [...JSON.parse(read("tests/fixtures/recipes-channel-2026.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2018.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2021.json"))];
+  const sources = [...JSON.parse(read("tests/fixtures/recipes-channel-2026.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2018.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2021.json")), ...JSON.parse(read("tests/fixtures/advice-roe-2025.json"))];
   const media = JSON.parse(read("assets/media-variants.json"));
   for (const source of sources) {
     const entry = entries.find(item => item.id === source.id);
@@ -36,7 +36,7 @@ test("selected archive texts retain every author word, source date and original 
 test("recipes point to the right product variant and use live catalog prices", () => {
   const page = renderRecipesPage();
   assert.equal(recipes.filter(recipe => recipe.kind === "recipe").length, 17);
-  assert.equal(recipes.filter(recipe => recipe.kind === "advice").length, 6);
+  assert.equal(recipes.filter(recipe => recipe.kind === "advice").length, 7);
   for (const recipe of recipes) {
     assert.ok(entries.some(entry => entry.id === recipe.id));
     assert.ok(page.includes(`href="../journal/${recipe.id}/"`));
@@ -58,6 +58,19 @@ test("recipes point to the right product variant and use live catalog prices", (
   assert.ok(!productRecipeLinks(seafood, unpeeled).some(recipe => recipe.id === 464));
   // The archive's flounder recipe is for another species, not the current fish.
   assert.deepEqual(recipes.find(recipe => recipe.id === 382).products, []);
+});
+
+test("published stories omit social hashtag rows and preserve the roe guide's prose", () => {
+  for (const entry of entries) {
+    const story = read(`journal/${entry.id}/index.html`);
+    const body = story.match(/<div class="ship-log-entry__body">([\s\S]*?)<\/div>/)[1];
+    assert.doesNotMatch(body, /class="journal-tags"/, `Social tag row in ${entry.id}`);
+    assert.doesNotMatch(body.replace(/<[^>]*>/g, ""), /#[\p{L}]/u, `Unusable hashtag in ${entry.id}`);
+    if (entry.id === 619) {
+      const original = JSON.parse(read("tests/fixtures/advice-roe-2025.json"))[0].text;
+      assert.equal(normalize(body), normalize(original.replace(/\n\s*#[^\n]+$/, "")));
+    }
+  }
 });
 
 test("dinner collections and the fresh caviar price share catalog facts", () => {

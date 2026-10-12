@@ -17,6 +17,10 @@ for (const audio of olegSources.audio) {
       throw new Error(`Invalid reviewed audio chapter: ${chapter.id}`);
     }
     chapters.add(chapter.id);
+    if (chapter.catalogQuote && (!Number.isInteger(chapter.quoteStart)
+      || chapter.quoteStart < chapter.start || chapter.quoteStart >= chapter.end)) {
+      throw new Error(`Invalid catalog quotation time: ${chapter.id}`);
+    }
   }
   const linkedProducts = [...new Set(audio.chapters.flatMap(chapter => chapter.products))];
   if (JSON.stringify(linkedProducts) !== JSON.stringify(audio.products)) {

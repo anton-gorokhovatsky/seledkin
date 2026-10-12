@@ -180,7 +180,7 @@ test("ingredients retain the editorial spreads, browser history and an exact cat
   await page.goto("recipes/?audit=ingredients");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator("[data-recipe-opening]")).toBeVisible();
-  await expect(page.locator(".recipe-record:visible")).toHaveCount(20);
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(21);
   const mussels = page.getByRole("button", { name: /^Мидии/ });
   await mussels.press("Enter");
   await expect(mussels).toBeFocused();
@@ -215,7 +215,7 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
     await page.goto(`${baseURL}recipes/?audit=recipes`);
     await expect(page.locator(".recipe-editorial-opening article")).toHaveCount(3);
     await expect(page.locator('.recipe-record[data-kind="recipe"]:visible')).toHaveCount(14);
-    await expect(page.locator('.recipe-record[data-kind="advice"]:visible')).toHaveCount(6);
+    await expect(page.locator('.recipe-record[data-kind="advice"]:visible')).toHaveCount(7);
     await expect(page.locator("#meals .meal-collection")).toHaveCount(3);
     await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
     expect(await page.evaluate(async () => (await axe.run({ runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] } })).violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })))).toEqual([]);

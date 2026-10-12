@@ -220,7 +220,14 @@ ${prints}
 }
 
 function journalBody(entry, inquiry) {
-  const lines = entry.body.split("\n");
+  // Social hashtag rows are not site navigation. The archived source remains
+  // unchanged; inline hashtags keep their words without the social prefix.
+  const body = entry.body.replace(/<p\b[^>]*>([\s\S]*?)<\/p>/g, (paragraph, content) => {
+    const visible = plain(content.replace(/<[^>]*>/g, "")).trim();
+    return /^(?:#[\p{L}\p{N}_]+\s*)+$/u.test(visible) ? "" : paragraph;
+  }).split(/(<[^>]*>)/g).map(part => part.startsWith("<") ? part
+    : part.replace(/(^|[^\p{L}\p{N}_])#(?=[\p{L}])/gu, "$1")).join("");
+  const lines = body.split("\n").filter(line => line.trim());
   const historical = recipes.some(recipe => recipe.id === entry.id)
     ? lines.findIndex(line => /Заказы принимаются только.*WhatsApp|class="journal-historical-contacts"/.test(line)) : -1;
   if (historical < 0) return lines.map(line => `                  ${line}`).join("\n");
@@ -272,12 +279,12 @@ export function renderJournal(list, view) {
               </header>
               ${image(entry, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, true)}
               <div class="ship-log-entry__content">
-${entry.source?.excerpt ? `                <p class="recipe-archive-note">Рецепт из авторской публикации Олега. <a href="${escape(source)}">Полный текст в ${text(entry.source.name)}</a>.</p>\n` : recipes.some(recipe => recipe.id === id) ? `                <p class="recipe-archive-note">Цены и условия в авторском тексте относятся к дате публикации. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>\n` : ""}                <div class="ship-log-entry__body">
+${entry.imageCaption ? `                <p class="source-caption">${text(entry.imageCaption)}</p>\n` : ""}${entry.source?.excerpt ? `                <p class="recipe-archive-note">Рецепт из авторской публикации Олега. <a href="${escape(source)}">Полный текст в ${text(entry.source.name)}</a>.</p>\n` : recipes.some(recipe => recipe.id === id) ? `                <p class="recipe-archive-note">Цены и условия в авторском тексте относятся к дате публикации. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>\n` : ""}                <div class="ship-log-entry__body">
 ${journalBody(entry, inquiry)}
                 </div>
                 <div class="ship-log-entry__actions">
                   <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}"><span class="source-button__label">Спросить о наличии<span class="visually-hidden"> в Телеграме: ${text(entry.product)}</span></span></a>
-                  <a class="ship-log-entry__link" href="${escape(source)}">${entry.source ? `Оригинал в ${text(entry.source.name)}` : "Читать запись в Телеграме"}</a>
+                  <a class="ship-log-entry__link" href="${escape(source)}">${entry.source ? `Оригинал в ${text(entry.source.name === "Телеграм" ? "Телеграме" : entry.source.name)}` : "Читать запись в Телеграме"}</a>
                 </div>
               </div>
             </article>`;

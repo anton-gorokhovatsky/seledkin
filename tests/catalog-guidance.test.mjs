@@ -18,12 +18,15 @@ test("catalog guidance keeps Oleg's words beside the matching product and comple
     const path = source ? `content/sources/${source.sourceFile}` : `content/journal/${tip.entry}.html`;
     const href = (source?.url ?? `../journal/${tip.entry}/`).replaceAll("&", "&amp;");
     assert.ok(normalized(read(path)).includes(normalized(tip.quote)), `Altered quotation ${tip.entry ?? tip.source}`);
-    assert.ok(article.includes(`<blockquote cite="${href}">${typographText(tip.quote)}</blockquote>`));
-    assert.ok(article.includes(`href="${href}"`), `Missing complete source ${tip.entry ?? tip.source}`);
+    assert.ok(article.includes(`<blockquote cite="${href}"`));
+    assert.ok(article.includes(`>${typographText(tip.quote)}</blockquote>`));
+    if (source) assert.ok(article.includes(`data-source-date="${source.date}"`));
+    const local = source?.entry ? `../journal/${source.entry}/` : tip.entry ? href : null;
+    if (local) assert.ok(article.includes(`href="${local}"`), `Missing on-site material ${tip.entry ?? tip.source}`);
   }
 });
 
-test("audio topics are linked by product, without fabricated quotations or mixing packaging advice", () => {
+test("audio excerpts retain their selected words and time without mixing packaging advice", () => {
   for (const audio of sources.audio) {
     assert.equal(audio.reviewed, "full-transcript-and-selected-segment-crosscheck");
     assert.ok(read("about/index.html").includes(`href="${audio.url}"`));
@@ -33,20 +36,34 @@ test("audio topics are linked by product, without fabricated quotations or mixin
       assert.ok(read("about/index.html").includes(`href="${href}"`));
       for (const id of chapter.products) {
         const article = html.match(new RegExp(`<article[^>]*id="product-${id}"[\\s\\S]*?</article>`))?.[0];
-        assert.ok(article.includes(`href="${href}"`), `${id} misses ${chapter.id}`);
-        assert.ok(!article.includes(`<blockquote cite="${href}"`), "Audio summaries cannot masquerade as direct quotations");
+        if (chapter.catalog === false) assert.ok(!article.includes(`data-audio-chapter="${chapter.id}"`));
+        if (article.includes(`data-audio-chapter="${chapter.id}"`)) {
+          const quoteHref = audioFragmentHref(audio, { start: chapter.quoteStart });
+          assert.ok(article.includes(`cite="${quoteHref}"`));
+          assert.ok(article.includes(typographText(chapter.catalogQuote)));
+          assert.doesNotMatch(article, /class="catalog-audio-note"/);
+        }
       }
     }
   }
   const cannedCrab = html.match(/<article[^>]*id="product-seafood-004"[\s\S]*?<\/article>/)[0];
-  assert.match(cannedCrab, /Рыбные консервы/);
+  assert.doesNotMatch(cannedCrab, /catalog-product-advice/);
   const freshCrab = html.match(/<article[^>]*id="product-seafood-001"[\s\S]*?<\/article>/)[0];
-  assert.doesNotMatch(freshCrab, /Рыбные консервы/);
+  assert.doesNotMatch(freshCrab, /data-audio-chapter="canned-choice"/);
   const cannedTongues = html.match(/<article[^>]*id="product-prepared-fish-013"[\s\S]*?<\/article>/)[0];
   assert.doesNotMatch(cannedTongues, /liver-tongues|#t=17%3A30/);
   const pate = html.match(/<article[^>]*id="product-other-007"[\s\S]*?<\/article>/)[0];
   assert.match(pate, /Обычно мы не\s+советуем покупать такую, но\s+именно эту/);
-  assert.match(pate, /datetime="2023-10-20"/);
+  assert.match(pate, /data-source-date="2023-10-20"/);
+});
+
+test("catalog advice serves the advice and on-site reading without source footnotes", () => {
+  for (const advice of html.matchAll(/<div class="catalog-product-advice">([\s\S]*?)<\/div>/g)) {
+    assert.doesNotMatch(advice[1], /<a[^>]+href="https?:/);
+    assert.doesNotMatch(advice[1], /<time\b|SoundCloud|YouTube/);
+  }
+  assert.match(html, /href="\.\.\/journal\/619\/"/);
+  assert.ok(read("journal/619/index.html").includes('href="https://t.me/kapitanseledkin/619"'));
 });
 
 test("preparation descriptions are expanded once instead of repeated as notes", () => {

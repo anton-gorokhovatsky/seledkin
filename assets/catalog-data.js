@@ -209,7 +209,7 @@ export const catalog = [
   {
     slug: "accessories",
     label: "Кухонные принадлежности",
-    shortLabel: "Принадлежности",
+    shortLabel: "Кухонные принадлежности",
     showOnHome: false,
     items: [
       moved("other", item("other-027", "piece", "Пинцет для удаления рыбных костей", "990 ₽", "Португалия")),

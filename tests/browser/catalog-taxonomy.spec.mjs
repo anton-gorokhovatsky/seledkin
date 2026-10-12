@@ -17,7 +17,7 @@ test("a buyer can use an old category link and keep moved products in the saved 
   await expect(list.getByRole("textbox", { name: /^Количество.*Фарш форели/ })).toHaveValue("1");
   await expect(list.getByRole("textbox", { name: /^Количество.*Мясо краба/ })).toHaveValue("2");
   const categories = page.locator("[data-catalog-filters]");
-  for (const [name, count] of [["Бакалея", 11], ["Вяленая рыба", 4], ["Консервы и бульон", 12], ["Принадлежности", 1]]) {
+  for (const [name, count] of [["Бакалея", 11], ["Вяленая рыба", 4], ["Консервы и бульон", 12], ["Кухонные принадлежности", 1]]) {
     await categories.getByRole("button", { name, exact: true }).press("Enter");
     await expect(products).toHaveCount(count);
     await expect(page.locator('[data-category="other"]')).toBeHidden();

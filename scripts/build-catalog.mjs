@@ -4,7 +4,7 @@ import { catalog } from "../assets/catalog-data.js";
 import { catalogPrice, productLabel, productDescription, orderLinks, positionCount, productNotes, productSearchText, productKey } from "../assets/catalog-model.js";
 import { typographText } from "../assets/typography.js";
 import { recipeContent, productRecipeLinks, matchesProduct } from "./recipe-content.mjs";
-import { olegSources as sources, audioTime, audioFragmentHref } from "./oleg-content.mjs";
+import { olegSources as sources, audioFragmentHref } from "./oleg-content.mjs";
 
 const path = fileURLToPath(new URL("../catalog/index.html", import.meta.url));
 const original = readFileSync(path, "utf8");
@@ -49,18 +49,19 @@ const products = catalog.map((category) => `
   const source = tip && journal.find(entry => entry.id === tip.entry);
   const externalSource = tip?.source && sources.textSources.find(source => source.id === tip.source);
   const audioChapters = sources.audio.flatMap(audio => audio.chapters
-    .filter(chapter => chapter.products.includes(product.id)).map(chapter => ({ audio, chapter })));
+    .filter(chapter => chapter.catalog !== false && chapter.products.includes(product.id)).map(chapter => ({ audio, chapter })));
   const related = productRecipeLinks(category, product);
-  const audioNote = !tip && !related.length && audioChapters[0];
+  const audioNote = tip ? null : audioChapters[0];
   const adviceEntries = (source ? [source, ...related.filter(entry => entry.id !== source.id)] : related).slice(0, 2);
   const advice = adviceEntries.map(recipe =>
     adviceLink(`../journal/${recipe.id}/`, recipe.title, journal.find(entry => entry.id === recipe.id)));
-  if (externalSource) advice.unshift(`<a href="${escape(externalSource.url)}">${text(externalSource.label)} · ${text(externalSource.site)} · <time datetime="${externalSource.date}">${text(new Intl.DateTimeFormat("ru-RU", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${externalSource.date}T12:00:00Z`)).replace(/ г\.$/, ""))}</time></a>`);
-  for (const story of recipeContent.productStories.filter(story => story.products.some(selection => matchesProduct(selection, category, product)))) {
-    advice.push(adviceLink(story.source, story.label, story));
+  if (externalSource?.entry && !adviceEntries.some(entry => entry.id === externalSource.entry)) {
+    advice.unshift(adviceLink(`../journal/${externalSource.entry}/`, externalSource.label, journal.find(entry => entry.id === externalSource.entry)));
   }
-  for (const { audio, chapter } of audioChapters) advice.push(`<a href="${escape(audioFragmentHref(audio, chapter))}">${text(`Послушать: ${chapter.label} · ${audio.label} · ${audioTime(chapter.start)} · SoundCloud`)}</a>`);
-  for (const video of sources.video.filter(source => source.products.includes(product.id))) advice.push(`<a href="${escape(video.url)}">${text(`${video.label} · YouTube`)}</a>`);
+  for (const story of recipeContent.productStories.filter(story => story.products.some(selection => matchesProduct(selection, category, product)))) {
+    const localEntry = journal.find(entry => `https://t.me/kapitanseledkin/${entry.id}` === story.source);
+    if (localEntry && !adviceEntries.some(entry => entry.id === localEntry.id)) advice.push(adviceLink(`../journal/${localEntry.id}/`, story.label, story));
+  }
   return `
               <article class="catalog-product" id="product-${escape(product.id)}" tabindex="-1" data-product-id="${escape(product.id)}" data-search-text="${escape(keywords)}" data-product-name="${escape(product.name)}" data-product-category="${category.slug}"${product.previousCategory ? ` data-previous-category="${product.previousCategory}"` : ""}>
                 <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description ? `
@@ -78,8 +79,8 @@ const products = catalog.map((category) => `
                     <a href="${escape(links.whatsapp)}">В&nbsp;WhatsApp</a>
                     <a href="tel:+79166751452">Позвонить</a>
                   </div>
-                </details>${advice.length ? `
-                <div class="catalog-product-advice"><span>${tip || related.length ? "Олег советует" : "Олег рассказывает"}</span>${tip ? `<blockquote cite="${escape(externalSource?.url ?? `../journal/${tip.entry}/`)}">${text(tip.quote)}</blockquote>` : audioNote ? `<p class="catalog-audio-note">${text(audioNote.chapter.note)}</p>` : ""}${advice.join("\n                  ")}</div>` : ""}
+                </details>${tip || audioNote || advice.length ? `
+                <div class="catalog-product-advice"><span>${audioNote?.chapter.catalogLabel ?? (tip || related.length ? "Олег советует" : "Олег рассказывает")}</span>${tip ? `<blockquote cite="${escape(externalSource?.url ?? `../journal/${tip.entry}/`)}"${externalSource ? ` data-source-date="${externalSource.date}"` : ""}>${text(tip.quote)}</blockquote>` : audioNote?.chapter.catalogQuote ? `<blockquote class="catalog-audio-quote" cite="${escape(audioFragmentHref(audioNote.audio, { start: audioNote.chapter.quoteStart }))}" data-audio-chapter="${escape(audioNote.chapter.id)}">${text(audioNote.chapter.catalogQuote)}</blockquote>` : ""}${advice.join("\n                  ")}</div>` : ""}
               </article>`;
 }).join("")}
             </div>

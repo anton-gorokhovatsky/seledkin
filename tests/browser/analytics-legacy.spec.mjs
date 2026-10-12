@@ -59,7 +59,7 @@ test("recipe product choices and exact catalog transitions are measured without 
   });
   await page.getByRole("button", { name: /^Все материалы/ }).click();
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").at(-1)[3])).toEqual({
-    context: "recipes", action: "ingredient_filter", ingredient: "all", count: 23,
+    context: "recipes", action: "ingredient_filter", ingredient: "all", count: 24,
   });
   const params = await page.evaluate(() => window.goalCalls.filter(call => call[1] === "reachGoal").map(call => call[3]));
   for (const value of params) expect(Object.keys(value).every(key => ["context", "action", "ingredient", "count", "recipe_id", "product_id"].includes(key))).toBe(true);

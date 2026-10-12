@@ -10,7 +10,8 @@
       "sourceFile": "telegram-619.txt",
       "alternateUrls": [
         "https://www.facebook.com/permalink.php?story_fbid=pfbid09Mm9oePJxeCt2iREynvkskEz5yQqYkyQsuF6qQwu96k5sJKibRfCdXHKwRxiLLzGl&id=61580098542037"
-      ]
+      ],
+      "entry": 619
     },
     {
       "id": "north-fish",
@@ -105,7 +106,10 @@
           "products": [
             "frozen-fish-010",
             "frozen-fish-015"
-          ]
+          ],
+          "catalogQuote": "Маленький-маленький жировой плавничок. Вот у корюшки он есть, а у пихерея его нет.",
+          "quoteStart": 551,
+          "catalogLabel": "Олег советует"
         },
         {
           "id": "smelt-pan",
@@ -115,7 +119,8 @@
           "note": "Мука и соль в пакете, выкладка рыбы «крестом» и «снежинкой», переворот с помощью тарелки: Олег объясняет свою подачу корюшки.",
           "products": [
             "frozen-fish-015"
-          ]
+          ],
+          "catalog": false
         }
       ],
       "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
@@ -154,7 +159,8 @@
             "seafood-004",
             "seafood-005",
             "seafood-006"
-          ]
+          ],
+          "catalog": false
         },
         {
           "id": "canned-sprats",
@@ -164,7 +170,10 @@
           "note": "Олег рассказывает о копчении и размере рыбы: чем мельче рыба, тем суше получаются шпроты.",
           "products": [
             "other-010"
-          ]
+          ],
+          "catalogQuote": "Причем чем мельче рыба, тем суше получаются шпроты.",
+          "quoteStart": 1260,
+          "catalogLabel": "Олег советует"
         }
       ],
       "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
@@ -195,7 +204,8 @@
           "note": "Олег рассказывает о своём выборе очищенных мидий из Чили.",
           "products": [
             "seafood-009"
-          ]
+          ],
+          "catalog": false
         },
         {
           "id": "exotic-cook-mussels",
@@ -205,7 +215,8 @@
           "note": "Олег предлагает прогреть масло с чесноком и специями и добавить его к размороженным мидиям.",
           "products": [
             "seafood-009"
-          ]
+          ],
+          "catalog": false
         },
         {
           "id": "exotic-squid",
@@ -216,7 +227,10 @@
           "products": [
             "seafood-011",
             "seafood-012"
-          ]
+          ],
+          "catalogQuote": "Дождались повторного закипания, посчитали секундомером ровно три минуты. Достали кальмаров, положили остужаться.",
+          "quoteStart": 827,
+          "catalogLabel": "Олег советует"
         },
         {
           "id": "exotic-scallop",
@@ -226,7 +240,8 @@
           "note": "Олег сравнивает разные виды гребешка и рассказывает, почему выбирает Южные Курилы и Сахалин.",
           "products": [
             "seafood-020"
-          ]
+          ],
+          "catalog": false
         }
       ],
       "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
@@ -258,7 +273,8 @@
             "seafood-001",
             "seafood-002",
             "seafood-003"
-          ]
+          ],
+          "catalog": false
         }
       ],
       "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
@@ -288,7 +304,10 @@
           "products": [
             "other-005",
             "other-006"
-          ]
+          ],
+          "catalogQuote": "В процессе нагревания печень выпускает из себя жир.",
+          "quoteStart": 299,
+          "catalogLabel": "Олег рассказывает"
         },
         {
           "id": "liver-cook",
@@ -299,7 +318,8 @@
           "products": [
             "other-005",
             "other-006"
-          ]
+          ],
+          "catalog": false
         },
         {
           "id": "liver-tongues",
@@ -307,7 +327,8 @@
           "end": 1092,
           "label": "О жареных и тушёных языках трески",
           "note": "Отдельный разговор о рыбных субпродуктах и приготовлении языков трески. Это не описание консервированных языков из нынешнего каталога.",
-          "products": []
+          "products": [],
+          "catalog": false
         }
       ],
       "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
@@ -335,7 +356,10 @@
           "note": "Олег описывает филе AAA как ровный брусок с тонкими прослойками и сравнивает его с более жёсткой хвостовой частью.",
           "products": [
             "fillet-006"
-          ]
+          ],
+          "catalogQuote": "Это ровный прямоугольный брусок… То есть вы видите практически только красный цвет.",
+          "quoteStart": 869,
+          "catalogLabel": "Олег рассказывает"
         }
       ],
       "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
@@ -363,7 +387,8 @@
           "note": "Олег сравнивает ледяную рыбу до 250 г и крупнее: у мелкой рыбы ниже выход мяса.",
           "products": [
             "frozen-fish-029"
-          ]
+          ],
+          "catalog": false
         },
         {
           "id": "ice-pan",
@@ -373,7 +398,8 @@
           "note": "Олег предлагает жарить ледяную рыбу в небольшой панировке без крышки. Если приходится отрезать голову, советует пожарить и её: в щёчках есть мясо.",
           "products": [
             "frozen-fish-029"
-          ]
+          ],
+          "catalog": false
         }
       ],
       "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
@@ -402,7 +428,8 @@
           "note": "Олег предлагает оценивать соль, консистенцию и оболочку зерна: остаётся ли она во рту после того, как икринку раскусили.",
           "products": [
             "caviar-005"
-          ]
+          ],
+          "catalog": false
         },
         {
           "id": "roe-colour",
@@ -410,17 +437,22 @@
           "end": 657,
           "label": "Почему цвет икры бывает разным",
           "note": "Разговор о различиях цвета икры нерки, горбуши и кеты; Олег советует выбирать по вкусу.",
-          "products": []
+          "products": [],
+          "catalog": false
         },
         {
           "id": "roe-preference",
           "start": 1409,
           "end": 1429,
           "label": "Любимая икра Олега",
-          "note": "В конце разговора Олег называет своей любимой красную форелевую икру. Это его личное предпочтение.",
+          "note": "Из красной икры Олег больше всего любит форелевую.",
           "products": [
             "trout-roe"
-          ]
+          ],
+          "catalogQuote": "Мне больше всего нравится красная форелевая икра.",
+          "quoteStart": 1424,
+          "catalogLabel": "Олег рассказывает",
+          "catalog": false
         }
       ],
       "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
