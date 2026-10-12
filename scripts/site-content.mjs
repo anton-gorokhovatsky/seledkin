@@ -314,7 +314,6 @@ export function renderJournalAtlas(list) {
               <h1 class="page-intro__title" id="journal-title">Су­до­вой <em>жур­нал</em></h1>
             </div>
             <div class="journal-atlas__introduction">
-              <span class="journal-atlas__count" aria-hidden="true">${String(recent.length).padStart(2, "0")}</span>
               <p>${text("Пять последних записей. Рыба, детали, жизнь лавки — в авторском кадре.")}</p>
               ${earlier.length ? `<a class="editorial-link" href="#journal-earlier">Ранее в журнале${harpoon}</a>` : ""}
             </div>
