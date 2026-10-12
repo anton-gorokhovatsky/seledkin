@@ -109,7 +109,8 @@
           ],
           "catalogQuote": "Маленький-маленький жировой плавничок. Вот у корюшки он есть, а у пихерея его нет.",
           "quoteStart": 551,
-          "catalogLabel": "Олег советует"
+          "catalogLabel": "Олег советует",
+          "catalog": false
         },
         {
           "id": "smelt-pan",

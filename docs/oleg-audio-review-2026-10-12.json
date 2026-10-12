@@ -5,7 +5,7 @@
   "method": {
     "draft": "Local Whisper large-v3-turbo 4-bit Russian ASR, full recordings",
     "crosscheck": "18 selected original-audio segments re-recognized with full Whisper large-v3 4-bit and compared with the draft",
-    "boundary": "Full machine transcripts, not human listening. Catalog uses five short speech excerpts crosschecked against two ASR passes, with punctuation normalized and omissions marked. Recognition differences are recorded on the selected chapters. The roe-preference excerpt is retained only as research evidence; it is not used as advice for the current product. No claim of a fully verbatim audio transcript.",
+    "boundary": "Full machine transcripts, not human listening. Catalog uses four short speech excerpts crosschecked against two ASR passes, with punctuation normalized and omissions marked. Recognition differences are recorded on the selected chapters. The roe-preference excerpt is retained only as research evidence; it is not used as advice for the current product. No claim of a fully verbatim audio transcript.",
     "recordingDates": "Unknown; SoundCloud upload dates are not broadcast dates."
   },
   "audio": [
@@ -33,7 +33,8 @@
             "crosscheckSha256": "bb56e341a3823afc599fb576a3a600ef646740a375a2da0bf3716198e081d5a2",
             "wording": "Short excerpt from the draft and selected-segment full-model ASR. Spoken punctuation is normalized; omissions in the tuna excerpt are marked with an ellipsis.",
             "recognitionDifference": "Both passes name pikherey; the genitive ending follows the draft (pikhereya)."
-          }
+          },
+          "catalog": false
         },
         {
           "id": "smelt-pan",
@@ -401,13 +402,14 @@
     "Keep existing composition, photographs and button components; add a second all-recipes entrance after the home preview."
   ],
   "catalogReview": {
-    "writtenQuotes": 26,
-    "spokenExcerpts": 5,
-    "renderedSpokenQuotes": 8,
+    "writtenQuotes": 28,
+    "spokenExcerpts": 4,
+    "renderedSpokenQuotes": 6,
     "removed": [
       "kamchatka-crabs: comparison teaser without a useful statement",
       "canned-choice: generic preference repeated under six products",
-      "roe-preference: personal preference from an interview does not belong to the current product card"
+      "roe-preference: personal preference from an interview does not belong to the current product card",
+      "smelt-choice: rare fish name has unverified ASR spelling; catalog uses the existing written frying recipe instead"
     ],
     "sourcesInCatalog": "Provenance is retained in cite/data metadata. Visible links lead only to native recipes and guides; original sources and audio library live on the full material/about pages."
   }

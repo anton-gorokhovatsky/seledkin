@@ -103,9 +103,11 @@ test("catalog advice previews retain the full photograph, keyboard access and di
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/journal\/574\/$/);
 
-  await page.goto("catalog/?q=кальмар&category=seafood&audit=advice");
-  await page.locator('.catalog-advice-link[href="https://t.me/kapitanseledkin/610"]').first().hover();
-  await expect(page.locator(".catalog-advice-link.is-previewing img")).toHaveAttribute("src", /journal-610-/);
+  // The catalog's reading links now stay on site. Check the second preview
+  // on the complete roe guide, rather than on a removed social-source link.
+  await page.goto("catalog/?q=красная+икра&category=caviar&audit=advice");
+  await page.locator('#product-caviar-005 .catalog-advice-link[href="../journal/619/"]').hover();
+  await expect(page.locator(".catalog-advice-link.is-previewing img")).toHaveAttribute("src", /journal-619-/);
   const phoneContext = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
   const phone = await phoneContext.newPage();
   await phone.goto(`${baseURL}catalog/?q=мясо+мидий&category=seafood&audit=advice`);
