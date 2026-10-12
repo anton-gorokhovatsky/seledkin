@@ -15,7 +15,7 @@ test("desktop menu keeps contacts in place while routes scroll, including short 
     const context = await browser.newContext({ reducedMotion: "reduce" });
     await context.addInitScript(value => localStorage.setItem("seledkin-theme", value), theme);
     const page = await context.newPage();
-    for (const viewport of [{ width: 1624, height: 930 }, { width: 1024, height: 600 }]) {
+    for (const viewport of [{ width: 1624, height: 930 }, { width: 1512, height: 862 }, { width: 1024, height: 600 }]) {
       await page.setViewportSize(viewport);
       await page.goto(new URL("?audit=menu-scroll", baseURL).href);
       await page.getByRole("button", { name: "Открыть меню", exact: true }).click();
@@ -31,6 +31,11 @@ test("desktop menu keeps contacts in place while routes scroll, including short 
       await proof(page, `menu-${theme}-${viewport.width}-top`);
 
       const routesOverflow = await panel.evaluate(element => element.scrollHeight - element.clientHeight);
+      if (viewport.width === 1512) {
+        expect(routesOverflow, "visible menu routes do not scroll through trailing padding").toBe(0);
+        expect(await serviceScroll.evaluate(element => element.scrollHeight - element.clientHeight),
+          "visible service actions do not scroll through trailing padding").toBe(0);
+      }
       // Short windows must exercise scrolling; a taller window can fit all routes.
       if (viewport.height === 600) expect(routesOverflow).toBeGreaterThan(0);
       await page.mouse.move(200, viewport.height / 2);

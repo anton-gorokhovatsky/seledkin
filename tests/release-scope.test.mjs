@@ -159,6 +159,20 @@ test("recipe pages, dedicated styles and filtering select recipe journeys", () =
   assert.equal(classifyRelease([{ path: 'assets/recipes-editorial.css', before: '.recipes-intro{gap:2rem}', after: ':root{--ink:red}.recipes-intro{gap:1rem}' }]), "full");
 });
 
+test("menu end spacing selects navigation without hiding overflow or other layout changes", () => {
+  const before = '@media (width > 61.1875rem){.site-menu__service-inner{min-height:0;padding-top:0;overflow-y:auto;}}';
+  const after = before.replace('padding-top:0;', 'padding-top:0;padding-bottom:0;')
+    .replace('{.site-menu__service-inner', '{.site-menu__routes{padding-bottom:0;}.site-menu__service-inner');
+  const changes = [{ path: "assets/styles.css", before, after }];
+  assert.equal(classifyRelease(changes), "scoped");
+  assert.deepEqual(scopedBrowserTags(changes), ["@navigation"]);
+  for (const changed of [after.replace('overflow-y:auto', 'overflow-y:hidden'),
+    after.replace('min-height:0', 'min-height:100%'), after + ':root{--ink:red}',
+    after.replace('.site-menu__routes{padding-bottom:0;', '.site-menu__routes{font-size:1rem;padding-bottom:0;')]) {
+    assert.equal(classifyRelease([{ path: "assets/styles.css", before, after: changed }]), "full");
+  }
+});
+
 test("shared tokens, mixed selectors, moved rules and unknown modules retain the full gate", () => {
   for (const [before, after] of [
     [':root{--ink:black}', ':root{--ink:blue}'],

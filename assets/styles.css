@@ -2750,6 +2750,10 @@ a.site-menu__brand {
 }
 
 @media (width > 61.1875rem) {
+  .site-menu__routes {
+    padding-bottom: 0;
+  }
+
   .site-menu__service {
     position: sticky;
     top: 0;
@@ -2763,6 +2767,7 @@ a.site-menu__brand {
   .site-menu__service-inner {
     min-height: 0;
     padding-top: 0;
+    padding-bottom: 0;
     flex: 1;
     justify-content: flex-start;
     overflow-y: auto;

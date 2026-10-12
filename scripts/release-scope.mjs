@@ -170,13 +170,22 @@ function cssRules(source, context = "", rules = new Map()) {
   return rules;
 }
 
+function onlyMenuEndPadding(before, after, selector) {
+  if (!/^\s*\.site-menu__(?:routes|service-inner)\s*$/.test(selector)) return false;
+  const withoutEndPadding = rule => (rule?.body ?? "")
+    .replace(/(^|[;\n])\s*padding-bottom\s*:[^;{}]+;/g, "$1")
+    .split("\n").map(line => line.trim()).filter(Boolean).join("\n");
+  return withoutEndPadding(before) === withoutEndPadding(after);
+}
+
 function cssTags(before, after, recipeSheet = false) {
   try {
     const oldRules = cssRules(before), newRules = cssRules(after), tags = new Set();
     for (const key of new Set([...oldRules.keys(), ...newRules.keys()])) {
       if (oldRules.get(key)?.body === newRules.get(key)?.body) continue;
       for (const selector of (newRules.get(key) ?? oldRules.get(key)).selector.split(",")) {
-        const tag = recipeSheet && /^\s*(?:\.(?:recipes?-)[\w-]+|\[data-recipe-)[^,]*$/.test(selector) ? "@recipes"
+        const tag = onlyMenuEndPadding(oldRules.get(key), newRules.get(key), selector) ? "@navigation"
+          : recipeSheet && /^\s*(?:\.(?:recipes?-)[\w-]+|\[data-recipe-)[^,]*$/.test(selector) ? "@recipes"
           : /^\s*\.contacts-source(?=[\s_.#[:]|$)/.test(selector) ? "@contacts"
           : /^\s*\.catalog-(?:[\w-]+)(?=[\s.#[:]|$)/.test(selector) ? "@catalog"
           : /^\s*\.(?:journal-historical|recipe-archive-note)(?=[\s_.#[:]|$)/.test(selector) ? "@journal"
