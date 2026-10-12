@@ -9,6 +9,14 @@ const units = /([\d])[ \t\r\n\u00a0\u202f]*(₽|%|(?:кг|мл|г|л|руб\.|р
 const monthNames = "января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря";
 const dates = new RegExp(`(\\d{1,2})[ \\t\\r\\n\\u00a0]+(${monthNames})(?:[ \\t\\r\\n\\u00a0]+(\\d{4}))?(?![\\p{L}\\p{N}])`, "giu");
 
+export function countNoun(value, [one, few, many]) {
+  const lastTwo = value % 100;
+  const last = value % 10;
+  const noun = lastTwo >= 11 && lastTwo <= 14 ? many
+    : last === 1 ? one : last >= 2 && last <= 4 ? few : many;
+  return `${value}\u00a0${noun}`;
+}
+
 function typographProse(value) {
   // Quote nesting is authored context, including quotations across paragraphs.
   let result = value;

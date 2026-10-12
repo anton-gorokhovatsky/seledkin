@@ -2,7 +2,8 @@
   "address": {
     "city": "Москва",
     "street": "ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1",
-    "metro": "«Вави&shy;ловская» и «Университет»"
+    "metro": "«Вави&shy;ловская»",
+    "additionalMetro": "«Уни&shy;вер&shy;си&shy;тет»"
   },
   "store": {
     "timeZone": "Europe/Moscow",

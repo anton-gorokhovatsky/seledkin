@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { typographText } from "../assets/typography.js";
+import { countNoun, typographText } from "../assets/typography.js";
 import { catalog } from "../assets/catalog-data.js";
 import { catalogPrice, productNotes, productDescription, orderLinks, productHref, positionCount } from "../assets/catalog-model.js";
 import { recipeContent, recipes, recipeIngredients, resolveProduct, productCatalogHref, productRecipeLinks } from "./recipe-content.mjs";
@@ -100,8 +100,8 @@ export function renderAboutPreview(root = "", shell = true) {
 }
 
 const street = `${site.address.city}, ${site.address.street}`;
-const metro = `метро ${site.address.metro}`;
-export const contactAddress = `${street}. Метро ${site.address.metro}.`;
+const metroDirections = `Метро ${site.address.metro}. Можно также дойти от метро ${site.address.additionalMetro}.`;
+export const contactAddress = `${street}. ${metroDirections}`;
 
 function routeLinks(page, root, numbered) {
   return site.routes.map(({ href, label }, index) => {
@@ -125,7 +125,7 @@ export function renderMenu(page, root) {
     routes: routeLinks(page, root, true),
     regularHours,
     menuActions: contactActions({ phoneName: true }),
-    menuAddress: `${street}<br />\n                Метро ${site.address.metro}`,
+    menuAddress: `${street}<br />\n                ${metroDirections}`,
   });
 }
 
@@ -136,7 +136,7 @@ ${routeLinks(page, root, false)}
   return `${fallback}\n${template("footer", {
     root, footerId: page === "catalog" ? "catalog-footer-title" : "footer-title",
     regularHours: `Каждый день с ${store.hours.open} до ${store.hours.close}`,
-    footerAddress: `${street}; ${metro}`,
+    footerAddress: `${street}. ${metroDirections}`,
     footerActions: contactActions({ classes: "source-button--footer-contact" }),
   })}`;
 }
@@ -466,7 +466,7 @@ export function renderRecipesPage() {
   const chooser = `<section class="recipe-chooser" aria-labelledby="recipe-chooser-title" data-recipe-chooser hidden>
     <h2 id="recipe-chooser-title">Из чего готовим?</h2>
     <div class="recipe-ingredients" role="group" aria-label="Выбрать продукт">${recipeIngredients.map(([slug, label]) => `<button type="button" data-ingredient="${slug}" aria-pressed="${slug === "all"}">${label}<span>${slug === "all" ? recipes.length : recipes.filter(recipe => recipe.ingredient === slug).length}</span></button>`).join("")}</div>
-    <p class="recipe-filter-status" role="status" aria-live="polite" data-recipe-filter-status>${recipes.filter(recipe => recipe.kind === "recipe").length} рецептов и ${recipes.filter(recipe => recipe.kind === "advice").length} совета</p>
+    <p class="recipe-filter-status" role="status" aria-live="polite" data-recipe-filter-status>${countNoun(recipes.filter(recipe => recipe.kind === "recipe").length, ["рецепт", "рецепта", "рецептов"])} и ${countNoun(recipes.filter(recipe => recipe.kind === "advice").length, ["совет", "совета", "советов"])}</p>
   </section>`;
   const wordBreaks = { "сковороде": "ско­во­ро­де", "томатном": "то­мат­ном", "Осьминог": "Ось­ми­ног", "Патагонские": "Пата­гон­ские", "Перепелиные": "Пере­пе­ли­ные", "креветочной": "кре­ве­точной", "креветки": "кре­вет­ки", "креветку": "кре­вет­ку", "белобрюшка": "бело­брюш­ка", "Командир": "Коман­дир", "счастливой": "счаст­ливой", "Предельно": "Пре­дель­но", "упаковка": "упа­ков­ка", "разделать": "раз­делать" };
   const recordTitle = title => Object.entries(wordBreaks).reduce((result, [word, hyphenated]) => result.replaceAll(word, hyphenated), text(title));

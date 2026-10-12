@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { typographPrice, typographText } from "../assets/typography.js";
+import { countNoun, typographPrice, typographText } from "../assets/typography.js";
+
+test("Russian counters keep the correct noun at teen and decade boundaries", () => {
+  for (const [count, expected] of [[0, "советов"], [1, "совет"], [2, "совета"], [4, "совета"], [5, "советов"], [7, "советов"], [11, "советов"], [14, "советов"], [21, "совет"], [22, "совета"], [25, "советов"], [101, "совет"], [112, "советов"]]) {
+    assert.equal(countNoun(count, ["совет", "совета", "советов"]), `${count}\u00a0${expected}`);
+  }
+});
 
 test("Russian copy preserves nested quotes, word hyphens and authored dialogue", () => {
   assert.equal(typographText("«Всё „ок“, но неправильно везут»"), "«Всё „ок“, но\u00a0неправильно везут»");

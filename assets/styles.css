@@ -2449,6 +2449,13 @@ a.source-brand {
   visibility: visible;
 }
 
+/* Keep the entry control in the masthead, away from prices while scrolling.
+   The dialog's close control retains its fixed position. */
+.floating-menu[data-menu-toggle],
+.floating-menu[data-menu-fallback-link] {
+  position: absolute;
+}
+
 :root[data-input-modality="pointer"] .floating-menu:focus-visible {
   outline: none;
 }
@@ -3748,7 +3755,7 @@ a.site-menu__brand {
 
   .assortment-overview__header h2 {
     max-width: none;
-    font-size: clamp(2.75rem, 10vw, 4rem);
+    font-size: clamp(2.5rem, 1.5rem + 3vw, 3.375rem);
   }
 
   .assortment-overview__header p {
@@ -4071,10 +4078,6 @@ a.site-menu__brand {
 
   .assortment-overview {
     padding-top: 3.25rem;
-  }
-
-  .assortment-overview__header h2 {
-    font-size: clamp(3rem, 16vw, 4.15rem);
   }
 
   .assortment-overview__media {

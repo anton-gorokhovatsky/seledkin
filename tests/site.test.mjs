@@ -248,7 +248,7 @@ test("home exposes the core customer jobs", () => {
   assert.match(home, /метро «Вавиловская»/);
   const contacts =
     home.match(/<section class="contacts-source"[\s\S]*?<\/section>/)?.[0] ?? "";
-  assert.match(contacts, /Метро «Вавиловская» и «Университет»/);
+  assert.match(contacts, /Метро «Вавиловская»\. Можно также дойти от метро «Университет»\./);
   assert.match(contacts, /Ежедневно с 11:00 до 20:00/);
   assert.doesNotMatch(home + styles, /source-hero__down/);
 });
@@ -803,7 +803,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     const footerMarkup =
       page.match(/<footer class="source-footer"[\s\S]*?<\/footer>/)?.[0] ?? "";
     assert.doesNotMatch(footerMarkup, /Ежедневно с 11:00 до 20:00/);
-    assert.match(page, /метро «Вавиловская»/);
+    assert.match(footerMarkup, /Метро «Вавиловская»\. Можно также дойти от метро «Университет»\./);
     assert.match(page, /class="source-footer__portrait"/);
     assert.match(page, /salmon-cat\.jpg/);
     for (const label of ["Телеграм-канал", "YouTube", "SoundCloud"]) {

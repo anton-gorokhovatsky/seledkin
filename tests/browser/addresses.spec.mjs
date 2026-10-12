@@ -25,7 +25,7 @@ async function expectMetroWithStation(locator, additionalStation = true) {
   });
   expect(layout).not.toBeNull();
   expect(layout.text).toMatch(/[Мм]етро «Вавиловская»/);
-  if (additionalStation) expect(layout.text).toContain('«Вавиловская» и «Университет»');
+  if (additionalStation) expect(layout.text).toContain('Метро «Вавиловская». Можно также дойти от метро «Университет».');
   expect(Math.abs(layout.metroLine - layout.stationLine)).toBeLessThan(1);
   expect(layout.contentWidth).toBeLessThanOrEqual(layout.width);
 }

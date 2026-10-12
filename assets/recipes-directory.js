@@ -1,4 +1,5 @@
 import { revealChange } from "./interaction-feedback.js";
+import { countNoun } from "./typography.js";
 
 const chooser = document.querySelector("[data-recipe-chooser]");
 if (chooser) {
@@ -37,7 +38,7 @@ if (chooser) {
     heading.textContent = ingredient === "all" ? "Рецепты и советы" : buttons.find(button => button.dataset.ingredient === ingredient).firstChild.textContent;
     const count = records.filter(record => !record.hidden).length + features.filter(feature => !feature.hidden).length;
     document.body.dataset.recipeCount = String(count);
-    status.textContent = ingredient === "all" ? allStatus : `${count} ${count === 1 ? "материал" : count < 5 ? "материала" : "материалов"}`;
+    status.textContent = ingredient === "all" ? allStatus : countNoun(count, ["материал", "материала", "материалов"]);
     if (animate) revealChange([opening.hidden ? null : opening, directory.hidden ? null : directory]);
   }
   for (const button of buttons) button.addEventListener("click", () => {
