@@ -54,6 +54,38 @@ test("tooling and documentation do not republish an unchanged site", () => {
     "scripts/release-scope.mjs", "tests/release-scope.test.mjs"].map(path => ({ path }))), "none");
 });
 
+const menuPage = routes => `<main>Same content</main><nav aria-label="Меню сайта">${routes.map(([href, label], i) =>
+  `<a href="${href}"${href === "catalog/" ? ' aria-current="page"' : ""}><span aria-hidden="true">0${i + 1}</span><span>${label}</span></a>`).join("")}</nav>
+<nav class="site-navigation-fallback source-shell" id="site-navigation-fallback" aria-label="Разделы сайта" tabindex="-1" data-menu-fallback>${routes.map(([href, label]) =>
+  `<a href="${href}"${href === "catalog/" ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav><footer>Same contacts</footer>`;
+const menuRoutes = [["catalog/", "Продукты и цены"], ["#assortment", "Что продаём"], ["#contacts", "Контакты"]];
+const retainedMenuRoutes = menuRoutes.filter(([href]) => href !== "#assortment");
+
+test("changing menu items selects navigation while generated page content stays unchanged", () => {
+  for (const routes of [retainedMenuRoutes, [...menuRoutes].reverse(), [...menuRoutes, ["recipes/", "Рецепты"]],
+    menuRoutes.map(([href, label]) => [href, label === "Контакты" ? "Адрес лавки" : label])]) {
+    const changes = ["index.html", "catalog/index.html", "about/index.html", "journal/700/index.html"]
+      .map(path => ({ path, before: menuPage(menuRoutes), after: menuPage(routes) }));
+    assert.equal(classifyRelease(changes), "scoped");
+    assert.deepEqual(scopedBrowserTags(changes), ["@navigation"]);
+  }
+});
+
+test("navigation selection cannot hide changed behaviour, layout or content outside its links", () => {
+  const before = menuPage(menuRoutes), after = menuPage(retainedMenuRoutes);
+  for (const changed of [after.replace("Same content", "New content"), after.replace("Same contacts", "New contacts"),
+    after.replace('href="catalog/"', 'href="catalog/" onclick="newBehaviour()"'),
+    after.replace('href="catalog/"', 'href="javascript:newBehaviour()"'),
+    after.replace('aria-label="Меню сайта"', 'aria-label="Другое меню"'), after + "<script>newBehaviour()</script>",
+    after.replace('<span>Контакты</span>', '<strong>Контакты</strong>')]) {
+    assert.equal(classifyRelease([{ path: "index.html", before, after: changed }]), "full");
+  }
+  for (const change of [{ path: "assets/site.js", before: "old();", after: "new();" },
+    { path: "assets/styles.css", before: ".site-menu{gap:1rem}", after: ".site-menu{gap:2rem}" }]) {
+    assert.equal(classifyRelease([{ path: "index.html", before, after }, change]), "full");
+  }
+});
+
 const region = (name, text) => `<!-- shared:${name}:start -->${text}<!-- shared:${name}:end -->`;
 const journalUpdate = () => [
   { path: "content/journal/700.html", after: "<p>Новая авторская запись</p>" },

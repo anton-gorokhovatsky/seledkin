@@ -9,7 +9,7 @@ const proof = async (page, name) => {
   if (process.env.MENU_PROOF_DIR) await page.screenshot({ path: `${process.env.MENU_PROOF_DIR}/${name}.png` });
 };
 
-test("desktop menu keeps contacts in place while routes scroll, including short windows", async ({ browser, baseURL }) => {
+test("desktop menu keeps contacts in place while routes scroll, including short windows @navigation", async ({ browser, baseURL }) => {
   test.setTimeout(90000);
   for (const theme of ["light", "dark"]) {
     const context = await browser.newContext({ reducedMotion: "reduce" });
@@ -30,9 +30,16 @@ test("desktop menu keeps contacts in place while routes scroll, including short 
       expect(overlaps(await box(page.locator(".site-menu__brand")), await box(page.locator("#menu-title")))).toBe(false);
       await proof(page, `menu-${theme}-${viewport.width}-top`);
 
+      const routesOverflow = await panel.evaluate(element => element.scrollHeight - element.clientHeight);
+      // Short windows must exercise scrolling; a taller window can fit all routes.
+      if (viewport.height === 600) expect(routesOverflow).toBeGreaterThan(0);
       await page.mouse.move(200, viewport.height / 2);
       await page.mouse.wheel(0, 10000);
-      await expect.poll(() => panel.evaluate(element => element.scrollTop)).toBeGreaterThan(0);
+      if (routesOverflow > 1) {
+        await expect.poll(() => panel.evaluate(element => element.scrollTop)).toBeGreaterThan(0);
+      } else {
+        expect(await panel.evaluate(element => element.scrollTop)).toBe(0);
+      }
       expect(Math.abs((await box(hours)).top - hoursBefore.top)).toBeLessThan(1);
       expect((await box(service)).top).toBeGreaterThanOrEqual(-1);
       expect((await box(service)).bottom).toBeLessThanOrEqual(viewport.height + 1);
@@ -58,7 +65,7 @@ test("desktop menu keeps contacts in place while routes scroll, including short 
   }
 });
 
-test("mobile menu reaches both scroll boundaries and keeps keyboard focus below its header", async ({ browser, baseURL }) => {
+test("mobile menu reaches both scroll boundaries and keeps keyboard focus below its header @navigation", async ({ browser, baseURL }) => {
   test.setTimeout(90000);
   for (const theme of ["light", "dark"]) {
     const context = await browser.newContext({ reducedMotion: "reduce" });

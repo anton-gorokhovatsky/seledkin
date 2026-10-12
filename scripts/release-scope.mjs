@@ -75,6 +75,31 @@ function onlyTypography(before, after) {
   return normalize(before) === normalize(after);
 }
 
+function onlyMenuRoutes(before, after) {
+  const regions = [
+    [/(<nav aria-label="Меню сайта">)([\s\S]*?)(<\/nav>)/g,
+      /<a href="([^"<>]+)"(?: aria-current="page")?>\s*<span aria-hidden="true">\d+<\/span>\s*<span>[^<>]+<\/span>\s*<\/a>/g],
+    [/(<nav class="site-navigation-fallback source-shell" id="site-navigation-fallback" aria-label="Разделы сайта" tabindex="-1" data-menu-fallback>)([\s\S]*?)(<\/nav>)/g,
+      /<a href="([^"<>]+)"(?: aria-current="page")?>[^<>]+<\/a>/g],
+  ];
+  const strip = html => {
+    for (const [region, links] of regions) {
+      let count = 0, valid = true;
+      html = html.replace(region, (_, open, content, close) => {
+        count++;
+        const anchors = [...content.matchAll(links)];
+        valid &&= anchors.length > 0 && content.replace(links, "").trim() === ""
+          && anchors.every(([, href]) => !/^(?:[a-z]+:|\/\/)|\s/i.test(href));
+        return `${open}MENU_ROUTES${close}`;
+      });
+      if (count !== 1 || !valid) return null;
+    }
+    return html;
+  };
+  const outside = strip(before);
+  return outside != null && outside === strip(after);
+}
+
 function onlyProductTargets(before, after) {
   if (before == null || after == null) return false;
   const targets = [[], []];
@@ -189,6 +214,7 @@ export function scopedBrowserTags(changes) {
     } else if (path.endsWith(".html") && before != null && after != null) {
       const oldHtml = resourceVersions(before), newHtml = resourceVersions(after);
       if (oldHtml === newHtml) continue;
+      if (onlyMenuRoutes(oldHtml, newHtml)) { tags.add("@navigation"); continue; }
       if (onlyProductTargets(oldHtml, newHtml)) { tags.add("@catalog"); continue; }
       const region = path === "index.html" ? /<!-- shared:mobile-hero:start -->[\s\S]*?<!-- shared:mobile-hero:end -->/
         : ["catalog/index.html", "recipes/index.html"].includes(path) || /^journal\/\d+\/index\.html$/.test(path) ? /<main\b[^>]*>[\s\S]*?<\/main>/ : null;

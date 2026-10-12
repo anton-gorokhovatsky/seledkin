@@ -28,7 +28,7 @@ test("a missing nested URL retains the catalog route and images without JavaScri
 });
 
 for (const source of ["", "catalog/", "about/", "journal/"]) {
-  test(`all menu destinations work from ${source || "home"} on desktop and mobile`, async ({ page, baseURL }) => {
+  test(`all menu destinations work from ${source || "home"} on desktop and mobile @navigation`, async ({ page, baseURL }) => {
     test.setTimeout(90000);
     for (const width of [390, 1440]) {
       await page.setViewportSize({ width, height: 900 });
