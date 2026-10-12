@@ -1343,7 +1343,8 @@ test("menu, focus and reduced motion remain accessible", () => {
     const routes = page.match(
       /<section class="site-menu__routes">([\s\S]*?)<\/section>/,
     )?.[1] ?? "";
-    assert.equal((routes.match(/<a\s/g) ?? []).length, 7);
+    assert.equal((routes.match(/<a\s/g) ?? []).length, 6);
+    assert.doesNotMatch(routes, /href="(?:\.\.\/)?#assortment"/);
   }
 
   assert.match(siteScript, /event\.key === "Escape"/);

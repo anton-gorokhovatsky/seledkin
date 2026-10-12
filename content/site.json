@@ -27,7 +27,6 @@
   ],
   "routes": [
     { "href": "catalog/", "label": "Продукты и цены" },
-    { "href": "#assortment", "label": "Что продаём" },
     { "href": "#delivery", "label": "Доставка" },
     { "href": "#contacts", "label": "Контакты" },
     { "href": "recipes/", "label": "Рецепты и советы" },

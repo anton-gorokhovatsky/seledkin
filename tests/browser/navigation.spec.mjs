@@ -3,7 +3,6 @@ import { readFile } from "node:fs/promises";
 
 const routes = [
   ["Продукты и цены", "catalog/", "main h1"],
-  ["Что продаём", "#assortment", "#assortment h2"],
   ["Доставка", "#delivery", "#delivery h2"],
   ["Контакты", "#contacts", "#contacts h2"],
   ["Рецепты и советы", "recipes/", "main h1"],

@@ -50,7 +50,7 @@ for (const mode of ["no-js", "failed-module"]) {
         await menuLink.click();
         const navigation = page.getByRole("navigation", { name: "Разделы сайта", exact: true });
         await expect(navigation).toBeInViewport();
-        await expect(navigation.getByRole("link")).toHaveCount(7);
+        await expect(navigation.getByRole("link")).toHaveCount(6);
         await navigation.getByRole("link", { name: "Продукты и цены" }).click();
         await expect(page).toHaveURL(new URL("catalog/", baseURL).href);
         await expect(page.locator(".catalog-product")).toHaveCount(116);
