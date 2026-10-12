@@ -8,7 +8,6 @@ const paths = ["", "catalog/", "about/", "recipes/", "journal/", ...entries.map(
 const pages = new Map(await Promise.all(paths.map(async path => [path, await readFile(new URL(`../${path}index.html`, import.meta.url), "utf8")])));
 const routes = [
   ["Продукты и цены", "catalog/"],
-  ["Что продаём", "#assortment"],
   ["Доставка", "#delivery"],
   ["Контакты", "#contacts"],
   ["Рецепты и советы", "recipes/"],
