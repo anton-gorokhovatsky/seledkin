@@ -13,7 +13,11 @@ test("footer Coral loads on approach, shares the sea pause and stops offscreen",
   expect(await video.getAttribute("src")).toBeNull();
   expect(requests).toEqual([]);
   await page.locator(".source-footer__base").scrollIntoViewIfNeeded();
-  await expect.poll(() => video.evaluate(video => !video.paused && video.currentTime > 0), { timeout: 15000 }).toBe(true);
+  await expect.poll(() => video.evaluate(video => ({
+    playing: !video.paused && video.currentTime > 0,
+    error: video.error?.code ?? null,
+    readyState: video.readyState,
+  })), { timeout: 15000 }).toMatchObject({ playing: true, error: null });
   await expect(page.locator(".source-footer")).toHaveAttribute("data-coral", "");
   await page.locator("[data-menu-toggle]").click();
   await expect(video).toHaveJSProperty("paused", true);
@@ -67,3 +71,17 @@ for (const mode of ["reduced motion", "save data"]) {
     await expect(page.locator(".footer-coral-layer")).toBeHidden();
   });
 }
+
+test("unloaded or unavailable Coral never adds horizontal scrolling", async ({ page }) => {
+  await page.route("**/footer-coral-poster.png", route => route.abort());
+  await page.route("**/footer-coral.mp4", route => route.abort());
+  await page.goto("?audit=footer-coral-test");
+  await expect(page.locator(".footer-coral-layer")).toHaveCount(1);
+  for (const width of [390, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
+  }
+  await page.locator(".source-footer__base").scrollIntoViewIfNeeded();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
+  await expect(page.locator('.source-footer__actions a[href="https://t.me/+79166751452"]')).toBeVisible();
+});

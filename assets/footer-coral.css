@@ -6,8 +6,18 @@
   overflow: visible;
 }
 
-.source-footer[data-coral]::before {
+.source-footer:has(.footer-coral-layer)::before {
   display: none;
+}
+
+.footer-coral-video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .footer-coral-layer {

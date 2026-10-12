@@ -13,7 +13,9 @@ if (footer) {
   field.className = "footer-coral-field";
   const video = document.createElement("video");
   video.className = "footer-coral-video";
-  video.hidden = true;
+  // Keep a rendered, silent source for WebKit's canvas-video playback policy.
+  // CSS makes the one-pixel decoder surface transparent and non-interactive.
+  video.setAttribute("aria-hidden", "true");
   video.muted = true;
   video.defaultMuted = true;
   video.loop = true;
