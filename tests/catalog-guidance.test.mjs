@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { typographText } from "../assets/typography.js";
+import { audioFragmentHref, audioTime } from "../scripts/oleg-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const guidance = JSON.parse(read("content/catalog-guidance.json"));
@@ -23,15 +24,29 @@ test("catalog guidance keeps Oleg's words beside the matching product and comple
 });
 
 test("audio topics are linked by product, without fabricated quotations or mixing packaging advice", () => {
-  for (const audio of sources.audio) for (const id of audio.products) {
-    const article = html.match(new RegExp(`<article[^>]*id="product-${id}"[\\s\\S]*?</article>`))?.[0];
-    assert.ok(article.includes(`href="${audio.url}"`), `${id} misses ${audio.id}`);
+  for (const audio of sources.audio) {
+    assert.equal(audio.reviewed, "full-transcript-and-selected-segment-crosscheck");
     assert.ok(read("about/index.html").includes(`href="${audio.url}"`));
+    for (const chapter of audio.chapters) {
+      const href = audioFragmentHref(audio, chapter);
+      assert.equal(decodeURIComponent(new URL(href).hash.slice(3)), audioTime(chapter.start));
+      assert.ok(read("about/index.html").includes(`href="${href}"`));
+      for (const id of chapter.products) {
+        const article = html.match(new RegExp(`<article[^>]*id="product-${id}"[\\s\\S]*?</article>`))?.[0];
+        assert.ok(article.includes(`href="${href}"`), `${id} misses ${chapter.id}`);
+        assert.ok(!article.includes(`<blockquote cite="${href}"`), "Audio summaries cannot masquerade as direct quotations");
+      }
+    }
   }
   const cannedCrab = html.match(/<article[^>]*id="product-seafood-004"[\s\S]*?<\/article>/)[0];
   assert.match(cannedCrab, /Рыбные консервы/);
   const freshCrab = html.match(/<article[^>]*id="product-seafood-001"[\s\S]*?<\/article>/)[0];
   assert.doesNotMatch(freshCrab, /Рыбные консервы/);
+  const cannedTongues = html.match(/<article[^>]*id="product-prepared-fish-013"[\s\S]*?<\/article>/)[0];
+  assert.doesNotMatch(cannedTongues, /liver-tongues|#t=17%3A30/);
+  const pate = html.match(/<article[^>]*id="product-other-007"[\s\S]*?<\/article>/)[0];
+  assert.match(pate, /Обычно мы не\s+советуем покупать такую, но\s+именно эту/);
+  assert.match(pate, /datetime="2023-10-20"/);
 });
 
 test("preparation descriptions are expanded once instead of repeated as notes", () => {

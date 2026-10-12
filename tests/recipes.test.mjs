@@ -18,7 +18,7 @@ const normalize = value => value.replace(/<br\s*\/?\s*>/g, "\n").replace(/<[^>]*
   .replace(/\s|[-—–‑]/g, "");
 
 test("selected archive texts retain every author word, source date and original full frame", () => {
-  const sources = [...JSON.parse(read("tests/fixtures/recipes-channel-2026.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2018.json"))];
+  const sources = [...JSON.parse(read("tests/fixtures/recipes-channel-2026.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2018.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2021.json"))];
   const media = JSON.parse(read("assets/media-variants.json"));
   for (const source of sources) {
     const entry = entries.find(item => item.id === source.id);
@@ -35,7 +35,7 @@ test("selected archive texts retain every author word, source date and original 
 
 test("recipes point to the right product variant and use live catalog prices", () => {
   const page = renderRecipesPage();
-  assert.equal(recipes.filter(recipe => recipe.kind === "recipe").length, 16);
+  assert.equal(recipes.filter(recipe => recipe.kind === "recipe").length, 17);
   assert.equal(recipes.filter(recipe => recipe.kind === "advice").length, 6);
   for (const recipe of recipes) {
     assert.ok(entries.some(entry => entry.id === recipe.id));

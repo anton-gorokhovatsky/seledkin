@@ -360,6 +360,20 @@
     "archiveImageWidth": 200
   },
   {
+    "id": "facebook-2021-12-14-mussels",
+    "date": "2021-12-14",
+    "title": "«Ой, где был я вчера!»",
+    "product": "Чилийские мидии, бамбук и халапеньо",
+    "alt": "Очищенное мясо чилийских мидий крупным планом",
+    "image": "journal-facebook-2021-12-14-mussels.jpg",
+    "source": {
+      "name": "Facebook",
+      "url": "https://www.facebook.com/kapitanseledkin/posts/pfbid02PPp7m7HDbdAjLgjcMANfDeHmo1vVT9rQpi7CG8vor8PSJzbSvyLkSXDHNmi1bTYal",
+      "excerpt": true
+    },
+    "archiveImageWidth": 200
+  },
+  {
     "id": "facebook-2018-12-15-nerka",
     "date": "2018-12-15",
     "title": "Нерка-серебряночка",

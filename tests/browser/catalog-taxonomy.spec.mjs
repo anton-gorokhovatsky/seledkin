@@ -97,7 +97,9 @@ test("the audio topics remain accessible beside the interview and podcast @journ
     await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
     await page.goto("about/?audit=audio-library");
     const library = page.locator(".founder-source__library");
-    await expect(library.getByRole("link")).toHaveCount(8);
+    await expect(library.locator("li")).toHaveCount(8);
+    await expect(library.locator('.founder-source__chapters a')).toHaveCount(18);
+    await expect(library.getByRole("link", { name: /Что оценивать при дегустации/ })).toHaveAttribute("href", /#t=6%3A58$/);
     for (const width of [1440, 320]) {
       await page.setViewportSize({ width, height: 1000 });
       await library.scrollIntoViewIfNeeded();

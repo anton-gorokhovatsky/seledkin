@@ -1530,5 +1530,32 @@
     "bytes": 147084,
     "width": 960,
     "height": 1200
+  },
+  {
+    "file": "journal-facebook-2021-12-14-mussels-480.webp",
+    "source": "journal-facebook-2021-12-14-mussels.jpg",
+    "sourceSha256": "f0c6bfd5028338a1d972fb1ba3d4e06e007bc8b61a0f188e6a016c56d3009c3b",
+    "sha256": "ca624dc27051fd70a6b9ecfccfef1f50df69a2d3d86143724f0d977fc689cb45",
+    "bytes": 68330,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "journal-facebook-2021-12-14-mussels-960.webp",
+    "source": "journal-facebook-2021-12-14-mussels.jpg",
+    "sourceSha256": "f0c6bfd5028338a1d972fb1ba3d4e06e007bc8b61a0f188e6a016c56d3009c3b",
+    "sha256": "4598eac7d4453b505290e3299faf81725a0527f1b753a60be477015a6f1b158b",
+    "bytes": 228776,
+    "width": 960,
+    "height": 960
+  },
+  {
+    "file": "journal-facebook-2021-12-14-mussels-32.webp",
+    "source": "journal-facebook-2021-12-14-mussels.jpg",
+    "sourceSha256": "f0c6bfd5028338a1d972fb1ba3d4e06e007bc8b61a0f188e6a016c56d3009c3b",
+    "sha256": "b6d4a399c1b6db20d087fc73efd69252c0d3ca0113bc3d7012491bc9d4492a43",
+    "bytes": 604,
+    "width": 32,
+    "height": 32
   }
 ]

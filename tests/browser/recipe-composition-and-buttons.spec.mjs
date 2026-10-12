@@ -43,7 +43,7 @@ test("all recipes and advice retain large photographs and authored text in every
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("recipes/?audit=all-materials");
   await page.evaluate(() => document.fonts.ready);
-  for (const [ingredient, count] of [["all", 22], ["fish", 13], ["mussels", 2], ["shrimp", 4], ["octopus", 1], ["roe", 1], ["pasta", 1]]) {
+  for (const [ingredient, count] of [["all", 23], ["fish", 13], ["mussels", 3], ["shrimp", 4], ["octopus", 1], ["roe", 1], ["pasta", 1]]) {
     await page.locator(`button[data-ingredient="${ingredient}"]`).press("Enter");
     const materials = page.locator("[data-recipe-feature]:visible, .recipe-record:visible");
     await expect(materials).toHaveCount(count);

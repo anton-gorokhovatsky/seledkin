@@ -1,13 +1,16 @@
 {
-  "reviewedAt": "2026-10-11",
+  "reviewedAt": "2026-10-12",
   "textSources": [
     {
       "id": "red-roe-choice",
       "date": "2025-12-17",
-      "site": "Facebook",
+      "site": "Телеграм",
       "label": "Как выбирать красную икру",
-      "url": "https://www.facebook.com/permalink.php?story_fbid=pfbid09Mm9oePJxeCt2iREynvkskEz5yQqYkyQsuF6qQwu96k5sJKibRfCdXHKwRxiLLzGl&id=61580098542037",
-      "sourceFile": "facebook-caviar-2025.txt"
+      "url": "https://t.me/kapitanseledkin/619",
+      "sourceFile": "telegram-619.txt",
+      "alternateUrls": [
+        "https://www.facebook.com/permalink.php?story_fbid=pfbid09Mm9oePJxeCt2iREynvkskEz5yQqYkyQsuF6qQwu96k5sJKibRfCdXHKwRxiLLzGl&id=61580098542037"
+      ]
     },
     {
       "id": "north-fish",
@@ -34,6 +37,46 @@
       "url": "https://t.me/kapitanseledkin/262",
       "sourceFile": "telegram-262-excerpt.txt",
       "excerptOnly": true
+    },
+    {
+      "id": "liver-pate-exception",
+      "date": "2023-10-20",
+      "site": "Телеграм",
+      "label": "Почему Олег рекомендует этот паштет",
+      "url": "https://t.me/kapitanseledkin/286",
+      "sourceFile": "telegram-286.txt"
+    },
+    {
+      "id": "scallop-cooking",
+      "date": "2024-02-09",
+      "site": "Телеграм",
+      "label": "Как Олег готовит гребешка",
+      "url": "https://t.me/kapitanseledkin/331",
+      "sourceFile": "telegram-331.txt"
+    },
+    {
+      "id": "chir-character",
+      "date": "2025-08-22",
+      "site": "Телеграм",
+      "label": "Олег о чире",
+      "url": "https://t.me/kapitanseledkin/589",
+      "sourceFile": "telegram-589.txt"
+    },
+    {
+      "id": "kamchatka-dried-smelt",
+      "date": "2022-06-10",
+      "site": "Телеграм",
+      "label": "Чем хороша камчатская вяленая корюшка",
+      "url": "https://t.me/kapitanseledkin/90",
+      "sourceFile": "telegram-90.txt"
+    },
+    {
+      "id": "icefish-frozen",
+      "date": "2022-05-31",
+      "site": "Facebook",
+      "label": "Олег о ледяной рыбе",
+      "url": "https://www.facebook.com/kapitanseledkin/posts/pfbid0by7sbkJLgMSpZbqEqxHa7EwtAKJ4xbjJC1n6snYH3q7Cq3QH2bcuEEsFeELBtebel",
+      "sourceFile": "facebook-icefish-2022.txt"
     }
   ],
   "audio": [
@@ -45,11 +88,37 @@
       "site": "SoundCloud",
       "products": [
         "frozen-fish-010",
-        "frozen-fish-015",
-        "other-001",
-        "other-003"
+        "frozen-fish-015"
       ],
-      "reviewed": "title-and-public-metadata"
+      "reviewed": "full-transcript-and-selected-segment-crosscheck",
+      "durationSeconds": 1465,
+      "reviewedAt": "2026-10-12",
+      "recordingDate": null,
+      "summary": "Выбор корюшки, размер рыбы и жарка «солнышком».",
+      "chapters": [
+        {
+          "id": "smelt-choice",
+          "start": 528,
+          "end": 609,
+          "label": "Как отличить корюшку и выбрать размер",
+          "note": "Олег объясняет, как отличить корюшку от похожей на неё рыбы — пехерея: у корюшки есть маленький жировой плавничок у хвоста.",
+          "products": [
+            "frozen-fish-010",
+            "frozen-fish-015"
+          ]
+        },
+        {
+          "id": "smelt-pan",
+          "start": 655,
+          "end": 782,
+          "label": "Корюшка «солнышком»",
+          "note": "Мука и соль в пакете, выкладка рыбы «крестом» и «снежинкой», переворот с помощью тарелки: Олег объясняет свою подачу корюшки.",
+          "products": [
+            "frozen-fish-015"
+          ]
+        }
+      ],
+      "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
     },
     {
       "id": "canned",
@@ -60,13 +129,45 @@
       "products": [
         "other-008",
         "other-009",
-        "other-010",
         "other-011",
         "seafood-004",
         "seafood-005",
-        "seafood-006"
+        "seafood-006",
+        "other-010"
       ],
-      "reviewed": "title-and-public-metadata"
+      "reviewed": "full-transcript-and-selected-segment-crosscheck",
+      "durationSeconds": 1486,
+      "reviewedAt": "2026-10-12",
+      "recordingDate": null,
+      "summary": "Выбор заливки рыбных консервов и отдельный разговор о шпротах.",
+      "chapters": [
+        {
+          "id": "canned-choice",
+          "start": 756,
+          "end": 793,
+          "label": "В масле, в своём соку или в томате",
+          "note": "Олег связывает выбор заливки с личным вкусом: кому-то нравится собственный сок, кому-то масло или томатный соус.",
+          "products": [
+            "other-008",
+            "other-009",
+            "other-011",
+            "seafood-004",
+            "seafood-005",
+            "seafood-006"
+          ]
+        },
+        {
+          "id": "canned-sprats",
+          "start": 1182,
+          "end": 1327,
+          "label": "Что влияет на вкус шпрот",
+          "note": "Олег рассказывает о копчении и размере рыбы: чем мельче рыба, тем суше получаются шпроты.",
+          "products": [
+            "other-010"
+          ]
+        }
+      ],
+      "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
     },
     {
       "id": "exotic",
@@ -74,8 +175,61 @@
       "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-ekzoticheskie-moreprodukty",
       "uploaded": "2021-01-19",
       "site": "SoundCloud",
-      "products": [],
-      "reviewed": "title-and-public-metadata"
+      "products": [
+        "seafood-009",
+        "seafood-011",
+        "seafood-012",
+        "seafood-020"
+      ],
+      "reviewed": "full-transcript-and-selected-segment-crosscheck",
+      "durationSeconds": 1501,
+      "reviewedAt": "2026-10-12",
+      "recordingDate": null,
+      "summary": "Выбор и приготовление мяса мидий, кальмаров и гребешков.",
+      "chapters": [
+        {
+          "id": "exotic-mussels",
+          "start": 568,
+          "end": 607,
+          "label": "Почему Олег выбирает чилийские мидии",
+          "note": "Олег рассказывает о своём выборе очищенных мидий из Чили.",
+          "products": [
+            "seafood-009"
+          ]
+        },
+        {
+          "id": "exotic-cook-mussels",
+          "start": 681,
+          "end": 709,
+          "label": "Мидии с чесноком и специями",
+          "note": "Олег предлагает прогреть масло с чесноком и специями и добавить его к размороженным мидиям.",
+          "products": [
+            "seafood-009"
+          ]
+        },
+        {
+          "id": "exotic-squid",
+          "start": 795,
+          "end": 838,
+          "label": "Как варить кальмаров небольшими партиями",
+          "note": "Правило Олега «три — три — три»: три кальмара, три литра воды, три минуты после повторного закипания. Он подчёркивает, что пропорция условная и важно не перегружать кастрюлю.",
+          "products": [
+            "seafood-011",
+            "seafood-012"
+          ]
+        },
+        {
+          "id": "exotic-scallop",
+          "start": 1106,
+          "end": 1166,
+          "label": "Как выбрать гребешка",
+          "note": "Олег сравнивает разные виды гребешка и рассказывает, почему выбирает Южные Курилы и Сахалин.",
+          "products": [
+            "seafood-020"
+          ]
+        }
+      ],
+      "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
     },
     {
       "id": "kamchatka",
@@ -83,8 +237,31 @@
       "url": "https://soundcloud.com/kapitanseledkin/oleg-gugunava-kamchatskie-delikatesy",
       "uploaded": "2021-01-19",
       "site": "SoundCloud",
-      "products": [],
-      "reviewed": "title-and-public-metadata"
+      "products": [
+        "seafood-001",
+        "seafood-002",
+        "seafood-003"
+      ],
+      "reviewed": "full-transcript-and-selected-segment-crosscheck",
+      "durationSeconds": 1450,
+      "reviewedAt": "2026-10-12",
+      "recordingDate": null,
+      "summary": "Во второй части — камчатский краб и краб-стригун. Первая часть посвящена экологическому событию того времени на Камчатке.",
+      "chapters": [
+        {
+          "id": "kamchatka-crabs",
+          "start": 792,
+          "end": 840,
+          "label": "Камчатский краб и краб-стригун",
+          "note": "Олег сравнивает камчатского краба и краба-стригуна: размер, толщину фаланг и вкус мяса.",
+          "products": [
+            "seafood-001",
+            "seafood-002",
+            "seafood-003"
+          ]
+        }
+      ],
+      "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
     },
     {
       "id": "cod-liver",
@@ -94,10 +271,46 @@
       "site": "SoundCloud",
       "products": [
         "other-005",
-        "other-006",
-        "other-007"
+        "other-006"
       ],
-      "reviewed": "title-and-public-metadata"
+      "reviewed": "full-transcript-and-selected-segment-crosscheck",
+      "durationSeconds": 1509,
+      "reviewedAt": "2026-10-12",
+      "recordingDate": null,
+      "summary": "Как делают печень трески в море, что находится в банке и с чем её подать.",
+      "chapters": [
+        {
+          "id": "liver-made",
+          "start": 252,
+          "end": 385,
+          "label": "Что означает «сделано в море»",
+          "note": "Олег объясняет, как печень консервируют на судне из свежего сырья. Жир в такой банке выделяется из самой печени при приготовлении.",
+          "products": [
+            "other-005",
+            "other-006"
+          ]
+        },
+        {
+          "id": "liver-cook",
+          "start": 548,
+          "end": 589,
+          "label": "Салат и блины с печенью трески",
+          "note": "Салат с яйцом и луком, блины с начинкой: Олег предлагает простые способы подать печень трески.",
+          "products": [
+            "other-005",
+            "other-006"
+          ]
+        },
+        {
+          "id": "liver-tongues",
+          "start": 1050,
+          "end": 1092,
+          "label": "О жареных и тушёных языках трески",
+          "note": "Отдельный разговор о рыбных субпродуктах и приготовлении языков трески. Это не описание консервированных языков из нынешнего каталога.",
+          "products": []
+        }
+      ],
+      "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
     },
     {
       "id": "tuna",
@@ -108,7 +321,24 @@
       "products": [
         "fillet-006"
       ],
-      "reviewed": "title-and-public-metadata"
+      "reviewed": "full-transcript-and-selected-segment-crosscheck",
+      "durationSeconds": 1438,
+      "reviewedAt": "2026-10-12",
+      "recordingDate": null,
+      "summary": "Филе AAA и хвостовая часть: Олег объясняет разницу в форме и текстуре мяса.",
+      "chapters": [
+        {
+          "id": "tuna-cut",
+          "start": 838,
+          "end": 928,
+          "label": "Филе AAA и хвостовая часть",
+          "note": "Олег описывает филе AAA как ровный брусок с тонкими прослойками и сравнивает его с более жёсткой хвостовой частью.",
+          "products": [
+            "fillet-006"
+          ]
+        }
+      ],
+      "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
     },
     {
       "id": "icefish",
@@ -119,7 +349,34 @@
       "products": [
         "frozen-fish-029"
       ],
-      "reviewed": "title-and-public-metadata"
+      "reviewed": "full-transcript-and-selected-segment-crosscheck",
+      "durationSeconds": 1469,
+      "reviewedAt": "2026-10-12",
+      "recordingDate": null,
+      "summary": "Как размер влияет на выход мяса и как Олег предлагает жарить ледяную рыбу.",
+      "chapters": [
+        {
+          "id": "ice-size",
+          "start": 630,
+          "end": 672,
+          "label": "Размер рыбы и выход мяса",
+          "note": "Олег сравнивает ледяную рыбу до 250 г и крупнее: у мелкой рыбы ниже выход мяса.",
+          "products": [
+            "frozen-fish-029"
+          ]
+        },
+        {
+          "id": "ice-pan",
+          "start": 955,
+          "end": 1038,
+          "label": "Как пожарить ледяную рыбу",
+          "note": "Олег предлагает жарить ледяную рыбу в небольшой панировке без крышки. Если приходится отрезать голову, советует пожарить и её: в щёчках есть мясо.",
+          "products": [
+            "frozen-fish-029"
+          ]
+        }
+      ],
+      "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
     },
     {
       "id": "roe",
@@ -128,17 +385,45 @@
       "uploaded": "2021-01-15",
       "site": "SoundCloud",
       "products": [
-        "caviar-001",
-        "caviar-002",
-        "caviar-003",
-        "caviar-004",
         "caviar-005",
-        "trout-roe",
-        "caviar-007",
-        "caviar-008",
-        "caviar-009"
+        "trout-roe"
       ],
-      "reviewed": "title-and-public-metadata"
+      "reviewed": "full-transcript-and-selected-segment-crosscheck",
+      "durationSeconds": 1467,
+      "reviewedAt": "2026-10-12",
+      "recordingDate": null,
+      "summary": "Вкус, соль и оболочка зерна; различия цвета красной икры и личное предпочтение Олега.",
+      "chapters": [
+        {
+          "id": "roe-taste",
+          "start": 418,
+          "end": 454,
+          "label": "Что оценивать при дегустации",
+          "note": "Олег предлагает оценивать соль, консистенцию и оболочку зерна: остаётся ли она во рту после того, как икринку раскусили.",
+          "products": [
+            "caviar-005"
+          ]
+        },
+        {
+          "id": "roe-colour",
+          "start": 629,
+          "end": 657,
+          "label": "Почему цвет икры бывает разным",
+          "note": "Разговор о различиях цвета икры нерки, горбуши и кеты; Олег советует выбирать по вкусу.",
+          "products": []
+        },
+        {
+          "id": "roe-preference",
+          "start": 1409,
+          "end": 1429,
+          "label": "Любимая икра Олега",
+          "note": "В конце разговора Олег называет своей любимой красную форелевую икру. Это его личное предпочтение.",
+          "products": [
+            "trout-roe"
+          ]
+        }
+      ],
+      "reviewMethod": "Full local machine transcript reviewed; selected segments cross-checked with Whisper large-v3. Editorial summaries, not direct audio quotations."
     }
   ],
   "video": [

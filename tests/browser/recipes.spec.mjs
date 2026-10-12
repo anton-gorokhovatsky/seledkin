@@ -1,4 +1,39 @@
 import { test, expect } from "@playwright/test";
+
+test("a buyer finds all recipes below the home preview, cooks Oleg's mussel wrap and opens its bamboo ingredient @recipes @journal", async ({ page }, testInfo) => {
+  for (const theme of ["light", "dark"]) {
+    await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto("?audit=audio-enrichment#watch-catch");
+    await page.locator(".watch-catch__all").getByRole("link", { name: "Все рецепты и советы", exact: true }).press("Enter");
+    await page.getByRole("button", { name: /^Мидии/ }).press("Enter");
+    await expect(page.locator(".recipe-record:visible")).toHaveCount(3);
+    const recipe = page.locator('[data-recipe-material="facebook-2021-12-14-mussels"]');
+    await recipe.getByRole("link", { name: "Читать рецепт", exact: true }).press("Enter");
+    await expect(page.locator("h1")).toHaveText("«Ой, где был я вчера!»");
+    await expect(page.locator(".ship-log-entry__meta time")).toHaveAttribute("datetime", "2021-12-14");
+    await expect(page.getByRole("link", { name: "Полный текст в Facebook", exact: true })).toHaveAttribute("href", /^https:\/\/www.facebook.com\/kapitanseledkin\/posts\//);
+    await expect(page.locator(".ship-log-entry__body")).not.toContainText("595");
+    await expect(page.locator(".recipe-current .meal-product")).toHaveCount(4);
+    for (const width of [1440, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const image = page.locator(".journal-story > img");
+      await image.scrollIntoViewIfNeeded();
+      const frame = await image.evaluate(async image => {
+        await image.decode();
+        return { ratio: image.clientWidth / image.clientHeight, source: image.naturalWidth / image.naturalHeight, fit: getComputedStyle(image).objectFit };
+      });
+      expect(frame.fit).not.toBe("cover");
+      expect(frame.ratio).toBeCloseTo(frame.source, 2);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+      await page.screenshot({ path: testInfo.outputPath(`mussels-wrap-${width}-${theme}.png`) });
+    }
+    await page.locator(".recipe-current").getByRole("link", { name: "Ростки бамбука", exact: true }).press("Enter");
+    await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
+    await expect(page.locator(".catalog-product:visible")).toHaveAttribute("data-product-id", "other-013");
+    await expect(page.locator(".catalog-product:visible strong")).toHaveText("190 ₽ за 540 г");
+  }
+});
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 
@@ -48,7 +83,10 @@ test("catalog advice previews retain the full photograph, keyboard access and di
   await product.locator("summary").focus();
   // Safari on macOS includes links with Option–Tab unless full keyboard
   // navigation is enabled; preserve the browser's native preference.
-  await page.keyboard.press(testInfo.project.name === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab");
+  const nextLink = testInfo.project.name === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab";
+  await page.keyboard.press(nextLink);
+  await expect(product.getByRole("link", { name: "«Ой, где был я вчера!»", exact: true })).toBeFocused();
+  await page.keyboard.press(nextLink);
   await expect(recipe).toBeFocused();
   await expect(photo).toBeVisible();
   await page.waitForTimeout(400); // The pointer dismissal delay is 350 ms.
@@ -142,16 +180,16 @@ test("ingredients retain the editorial spreads, browser history and an exact cat
   await page.goto("recipes/?audit=ingredients");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator("[data-recipe-opening]")).toBeVisible();
-  await expect(page.locator(".recipe-record:visible")).toHaveCount(19);
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(20);
   const mussels = page.getByRole("button", { name: /^Мидии/ });
   await mussels.press("Enter");
   await expect(mussels).toBeFocused();
   await expect(mussels).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("[data-recipe-opening]")).toBeHidden();
-  await expect(page.locator(".recipe-record:visible")).toHaveCount(2);
-  await expect(page.locator("[data-recipe-filter-status]")).toHaveText("2 материала");
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(3);
+  await expect(page.locator("[data-recipe-filter-status]")).toHaveText("3 материала");
   await page.reload();
-  await expect(page.locator(".recipe-record:visible")).toHaveCount(2);
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(3);
   await page.getByRole("button", { name: /^Все материалы/ }).press("Enter");
   await expect(page.locator("[data-recipe-opening]")).toBeVisible();
   await page.goBack();
@@ -164,7 +202,7 @@ test("ingredients retain the editorial spreads, browser history and an exact cat
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await expect(page.locator(".catalog-product:visible h4")).toHaveText("Мясо мидий");
   await page.goBack();
-  await expect(page.locator(".recipe-record:visible")).toHaveCount(2);
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(3);
 });
 
 test("the recipe directory remains readable in both watches, narrow reflow and enlarged text @typography @recipes", async ({ browser, baseURL }, testInfo) => {
@@ -176,7 +214,7 @@ test("the recipe directory remains readable in both watches, narrow reflow and e
     const page = await context.newPage();
     await page.goto(`${baseURL}recipes/?audit=recipes`);
     await expect(page.locator(".recipe-editorial-opening article")).toHaveCount(3);
-    await expect(page.locator('.recipe-record[data-kind="recipe"]:visible')).toHaveCount(13);
+    await expect(page.locator('.recipe-record[data-kind="recipe"]:visible')).toHaveCount(14);
     await expect(page.locator('.recipe-record[data-kind="advice"]:visible')).toHaveCount(6);
     await expect(page.locator("#meals .meal-collection")).toHaveCount(3);
     await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });

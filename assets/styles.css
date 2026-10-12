@@ -1281,17 +1281,25 @@ a.source-brand {
 
 .founder-source__library h3 {
   margin: 0 0 .5rem;
-  font-size: var(--text-interface);
+  font: 600 var(--text-reading) / 1.4 var(--sans);
 }
 
 .founder-source__library ul {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-  gap: .25rem var(--about-column-gap);
+  gap: 2rem var(--about-column-gap);
   padding: 0;
   margin: .75rem 0 0;
   list-style: none;
 }
+
+.founder-source__library li { min-width: 0; }
+.founder-source__library h4 { margin: 0; font: 600 var(--text-body) / 1.4 var(--sans); }
+.founder-source__library li > p { margin: .5rem 0; }
+.founder-source__library .source-caption { color: var(--muted); font-size: var(--text-meta); font-weight: 400; }
+.founder-source__chapters { display: flex; flex-direction: column; gap: .25rem; }
+.founder-source__chapters a { justify-content: space-between; gap: .75rem; width: 100%; color: var(--text-link); font: 500 var(--text-interface) / 1.45 var(--sans); }
+.founder-source__chapters .source-caption { flex-shrink: 0; font-variant-numeric: tabular-nums; }
 
 .about-overview__reasons-header {
   margin-bottom: clamp(2.5rem, 4vw, 4rem);
@@ -1557,6 +1565,7 @@ a.source-brand {
   margin: clamp(2.5rem, 5vw, 4rem) 0 0;
   list-style: none;
 }
+.watch-catch__all { margin: 2rem 0 0; }
 .watch-catch__item {
   min-width: 0;
   container-type: inline-size;
@@ -1638,7 +1647,8 @@ a.source-brand {
   font-size: var(--text-meta);
 }
 .catalog-product-advice > span { color: var(--blue-deep); font-weight: 600; }
-.catalog-product-advice blockquote {
+.catalog-product-advice blockquote,
+.catalog-product-advice .catalog-audio-note {
   flex-basis: 100%;
   margin: 0;
   font-size: var(--text-interface);

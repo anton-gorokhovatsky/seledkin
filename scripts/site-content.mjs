@@ -3,10 +3,10 @@ import { typographText } from "../assets/typography.js";
 import { catalog } from "../assets/catalog-data.js";
 import { catalogPrice, productNotes, productDescription, orderLinks, productHref, positionCount } from "../assets/catalog-model.js";
 import { recipeContent, recipes, recipeIngredients, resolveProduct, productCatalogHref, productRecipeLinks } from "./recipe-content.mjs";
+import { olegSources, audioTime, audioFragmentHref } from "./oleg-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const site = JSON.parse(read("content/site.json"));
-const olegSources = JSON.parse(read("content/oleg-sources.json"));
 export const store = site.store;
 const validHours = hours => hours && /^([01]\d|2[0-3]):[0-5]\d$/.test(hours.open)
   && /^([01]\d|2[0-3]):[0-5]\d$/.test(hours.close) && hours.open < hours.close;
@@ -272,7 +272,7 @@ export function renderJournal(list, view) {
               </header>
               ${image(entry, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, true)}
               <div class="ship-log-entry__content">
-${recipes.some(recipe => recipe.id === id) ? `                <p class="recipe-archive-note">Цены и условия в авторском тексте относятся к дате публикации. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>\n` : ""}                <div class="ship-log-entry__body">
+${entry.source?.excerpt ? `                <p class="recipe-archive-note">Рецепт из авторской публикации Олега. <a href="${escape(source)}">Полный текст в ${text(entry.source.name)}</a>.</p>\n` : recipes.some(recipe => recipe.id === id) ? `                <p class="recipe-archive-note">Цены и условия в авторском тексте относятся к дате публикации. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>\n` : ""}                <div class="ship-log-entry__body">
 ${journalBody(entry, inquiry)}
                 </div>
                 <div class="ship-log-entry__actions">
@@ -420,7 +420,8 @@ export function renderRecipeHome() {
     const recipe = recipes.find(item => item.id === id);
     const entry = recipeEntry(recipe);
     return `<li class="watch-catch__item"><a href="journal/${id}/" aria-label="${text(recipe.title)}"><span class="watch-catch__photo">${image(entry, "", "(max-width: 1257px) 88px, (max-width: 1714px) 7vw, 120px")}</span><span class="watch-catch__caption"><span class="watch-catch__name">${text(recipe.title).replace("секретов", "секре­тов")}</span>${harpoon}</span></a></li>`;
-  }).join("\n")}</ul>`;
+  }).join("\n")}</ul>
+  <p class="watch-catch__all"><a class="editorial-link" href="recipes/">Все рецепты и советы${harpoon}</a></p>`;
 }
 
 function renderRecipeEditorial(root) {
@@ -539,7 +540,12 @@ export function renderAssortmentDirectory() {
 export function renderAudioLibrary() {
   return `<div class="founder-source__library" aria-labelledby="oleg-audio-title">
             <h3 id="oleg-audio-title">Олег о рыбе и морепродуктах</h3>
-            <p class="source-caption">Аудиозаписи на SoundCloud</p>
-            <ul>${olegSources.audio.map(audio => `<li><a class="founder-source__source-link" href="${escape(audio.url)}">${text(audio.label)}</a></li>`).join("\n              ")}</ul>
+            <p class="source-caption">Архив программы «Провиант» на радио «Говорит Москва». Записи опубликованы на SoundCloud в январе 2021 года; цены и сообщения о поставках относятся ко времени эфиров.</p>
+            <ul>${olegSources.audio.map(audio => `<li id="audio-${audio.id}">
+                <h4><a class="founder-source__source-link" href="${escape(audio.url)}">${text(audio.label)}</a></h4>
+                <p class="source-caption">${text(`${Math.floor(audio.durationSeconds / 60)} мин ${audio.durationSeconds % 60} с`)}</p>
+                <p>${text(audio.summary)}</p>
+                <div class="founder-source__chapters">${audio.chapters.map(chapter => `<a class="founder-source__source-link" href="${escape(audioFragmentHref(audio, chapter))}"><span>${text(chapter.label)}</span><span class="source-caption">${audioTime(chapter.start)}</span></a>`).join("\n                  ")}</div>
+              </li>`).join("\n              ")}</ul>
           </div>`;
 }
