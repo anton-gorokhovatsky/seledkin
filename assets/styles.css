@@ -1117,6 +1117,7 @@ a.source-brand {
   color: var(--text-link);
 }
 
+.catalog-product-advice > span::after,
 .ship-log::before,
 .source-footer::before,
 .not-found-source::before {
@@ -1646,7 +1647,29 @@ a.source-brand {
   background: var(--catalog-advice-surface);
   font-size: var(--text-meta);
 }
-.catalog-product-advice > span { color: var(--blue-deep); font-weight: 600; }
+.catalog-product-advice > span {
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+  color: var(--blue-deep);
+  font-weight: 600;
+}
+.catalog-product-advice > span::after {
+  content: "";
+  flex-shrink: 0;
+  width: min(8rem, 35%);
+  height: 2.5rem;
+  margin-inline-start: auto;
+  --shoal-color: var(--shoal-primary);
+  -webkit-mask-size: 22rem auto;
+  mask-size: 22rem auto;
+  -webkit-mask-position: right center;
+  mask-position: right center;
+  opacity: 0.55;
+}
 .catalog-product-advice blockquote,
 .catalog-product-advice .catalog-audio-note {
   flex-basis: 100%;
