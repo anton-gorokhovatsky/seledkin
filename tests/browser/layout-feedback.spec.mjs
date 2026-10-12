@@ -122,7 +122,7 @@ test("ingredient filters keep their position and the selected editorial composit
     await expect(lead).toBeVisible();
     await page.getByRole("button", { name: /^Все материалы/ }).press("Enter");
     await expect(page.locator("[data-recipe-feature]:visible")).toHaveCount(3);
-    await expect(page.locator(".recipe-record:visible")).toHaveCount(19);
+    await expect(page.locator(".recipe-record:visible")).toHaveCount(20);
     expect(await chooser.evaluate(node => node.getBoundingClientRect().top + scrollY)).toBeCloseTo(chooserTop, 0);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   }
@@ -144,7 +144,7 @@ test("recipe feedback preserves rapid filtering, keyboard focus and the reduced-
   await page.addStyleTag({ content: ":root { --reveal-duration: 2000ms; }" });
   const mussels = page.getByRole("button", { name: /^Мидии/ });
   await mussels.press("Enter");
-  await expect(page.locator(".recipe-record:visible")).toHaveCount(2);
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(3);
   await expect(mussels).toBeFocused();
   expect(await page.locator(".recipe-record-directory").evaluate(node => node.getAnimations().some(animation => animation.playState === "running"))).toBe(true);
   await page.getByRole("button", { name: /^Креветки/ }).press("Enter");
@@ -154,7 +154,7 @@ test("recipe feedback preserves rapid filtering, keyboard focus and the reduced-
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect.poll(() => page.locator(".recipe-record-directory").evaluate(node => node.getAnimations().filter(animation => animation.playState === "running").length)).toBe(0);
   await mussels.press("Enter");
-  await expect(page.locator(".recipe-record:visible")).toHaveCount(2);
+  await expect(page.locator(".recipe-record:visible")).toHaveCount(3);
   expect(await page.locator(".recipe-record-directory").evaluate(node => node.getAnimations().length)).toBe(0);
   await page.locator('[data-recipe-material="574"] .recipe-record-story').press("Enter");
   await expect(page).toHaveURL(/journal\/574\/$/);
