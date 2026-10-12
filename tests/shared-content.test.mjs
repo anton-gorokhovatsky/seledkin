@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { entries, renderJournal, renderMenu, renderFooter, renderTheme, renderJournalPage } from "../scripts/site-content.mjs";
+import { isSocialTagRow } from "./helpers/editorial-prose.mjs";
 
 test("committed shared regions are current and building twice is unnecessary", () => {
   // The check regenerates every shared region in memory and compares exact bytes.
@@ -21,7 +22,7 @@ test("every page initializes analytics once through the guarded shared module", 
   }
 });
 
-test("one journal edit propagates to all views without shortening its body", () => {
+test("one journal edit propagates to all views without shortening its prose", () => {
   assert.equal(new Set(entries.map(entry => entry.id)).size, entries.length);
   const changed = { ...entries[0], title: "Проверка общего заголовка", product: "Проверка продукта" };
   for (const view of ["hero", "preview", "archive", "search"]) {
@@ -31,7 +32,7 @@ test("one journal edit propagates to all views without shortening its body", () 
     assert.ok(html.includes(changed.image));
   }
   const archive = renderJournal([changed], "article");
-  for (const line of changed.body.split("\n")) assert.ok(archive.includes(line));
+  for (const line of changed.body.split("\n").filter(line => !isSocialTagRow(line))) assert.ok(archive.includes(line));
   assert.ok(decodeURIComponent(archive).includes(changed.product));
 });
 
@@ -50,7 +51,7 @@ test("shared navigation keeps page-specific routes and the same contact informat
   assert.ok(!renderTheme("catalog").includes("posterPreload"));
 });
 
-test("every story is shareable and preserves author text outside approved old contact tails", () => {
+test("every story is shareable and preserves author text outside approved old contact tails and social tag rows", () => {
   const oldRecipeContacts = new Set([375, 377, 378, 382, 464, 556,
     "facebook-2018-12-15-nerka", "facebook-2018-02-16-herring"]);
   for (const entry of entries) {
@@ -62,7 +63,7 @@ test("every story is shareable and preserves author text outside approved old co
     const contactStart = oldRecipeContacts.has(entry.id)
       ? lines.findIndex(line => /Заказы принимаются только|class="journal-historical-contacts"/.test(line)) : -1;
     const authorLines = contactStart < 0 ? lines : lines.slice(0, contactStart);
-    for (const line of authorLines) assert.ok(page.includes(line), `Lost author line in ${entry.id}`);
+    for (const line of authorLines.filter(line => !isSocialTagRow(line))) assert.ok(page.includes(line), `Lost author line in ${entry.id}`);
     if (contactStart >= 0) {
       assert.ok(!page.includes("Заказы принимаются только"), `Outdated ordering conditions in ${entry.id}`);
       assert.ok(!page.includes('class="journal-historical-contacts"'), `Outdated contact tail in ${entry.id}`);

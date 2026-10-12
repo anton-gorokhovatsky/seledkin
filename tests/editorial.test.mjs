@@ -3,6 +3,7 @@ import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
 import { catalogPrice, matchesSearch, productSearchText } from "../assets/catalog-model.js";
+import { isSocialTagRow } from "./helpers/editorial-prose.mjs";
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 const [home, about, archive, originals] = await Promise.all([
   read("index.html"), read("about/index.html"), read("journal/index.html"),
@@ -65,7 +66,7 @@ test("all journal entries retain their source and a draft about that exact produ
 });
 
 
-test("journal updates preserve each dated author paragraph and source", async () => {
+test("journal updates preserve each dated author paragraph and source outside approved social tag rows", async () => {
   const fixtures = (await readdir(new URL("fixtures/", import.meta.url))).filter(name => /^journal-.*-\d{4}\.json$/.test(name));
   const posts = (await Promise.all(fixtures.map(name => read(`tests/fixtures/${name}`).then(JSON.parse)))).flat();
   for (const post of posts) {
@@ -74,7 +75,7 @@ test("journal updates preserve each dated author paragraph and source", async ()
     assert.ok(entry.includes(`datetime="${post.date}"`));
     assert.ok(entry.includes(`href="${post.source}"`));
     assert.ok(plain(entry).includes(plain(post.title).replace(/\.$/u, "")));
-    for (const paragraph of post.paragraphs) assert.ok(plain(entry).includes(plain(paragraph)), `Changed author text in ${post.id}: ${paragraph}`);
+    for (const paragraph of post.paragraphs.filter(paragraph => !isSocialTagRow(paragraph))) assert.ok(plain(entry).includes(plain(paragraph)), `Changed author text in ${post.id}: ${paragraph}`);
   }
 });
 

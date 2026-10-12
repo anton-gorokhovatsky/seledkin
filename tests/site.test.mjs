@@ -693,7 +693,9 @@ test("the recipe preview gives full photographs and direct access to complete au
   assert.match(section, /data-source-image="assets\/journal-692\.jpg"/);
   assert.doesNotMatch(section, /watch-catch-(?:herring|shrimp|squid|octopus)\.svg/);
   for (const id of [692, 377, 412, 664]) assert.ok(section.includes(`href="journal/${id}/"`));
-  for (const id of [506, 610]) assert.ok(catalogPage.includes(`https://t.me/kapitanseledkin/${id}`));
+  // Social-source links were removed from the catalog by the user's decision;
+  // on-site advice/recipe routes are protected by catalog-guidance.test.mjs.
+  for (const id of [506, 610]) assert.ok(!catalogPage.includes(`href="https://t.me/kapitanseledkin/${id}"`));
 });
 
 test("the wide shell and linear Ship's Log avoid narrow nested cards", () => {
