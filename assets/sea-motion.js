@@ -16,6 +16,14 @@ try { paused = localStorage.getItem("seledkin-sea-paused") === "true"; } catch {
 let heroVisible = false;
 let readyToPlay = false;
 
+// All marine backgrounds follow the same existing pause and data preference.
+export function seaMotionState() {
+  return {
+    allowed: !paused && !dataBlocked() && !reducedMotion.matches && !document.hidden,
+    menuOpen: Boolean(menu && !menu.hidden),
+  };
+}
+
 function updateControls() {
   for (const button of toggles) {
     button.hidden = reducedMotion.matches;
@@ -66,6 +74,7 @@ export function syncHeroVideo() {
 export function syncMenuSeaVideo() {
   sync(menuVideo, Boolean(menu && !menu.hidden));
   syncHeroVideo();
+  document.dispatchEvent(new CustomEvent("seledkin:seamotionchange", { detail: seaMotionState() }));
 }
 function syncAll() {
   updateControls();

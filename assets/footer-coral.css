@@ -1,0 +1,83 @@
+/* Accepted footer composition: original portrait and text, transparent native
+   Coral ink in the surrounding field. No background panel crosses the journal. */
+.source-footer:has(.footer-coral-layer) {
+  --coral-overlap: var(--section-gap);
+  isolation: isolate;
+  overflow: visible;
+}
+
+.source-footer[data-coral]::before {
+  display: none;
+}
+
+.footer-coral-layer {
+  position: absolute;
+  z-index: 0;
+  inset: calc(-1 * var(--coral-overlap)) 0 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.footer-coral-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 48%, #000 85%, #000 90%, transparent), linear-gradient(to bottom, transparent, rgb(0 0 0 / 22%) 16%, rgb(0 0 0 / 22%) 54%, rgb(0 0 0 / 75%) 82%, #000);
+  mask-image: linear-gradient(to right, transparent 48%, #000 85%, #000 90%, transparent), linear-gradient(to bottom, transparent, rgb(0 0 0 / 22%) 16%, rgb(0 0 0 / 22%) 54%, rgb(0 0 0 / 75%) 82%, #000);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.footer-coral-art {
+  position: absolute;
+  top: 0;
+  right: -10%;
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  opacity: 0.5;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 28%, #000 78%, transparent), linear-gradient(to bottom, transparent, #000 8%, #000 97%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 28%, #000 78%, transparent), linear-gradient(to bottom, transparent, #000 8%, #000 97%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.footer-coral-art--upper {
+  display: none;
+}
+
+.source-footer[data-coral] :is(h2, p, figcaption, small, .source-footer__channels span, .source-footer__base a) {
+  text-shadow: 0 1px 2px var(--footer), 0 0 0.25em var(--footer-surface);
+}
+
+@media (width <= 46rem) {
+  .footer-coral-art {
+    top: auto;
+    right: -40vw;
+    bottom: 0;
+    height: min(100%, 64rem);
+  }
+  .footer-coral-art--upper {
+    top: 0;
+    right: -12vw;
+    bottom: auto;
+    display: block;
+    height: min(45%, 44rem);
+  }
+}
+
+@media (prefers-contrast: more), (forced-colors: active) {
+  .footer-coral-layer {
+    display: none;
+  }
+  .source-footer[data-coral] :is(h2, p, figcaption, small, .source-footer__channels span, .source-footer__base a) {
+    text-shadow: none;
+  }
+}
