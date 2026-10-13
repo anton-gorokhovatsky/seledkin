@@ -73,7 +73,7 @@ test("early Facebook advice keeps its source, photograph and current product rou
     await page.setViewportSize({ width: 320, height: 1000 });
     await page.goto(`journal/${story.id}/?audit=early-advice`);
     await expect(page.locator(".ship-log-entry__meta time")).toHaveAttribute("datetime", story.date);
-    await expect(page.getByRole("link", { name: "Оригинал в Facebook", exact: true })).toHaveAttribute("href", /^https:\/\/www.facebook.com\//);
+    await expect(page.getByRole("link", { name: "Из Facebook", exact: true })).toHaveAttribute("href", /^https:\/\/www.facebook.com\//);
     await expect(page.locator(".ship-log-entry__body")).not.toContainText("587");
     const photo = page.locator(".journal-story > img");
     await photo.scrollIntoViewIfNeeded();
