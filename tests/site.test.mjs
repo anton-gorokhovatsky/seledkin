@@ -1336,8 +1336,10 @@ test("menu, focus and reduced motion remain accessible", () => {
     const contactActions =
       page.match(/<div class="site-menu__actions">([\s\S]*?)<\/div>/)?.[1] ?? "";
     assert.equal((contactActions.match(/class="source-button(?:\s|")/g) ?? []).length, 3);
-    assert.match(page, /class="theme-toggle__moon"/);
-    assert.match(page, /class="theme-toggle__sun"/);
+    assert.match(page, /<fieldset class="theme-choice">\s*<legend>Вахта<\/legend>/);
+    for (const value of ["auto", "light", "dark"]) {
+      assert.ok(page.includes(`type="radio" name="watch" value="${value}" data-theme-choice`));
+    }
     assert.ok(page.includes(`href="${journalPath}"`));
     assert.doesNotMatch(page, />×</);
 

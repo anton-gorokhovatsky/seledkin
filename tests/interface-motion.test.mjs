@@ -74,8 +74,12 @@ test("enhancement is independent of navigation, local on every page, and preserv
     const publication = versionAssets(new Map([...assets, [file, page]]));
     assert.ok(publication.files.get(file).includes(`styles.css?v=${publication.version}`), "CSS is versioned during assembly");
     assert.ok(publication.files.get(file).includes(`interface-motion.js?v=${publication.version}`), "the enhancement and CSS share the publication version");
-    assert.match(page, /class="theme-toggle__moon"/);
-    assert.match(page, /class="theme-toggle__sun"/);
+    if (file === "404.html") {
+      assert.doesNotMatch(page, /data-menu-toggle|data-theme-toggle/);
+    } else {
+      assert.match(page, /class="floating-menu__mark"/);
+      assert.equal((page.match(/data-theme-choice/g) ?? []).length, 3);
+    }
   }
   const script = await readFile(new URL("../assets/interface-motion.js", import.meta.url), "utf8");
   assert.match(script, /reducedMotion: "user"/);
