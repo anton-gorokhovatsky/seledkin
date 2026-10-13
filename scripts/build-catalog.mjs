@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { catalog } from "../assets/catalog-data.js";
 import { catalogPrice, productLabel, productDescription, orderLinks, positionCount, productNotes, productSearchText, productKey } from "../assets/catalog-model.js";
 import { typographText } from "../assets/typography.js";
-import { recipeContent, productRecipeLinks, matchesProduct } from "./recipe-content.mjs";
+import { recipeContent, productRecipeLinks, matchesProduct, editorialPath } from "./recipe-content.mjs";
 import { olegSources as sources, audioFragmentHref } from "./oleg-content.mjs";
 
 const path = fileURLToPath(new URL("../catalog/index.html", import.meta.url));
@@ -54,13 +54,13 @@ const products = catalog.map((category) => `
   const audioNote = tip ? null : audioChapters[0];
   const adviceEntries = (source ? [source, ...related.filter(entry => entry.id !== source.id)] : related).slice(0, 2);
   const advice = adviceEntries.map(recipe =>
-    adviceLink(`../journal/${recipe.id}/`, recipe.title, journal.find(entry => entry.id === recipe.id)));
+    adviceLink(`../${editorialPath(recipe.id)}`, recipe.title, journal.find(entry => entry.id === recipe.id)));
   if (externalSource?.entry && !adviceEntries.some(entry => entry.id === externalSource.entry)) {
-    advice.unshift(adviceLink(`../journal/${externalSource.entry}/`, externalSource.label, journal.find(entry => entry.id === externalSource.entry)));
+    advice.unshift(adviceLink(`../${editorialPath(externalSource.entry)}`, externalSource.label, journal.find(entry => entry.id === externalSource.entry)));
   }
   for (const story of recipeContent.productStories.filter(story => story.products.some(selection => matchesProduct(selection, category, product)))) {
     const localEntry = journal.find(entry => `https://t.me/kapitanseledkin/${entry.id}` === story.source);
-    if (localEntry && !adviceEntries.some(entry => entry.id === localEntry.id)) advice.push(adviceLink(`../journal/${localEntry.id}/`, story.label, story));
+    if (localEntry && !adviceEntries.some(entry => entry.id === localEntry.id)) advice.push(adviceLink(`../${editorialPath(localEntry.id)}`, story.label, story));
   }
   return `
               <article class="catalog-product" id="product-${escape(product.id)}" tabindex="-1" data-product-id="${escape(product.id)}" data-search-text="${escape(keywords)}" data-product-name="${escape(product.name)}" data-product-category="${category.slug}"${product.previousCategory ? ` data-previous-category="${product.previousCategory}"` : ""}>
@@ -80,7 +80,7 @@ const products = catalog.map((category) => `
                     <a href="tel:+79166751452">Позвонить</a>
                   </div>
                 </details>${tip || audioNote || advice.length ? `
-                <div class="catalog-product-advice"><span>${audioNote?.chapter.catalogLabel ?? (tip || related.length ? "Олег советует" : "Олег рассказывает")}</span>${tip ? `<blockquote cite="${escape(externalSource?.url ?? `../journal/${tip.entry}/`)}"${externalSource ? ` data-source-date="${externalSource.date}"` : ""}>${text(tip.quote)}</blockquote>` : audioNote?.chapter.catalogQuote ? `<blockquote class="catalog-audio-quote" cite="${escape(audioFragmentHref(audioNote.audio, { start: audioNote.chapter.quoteStart }))}" data-audio-chapter="${escape(audioNote.chapter.id)}">${text(audioNote.chapter.catalogQuote)}</blockquote>` : ""}${advice.join("\n                  ")}</div>` : ""}
+                <div class="catalog-product-advice"><span>${audioNote?.chapter.catalogLabel ?? (tip || related.length ? "Олег советует" : "Олег рассказывает")}</span>${tip ? `<blockquote cite="${escape(externalSource?.url ?? `../${editorialPath(tip.entry)}`)}"${externalSource ? ` data-source-date="${externalSource.date}"` : ""}>${text(tip.quote)}</blockquote>` : audioNote?.chapter.catalogQuote ? `<blockquote class="catalog-audio-quote" cite="${escape(audioFragmentHref(audioNote.audio, { start: audioNote.chapter.quoteStart }))}" data-audio-chapter="${escape(audioNote.chapter.id)}">${text(audioNote.chapter.catalogQuote)}</blockquote>` : ""}${advice.join("\n                  ")}</div>` : ""}
               </article>`;
 }).join("")}
             </div>

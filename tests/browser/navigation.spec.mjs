@@ -72,7 +72,7 @@ test("recipes are on the homepage and each featured product opens matching catal
         return { ratio: box.width / box.height, source: image.naturalWidth / image.naturalHeight };
       });
       expect(Math.abs(frame.ratio - frame.source)).toBeLessThan(.01);
-      await expect(card.locator("a")).toHaveAttribute("href", /^journal\/(377|412|664)\/$/);
+      await expect(card.locator("a")).toHaveAttribute("href", /^recipes\/(377|412|664)\/$/);
     }
     if (width > 979) {
       const lines = await cards.locator(".watch-catch__name").evaluateAll(names => names.map(name => name.getBoundingClientRect().top));

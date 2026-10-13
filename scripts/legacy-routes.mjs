@@ -13,8 +13,8 @@ for (const route of legacyRoutes) {
   names.add(route.path);
 }
 
-export function renderLegacyRoute({ target, label }) {
-  const href = `../${target}`;
+export function renderLegacyRoute({ target, label, root = "../", message = "Этот раздел теперь в каталоге лавки.", action = "Открыть каталог" }) {
+  const href = `${root}${target}`;
   return `<!doctype html>
 <html lang="ru">
   <head>
@@ -31,15 +31,16 @@ export function renderLegacyRoute({ target, label }) {
       new URL(location.href).searchParams.forEach((value, key) => {
         if (!destination.searchParams.has(key)) destination.searchParams.set(key, value);
       });
+      if (!destination.hash) destination.hash = location.hash;
       location.replace(destination.href);
     </script>
-    <link rel="stylesheet" href="../assets/styles.css" />
+    <link rel="stylesheet" href="${root}assets/styles.css" />
   </head>
   <body class="not-found-page">
     <main class="not-found-source">
       <h1>${label}</h1>
-      <p>Этот раздел теперь в каталоге лавки.</p>
-      <a class="source-button source-button--outline" href="${href.replaceAll("&", "&amp;")}"><span class="source-button__label">Открыть каталог</span></a>
+      <p>${message}</p>
+      <a class="source-button source-button--outline" href="${href.replaceAll("&", "&amp;")}"><span class="source-button__label">${action}</span></a>
     </main>
   </body>
 </html>

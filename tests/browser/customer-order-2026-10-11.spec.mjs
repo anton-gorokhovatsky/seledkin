@@ -95,7 +95,7 @@ test("equal order channels keep the same appearance in delivery, catalog, menu a
 test("recipe sequence photographs share one column and a short gap @journal", async ({ page }, testInfo) => {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
-    await page.goto("journal/692/?audit=recipe-sequence");
+    await page.goto("recipes/692/?audit=recipe-sequence");
     const geometry = await page.evaluate(() => {
       const first = document.querySelector(".journal-story > img").getBoundingClientRect();
       const second = document.querySelector(".recipe-sequence img").getBoundingClientRect();
@@ -117,10 +117,10 @@ test("editorial recipe photos and titles open the complete source without a cont
   for (const feature of await features.all()) {
     const photo = feature.locator("figure a"), title = feature.locator("h2 a");
     expect(await photo.getAttribute("href")).toBe(await title.getAttribute("href"));
-    await expect(photo).toHaveAttribute("href", /journal\/\d+\/$/);
+    await expect(photo).toHaveAttribute("href", /recipes\/\d+\/$/);
   }
   await features.nth(1).locator("h2 a").press("Enter");
   await expect(page.locator(".ship-log-entry__body")).toContainText("Не нужно даже наливать воду");
   await expect(page.locator(".ship-log-entry__body")).not.toContainText("Заказы принимаются только");
-  await expect(page.getByRole("link", { name: "Читать запись в Телеграме", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Из телеграм-канала", exact: true })).toBeVisible();
 });

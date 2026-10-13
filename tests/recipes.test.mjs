@@ -1,3 +1,4 @@
+import { editorialPath, recipeForEntry } from "../scripts/recipe-content.mjs";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -17,6 +18,32 @@ const normalize = value => value.replace(/<br\s*\/?\s*>/g, "\n").replace(/<[^>]*
   .replace(/₽\./g, "₽")
   .replace(/\s|[-—–‑]/g, "");
 
+test("recipes have one canonical home, working old addresses and no social contact signature", () => {
+  const journal = read("journal/index.html");
+  const sitemap = read("sitemap.xml");
+  for (const recipe of recipes) {
+    const path = `recipes/${recipe.id}/`;
+    const page = read(`${path}index.html`);
+    const alias = read(`journal/${recipe.id}/index.html`);
+    assert.ok(page.includes(`rel="canonical" href="https://ks.fish/${path}"`));
+    assert.ok(page.includes('aria-label="Рецепты и советы"><a href="../">Все рецепты и советы</a>'));
+    assert.ok(page.includes('href="../../recipes/" aria-current="page"'));
+    assert.ok(!journal.includes(`id="journal-entry-${recipe.id}"`));
+    assert.ok(sitemap.includes(`https://ks.fish/${path}`));
+    assert.ok(!sitemap.includes(`https://ks.fish/journal/${recipe.id}/`));
+    assert.ok(alias.includes(`http-equiv="refresh" content="0; url=../../${path}"`));
+    assert.ok(alias.includes('name="robots" content="noindex"'));
+    assert.ok(alias.includes('location.replace(destination.href)'));
+    assert.ok(!alias.includes('<article'));
+    const body = page.match(/<div class="ship-log-entry__body">([\s\S]*?)<\/div>/)[1];
+    assert.doesNotMatch(body, /Строителей|675[‑-]14[‑-]52|journal-(historical-contacts|source-signature)|Магазин \+ доставка/);
+    const source = page.match(/<a class="ship-log-entry__source"[^>]*>[\s\S]*?<\/a>/)[0];
+    if (source.includes("t.me")) assert.ok(source.includes('social-icons.svg#telegram'));
+  }
+  // The contact notice in 574 precedes the recipe; it must not swallow cooking instructions.
+  assert.ok(read("recipes/574/index.html").includes("Отварите рис."));
+});
+
 test("selected archive texts retain every author word, source date and original full frame", () => {
   const sources = [...JSON.parse(read("tests/fixtures/recipes-channel-2026.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2018.json")), ...JSON.parse(read("tests/fixtures/recipes-facebook-2021.json")), ...JSON.parse(read("tests/fixtures/advice-roe-2025.json"))];
   const media = JSON.parse(read("assets/media-variants.json"));
@@ -29,7 +56,7 @@ test("selected archive texts retain every author word, source date and original 
     if (source.id === 73) assert.ok(!entry.body.includes('class="journal-tags"'), "An abandoned hashtag must not leave an empty tag row");
     assert.ok(entry.alt);
     assert.ok(media.some(item => item.source === entry.image && item.width > 32));
-    assert.ok(read(`journal/${entry.id}/index.html`).includes(source.source.replaceAll("&", "&amp;")));
+    assert.ok(read(`${editorialPath(entry.id)}index.html`).includes(source.source.replaceAll("&", "&amp;")));
   }
 });
 
@@ -39,18 +66,18 @@ test("recipes point to the right product variant and use live catalog prices", (
   assert.equal(recipes.filter(recipe => recipe.kind === "advice").length, 7);
   for (const recipe of recipes) {
     assert.ok(entries.some(entry => entry.id === recipe.id));
-    assert.ok(page.includes(`href="../journal/${recipe.id}/"`));
+    assert.ok(page.includes(`href="${recipe.id}/"`));
     for (const selection of recipe.products) {
       const { category, product } = resolveProduct(selection);
       assert.ok(productRecipeLinks(category, product).includes(recipe));
       const url = new URL(productCatalogHref(selection), "https://ks.fish/");
       assert.equal(url.searchParams.get("product"), product.id);
       assert.equal(url.hash, `#product-${product.id}`);
-      const story = read(`journal/${recipe.id}/index.html`);
+      const story = read(`${editorialPath(recipe.id)}index.html`);
       assert.ok(story.includes(catalogPrice(product.price)));
       const context = story.match(/<section class="recipe-current"[\s\S]*?<\/section>/)?.[0];
       assert.ok(context, "A recipe's matching product must have catalog context");
-      assert.ok(!context.includes(`href="../../journal/${recipe.id}/"`), "Product context must not loop back to the same recipe");
+      assert.ok(!context.includes(`href="../../${editorialPath(recipe.id)}"`), "Product context must not loop back to the same recipe");
     }
   }
   const seafood = catalog.find(category => category.slug === "seafood");
@@ -62,7 +89,7 @@ test("recipes point to the right product variant and use live catalog prices", (
 
 test("published stories omit social hashtag rows and preserve the roe guide's prose", () => {
   for (const entry of entries) {
-    const story = read(`journal/${entry.id}/index.html`);
+    const story = read(`${editorialPath(entry.id)}index.html`);
     const body = story.match(/<div class="ship-log-entry__body">([\s\S]*?)<\/div>/)[1];
     assert.doesNotMatch(body, /class="journal-tags"/, `Social tag row in ${entry.id}`);
     assert.doesNotMatch(body.replace(/<[^>]*>/g, ""), /#[\p{L}]/u, `Unusable hashtag in ${entry.id}`);

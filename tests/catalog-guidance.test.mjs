@@ -1,3 +1,4 @@
+import { editorialPath, recipeForEntry } from "../scripts/recipe-content.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -16,12 +17,12 @@ test("catalog guidance keeps Oleg's words beside the matching product and comple
     assert.ok(article, `Missing product ${tip.product}`);
     const source = tip.source && sources.textSources.find(source => source.id === tip.source);
     const path = source ? `content/sources/${source.sourceFile}` : `content/journal/${tip.entry}.html`;
-    const href = (source?.url ?? `../journal/${tip.entry}/`).replaceAll("&", "&amp;");
+    const href = (source?.url ?? `../${editorialPath(tip.entry)}`).replaceAll("&", "&amp;");
     assert.ok(normalized(read(path)).includes(normalized(tip.quote)), `Altered quotation ${tip.entry ?? tip.source}`);
     assert.ok(article.includes(`<blockquote cite="${href}"`));
     assert.ok(article.includes(`>${typographText(tip.quote)}</blockquote>`));
     if (source) assert.ok(article.includes(`data-source-date="${source.date}"`));
-    const local = source?.entry ? `../journal/${source.entry}/` : tip.entry ? href : null;
+    const local = source?.entry ? `../${editorialPath(source.entry)}` : tip.entry ? href : null;
     if (local) assert.ok(article.includes(`href="${local}"`), `Missing on-site material ${tip.entry ?? tip.source}`);
   }
 });
@@ -62,8 +63,8 @@ test("catalog advice serves the advice and on-site reading without source footno
     assert.doesNotMatch(advice[1], /<a[^>]+href="https?:/);
     assert.doesNotMatch(advice[1], /<time\b|SoundCloud|YouTube/);
   }
-  assert.match(html, /href="\.\.\/journal\/619\/"/);
-  assert.ok(read("journal/619/index.html").includes('href="https://t.me/kapitanseledkin/619"'));
+  assert.match(html, /href="\.\.\/recipes\/619\/"/);
+  assert.ok(read("recipes/619/index.html").includes('href="https://t.me/kapitanseledkin/619"'));
 });
 
 test("preparation descriptions are expanded once instead of repeated as notes", () => {
@@ -78,6 +79,6 @@ test("peeled shrimp guidance never describes the unpeeled product", () => {
   const peeled = html.match(/<article[^>]*id="product-seafood-014"[\s\S]*?<\/article>/)[0];
   const unpeeled = html.match(/<article[^>]*id="product-seafood-013"[\s\S]*?<\/article>/)[0];
   assert.match(peeled, /Глубоководная, очищенная, свежемороженая/);
-  assert.match(peeled, /<blockquote cite="\.\.\/journal\/464\/">/);
-  assert.doesNotMatch(unpeeled, /<blockquote cite="\.\.\/journal\/464\/">/);
+  assert.match(peeled, /<blockquote cite="\.\.\/recipes\/464\/">/);
+  assert.doesNotMatch(unpeeled, /<blockquote cite="\.\.\/recipes\/464\/">/);
 });

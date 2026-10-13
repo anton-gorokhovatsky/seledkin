@@ -1,7 +1,8 @@
+import { recipeForEntry } from "../../scripts/recipe-content.mjs";
 import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
 
-const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8"));
+const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8")).filter(entry => !recipeForEntry(entry.id));
 const latest = journal[0];
 const latestRoute = new RegExp(`/journal/${latest.id}/$`);
 
@@ -26,7 +27,7 @@ test("the journal preview leads to its full story and a product-specific inquiry
   const url = new URL(await inquiry.getAttribute("href"));
   expect(url.searchParams.get("text")).toContain(latest.product);
   expect(url.searchParams.get("text")).toContain(`https://t.me/kapitanseledkin/${latest.id}`);
-  await expect(entry.getByRole("link", { name: "Читать запись в Телеграме" })).toHaveAttribute("href", `https://t.me/kapitanseledkin/${latest.id}`);
+  await expect(entry.getByRole("link", { name: "Из телеграм-канала" })).toHaveAttribute("href", `https://t.me/kapitanseledkin/${latest.id}`);
   await page.goto("#journal-entry-680");
   await expect(page).toHaveURL(/journal\/680\/$/);
   await page.goto("#journal-entry-683");

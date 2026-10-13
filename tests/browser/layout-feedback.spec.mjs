@@ -157,5 +157,5 @@ test("recipe feedback preserves rapid filtering, keyboard focus and the reduced-
   await expect(page.locator(".recipe-record:visible")).toHaveCount(3);
   expect(await page.locator(".recipe-record-directory").evaluate(node => node.getAnimations().length)).toBe(0);
   await page.locator('[data-recipe-material="574"] .recipe-record-story').press("Enter");
-  await expect(page).toHaveURL(/journal\/574\/$/);
+  await expect(page).toHaveURL(/recipes\/574\/$/);
 });

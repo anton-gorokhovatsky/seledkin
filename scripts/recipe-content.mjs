@@ -4,6 +4,9 @@ import { productHref } from "../assets/catalog-model.js";
 
 export const recipeContent = JSON.parse(readFileSync(new URL("../content/recipes.json", import.meta.url), "utf8"));
 export const recipes = recipeContent.recipes;
+export const recipeForEntry = id => recipes.find(recipe => recipe.id === id);
+// A publication has one home on the site, regardless of its social source.
+export const editorialPath = id => `${recipeForEntry(id) ? "recipes" : "journal"}/${id}/`;
 export const recipeIngredients = [
   ["all", "Все материалы"], ["fish", "Рыба"], ["mussels", "Мидии"],
   ["shrimp", "Креветки"], ["octopus", "Осьминог"], ["roe", "Икра"], ["pasta", "Паста"],

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("ordinary action buttons keep their visible side insets across page layouts", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  for (const route of ["?audit=button-insets", "catalog/?audit=button-insets", "recipes/?ingredient=roe&audit=button-insets", "about/?audit=button-insets", "journal/692/?audit=button-insets", "404.html?audit=button-insets"]) {
+  for (const route of ["?audit=button-insets", "catalog/?audit=button-insets", "recipes/?ingredient=roe&audit=button-insets", "about/?audit=button-insets", "recipes/692/?audit=button-insets", "404.html?audit=button-insets"]) {
     await page.goto(route);
     await page.evaluate(() => document.fonts.ready);
     async function checkInsets() {
@@ -128,7 +128,7 @@ test("repeated photograph and text blocks share their axes on the homepage and a
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   }
-  for (const route of ["catalog/?audit=shared-photo-axes", "about/?audit=shared-photo-axes", "journal/664/?audit=shared-photo-axes", "recipes/?ingredient=pasta&audit=shared-photo-axes"]) {
+  for (const route of ["catalog/?audit=shared-photo-axes", "about/?audit=shared-photo-axes", "recipes/664/?audit=shared-photo-axes", "recipes/?ingredient=pasta&audit=shared-photo-axes"]) {
     await page.goto(route);
     await page.evaluate(() => document.fonts.ready);
     for (const width of [1512, 800, 320]) {

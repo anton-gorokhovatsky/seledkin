@@ -1,5 +1,44 @@
 import { test, expect } from "@playwright/test";
 
+test("a recipe belongs to recipes, keeps its old links and returns to its exact ingredient @recipes @journal", async ({ page, browser, baseURL }, testInfo) => {
+  for (const [theme, width] of [["light", 1440], ["dark", 390], ["light", 320]]) {
+    await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("journal/701/?audit=recipe-section");
+    await expect(page).toHaveURL(/\/recipes\/701\/\?audit=recipe-section$/);
+    await expect(page.locator(".page-intro__eyebrow").first()).toHaveText("Рецепт · Олег Гугунава");
+    const source = page.getByRole("link", { name: "Из телеграм-канала", exact: true });
+    await expect(source).toHaveAttribute("href", "https://t.me/kapitanseledkin/701");
+    const bounds = await source.boundingBox();
+    expect(bounds.height).toBeGreaterThanOrEqual(44);
+    await expect(page.locator(".ship-log-entry__body")).not.toContainText("Строителей");
+    await expect(page.locator(".ship-log-entry__body")).toContainText("Капитан, капитан, улыбнитесь!");
+    await page.screenshot({ path: testInfo.outputPath(`recipe-source-${width}-${theme}.png`) });
+    if (width === 320) await page.addStyleTag({ content: "html { font-size:200% !important; } * { line-height:1.5 !important; letter-spacing:.12em !important; word-spacing:.16em !important; } p { margin-bottom:2em !important; }" });
+    await source.focus();
+    await expect(source).toBeFocused();
+    await expect(source).toBeInViewport();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  }
+  await page.goto("journal/?audit=recipe-section#journal-entry-701");
+  await expect(page).toHaveURL(/\/recipes\/701\/$/);
+  await page.getByRole("link", { name: "Все рецепты и советы", exact: true }).click();
+  await expect(page).toHaveURL(/\/recipes\/$/);
+  await page.locator('[data-recipe-material="701"]').getByRole("link", { name: "Читать рецепт", exact: true }).click();
+  await page.locator(".recipe-current").getByRole("link", { name: "Печень трески по-мурмански", exact: true }).click();
+  const product = page.locator(".catalog-product:visible");
+  await expect(product).toHaveCount(1);
+  await expect(product).toHaveAttribute("data-product-id", "cod-liver-murmansk-230");
+  await product.getByRole("link", { name: "Рулетики с печенью трески", exact: true }).click();
+  await expect(page).toHaveURL(/\/recipes\/701\/$/);
+  const noJs = await browser.newContext({ javaScriptEnabled: false });
+  const oldLink = await noJs.newPage();
+  await oldLink.goto(`${baseURL}journal/701/`);
+  await expect(oldLink).toHaveURL(/\/recipes\/701\/$/);
+  await expect(oldLink.locator(".ship-log-entry__body")).toContainText("Натрите на крупной терке вареное яйцо");
+  await noJs.close();
+});
+
 test("a buyer finds all recipes below the home preview, cooks Oleg's mussel wrap and opens its bamboo ingredient @recipes @journal", async ({ page }, testInfo) => {
   for (const theme of ["light", "dark"]) {
     await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
@@ -101,18 +140,18 @@ test("catalog advice previews retain the full photograph, keyboard access and di
   await expect(photo).toBeHidden();
   await expect(recipe).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/journal\/574\/$/);
+  await expect(page).toHaveURL(/recipes\/574\/$/);
 
   // The catalog's reading links now stay on site. Check the second preview
   // on the complete roe guide, rather than on a removed social-source link.
   await page.goto("catalog/?q=красная+икра&category=caviar&audit=advice");
-  await page.locator('#product-caviar-005 .catalog-advice-link[href="../journal/619/"]').hover();
+  await page.locator('#product-caviar-005 .catalog-advice-link[href="../recipes/619/"]').hover();
   await expect(page.locator(".catalog-advice-link.is-previewing img")).toHaveAttribute("src", /journal-619-/);
   const phoneContext = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
   const phone = await phoneContext.newPage();
   await phone.goto(`${baseURL}catalog/?q=мясо+мидий&category=seafood&audit=advice`);
   await phone.locator(".catalog-product:visible").getByRole("link", { name: "Мидии с рисом", exact: true }).tap();
-  await expect(phone).toHaveURL(/journal\/574\/$/);
+  await expect(phone).toHaveURL(/recipes\/574\/$/);
   await phoneContext.close();
 });
 
@@ -122,14 +161,14 @@ test("a buyer can cook the right shrimp variant and return to its current price 
   await expect(products).toHaveCount(2);
   const peeled = products.filter({ hasText: "Глубоководная, очищенная" });
   await expect(peeled.getByRole("link", { name: "Патагонские креветки с чесноком", exact: true })).toBeVisible();
-  await expect(products.filter({ hasNotText: "Глубоководная, очищенная" }).locator('a[href="../journal/464/"]')).toHaveCount(0);
+  await expect(products.filter({ hasNotText: "Глубоководная, очищенная" }).locator('a[href="../recipes/464/"]')).toHaveCount(0);
   await peeled.getByRole("link", { name: "Патагонские креветки с чесноком", exact: true }).click();
-  await expect(page).toHaveURL(/journal\/464\/$/);
+  await expect(page).toHaveURL(/recipes\/464\/$/);
   await expect(page.locator(".ship-log-entry__body")).toContainText("Можно размораживать в прохладной воде");
   await expect(page.locator(".recipe-archive-note")).toContainText("к дате публикации");
   await expect(page.locator(".ship-log-entry__body")).not.toContainText("Заказы принимаются только");
   await expect(page.locator(".journal-historical, .journal-historical__current")).toHaveCount(0);
-  expect(await page.getByRole("link", { name: "Читать запись в Телеграме", exact: true }).getAttribute("href")).toBe("https://t.me/kapitanseledkin/464");
+  expect(await page.getByRole("link", { name: "Из телеграм-канала", exact: true }).getAttribute("href")).toBe("https://t.me/kapitanseledkin/464");
   await page.locator(".recipe-current").getByRole("link", { name: "Креветка патагонская", exact: true }).click();
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await expect(page.locator(".catalog-product:visible")).toContainText("Глубоководная, очищенная");

@@ -1870,15 +1870,28 @@ a.source-brand {
 
 .ship-log-entry__meta {
   display: flex;
+  align-items: center;
   gap: 0.5rem 1rem;
   margin-bottom: 1rem;
   color: var(--muted);
   flex-wrap: wrap;
   font-size: var(--text-meta);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.07em;
   line-height: 1.4;
-  text-transform: uppercase;
+}
+
+.ship-log-entry__source {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+
+.ship-log-entry__source svg {
+  flex: 0 0 1.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: currentColor;
 }
 
 .ship-log-entry h2 {

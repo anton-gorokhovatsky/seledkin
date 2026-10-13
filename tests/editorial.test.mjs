@@ -1,3 +1,4 @@
+import { editorialPath, recipeForEntry } from "../scripts/recipe-content.mjs";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
@@ -10,7 +11,7 @@ const [home, about, archive, originals] = await Promise.all([
   read("tests/fixtures/editorial-paragraphs.json").then(JSON.parse),
 ]);
 const ids = JSON.parse(await read("content/journal.json"));
-const journal = (await Promise.all(ids.map(entry => read(`journal/${entry.id}/index.html`)))).join("\n");
+const journal = (await Promise.all(ids.map(entry => read(`${editorialPath(entry.id)}index.html`)))).join("\n");
 const plain = text => text.replace(/<[^>]*>/g, "")
   .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code))).replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '\"')
   .replace(/&shy;|\u00ad/g, "")
@@ -75,7 +76,10 @@ test("journal updates preserve each dated author paragraph and source outside ap
     assert.ok(entry.includes(`datetime="${post.date}"`));
     assert.ok(entry.includes(`href="${post.source}"`));
     assert.ok(plain(entry).includes(plain(post.title).replace(/\.$/u, "")));
-    for (const paragraph of post.paragraphs.filter(paragraph => !isSocialTagRow(paragraph))) assert.ok(plain(entry).includes(plain(paragraph)), `Changed author text in ${post.id}: ${paragraph}`);
+    const sourceBody = await read(`content/journal/${post.id}.html`);
+    for (const paragraph of post.paragraphs) assert.ok(plain(sourceBody).includes(plain(paragraph)), `Lost archived source in ${post.id}`);
+    for (const paragraph of post.omittedContactParagraphs ?? []) assert.ok(!plain(entry).includes(plain(paragraph)), `Contact signature in ${post.id}`);
+    for (const paragraph of post.paragraphs.filter(paragraph => !isSocialTagRow(paragraph) && !post.omittedContactParagraphs?.includes(paragraph))) assert.ok(plain(entry).includes(plain(paragraph)), `Changed author text in ${post.id}: ${paragraph}`);
   }
 });
 

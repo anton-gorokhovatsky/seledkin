@@ -44,7 +44,7 @@
     <title>{{title}} — Рыбная лавка капитана Селедкина</title>
   </head>
   <body class="journal-page journal-story-page">
-    <a class="skip-link" href="#main">Перейти к записи</a>
+    <a class="skip-link" href="#main">{{skipLabel}}</a>
 
     <header class="source-header" id="top">
       <div class="source-header__bar">
@@ -65,9 +65,9 @@
     {{menu}}
 
     <main id="main" tabindex="-1" class="journal-story-main source-shell">
-      <nav class="journal-story__back" aria-label="Судовой журнал"><a href="../">Все записи журнала</a>{{recipeBack}}</nav>
+      <nav class="journal-story__back" aria-label="{{sectionLabel}}"><a href="../">{{backLabel}}</a></nav>
 {{article}}
-      <nav class="journal-story__next" aria-label="Другие записи журнала">{{neighbors}}</nav>
+      <nav class="journal-story__next" aria-label="{{neighborsLabel}}">{{neighbors}}</nav>
     </main>
 
     {{footer}}

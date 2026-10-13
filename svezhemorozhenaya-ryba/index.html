@@ -14,6 +14,7 @@
       new URL(location.href).searchParams.forEach((value, key) => {
         if (!destination.searchParams.has(key)) destination.searchParams.set(key, value);
       });
+      if (!destination.hash) destination.hash = location.hash;
       location.replace(destination.href);
     </script>
     <link rel="stylesheet" href="../assets/styles.css" />

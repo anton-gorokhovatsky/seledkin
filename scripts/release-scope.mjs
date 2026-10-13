@@ -262,11 +262,18 @@ export function readReleaseChanges(base) {
   }
 }
 
+export function selectReleaseChecks(changes, requested = "auto") {
+  // A deliberate manual choice for an approved editorial release. Automatic
+  // classification remains conservative for unknown changes and missing bases.
+  if (requested === "editorial") return { scope: "scoped", grep: "@recipes|@journal" };
+  const scope = requested === "full" ? "full" : classifyRelease(changes);
+  return { scope, grep: scope === "scoped" ? scopedBrowserTags(changes).join("|") : "" };
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const changes = readReleaseChanges(process.argv[2]);
-  const scope = process.argv[3] === "full" ? "full" : classifyRelease(changes);
+  const { scope, grep } = selectReleaseChecks(changes, process.argv[3]);
   const pages = scope === "typography" ? changes.filter(({ path }) => !tooling.test(path)).map(({ path }) => path) : [];
-  const grep = scope === "scoped" ? scopedBrowserTags(changes).join("|") : "";
   const output = `scope=${scope}\nbrowser_required=${["full", "journal", "typography", "scoped"].includes(scope)}\nbrowser_grep=${grep}\ntypography_pages=${JSON.stringify(pages)}\n`;
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, output);
   process.stdout.write(output);

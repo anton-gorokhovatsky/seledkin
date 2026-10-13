@@ -1,3 +1,4 @@
+import { editorialPath, recipeForEntry } from "./recipe-content.mjs";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, extname, join, resolve } from "node:path";
@@ -141,7 +142,7 @@ for (const forbidden of ["next/", "next.js", "react-dom", "from \"react\"", "til
 }
 
 const journalEntries = JSON.parse(readFileSync(join(root, "content/journal.json"), "utf8"));
-const htmlFiles = [...journalEntries.map(entry => `journal/${entry.id}/index.html`), "index.html", "catalog/index.html", "about/index.html", "journal/index.html", "recipes/index.html", "404.html"];
+const htmlFiles = [...journalEntries.map(entry => `${editorialPath(entry.id)}index.html`), "index.html", "catalog/index.html", "about/index.html", "journal/index.html", "recipes/index.html", "404.html"];
 const pageTitles = new Map();
 for (const file of htmlFiles) {
   const path = join(root, file);
@@ -368,11 +369,11 @@ for (const required of ["video.pause()", "video.currentTime = 0", "IntersectionO
   if (!seaScript.includes(required)) fail(`assets/sea-motion.js: нет обязательного поведения ${required}`);
 }
 
-if (!journalEntries.length || (journalPage.match(/class="journal-index-entry(?:\s|")/g) ?? []).length !== journalEntries.length) {
+if (!journalEntries.length || (journalPage.match(/class="journal-index-entry(?:\s|")/g) ?? []).length !== journalEntries.filter(entry => !recipeForEntry(entry.id)).length) {
   fail("journal/index.html: «Судовой журнал» не совпадает с отобранными записями");
 }
 for (const { id, source } of journalEntries) {
-  const article = readFileSync(join(root, `journal/${id}/index.html`), "utf8");
+  const article = readFileSync(join(root, `${editorialPath(id)}index.html`), "utf8");
   for (const required of [
     `assets/journal-${id}.jpg`,
     (source?.url ?? `https://t.me/kapitanseledkin/${id}`).replaceAll("&", "&amp;"),

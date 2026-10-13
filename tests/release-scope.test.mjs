@@ -1,6 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { classifyRelease, readReleaseChanges, scopedBrowserTags } from "../scripts/release-scope.mjs";
+import { classifyRelease, readReleaseChanges, scopedBrowserTags, selectReleaseChecks } from "../scripts/release-scope.mjs";
+
+test("manual editorial selection runs recipe and journal journeys without weakening automatic scope", () => {
+  const changes = [{ path: "recipes/701/index.html", after: "<h1>Рецепт</h1>" }];
+  assert.deepEqual(selectReleaseChecks(changes, "editorial"), { scope: "scoped", grep: "@recipes|@journal" });
+  assert.deepEqual(selectReleaseChecks(changes), { scope: "full", grep: "" });
+  assert.deepEqual(selectReleaseChecks(changes, "full"), { scope: "full", grep: "" });
+  assert.deepEqual(selectReleaseChecks(null), { scope: "full", grep: "" });
+});
 
 const before = '<footer><a class="credit" href="https://example.com/">Дизайн и разработка</a></footer>';
 const after = before.replace("https://example.com/", "https://gorokhovatsky.tech/?point=ks-fish");

@@ -1,9 +1,12 @@
-// Old public fragments remain usable. Without JS they still land on a linked row.
+import { recipeRoutes } from "./recipe-routes.js";
+
+// Old public fragments keep working after recipes move to their own section.
 function openLegacyEntry() {
   const id = location.hash.match(/^#journal-entry-(\d+)$/)?.[1];
   if (!id) return;
   const link = document.querySelector(`#journal-entry-${id} > a`);
-  if (link) location.replace(link.href);
+  const target = link?.href ?? recipeRoutes[id];
+  if (target) location.replace(new URL(target, location.href).href);
 }
 openLegacyEntry();
 window.addEventListener("hashchange", openLegacyEntry);

@@ -1,3 +1,4 @@
+import { editorialPath, recipeForEntry } from "../scripts/recipe-content.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -144,7 +145,7 @@ function pngDimensions(buffer) {
   };
 }
 
-const journalStories = (await Promise.all(journalEntries.map(entry => pageText(`../journal/${entry.id}/index.html`)))).join("\n");
+const journalStories = (await Promise.all(journalEntries.map(entry => pageText(`../${editorialPath(entry.id)}index.html`)))).join("\n");
 test("the site is plain HTML, CSS and JavaScript", () => {
   assert.match(home, /^<!doctype html>/i);
   assert.match(catalogPage, /^<!doctype html>/i);
@@ -238,7 +239,7 @@ test("home exposes the core customer jobs", () => {
   assert.match(hero, /href="#delivery-order"/);
   assert.match(home, /id="delivery-order"[^>]*aria-label="Способы заказа"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
-  const latest = journalEntries[0];
+  const latest = journalEntries.find(entry => !recipeForEntry(entry.id));
   assert.ok(hero.includes(`href="journal/${latest.id}/"`));
   assert.ok(hero.includes(`data-source-image="assets/${latest.image}"`));
   assert.ok(hero.includes(`datetime="${latest.date}"`));
@@ -264,7 +265,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     /Переключайте записи кнопками или клавишами со стрелками влево и вправо\./,
   );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 5);
-  for (const { id } of journalEntries.slice(0, 5)) {
+  for (const { id } of journalEntries.filter(entry => !recipeForEntry(entry.id)).slice(0, 5)) {
     assert.match(hero, new RegExp("href=\"journal/" + id + "/\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }
@@ -650,8 +651,8 @@ test("the typographic scale protects reading and interface text", () => {
 test("the Ship's Log is a manual, attributed selection of the latest posts", () => {
   assert.match(journalPage, /id="journal"/);
   assert.match(journalPage.replaceAll("\u00ad", ""), /<h1 class="page-intro__title" id="journal-title">Судовой <em>журнал<\/em><\/h1>/);
-  assert.equal((journalPage.match(/class="journal-index-entry(?:\s|")/g) ?? []).length, journalEntries.length);
-  for (const { id } of journalEntries) {
+  assert.equal((journalPage.match(/class="journal-index-entry(?:\s|")/g) ?? []).length, journalEntries.filter(entry => !recipeForEntry(entry.id)).length);
+  for (const { id } of journalEntries.filter(entry => !recipeForEntry(entry.id))) {
     assert.match(
       journalPage,
       new RegExp(
@@ -662,7 +663,7 @@ test("the Ship's Log is a manual, attributed selection of the latest posts", () 
   assert.match(journalPage, /https:\/\/t\.me\/kapitanseledkin"/);
 
   let cursor = -1;
-  for (const { id } of journalEntries) {
+  for (const { id } of journalEntries.filter(entry => !recipeForEntry(entry.id))) {
     const next = journalPage.indexOf(`href="${id}/"`, cursor + 1);
     assert.ok(next > cursor, `Запись ${id} должна идти в обратной хронологии`);
     assert.match(journalPage, new RegExp(`assets/journal-${id}\\.jpg`));
@@ -692,7 +693,7 @@ test("the recipe preview gives full photographs and direct access to complete au
   assert.match(section, /href="recipes\/"/);
   assert.match(section, /data-source-image="assets\/journal-692\.jpg"/);
   assert.doesNotMatch(section, /watch-catch-(?:herring|shrimp|squid|octopus)\.svg/);
-  for (const id of [692, 377, 412, 664]) assert.ok(section.includes(`href="journal/${id}/"`));
+  for (const id of [692, 377, 412, 664]) assert.ok(section.includes(`href="recipes/${id}/"`));
   // Social-source links were removed from the catalog by the user's decision;
   // on-site advice/recipe routes are protected by catalog-guidance.test.mjs.
   for (const id of [506, 610]) assert.ok(!catalogPage.includes(`href="https://t.me/kapitanseledkin/${id}"`));
@@ -1952,7 +1953,7 @@ test("search engines receive every public page including full journal articles",
   assert.ok(sitemap.includes(`<loc>${root}about/</loc>`));
   assert.ok(sitemap.includes(`<loc>${root}recipes/</loc>`));
   assert.equal((sitemap.match(/<url>/g) ?? []).length, 5 + journalEntries.length);
-  for (const entry of journalEntries) assert.ok(sitemap.includes(`<loc>${root}journal/${entry.id}/</loc>`));
+  for (const entry of journalEntries) assert.ok(sitemap.includes(`<loc>${root}${editorialPath(entry.id)}</loc>`));
 });
 
 test("the custom domain is consistent across all pages and the deployment artifact", async () => {

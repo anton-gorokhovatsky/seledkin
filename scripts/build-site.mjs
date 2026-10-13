@@ -1,12 +1,13 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, journalEntries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
+import { editorialPath, recipeForEntry } from "./recipe-content.mjs";
 import { catalog } from "../assets/catalog-data.js";
 import { positionCount } from "../assets/catalog-model.js";
 import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
-const hero = entries.slice(0, 5);
-const preview = entries.slice(0, 3);
+const hero = journalEntries.slice(0, 5);
+const preview = journalEntries.slice(0, 3);
 const pages = [["index.html", "home", ""], ["catalog/index.html", "catalog", "../"],
   ["about/index.html", "about", "../"], ["journal/index.html", "journal", "../"], ["404.html", "404", ""]];
 for (const [path, page, root] of pages) {
@@ -26,10 +27,10 @@ for (const [path, page, root] of pages) {
     "assortment-directory": renderAssortmentDirectory(),
     "mobile-hero": renderMobileHero(),
   });
-  if (page === "journal") regions["journal-archive"] = renderJournalAtlas(entries);
+  if (page === "journal") regions["journal-archive"] = renderJournalAtlas(journalEntries);
   if (page === "about") regions["audio-library"] = renderAudioLibrary();
   if (page === "catalog") Object.assign(regions, {
-    "journal-search": renderJournal(entries, "search"), "delivery-summary": renderDelivery("catalog"),
+    "journal-search": renderJournal(journalEntries, "search"), "delivery-summary": renderDelivery("catalog"),
     "order-actions": renderCatalogOrderActions(),
   });
   let result = original;
@@ -79,8 +80,15 @@ function generated(path, content) {
   }
 }
 generated("assets/store-data.js", `// Generated from content/site.json by pnpm build:site.\nexport const store = ${JSON.stringify(store, null, 2)};\n`);
-for (const entry of entries) generated(`journal/${entry.id}/index.html`, renderJournalPage(entry));
+generated("journal/recipe-routes.js", `// Generated from the editorial classification.\nexport const recipeRoutes = ${JSON.stringify(Object.fromEntries(entries.filter(entry => recipeForEntry(entry.id)).map(entry => [entry.id, `../${editorialPath(entry.id)}`])), null, 2)};\n`);
+for (const entry of entries) {
+  generated(`${editorialPath(entry.id)}index.html`, renderJournalPage(entry));
+  if (recipeForEntry(entry.id)) generated(`journal/${entry.id}/index.html`, renderLegacyRoute({
+    target: editorialPath(entry.id), root: "../../", label: entry.title,
+    message: "Этот материал теперь в разделе «Рецепты и советы».", action: "Открыть материал",
+  }));
+}
 generated("recipes/index.html", renderRecipesPage());
 for (const route of legacyRoutes) generated(`${route.path}/index.html`, renderLegacyRoute(route));
-const routes = ["", "catalog/", "journal/", "recipes/", "about/", ...entries.map(entry => `journal/${entry.id}/`)];
+const routes = ["", "catalog/", "journal/", "recipes/", "about/", ...entries.map(entry => editorialPath(entry.id))];
 generated("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${routes.map(path => `  <url>\n    <loc>https://ks.fish/${path}</loc>\n  </url>`).join("\n")}\n</urlset>\n`);

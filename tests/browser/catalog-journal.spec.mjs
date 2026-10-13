@@ -1,8 +1,9 @@
+import { recipeForEntry } from "../../scripts/recipe-content.mjs";
 import { test, expect } from "@playwright/test";
 import { stubStoreMap } from "./map-fixture.mjs";
 import { readFileSync } from "node:fs";
 
-const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8"));
+const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8")).filter(entry => !recipeForEntry(entry.id));
 
 test("an empty category search can broaden without losing the query or browser history @catalog", async ({ page }, testInfo) => {
   await page.goto("catalog/");

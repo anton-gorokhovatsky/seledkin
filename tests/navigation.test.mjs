@@ -1,10 +1,11 @@
+import { editorialPath, recipeForEntry } from "../scripts/recipe-content.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const base = new URL("https://example.com/seledkin/");
 const entries = JSON.parse(await readFile(new URL("../content/journal.json", import.meta.url), "utf8"));
-const paths = ["", "catalog/", "about/", "recipes/", "journal/", ...entries.map(entry => `journal/${entry.id}/`)];
+const paths = ["", "catalog/", "about/", "recipes/", "journal/", ...entries.map(entry => `${editorialPath(entry.id)}`)];
 const pages = new Map(await Promise.all(paths.map(async path => [path, await readFile(new URL(`../${path}index.html`, import.meta.url), "utf8")])));
 const routes = [
   ["Продукты и цены", "catalog/"],
@@ -26,7 +27,7 @@ test("every menu label leads to the promised section from every page", () => {
       assert.equal(plain(content.replace(/<span aria-hidden="true">[\s\S]*?<\/span>/, "")), label);
       const destination = new URL(attributes.match(/href="([^"]+)"/)[1], new URL(path, base));
       assert.equal(destination.href, new URL(route, base).href, `${path}: ${label}`);
-      assert.equal(attributes.includes('aria-current="page"'), path !== "" && route === (path.startsWith("journal/") ? "journal/" : path), `${path}: incorrect current page on ${label}`);
+      assert.equal(attributes.includes('aria-current="page"'), path !== "" && route === (/^(journal|recipes)\//.test(path) ? `${path.split("/")[0]}/` : path), `${path}: incorrect current page on ${label}`);
     });
   }
 });

@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
     inputs:
       checks:
-        description: Check changed scope or explicitly run the full suite
+        description: Automatic scope, selected recipes/journal checks, or the full suite
         type: choice
         default: auto
-        options: [auto, full]
+        options: [auto, editorial, full]
 
 permissions:
   contents: read

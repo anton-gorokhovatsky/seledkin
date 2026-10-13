@@ -1,0 +1,28 @@
+// Generated from the editorial classification.
+export const recipeRoutes = {
+  "73": "../recipes/73/",
+  "120": "../recipes/120/",
+  "138": "../recipes/138/",
+  "150": "../recipes/150/",
+  "360": "../recipes/360/",
+  "375": "../recipes/375/",
+  "377": "../recipes/377/",
+  "378": "../recipes/378/",
+  "382": "../recipes/382/",
+  "412": "../recipes/412/",
+  "423": "../recipes/423/",
+  "453": "../recipes/453/",
+  "464": "../recipes/464/",
+  "556": "../recipes/556/",
+  "574": "../recipes/574/",
+  "588": "../recipes/588/",
+  "608": "../recipes/608/",
+  "619": "../recipes/619/",
+  "627": "../recipes/627/",
+  "664": "../recipes/664/",
+  "692": "../recipes/692/",
+  "701": "../recipes/701/",
+  "facebook-2021-12-14-mussels": "../recipes/facebook-2021-12-14-mussels/",
+  "facebook-2018-12-15-nerka": "../recipes/facebook-2018-12-15-nerka/",
+  "facebook-2018-02-16-herring": "../recipes/facebook-2018-02-16-herring/"
+};

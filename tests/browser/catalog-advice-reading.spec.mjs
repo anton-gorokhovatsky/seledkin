@@ -23,7 +23,7 @@ test("a buyer reads the full roe guide on site and advice space follows its cont
   await expect(page.locator("h1")).toHaveText("Как выбирать красную икру");
   await expect(page.locator('.ship-log-entry__meta time')).toHaveAttribute("datetime", "2025-12-17");
   await expect(page.locator('.source-caption')).toHaveText("Красная икра — фотография из архива лавки");
-  await expect(page.getByRole("link", { name: "Оригинал в Телеграме", exact: true })).toHaveAttribute("href", "https://t.me/kapitanseledkin/619");
+  await expect(page.getByRole("link", { name: "Из телеграм-канала", exact: true })).toHaveAttribute("href", "https://t.me/kapitanseledkin/619");
   await expect(page.locator('.recipe-current a')).toHaveCount(4);
   await page.locator('.journal-story > img').scrollIntoViewIfNeeded();
   await page.screenshot({ path: testInfo.outputPath("roe-guide-320.png") });
