@@ -236,6 +236,17 @@ function journalBody(entry, inquiry) {
   return lines.slice(0, historical).map(line => `                  ${line}`).join("\n");
 }
 
+function journalTitle(value) {
+  const hyphens = {
+    Охлажденная: "Ох\u00adлаж\u00adденная", эталонная: "эта\u00adлонная", Карелии: "Ка\u00adре\u00adлии",
+    малосольного: "мало\u00adсоль\u00adного", каспийского: "кас\u00adпий\u00adского", паштеты: "паш\u00adтеты",
+    копченого: "коп\u00adче\u00adного", балтийского: "бал\u00adтий\u00adского", Диаметр: "Диа\u00adметр",
+    тарелки: "та\u00adрелки", сантиметров: "сан\u00adти\u00adмет\u00adров",
+    Рулетики: "Ру\u00adле\u00adти\u00adки", печенью: "пе\u00adченью",
+  };
+  return text(Object.entries(hyphens).reduce((title, [word, hyphenated]) => title.replaceAll(word, hyphenated), value));
+}
+
 export function renderJournal(list, view) {
   return list.map((entry, index) => {
     const { id, title } = entry;
@@ -251,7 +262,7 @@ export function renderJournal(list, view) {
               </div>
               <div class="journal-preview__copy">
                 <time datetime="${entry.date}">${date(entry)}</time>
-                <h3 id="journal-preview-${id}">${title}</h3>
+                <h3 id="journal-preview-${id}">${journalTitle(title)}</h3>
                 <span class="journal-preview__link">Читать запись</span>
               </div>
             </a>`;
@@ -262,7 +273,7 @@ export function renderJournal(list, view) {
                 ${image(entry, root, "(max-width: 61.1875rem) min(26vw, 192px), 192px")}
                 <div>
                   <time datetime="${entry.date}">${date(entry)}</time>
-                  <${view === "archive" ? "h2" : "h3"} id="entry-title-${id}">${title}</${view === "archive" ? "h2" : "h3"}>
+                  <${view === "archive" ? "h2" : "h3"} id="entry-title-${id}">${journalTitle(title)}</${view === "archive" ? "h2" : "h3"}>
                   <span class="journal-index-entry__read">Читать запись</span>
                 </div>
               </a>
@@ -274,7 +285,7 @@ export function renderJournal(list, view) {
     return `            <article class="ship-log-entry journal-story" data-journal-id="${id}" id="journal-entry-${id}" tabindex="-1">
               <header class="journal-story__header page-intro">
                 <p class="page-intro__eyebrow">Судовой журнал · Олег Гугунава</p>
-                <h1 class="page-intro__title">${title}</h1>
+                <h1 class="page-intro__title">${journalTitle(title)}</h1>
                 <p class="ship-log-entry__meta"><time datetime="${entry.date}">${date(entry)}</time> <span>${text(entry.source?.name ?? "Телеграм")}</span></p>
               </header>
               ${image(entry, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, true)}
@@ -296,13 +307,6 @@ ${journalBody(entry, inquiry)}
 export function renderJournalAtlas(list) {
   const recent = list.slice(0, 5);
   const earlier = list.slice(recent.length);
-  const hyphens = {
-    Охлажденная: "Ох\u00adлаж\u00adденная", эталонная: "эта\u00adлонная", Карелии: "Ка\u00adре\u00adлии",
-    малосольного: "мало\u00adсоль\u00adного", каспийского: "кас\u00adпий\u00adского", паштеты: "паш\u00adтеты",
-    копченого: "коп\u00adче\u00adного", балтийского: "бал\u00adтий\u00adского", Диаметр: "Диа\u00adметр",
-    тарелки: "та\u00adрелки", сантиметров: "сан\u00adти\u00adмет\u00adров",
-  };
-  const title = entry => text(entry.title.replace(/Охлажденная|эталонная|Карелии|малосольного|каспийского|паштеты|копченого|балтийского|Диаметр|тарелки|сантиметров/g, word => hyphens[word]));
   const sizes = ["(max-width: 34rem) calc(100vw - 36px), (max-width: 52rem) 62vw, 55vw",
     "(max-width: 34rem) calc(100vw - 36px), (max-width: 52rem) 62vw, 31vw",
     "(max-width: 34rem) calc(100vw - 36px), (max-width: 52rem) 70vw, 31vw",
@@ -325,7 +329,7 @@ ${recent.map((entry, index) => `            <article class="journal-index-entry 
                   ${image(entry, "../", sizes[index], false, index === 0)}
                   <figcaption>
                     <time id="entry-date-${entry.id}" datetime="${entry.date}">${date(entry)}</time>
-                    <h2 id="entry-title-${entry.id}">${title(entry)}</h2>
+                    <h2 id="entry-title-${entry.id}">${journalTitle(entry.title)}</h2>
                     <span class="atlas-record__read">Читать запись${harpoon}</span>
                   </figcaption>
                 </figure>
