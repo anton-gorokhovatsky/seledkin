@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { catalog } from "../assets/catalog-data.js";
 import { matchesSearch, productSearchText, catalogPrice } from "../assets/catalog-model.js";
-import { recipes, recipeContent, resolveProduct, productRecipeLinks, productCatalogHref } from "../scripts/recipe-content.mjs";
+import { recipes, recipeOpening, recipeContent, resolveProduct, productRecipeLinks, productCatalogHref } from "../scripts/recipe-content.mjs";
 import { entries, renderRecipesPage } from "../scripts/site-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
@@ -17,6 +17,22 @@ const normalize = value => value.replace(/<br\s*\/?\s*>/g, "\n").replace(/<[^>]*
   .replace(/([0-9])\s*°?([CС])/g, "$1C").replace(/([0-9])\s*р\./g, "$1₽")
   .replace(/₽\./g, "₽")
   .replace(/\s|[-—–‑]/g, "");
+
+test("recipes and advice follow original publication dates across the directory and neighbors", () => {
+  const expected = entries.filter(entry => recipeForEntry(entry.id)).sort((a, b) => b.date.localeCompare(a.date));
+  assert.deepEqual(recipes.map(recipe => recipe.id), expected.map(entry => entry.id));
+  assert.deepEqual(recipeOpening.map(recipe => recipe.id), [701, 692, 664]);
+  const page = renderRecipesPage();
+  const visibleIds = [...page.matchAll(/<article[^>]+data-recipe-(?:feature|material)="([^"]+)"[^>]*>/g)]
+    .filter(([tag]) => !/\shidden(?:\s|>)/.test(tag)).map(([, id]) => id);
+  assert.deepEqual(visibleIds, expected.map(entry => String(entry.id)));
+  for (const [index, entry] of expected.entries()) {
+    const article = read(`recipes/${entry.id}/index.html`);
+    for (const [neighbor, relation] of [[expected[index + 1], "prev"], [expected[index - 1], "next"]]) {
+      if (neighbor) assert.ok(article.includes(`href="../${neighbor.id}/" rel="${relation}"`));
+    }
+  }
+});
 
 test("recipes have one canonical home, working old addresses and no social contact signature", () => {
   const journal = read("journal/index.html");

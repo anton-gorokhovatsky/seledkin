@@ -3,7 +3,17 @@ import { catalog } from "../assets/catalog-data.js";
 import { productHref } from "../assets/catalog-model.js";
 
 export const recipeContent = JSON.parse(readFileSync(new URL("../content/recipes.json", import.meta.url), "utf8"));
-export const recipes = recipeContent.recipes;
+const publications = JSON.parse(readFileSync(new URL("../content/journal.json", import.meta.url), "utf8"));
+const publicationDate = recipe => {
+  const date = publications.find(entry => entry.id === recipe.id)?.date;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date ?? "")) throw new Error(`Missing recipe publication date: ${recipe.id}`);
+  return date;
+};
+// Original dates determine the reading order, including imported archive posts.
+// Editorial typography never pins a story above newer ones.
+export const recipes = [...recipeContent.recipes].sort((a, b) =>
+  publicationDate(b).localeCompare(publicationDate(a)) || String(a.id).localeCompare(String(b.id)));
+export const recipeOpening = recipes.slice(0, 3);
 export const recipeForEntry = id => recipes.find(recipe => recipe.id === id);
 // A publication has one home on the site, regardless of its social source.
 export const editorialPath = id => `${recipeForEntry(id) ? "recipes" : "journal"}/${id}/`;

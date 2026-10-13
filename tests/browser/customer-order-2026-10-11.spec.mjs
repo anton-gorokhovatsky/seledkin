@@ -119,8 +119,8 @@ test("editorial recipe photos and titles open the complete source without a cont
     expect(await photo.getAttribute("href")).toBe(await title.getAttribute("href"));
     await expect(photo).toHaveAttribute("href", /recipes\/\d+\/$/);
   }
-  await features.nth(1).locator("h2 a").press("Enter");
-  await expect(page.locator(".ship-log-entry__body")).toContainText("Не нужно даже наливать воду");
-  await expect(page.locator(".ship-log-entry__body")).not.toContainText("Заказы принимаются только");
+  await features.nth(0).locator("h2 a").press("Enter");
+  await expect(page.locator(".ship-log-entry__body")).toContainText(/Натрите\s+на\s+крупной\s+терке\s+вареное\s+яйцо/);
+  await expect(page.locator(".ship-log-entry__body")).not.toContainText("Строителей");
   await expect(page.getByRole("link", { name: "Из телеграм-канала", exact: true })).toBeVisible();
 });

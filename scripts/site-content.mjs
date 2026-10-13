@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { countNoun, typographText } from "../assets/typography.js";
 import { catalog } from "../assets/catalog-data.js";
 import { catalogPrice, productNotes, productDescription, orderLinks, productHref, positionCount } from "../assets/catalog-model.js";
-import { recipeContent, recipes, recipeIngredients, resolveProduct, productCatalogHref, productRecipeLinks, recipeForEntry, editorialPath } from "./recipe-content.mjs";
+import { recipeContent, recipes, recipeOpening, recipeIngredients, resolveProduct, productCatalogHref, productRecipeLinks, recipeForEntry, editorialPath } from "./recipe-content.mjs";
 import { olegSources, audioTime, audioFragmentHref } from "./oleg-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
@@ -445,38 +445,42 @@ export function renderRecipeHome() {
 }
 
 function renderRecipeEditorial(root) {
-  const selected = recipeContent.editorial.map(item => {
-    const recipe = recipes.find(recipe => recipe.id === item.id && recipe.kind === "recipe");
-    if (!recipe || recipe.products.length !== 1) throw new Error(`Invalid editorial recipe: ${item.id}`);
+  const selected = recipeOpening.map(recipe => {
+    const item = recipeContent.editorial.find(item => item.id === recipe.id) ?? {};
     const entry = recipeEntry(recipe);
+    const excerpt = recipe.excerpt ?? [item.excerpt];
     const normalized = value => plain(value).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-    for (const quote of [item.pull, item.excerpt]) {
-      if (!normalized(entry.body).includes(normalized(quote))) throw new Error(`Editorial quote differs from Oleg's source: ${item.id}`);
+    for (const quote of [item.pull, ...excerpt].filter(Boolean)) {
+      if (!normalized(entry.body).includes(normalized(quote))) throw new Error(`Editorial quote differs from Oleg's source: ${recipe.id}`);
     }
-    return { ...item, recipe, entry, product: resolveProduct(recipe.products[0]).product };
+    if (!excerpt.length || excerpt.some(paragraph => !paragraph)) throw new Error(`Missing recipe excerpt: ${recipe.id}`);
+    return { ...item, id: recipe.id, recipe, entry, excerpt, products: recipe.products.map(selection => resolveProduct(selection).product) };
   });
-  const meta = item => `<p class="recipe-meta">Рецепт Олега · <time datetime="${item.entry.date}">${date(item.entry)}</time></p>`;
-  const title = item => `<h2 id="recipe-editorial-${item.id}"><a href="${root}recipes/${item.id}/">${text(item.noun)} <em>${text(item.ending)}</em></a></h2>`;
-  const photoLink = (item, photo) => `<a class="recipe-editorial-photo-link" href="${root}recipes/${item.id}/" aria-label="Читать рецепт: ${text(item.recipe.title)}">${photo}</a>`;
-  const actions = item => `<div class="recipe-editorial-actions"><a class="editorial-link" href="${root}recipes/${item.id}/" aria-label="Читать рецепт: ${text(item.recipe.title)}">Читать рецепт${harpoon}</a><a class="editorial-link recipe-editorial-actions__catalog" data-recipe-id="${item.id}" href="${escape(productCatalogHref(item.recipe.products[0], root))}">${text(item.product.name)} в каталоге${harpoon}</a></div>`;
-  const product = item => `<div class="recipe-editorial-product"><div><p class="recipe-editorial-product__label">Для этого рецепта</p><p class="recipe-editorial-product__name">${text(item.product.name)}</p><p class="recipe-editorial-product__origin">${text(item.product.description)}</p></div><strong>${escape(catalogPrice(item.product.price)).replace("/", "<wbr>/")}</strong></div>`;
+  const kind = item => item.recipe.kind === "advice" ? "совет" : "рецепт";
+  const meta = item => `<p class="recipe-meta">${item.recipe.kind === "advice" ? "Совет" : "Рецепт"} Олега · <time datetime="${item.entry.date}">${date(item.entry)}</time></p>`;
+  const title = item => `<h2 id="recipe-editorial-${item.id}"><a href="${root}recipes/${item.id}/">${item.noun && item.ending ? `${text(item.noun)} <em>${text(item.ending)}</em>` : text(item.recipe.title)}</a></h2>`;
+  const photoLink = (item, photo) => `<a class="recipe-editorial-photo-link" href="${root}recipes/${item.id}/" aria-label="Читать ${kind(item)}: ${text(item.recipe.title)}">${photo}</a>`;
+  const actions = item => `<div class="recipe-editorial-actions"><a class="editorial-link" href="${root}recipes/${item.id}/" aria-label="Читать ${kind(item)}: ${text(item.recipe.title)}">Читать ${kind(item)}${harpoon}</a>${item.recipe.products.map((selection, index) => `<a class="editorial-link recipe-editorial-actions__catalog" data-recipe-id="${item.id}" href="${escape(productCatalogHref(selection, root))}">${text(item.products[index].name)} в каталоге${harpoon}</a>`).join("")}</div>`;
+  const product = item => item.products.map(product => `<div class="recipe-editorial-product"><div><p class="recipe-editorial-product__label">${item.recipe.kind === "advice" ? "В совете Олега" : "Для этого рецепта"}</p><p class="recipe-editorial-product__name">${text(product.name)}</p>${product.description ? `<p class="recipe-editorial-product__origin">${text(product.description)}</p>` : ""}</div><strong>${escape(catalogPrice(product.price)).replace("/", "<wbr>/")}</strong></div>`).join("");
+  const pull = item => item.pull ? `<blockquote class="recipe-editorial-pull"><p>«${text(item.pull)}»</p></blockquote>` : "";
+  const excerpt = item => item.excerpt.map(paragraph => `<p>${text(paragraph)}</p>`).join("");
   const [lead, ...pair] = selected;
   return `<div class="recipe-editorial-opening">
     <article class="recipe-feature recipe-editorial-lead" data-recipe-feature="${lead.id}" data-ingredient-group="${lead.recipe.ingredient}" aria-labelledby="recipe-editorial-${lead.id}">
-      <div class="recipe-editorial-lead__heading">${meta(lead)}${title(lead)}<blockquote class="recipe-editorial-pull"><p>«${text(lead.pull)}»</p></blockquote></div>
-      <figure class="recipe-feature__photo recipe-editorial-lead__photo">${photoLink(lead, image(lead.entry, root, "(max-width: 46rem) calc(100vw - 36px), 58vw", false, true))}<figcaption>Фотография Олега к рецепту</figcaption></figure>
-      <div class="recipe-editorial-lead__note"><p>${text(lead.excerpt)}</p>${actions(lead)}</div>
-      <div class="recipe-editorial-lead__product">${product(lead)}</div>
+      <div class="recipe-editorial-lead__heading">${meta(lead)}${title(lead)}${pull(lead)}</div>
+      <figure class="recipe-feature__photo recipe-editorial-lead__photo">${photoLink(lead, image(lead.entry, root, "(max-width: 46rem) calc(100vw - 36px), 58vw", false, true))}<figcaption>Фотография Олега к ${lead.recipe.kind === "advice" ? "совету" : "рецепту"}</figcaption></figure>
+      <div class="recipe-editorial-lead__note">${excerpt(lead)}${actions(lead)}</div>
+      ${lead.products.length ? `<div class="recipe-editorial-lead__product">${product(lead)}</div>` : ""}
     </article>
     <div class="recipe-editorial-pair">${pair.map(item => `<article class="recipe-editorial-story" data-recipe-feature="${item.id}" data-ingredient-group="${item.recipe.ingredient}" aria-labelledby="recipe-editorial-${item.id}">
       <figure>${photoLink(item, image(item.entry, root, "(max-width: 46rem) calc(100vw - 36px), 46vw"))}</figure>
-      <div class="recipe-editorial-story__copy">${meta(item)}${title(item)}<blockquote class="recipe-editorial-pull"><p>${text(item.pull)}.</p></blockquote><p>${text(item.excerpt)}</p>${product(item)}${actions(item)}</div>
+      <div class="recipe-editorial-story__copy">${meta(item)}${title(item)}${pull(item)}${excerpt(item)}${product(item)}${actions(item)}</div>
     </article>`).join("\n")}</div>
   </div>`;
 }
 
 export function renderRecipesPage() {
-  const featuredIds = new Set(recipeContent.editorial.map(item => item.id));
+  const featuredIds = new Set(recipeOpening.map(item => item.id));
   const chooser = `<section class="recipe-chooser" aria-labelledby="recipe-chooser-title" data-recipe-chooser hidden>
     <h2 id="recipe-chooser-title">Из чего готовим?</h2>
     <div class="recipe-ingredients" role="group" aria-label="Выбрать продукт">${recipeIngredients.map(([slug, label]) => `<button type="button" data-ingredient="${slug}" aria-pressed="${slug === "all"}">${label}<span>${slug === "all" ? recipes.length : recipes.filter(recipe => recipe.ingredient === slug).length}</span></button>`).join("")}</div>
@@ -492,7 +496,8 @@ export function renderRecipesPage() {
     <div class="recipe-records">${recipes.map(recipe => {
       const entry = recipeEntry(recipe);
       const normalized = value => plain(value).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-      const excerpt = recipe.excerpt || [];
+      const editorialExcerpt = recipeContent.editorial.find(item => item.id === recipe.id)?.excerpt;
+      const excerpt = recipe.excerpt ?? (editorialExcerpt ? [editorialExcerpt] : []);
       if (!featuredIds.has(recipe.id) && !excerpt.length) throw new Error(`Missing recipe excerpt: ${recipe.id}`);
       for (const paragraph of excerpt) {
         if (!normalized(entry.body).includes(normalized(paragraph))) throw new Error(`Recipe excerpt differs from Oleg's source: ${recipe.id}`);
@@ -522,7 +527,7 @@ export function renderRecipesPage() {
   return template("recipes-page", {
     theme: renderTheme("recipes"), analytics: renderAnalytics("../"), menu: renderMenu("recipes", "../"), footer: renderFooter("recipes", "../"),
     chooser, groups, collections, aboutPreview: renderAboutPreview("../", false),
-    recipeJump: [["recipes-title", "Ещё рецепты"], ["advice", "Советы о рыбе"], ["meals", "Что купить к ужину"]]
+    recipeJump: [["recipes-title", "Ещё рецепты и советы"], ["meals", "Что купить к ужину"]]
       .map(([id, label]) => `<a href="#${id}">${label}${harpoon}</a>`).join(""),
   }).replace(/[ \t]+$/gm, "") + "\n";
 }

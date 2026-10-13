@@ -50,10 +50,14 @@ test("all recipes and advice retain large photographs and authored text in every
     const details = await materials.evaluateAll(nodes => nodes.map(node => {
       const photo = node.querySelector("img"), title = node.querySelector("h2, h3");
       const quote = node.querySelector(".recipe-record-excerpt, .recipe-editorial-lead__note, .recipe-editorial-story__copy > p:not(.recipe-meta)");
-      return { id: node.dataset.recipeMaterial || node.dataset.recipeFeature, photoWidth: photo.getBoundingClientRect().width,
+      return { id: node.dataset.recipeMaterial || node.dataset.recipeFeature, date: node.querySelector("time").getAttribute("datetime"), photoWidth: photo.getBoundingClientRect().width,
         titleSize: parseFloat(getComputedStyle(title).fontSize), quote: quote?.textContent.trim(),
         photoHref: photo.closest("a").getAttribute("href"), titleHref: title.closest("a")?.getAttribute("href") || title.querySelector("a").getAttribute("href") };
     }));
+    const dates = details.map(detail => detail.date);
+    expect(dates, `Publication order for ${ingredient}`).toEqual([...dates].sort().reverse());
+    expect(new Set(details.map(detail => detail.id)).size).toBe(count);
+    if (ingredient === "all") expect(details.slice(0, 3).map(detail => detail.id)).toEqual(["701", "692", "664"]);
     for (const detail of details) {
       expect(detail.photoWidth, detail.id).toBeGreaterThan(350);
       expect(detail.titleSize, detail.id).toBeGreaterThanOrEqual(60);

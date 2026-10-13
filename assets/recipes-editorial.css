@@ -41,7 +41,7 @@
   font-size: clamp(2.75rem, 1.6rem + 3vw, 4.7rem);
   line-height: 1.06;
   letter-spacing: -0.035em;
-  max-width: 10ch;
+  max-width: 13ch;
 }
 .recipe-editorial-lead__photo { grid-column: 2; grid-row: 1 / span 2; }
 .recipe-editorial-lead__photo figcaption { margin-top: 0.75rem; color: var(--muted); font-size: var(--text-meta); }
