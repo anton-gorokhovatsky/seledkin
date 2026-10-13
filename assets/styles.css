@@ -4724,6 +4724,86 @@ a.site-menu__brand {
   border-color: var(--brass);
   text-decoration: none;
 }
+.theme-choice {
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: var(--text-meta);
+  line-height: 1.25;
+}
+.theme-choice legend {
+  margin-bottom: 0.5rem;
+  padding: 0;
+  color: var(--footer-muted);
+}
+.theme-choice__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--jelly-glass-border);
+  border-radius: 1.75rem;
+  background: var(--jelly-glass-surface);
+  color: var(--ink);
+  box-shadow: var(--jelly-glass-shadow);
+  -webkit-backdrop-filter: var(--jelly-glass-filter);
+  backdrop-filter: var(--jelly-glass-filter);
+}
+.theme-choice label {
+  position: relative;
+  display: flex;
+  max-width: 100%;
+  cursor: pointer;
+}
+.theme-choice input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.theme-choice span {
+  display: flex;
+  min-height: var(--button-height);
+  align-items: center;
+  padding: var(--button-padding-block) var(--button-padding-inline);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-weight: 500;
+}
+.theme-choice input:checked + span {
+  border-color: currentcolor;
+  background: var(--paper);
+  font-weight: 600;
+}
+.theme-choice input:focus-visible + span {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.theme-choice label:hover span {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+@media (forced-colors: active) {
+  .theme-choice__options {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .theme-choice input:checked + span {
+    border-color: Highlight;
+  }
+  .theme-choice input:focus-visible + span {
+    outline-color: Highlight;
+  }
+}
 .sea-motion-toggle[hidden] {
   display: none;
 }

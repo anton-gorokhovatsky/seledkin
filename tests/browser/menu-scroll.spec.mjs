@@ -59,7 +59,7 @@ test("desktop menu keeps contacts in place while routes scroll, including short 
 
       // A short window still exposes the last action without moving the routes.
       const routesPosition = await panel.evaluate(element => element.scrollTop);
-      const lastAction = service.locator("[data-theme-toggle]");
+      const lastAction = service.locator("[data-theme-choice]:checked");
       await lastAction.focus();
       await expect(lastAction).toBeInViewport();
       expect((await box(lastAction)).top).toBeGreaterThan((await box(close)).bottom);
@@ -99,12 +99,12 @@ test("mobile menu reaches both scroll boundaries and keeps keyboard focus below 
       await page.mouse.move(viewport.width / 2, viewport.height / 2);
       await page.mouse.wheel(0, 50000);
       await expect.poll(() => panel.evaluate(element => element.scrollHeight - element.clientHeight - element.scrollTop)).toBeLessThan(2);
-      await expect(menu.locator("[data-theme-toggle]")).toBeInViewport();
+      await expect(menu.locator("[data-theme-choice]:checked")).toBeInViewport();
       await expect(close).toBeInViewport();
       await proof(page, `${name}-bottom`);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
 
-      await menu.locator("[data-theme-toggle]").focus();
+      await menu.locator("[data-theme-choice]:checked").focus();
       const count = await menu.locator("a[href], button:not([disabled])").filter({ visible: true }).count();
       for (let step = 0; step < count; step++) {
         const focused = await menu.evaluate(element => {

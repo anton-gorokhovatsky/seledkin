@@ -42,7 +42,7 @@ test("sunlight shares one state between the hero and menu, below their text", as
   const heroField = await page.locator(".source-hero").evaluate(node => getComputedStyle(node, "::before").backgroundImage);
   await page.locator("[data-menu-toggle]").click();
   await expect.poll(() => page.locator(".site-menu__layout").evaluate(node => getComputedStyle(node, "::before").backgroundImage)).toBe(heroField);
-  await page.locator("[data-menu] [data-theme-toggle]").click();
+  await page.getByRole("radio", { name: "Ночная", exact: true }).check();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("html")).toHaveAttribute("data-sea-light", "evening");
   await expect.poll(() => page.locator(".site-menu__layout").evaluate(node => getComputedStyle(node, "::before").opacity)).toBe("0.25");
@@ -56,7 +56,7 @@ test("save-data prevents video requests through theme changes and navigation unt
   page.on("request", request => { if (/\.mp4(?:\?|$)/.test(request.url())) requests.push(request.url()); });
   await page.goto("");
   await page.locator("[data-menu-toggle]").click();
-  await page.locator("[data-menu] [data-theme-toggle]").click();
+  await page.getByRole("radio", { name: "Ночная", exact: true }).check();
   const toggle = page.locator("[data-menu] [data-sea-toggle]");
   await expect(toggle).toHaveText("Включить море");
   expect(await page.locator("[data-theme-video-source][src]").count()).toBe(0);
@@ -97,7 +97,7 @@ test("2G also uses the poster and reduced motion stays the stronger preference",
   await expect(page.locator("[data-menu] [data-sea-toggle]")).toHaveText("Включить море");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator("[data-menu] [data-sea-toggle]")).toBeHidden();
-  await page.locator("[data-menu] [data-theme-toggle]").click();
+  await page.getByRole("radio", { name: "Ночная", exact: true }).check();
   expect(await page.locator("[data-theme-video-source][src]").count()).toBe(0);
   expect(requests).toEqual([]);
 });

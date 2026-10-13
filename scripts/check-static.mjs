@@ -181,8 +181,10 @@ for (const file of htmlFiles) {
   }
   for (const required of [
     'localStorage.getItem("seledkin-theme")',
-    "data-theme-toggle",
-    'aria-label="Включить ночную вахту"',
+    ...(file === "404.html" ? ["data-theme-toggle"] : [
+      'class="theme-choice"', 'value="auto" data-theme-choice',
+      'value="light" data-theme-choice', 'value="dark" data-theme-choice',
+    ]),
   ]) {
     if (!html.includes(required)) {
       fail(`${file}: нет обязательного поведения темы ${required}`);
@@ -347,6 +349,7 @@ for (const required of [
   'export const storeTimeZone = store.timeZone',
   'window.matchMedia("(prefers-color-scheme: dark)")',
   "localStorage.setItem(themeStorageKey, explicitTheme)",
+  "localStorage.removeItem(themeStorageKey)",
   "scheduledTheme(new Date())",
   "scheduleNextShift()",
   '"Дневная вахта"',

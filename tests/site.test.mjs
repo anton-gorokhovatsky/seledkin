@@ -1508,9 +1508,12 @@ test("theme follows store hours and a deliberate choice persists across pages", 
     assert.match(page, /"timeZone":"Europe\/Moscow"/);
     assert.match(page, /"open":"11:00","close":"20:00"/);
     assert.match(page, /dataset\.themeSource = "explicit"/);
-    assert.match(page, /data-theme-toggle/);
-    assert.match(page, /Ночная вахта/);
-    assert.doesNotMatch(page, /data-theme-toggle[^>]*aria-pressed/);
+    if (page !== notFoundPage) {
+      assert.match(page, /<legend>Вахта<\/legend>/);
+      for (const mode of ["auto", "light", "dark"]) {
+        assert.ok(page.includes(`value="${mode}" data-theme-choice`));
+      }
+    }
   }
   assert.match(themeScript, /function scheduleNextShift\(\)/);
   assert.match(themeScript, /document\.addEventListener\("visibilitychange"/);

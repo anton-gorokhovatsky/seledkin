@@ -44,6 +44,7 @@ function initTheme() {
   const root = document.documentElement;
   const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
   const toggles = [...document.querySelectorAll("[data-theme-toggle]")];
+  const choices = [...document.querySelectorAll("[data-theme-choice]")];
   const themeLogos = [...document.querySelectorAll("[data-theme-logo]")];
   const themeVideos = [...document.querySelectorAll("[data-theme-video]")];
   const themeColor = document.querySelector('meta[name="theme-color"]');
@@ -110,6 +111,10 @@ function initTheme() {
       if (label) label.textContent = action;
     }
 
+    for (const choice of choices) {
+      choice.checked = choice.value === (explicitTheme ?? "auto");
+    }
+
     document.dispatchEvent(
       new CustomEvent("seledkin:themechange", { detail: { theme } }),
     );
@@ -131,7 +136,8 @@ function initTheme() {
   function setExplicitTheme(theme) {
     explicitTheme = normalizeTheme(theme);
     try {
-      localStorage.setItem(themeStorageKey, explicitTheme);
+      if (explicitTheme) localStorage.setItem(themeStorageKey, explicitTheme);
+      else localStorage.removeItem(themeStorageKey);
     } catch {
       // The selected theme still applies for this page when storage is blocked.
     }
@@ -145,12 +151,18 @@ function initTheme() {
     });
   }
 
+  for (const choice of choices) {
+    choice.addEventListener("change", () => {
+      if (choice.checked) setExplicitTheme(choice.value);
+    });
+  }
+
   colorScheme.addEventListener?.("change", () => {
     if (!explicitTheme && !scheduledTheme(new Date())) renderThemeControls();
   });
 
   window.addEventListener("storage", (event) => {
-    if (event.key !== themeStorageKey) return;
+    if (event.key !== themeStorageKey && event.key !== null) return;
     explicitTheme = normalizeTheme(event.newValue);
     renderThemeControls();
     scheduleNextShift();

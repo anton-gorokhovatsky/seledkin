@@ -14,9 +14,9 @@ test("each modal owns initial focus, every Tab stop and its close action @naviga
       await expect(close).toBeFocused();
       await expect(opener).toBeHidden();
       await expect(page.locator("main")).toHaveJSProperty("inert", true);
-      const count = await dialog.locator("a[href]:visible, button:visible:not([disabled])").count();
+      const count = await dialog.locator("a[href]:visible, button:visible:not([disabled]), input[type=radio]:checked:visible").count();
       await page.keyboard.press("Shift+Tab");
-      await expect(dialog.locator("[data-theme-toggle]")).toBeFocused();
+      await expect(dialog.locator("[data-theme-choice]:checked")).toBeFocused();
       await page.keyboard.press("Tab");
       await expect(close).toBeFocused();
       for (let i = 0; i < count + 2; i++) {

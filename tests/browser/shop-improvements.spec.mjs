@@ -163,7 +163,7 @@ test("the sea can be paused, stops offscreen, and respects the saved choice acro
   await expect(hero).toHaveJSProperty("paused", true);
   await expect(menuVideo).toHaveJSProperty("paused", true);
   await expect(pause).toHaveText("Включить море");
-  await page.locator("[data-menu] [data-theme-toggle]").click();
+  await page.getByRole("radio", { name: "Ночная", exact: true }).check();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(menuVideo.locator("source")).toHaveAttribute("src", /hero-sea-night-web\.mp4$/);
   await expect(menuVideo).toHaveJSProperty("paused", true);

@@ -79,7 +79,8 @@ function focusableMenuItems() {
     ...menu.querySelectorAll(
       'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
     ),
-  ].filter(element => !element.hidden && element.getClientRects().length > 0);
+  ].filter(element => !element.hidden && element.getClientRects().length > 0
+    && (!element.matches('input[type="radio"]') || element.checked));
 }
 
 function setPageInert(value) {

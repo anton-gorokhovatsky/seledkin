@@ -84,7 +84,7 @@ for (const mode of ["reduced motion", "save data"]) {
     await expect(page.locator('.source-footer__actions a[href="https://wa.me/79166751452"]')).toBeVisible();
     await page.screenshot({ path: testInfo.outputPath("footer-static-320.png") });
     await page.locator("[data-menu-toggle]").click();
-    await page.locator("[data-menu] [data-theme-toggle]").click();
+    await page.getByRole("radio", { name: "Ночная", exact: true }).check();
     await page.keyboard.press("Escape");
     await expect(page.locator(".source-footer")).toHaveAttribute("data-coral", "");
     expect(videos).toEqual([]);
