@@ -64,11 +64,18 @@
 }
 
 @media (width <= 46rem) {
+  .footer-coral-field {
+    /* A narrow footer is one continuous field. Do not reserve a straight
+       blank half behind the copy: the transparent ink can cross the column. */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, rgb(0 0 0 / 22%) 16%, rgb(0 0 0 / 22%) 54%, rgb(0 0 0 / 75%) 82%, #000);
+    mask-image: linear-gradient(to bottom, transparent, rgb(0 0 0 / 22%) 16%, rgb(0 0 0 / 22%) 54%, rgb(0 0 0 / 75%) 82%, #000);
+  }
   .footer-coral-art {
     top: auto;
     right: -40vw;
     bottom: 0;
     height: min(100%, 64rem);
+    opacity: 0.2;
   }
   .footer-coral-art--upper {
     top: 0;
