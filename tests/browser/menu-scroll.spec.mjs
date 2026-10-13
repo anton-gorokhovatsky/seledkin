@@ -4,7 +4,12 @@ const box = locator => locator.evaluate(element => {
   const { top, bottom, left, right } = element.getBoundingClientRect();
   return { top, bottom, left, right };
 });
-const overlaps = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+// Read both rectangles in one frame; separate round trips can straddle a scroll.
+const brandOverlapsHeading = page => page.locator(".site-menu__panel").evaluate(panel => {
+  const a = panel.querySelector(".site-menu__brand").getBoundingClientRect();
+  const b = panel.querySelector("#menu-title").getBoundingClientRect();
+  return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+});
 const proof = async (page, name) => {
   if (process.env.MENU_PROOF_DIR) await page.screenshot({ path: `${process.env.MENU_PROOF_DIR}/${name}.png` });
 };
@@ -27,7 +32,7 @@ test("desktop menu keeps contacts in place while routes scroll, including short 
       const hours = service.locator("h3");
       const hoursBefore = await box(hours);
       expect(hoursBefore.top).toBeGreaterThan((await box(close)).bottom + 12);
-      expect(overlaps(await box(page.locator(".site-menu__brand")), await box(page.locator("#menu-title")))).toBe(false);
+      expect(await brandOverlapsHeading(page)).toBe(false);
       await proof(page, `menu-${theme}-${viewport.width}-top`);
 
       const routesOverflow = await panel.evaluate(element => element.scrollHeight - element.clientHeight);
@@ -41,14 +46,14 @@ test("desktop menu keeps contacts in place while routes scroll, including short 
       await page.mouse.move(200, viewport.height / 2);
       await page.mouse.wheel(0, 10000);
       if (routesOverflow > 1) {
-        await expect.poll(() => panel.evaluate(element => element.scrollTop)).toBeGreaterThan(0);
+        await expect.poll(() => panel.evaluate(element => element.scrollHeight - element.clientHeight - element.scrollTop)).toBeLessThan(2);
       } else {
         expect(await panel.evaluate(element => element.scrollTop)).toBe(0);
       }
       expect(Math.abs((await box(hours)).top - hoursBefore.top)).toBeLessThan(1);
       expect((await box(service)).top).toBeGreaterThanOrEqual(-1);
       expect((await box(service)).bottom).toBeLessThanOrEqual(viewport.height + 1);
-      expect(overlaps(await box(page.locator(".site-menu__brand")), await box(page.locator("#menu-title")))).toBe(false);
+      expect(await brandOverlapsHeading(page)).toBe(false);
       await expect(close).toBeInViewport();
       await proof(page, `menu-${theme}-${viewport.width}-bottom`);
 
