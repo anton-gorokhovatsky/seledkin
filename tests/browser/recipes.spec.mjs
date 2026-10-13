@@ -24,7 +24,7 @@ test("a recipe belongs to recipes, keeps its old links and returns to its exact 
   await expect(page).toHaveURL(/\/recipes\/701\/$/);
   await page.getByRole("link", { name: "Все рецепты и советы", exact: true }).click();
   await expect(page).toHaveURL(/\/recipes\/$/);
-  await page.locator('[data-recipe-material="701"]').getByRole("link", { name: "Читать рецепт", exact: true }).click();
+  await page.getByRole("heading", { name: "Рулетики с печенью трески", exact: true }).getByRole("link").click();
   await page.locator(".recipe-current").getByRole("link", { name: "Печень трески по-мурмански", exact: true }).click();
   const product = page.locator(".catalog-product:visible");
   await expect(product).toHaveCount(1);
