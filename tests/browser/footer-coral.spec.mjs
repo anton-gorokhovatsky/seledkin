@@ -5,7 +5,7 @@ test("footer Coral loads on approach, shares the sea pause and stops offscreen",
   await page.emulateMedia({ reducedMotion: "no-preference" });
   const requests = [];
   page.on("request", request => {
-    if (/footer-coral\.(?:mp4|png)/.test(request.url())) requests.push(request.url());
+    if (/footer-coral(?:\.mp4|-poster\.webp)/.test(request.url())) requests.push(request.url());
   });
   await page.goto("?audit=footer-coral-test");
   const video = page.locator(".footer-coral-video");
@@ -73,7 +73,7 @@ for (const mode of ["reduced motion", "save data"]) {
 }
 
 test("unloaded or unavailable Coral never adds horizontal scrolling", async ({ page }) => {
-  await page.route("**/footer-coral-poster.png", route => route.abort());
+  await page.route("**/footer-coral-poster.webp", route => route.abort());
   await page.route("**/footer-coral.mp4", route => route.abort());
   await page.goto("?audit=footer-coral-test");
   await expect(page.locator(".footer-coral-layer")).toHaveCount(1);

@@ -40,7 +40,7 @@ if (footer) {
     let visible = false, paintFrame = 0, lastVideoFrame = -1;
     let posterStarted = false, posterReady = false, failed = false;
     const poster = new Image();
-    const posterURL = new URL("./footer-coral-poster.png", import.meta.url).href;
+    const posterURL = new URL("./footer-coral-poster.webp", import.meta.url).href;
     const videoURL = new URL("./footer-coral.mp4", import.meta.url).href;
 
     function paintUpper() {
