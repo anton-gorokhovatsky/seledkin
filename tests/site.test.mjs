@@ -689,11 +689,11 @@ test("the recipe preview gives full photographs and direct access to complete au
   assert.doesNotMatch(section, /Рецепт Олега/);
   assert.equal((section.match(/class="recipe-feature"/g) ?? []).length, 1);
   assert.equal((section.match(/class="watch-catch__item"/g) ?? []).length, 3);
-  assert.equal((section.match(/data-source-image="assets\/journal-(?:692|377|412|664)\.jpg"/g) ?? []).length, 4);
+  const photoIds = [...section.matchAll(/data-source-image="assets\/journal-(\d+)\.jpg"/g)].map(([, id]) => id);
+  assert.equal(photoIds.length, 4);
   assert.match(section, /href="recipes\/"/);
-  assert.match(section, /data-source-image="assets\/journal-692\.jpg"/);
   assert.doesNotMatch(section, /watch-catch-(?:herring|shrimp|squid|octopus)\.svg/);
-  for (const id of [692, 377, 412, 664]) assert.ok(section.includes(`href="recipes/${id}/"`));
+  for (const id of photoIds) assert.ok(section.includes(`href="recipes/${id}/"`));
   // Social-source links were removed from the catalog by the user's decision;
   // on-site advice/recipe routes are protected by catalog-guidance.test.mjs.
   for (const id of [506, 610]) assert.ok(!catalogPage.includes(`href="https://t.me/kapitanseledkin/${id}"`));

@@ -412,18 +412,28 @@ function renderRecipeContext(entry) {
   return `\n${sequence}${recipe.videoSource ? `<p class="recipe-video-source"><a class="editorial-link" href="${recipe.videoSource}">Смотреть авторское видео в Телеграме${harpoon}</a></p>` : ""}${current}`;
 }
 
-const recipeQuote = recipeContent.editorial.find(item => item.id === recipeContent.featured).excerpt;
-function recipeFeature(root, heading = "h3") {
-  const recipe = recipes.find(item => item.id === recipeContent.featured);
+function recipeEditorialItem(recipe) {
+  const item = recipeContent.editorial.find(item => item.id === recipe.id) ?? {};
   const entry = recipeEntry(recipe);
+  const excerpt = recipe.excerpt ?? [item.excerpt];
+  const normalized = value => plain(value).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  for (const quote of [item.pull, ...excerpt].filter(Boolean)) {
+    if (!normalized(entry.body).includes(normalized(quote))) throw new Error(`Editorial quote differs from Oleg's source: ${recipe.id}`);
+  }
+  if (!excerpt.length || excerpt.some(paragraph => !paragraph)) throw new Error(`Missing recipe excerpt: ${recipe.id}`);
+  return { ...item, id: recipe.id, recipe, entry, excerpt, products: recipe.products.map(selection => resolveProduct(selection).product) };
+}
+
+function recipeFeature(root, heading = "h3") {
+  const { recipe, entry, excerpt, products } = recipeEditorialItem(recipes[0]);
   return `<article class="recipe-feature" aria-labelledby="recipe-feature-title">
-    <a class="recipe-feature__photo" href="${root}recipes/${entry.id}/" aria-label="Рецепт: ${text(recipe.title)}">${image(entry, root, "(max-width: 61.1875rem) calc(100vw - 36px), 520px")}</a>
+    <a class="recipe-feature__photo" href="${root}recipes/${entry.id}/" aria-label="${recipe.kind === "advice" ? "Совет" : "Рецепт"}: ${text(recipe.title)}">${image(entry, root, "(max-width: 61.1875rem) calc(100vw - 36px), 520px")}</a>
     <div class="recipe-feature__copy">
       <p class="recipe-meta"><time datetime="${entry.date}">${date(entry)}</time></p>
       <${heading} id="recipe-feature-title">${text(recipe.title)}</${heading}>
-      <blockquote><p>${text(recipeQuote)}</p></blockquote>
-      <a class="editorial-link" href="${root}recipes/${entry.id}/">Приготовить по рецепту${harpoon}</a>
-      <a class="editorial-link recipe-feature__catalog" href="${escape(productCatalogHref(recipe.products[0], root))}">Филе трески в каталоге${harpoon}</a>
+      <blockquote>${excerpt.map(paragraph => `<p>${text(paragraph)}</p>`).join("")}</blockquote>
+      <a class="editorial-link" href="${root}recipes/${entry.id}/">${recipe.kind === "advice" ? "Читать совет" : "Приготовить по рецепту"}${harpoon}</a>
+      ${recipe.products.map((selection, index) => `<a class="editorial-link recipe-feature__catalog" href="${escape(productCatalogHref(selection, root))}">${text(products[index].name)} в каталоге${harpoon}</a>`).join("")}
     </div>
   </article>`;
 }
@@ -434,26 +444,16 @@ export function renderRecipeHome() {
     <a class="editorial-link" href="recipes/">Все рецепты и советы${harpoon}</a>
   </header>
   ${recipeFeature("")}
-  <ul class="watch-catch__list">${recipeContent.home.map(id => {
-    const recipe = recipes.find(item => item.id === id);
+  <ul class="watch-catch__list">${recipes.slice(1, 4).map(recipe => {
+    const { id } = recipe;
     const entry = recipeEntry(recipe);
-    return `<li class="watch-catch__item"><a href="recipes/${id}/" aria-label="${text(recipe.title)}"><span class="watch-catch__photo">${image(entry, "", "(max-width: 1257px) 88px, (max-width: 1714px) 7vw, 120px")}</span><span class="watch-catch__caption"><span class="watch-catch__name">${text(recipe.title).replace("секретов", "секре­тов")}</span>${harpoon}</span></a></li>`;
+    return `<li class="watch-catch__item"><a href="recipes/${id}/" aria-label="${text(recipe.title)}"><span class="watch-catch__photo">${image(entry, "", "(max-width: 1257px) 88px, (max-width: 1714px) 7vw, 120px")}</span><span class="watch-catch__caption"><span class="watch-catch__name">${text(recipe.title).replace("секретов", "секре­тов").replace("сковороде", "ско­во­ро­де")}</span>${harpoon}</span></a></li>`;
   }).join("\n")}</ul>
   <p class="watch-catch__all"><a class="editorial-link" href="recipes/">Все рецепты и советы${harpoon}</a></p>`;
 }
 
 function renderRecipeEditorial(root) {
-  const selected = recipeOpening.map(recipe => {
-    const item = recipeContent.editorial.find(item => item.id === recipe.id) ?? {};
-    const entry = recipeEntry(recipe);
-    const excerpt = recipe.excerpt ?? [item.excerpt];
-    const normalized = value => plain(value).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-    for (const quote of [item.pull, ...excerpt].filter(Boolean)) {
-      if (!normalized(entry.body).includes(normalized(quote))) throw new Error(`Editorial quote differs from Oleg's source: ${recipe.id}`);
-    }
-    if (!excerpt.length || excerpt.some(paragraph => !paragraph)) throw new Error(`Missing recipe excerpt: ${recipe.id}`);
-    return { ...item, id: recipe.id, recipe, entry, excerpt, products: recipe.products.map(selection => resolveProduct(selection).product) };
-  });
+  const selected = recipeOpening.map(recipeEditorialItem);
   const kind = item => item.recipe.kind === "advice" ? "совет" : "рецепт";
   const meta = item => `<p class="recipe-meta">${item.recipe.kind === "advice" ? "Совет" : "Рецепт"} Олега · <time datetime="${item.entry.date}">${date(item.entry)}</time></p>`;
   const title = item => `<h2 id="recipe-editorial-${item.id}"><a href="${root}recipes/${item.id}/">${item.noun && item.ending ? `${text(item.noun)} <em>${text(item.ending)}</em>` : text(item.recipe.title)}</a></h2>`;

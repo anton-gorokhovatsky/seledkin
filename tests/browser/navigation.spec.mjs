@@ -59,7 +59,11 @@ test("recipes are on the homepage and each featured product opens matching catal
   await expect(page.locator('#assortment > .source-shell > h2, #assortment h2')).toHaveCount(1);
   await expect(page.locator('#prices h3')).toHaveText('Цены в лавке');
   await expect(stories.locator(".recipe-feature")).toHaveCount(1);
+  await expect(stories.locator("#recipe-feature-title")).toHaveText("Рулетики с печенью трески");
+  await expect(stories.locator(".recipe-feature time")).toHaveAttribute("datetime", "2026-10-13");
+  await expect(stories.locator(".recipe-feature__photo")).toHaveAttribute("href", "recipes/701/");
   await expect(stories.locator(".watch-catch__item")).toHaveCount(3);
+  expect(await stories.locator(".watch-catch__item > a").evaluateAll(links => links.map(link => link.getAttribute("href")))).toEqual(["recipes/692/", "recipes/664/", "recipes/627/"]);
   for (const width of [1440, 638, 320]) {
     await page.setViewportSize({ width, height: 1000 });
     const cards = stories.locator(".watch-catch__item");
@@ -72,7 +76,6 @@ test("recipes are on the homepage and each featured product opens matching catal
         return { ratio: box.width / box.height, source: image.naturalWidth / image.naturalHeight };
       });
       expect(Math.abs(frame.ratio - frame.source)).toBeLessThan(.01);
-      await expect(card.locator("a")).toHaveAttribute("href", /^recipes\/(377|412|664)\/$/);
     }
     if (width > 979) {
       const lines = await cards.locator(".watch-catch__name").evaluateAll(names => names.map(name => name.getBoundingClientRect().top));
@@ -80,8 +83,9 @@ test("recipes are on the homepage and each featured product opens matching catal
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   }
-  await stories.getByRole("link", { name: "Филе трески в каталоге", exact: true }).click();
-  await expect(page.locator(".catalog-product:visible").getByRole("heading", { name: "Филе трески", exact: true })).toBeVisible();
+  await stories.getByRole("link", { name: "Печень трески по-мурмански в каталоге", exact: true }).click();
+  await expect(page).toHaveURL(/product=cod-liver-murmansk-230#product-cod-liver-murmansk-230$/);
+  await expect(page.locator("#product-cod-liver-murmansk-230").getByRole("heading", { name: "Печень трески по-мурмански", exact: true })).toBeInViewport();
   await expect(page.locator("[data-catalog-empty]")).toBeHidden();
   for (const source of ["about/#watch-catch", "about/index.html#watch-catch"]) {
     await page.goto(source);

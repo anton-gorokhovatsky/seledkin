@@ -1363,10 +1363,6 @@ a.source-brand {
   padding-bottom: var(--about-section-space);
 }
 
-.founder-source__closing {
-  align-items: center;
-}
-
 .founder-source__closing .founder-source__dish {
   grid-column: 1;
   grid-row: 1;
@@ -1526,7 +1522,7 @@ a.source-brand {
   display: grid;
   grid-template-columns: var(--photo-copy-columns);
   gap: var(--photo-copy-gap);
-  align-items: center;
+  align-items: start;
 }
 .recipe-feature__photo img,
 .recipe-card img,
@@ -1542,6 +1538,7 @@ a.source-brand {
   font-weight: 400;
   line-height: 1.08;
   text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 .recipe-feature blockquote {
   margin: 0 0 1rem;
@@ -1596,12 +1593,24 @@ a.source-brand {
   text-wrap: balance;
 }
 .watch-catch__item svg { align-self: start; color: var(--text-link); }
-/* Photo-and-copy rows share the visible cap edge, not the font's leading.
-   Keep one rule for recipe teasers, journal previews and archive/search rows. */
+/* Every photo-and-copy composition starts at the visible cap edge.
+   This includes large stories and the footer as well as short editorial rows. */
 .watch-catch__name,
+.recipe-feature__copy > .recipe-meta,
+.recipe-editorial-lead__heading > .recipe-meta,
+.recipe-editorial-story__copy > .recipe-meta,
 .journal-preview__entry time,
 .journal-index-entry time,
-.recipe-record-copy > .recipe-record-meta {
+.recipe-record-copy > .recipe-record-meta,
+.about-preview__copy > :first-child,
+.about-overview__heading > :first-child,
+.about-overview__reason > :first-child,
+.founder-source__copy > :first-child,
+.founder-source__principle,
+.delivery-waybill__eyebrow,
+.source-footer__kicker,
+.ship-log-entry__content > p:first-child,
+.ship-log-entry__body:first-child > :first-child {
   display: block;
   text-box: trim-start cap alphabetic;
 }
@@ -2248,7 +2257,7 @@ a.source-brand {
   z-index: 1;
   display: grid;
   grid-template-columns: var(--photo-copy-columns);
-  align-items: center;
+  align-items: start;
   gap: var(--photo-copy-gap);
   padding-block: clamp(3rem, 5vw, 5rem) clamp(2rem, 3vw, 3rem);
 }
@@ -2817,6 +2826,13 @@ a.site-menu__brand {
   line-height: 1;
 }
 
+@media (width > 61.1875rem) {
+  .site-menu__service h3 {
+    max-width: none;
+    font-size: clamp(2.6rem, 3.25vw, 3rem);
+  }
+}
+
 .site-menu__service .store-hours {
   margin-bottom: 1.4rem;
 }
@@ -2847,7 +2863,7 @@ a.site-menu__brand {
 
 .site-menu__networks {
   width: min(100%, 23rem);
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .site-menu__channel {
@@ -2885,7 +2901,7 @@ a.site-menu__brand {
 .site-menu__socials {
   display: flex;
   gap: 0.45rem 1.25rem;
-  margin-top: 0.25rem;
+  margin-top: 0.75rem;
   flex-wrap: wrap;
 }
 
@@ -4542,7 +4558,7 @@ a.site-menu__brand {
 .about-preview__layout {
   display: grid;
   grid-template-columns: var(--photo-copy-columns);
-  align-items: center;
+  align-items: start;
   gap: var(--photo-copy-gap);
 }
 .about-preview figure {
@@ -4708,8 +4724,8 @@ a.site-menu__brand {
   display: grid;
   width: min(100%, 23rem);
   justify-items: start;
-  gap: 0;
-  margin-top: 0.75rem;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
   color: var(--footer-muted);
 }
 .site-menu__preferences > .sea-motion-toggle {

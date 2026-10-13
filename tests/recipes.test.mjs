@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { catalog } from "../assets/catalog-data.js";
 import { matchesSearch, productSearchText, catalogPrice } from "../assets/catalog-model.js";
 import { recipes, recipeOpening, recipeContent, resolveProduct, productRecipeLinks, productCatalogHref } from "../scripts/recipe-content.mjs";
-import { entries, renderRecipesPage } from "../scripts/site-content.mjs";
+import { entries, renderRecipesPage, renderRecipeHome } from "../scripts/site-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const findProducts = (query, slug) => catalog.filter(category => category.slug === slug)
@@ -18,7 +18,7 @@ const normalize = value => value.replace(/<br\s*\/?\s*>/g, "\n").replace(/<[^>]*
   .replace(/₽\./g, "₽")
   .replace(/\s|[-—–‑]/g, "");
 
-test("recipes and advice follow original publication dates across the directory and neighbors", () => {
+test("recipes and advice follow original publication dates across the homepage, directory and neighbors", () => {
   const expected = entries.filter(entry => recipeForEntry(entry.id)).sort((a, b) => b.date.localeCompare(a.date));
   assert.deepEqual(recipes.map(recipe => recipe.id), expected.map(entry => entry.id));
   assert.deepEqual(recipeOpening.map(recipe => recipe.id), [701, 692, 664]);
@@ -26,6 +26,19 @@ test("recipes and advice follow original publication dates across the directory 
   const visibleIds = [...page.matchAll(/<article[^>]+data-recipe-(?:feature|material)="([^"]+)"[^>]*>/g)]
     .filter(([tag]) => !/\shidden(?:\s|>)/.test(tag)).map(([, id]) => id);
   assert.deepEqual(visibleIds, expected.map(entry => String(entry.id)));
+  const home = renderRecipeHome();
+  const homeIds = [...new Set([...home.matchAll(/href="recipes\/(\d+)\/"/g)].map(([, id]) => Number(id)))];
+  assert.deepEqual(homeIds, expected.slice(0, 4).map(entry => entry.id));
+  const latest = recipeForEntry(expected[0].id);
+  const feature = home.match(/<article class="recipe-feature"[\s\S]*?<\/article>/)[0];
+  assert.ok(normalize(feature).includes(normalize(latest.title)));
+  assert.ok(feature.includes(`datetime="${expected[0].date}"`));
+  assert.ok(normalize(feature).includes(normalize(latest.excerpt[0])));
+  for (const selection of latest.products) {
+    assert.ok(normalize(feature).includes(normalize(`${selection.name} в каталоге`)));
+    assert.ok(feature.includes(productCatalogHref(selection).replaceAll("&", "&amp;")));
+  }
+  assert.ok(read("index.html").includes(home), "Published homepage must be regenerated with the same chronology");
   for (const [index, entry] of expected.entries()) {
     const article = read(`recipes/${entry.id}/index.html`);
     for (const [neighbor, relation] of [[expected[index + 1], "prev"], [expected[index - 1], "next"]]) {
