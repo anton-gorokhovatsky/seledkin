@@ -59,7 +59,7 @@ test("recipe product choices and exact catalog transitions are measured without 
   });
   await page.getByRole("button", { name: /^Все материалы/ }).click();
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").at(-1)[3])).toEqual({
-    context: "recipes", action: "ingredient_filter", ingredient: "all", count: 24,
+    context: "recipes", action: "ingredient_filter", ingredient: "all", count: 25,
   });
   const params = await page.evaluate(() => window.goalCalls.filter(call => call[1] === "reachGoal").map(call => call[3]));
   for (const value of params) expect(Object.keys(value).every(key => ["context", "action", "ingredient", "count", "recipe_id", "product_id"].includes(key))).toBe(true);
@@ -137,7 +137,7 @@ test("legacy routing also works without JavaScript and does not load an uncondit
   page.on("request", request => { if (request.url().includes("mc.yandex.ru")) requests.push(request.url()); });
   await page.goto("http://127.0.0.1:4173/collection/");
   await expect(page).toHaveURL("http://127.0.0.1:4173/catalog/");
-  await expect(page.locator(".catalog-product")).toHaveCount(116);
+  await expect(page.locator(".catalog-product")).toHaveCount(117);
   expect(requests).toEqual([]);
   await context.close();
 });

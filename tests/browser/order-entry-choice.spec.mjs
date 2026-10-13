@@ -38,7 +38,7 @@ test("mobile order entry retains the photographed product before choosing a chan
   await page.screenshot({ path: testInfo.outputPath("mobile-order-390.png") });
   await page.getByRole("button", { name: "Весь каталог", exact: true }).click();
   expect(new URL(page.url()).hash).toBe("");
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(116);
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(117);
 
   const fallback = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const plain = await fallback.newPage();

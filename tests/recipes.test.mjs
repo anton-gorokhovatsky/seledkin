@@ -35,7 +35,7 @@ test("selected archive texts retain every author word, source date and original 
 
 test("recipes point to the right product variant and use live catalog prices", () => {
   const page = renderRecipesPage();
-  assert.equal(recipes.filter(recipe => recipe.kind === "recipe").length, 17);
+  assert.equal(recipes.filter(recipe => recipe.kind === "recipe").length, 18);
   assert.equal(recipes.filter(recipe => recipe.kind === "advice").length, 7);
   for (const recipe of recipes) {
     assert.ok(entries.some(entry => entry.id === recipe.id));

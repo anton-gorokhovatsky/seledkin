@@ -45,7 +45,7 @@ test("search keeps partial words and combines terms without mixing different pro
   assert.equal(findProducts("сельдь филе").length, 0);
   assert.equal(findProducts("несуществующая рыба").length, 0);
   assert.equal(findProducts("***").length, 0);
-  assert.equal(findProducts("").length, 116);
+  assert.equal(findProducts("").length, 117);
   assert.equal(matchesSearch("Лосось слабосоленый", "форель"), false);
 });
 
@@ -89,7 +89,7 @@ test("a moved product keeps saved orders and does not inherit unrelated preparat
   assert.deepEqual(restoreOrderKeys(["other|Фарш форели|Высшего качества|/0,5 кг", fishMince.id], catalog), [fishMince.id]);
   assert.deepEqual(findProducts("фарш"), ["Фарш форели"]);
   assert.deepEqual(findProducts("бульон"), ["Бульон из форели"]);
-  assert.equal(findProducts("консервы").length, 11);
+  assert.equal(findProducts("консервы").length, 12);
   assert.ok(catalog.find(category => category.slug === "seafood").items.some(product => product.id === "other-025"));
   assert.ok(catalog.find(category => category.slug === "grocery").items.some(product => product.name === "Рис"));
   assert.ok(catalog.find(category => category.slug === "accessories").items.every(product => product.quantityUnit === "piece"));

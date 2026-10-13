@@ -175,7 +175,7 @@ test("home assortment links to its selected categories while the full catalog re
 
   assert.match(section, /id="assortment"/);
   assert.match(section, /id="assortment-title">Что продаём<\/h2>/);
-  assert.match(section, /116 позиций в полном каталоге/);
+  assert.match(section, /117 позиций в полном каталоге/);
   assert.doesNotMatch(section, />Весь каталог<\/span>/);
 
   for (const [slug, label, count] of [
@@ -186,7 +186,7 @@ test("home assortment links to its selected categories while the full catalog re
     ["steaks", "Рыбные стейки", 5],
     ["prepared-fish", "Слабосоленая и копченая рыба", 13],
     ["dried-fish", "Вяленая рыба", 4],
-    ["canned", "Консервы и бульон", 12],
+    ["canned", "Консервы и бульон", 13],
     ["grocery", "Бакалея", 11],
   ]) {
     assert.match(section, new RegExp(`href="catalog\\/#category-${slug}"`));
@@ -931,11 +931,11 @@ test("menu and footer channels use one precise local SVG set with Telegram first
   );
 });
 
-test("the complete catalog has stable categories and 116 priced items", () => {
+test("the complete catalog has stable categories and 117 priced items", () => {
   assert.equal(catalog.length, 10);
   assert.equal(
     catalog.reduce((total, category) => total + category.items.length, 0),
-    116,
+    117,
   );
   assert.deepEqual(
     catalog.map((category) => [category.slug, category.items.length]),
@@ -947,7 +947,7 @@ test("the complete catalog has stable categories and 116 priced items", () => {
       ["steaks", 5],
       ["prepared-fish", 13],
       ["dried-fish", 4],
-      ["canned", 12],
+      ["canned", 13],
       ["grocery", 11],
       ["accessories", 1],
     ],
