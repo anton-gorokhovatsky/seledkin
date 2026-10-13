@@ -1479,7 +1479,8 @@ a.source-brand {
 
 /* Recipes continue the product story, with one full photograph as the focus. */
 .watch-catch {
-  padding: clamp(2rem, 4vw, 3.5rem) 0 clamp(3.5rem, 6vw, 5.5rem);
+  /* The following delivery section owns the space between these sections. */
+  padding: clamp(2rem, 4vw, 3.5rem) 0 0;
 }
 .watch-catch__header,
 .recipe-section-heading {
@@ -2410,6 +2411,10 @@ a.source-brand {
   min-height: 2.75rem;
   align-items: center;
   display: inline-flex;
+}
+
+.source-footer__base > small {
+  font-size: inherit;
 }
 
 .source-footer__credit {
