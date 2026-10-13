@@ -44,7 +44,7 @@ test("footer Coral loads on approach, shares the sea pause and stops offscreen",
   await expect(video).toHaveJSProperty("paused", true);
   const pause = page.locator("[data-menu] [data-sea-toggle]");
   await pause.click();
-  await expect(pause).toHaveText("Включить море");
+  await expect(pause).toHaveText("Включить движение");
   await page.keyboard.press("Escape");
   await expect(video).toHaveJSProperty("paused", true);
   await page.reload();

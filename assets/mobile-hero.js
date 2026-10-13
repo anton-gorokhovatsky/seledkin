@@ -9,8 +9,6 @@ export function setupMobileHero() {
   const price = gallery.querySelector(".afisha__price");
   const count = gallery.querySelector(".afisha__count");
   const status = gallery.querySelector(".afisha__status");
-  const product = document.querySelector(".afisha__catalog");
-  const order = document.querySelector(".afisha__order");
   const mobile = matchMedia("(max-width: 61.1875rem)");
   let index = 0;
   let pointerStart = null;
@@ -39,11 +37,9 @@ export function setupMobileHero() {
     afisha.dataset.photoIndex = String(index + 1);
     name.textContent = current.dataset.caption;
     price.textContent = current.dataset.price;
-    frame.href = product.href = current.dataset.href;
-    order.href = current.dataset.order;
+    frame.href = current.dataset.href;
     count.textContent = `${index + 1}/${photos.length}`;
     frame.setAttribute("aria-label", `Открыть ${current.dataset.caption} в каталоге, ${current.dataset.price}`);
-    product.setAttribute("aria-label", `Открыть в каталоге: ${current.dataset.caption}`);
     change.hidden = false;
   }
 

@@ -33,6 +33,7 @@ test("returning to Auto restores Moscow schedule and its next boundary @theme", 
 });
 
 test("watch choice persists, syncs between pages and remains one keyboard stop @theme", async ({ page, context }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("");
   await openMenu(page);
   await choice(page, "Дневная").check();
@@ -44,10 +45,15 @@ test("watch choice persists, syncs between pages and remains one keyboard stop @
 
   await page.getByRole("button", { name: "Закрыть меню", exact: true }).focus();
   await page.keyboard.press("Shift+Tab");
+  const pause = page.locator("[data-menu] [data-sea-toggle]");
+  await expect(pause).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
   await expect(choice(page, "Дневная")).toBeFocused();
   await page.keyboard.press("ArrowRight");
   await expect(choice(page, "Ночная")).toBeChecked();
   await expect(choice(page, "Ночная")).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(pause).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.getByRole("button", { name: "Закрыть меню", exact: true })).toBeFocused();
 

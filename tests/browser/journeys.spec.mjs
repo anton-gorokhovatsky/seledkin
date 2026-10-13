@@ -116,8 +116,8 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
     if (width < 980) {
       await expect(journal).toBeHidden();
       await expect(page.locator(".afisha")).toBeVisible();
-      await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", /#product-caspian-herring$/);
-      await expect(page.locator(".afisha__all")).toHaveAttribute("href", "catalog/");
+      await expect(page.locator(".afisha__frame")).toHaveAttribute("href", /#product-caspian-herring$/);
+      await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", "catalog/");
       const boundary = await page.locator(".source-hero").evaluate(e => e.getBoundingClientRect().bottom);
       expect((await page.locator("#assortment").boundingBox()).y).toBeCloseTo(boundary, 0);
       if (height >= 800) await expect(page.locator(".afisha__order")).toBeInViewport({ ratio: 1 });
@@ -337,12 +337,11 @@ test("a photographed product opens its own catalog position, price and order @af
   for (let i = 0; i < expected.length; i++) {
     await expect(page.locator(".afisha__count")).toHaveText(`${i + 1}/5`);
     const href = await frame.getAttribute("href");
-    await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", href);
+    await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", "catalog/");
+    await expect(page.locator(".afisha__catalog")).toHaveText("Каталог и цены");
     const destinationUrl = new URL(href, page.url());
     expect(destinationUrl.hash).toBe(`#product-${destinationUrl.searchParams.get("product")}`);
-    const orderUrl = new URL(await page.locator(".afisha__order").getAttribute("href"), page.url());
-    expect(orderUrl.searchParams.get("product")).toBe(destinationUrl.searchParams.get("product"));
-    expect(orderUrl.hash).toBe(`#order-${destinationUrl.searchParams.get("product")}`);
+    await expect(page.locator(".afisha__order")).toHaveAttribute("href", "#delivery-order");
     await expect(page.locator(".afisha__order")).toHaveText("Заказать");
     destinations.push({ href, price: await page.locator(".afisha__price").textContent(), name: expected[i] });
     await frame.press("ArrowRight");

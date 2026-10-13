@@ -36,7 +36,7 @@ if (typeof document !== "undefined") {
     const url = new URL(link.href);
     const afisha = link.closest(".afisha");
     const source = afisha || new URL(location.href).searchParams.get("from") === "afisha" ? "afisha" : undefined;
-    if (afisha && link.matches(".afisha__frame, .afisha__catalog")) {
+    if (afisha && link.matches(".afisha__frame")) {
       reachGoal("product_select", { context: "afisha", action: "open_catalog", product: afisha.dataset.productName,
         category: afisha.dataset.productCategory, product_id: afisha.dataset.productId, photo: Number(afisha.dataset.photoIndex) });
     }

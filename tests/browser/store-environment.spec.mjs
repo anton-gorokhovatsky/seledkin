@@ -58,11 +58,11 @@ test("save-data prevents video requests through theme changes and navigation unt
   await page.locator("[data-menu-toggle]").click();
   await page.getByRole("radio", { name: "Ночная", exact: true }).check();
   const toggle = page.locator("[data-menu] [data-sea-toggle]");
-  await expect(toggle).toHaveText("Включить море");
+  await expect(toggle).toHaveText("Включить движение");
   expect(await page.locator("[data-theme-video-source][src]").count()).toBe(0);
   await page.goto("journal/698/");
   await page.locator("[data-menu-toggle]").click();
-  await expect(toggle).toHaveText("Включить море");
+  await expect(toggle).toHaveText("Включить движение");
   expect(requests).toEqual([]);
   await toggle.focus();
   await page.keyboard.press("Enter");
@@ -79,12 +79,12 @@ test("save-data prevents video requests through theme changes and navigation unt
     testConnection.saveData = true;
     testConnection.dispatchEvent(new Event("change"));
   });
-  await expect(toggle).toHaveText("Включить море");
+  await expect(toggle).toHaveText("Включить движение");
   expect(await page.locator("[data-theme-video-source][src]").count()).toBe(0);
   const beforeReload = requests.length;
   await page.reload();
   await page.locator("[data-menu-toggle]").click();
-  await expect(toggle).toHaveText("Включить море");
+  await expect(toggle).toHaveText("Включить движение");
   expect(requests.length).toBe(beforeReload);
 });
 
@@ -94,7 +94,7 @@ test("2G also uses the poster and reduced motion stays the stronger preference",
   page.on("request", request => { if (/\.mp4(?:\?|$)/.test(request.url())) requests.push(request.url()); });
   await page.goto("");
   await page.locator("[data-menu-toggle]").click();
-  await expect(page.locator("[data-menu] [data-sea-toggle]")).toHaveText("Включить море");
+  await expect(page.locator("[data-menu] [data-sea-toggle]")).toHaveText("Включить движение");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator("[data-menu] [data-sea-toggle]")).toBeHidden();
   await page.getByRole("radio", { name: "Ночная", exact: true }).check();

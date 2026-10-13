@@ -72,9 +72,9 @@ test("afisha records the photographed product through catalog and order list @an
   await page.locator(".afisha__change").click();
   await expect.poll(() => page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")?.[3].action)).toBe("preview");
   expect(await page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")[3])).toMatchObject({context:"afisha",product:"Икра форели",method:"button",photo:2});
-  await page.evaluate(() => document.addEventListener("click", event => { if (event.target.closest(".afisha__catalog")) event.preventDefault(); }));
-  const href = await page.locator(".afisha__catalog").getAttribute("href");
-  await page.locator(".afisha__catalog").click();
+  await page.evaluate(() => document.addEventListener("click", event => { if (event.target.closest(".afisha__frame")) event.preventDefault(); }));
+  const href = await page.locator(".afisha__frame").getAttribute("href");
+  await page.locator(".afisha__frame").click();
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").at(-1)[3])).toMatchObject({context:"afisha",action:"open_catalog",product:"Икра форели",photo:2});
   await page.goto(new URL(href, page.url()).href);
   await page.locator(".catalog-product:visible summary").click();

@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("each modal owns initial focus, every Tab stop and its close action @navigation", async ({ page }) => {
   test.setTimeout(90000); // Eight visits, including every focus stop in each modal.
+  await page.emulateMedia({ reducedMotion: "reduce" });
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     for (const route of ["", "catalog/", "about/", "journal/"]) {

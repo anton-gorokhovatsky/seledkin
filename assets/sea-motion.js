@@ -28,8 +28,8 @@ function updateControls() {
   for (const button of toggles) {
     button.hidden = reducedMotion.matches;
     const stopped = paused || dataBlocked();
-    button.textContent = stopped ? "Включить море" : "Остановить море";
-    button.setAttribute("aria-label", stopped ? "Включить движение моря" : "Остановить движение моря");
+    button.textContent = stopped ? "Включить движение" : "Остановить движение";
+    button.setAttribute("aria-label", stopped ? "Включить движение фона" : "Остановить движение фона");
   }
 }
 

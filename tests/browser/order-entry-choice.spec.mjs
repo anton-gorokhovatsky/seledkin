@@ -17,36 +17,25 @@ test("desktop order entry offers the existing phone and equal messengers @catalo
   await expect(choices.getByRole("link").first()).toBeFocused();
 });
 
-test("mobile order entry retains the photographed product before choosing a channel @afisha", async ({ page, browser, baseURL }, testInfo) => {
+test("mobile order entry offers the same channels as desktop @afisha", async ({ page, browser, baseURL }) => {
   await page.goto("?audit=order-entry");
   await page.locator(".afisha__frame").press("ArrowRight");
-  const price = await page.locator(".afisha__price").textContent();
-  const href = await page.locator(".afisha__order").getAttribute("href");
-  await page.locator(".afisha__order").press("Enter");
-  const product = page.locator("#product-trout-roe");
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
-  await expect(product.locator("h4")).toHaveText("Икра форели");
-  await expect(product.locator("strong")).toHaveText(price);
-  await expect(product.locator("details")).toHaveAttribute("open", "");
-  await expect(product.locator("summary")).toBeFocused();
-  await expect(product.locator('.catalog-product-order a[href^="tel:"]')).toBeVisible();
-  for (const link of await product.locator('.catalog-product-order a:not([href^="tel:"])').all()) {
-    await expect(link).toBeVisible();
-    expect(new URL(await link.getAttribute("href")).searchParams.get("text")).toContain("Икра форели");
+  await expect(page.locator(".afisha__frame")).toHaveAttribute("href", /product=trout-roe/);
+  await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", "catalog/");
+  const order = page.locator(".afisha__order");
+  await expect(order).toHaveAttribute("href", "#delivery-order");
+  await order.press("Enter");
+  const choices = page.getByRole("group", { name: "Способы заказа" });
+  await expect(choices).toBeFocused();
+  await expect(choices.getByRole("link")).toHaveCount(3);
+  for (const [name, href] of [["Заказать в Телеграме", "https://t.me/+79166751452"], ["Заказать в WhatsApp", "https://wa.me/79166751452"]]) {
+    await expect(choices.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
+    await expect(choices.getByRole("link", { name, exact: true })).toBeInViewport();
   }
-  await page.evaluate(() => document.fonts.ready);
-  await page.screenshot({ path: testInfo.outputPath("mobile-order-390.png") });
-  await page.getByRole("button", { name: "Весь каталог", exact: true }).click();
-  expect(new URL(page.url()).hash).toBe("");
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(117);
-
   const fallback = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const plain = await fallback.newPage();
-  await plain.goto(new URL(href, baseURL).href);
-  const summary = plain.locator("#order-trout-roe");
-  await expect(summary).toBeInViewport();
-  if (!await plain.locator("#product-trout-roe details").getAttribute("open").then(value => value !== null)) await summary.press("Enter");
-  await expect(plain.locator("#product-trout-roe .catalog-product-order a")).toHaveCount(3);
+  await plain.goto(new URL("?audit=order-entry#delivery-order", baseURL).href);
+  await expect(plain.getByRole("group", { name: "Способы заказа" })).toBeInViewport();
   await fallback.close();
 });
 

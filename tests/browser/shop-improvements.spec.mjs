@@ -102,7 +102,7 @@ test("mobile shopping appears earlier while original photo proportions survive",
   // The shopping entry stays in the mobile afisha even as later stories grow.
   await expect(page.locator(".afisha")).toBeVisible();
   expect(await page.locator("#assortment").evaluate(section => section.previousElementSibling.classList.contains("source-hero"))).toBe(true);
-  await page.locator(".afisha__all").click();
+  await page.locator(".afisha__catalog").click();
   await expect(page).toHaveURL(/\/catalog\/$/);
   await page.evaluate(() => document.fonts.ready);
   expect((await page.locator(".catalog-product").first().boundingBox()).y).toBeLessThan(650);
@@ -162,7 +162,7 @@ test("the sea can be paused, stops offscreen, and respects the saved choice acro
   await pause.click();
   await expect(hero).toHaveJSProperty("paused", true);
   await expect(menuVideo).toHaveJSProperty("paused", true);
-  await expect(pause).toHaveText("Включить море");
+  await expect(pause).toHaveText("Включить движение");
   await page.getByRole("radio", { name: "Ночная", exact: true }).check();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(menuVideo.locator("source")).toHaveAttribute("src", /hero-sea-night-web\.mp4$/);
@@ -170,7 +170,7 @@ test("the sea can be paused, stops offscreen, and respects the saved choice acro
   await page.keyboard.press("Escape");
   await page.goto(`${baseURL}journal/`);
   await page.locator("[data-menu-toggle]").click();
-  await expect(page.locator("[data-menu] [data-sea-toggle]")).toHaveText("Включить море");
+  await expect(page.locator("[data-menu] [data-sea-toggle]")).toHaveText("Включить движение");
   expect(await page.locator("[data-menu-sea-video] source").getAttribute("src")).toBeNull();
   await page.locator("[data-menu] [data-sea-toggle]").click();
   await expect.poll(() => page.locator("[data-menu-sea-video]").evaluate(video => !video.paused), { timeout: 15000 }).toBe(true);
