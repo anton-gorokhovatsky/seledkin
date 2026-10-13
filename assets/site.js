@@ -5,6 +5,7 @@ import "./theme.js";
 import "./store-environment.js";
 import { syncMenuSeaVideo } from "./sea-motion.js";
 import { setupOrderContinuation } from "./order-continuation.js";
+import "./footer-coral.js";
 
 const root = new URL("../", import.meta.url);
 const isHome = location.pathname === root.pathname || location.pathname === `${root.pathname}index.html`;

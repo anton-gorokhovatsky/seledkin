@@ -1,11 +1,32 @@
 import { test, expect } from "@playwright/test";
 
+test("every shared footer shows Coral without the old shoal, including nested journal entries", async ({ page }) => {
+  test.setTimeout(90000);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const videos = [];
+  page.on("request", request => { if (/footer-coral(?:-organic)?\.mp4/.test(request.url())) videos.push(request.url()); });
+  for (const path of ["", "about/", "catalog/", "recipes/", "journal/", "journal/700/"]) {
+    for (const width of [1512, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`${path}?audit=shared-footer-coral`);
+      const footer = page.locator(".source-footer");
+      await page.locator(".source-footer__base").scrollIntoViewIfNeeded();
+      await expect(footer).toHaveAttribute("data-coral", "");
+      expect(await footer.evaluate(f => getComputedStyle(f, "::before").display), `${path} old shoal`).toBe("none");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), `${path} at ${width}px`).toBe(0);
+      await expect(footer.locator('a[href="https://t.me/+79166751452"]')).toBeVisible();
+      await expect(footer.locator('a[href="https://wa.me/79166751452"]')).toBeVisible();
+    }
+  }
+  expect(videos).toEqual([]);
+});
+
 test("footer Coral loads on approach, shares the sea pause and stops offscreen", async ({ page }) => {
   await page.setViewportSize({ width: 1512, height: 900 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
   const requests = [];
   page.on("request", request => {
-    if (/footer-coral(?:\.mp4|-poster\.webp)/.test(request.url())) requests.push(request.url());
+    if (/footer-coral(?:(?:-organic)?\.mp4|-poster\.webp)/.test(request.url())) requests.push(request.url());
   });
   await page.goto("?audit=footer-coral-test");
   const video = page.locator(".footer-coral-video");
@@ -47,7 +68,7 @@ for (const mode of ["reduced motion", "save data"]) {
         value: { saveData: true, effectiveType: "4g", addEventListener() {} } });
     });
     const videos = [];
-    page.on("request", request => { if (/footer-coral\.mp4/.test(request.url())) videos.push(request.url()); });
+    page.on("request", request => { if (/footer-coral(?:-organic)?\.mp4/.test(request.url())) videos.push(request.url()); });
     await page.goto("?audit=footer-coral-test");
     await page.locator(".source-footer__base").scrollIntoViewIfNeeded();
     await expect(page.locator(".source-footer")).toHaveAttribute("data-coral", "");
@@ -74,7 +95,7 @@ for (const mode of ["reduced motion", "save data"]) {
 
 test("unloaded or unavailable Coral never adds horizontal scrolling", async ({ page }) => {
   await page.route("**/footer-coral-poster.webp", route => route.abort());
-  await page.route("**/footer-coral.mp4", route => route.abort());
+  await page.route("**/footer-coral-organic.mp4", route => route.abort());
   await page.goto("?audit=footer-coral-test");
   await expect(page.locator(".footer-coral-layer")).toHaveCount(1);
   for (const width of [390, 320]) {

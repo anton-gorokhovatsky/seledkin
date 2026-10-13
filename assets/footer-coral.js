@@ -1,6 +1,6 @@
 import { seaMotionState } from "./sea-motion.js";
 
-// Accepted native Coral artwork, confined to the home footer. The existing
+// Accepted native Coral artwork, shared by every site footer. The existing
 // sea control also pauses this background; no additional interface is needed.
 const footer = document.querySelector(".source-footer");
 const contrast = matchMedia("(prefers-contrast: more), (forced-colors: active)");
@@ -41,7 +41,7 @@ if (footer) {
     let posterStarted = false, posterReady = false, failed = false;
     const poster = new Image();
     const posterURL = new URL("./footer-coral-poster.webp", import.meta.url).href;
-    const videoURL = new URL("./footer-coral.mp4", import.meta.url).href;
+    const videoURL = new URL("./footer-coral-organic.mp4", import.meta.url).href;
 
     function paintUpper() {
       upperContext.clearRect(0, 0, upper.width, upper.height);
@@ -57,7 +57,7 @@ if (footer) {
     }
     function paintVideo() {
       if (video.readyState < 2) return;
-      const frame = Math.floor(video.currentTime * 12);
+      const frame = Math.floor(video.currentTime * Number(video.dataset.frameRate || 24));
       if (lastVideoFrame === frame) return;
       lastVideoFrame = frame;
       context.drawImage(video, 0, 0);
@@ -108,7 +108,7 @@ if (footer) {
       poster.decode().then(() => {
         posterReady = true;
         if (video.paused || video.readyState < 2) paintPoster();
-      }).catch(() => {}); // The original footer artwork remains as fallback.
+      }).catch(() => {}); // Footer content remains available without decoration.
     }
     video.addEventListener("error", () => {
       failed = true;

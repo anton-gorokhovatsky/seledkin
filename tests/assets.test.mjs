@@ -5,8 +5,10 @@ import { versionAssets } from "../scripts/build-assets.mjs";
 const publication = () => new Map([
   ["index.html", '<link href="assets/styles.css"><script src="assets/site.js"></script><iframe src="assets/store-map.html"></iframe>'],
   ["catalog/index.html", '<script src="../assets/order-list.js"></script><link href="../assets/styles.css">'],
-  ["assets/styles.css", "body { color: navy; }"],
-  ["assets/site.js", 'import "./order-list.js"; const map = "./store-map.html";'],
+  ["assets/styles.css", '@import url("./footer-coral.css"); body { color: navy; }'],
+  ["assets/footer-coral.css", ".footer-coral-layer { position: absolute; }"],
+  ["assets/site.js", 'import "./order-list.js"; import "./footer-coral.js"; const map = "./store-map.html";'],
+  ["assets/footer-coral.js", 'const videoURL = new URL("./footer-coral-organic.mp4", import.meta.url);'],
   ["assets/order-list.js", 'import { catalog } from "./catalog-data.js";'],
   ["assets/catalog-data.js", 'export const catalog = [{id: "roe", price: "6000 ₽"}];'],
   ["assets/store-map.html", '<script src="https://api.mapbox.com/mapbox-gl.js?v=external"></script><script src="./map.js"></script>'],
@@ -15,10 +17,12 @@ const publication = () => new Map([
 
 test("publication versions include nested module dependencies and the map, preserve external URLs and are repeatable", () => {
   const result = versionAssets(publication());
-  for (const path of ["index.html", "catalog/index.html", "assets/site.js", "assets/order-list.js", "assets/store-map.html", "assets/map.js"]) {
+  for (const path of ["index.html", "catalog/index.html", "assets/styles.css", "assets/site.js", "assets/order-list.js", "assets/store-map.html", "assets/map.js"]) {
     assert.ok(result.files.get(path).includes(`?v=${result.version}`), path);
   }
   assert.ok(result.files.get("assets/order-list.js").includes(`catalog-data.js?v=${result.version}`));
+  assert.ok(result.files.get("assets/styles.css").includes(`footer-coral.css?v=${result.version}`));
+  assert.ok(result.files.get("assets/site.js").includes(`footer-coral.js?v=${result.version}`));
   assert.ok(result.files.get("assets/store-map.html").includes('https://api.mapbox.com/mapbox-gl.js?v=external'));
   assert.deepEqual(versionAssets(result.files), result);
 });
