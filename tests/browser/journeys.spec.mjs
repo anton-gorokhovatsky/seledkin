@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { createRequire } from "node:module";
+import { readFile } from "node:fs/promises";
 import { stubStoreMap } from "./map-fixture.mjs";
 const require = createRequire(import.meta.url);
 
@@ -330,10 +331,18 @@ test("ordinary sections share one continuous surface and delivery keeps its cont
 
 test("320px reflow, enlarged text, custom spacing and contrast retain controls", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 844 });
+  await page.route("**/qa-reflow-serif.ttf", async route => route.fulfill({
+    contentType: "font/ttf",
+    body: await readFile(new URL("../fixtures/fonts/DejaVuSerif.ttf", import.meta.url)),
+  }));
   for (const path of ["", "catalog/", "about/", "journal/", "journal/698/", "journal/683/", "404.html"]) {
     for (const mode of ["text", "spacing", "contrast", "forced"]) {
       await page.emulateMedia({ reducedMotion: "reduce", contrast: mode === "contrast" ? "more" : "no-preference", forcedColors: mode === "forced" ? "active" : "none" });
       await page.goto(path);
+      if (path === "404.html") await page.addStyleTag({ content: `
+        @font-face { font-family: "QA Reflow Serif"; src: url("/qa-reflow-serif.ttf"); }
+        .not-found-art__code { font-family: "QA Reflow Serif", serif; }
+      ` });
       if (mode === "text") await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
       if (mode === "spacing") await page.addStyleTag({ content: "* { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-bottom: 2em !important; }" });
       await page.evaluate(() => document.fonts.ready);

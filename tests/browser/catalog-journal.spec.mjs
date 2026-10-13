@@ -195,7 +195,9 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
   await page.goto("https://ks.fish/#contacts");
   // Loading the always-active map is not an intentional route request.
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "map_open").length)).toBe(0);
-  await page.evaluate(() => document.addEventListener("click", event => { if(event.target.closest('a[href^="https://yandex.ru/maps/"]')) event.preventDefault(); }));
+  // Cancel the external navigation after the document's analytics listener,
+  // regardless of module loading order. The fixture must not cancel the intent.
+  await page.evaluate(() => window.addEventListener("click", event => { if(event.target.closest('a[href^="https://yandex.ru/maps/"]')) event.preventDefault(); }));
   await page.getByRole("link", { name: "Открыть в Яндекс Картах" }).click();
   // Wait for event delivery in WebKit; retain the exact-once assertion.
   await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "map_open").length)).toBe(1);

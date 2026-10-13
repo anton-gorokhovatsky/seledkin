@@ -78,6 +78,7 @@
 @media (width <= 24rem) {
   .not-found-masthead .not-found-source__brand { width: 6.75rem; }
   .not-found-masthead { gap: 0.5rem; }
+  .not-found-art__code { font-size: clamp(4rem, 40vw, 20rem); }
 }
 @media (forced-colors: active) {
   .not-found-art__code { color: CanvasText; }
