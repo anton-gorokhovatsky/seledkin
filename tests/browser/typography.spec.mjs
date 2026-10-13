@@ -38,8 +38,11 @@ test("typography crosses inline links without changing links, code or user input
 test("updated search and journal counters keep their number and noun together", async ({ page }) => {
   await page.goto("catalog/");
   await page.locator("[data-catalog-search]").fill("нерка");
-  await expect(page.locator("[data-catalog-count]")).toHaveText("2 позиции · Из журнала: 1");
-  expect(await page.locator("[data-catalog-count]").textContent()).toBe("2\u00a0позиции · Из\u00a0журнала: 1");
+  await expect(page.locator("[data-catalog-count]")).toHaveText("2 позиции");
+  expect(await page.locator("[data-catalog-count]").textContent()).toBe("2\u00a0позиции");
+  await page.locator("[data-catalog-search]").fill("риет");
+  await expect(page.locator("[data-catalog-count]")).toHaveText("В каталоге нет совпадений · Из журнала: 1");
+  expect(await page.locator("[data-catalog-count]").textContent()).toContain("Из\u00a0журнала: 1");
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("");
   await page.locator("[data-hero-journal-next]").click();

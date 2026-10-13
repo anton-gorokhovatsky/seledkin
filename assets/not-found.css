@@ -70,7 +70,7 @@
     padding-block: 1.5rem 3rem;
   }
   .not-found-art { order: -1; width: min(100%, 28rem); justify-self: center; padding-top: 2.5rem; }
-  .not-found-art__code { font-size: clamp(10rem, 43vw, 20rem); }
+  .not-found-art__code { font-size: clamp(5rem, 43vw, 20rem); }
   .not-found-art__shoal { width: 94%; left: 3%; }
   .not-found-copy { max-width: 32rem; }
   .not-found-redesign h1 { max-width: 100%; }

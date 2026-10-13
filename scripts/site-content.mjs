@@ -438,6 +438,11 @@ function recipeFeature(root, heading = "h3") {
   </article>`;
 }
 
+function recipeTitle(title) {
+  const wordBreaks = { "секретов": "секре­тов", "сковороде": "ско­во­ро­де", "томатном": "то­мат­ном", "Осьминог": "Ось­ми­ног", "Патагонские": "Пата­гон­ские", "Перепелиные": "Пере­пе­ли­ные", "креветочной": "кре­ве­точной", "креветки": "кре­вет­ки", "креветку": "кре­вет­ку", "белобрюшка": "бело­брюш­ка", "Командир": "Коман­дир", "счастливой": "счаст­ливой", "Предельно": "Пре­дель­но", "упаковка": "упа­ков­ка", "разделать": "раз­делать" };
+  return Object.entries(wordBreaks).reduce((result, [word, hyphenated]) => result.replaceAll(word, hyphenated), text(title));
+}
+
 export function renderRecipeHome() {
   return `<header class="watch-catch__header">
     <h2 id="watch-catch-title">Рецепты и советы Олега</h2>
@@ -447,7 +452,7 @@ export function renderRecipeHome() {
   <ul class="watch-catch__list">${recipes.slice(1, 4).map(recipe => {
     const { id } = recipe;
     const entry = recipeEntry(recipe);
-    return `<li class="watch-catch__item"><a href="recipes/${id}/" aria-label="${text(recipe.title)}"><span class="watch-catch__photo">${image(entry, "", "(max-width: 1257px) 88px, (max-width: 1714px) 7vw, 120px")}</span><span class="watch-catch__caption"><span class="watch-catch__name">${text(recipe.title).replace("секретов", "секре­тов").replace("сковороде", "ско­во­ро­де")}</span>${harpoon}</span></a></li>`;
+    return `<li class="watch-catch__item"><a href="recipes/${id}/" aria-label="${text(recipe.title)}"><span class="watch-catch__photo">${image(entry, "", "(max-width: 1257px) 88px, (max-width: 1714px) 7vw, 120px")}</span><span class="watch-catch__caption"><span class="watch-catch__name">${recipeTitle(recipe.title)}</span>${harpoon}</span></a></li>`;
   }).join("\n")}</ul>
   <p class="watch-catch__all"><a class="editorial-link" href="recipes/">Все рецепты и советы${harpoon}</a></p>`;
 }
@@ -484,8 +489,7 @@ export function renderRecipesPage() {
     <div class="recipe-ingredients" role="group" aria-label="Выбрать продукт">${recipeIngredients.map(([slug, label]) => `<button type="button" data-ingredient="${slug}" aria-pressed="${slug === "all"}">${label}<span>${slug === "all" ? recipes.length : recipes.filter(recipe => recipe.ingredient === slug).length}</span></button>`).join("")}</div>
     <p class="recipe-filter-status" role="status" aria-live="polite" data-recipe-filter-status>${countNoun(recipes.filter(recipe => recipe.kind === "recipe").length, ["рецепт", "рецепта", "рецептов"])} и ${countNoun(recipes.filter(recipe => recipe.kind === "advice").length, ["совет", "совета", "советов"])}</p>
   </section>`;
-  const wordBreaks = { "сковороде": "ско­во­ро­де", "томатном": "то­мат­ном", "Осьминог": "Ось­ми­ног", "Патагонские": "Пата­гон­ские", "Перепелиные": "Пере­пе­ли­ные", "креветочной": "кре­ве­точной", "креветки": "кре­вет­ки", "креветку": "кре­вет­ку", "белобрюшка": "бело­брюш­ка", "Командир": "Коман­дир", "счастливой": "счаст­ливой", "Предельно": "Пре­дель­но", "упаковка": "упа­ков­ка", "разделать": "раз­делать" };
-  const recordTitle = title => Object.entries(wordBreaks).reduce((result, [word, hyphenated]) => result.replaceAll(word, hyphenated), text(title));
+
   const groups = `<section class="recipe-directory recipe-directory--editorial" aria-label="Авторские развороты" data-recipe-opening>
     ${renderRecipeEditorial("../")}
   </section>
@@ -507,7 +511,7 @@ export function renderRecipesPage() {
       return `<article class="recipe-record"${recipe.id === 453 ? ' id="advice"' : ""} data-recipe-material="${recipe.id}" data-ingredient-group="${recipe.ingredient}" data-kind="${recipe.kind}"${featuredIds.has(recipe.id) ? ' data-featured hidden' : ""} aria-labelledby="recipe-title-${recipe.id}">
         <a class="recipe-record-photo" href="${recipe.id}/" aria-label="${recipe.kind === "advice" ? "Читать совет" : "Читать рецепт"}: ${text(recipe.title)}">${image(entry, "../", "(max-width: 46rem) calc(100vw - 36px), (max-width: 1440px) 42vw, 580px")}</a>
         <div class="recipe-record-copy"><p class="recipe-record-meta">${recipe.kind === "advice" ? "Совет" : "Рецепт"} Олега · <time datetime="${entry.date}">${date(entry)}</time></p>
-        <a class="recipe-record-story" href="${recipe.id}/" aria-labelledby="recipe-title-${recipe.id}"><h3 id="recipe-title-${recipe.id}">${recordTitle(recipe.title)}</h3></a>
+        <a class="recipe-record-story" href="${recipe.id}/" aria-labelledby="recipe-title-${recipe.id}"><h3 id="recipe-title-${recipe.id}">${recipeTitle(recipe.title)}</h3></a>
         <div class="recipe-record-excerpt">${excerpt.map(paragraph => `<p>${text(paragraph)}</p>`).join("")}</div>
         <a class="editorial-link recipe-record-read" href="${recipe.id}/">${recipe.kind === "advice" ? "Читать совет" : "Читать рецепт"}${harpoon}</a>
         ${buying ? `<div class="recipe-record-products">${buying}</div>` : ""}</div>

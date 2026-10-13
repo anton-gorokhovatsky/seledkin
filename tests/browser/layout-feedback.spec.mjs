@@ -17,7 +17,7 @@ test("delivery stays inside 320px with enlarged text and a wider fallback serif 
   await page.addStyleTag({ content: `
     @font-face { font-family: "QA Reflow Serif"; src: url("/qa-reflow-serif.ttf"); }
     html { font-size: 200% !important; }
-    .delivery-waybill h2 { font-family: "QA Reflow Serif", serif; }
+    .delivery-waybill h2, .watch-catch__name { font-family: "QA Reflow Serif", serif; }
   ` });
   await page.evaluate(() => document.fonts.ready);
   const heading = page.locator(".delivery-waybill h2");
@@ -80,8 +80,8 @@ test("compact journal photos retain their full frame and recipe words never brea
     expect(Math.abs(frame.ratio - frame.original)).toBeLessThan(.02);
   };
   await checkPhoto(preview, 160);
-  const name = page.locator('.watch-catch__name').filter({ hasText: "Осьминог" });
-  expect(await name.textContent()).toContain("секре\u00adтов");
+  const name = page.locator('.watch-catch__name').filter({ hasText: "Филе трески" });
+  expect(await name.textContent()).toContain("ско\u00adво\u00adро\u00adде");
   expect(await name.evaluate(node => getComputedStyle(node).overflowWrap)).not.toBe("anywhere");
   expect(await page.locator('.afisha__title em').textContent()).toContain("каж\u00adдый");
   await page.goto("journal/?audit=compact-journal#journal-earlier");

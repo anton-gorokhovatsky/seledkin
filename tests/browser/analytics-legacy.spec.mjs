@@ -96,7 +96,7 @@ test("afisha records the photographed product through catalog and order list @an
 test("service entry excludes the whole tab, but an explicit ordinary visit can resume measurement @analytics", async ({ page, baseURL }) => {
   const requests = await publicFixture(page, baseURL);
   await page.goto("https://ks.fish/?audit=analytics-check");
-  await page.getByRole("link", { name: "Весь каталог", exact: true }).click();
+  await page.getByRole("link", { name: "Каталог и цены", exact: true }).click();
   await expect(page.getByRole("searchbox", { name: "Найти товар" })).toBeVisible();
   await page.getByRole("searchbox", { name: "Найти товар" }).fill("тунец");
   await page.getByRole("searchbox", { name: "Найти товар" }).press("Enter");

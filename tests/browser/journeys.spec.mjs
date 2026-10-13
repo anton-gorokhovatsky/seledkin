@@ -3,8 +3,24 @@ import { createRequire } from "node:module";
 import { stubStoreMap } from "./map-fixture.mjs";
 const require = createRequire(import.meta.url);
 
-async function noOverflow(page) {
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+async function noOverflow(page, scenario = "") {
+  const overflow = await page.evaluate(() => {
+    const width = document.documentElement.scrollWidth - innerWidth;
+    const elements = [];
+    if (width > 1) {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (!node.textContent.trim() || node.parentElement.closest("[hidden],.visually-hidden,script,style")) continue;
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        const right = Math.max(...[...range.getClientRects()].map(rect => rect.right));
+        if (right > innerWidth + 1) elements.push({ text: node.textContent.trim().slice(0, 60), className: node.parentElement.className, right });
+      }
+    }
+    return { width, elements: elements.slice(0, 8) };
+  });
+  expect(overflow.width, `${scenario}: ${JSON.stringify(overflow.elements)}`).toBeLessThanOrEqual(1);
 }
 
 test("prices and product-specific order links survive unavailable JavaScript @catalog", async ({ browser, baseURL }) => {
@@ -37,22 +53,22 @@ test("search, category, shared URL and browser history retain the same selection
   const search = page.locator("[data-catalog-search]");
   const count = page.locator("[data-catalog-count]");
   await search.fill("нерка");
-  await expect(count).toHaveText("2 позиции · Из журнала: 1");
+  await expect(count).toHaveText("2 позиции");
   expect(new URL(page.url()).searchParams.get("q")).toBe("нерка");
   await page.reload();
   await expect(search).toHaveValue("нерка");
-  await expect(count).toHaveText("2 позиции · Из журнала: 1");
+  await expect(count).toHaveText("2 позиции");
   const shared = await context.newPage();
   await shared.goto(page.url());
-  await expect(shared.locator("[data-catalog-count]")).toHaveText("2 позиции · Из журнала: 1");
+  await expect(shared.locator("[data-catalog-count]")).toHaveText("2 позиции");
   await shared.close();
   await page.locator("[data-catalog-select]").selectOption("seafood");
-  await expect(count).toHaveText("В каталоге нет совпадений · Из журнала: 1");
+  await expect(count).toHaveText("0 позиций");
   await page.goBack();
-  await expect(count).toHaveText("2 позиции · Из журнала: 1");
+  await expect(count).toHaveText("2 позиции");
   await expect(page.locator("[data-catalog-select]")).toHaveValue("all");
   await page.goForward();
-  await expect(count).toHaveText("В каталоге нет совпадений · Из журнала: 1");
+  await expect(count).toHaveText("0 позиций");
   await page.locator("[data-catalog-reset]").click();
   await expect(count).toHaveText("117 позиций");
   await search.fill("морепродукты");
@@ -321,7 +337,7 @@ test("320px reflow, enlarged text, custom spacing and contrast retain controls",
       if (mode === "text") await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
       if (mode === "spacing") await page.addStyleTag({ content: "* { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-bottom: 2em !important; }" });
       await page.evaluate(() => document.fonts.ready);
-      await noOverflow(page);
+      await noOverflow(page, `${path} ${mode}`);
       const clipped = await page.locator(".source-button:visible, summary:visible, input:visible, select:visible").evaluateAll(elements => elements.filter(e => { const r = e.getBoundingClientRect(); return r.x < -1 || r.right > innerWidth + 1; }).map(e => e.textContent.trim() || e.tagName));
       expect(clipped).toEqual([]);
     }
