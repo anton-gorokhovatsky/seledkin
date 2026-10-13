@@ -1,0 +1,85 @@
+.not-found-redesign {
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+.not-found-masthead,
+.not-found-redesign .not-found-source {
+  width: min(calc(100% - var(--page-outer)), var(--shell));
+  margin-inline: auto;
+}
+.not-found-masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: clamp(1.25rem, 3vw, 2.5rem);
+}
+.not-found-masthead .not-found-source__brand {
+  width: clamp(8rem, 16vw, 13rem);
+  margin: 0;
+  flex: none;
+}
+.not-found-redesign .not-found-source {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 6rem);
+  padding-block: 3rem clamp(5rem, 10vh, 8rem);
+  text-align: left;
+}
+.not-found-redesign .not-found-source::before { content: none; }
+.not-found-redesign h1 { max-width: 100%; margin-block: 0 1.5rem; }
+.not-found-redesign h1 em { display: block; font-weight: 400; }
+.not-found-redesign .not-found-source__label { margin-bottom: 1.25rem; }
+.not-found-description { max-width: 35ch; color: var(--muted); margin-bottom: 2rem; }
+.not-found-redesign .not-found-source__actions { justify-content: start; gap: 1rem 1.75rem; align-items: center; }
+.not-found-home { gap: 0.75rem; }
+.not-found-home svg { width: 1.75rem; height: auto; }
+.not-found-art {
+  position: relative;
+  min-width: 0;
+  padding-top: 15%;
+  color: var(--blue-deep);
+  isolation: isolate;
+}
+.not-found-art__code {
+  display: block;
+  font: 400 clamp(12rem, 29vw, 27rem) / 0.95 var(--serif);
+  letter-spacing: -0.075em;
+  text-align: center;
+}
+.not-found-art__shoal {
+  position: absolute;
+  z-index: -1;
+  width: 110%;
+  aspect-ratio: 7940 / 2494;
+  inset: 0 auto auto -8%;
+  background: var(--shoal-primary);
+  opacity: 0.24;
+  -webkit-mask: url("fish-pattern.svg") center / contain no-repeat;
+  mask: url("fish-pattern.svg") center / contain no-repeat;
+  transform: rotate(-12deg);
+}
+@media (width <= 46rem) {
+  .not-found-redesign .not-found-source {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 2rem;
+    padding-block: 1.5rem 3rem;
+  }
+  .not-found-art { order: -1; width: min(100%, 28rem); justify-self: center; padding-top: 2.5rem; }
+  .not-found-art__code { font-size: clamp(10rem, 43vw, 20rem); }
+  .not-found-art__shoal { width: 94%; left: 3%; }
+  .not-found-copy { max-width: 32rem; }
+  .not-found-redesign h1 { max-width: 100%; }
+}
+@media (width <= 24rem) {
+  .not-found-masthead .not-found-source__brand { width: 6.75rem; }
+  .not-found-masthead { gap: 0.5rem; }
+}
+@media (forced-colors: active) {
+  .not-found-art__code { color: CanvasText; }
+  .not-found-art__shoal { display: none; }
+}

@@ -72,9 +72,11 @@
     <script type="module" src="assets/interface-motion.js"></script>
     <script type="module" src="assets/typography.js"></script>
     <title>Страница не найдена — Рыбная лавка капитана Селедкина</title>
+    <link rel="stylesheet" href="assets/not-found.css" />
   </head>
-  <body class="not-found-page">
-    <main class="not-found-source">
+  <body class="not-found-page not-found-redesign">
+    <a class="skip-link" href="#main">Перейти к содержанию</a>
+    <header class="not-found-masthead">
       <a
         class="not-found-source__brand brand-jelly brand-jelly--page"
         href="./"
@@ -90,30 +92,18 @@
           height="1784"
         />
       </a>
-      <p class="not-found-source__label">Ошибка 404</p>
-      <h1>Такой страницы в лавке нет</h1>
-      <p>Откройте каталог с ценами или вернитесь на главную.</p>
-      <div class="not-found-source__actions">
-        <a class="source-button source-button--telegram" href="catalog/">
-          <span class="source-button__label">Открыть каталог</span>
-        </a>
-        <a class="source-button source-button--outline" href="./"><span class="source-button__label">На главную</span></a>
+    </header>
+    <main class="not-found-source" id="main">
+      <div class="not-found-copy">
+        <p class="not-found-source__label">Ошибка 404</p>
+        <h1>Такой страницы <em>в лавке нет</em></h1>
+        <p class="not-found-description">Откройте каталог с ценами или вернитесь на главную.</p>
+        <div class="not-found-source__actions">
+          <a class="source-button source-button--telegram" href="catalog/"><span class="source-button__label">Открыть каталог</span></a>
+          <a class="editorial-link not-found-home" href="./">На главную<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"/><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor"/></svg></a>
+        </div>
       </div>
-      <button
-        class="theme-toggle theme-toggle--not-found"
-        type="button"
-        aria-label="Включить ночную вахту"
-        data-theme-toggle
-      >
-        <svg class="theme-toggle__mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path class="theme-toggle__moon" d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8a8.5 8.5 0 1 0 11.6 11.6Z" />
-          <g class="theme-toggle__sun">
-            <circle cx="12" cy="12" r="3.5" />
-            <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2M4.6 4.6 6 6M18 18l1.4 1.4M19.4 4.6 18 6M6 18l-1.4 1.4" />
-          </g>
-        </svg>
-        <span data-theme-label>Ночная вахта</span>
-      </button>
+      <div class="not-found-art" aria-hidden="true"><span class="not-found-art__shoal"></span><span class="not-found-art__code">404</span></div>
     </main>
   </body>
 </html>

@@ -181,7 +181,7 @@ for (const file of htmlFiles) {
   }
   for (const required of [
     'localStorage.getItem("seledkin-theme")',
-    ...(file === "404.html" ? ["data-theme-toggle"] : [
+    ...(file === "404.html" ? ['href="assets/not-found.css"'] : [
       'class="theme-choice"', 'value="auto" data-theme-choice',
       'value="light" data-theme-choice', 'value="dark" data-theme-choice',
     ]),
