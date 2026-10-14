@@ -2434,6 +2434,7 @@ a.source-brand {
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 1.5rem;
+  padding-block: 1.5rem;
   border-top: 1px solid var(--footer-line);
   color: var(--footer-base);
   font-size: var(--text-meta);
@@ -2450,7 +2451,18 @@ a.source-brand {
 }
 
 .source-footer__credit {
+  display: block;
+  min-width: 0;
+  min-block-size: 5.75rem;
   justify-self: center;
+  font-family: var(--sans);
+  --ag-signature-size: 8rem;
+  --ag-signature-ink: var(--footer-text);
+  --ag-signature-muted: var(--footer-base);
+  --ag-signature-accent: var(--footer-text);
+  --ag-signature-node-ink: var(--footer-base);
+  --ag-signature-name-size: 1rem;
+  --ag-signature-role-size: var(--text-meta);
 }
 
 .source-footer__base > a:last-child {
@@ -3973,6 +3985,22 @@ a.site-menu__brand {
 
   .source-footer__base > a:last-child {
     justify-self: end;
+  }
+
+  @media (width <= 46rem) {
+    .source-footer__base > small {
+      grid-column: 1;
+    }
+
+    .source-footer__credit {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    .source-footer__base > a:last-child {
+      grid-column: 2;
+      grid-row: 1;
+    }
   }
 
   .catalog-intro {

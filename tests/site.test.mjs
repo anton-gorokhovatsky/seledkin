@@ -812,7 +812,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     }
     assert.match(
       page,
-      /href="https:\/\/gorokhovatsky\.tech\/\?point=ks-fish">Дизайн и разработка<\/a>/,
+      /<ag-signature class="source-footer__credit" role-label="Дизайн и разработка" theme="dark" controls="external">\s*<a href="https:\/\/gorokhovatsky\.tech\/" rel="author">Антон Гороховатский — Дизайн и разработка<\/a>/,
     );
     const channels =
       page.match(/<nav class="source-footer__channels"[\s\S]*?<\/nav>/)?.[0] ?? "";
