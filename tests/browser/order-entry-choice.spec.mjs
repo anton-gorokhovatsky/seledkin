@@ -104,8 +104,7 @@ test("afisha order stays with its photo and remains readable at 320px with enlar
       expect(box.x + box.width).toBeLessThanOrEqual(321);
       expect(await item.evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);
     }
-    // Scope the stress check to the changed shopping entry. The delivery price
-    // has a separate pre-existing overflow with 200% text AND enlarged spacing.
+    // Scope this check to the shopping entry; delivery has its own reflow test.
     const outside = await page.locator(".afisha").evaluate(afisha => [...afisha.querySelectorAll('*')].filter(e => e.getBoundingClientRect().right > innerWidth + 1).map(e => ({ class: e.className, text: e.textContent.slice(0, 70) })));
     expect(outside).toEqual([]);
     // Compare one layout frame: Safari may scroll the focused disclosure.

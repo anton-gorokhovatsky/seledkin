@@ -185,6 +185,7 @@ function cssTags(before, after, recipeSheet = false) {
       if (oldRules.get(key)?.body === newRules.get(key)?.body) continue;
       for (const selector of (newRules.get(key) ?? oldRules.get(key)).selector.split(",")) {
         const tag = onlyMenuEndPadding(oldRules.get(key), newRules.get(key), selector) ? "@navigation"
+          : /^\s*\.delivery-waybill__price(?:\s+span)?\s*$/.test(selector) ? "@delivery"
           : recipeSheet && /^\s*(?:\.(?:recipes?-)[\w-]+|\[data-recipe-)[^,]*$/.test(selector) ? "@recipes"
           : /^\s*\.contacts-source(?=[\s_.#[:]|$)/.test(selector) ? "@contacts"
           : /^\s*\.catalog-(?:[\w-]+)(?=[\s.#[:]|$)/.test(selector) ? "@catalog"

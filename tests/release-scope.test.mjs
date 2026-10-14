@@ -181,6 +181,17 @@ test("menu end spacing selects navigation without hiding overflow or other layou
   }
 });
 
+test("delivery price styles select their reflow scenario without admitting other components", () => {
+  const before = '.delivery-waybill__price{font-size:8rem}.delivery-waybill__price span{font-size:.48em}';
+  const after = before.replace('8rem', 'min(8rem,35cqi)');
+  const changes = [{ path: "assets/styles.css", before, after }];
+  assert.equal(classifyRelease(changes), "scoped");
+  assert.deepEqual(scopedBrowserTags(changes), ["@delivery"]);
+  for (const extra of [':root{--serif:serif}', '.delivery-waybill{display:block}', '.source-button{display:none}']) {
+    assert.equal(classifyRelease([{ path: "assets/styles.css", before, after: after + extra }]), "full");
+  }
+});
+
 test("shared tokens, mixed selectors, moved rules and unknown modules retain the full gate", () => {
   for (const [before, after] of [
     [':root{--ink:black}', ':root{--ink:blue}'],

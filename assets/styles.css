@@ -2070,7 +2070,8 @@ a.source-brand {
 .delivery-waybill__price {
   margin: 0;
   color: var(--blue);
-  font: 400 clamp(4rem, 3rem + 10cqi, 10rem) / 0.9 var(--serif);
+  /* Keep the amount and currency together, including enlarged text spacing. */
+  font: 400 min(clamp(4rem, 3rem + 10cqi, 10rem), 35cqi) / 0.9 var(--serif);
   white-space: nowrap;
 }
 
