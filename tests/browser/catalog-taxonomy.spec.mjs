@@ -48,8 +48,9 @@ test("catalog category selection and the expanded PBG description reflow without
     await expect(page.locator(".catalog-product:visible h4")).toHaveText("Пинцет для удаления рыбных костей");
     await page.locator("[data-catalog-select]").selectOption("prepared-fish");
     for (const id of ["smoked-mackerel", "prepared-fish-006", "prepared-fish-011"]) {
-      const description = page.locator(`#product-${id} > p`);
+      const description = page.locator(`#product-${id} > p`).filter({ hasText: "Потрошёная рыба без головы" });
       await expect(description).toHaveCount(1);
+      await expect(page.locator(`#product-${id} > p`).filter({ hasText: "ПБГ" })).toHaveCount(0);
       await expect(description).not.toContainText("ПБГ");
       await expect(description).toContainText("Потрошёная рыба без головы");
     }
