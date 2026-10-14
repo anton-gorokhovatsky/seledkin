@@ -3,6 +3,7 @@
     "id": 696,
     "image": "journal-696.jpg",
     "caption": "Каспийский залом",
+    "orderName": "каспийский залом",
     "alt": "Целый каспийский залом на белой тарелке",
     "product": {
       "category": "prepared-fish",
@@ -13,6 +14,7 @@
     "id": 700,
     "image": "journal-700.jpg",
     "caption": "Икра форели",
+    "orderName": "икру форели",
     "alt": "Красная икра форели в открытой банке",
     "product": {
       "category": "caviar",
@@ -23,6 +25,7 @@
     "id": 566,
     "image": "journal-566.jpg",
     "caption": "Стейки лосося",
+    "orderName": "стейк лосося",
     "alt": "Стейки чилийского лосося",
     "product": {
       "category": "steaks",
@@ -33,6 +36,7 @@
     "id": 695,
     "image": "journal-695.jpg",
     "caption": "Копчёная форель",
+    "orderName": "форель холодного копчения",
     "alt": "Нарезанное филе форели холодного копчения без кожи на чёрном подносе",
     "product": {
       "category": "prepared-fish",
@@ -43,6 +47,7 @@
     "id": 454,
     "image": "journal-454.jpg",
     "caption": "Копчёная скумбрия",
+    "orderName": "скумбрию горячего копчения",
     "alt": "Ряды скумбрии горячего и холодного копчения",
     "product": {
       "category": "prepared-fish",

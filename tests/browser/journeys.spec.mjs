@@ -137,7 +137,7 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
       await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", "catalog/");
       const boundary = await page.locator(".source-hero").evaluate(e => e.getBoundingClientRect().bottom);
       expect((await page.locator("#assortment").boundingBox()).y).toBeCloseTo(boundary, 0);
-      if (height >= 800) await expect(page.locator(".afisha__order")).toBeInViewport({ ratio: 1 });
+      if (height >= 800) await expect(page.locator(".afisha__order summary")).toBeInViewport({ ratio: 1 });
       await page.screenshot({ path: testInfo.outputPath(`hero-${width}-${height}-first.png`) });
       await noOverflow(page);
       continue;
@@ -358,6 +358,7 @@ test("a photographed product opens its own catalog position, price and order @af
   await page.goto("");
   const frame = page.locator(".afisha__frame");
   const expected = ["Каспийский залом", "Икра форели", "Стейк лосося", "Форель холодного копчения", "Скумбрия горячего копчения"];
+  const orderNames = ["каспийский залом", "икру форели", "стейк лосося", "форель холодного копчения", "скумбрию горячего копчения"];
   const destinations = [];
   for (let i = 0; i < expected.length; i++) {
     await expect(page.locator(".afisha__count")).toHaveText(`${i + 1}/5`);
@@ -366,8 +367,7 @@ test("a photographed product opens its own catalog position, price and order @af
     await expect(page.locator(".afisha__catalog")).toHaveText("Каталог и цены");
     const destinationUrl = new URL(href, page.url());
     expect(destinationUrl.hash).toBe(`#product-${destinationUrl.searchParams.get("product")}`);
-    await expect(page.locator(".afisha__order")).toHaveAttribute("href", "#delivery-order");
-    await expect(page.locator(".afisha__order")).toHaveText("Заказать");
+    await expect(page.locator(".afisha__order summary")).toHaveText(`Заказать ${orderNames[i]}`);
     destinations.push({ href, price: await page.locator(".afisha__price").textContent(), name: expected[i] });
     await frame.press("ArrowRight");
   }

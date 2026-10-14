@@ -190,6 +190,8 @@ export function renderMobileHero() {
     const { product } = resolveProduct(photo.product);
     if (!product.id) throw new Error(`Hero product needs a stable anchor: ${product.name}`);
     const href = productCatalogHref(photo.product, "", "afisha");
+    const links = orderLinks(product);
+    if (!photo.orderName) throw new Error(`Hero product needs an order label: ${product.name}`);
     const variants = media.filter(item => item.source === photo.image && item.width > 32);
     const { width, height } = variants.at(-1);
     let img = image({ ...photo, alt: text(photo.alt) }, "", "(max-width: 61.1875rem) calc(100vw - 60px), 1px", i > 0, true);
@@ -198,10 +200,11 @@ export function renderMobileHero() {
       const srcset = img.match(/srcset="([^"]+)"/)[1];
       img = `<picture><source media="(max-width: 61.1875rem)" srcset="${srcset}">${img.replace(/ srcset="[^"]+"/, "").replace(/src="[^"]+"/, `src="assets/${photo.image.replace(/\.jpg$/, "-32.webp")}"`)}</picture>`;
     }
-    return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-caption="${text(product.name)}" data-category="${photo.product.category}" data-product-id="${product.id}" data-source="https://t.me/kapitanseledkin/${photo.id}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
+    return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-caption="${text(product.name)}" data-category="${photo.product.category}" data-product-id="${product.id}" data-source="https://t.me/kapitanseledkin/${photo.id}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}" data-order-label="${text(`Заказать ${photo.orderName}`)}" data-telegram="${escape(links.telegram)}" data-whatsapp="${escape(links.whatsapp)}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
   }).join("\n");
   const first = resolveProduct(photos[0].product).product;
   const firstHref = productCatalogHref(photos[0].product, "", "afisha");
+  const firstOrder = orderLinks(first);
   return `          <div class="afisha" data-product-name="${text(first.name)}" data-product-category="${photos[0].product.category}" data-product-id="${first.id}" data-photo-index="1">
             <div class="afisha__brand brand-jelly brand-jelly--sea"><img src="assets/logo-redrawn-sea.svg" alt="Рыбная лавка капитана Селедкина" width="3600" height="1784"></div>
             <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каж&shy;дый день,</em> море&shy;про&shy;дукты и&nbsp;рыбные дели&shy;ка&shy;тесы в&nbsp;Москве</p>
@@ -209,12 +212,17 @@ export function renderMobileHero() {
               <a class="afisha__frame" href="${escape(firstHref)}" aria-label="Открыть ${text(photos[0].caption)} в каталоге">
 ${prints}
               </a>
-              <figcaption><div class="afisha__caption"><span class="afisha__name">${text(photos[0].caption)}</span><span class="afisha__price">${escape(catalogPrice(first.price))}</span></div><button class="afisha__change" type="button" hidden><span>Ещё из лавки</span><span class="afisha__count" aria-hidden="true">1/${photos.length}</span>${arrow}</button></figcaption>
+              <figcaption>
+                <div class="afisha__caption"><span class="afisha__name">${text(first.name)}</span><span class="afisha__price">${escape(catalogPrice(first.price))}</span></div><button class="afisha__change" type="button" hidden><span>Ещё из лавки</span><span class="afisha__count" aria-hidden="true">1/${photos.length}</span>${arrow}</button>
+                <details class="afisha__order">
+                  <summary><span class="afisha__order-label">${text(`Заказать ${photos[0].orderName}`)}</span></summary>
+                  <div class="afisha__order-channels"><a class="afisha__order-telegram" href="${escape(firstOrder.telegram)}">В Телеграме</a><a class="afisha__order-whatsapp" href="${escape(firstOrder.whatsapp)}">В WhatsApp</a></div>
+                </details>
+              </figcaption>
               <span class="afisha__status" role="status" aria-live="polite"></span>
             </figure>
             <nav class="afisha__actions" aria-label="Основные действия">
               <a class="afisha__catalog" href="catalog/"><span>Каталог и цены</span>${arrow}</a>
-              <div class="afisha__secondary"><a class="afisha__order" href="#delivery-order">Заказать</a></div>
             </nav>
           </div>`;
 }

@@ -17,26 +17,104 @@ test("desktop order entry offers the existing phone and equal messengers @catalo
   await expect(choices.getByRole("link").first()).toBeFocused();
 });
 
-test("mobile order entry offers the same channels as desktop @afisha", async ({ page, browser, baseURL }) => {
+test("mobile order keeps the pictured product through selection and messenger handoff @afisha", async ({ page, browser, baseURL }, testInfo) => {
   await page.goto("?audit=order-entry");
-  await page.locator(".afisha__frame").press("ArrowRight");
-  await expect(page.locator(".afisha__frame")).toHaveAttribute("href", /product=trout-roe/);
   await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", "catalog/");
   const order = page.locator(".afisha__order");
-  await expect(order).toHaveAttribute("href", "#delivery-order");
-  await order.press("Enter");
-  const choices = page.getByRole("group", { name: "Способы заказа" });
-  await expect(choices).toBeFocused();
-  await expect(choices.getByRole("link")).toHaveCount(3);
-  for (const [name, href] of [["Заказать в Телеграме", "https://t.me/+79166751452"], ["Заказать в WhatsApp", "https://wa.me/79166751452"]]) {
-    await expect(choices.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
-    await expect(choices.getByRole("link", { name, exact: true })).toBeInViewport();
+  await expect(order.getByRole("link").first()).toBeHidden();
+  await order.locator("summary").press("Enter");
+  await expect(order).toHaveAttribute("open", "");
+  await page.keyboard.press(testInfo.project.name === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab");
+  await expect(order.getByRole("link").first()).toBeFocused();
+  const products = ["Каспийский залом", "Икра форели", "Стейк лосося", "Форель холодного копчения", "Скумбрия горячего копчения"];
+  for (const name of products) {
+    await expect(page.locator(".afisha__name")).toHaveText(name);
+    const price = await page.locator(".afisha__price").textContent();
+    for (const [selector, host] of [[".afisha__order-telegram", "t.me"], [".afisha__order-whatsapp", "wa.me"]]) {
+      const link = order.locator(selector);
+      await expect(link).toBeVisible();
+      const url = new URL(await link.getAttribute("href"));
+      expect(url.hostname).toBe(host);
+      expect(url.searchParams.get("text")).toContain(name);
+      expect(url.searchParams.get("text")).toContain(price);
+      expect(url.searchParams.get("text")).not.toMatch(/(?:Вес|Количество):/);
+    }
+    expect(new URL(page.url()).hash).toBe("");
+    await page.locator(".afisha__frame").press("ArrowRight");
   }
+  // A real navigation carries the draft. The stub never contacts the shop.
+  await page.locator(".afisha__frame").press("ArrowRight");
+  await page.locator(".afisha__frame").press("ArrowRight");
+  await page.route("https://wa.me/**", route => route.fulfill({ contentType: "text/html", body: "Messenger destination" }));
+  await order.locator(".afisha__order-whatsapp").click();
+  await expect(page).toHaveURL(/^https:\/\/wa\.me\/79166751452\?text=/);
+  expect(new URL(page.url()).searchParams.get("text")).toContain("Стейк лосося");
+
   const fallback = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const plain = await fallback.newPage();
-  await plain.goto(new URL("?audit=order-entry#delivery-order", baseURL).href);
-  await expect(plain.getByRole("group", { name: "Способы заказа" })).toBeInViewport();
+  await plain.goto(new URL("?audit=order-entry", baseURL).href);
+  await plain.locator(".afisha__order summary").click();
+  for (const link of await plain.locator(".afisha__order a").all()) {
+    await expect(link).toBeVisible();
+    expect(new URL(await link.getAttribute("href")).searchParams.get("text")).toContain("Каспийский залом");
+  }
   await fallback.close();
+});
+
+test("afisha Telegram copying recovers and never keeps the previous photograph's draft @afisha", async ({ page }) => {
+  const copied = [];
+  await page.exposeFunction("rememberOrderDraft", draft => copied.push(draft));
+  await page.addInitScript(() => {
+    window.refuseOrderCopy = true;
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async draft => {
+      if (window.refuseOrderCopy) throw new Error("Clipboard denied");
+      await window.rememberOrderDraft(draft);
+    } } });
+  });
+  await page.goto("?audit=order-entry");
+  await page.locator(".afisha__order summary").press("Enter");
+  await page.locator(".afisha__order-telegram").click();
+  await expect(page.getByRole("textbox", { name: "Текст для сообщения" })).toHaveValue(/Каспийский залом/);
+  await expect(page.locator(".afisha__order-status")).toContainText("Автоматическое копирование недоступно");
+  await page.locator(".afisha__change").click();
+  await expect(page.getByRole("textbox", { name: "Текст для сообщения" })).toBeHidden();
+  await expect(page.locator(".afisha__order-status")).toBeEmpty();
+  await page.evaluate(() => { window.refuseOrderCopy = false; });
+  await page.route("https://t.me/**", route => route.fulfill({ contentType: "text/html", body: "Messenger destination" }));
+  await page.locator(".afisha__order-telegram").click();
+  await expect(page).toHaveURL(/^https:\/\/t\.me\/\+79166751452\?text=/);
+  expect(copied).toHaveLength(1);
+  expect(copied[0]).toContain("Икра форели");
+  expect(copied[0]).not.toContain("Каспийский залом");
+});
+
+test("afisha order stays with its photo and remains readable at 320px with enlarged text @afisha", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  for (const theme of ["light", "dark"]) {
+    await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
+    await page.goto("?audit=order-entry");
+    await page.addStyleTag({ content: "html { font-size: 200% !important; } * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; }" });
+    await page.locator(".afisha__frame").press("ArrowLeft");
+    await page.locator(".afisha__order summary").press("Enter");
+    for (const item of await page.locator(".afisha__order summary, .afisha__order a").all()) {
+      const box = await item.boundingBox();
+      expect(box.width).toBeGreaterThanOrEqual(44);
+      expect(box.height).toBeGreaterThanOrEqual(44);
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(321);
+      expect(await item.evaluate(e => e.scrollWidth - e.clientWidth)).toBeLessThanOrEqual(1);
+    }
+    // Scope the stress check to the changed shopping entry. The delivery price
+    // has a separate pre-existing overflow with 200% text AND enlarged spacing.
+    const outside = await page.locator(".afisha").evaluate(afisha => [...afisha.querySelectorAll('*')].filter(e => e.getBoundingClientRect().right > innerWidth + 1).map(e => ({ class: e.className, text: e.textContent.slice(0, 70) })));
+    expect(outside).toEqual([]);
+    // Compare one layout frame: Safari may scroll the focused disclosure.
+    const { orderBottom, catalogTop } = await page.evaluate(() => ({
+      orderBottom: document.querySelector(".afisha__order").getBoundingClientRect().bottom,
+      catalogTop: document.querySelector(".afisha__catalog").getBoundingClientRect().top,
+    }));
+    expect(catalogTop).toBeGreaterThanOrEqual(orderBottom);
+  }
 });
 
 test("catalog advice stays readable in both watches with 320px reflow and enlarged spacing @catalog", async ({ page }, testInfo) => {

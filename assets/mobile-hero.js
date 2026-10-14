@@ -1,4 +1,6 @@
-// Each photograph leads to its actual catalog position; browsing stays optional.
+import { copyOrderMessage } from "./order-message.js";
+
+// Details and ordering both keep the photographed product; the full catalog is separate.
 export function setupMobileHero() {
   const gallery = document.querySelector(".afisha__gallery");
   if (!gallery) return;
@@ -9,6 +11,14 @@ export function setupMobileHero() {
   const price = gallery.querySelector(".afisha__price");
   const count = gallery.querySelector(".afisha__count");
   const status = gallery.querySelector(".afisha__status");
+  const order = gallery.querySelector(".afisha__order");
+  const orderLabel = order.querySelector(".afisha__order-label");
+  const telegram = order.querySelector(".afisha__order-telegram");
+  const whatsapp = order.querySelector(".afisha__order-whatsapp");
+  const copyBeforeTelegram = matchMedia("(hover: hover) and (pointer: fine)");
+  let copyUI;
+  let copying = false;
+  let selectionVersion = 0;
   const mobile = matchMedia("(max-width: 61.1875rem)");
   let index = 0;
   let pointerStart = null;
@@ -40,8 +50,61 @@ export function setupMobileHero() {
     frame.href = current.dataset.href;
     count.textContent = `${index + 1}/${photos.length}`;
     frame.setAttribute("aria-label", `Открыть ${current.dataset.caption} в каталоге, ${current.dataset.price}`);
+    orderLabel.textContent = current.dataset.orderLabel;
+    telegram.href = current.dataset.telegram;
+    whatsapp.href = current.dataset.whatsapp;
+    telegram.textContent = copyBeforeTelegram.matches ? "Скопировать и\u00a0открыть Телеграм" : "В\u00a0Телеграме";
+    selectionVersion++;
+    copying = false;
+    if (copyUI) {
+      copyUI.manualCopy.hidden = true;
+      copyUI.field.value = "";
+      copyUI.status.textContent = "";
+    }
     change.hidden = false;
   }
+
+  telegram.addEventListener("click", async event => {
+    if (!copyBeforeTelegram.matches || (copyUI && !copyUI.manualCopy.hidden)) return;
+    event.preventDefault();
+    if (copying) return;
+    if (!copyUI) {
+      const manualCopy = document.createElement("label");
+      manualCopy.className = "afisha__order-draft";
+      manualCopy.hidden = true;
+      const caption = document.createElement("span");
+      caption.textContent = "Текст для сообщения";
+      const field = document.createElement("textarea");
+      field.readOnly = true;
+      field.rows = 6;
+      manualCopy.append(caption, field);
+      const status = document.createElement("p");
+      status.className = "afisha__order-status";
+      status.setAttribute("role", "status");
+      order.append(manualCopy, status);
+      copyUI = { manualCopy, field, status };
+    }
+    const version = selectionVersion;
+    const destination = telegram.href;
+    copying = true;
+    const copied = await copyOrderMessage(new URL(destination).searchParams.get("text"), copyUI);
+    if (version !== selectionVersion) {
+      copyUI.manualCopy.hidden = true;
+      copyUI.status.textContent = "";
+      return;
+    }
+    copying = false;
+    if (!copied) {
+      telegram.textContent = "Открыть чат в\u00a0Телеграме";
+      return;
+    }
+    const afisha = gallery.closest(".afisha");
+    document.dispatchEvent(new CustomEvent("shop:goal", { detail: { goal: "order_click", params: {
+      channel: "telegram", context: "afisha", source: "afisha",
+      product: afisha.dataset.productName, product_id: afisha.dataset.productId,
+    } } }));
+    window.location.assign(destination);
+  });
 
   function move(step, method) {
     index = (index + step + photos.length) % photos.length;
