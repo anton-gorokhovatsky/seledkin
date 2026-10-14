@@ -56,9 +56,17 @@ test("the empty order and footer remain grouped at intermediate width and enlarg
       expect((await button.boundingBox()).height).toBeGreaterThanOrEqual(44);
       if (!enlarged) expect(await button.locator(".source-button__label").evaluate(label => label.getBoundingClientRect().height <= parseFloat(getComputedStyle(label).lineHeight) + 1)).toBe(true);
     }
-    const links = await page.locator(".source-footer__base > a").evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().toJSON()));
-    if (!enlarged) expect(Math.abs(links[0].top - links[1].top)).toBeLessThan(1);
-    expect(links[0].right).toBeLessThanOrEqual(links[1].left);
+    const signature = page.locator("ag-signature");
+    await expect(signature).toHaveAttribute("data-signature-version", /^1\./);
+    const authorLink = signature.getByRole("link", { name: "Антон Гороховатский Дизайн и разработка" });
+    const backLink = page.locator(".source-footer__base > a");
+    await expect(authorLink).toHaveCount(1);
+    await expect(backLink).toHaveCount(1);
+    const author = await authorLink.boundingBox();
+    const back = await backLink.boundingBox();
+    for (const box of [author, back]) expect(box.height).toBeGreaterThanOrEqual(44);
+    expect(author.x + author.width <= back.x || back.x + back.width <= author.x
+      || author.y + author.height <= back.y || back.y + back.height <= author.y).toBe(true);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
     if (!enlarged) await order.screenshot({ path: testInfo.outputPath("empty-order-638.png") });
   }
