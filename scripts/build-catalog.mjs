@@ -13,8 +13,21 @@ const escape = (value) => String(value).replaceAll("&", "&amp;").replaceAll('"',
 const text = (value) => escape(typographText(value));
 const journal = JSON.parse(readFileSync(new URL("../content/journal.json", import.meta.url), "utf8"));
 const guidance = JSON.parse(readFileSync(new URL("../content/catalog-guidance.json", import.meta.url), "utf8"));
+const details = JSON.parse(readFileSync(new URL("../content/catalog-details.json", import.meta.url), "utf8"));
 const normalize = value => value.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/gu, " ").trim();
 const productIds = new Set(catalog.flatMap(category => category.items.map(product => product.id)));
+const detailsByProduct = new Map();
+for (const item of details.products) {
+  if (!productIds.has(item.product) || detailsByProduct.has(item.product)) throw new Error(`Invalid details product: ${item.product}`);
+  if (!Number.isInteger(item.source?.row) || !item.source.name || !item.source.description) throw new Error(`Missing details source: ${item.product}`);
+  if (item.kcalPer100g !== undefined) {
+    const sourceEnergy = item.source.description.match(/калорийность\s*:?\s*(\d+(?:[.,]\d+)?)\s*ккал/iu);
+    if (!sourceEnergy || Number(sourceEnergy[1].replace(",", ".")) !== item.kcalPer100g || item.kcalPer100g <= 0) {
+      throw new Error(`Calories must retain the source value and unit: ${item.product}`);
+    }
+  }
+  detailsByProduct.set(item.product, item);
+}
 const guidedProducts = new Set();
 for (const item of guidance) {
   if (!productIds.has(item.product) || guidedProducts.has(item.product)) throw new Error(`Invalid guidance product: ${item.product}`);
@@ -43,7 +56,9 @@ const products = catalog.map((category) => `
             </div>
             <div class="catalog-product-grid">${category.items.map((product) => {
   const links = orderLinks(product);
-  const keywords = productSearchText(category, product);
+  const detail = detailsByProduct.get(product.id);
+  const facts = [detail?.form, detail?.size].filter(Boolean).join(" · ");
+  const keywords = [productSearchText(category, product), facts, detail?.ingredients, detail?.handling].filter(Boolean).join(" ");
   const notes = productNotes(product);
   const tip = guidance.find(item => item.product === product.id);
   const source = tip && journal.find(entry => entry.id === tip.entry);
@@ -66,7 +81,11 @@ const products = catalog.map((category) => `
               <article class="catalog-product" id="product-${escape(product.id)}" tabindex="-1" data-product-id="${escape(product.id)}" data-search-text="${escape(keywords)}" data-product-name="${escape(product.name)}" data-product-category="${category.slug}"${product.previousCategory ? ` data-previous-category="${product.previousCategory}"` : ""}>
                 <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description ? `
                 <p>${text(productDescription(product))}</p>` : ""}${notes ? `
-                <p>${escape(notes)}</p>` : ""}
+                <p>${escape(notes)}</p>` : ""}${facts ? `
+                <p class="catalog-product-facts">${text(facts)}</p>` : ""}${detail?.kcalPer100g !== undefined ? `
+                <p class="catalog-product-calories">${text(`${new Intl.NumberFormat("ru-RU").format(detail.kcalPer100g)}\u00a0ккал на 100 г`)}</p>` : ""}${detail?.ingredients ? `
+                <p class="catalog-product-ingredients">${text(`Состав: ${detail.ingredients}`)}</p>` : ""}${detail?.handling ? `
+                <p class="catalog-product-handling">${text(detail.handling)}</p>` : ""}
                 <div class="catalog-product-actions" hidden>
                   <button type="button" class="catalog-product-add" data-order-add value="${escape(productKey(category, product))}"><span>В список заказа</span></button>
                   <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
