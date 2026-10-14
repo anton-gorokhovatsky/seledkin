@@ -183,7 +183,7 @@ test("menu end spacing selects navigation without hiding overflow or other layou
 
 test("delivery price styles select their reflow scenario without admitting other components", () => {
   const before = '.delivery-waybill__price{font-size:8rem}.delivery-waybill__price span{font-size:.48em}';
-  const after = before.replace('8rem', 'min(8rem,35cqi)');
+  const after = before.replace('8rem', 'min(8rem,32cqi)');
   const changes = [{ path: "assets/styles.css", before, after }];
   assert.equal(classifyRelease(changes), "scoped");
   assert.deepEqual(scopedBrowserTags(changes), ["@delivery"]);

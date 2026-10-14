@@ -2071,7 +2071,7 @@ a.source-brand {
   margin: 0;
   color: var(--blue);
   /* Keep the amount and currency together, including enlarged text spacing. */
-  font: 400 min(clamp(4rem, 3rem + 10cqi, 10rem), 35cqi) / 0.9 var(--serif);
+  font: 400 min(clamp(4rem, 3rem + 10cqi, 10rem), 32cqi) / 0.9 var(--serif);
   white-space: nowrap;
 }
 
