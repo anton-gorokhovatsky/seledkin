@@ -134,6 +134,9 @@ test("same-name fish retain their origin in the list, accessible controls and dr
   // Establish focus first, then keep the actual pointer activation and result.
   await sakhalin.focus();
   await expect(sakhalin).toBeFocused();
+  // Let WebKit finish native focus scrolling and the scheduled focus clearance
+  // before pointer down/up; the subsequent click must still add the second fish.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await sakhalin.click();
   const list = page.locator("#order-list");
   await expect(list.locator("li")).toHaveCount(2);
