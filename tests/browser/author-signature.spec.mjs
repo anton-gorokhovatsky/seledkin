@@ -26,6 +26,12 @@ test("the shared signature stays readable in the footer across watches and text 
         });
       }
       await signature.scrollIntoViewIfNeeded();
+      if (width === 1440) {
+        const credit = await signature.boundingBox();
+        const backToTop = await page.locator(".source-footer__legal > a").boundingBox();
+        expect(credit.height).toBeLessThan(100);
+        expect(backToTop.x).toBeGreaterThanOrEqual(credit.x + credit.width);
+      }
       if (width === 390) {
         const group = await signature.boundingBox();
         expect(group.height).toBeLessThan(100);
