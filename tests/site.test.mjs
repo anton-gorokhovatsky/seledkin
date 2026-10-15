@@ -858,13 +858,9 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     /padding-block:\s*0 clamp\(2\.5rem, 4vw, 3\.5rem\)/,
   );
   assert.doesNotMatch(footerPostscriptRule, /border-(?:top|bottom)\s*:/);
-  assert.match(footerBaseRule, /display:\s*grid/);
   assert.match(footerBaseRule, /border-top:\s*1px solid var\(--footer-line\)/);
   assert.doesNotMatch(footerBaseRule, /border-bottom\s*:/);
-  assert.match(
-    footerBaseRule,
-    /grid-template-columns:\s*minmax\(0,\s*1fr\)\s+auto\s+minmax\(0,\s*1fr\)/,
-  );
+  // Responsive grouping is verified in the footer browser scenarios, independently of grid/flex.
   assert.match(
     styles,
     /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__channels\s*\{[\s\S]*?grid-template-columns:\s*1fr;/,
