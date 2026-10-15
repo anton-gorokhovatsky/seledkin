@@ -162,6 +162,20 @@ test("footer layout selects its scenarios while preserving content, destinations
   }
 });
 
+test("removing the optional footer return link keeps a bounded footer gate", () => {
+  const link = '<a href="#">В\u00a0начало</a>';
+  const before = '<main>Same page</main>' + region('footer', `<footer><p>Copyright</p><a href="https://example.com/">Author</a>${link}<script src="footer.js"></script></footer>`);
+  const after = before.replace(link, '');
+  const html = changed => ({ path: 'about/index.html', before, after: changed });
+  assert.deepEqual(selectReleaseChecks([html(after)]), { scope: 'scoped', grep: '@footer|@signature' });
+  for (const changed of [after.replace('Same page', 'Changed page'), after.replace('Copyright', 'New copy'),
+    after.replace('example.com', 'changed.com'), after.replace('footer.js', 'new.js'),
+    after.replace('<p>', '<p onclick="run()">')]) {
+    assert.equal(classifyRelease([html(changed)]), 'full');
+  }
+  assert.equal(classifyRelease([{ path: 'about/index.html', before: after, after: before }]), 'full');
+});
+
 test("component changes select customer scenarios, including responsive CSS", () => {
   const changes = [
     { path: "assets/styles.css", before: ':root{--ink:black}.catalog-order{gap:1rem}',

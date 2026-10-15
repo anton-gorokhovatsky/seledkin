@@ -15,6 +15,7 @@ test("the shared signature stays readable in the footer across watches and text 
     const signature = page.locator("ag-signature");
     await expect(signature).toHaveAttribute("data-signature-version", /^1\./);
     await expect(signature.getByRole("link", { name: "Антон Гороховатский Дизайн и разработка" })).toHaveCount(1);
+    await expect(page.locator(".source-footer__utilities > a")).toHaveCount(0);
     for (const width of [1440, 638, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
       if (width === 320) {
@@ -28,9 +29,7 @@ test("the shared signature stays readable in the footer across watches and text 
       await signature.scrollIntoViewIfNeeded();
       if (width === 1440) {
         const credit = await signature.boundingBox();
-        const backToTop = await page.locator(".source-footer__utilities > a").boundingBox();
         expect(credit.height).toBeLessThan(100);
-        expect(backToTop.x).toBeGreaterThanOrEqual(credit.x + credit.width);
       }
       if (width === 390) {
         const group = await signature.boundingBox();
@@ -40,17 +39,13 @@ test("the shared signature stays readable in the footer across watches and text 
         const text = await signature.locator(".text").boundingBox();
         expect(text.width).toBeGreaterThan(250);
       }
-      for (const node of await page.locator(".source-footer__legal > small, .source-footer__utilities > a, ag-signature .credit, ag-signature .name, ag-signature .role").all()) {
+      for (const node of await page.locator(".source-footer__legal > small, ag-signature .credit, ag-signature .name, ag-signature .role").all()) {
         const bounds = await node.boundingBox();
         expect(bounds.x).toBeGreaterThanOrEqual(-1);
         expect(bounds.x + bounds.width).toBeLessThanOrEqual(width + 1);
       }
       await expect(signature.getByRole("button", { name: "Остановить движение", exact: true })).toBeHidden();
       await page.screenshot({ path: testInfo.outputPath(`signature-${width}-${theme}.png`) });
-      if (width === 1440 || width === 390) {
-        await page.locator(".source-footer__utilities > a").click();
-        await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
-      }
     }
   }
 });

@@ -150,7 +150,12 @@ function onlyFooterLayout(before, after) {
     targets: [...html.matchAll(/\b(?:href|src|srcset|sizes|aria-label|alt)="[^"]*"/g)].map(match => match[0]).sort(),
     words: html.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).sort(),
   });
-  return stable(oldRegions[0]) === stable(newRegions[0]);
+  if (stable(oldRegions[0]) === stable(newRegions[0])) return true;
+  // Removing the optional footer return link affects only this component.
+  // All remaining text, destinations, code and page content stay protected.
+  const backLink = /\s*<a href="#(?:top)?">В[ \u00a0]начало<\/a>/g;
+  return [...oldRegions[0].matchAll(backLink)].length === 1
+    && stable(oldRegions[0].replace(backLink, "")) === stable(newRegions[0]);
 }
 
 function cssRules(source, context = "", rules = new Map()) {

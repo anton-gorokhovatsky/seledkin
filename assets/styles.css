@@ -2441,7 +2441,6 @@ a.source-brand {
   font-size: var(--text-meta);
 }
 
-.source-footer__base > .source-footer__utilities > a,
 .source-footer__credit > a {
   min-height: 2.75rem;
   align-items: flex-start;
@@ -2466,11 +2465,6 @@ a.source-brand {
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 1rem 2rem;
-}
-
-.source-footer__base > .source-footer__utilities > a {
-  margin-inline-start: auto;
-  color: var(--footer-text);
 }
 
 .source-footer__credit {
