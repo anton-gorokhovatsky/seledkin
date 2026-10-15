@@ -47,6 +47,10 @@ test("the shared signature stays readable in the footer across watches and text 
       }
       await expect(signature.getByRole("button", { name: "Остановить движение", exact: true })).toBeHidden();
       await page.screenshot({ path: testInfo.outputPath(`signature-${width}-${theme}.png`) });
+      if (width === 1440 || width === 390) {
+        await page.locator(".source-footer__legal > a").click();
+        await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+      }
     }
   }
 });
