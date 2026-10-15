@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
 
-const moduleURL = "https://gorokhovatsky.tech/signature/v1/signature.js";
+const moduleURL = "https://gorokhovatsky.tech/signature/v1/signature.js?v=1.0.4";
 
-test("the shared signature stays readable in the footer across watches and text sizes", async ({ page }, testInfo) => {
+test("the shared signature stays readable in the footer across watches and text sizes @signature", async ({ page }, testInfo) => {
   await page.addInitScript(() => localStorage.setItem("seledkin-theme", "light"));
   for (const theme of ["light", "dark"]) {
     await page.goto("about/");
@@ -15,7 +15,7 @@ test("the shared signature stays readable in the footer across watches and text 
     const signature = page.locator("ag-signature");
     await expect(signature).toHaveAttribute("data-signature-version", /^1\./);
     await expect(signature.getByRole("link", { name: "Антон Гороховатский Дизайн и разработка" })).toHaveCount(1);
-    for (const width of [1440, 390, 320]) {
+    for (const width of [1440, 638, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
       if (width === 320) {
         await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
@@ -26,6 +26,14 @@ test("the shared signature stays readable in the footer across watches and text 
         });
       }
       await signature.scrollIntoViewIfNeeded();
+      if (width === 390) {
+        const group = await signature.boundingBox();
+        expect(group.height).toBeLessThan(65);
+      }
+      if (width === 320) {
+        const text = await signature.locator(".text").boundingBox();
+        expect(text.width).toBeGreaterThan(250);
+      }
       for (const node of await page.locator(".source-footer__base > small, .source-footer__base > a, ag-signature .credit, ag-signature .name, ag-signature .role").all()) {
         const bounds = await node.boundingBox();
         expect(bounds.x).toBeGreaterThanOrEqual(-1);
@@ -37,7 +45,7 @@ test("the shared signature stays readable in the footer across watches and text 
   }
 });
 
-test("the site motion command also pauses the author mark and preserves that choice", async ({ page }) => {
+test("the site motion command also pauses the author mark and preserves that choice @signature", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("about/");
   const signature = page.locator("ag-signature");
@@ -61,7 +69,7 @@ test("the site motion command also pauses the author mark and preserves that cho
   await expect(mark).toHaveAttribute("data-arc-running", "false");
 });
 
-test("a failed shared module leaves the ordinary author link available", async ({ page }) => {
+test("a failed shared module leaves the ordinary author link available @signature", async ({ page }) => {
   await page.route(moduleURL, route => route.abort());
   await page.goto("journal/698/");
   const fallback = page.locator("ag-signature > a");

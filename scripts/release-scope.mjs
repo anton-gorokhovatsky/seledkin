@@ -127,6 +127,7 @@ function onlyProductTargets(before, after) {
 // manual version does not change the module or page's customer behaviour.
 const resourceVersions = value => value?.replace(/(["'`])([\w./-]+\.(?:css|js)|[\w./-]*store-map\.html)\?v=[\w.-]+(?=\1)/g, "$1$2");
 const componentScripts = {
+  "assets/author-signature.js": ["@signature"],
   "assets/catalog-data.js": ["@catalog", "@afisha", "@recipes"],
   "assets/mobile-hero.js": ["@afisha"],
   "assets/analytics.js": ["@analytics"],
@@ -186,6 +187,7 @@ function cssTags(before, after, recipeSheet = false) {
       for (const selector of (newRules.get(key) ?? oldRules.get(key)).selector.split(",")) {
         const tag = onlyMenuEndPadding(oldRules.get(key), newRules.get(key), selector) ? "@navigation"
           : /^\s*\.delivery-waybill__price(?:\s+span)?\s*$/.test(selector) ? "@delivery"
+          : /^\s*\.source-footer__(?:base|credit)(?=[\s>.#[:]|$)/.test(selector) ? "@signature"
           : recipeSheet && /^\s*(?:\.(?:recipes?-)[\w-]+|\[data-recipe-)[^,]*$/.test(selector) ? "@recipes"
           : /^\s*\.contacts-source(?=[\s_.#[:]|$)/.test(selector) ? "@contacts"
           : /^\s*\.catalog-(?:[\w-]+)(?=[\s.#[:]|$)/.test(selector) ? "@catalog"

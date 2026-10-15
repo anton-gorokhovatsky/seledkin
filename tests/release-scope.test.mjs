@@ -136,6 +136,20 @@ test("missing or unavailable comparison bases cannot skip the full gate", () => 
   }
 });
 
+test("the footer credit has a bounded gate without covering other footer or shared styles", () => {
+  const css = selector => ({ path: "assets/styles.css", before: `${selector}{gap:1rem}`,
+    after: `${selector}{gap:2rem}` });
+  const changes = [css(".source-footer__base > small"),
+    { path: "assets/author-signature.js", before: "old();", after: "new();" }];
+  changes[0].after += "@media(max-width:40rem){.source-footer__credit::part(credit){flex-direction:row}}";
+  assert.equal(classifyRelease(changes), "scoped");
+  assert.deepEqual(scopedBrowserTags(changes), ["@signature"]);
+  for (const selector of [".source-footer", ".source-footer__channels", ":root",
+    ".source-footer__base, .site-menu"]) {
+    assert.equal(classifyRelease([css(selector)]), "full", selector);
+  }
+});
+
 test("component changes select customer scenarios, including responsive CSS", () => {
   const changes = [
     { path: "assets/styles.css", before: ':root{--ink:black}.catalog-order{gap:1rem}',

@@ -38,7 +38,7 @@ test("delivery stays inside 320px with enlarged text and a wider fallback serif 
   await page.locator("#delivery").screenshot({ path: testInfo.outputPath("delivery-320-enlarged-fallback.png") });
 });
 
-test("the empty order and footer remain grouped at intermediate width and enlarged text @catalog", async ({ page }, testInfo) => {
+test("the empty order and footer remain grouped at intermediate width and enlarged text @catalog @signature", async ({ page }, testInfo) => {
   for (const [width, enlarged] of [[638, false], [320, true]]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("catalog/?q=Черная+икра&category=caviar&audit=layout#order-list");
