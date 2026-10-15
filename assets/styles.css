@@ -2433,7 +2433,7 @@ a.source-brand {
   z-index: 1;
   display: grid;
   grid-template-columns: var(--photo-copy-columns);
-  align-items: flex-start;
+  align-items: center;
   gap: 1.5rem var(--photo-copy-gap);
   padding-block: 1.5rem;
   border-top: 1px solid var(--footer-line);
