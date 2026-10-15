@@ -11,11 +11,12 @@ test("footer subscription stays with the contacts and the complete portrait @foo
     }
     await page.locator("ag-signature[data-signature-version]").waitFor();
     const portrait = page.locator(".source-footer__portrait img");
-    await portrait.scrollIntoViewIfNeeded();
-    await portrait.evaluate(img => img.decode());
     for (const width of [1512, 980, 760, 638, 390, 320]) {
       await page.setViewportSize({width, height:900});
       if (width === 320) await page.addStyleTag({content:"html { font-size:200% !important; }"});
+      // A viewport change may select another srcset image, especially over the network.
+      await portrait.scrollIntoViewIfNeeded();
+      await portrait.evaluate(img => img.decode());
       const details = await page.locator(".source-footer__details").boundingBox();
       const subscription = await page.locator(".source-footer__postscript").boundingBox();
       const photo = await portrait.boundingBox();
