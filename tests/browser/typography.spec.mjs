@@ -122,7 +122,7 @@ test("entry captions and actions meet the title's final text line @recipes @jour
   }
 });
 
-test("section headings, counts and actions share the final text line", async ({ page }) => {
+test("section headings retain their text line and footer channels follow their paragraph @footer", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("?audit=alignment");
   await page.evaluate(() => document.fonts.ready);
@@ -132,13 +132,20 @@ test("section headings, counts and actions share the final text line", async ({ 
     [".watch-catch__header h2", ".watch-catch__header a"],
     [".journal-preview__header h2", ".journal-preview__header a"],
     [".contacts-source__card h2", ".contacts-source__details .store-status"],
-    [".source-footer__postscript > p", ".source-footer__channels a:last-child span"],
   ]) {
     const titleLine = await textBaseline(page.locator(heading));
     const companionLine = await textBaseline(page.locator(companion));
     offsets.push({ heading, offset: Math.abs(titleLine - companionLine) });
   }
   expect(offsets.filter(({ offset }) => offset >= 1), JSON.stringify(offsets)).toEqual([]);
+  // The accepted footer places subscription links below the paragraph.
+  // Preserve their left axis and the interval within this semantic group.
+  const subscription = await page.locator(".source-footer__postscript > p").boundingBox();
+  const channels = await page.locator(".source-footer__channels").boundingBox();
+  expect(Math.abs(channels.x - subscription.x)).toBeLessThan(1);
+  const subscriptionGap = channels.y - subscription.y - subscription.height;
+  expect(subscriptionGap).toBeGreaterThanOrEqual(16);
+  expect(subscriptionGap).toBeLessThanOrEqual(32);
   for (const width of [390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     for (const [route, container, children] of [

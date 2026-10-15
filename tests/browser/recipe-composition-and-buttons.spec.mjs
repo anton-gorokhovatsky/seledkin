@@ -108,7 +108,7 @@ test("a single recipe uses the full desktop spread and a complete narrow reading
   }
 });
 
-test("repeated photograph and text blocks share their axes on the homepage and across page footers", async ({ page }) => {
+test("repeated photograph and text blocks share their axes on the homepage and across page footers @footer", async ({ page }) => {
   const homeAxes = new Map();
   await page.goto("?audit=shared-photo-axes");
   await page.evaluate(() => document.fonts.ready);
@@ -120,13 +120,17 @@ test("repeated photograph and text blocks share their axes on the homepage and a
       [".source-footer__portrait img", ".source-footer__details"],
     ].map(([photoSelector, copySelector]) => {
       const photo = document.querySelector(photoSelector), copy = document.querySelector(copySelector);
-      return { photo: photo.getBoundingClientRect().toJSON(), copy: copy.getBoundingClientRect().toJSON(),
+      return { footer: photoSelector.startsWith(".source-footer"),
+        photo: photo.getBoundingClientRect().toJSON(), copy: copy.getBoundingClientRect().toJSON(),
         ratio: Number(photo.getAttribute("width")) / Number(photo.getAttribute("height")) };
     }));
     homeAxes.set(width, blocks[0]);
     for (const block of blocks) {
       expect(block.photo.left).toBeCloseTo(blocks[0].photo.left, 0);
-      expect(block.photo.width).toBeCloseTo(blocks[0].photo.width, 0);
+      // The accepted one-column footer caps the complete mascot portrait at
+      // 400px, while editorial photographs continue to use the full column.
+      const photoWidth = block.footer && width <= 736 ? Math.min(400, blocks[0].photo.width) : blocks[0].photo.width;
+      expect(block.photo.width).toBeCloseTo(photoWidth, 0);
       expect(block.photo.width / block.photo.height).toBeCloseTo(block.ratio, 2);
       expect(block.copy.left).toBeCloseTo(blocks[0].copy.left, 0);
     }
