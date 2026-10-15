@@ -274,10 +274,10 @@ export function renderHeroJournalProducts(list) {
     const panelId = `hero-journal-order-${entry.id}`;
     return [`            <div class="hero-journal-product" data-hero-journal-product="${entry.id}" data-journal-id="${entry.id}"${index ? " hidden" : ""}>
               <a class="hero-journal-product__price" href="${escape(productHref(product, "", "hero-journal"))}" aria-label="${text(`${product.name} в каталоге: ${catalogPrice(product.price)}`)}">${escape(catalogPrice(product.price))}</a>
-              <button class="source-button source-button--hero-secondary hero-journal-product__toggle" type="button" popovertarget="${panelId}" aria-expanded="false">${text(`Заказать ${orderName}`)}</button>
+              <button class="source-button source-button--hero-secondary hero-journal-product__toggle" type="button" popovertarget="${panelId}" aria-expanded="false"><span class="source-button__label">${text(`Заказать ${orderName}`)}</span></button>
               <div class="hero-journal-product__choices" id="${panelId}" popover="auto" role="group" aria-label="${text(`Заказать ${orderName}`)}">
-                <a class="source-button source-button--primary" href="${escape(links.telegram)}" data-hero-order-telegram><span>В Телеграме</span></a>
-                <a class="source-button source-button--primary" href="${escape(links.whatsapp)}"><span>В WhatsApp</span></a>
+                <a class="source-button source-button--primary" href="${escape(links.telegram)}" data-hero-order-telegram><span class="source-button__label">В Телеграме</span></a>
+                <a class="source-button source-button--primary" href="${escape(links.whatsapp)}"><span class="source-button__label">В WhatsApp</span></a>
                 <label class="hero-journal-product__draft" hidden><span>Текст для сообщения</span><textarea readonly rows="6"></textarea></label>
                 <p class="hero-journal-product__status" role="status"></p>
               </div>
