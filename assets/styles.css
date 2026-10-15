@@ -2455,6 +2455,7 @@ a.source-brand {
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem 2rem;
+  color: var(--footer-text);
 }
 
 .source-footer__legal > small {
@@ -2470,13 +2471,14 @@ a.source-brand {
   flex: 0 0 auto;
   inline-size: min(100%, calc(var(--ag-signature-size) + var(--ag-signature-gap) + 10.75rem));
   font-family: var(--sans);
-  --ag-signature-size: 104px;
+  justify-self: end;
+  --ag-signature-size: 96px;
   --ag-signature-gap: .75rem;
-  --ag-signature-ink: var(--footer-text);
+  --ag-signature-ink: var(--footer-base);
   --ag-signature-muted: var(--footer-base);
-  --ag-signature-accent: var(--footer-text);
+  --ag-signature-accent: var(--footer-base);
   --ag-signature-node-ink: var(--footer-base);
-  --ag-signature-name-size: var(--text-interface);
+  --ag-signature-name-size: var(--text-meta);
   --ag-signature-role-size: var(--text-meta);
 }
 
@@ -2494,7 +2496,7 @@ a.source-brand {
 }
 
 .source-footer__credit::part(name) {
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: normal;
   line-height: 1.5;
 }
@@ -4012,6 +4014,10 @@ a.site-menu__brand {
   .source-footer__base {
     grid-template-columns: minmax(0, 1fr);
     gap: 1.5rem;
+  }
+
+  .source-footer__credit {
+    justify-self: start;
   }
 
   .catalog-intro {
