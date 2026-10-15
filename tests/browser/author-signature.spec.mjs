@@ -28,7 +28,7 @@ test("the shared signature stays readable in the footer across watches and text 
       await signature.scrollIntoViewIfNeeded();
       if (width === 1440) {
         const credit = await signature.boundingBox();
-        const backToTop = await page.locator(".source-footer__legal > a").boundingBox();
+        const backToTop = await page.locator(".source-footer__utilities > a").boundingBox();
         expect(credit.height).toBeLessThan(100);
         expect(backToTop.x).toBeGreaterThanOrEqual(credit.x + credit.width);
       }
@@ -40,7 +40,7 @@ test("the shared signature stays readable in the footer across watches and text 
         const text = await signature.locator(".text").boundingBox();
         expect(text.width).toBeGreaterThan(250);
       }
-      for (const node of await page.locator(".source-footer__legal > small, .source-footer__legal > a, ag-signature .credit, ag-signature .name, ag-signature .role").all()) {
+      for (const node of await page.locator(".source-footer__legal > small, .source-footer__utilities > a, ag-signature .credit, ag-signature .name, ag-signature .role").all()) {
         const bounds = await node.boundingBox();
         expect(bounds.x).toBeGreaterThanOrEqual(-1);
         expect(bounds.x + bounds.width).toBeLessThanOrEqual(width + 1);
@@ -48,7 +48,7 @@ test("the shared signature stays readable in the footer across watches and text 
       await expect(signature.getByRole("button", { name: "Остановить движение", exact: true })).toBeHidden();
       await page.screenshot({ path: testInfo.outputPath(`signature-${width}-${theme}.png`) });
       if (width === 1440 || width === 390) {
-        await page.locator(".source-footer__legal > a").click();
+        await page.locator(".source-footer__utilities > a").click();
         await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
       }
     }

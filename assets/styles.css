@@ -2432,7 +2432,7 @@ a.source-brand {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: var(--photo-copy-columns);
   align-items: start;
   gap: .75rem var(--photo-copy-gap);
   padding-block: 1.5rem;
@@ -2441,7 +2441,7 @@ a.source-brand {
   font-size: var(--text-meta);
 }
 
-.source-footer__legal > a,
+.source-footer__base > .source-footer__utilities > a,
 .source-footer__credit > a {
   min-height: 2.75rem;
   align-items: flex-start;
@@ -2450,40 +2450,40 @@ a.source-brand {
 }
 
 .source-footer__legal {
-  display: contents;
+  min-width: 0;
   color: var(--footer-text);
 }
 
 .source-footer__legal > small {
-  grid-column: 1;
-  grid-row: 1;
-  flex: 1 1 12rem;
-  min-width: 0;
+  display: block;
   font-size: inherit;
   line-height: 1.5;
 }
 
-.source-footer__legal > a {
-  grid-column: 2;
-  grid-row: 1;
+.source-footer__base > .source-footer__utilities {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
   align-items: flex-start;
-  justify-self: end;
+  gap: 1rem 2rem;
+}
+
+.source-footer__base > .source-footer__utilities > a {
+  margin-inline-start: auto;
+  color: var(--footer-text);
 }
 
 .source-footer__credit {
   display: block;
-  grid-column: 1;
-  grid-row: 2;
   min-width: 0;
   flex: 0 0 auto;
   inline-size: min(100%, calc(var(--ag-signature-size) + var(--ag-signature-gap) + 10.75rem));
   font-family: var(--sans);
-  justify-self: start;
   --ag-signature-size: 72px;
   --ag-signature-gap: .75rem;
-  --ag-signature-ink: var(--footer-base);
+  --ag-signature-ink: var(--footer-text);
   --ag-signature-muted: var(--footer-base);
-  --ag-signature-accent: var(--footer-base);
+  --ag-signature-accent: var(--footer-text);
   --ag-signature-node-ink: var(--footer-base);
   --ag-signature-name-size: var(--text-meta);
   --ag-signature-role-size: var(--text-meta);
@@ -2493,7 +2493,7 @@ a.source-brand {
   inline-size: 100%;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--ag-signature-gap);
 }
 
@@ -4021,24 +4021,6 @@ a.site-menu__brand {
   .source-footer__base {
     grid-template-columns: minmax(0, 1fr);
     gap: .75rem;
-  }
-
-  .source-footer__legal {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem 2rem;
-  }
-
-  .source-footer__legal > a {
-    align-items: flex-start;
-  }
-
-  .source-footer__credit {
-    grid-column: auto;
-    grid-row: auto;
-    justify-self: start;
   }
 
   .catalog-intro {

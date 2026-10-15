@@ -836,7 +836,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     assert.doesNotMatch(footerVisit, /tel:|\+7\s*916\s*675/);
     assert.doesNotMatch(footerMarkup, /<dt>|<dd>/);
     assert.ok(footerMarkup.indexOf('class="source-footer__legal"') < footerMarkup.indexOf('class="source-footer__credit"'),
-      "Shop identity and navigation precede the secondary design credit");
+      "Shop identity precedes the secondary design credit");
   }
 
   const catRule =
