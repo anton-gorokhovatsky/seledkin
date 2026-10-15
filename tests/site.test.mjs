@@ -157,7 +157,7 @@ test("the site is plain HTML, CSS and JavaScript", () => {
 test("one drawn harpoon marks every directional transition", () => {
   assert.match(home, /<symbol id="icon-harpoon" viewBox="0 0 32 18">/);
   assert.match(home, /M23 9H8\.5C4\.6 9 2\.5 10\.8 2\.5 13\.2/);
-  assert.equal((home.match(/href="#icon-harpoon"/g) ?? []).length, catalog.filter(category => category.showOnHome !== false).length + 5);
+  assert.equal((home.match(/href="#icon-harpoon"/g) ?? []).length, catalog.filter(category => category.showOnHome !== false).length + 6);
   assert.doesNotMatch(home, /M2 8h20M16 2l6 6-6 6/);
   assert.match(
     styles,
@@ -236,7 +236,9 @@ test("home exposes the core customer jobs", () => {
   assert.match(home, /Заказать в Телеграме/);
   const hero = home.match(/<section class="source-hero"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(hero, /href="catalog\/"/);
-  assert.match(hero, /href="#delivery-order"/);
+  assert.match(hero, /href="journal\/"/);
+  assert.match(hero, /Заказать икру форели/);
+  assert.match(hero, /catalog\/\?product=trout-roe/);
   assert.match(home, /id="delivery-order"[^>]*aria-label="Способы заказа"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
   const latest = journalEntries.find(entry => !recipeForEntry(entry.id));

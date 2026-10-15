@@ -1,20 +1,51 @@
 import { test, expect } from "@playwright/test";
 
-test("desktop order entry offers the existing phone and equal messengers @catalog", async ({ page }, testInfo) => {
+test("desktop journal orders the pictured catalog product and clears the previous draft @catalog", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: {
+      writeText: async () => { throw new Error("Clipboard denied"); },
+    } });
+  });
   await page.goto("?audit=order-entry");
-  const order = page.locator(".source-hero__actions").getByRole("link", { name: "Заказать", exact: true });
+  const journal = page.locator("[data-hero-journal]");
+  const caviar = journal.locator('[data-hero-journal-product="700"]');
+  const order = caviar.getByRole("button", { name: "Заказать икру форели", exact: true });
   await order.press("Enter");
-  const choices = page.getByRole("group", { name: "Способы заказа" });
-  await expect(choices).toBeFocused();
-  for (const [name, href] of [["Позвонить в лавку: +7 916 675‑14‑52", "tel:+79166751452"], ["Заказать в Телеграме", "https://t.me/+79166751452"], ["Заказать в WhatsApp", "https://wa.me/79166751452"]]) {
-    const link = choices.getByRole("link", { name, exact: true });
-    await expect(link).toHaveAttribute("href", href);
-    await expect(link).toBeInViewport();
-  }
-  // macOS WebKit uses Option+Tab to include links when full keyboard access is off.
-  await page.keyboard.press(testInfo.project.name === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab");
+  const choices = caviar.getByRole("group", { name: "Заказать икру форели", exact: true });
   await expect(choices.getByRole("link").first()).toBeFocused();
+  for (const link of await choices.getByRole("link").all()) {
+    const draft = new URL(await link.getAttribute("href")).searchParams.get("text");
+    expect(draft).toContain("Икра форели");
+    expect(draft).toMatch(/4\s*990\s*₽ за\s*250\s*г/);
+  }
+  await choices.getByRole("link").first().click();
+  const draft = choices.getByRole("textbox", { name: "Текст для сообщения" });
+  await expect(draft).toHaveValue(/Икра форели/);
+  await draft.press("ArrowRight");
+  await expect(journal.locator("[data-hero-journal-counter]")).toHaveText(/1\s*из\s*5/);
+  await page.keyboard.press("Escape");
+  await expect(choices).toBeHidden();
+  await expect(order).toBeFocused();
+  await journal.locator("[data-hero-journal-next]").click();
+  await expect(journal.locator("[data-hero-journal-product]:visible")).toHaveCount(0);
+  await journal.locator("[data-hero-journal-previous]").click();
+  await order.click();
+  await expect(draft).toBeHidden();
+  await expect(choices.locator("[role=status]")).toBeEmpty();
+  await page.keyboard.press("Escape");
+  await journal.locator("[data-hero-journal-next]").click();
+  await journal.locator("[data-hero-journal-next]").click();
+  const herring = journal.locator('[data-hero-journal-product="698"]');
+  await herring.getByRole("button", { name: "Заказать каспийский залом", exact: true }).click();
+  const whatsapp = herring.getByRole("link", { name: "В WhatsApp", exact: true });
+  const herringDraft = new URL(await whatsapp.getAttribute("href")).searchParams.get("text");
+  expect(herringDraft).toContain("Каспийский залом");
+  expect(herringDraft).toMatch(/1\s*600\s*₽\/кг/);
+  expect(herringDraft).not.toContain("Икра форели");
+  await page.route("https://wa.me/**", route => route.fulfill({ contentType: "text/html", body: "Messenger destination" }));
+  await whatsapp.click();
+  await expect(page).toHaveURL(/^https:\/\/wa\.me\/79166751452\?text=/);
 });
 
 test("mobile order keeps the pictured product through selection and messenger handoff @afisha", async ({ page, browser, baseURL }, testInfo) => {

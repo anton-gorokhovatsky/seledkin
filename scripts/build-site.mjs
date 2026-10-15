@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, journalEntries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, journalEntries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderHeroJournalProducts, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
 import { editorialPath, recipeForEntry } from "./recipe-content.mjs";
 import { catalog } from "../assets/catalog-data.js";
 import { positionCount } from "../assets/catalog-model.js";
@@ -17,6 +17,7 @@ for (const [path, page, root] of pages) {
   if (page !== "404") Object.assign(regions, { menu: renderMenu(page, root), footer: renderFooter(page, root) });
   if (page === "home") Object.assign(regions, {
     "journal-hero": renderJournal(hero, "hero"), "journal-preview": renderJournal(preview, "preview"),
+    "journal-hero-products": renderHeroJournalProducts(hero),
     "contact-address": contactAddress,
     "contact-hours": regularHours,
     "delivery-terms": renderDelivery("waybill"),

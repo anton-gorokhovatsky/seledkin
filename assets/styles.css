@@ -5567,3 +5567,155 @@ a.site-menu__brand {
     padding-inline-end: calc(var(--ag-signature-arrow-size) + var(--ag-signature-arrow-gap) + var(--ag-signature-arrow-stroke));
   }
 }
+
+/* Accepted desktop headline + Oleg's manually selected journal photographs.
+   Mobile keeps its existing afisha and product ordering unchanged. */
+.hero-journal-product[hidden],
+.hero-journal-product__draft[hidden],
+.hero-journal-product__status:empty { display: none; }
+
+@media (min-width: 61.1876rem) {
+  .source-hero[data-desktop-editorial] {
+    height: auto;
+    min-height: 100svh;
+    container: editorial-hero / inline-size;
+  }
+  [data-desktop-editorial] .source-hero__content {
+    height: auto;
+    min-height: 100svh;
+    grid-template-columns: minmax(0, 1fr) clamp(18rem, min(30vw, calc((100svh - 31rem) * 1.0376)), 30rem);
+    align-items: start;
+    gap: clamp(2.75rem, 5vw, 5rem);
+    padding-block: calc(var(--masthead-height) + 5rem) 3rem;
+  }
+  [data-desktop-editorial] .source-hero__copy { container-type: inline-size; }
+  [data-desktop-editorial] h1 {
+    max-width: 100%;
+    margin: 0 0 1.5rem;
+    font-size: clamp(3rem, 10.6cqw, 5rem);
+    font-weight: 400;
+    letter-spacing: -.025em;
+    line-height: 1.02;
+    translate: 0 calc((1.02em - 1cap) / -2);
+    text-wrap: balance;
+  }
+  [data-desktop-editorial] h1 em { display: inline-block; font-weight: inherit; }
+  [data-desktop-editorial] .source-hero__copy > p {
+    max-width: 29ch;
+    font-size: clamp(1.25rem, .85rem + .8vw, 1.625rem);
+    line-height: 1.5;
+    text-wrap: balance;
+  }
+  [data-desktop-editorial] .source-hero__actions { gap: .75rem 1.75rem; }
+  .source-hero__journal-link {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: .65rem;
+    color: var(--on-image);
+    font: 400 var(--text-body)/1.4 var(--sans);
+    text-decoration: underline;
+    text-underline-offset: .2em;
+  }
+  .source-hero__journal-link svg { width: 1.75rem; height: auto; }
+  [data-desktop-editorial] .source-hero__journal {
+    height: auto;
+    grid-template-rows: auto auto auto;
+    align-self: start;
+    row-gap: 1rem;
+    overflow-anchor: none;
+  }
+  [data-desktop-editorial] .source-hero__journal-stack {
+    position: relative;
+    display: block;
+    padding-bottom: 0;
+  }
+  [data-desktop-editorial] .source-hero__journal-card {
+    position: absolute;
+    inset: 0 1.15rem auto 0;
+    width: auto;
+  }
+  [data-desktop-editorial] .source-hero__journal-card[data-stack-position="0"] {
+    position: relative;
+    inset: auto;
+  }
+  [data-desktop-editorial] .source-hero__journal-card[aria-hidden="true"] figcaption { display: none; }
+  [data-desktop-editorial] .source-hero__proof img {
+    aspect-ratio: var(--hero-journal-photo-ratio, 800 / 771);
+    object-position: left top;
+  }
+  [data-desktop-editorial] .source-hero__proof figcaption { margin-top: 1.25rem; gap: .5rem; }
+  [data-desktop-editorial] .source-hero__proof-meta {
+    gap: .35rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  [data-desktop-editorial] .source-hero__proof strong {
+    font-size: clamp(1.35rem, 1rem + .5vw, 1.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+  }
+  [data-desktop-editorial] .source-hero__journal-navigation { margin-right: 1.15rem; }
+  [data-desktop-editorial] .source-hero__journal[data-ready] .source-hero__journal-controls {
+    display: grid;
+    grid-template-columns: minmax(min-content, 1fr) auto minmax(min-content, 1fr);
+    margin-top: 0;
+  }
+  [data-desktop-editorial] .source-hero__journal-next-slot { margin-left: 0; }
+  .hero-journal-product {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+  }
+  .hero-journal-product__price {
+    color: var(--on-image);
+    font: 400 var(--text-body)/1.4 var(--sans);
+    text-underline-offset: .2em;
+  }
+  .hero-journal-product__toggle { margin-left: auto; }
+  .hero-journal-product__choices:popover-open {
+    position: fixed;
+    inset: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    gap: .75rem;
+    width: max-content;
+    max-width: min(30rem, calc(100vw - 2rem));
+    max-height: calc(100svh - 2rem);
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid var(--jelly-glass-border);
+    border-radius: 1rem;
+    background: var(--jelly-glass-surface);
+    color: var(--ink);
+    box-shadow: var(--jelly-glass-shadow);
+    -webkit-backdrop-filter: var(--jelly-glass-filter);
+    backdrop-filter: var(--jelly-glass-filter);
+    overflow: auto;
+    font: 400 var(--text-body)/1.5 var(--sans);
+  }
+  .hero-journal-product__choices::backdrop { background: transparent; }
+  .hero-journal-product__choices > a { flex: 1 1 auto; }
+  .hero-journal-product__draft, .hero-journal-product__status { flex-basis: 100%; margin: 0; }
+  .hero-journal-product__draft { display: grid; gap: .5rem; }
+  .hero-journal-product__draft textarea {
+    display: block;
+    width: 100%;
+    min-height: 10rem;
+    padding: .75rem;
+    border: 1px solid var(--ink);
+    border-radius: .25rem;
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+    resize: vertical;
+  }
+  @container editorial-hero (width < 58rem) {
+    [data-desktop-editorial] .source-hero__content { grid-template-columns: minmax(0, 1fr); gap: 3rem; }
+    [data-desktop-editorial] .source-hero__journal { width: min(100%, 26rem); justify-self: start; }
+    [data-desktop-editorial] h1 { max-width: 14ch; }
+  }
+}

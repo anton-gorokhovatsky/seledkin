@@ -255,13 +255,43 @@ function journalTitle(value) {
   return text(Object.entries(hyphens).reduce((title, [word, hyphenated]) => title.replaceAll(word, hyphenated), value));
 }
 
+// Editorial matches to current catalog positions; historical post prices are
+// never used as selling prices. Stories without an exact match stay editorial.
+const heroJournalProducts = {
+  700: ["trout-roe", "икру форели"],
+  698: ["caspian-herring", "каспийский залом"],
+  696: ["caspian-herring", "каспийский залом"],
+};
+
+export function renderHeroJournalProducts(list) {
+  return list.flatMap((entry, index) => {
+    const selection = heroJournalProducts[entry.id];
+    if (!selection) return [];
+    const [productId, orderName] = selection;
+    const product = catalog.flatMap(category => category.items).find(item => item.id === productId);
+    if (!product) throw new Error(`Missing hero journal product: ${productId}`);
+    const links = orderLinks(product);
+    const panelId = `hero-journal-order-${entry.id}`;
+    return [`            <div class="hero-journal-product" data-hero-journal-product="${entry.id}" data-journal-id="${entry.id}"${index ? " hidden" : ""}>
+              <a class="hero-journal-product__price" href="${escape(productHref(product, "", "hero-journal"))}" aria-label="${text(`${product.name} в каталоге: ${catalogPrice(product.price)}`)}">${escape(catalogPrice(product.price))}</a>
+              <button class="source-button source-button--hero-secondary hero-journal-product__toggle" type="button" popovertarget="${panelId}" aria-expanded="false">${text(`Заказать ${orderName}`)}</button>
+              <div class="hero-journal-product__choices" id="${panelId}" popover="auto" role="group" aria-label="${text(`Заказать ${orderName}`)}">
+                <a class="source-button source-button--primary" href="${escape(links.telegram)}" data-hero-order-telegram><span>В Телеграме</span></a>
+                <a class="source-button source-button--primary" href="${escape(links.whatsapp)}"><span>В WhatsApp</span></a>
+                <label class="hero-journal-product__draft" hidden><span>Текст для сообщения</span><textarea readonly rows="6"></textarea></label>
+                <p class="hero-journal-product__status" role="status"></p>
+              </div>
+            </div>`];
+  }).join("\n");
+}
+
 export function renderJournal(list, view) {
   return list.map((entry, index) => {
     const { id, title } = entry;
-    if (view === "hero") return `              <a class="source-hero__proof source-hero__journal-card" href="journal/${id}/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: ${title}"${index ? ' aria-hidden="true" tabindex="-1"' : ""} data-hero-journal-card data-stack-position="${index}">
+    if (view === "hero") return `              <a class="source-hero__proof source-hero__journal-card" href="journal/${id}/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: ${title}"${index ? ' aria-hidden="true" tabindex="-1"' : ""} data-hero-journal-card data-entry-id="${id}" data-stack-position="${index}">
                 <figure>
-                  ${image(entry, "", "(max-width: 61.1875rem) min(88vw, 340px), 288px", index > 0, true)}
-                  <figcaption><span class="source-hero__proof-meta"><time datetime="${entry.date}">${date(entry, false)}</time></span><strong>${title}</strong></figcaption>
+                  ${image(entry, "", "(max-width: 61.1875rem) 1px, (max-width: 100rem) 30vw, 480px", index > 0, true)}
+                  <figcaption><span class="source-hero__proof-meta">Судовой журнал · <time datetime="${entry.date}">${date(entry, false)}</time></span><strong>${journalTitle(title)}</strong></figcaption>
                 </figure>
               </a>`;
     if (view === "preview") return `            <a class="journal-preview__entry" href="journal/${id}/" aria-labelledby="journal-preview-${id}">

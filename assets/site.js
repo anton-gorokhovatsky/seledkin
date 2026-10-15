@@ -1,6 +1,7 @@
 import { typographText } from "./typography.js";
 import { setupAssortmentPreview } from "./assortment-preview.js";
 import { setupMobileHero } from "./mobile-hero.js";
+import { setupHeroJournalOrders } from "./hero-journal-order.js";
 import "./theme.js";
 import "./store-environment.js";
 import { syncMenuSeaVideo } from "./sea-motion.js";
@@ -201,6 +202,7 @@ if (
   let currentIndex = 0;
   let pointerStart = null;
   let blockNextClick = false;
+  const syncProduct = setupHeroJournalOrders(heroJournal);
 
   const syncJournal = () => {
     heroJournal.dataset.ready = "";
@@ -222,6 +224,10 @@ if (
       card.tabIndex = active ? 0 : -1;
       card.inert = !active;
     });
+    const activeCard = heroJournalCards[currentIndex];
+    const activeImage = activeCard.querySelector("img");
+    if (activeImage) heroJournal.style.setProperty("--hero-journal-photo-ratio", `${activeImage.getAttribute("width")} / ${activeImage.getAttribute("height")}`);
+    syncProduct(activeCard.dataset.entryId);
 
     const hasPrevious = currentIndex > 0;
     const hasNext = currentIndex < heroJournalCards.length - 1;
@@ -293,6 +299,7 @@ if (
   });
 
   heroJournal.addEventListener("keydown", (event) => {
+    if (event.target instanceof Element && event.target.closest("input, textarea, [contenteditable]")) return;
     if (event.key === "ArrowLeft") {
       event.preventDefault();
       showJournalCard(currentIndex - 1, { focusCard: true });

@@ -302,7 +302,7 @@
 <!-- shared:menu:end -->
 
     <main id="main" tabindex="-1">
-      <section class="source-hero" aria-labelledby="hero-title">
+      <section class="source-hero" aria-labelledby="hero-title" data-desktop-editorial>
         <video
           class="source-hero__video"
           data-poster-light="assets/hero-sea-poster.webp"
@@ -339,17 +339,18 @@
               />
             </div>
             <div class="source-hero__copy">
-              <h1 id="hero-title">«Рыбная лавка капитана Селедкина»</h1>
-              <p>Качественная рыба на каждый день, морепродукты и рыбные деликатесы в Москве</p>
+              <h1 id="hero-title">Качественная рыба <em>на каждый день</em></h1>
+              <p>Морепродукты и рыбные деликатесы в Москве</p>
               <div class="source-hero__actions" aria-label="Основные действия">
                 <a class="source-button source-button--hero-primary" href="catalog/">
                   <span class="source-button__label">Каталог и цены</span>
                 </a>
                 <a
-                  class="source-button source-button--hero-secondary"
-                  href="#delivery-order"
+                  class="source-hero__journal-link"
+                  href="journal/"
                 >
-                  <span class="source-button__label">Заказать</span>
+                  <span>Судовой журнал</span>
+                  <svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon"></use></svg>
                 </a>
               </div>
             </div>
@@ -392,38 +393,70 @@
             </p>
             <div class="source-hero__journal-stack" data-hero-journal-stack>
 <!-- shared:journal-hero:start -->
-              <a class="source-hero__proof source-hero__journal-card" href="journal/700/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Первая икра форели 2026 года" data-hero-journal-card data-stack-position="0">
+              <a class="source-hero__proof source-hero__journal-card" href="journal/700/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Первая икра форели 2026 года" data-hero-journal-card data-entry-id="700" data-stack-position="0">
                 <figure>
-                  <img src="assets/journal-700-480.webp" srcset="assets/journal-700-480.webp 480w, assets/journal-700-800.webp 800w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="assets/journal-700.jpg" decoding="async" alt="Красная икра форели в открытой банке" width="800" height="771" fetchpriority="high" />
-                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-10-08">8 октября</time></span><strong>Первая икра форели 2026 года</strong></figcaption>
+                  <img src="assets/journal-700-480.webp" srcset="assets/journal-700-480.webp 480w, assets/journal-700-800.webp 800w" sizes="(max-width: 61.1875rem) 1px, (max-width: 100rem) 30vw, 480px" data-source-image="assets/journal-700.jpg" decoding="async" alt="Красная икра форели в открытой банке" width="800" height="771" fetchpriority="high" />
+                  <figcaption><span class="source-hero__proof-meta">Судовой журнал · <time datetime="2026-10-08">8 октября</time></span><strong>Первая икра форели 2026 года</strong></figcaption>
                 </figure>
               </a>
-              <a class="source-hero__proof source-hero__journal-card" href="journal/699/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Охлажденная эталонная форель из Карелии" aria-hidden="true" tabindex="-1" data-hero-journal-card data-stack-position="1">
+              <a class="source-hero__proof source-hero__journal-card" href="journal/699/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Охлажденная эталонная форель из Карелии" aria-hidden="true" tabindex="-1" data-hero-journal-card data-entry-id="699" data-stack-position="1">
                 <figure>
-                  <img src="assets/journal-699-32.webp" data-full-src="assets/journal-699-480.webp" data-full-srcset="assets/journal-699-480.webp 480w, assets/journal-699-800.webp 800w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="assets/journal-699.jpg" decoding="async" alt="Голова и серебристый бок форели в тёмную крапинку на розовом фоне" width="800" height="800" />
-                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-10-01">1 октября</time></span><strong>Охлажденная эталонная форель из Карелии</strong></figcaption>
+                  <img src="assets/journal-699-32.webp" data-full-src="assets/journal-699-480.webp" data-full-srcset="assets/journal-699-480.webp 480w, assets/journal-699-800.webp 800w" sizes="(max-width: 61.1875rem) 1px, (max-width: 100rem) 30vw, 480px" data-source-image="assets/journal-699.jpg" decoding="async" alt="Голова и серебристый бок форели в тёмную крапинку на розовом фоне" width="800" height="800" />
+                  <figcaption><span class="source-hero__proof-meta">Судовой журнал · <time datetime="2026-10-01">1 октября</time></span><strong>Ох­лаж­денная эта­лонная форель из Ка­ре­лии</strong></figcaption>
                 </figure>
               </a>
-              <a class="source-hero__proof source-hero__journal-card" href="journal/698/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: У нас новый завоз малосольного каспийского залома" aria-hidden="true" tabindex="-1" data-hero-journal-card data-stack-position="2">
+              <a class="source-hero__proof source-hero__journal-card" href="journal/698/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: У нас новый завоз малосольного каспийского залома" aria-hidden="true" tabindex="-1" data-hero-journal-card data-entry-id="698" data-stack-position="2">
                 <figure>
-                  <img src="assets/journal-698-32.webp" data-full-src="assets/journal-698-480.webp" data-full-srcset="assets/journal-698-480.webp 480w, assets/journal-698-786.webp 786w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="assets/journal-698.jpg" decoding="async" alt="Ломтики каспийского залома с серебристой кожей на белой тарелке" width="786" height="800" />
-                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-09-29">29 сентября</time></span><strong>У нас новый завоз малосольного каспийского залома</strong></figcaption>
+                  <img src="assets/journal-698-32.webp" data-full-src="assets/journal-698-480.webp" data-full-srcset="assets/journal-698-480.webp 480w, assets/journal-698-786.webp 786w" sizes="(max-width: 61.1875rem) 1px, (max-width: 100rem) 30vw, 480px" data-source-image="assets/journal-698.jpg" decoding="async" alt="Ломтики каспийского залома с серебристой кожей на белой тарелке" width="786" height="800" />
+                  <figcaption><span class="source-hero__proof-meta">Судовой журнал · <time datetime="2026-09-29">29 сентября</time></span><strong>У нас новый завоз мало­соль­ного кас­пий­ского залома</strong></figcaption>
                 </figure>
               </a>
-              <a class="source-hero__proof source-hero__journal-card" href="journal/697/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Риеты и паштеты из копченого балтийского угря" aria-hidden="true" tabindex="-1" data-hero-journal-card data-stack-position="3">
+              <a class="source-hero__proof source-hero__journal-card" href="journal/697/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Риеты и паштеты из копченого балтийского угря" aria-hidden="true" tabindex="-1" data-hero-journal-card data-entry-id="697" data-stack-position="3">
                 <figure>
-                  <img src="assets/journal-697-32.webp" data-full-src="assets/journal-697-480.webp" data-full-srcset="assets/journal-697-480.webp 480w, assets/journal-697-800.webp 800w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="assets/journal-697.jpg" decoding="async" alt="Банки риета из копчёного угря; на передней банке этикетка «Со сладким перцем»" width="800" height="800" />
-                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-09-27">27 сентября</time></span><strong>Риеты и паштеты из копченого балтийского угря</strong></figcaption>
+                  <img src="assets/journal-697-32.webp" data-full-src="assets/journal-697-480.webp" data-full-srcset="assets/journal-697-480.webp 480w, assets/journal-697-800.webp 800w" sizes="(max-width: 61.1875rem) 1px, (max-width: 100rem) 30vw, 480px" data-source-image="assets/journal-697.jpg" decoding="async" alt="Банки риета из копчёного угря; на передней банке этикетка «Со сладким перцем»" width="800" height="800" />
+                  <figcaption><span class="source-hero__proof-meta">Судовой журнал · <time datetime="2026-09-27">27 сентября</time></span><strong>Риеты и паш­теты из коп­че­ного бал­тий­ского угря</strong></figcaption>
                 </figure>
               </a>
-              <a class="source-hero__proof source-hero__journal-card" href="journal/696/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Диаметр тарелки 27 сантиметров" aria-hidden="true" tabindex="-1" data-hero-journal-card data-stack-position="4">
+              <a class="source-hero__proof source-hero__journal-card" href="journal/696/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: Диаметр тарелки 27 сантиметров" aria-hidden="true" tabindex="-1" data-hero-journal-card data-entry-id="696" data-stack-position="4">
                 <figure>
-                  <img src="assets/journal-696-32.webp" data-full-src="assets/journal-696-480.webp" data-full-srcset="assets/journal-696-480.webp 480w, assets/journal-696-800.webp 800w" sizes="(max-width: 61.1875rem) min(88vw, 340px), 288px" data-source-image="assets/journal-696.jpg" decoding="async" alt="Каспийский залом целиком на белой тарелке, хвост и голова выступают за её края" width="800" height="599" />
-                  <figcaption><span class="source-hero__proof-meta"><time datetime="2026-09-24">24 сентября</time></span><strong>Диаметр тарелки 27 сантиметров</strong></figcaption>
+                  <img src="assets/journal-696-32.webp" data-full-src="assets/journal-696-480.webp" data-full-srcset="assets/journal-696-480.webp 480w, assets/journal-696-800.webp 800w" sizes="(max-width: 61.1875rem) 1px, (max-width: 100rem) 30vw, 480px" data-source-image="assets/journal-696.jpg" decoding="async" alt="Каспийский залом целиком на белой тарелке, хвост и голова выступают за её края" width="800" height="599" />
+                  <figcaption><span class="source-hero__proof-meta">Судовой журнал · <time datetime="2026-09-24">24 сентября</time></span><strong>Диа­метр та­релки 27 сан­ти­мет­ров</strong></figcaption>
                 </figure>
               </a>
 <!-- shared:journal-hero:end -->
             </div>
+<!-- shared:journal-hero-products:start -->
+            <div class="hero-journal-product" data-hero-journal-product="700" data-journal-id="700">
+              <a class="hero-journal-product__price" href="catalog/?product=trout-roe&amp;from=hero-journal#product-trout-roe" aria-label="Икра форели в каталоге: 4 990 ₽ за 250 г">4 990 ₽ за 250 г</a>
+              <button class="source-button source-button--hero-secondary hero-journal-product__toggle" type="button" popovertarget="hero-journal-order-700" aria-expanded="false">Заказать икру форели</button>
+              <div class="hero-journal-product__choices" id="hero-journal-order-700" popover="auto" role="group" aria-label="Заказать икру форели">
+                <a class="source-button source-button--primary" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%0A%D0%9F%D0%B5%D1%80%D0%B2%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%20%D1%81%D0%B5%D0%B7%D0%BE%D0%BD%D0%B0%202026%0A4%E2%80%AF990%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5." data-hero-order-telegram><span>В Телеграме</span></a>
+                <a class="source-button source-button--primary" href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%0A%D0%9F%D0%B5%D1%80%D0%B2%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%20%D1%81%D0%B5%D0%B7%D0%BE%D0%BD%D0%B0%202026%0A4%E2%80%AF990%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5."><span>В WhatsApp</span></a>
+                <label class="hero-journal-product__draft" hidden><span>Текст для сообщения</span><textarea readonly rows="6"></textarea></label>
+                <p class="hero-journal-product__status" role="status"></p>
+              </div>
+            </div>
+            <div class="hero-journal-product" data-hero-journal-product="698" data-journal-id="698" hidden>
+              <a class="hero-journal-product__price" href="catalog/?product=caspian-herring&amp;from=hero-journal#product-caspian-herring" aria-label="Каспийский залом в каталоге: 1 600 ₽/кг">1 600 ₽/кг</a>
+              <button class="source-button source-button--hero-secondary hero-journal-product__toggle" type="button" popovertarget="hero-journal-order-698" aria-expanded="false">Заказать каспийский залом</button>
+              <div class="hero-journal-product__choices" id="hero-journal-order-698" popover="auto" role="group" aria-label="Заказать каспийский залом">
+                <a class="source-button source-button--primary" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D1%81%D0%BF%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B7%D0%B0%D0%BB%D0%BE%D0%BC%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%201%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF600%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5." data-hero-order-telegram><span>В Телеграме</span></a>
+                <a class="source-button source-button--primary" href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D1%81%D0%BF%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B7%D0%B0%D0%BB%D0%BE%D0%BC%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%201%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF600%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5."><span>В WhatsApp</span></a>
+                <label class="hero-journal-product__draft" hidden><span>Текст для сообщения</span><textarea readonly rows="6"></textarea></label>
+                <p class="hero-journal-product__status" role="status"></p>
+              </div>
+            </div>
+            <div class="hero-journal-product" data-hero-journal-product="696" data-journal-id="696" hidden>
+              <a class="hero-journal-product__price" href="catalog/?product=caspian-herring&amp;from=hero-journal#product-caspian-herring" aria-label="Каспийский залом в каталоге: 1 600 ₽/кг">1 600 ₽/кг</a>
+              <button class="source-button source-button--hero-secondary hero-journal-product__toggle" type="button" popovertarget="hero-journal-order-696" aria-expanded="false">Заказать каспийский залом</button>
+              <div class="hero-journal-product__choices" id="hero-journal-order-696" popover="auto" role="group" aria-label="Заказать каспийский залом">
+                <a class="source-button source-button--primary" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D1%81%D0%BF%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B7%D0%B0%D0%BB%D0%BE%D0%BC%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%201%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF600%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5." data-hero-order-telegram><span>В Телеграме</span></a>
+                <a class="source-button source-button--primary" href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D0%B0%D1%81%D0%BF%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B7%D0%B0%D0%BB%D0%BE%D0%BC%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%201%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF600%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5."><span>В WhatsApp</span></a>
+                <label class="hero-journal-product__draft" hidden><span>Текст для сообщения</span><textarea readonly rows="6"></textarea></label>
+                <p class="hero-journal-product__status" role="status"></p>
+              </div>
+            </div>
+<!-- shared:journal-hero-products:end -->
             <div class="source-hero__journal-navigation">
               <div class="source-hero__journal-controls">
                 <button
