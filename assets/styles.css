@@ -2484,7 +2484,7 @@ a.source-brand {
   inline-size: 100%;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--ag-signature-gap);
 }
 
