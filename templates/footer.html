@@ -1,20 +1,5 @@
     <footer class="source-footer" aria-labelledby="{{footerId}}">
       <div class="source-footer__content source-shell">
-        <div class="source-footer__details">
-          <p class="source-footer__kicker">До встречи на Вавиловской</p>
-          <h2 id="{{footerId}}">Лосось на вахте — заходите в лавку</h2>
-          <p class="source-footer__lead">
-            {{regularHours}}. Можно приехать за рыбой и деликатесами или заказать доставку.
-          </p>
-          <p class="store-status" data-store-status hidden></p>
-          <div class="source-footer__visit">
-            <p>{{footerAddress}}</p>
-          </div>
-          <div class="source-footer__actions" aria-label="Связаться с лавкой">
-{{footerActions}}
-              </div>
-        </div>
-
         <figure class="source-footer__portrait">
           <img
             src="{{root}}assets/salmon-cat-480.webp"
@@ -30,11 +15,29 @@
           <figcaption>Лосось принимает солнечную ванну между вахтами.</figcaption>
         </figure>
 
+        <div class="source-footer__details">
+          <header class="source-footer__heading">
+            <p class="source-footer__kicker">До встречи на Вавиловской</p>
+            <h2 id="{{footerId}}">Лосось на вахте — заходите в лавку</h2>
+          </header>
+          <p class="source-footer__lead">
+            <span class="source-footer__hours">{{regularHours}}.</span>
+            Можно приехать за рыбой и деликатесами или заказать доставку.
+          </p>
+          <p class="store-status" data-store-status hidden></p>
+          <div class="source-footer__visit">
+            <p>{{footerAddress}}</p>
+          </div>
+          <div class="source-footer__actions" aria-label="Связаться с лавкой">
+{{footerActions}}
+          </div>
+        </div>
+
         <div class="source-footer__postscript">
           <p>
             P. S.: а ещё мы публикуем советы по приготовлению и обработке
             рыбы, все наши новости, в т. ч. об ассортименте, в наших
-            социальных сетях. Подписывайтесь!
+            социальных сетях. <strong>Подписывайтесь!</strong>
           </p>
           <nav class="source-footer__channels" aria-label="Социальные сети и каналы лавки">
             <a class="source-footer__channel--primary" href="https://t.me/kapitanseledkin">

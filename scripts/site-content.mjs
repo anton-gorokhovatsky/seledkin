@@ -138,7 +138,7 @@ ${routeLinks(page, root, false)}
   return `${fallback}\n${template("footer", {
     root, footerId: page === "catalog" ? "catalog-footer-title" : "footer-title",
     regularHours: `Каждый день с ${store.hours.open} до ${store.hours.close}`,
-    footerAddress: `${street}. ${metroDirections}`,
+    footerAddress: `<span class="source-footer__address">${street}.</span> <span class="source-footer__directions">${metroDirections}</span>`,
     footerActions: contactActions({ classes: "source-button--footer-contact" }),
   })}`;
 }

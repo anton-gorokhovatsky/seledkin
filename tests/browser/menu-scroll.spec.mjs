@@ -91,6 +91,15 @@ test("mobile menu reaches both scroll boundaries and keeps keyboard focus below 
       const panel = page.locator(".site-menu__panel");
       const close = page.getByRole("button", { name: "Закрыть меню", exact: true });
       const header = page.locator(".site-menu__masthead");
+      if (!viewport.enlarged) {
+        const hours = await page.locator("#menu-service-title").evaluate(node => {
+          const style = getComputedStyle(node);
+          return { height: node.getBoundingClientRect().height,
+            lineHeight: parseFloat(style.lineHeight), fontSize: parseFloat(style.fontSize) };
+        });
+        expect(hours.height, "the mobile schedule fits two natural lines").toBeLessThanOrEqual(hours.lineHeight * 2 + 1);
+        expect(hours.lineHeight / hours.fontSize, "schedule lines have room to breathe").toBeGreaterThanOrEqual(1.1);
+      }
       const logo = await box(page.locator(".site-menu__brand img"));
       expect(logo.top).toBeGreaterThanOrEqual((await box(header)).top);
       expect(logo.bottom).toBeLessThanOrEqual((await box(header)).bottom);

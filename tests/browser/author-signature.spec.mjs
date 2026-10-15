@@ -16,7 +16,7 @@ test("the shared signature stays readable in the footer across watches and text 
     await expect(signature).toHaveAttribute("data-signature-version", /^1\./);
     await expect(signature.getByRole("link", { name: "Антон Гороховатский Дизайн и разработка" })).toHaveCount(1);
     await expect(page.locator(".source-footer__utilities > a")).toHaveCount(0);
-    for (const width of [1440, 638, 390, 320]) {
+    for (const width of [1440, 638, 587, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
       if (width === 320) {
         await page.addStyleTag({ content: "html { font-size: 200% !important; }" });
@@ -27,6 +27,13 @@ test("the shared signature stays readable in the footer across watches and text 
         });
       }
       await signature.scrollIntoViewIfNeeded();
+      const surname = await signature.locator(".surname").evaluate(node => ({
+        height: node.getBoundingClientRect().height,
+        lineHeight: parseFloat(getComputedStyle(node).lineHeight),
+      }));
+      expect(surname.height, "the surname stays whole next to the hanging arrow").toBeLessThanOrEqual(surname.lineHeight + 1);
+      const arrow = await signature.locator(".arrow").boundingBox();
+      expect(arrow.x + arrow.width, "the external arrow stays within the screen").toBeLessThanOrEqual(width + 1);
       if (width === 1440) {
         const credit = await signature.boundingBox();
         expect(credit.height).toBeLessThan(100);
