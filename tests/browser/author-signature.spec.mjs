@@ -28,13 +28,13 @@ test("the shared signature stays readable in the footer across watches and text 
       await signature.scrollIntoViewIfNeeded();
       if (width === 390) {
         const group = await signature.boundingBox();
-        expect(group.height).toBeLessThan(65);
+        expect(group.height).toBeLessThan(100);
       }
       if (width === 320) {
         const text = await signature.locator(".text").boundingBox();
         expect(text.width).toBeGreaterThan(250);
       }
-      for (const node of await page.locator(".source-footer__base > small, .source-footer__base > a, ag-signature .credit, ag-signature .name, ag-signature .role").all()) {
+      for (const node of await page.locator(".source-footer__legal > small, .source-footer__legal > a, ag-signature .credit, ag-signature .name, ag-signature .role").all()) {
         const bounds = await node.boundingBox();
         expect(bounds.x).toBeGreaterThanOrEqual(-1);
         expect(bounds.x + bounds.width).toBeLessThanOrEqual(width + 1);

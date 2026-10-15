@@ -59,7 +59,7 @@ test("the empty order and footer remain grouped at intermediate width and enlarg
     const signature = page.locator("ag-signature");
     await expect(signature).toHaveAttribute("data-signature-version", /^1\./);
     const authorLink = signature.getByRole("link", { name: "Антон Гороховатский Дизайн и разработка" });
-    const backLink = page.locator(".source-footer__base > a");
+    const backLink = page.locator(".source-footer__legal > a");
     await expect(authorLink).toHaveCount(1);
     await expect(backLink).toHaveCount(1);
     const author = await authorLink.boundingBox();

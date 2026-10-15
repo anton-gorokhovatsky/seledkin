@@ -139,6 +139,20 @@ const componentScripts = {
   "catalog/catalog.js": ["@catalog"],
 };
 
+function onlyFooterLayout(before, after) {
+  const region = /<!-- shared:footer:start -->[\s\S]*?<!-- shared:footer:end -->|<footer\b[^>]*class="source-footer"[^>]*>[\s\S]*?<\/footer>/g;
+  const oldRegions = before.match(region), newRegions = after.match(region);
+  if (oldRegions?.length !== 1 || newRegions?.length !== 1
+    || before.replace(region, "FOOTER") !== after.replace(region, "FOOTER")) return false;
+  if (/\son\w+\s*=|<(?:iframe|object|embed)\b/i.test(newRegions[0])) return false;
+  const stable = html => JSON.stringify({
+    code: html.match(activeContent),
+    targets: [...html.matchAll(/\b(?:href|src|srcset|sizes|aria-label|alt)="[^"]*"/g)].map(match => match[0]).sort(),
+    words: html.replace(/<[^>]+>/g, " ").split(/\s+/).filter(Boolean).sort(),
+  });
+  return stable(oldRegions[0]) === stable(newRegions[0]);
+}
+
 function cssRules(source, context = "", rules = new Map()) {
   if (source == null) throw new Error("Missing CSS comparison");
   source = source.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -187,7 +201,8 @@ function cssTags(before, after, recipeSheet = false) {
       for (const selector of (newRules.get(key) ?? oldRules.get(key)).selector.split(",")) {
         const tag = onlyMenuEndPadding(oldRules.get(key), newRules.get(key), selector) ? "@navigation"
           : /^\s*\.delivery-waybill__price(?:\s+span)?\s*$/.test(selector) ? "@delivery"
-          : /^\s*\.source-footer__(?:base|credit)(?=[\s>.#[:]|$)/.test(selector) ? "@signature"
+          : /^\s*\.source-footer__(?:base|credit|legal)(?=[\s>.#[:]|$)/.test(selector) ? "@signature"
+          : /^\s*\.source-footer__(?:content|details|portrait|postscript|channels)(?=[\s>.#[:]|$)/.test(selector) ? "@footer"
           : recipeSheet && /^\s*(?:\.(?:recipes?-)[\w-]+|\[data-recipe-)[^,]*$/.test(selector) ? "@recipes"
           : /^\s*\.contacts-source(?=[\s_.#[:]|$)/.test(selector) ? "@contacts"
           : /^\s*\.catalog-(?:[\w-]+)(?=[\s.#[:]|$)/.test(selector) ? "@catalog"
@@ -228,6 +243,7 @@ export function scopedBrowserTags(changes) {
       if (oldHtml === newHtml) continue;
       if (onlyMenuRoutes(oldHtml, newHtml)) { tags.add("@navigation"); continue; }
       if (onlyProductTargets(oldHtml, newHtml)) { tags.add("@catalog"); continue; }
+      if (onlyFooterLayout(oldHtml, newHtml)) { tags.add("@footer"); tags.add("@signature"); continue; }
       const region = path === "index.html" ? /<!-- shared:mobile-hero:start -->[\s\S]*?<!-- shared:mobile-hero:end -->/
         : ["catalog/index.html", "recipes/index.html"].includes(path) || /^journal\/\d+\/index\.html$/.test(path) ? /<main\b[^>]*>[\s\S]*?<\/main>/ : null;
       if (!region || !region.test(oldHtml) || !region.test(newHtml)

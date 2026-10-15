@@ -144,9 +144,21 @@ test("the footer credit has a bounded gate without covering other footer or shar
   changes[0].after += "@media(max-width:40rem){.source-footer__credit::part(credit){flex-direction:row}}";
   assert.equal(classifyRelease(changes), "scoped");
   assert.deepEqual(scopedBrowserTags(changes), ["@signature"]);
-  for (const selector of [".source-footer", ".source-footer__channels", ":root",
+  for (const selector of [".source-footer", ".source-footer::before", ":root",
     ".source-footer__base, .site-menu"]) {
     assert.equal(classifyRelease([css(selector)]), "full", selector);
+  }
+});
+
+test("footer layout selects its scenarios while preserving content, destinations and the rest of the page", () => {
+  const before = '<main>Same page</main>' + region('footer', '<footer><p>Subscribe here</p><a href="https://example.com/">Channel</a><script src="footer.js"></script></footer>');
+  const after = before.replace('<p>Subscribe here</p><a href="https://example.com/">Channel</a>', '<div><a href="https://example.com/">Channel</a><p>Subscribe here</p></div>');
+  const html = changed => ({path:'about/index.html', before, after:changed});
+  assert.deepEqual(scopedBrowserTags([html(after)]), ['@footer', '@signature']);
+  assert.deepEqual(scopedBrowserTags([{path:'assets/styles.css', before:'.source-footer__postscript{gap:1rem}', after:'.source-footer__postscript{gap:2rem}'}]), ['@footer']);
+  for (const changed of [after.replace('Same page','Changed page'), after.replace('Subscribe','Buy'),
+    after.replace('example.com','changed.com'), after.replace('footer.js','new.js'), after.replace('<div>', '<div onclick="run()">')]) {
+    assert.equal(classifyRelease([html(changed)]), 'full');
   }
 });
 

@@ -853,10 +853,6 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     footerContentRule,
     /padding-block:\s*clamp\(3rem, 5vw, 5rem\) clamp\(2rem, 3vw, 3rem\)/,
   );
-  assert.match(
-    footerPostscriptRule,
-    /padding-block:\s*0 clamp\(2\.5rem, 4vw, 3\.5rem\)/,
-  );
   assert.doesNotMatch(footerPostscriptRule, /border-(?:top|bottom)\s*:/);
   assert.match(footerBaseRule, /border-top:\s*1px solid var\(--footer-line\)/);
   assert.doesNotMatch(footerBaseRule, /border-bottom\s*:/);
@@ -868,10 +864,6 @@ test("the footer ends both customer journeys with a useful, human invitation", (
   assert.match(
     styles,
     /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__content\s*\{[^}]*padding-block:\s*2\.75rem 1\.5rem;/,
-  );
-  assert.match(
-    styles,
-    /@media \(max-width: 34rem\)[\s\S]*?\.source-footer__postscript\s*\{[^}]*padding-block:\s*0 2\.25rem;/,
   );
 });
 

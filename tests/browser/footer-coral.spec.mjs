@@ -1,6 +1,44 @@
 import { test, expect } from "@playwright/test";
 
-test("every shared footer shows Coral without the old shoal, including nested journal entries", async ({ page }) => {
+test("footer subscription stays with the contacts and the complete portrait @footer", async ({ page }, testInfo) => {
+  await page.addInitScript(() => localStorage.setItem("seledkin-theme", "light"));
+  for (const theme of ["light", "dark"]) {
+    await page.goto("about/?audit=footer-composition");
+    if (theme === "dark") {
+      await page.locator("[data-menu-toggle]").click();
+      await page.getByRole("radio", { name: "Ночная", exact: true }).check();
+      await page.locator("[data-menu-close]").click();
+    }
+    await page.locator("ag-signature[data-signature-version]").waitFor();
+    const portrait = page.locator(".source-footer__portrait img");
+    await portrait.scrollIntoViewIfNeeded();
+    await portrait.evaluate(img => img.decode());
+    for (const width of [1512, 980, 760, 638, 390, 320]) {
+      await page.setViewportSize({width, height:900});
+      if (width === 320) await page.addStyleTag({content:"html { font-size:200% !important; }"});
+      const details = await page.locator(".source-footer__details").boundingBox();
+      const subscription = await page.locator(".source-footer__postscript").boundingBox();
+      const photo = await portrait.boundingBox();
+      const ratio = await portrait.evaluate(img => img.naturalWidth / img.naturalHeight);
+      expect(photo.width / photo.height).toBeCloseTo(ratio, 2);
+      if (width > 736) {
+        expect(Math.abs(subscription.x - details.x)).toBeLessThan(1);
+        expect(subscription.y - details.y - details.height).toBeGreaterThanOrEqual(0);
+        expect(subscription.y - details.y - details.height).toBeLessThanOrEqual(64);
+        expect(Math.abs(photo.y - details.y)).toBeLessThan(1);
+      } else {
+        const caption = await page.locator(".source-footer__portrait").boundingBox();
+        expect(subscription.y).toBeGreaterThanOrEqual(caption.y + caption.height);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+      if (width === 1512) await page.locator(".source-footer").screenshot({path:testInfo.outputPath(`footer-composition-${width}-${theme}.png`)});
+      await page.locator(".source-footer__base").scrollIntoViewIfNeeded();
+      if (width === 390) await page.screenshot({path:testInfo.outputPath(`footer-composition-${width}-${theme}.png`)});
+    }
+  }
+});
+
+test("every shared footer shows Coral without the old shoal, including nested journal entries @footer", async ({ page }) => {
   test.setTimeout(90000);
   await page.emulateMedia({ reducedMotion: "reduce" });
   const videos = [];
