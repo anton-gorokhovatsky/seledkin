@@ -28,6 +28,7 @@ const compositions = [
 
 for (const [width, enlarged] of [[1440, false], [980, false], [390, false], [320, true]]) {
   test(`photo and copy share their top edge at ${width}px${enlarged ? " with enlarged text" : ""}`, async ({ page }) => {
+    test.setTimeout(90000); // Six page visits and decoded lazy photographs on the shared CI runner.
     await page.setViewportSize({ width, height: 1000 });
     for (const [route, families] of compositions) {
       await page.goto(route);
