@@ -251,6 +251,7 @@ function journalTitle(value) {
     копченого: "коп\u00adче\u00adного", балтийского: "бал\u00adтий\u00adского", Диаметр: "Диа\u00adметр",
     тарелки: "та\u00adрелки", сантиметров: "сан\u00adти\u00adмет\u00adров",
     Рулетики: "Ру\u00adле\u00adти\u00adки", печенью: "пе\u00adченью",
+    брюшков: "брюш\u00adков", осетра: "осет\u00adра", горячего: "горя\u00adчего", копчения: "коп\u00adчения",
   };
   return text(Object.entries(hyphens).reduce((title, [word, hyphenated]) => title.replaceAll(word, hyphenated), value));
 }
@@ -258,6 +259,7 @@ function journalTitle(value) {
 // Editorial matches to current catalog positions; historical post prices are
 // never used as selling prices. Stories without an exact match stay editorial.
 const heroJournalProducts = {
+  702: ["prepared-fish-012", "рулет из брюшков осетра"],
   700: ["trout-roe", "икру форели"],
   698: ["caspian-herring", "каспийский залом"],
   696: ["caspian-herring", "каспийский залом"],

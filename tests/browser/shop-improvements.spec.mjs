@@ -46,7 +46,7 @@ test("complete editorial pages and inquiry links work without JavaScript", { tag
   await expect(page.locator(".journal-index-entry")).toHaveCount(journal.length);
   await page.locator(".journal-index-entry__link").first().click();
   await expect(page).toHaveURL(latestRoute);
-  await expect(page.locator("h1")).toHaveText(latest.title);
+  expect((await page.locator("h1").textContent()).replaceAll("\u00ad", "").replace(/\s+/gu, " ").trim()).toBe(latest.title.replace(/\s+/gu, " ").trim());
   await expect(page.getByRole("link", { name: /Спросить о наличии/ })).toHaveCount(1);
   await page.goto(`${baseURL}about/`);
   await expect(page.locator(".about-overview__chapter")).toHaveCount(3);

@@ -9,6 +9,10 @@ test("desktop journal orders the pictured catalog product and clears the previou
   });
   await page.goto("?audit=order-entry");
   const journal = page.locator("[data-hero-journal]");
+  const roll = journal.locator('[data-hero-journal-product="702"]');
+  await expect(roll).toBeVisible();
+  expect(new URL(await roll.locator('[data-hero-order-telegram]').getAttribute('href')).searchParams.get('text')).toMatch(/Рулет\s+из\s+брюшков\s+осетра[\s\S]*3\s*740\s*₽\/кг/);
+  await journal.locator("[data-hero-journal-next]").click();
   const caviar = journal.locator('[data-hero-journal-product="700"]');
   const order = caviar.getByRole("button", { name: "Заказать икру форели", exact: true });
   await order.press("Enter");
@@ -23,7 +27,7 @@ test("desktop journal orders the pictured catalog product and clears the previou
   const draft = choices.getByRole("textbox", { name: "Текст для сообщения" });
   await expect(draft).toHaveValue(/Икра форели/);
   await draft.press("ArrowRight");
-  await expect(journal.locator("[data-hero-journal-counter]")).toHaveText(/1\s*из\s*5/);
+  await expect(journal.locator("[data-hero-journal-counter]")).toHaveText(/2\s*из\s*5/);
   await page.keyboard.press("Escape");
   await expect(choices).toBeHidden();
   await expect(order).toBeFocused();
