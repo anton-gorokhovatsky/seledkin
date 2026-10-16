@@ -225,8 +225,6 @@ if (
       card.inert = !active;
     });
     const activeCard = heroJournalCards[currentIndex];
-    const activeImage = activeCard.querySelector("img");
-    if (activeImage) heroJournal.style.setProperty("--hero-journal-photo-ratio", `${activeImage.getAttribute("width")} / ${activeImage.getAttribute("height")}`);
     syncProduct(activeCard.dataset.entryId);
 
     const hasPrevious = currentIndex > 0;

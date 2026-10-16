@@ -74,6 +74,8 @@ export function setupHeroJournalOrders(journal) {
         reset();
       }
       product.hidden = !active;
+      product.inert = !active;
+      product.setAttribute("aria-hidden", String(!active));
     }
   };
 }

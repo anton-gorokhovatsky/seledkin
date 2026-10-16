@@ -305,6 +305,7 @@
                     <button type="button" data-category="all" aria-pressed="true">Весь ассортимент</button>
                     <button type="button" data-category="caviar" aria-pressed="false">Икра</button>
                     <button type="button" data-category="seafood" aria-pressed="false">Морепродукты</button>
+                    <button type="button" data-category="chilled-fish" aria-pressed="false">Охлаждённая рыба</button>
                     <button type="button" data-category="frozen-fish" aria-pressed="false">Свежемороженая рыба</button>
                     <button type="button" data-category="fillet" aria-pressed="false">Филе и фарш</button>
                     <button type="button" data-category="steaks" aria-pressed="false">Рыбные стейки</button>
@@ -323,6 +324,7 @@
                     <option value="all">Весь ассортимент</option>
                     <option value="caviar">Икра</option>
                     <option value="seafood">Морепродукты</option>
+                    <option value="chilled-fish">Охлаждённая рыба</option>
                     <option value="frozen-fish">Свежемороженая рыба</option>
                     <option value="fillet">Филе и фарш</option>
                     <option value="steaks">Рыбные стейки</option>
@@ -349,7 +351,7 @@
         <div class="catalog-result-line">
           <h2 id="catalog-results-title" class="visually-hidden">Товары</h2>
           <p role="status" aria-live="polite" aria-atomic="true" data-catalog-count>
-            117 позиций
+            132 позиции
           </p>
           <button type="button" class="reset-button" data-catalog-reset hidden>
             Сбросить поиск
@@ -361,7 +363,7 @@
           <section class="catalog-category" id="category-caviar" data-category="caviar" aria-labelledby="category-title-caviar">
             <div class="catalog-category-header">
               <h3 id="category-title-caviar">Икра</h3>
-              <p class="catalog-category-count">9 позиций</p>
+              <p class="catalog-category-count">10 позиций</p>
             </div>
             <div class="catalog-product-grid">
               <article class="catalog-product" id="product-caviar-001" tabindex="-1" data-product-id="caviar-001" data-search-text="Икра Черная икра Осетровая (забойная) высшего качества" data-product-name="Черная икра" data-product-category="caviar">
@@ -432,23 +434,40 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" id="product-caviar-005" tabindex="-1" data-product-id="caviar-005" data-search-text="Икра Красная икра Кижуч, нерка, кета, горбуша" data-product-name="Красная икра" data-product-category="caviar">
+              <article class="catalog-product" id="product-caviar-005" tabindex="-1" data-product-id="caviar-005" data-search-text="Икра Красная икра Нерка, кета, горбуша" data-product-name="Красная икра" data-product-category="caviar">
                 <div class="catalog-product-head"><h4>Красная икра</h4><strong>3 500 ₽ за 250 г</strong></div>
-                <p>Кижуч, нерка, кета, горбуша</p>
+                <p>Нерка, кета, горбуша</p>
                 <div class="catalog-product-actions" hidden>
                   <button type="button" class="catalog-product-add" data-order-add value="caviar-005"><span>В список заказа</span></button>
                   <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
-                  <button type="button" class="catalog-product-remove" data-order-remove value="caviar-005" aria-label="Убрать из списка: Красная икра, Кижуч, нерка, кета, горбуша, 3 500 ₽ за 250 г" hidden>Убрать</button>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="caviar-005" aria-label="Убрать из списка: Красная икра, Нерка, кета, горбуша, 3 500 ₽ за 250 г" hidden>Убрать</button>
                 </div>
                 <details class="catalog-product-order">
-                  <summary id="order-caviar-005">Уточнить наличие<span class="visually-hidden">: Красная икра, Кижуч, нерка, кета, горбуша, 3 500 ₽ за 250 г</span></summary>
+                  <summary id="order-caviar-005">Уточнить наличие<span class="visually-hidden">: Красная икра, Нерка, кета, горбуша, 3 500 ₽ за 250 г</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9A%D0%B8%D0%B6%D1%83%D1%87%2C%20%D0%BD%D0%B5%D1%80%D0%BA%D0%B0%2C%20%D0%BA%D0%B5%D1%82%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B0%0A3%E2%80%AF500%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9A%D0%B8%D0%B6%D1%83%D1%87%2C%20%D0%BD%D0%B5%D1%80%D0%BA%D0%B0%2C%20%D0%BA%D0%B5%D1%82%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B0%0A3%E2%80%AF500%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9D%D0%B5%D1%80%D0%BA%D0%B0%2C%20%D0%BA%D0%B5%D1%82%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B0%0A3%E2%80%AF500%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%B0%D1%8F%20%D0%B8%D0%BA%D1%80%D0%B0%0A%D0%9D%D0%B5%D1%80%D0%BA%D0%B0%2C%20%D0%BA%D0%B5%D1%82%D0%B0%2C%20%D0%B3%D0%BE%D1%80%D0%B1%D1%83%D1%88%D0%B0%0A3%E2%80%AF500%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                     <a href="tel:+79166751452">Позвонить</a>
                   </div>
                 </details>
                 <div class="catalog-product-advice"><span>Олег советует</span><blockquote cite="https://t.me/kapitanseledkin/619" data-source-date="2025-12-17">Развесную икру можно попробовать перед покупкой. Подобрать ту, которая больше нравится: по размеру, консистенции, вкусу и количеству соли.</blockquote><a class="catalog-advice-link" href="../recipes/619/">Как выбирать красную икру<span class="catalog-advice-photo" aria-hidden="true"><img src="../assets/journal-619-480.webp" srcset="../assets/journal-619-480.webp 480w, ../assets/journal-619-793.webp 793w" sizes="240px" width="793" height="793" loading="lazy" decoding="async" alt="" /></span></a></div>
+              </article>
+              <article class="catalog-product" id="product-coho-roe-2026" tabindex="-1" data-product-id="coho-roe-2026" data-search-text="Икра Икра дикого кижуча Сезон 2026, банка 250 г" data-product-name="Икра дикого кижуча" data-product-category="caviar">
+                <div class="catalog-product-head"><h4>Икра дикого кижуча</h4><strong>4 990 ₽ за 250 г</strong></div>
+                <p>Сезон 2026, банка 250 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="coho-roe-2026"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="coho-roe-2026" aria-label="Убрать из списка: Икра дикого кижуча, Сезон 2026, банка 250 г, 4 990 ₽ за 250 г" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-coho-roe-2026">Уточнить наличие<span class="visually-hidden">: Икра дикого кижуча, Сезон 2026, банка 250 г, 4 990 ₽ за 250 г</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%B4%D0%B8%D0%BA%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%B8%D0%B6%D1%83%D1%87%D0%B0%0A%D0%A1%D0%B5%D0%B7%D0%BE%D0%BD%202026%2C%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20250%C2%A0%D0%B3%0A4%E2%80%AF990%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D0%B0%20%D0%B4%D0%B8%D0%BA%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%B8%D0%B6%D1%83%D1%87%D0%B0%0A%D0%A1%D0%B5%D0%B7%D0%BE%D0%BD%202026%2C%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20250%C2%A0%D0%B3%0A4%E2%80%AF990%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0250%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
               </article>
               <article class="catalog-product" id="product-trout-roe" tabindex="-1" data-product-id="trout-roe" data-search-text="Икра Икра форели Первая икра сезона 2026" data-product-name="Икра форели" data-product-category="caviar">
                 <div class="catalog-product-head"><h4>Икра форели</h4><strong>4 990 ₽ за 250 г</strong></div>
@@ -867,10 +886,36 @@
             </div>
           </section>
 
+          <section class="catalog-category" id="category-chilled-fish" data-category="chilled-fish" aria-labelledby="category-title-chilled-fish">
+            <div class="catalog-category-header">
+              <h3 id="category-title-chilled-fish">Охлаждённая рыба</h3>
+              <p class="catalog-category-count">1 позиция</p>
+            </div>
+            <div class="catalog-product-grid">
+              <article class="catalog-product" id="product-chilled-trout" tabindex="-1" data-product-id="chilled-trout" data-search-text="Охлаждённая рыба Форель охлаждённая Карелия, вес одной рыбы около 1,2–1,4 кг" data-product-name="Форель охлаждённая" data-product-category="chilled-fish">
+                <div class="catalog-product-head"><h4>Форель охлаждённая</h4><strong>1 680 ₽/кг</strong></div>
+                <p>Карелия, вес одной рыбы около 1,2–1,4 кг</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="chilled-trout"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="chilled-trout" aria-label="Убрать из списка: Форель охлаждённая, Карелия, вес одной рыбы около 1,2–1,4 кг, 1 680 ₽/кг" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-chilled-trout">Уточнить наличие<span class="visually-hidden">: Форель охлаждённая, Карелия, вес одной рыбы около 1,2–1,4 кг, 1 680 ₽/кг</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%20%D0%BE%D1%85%D0%BB%D0%B0%D0%B6%D0%B4%D1%91%D0%BD%D0%BD%D0%B0%D1%8F%0A%D0%9A%D0%B0%D1%80%D0%B5%D0%BB%D0%B8%D1%8F%2C%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%201%2C2%E2%80%931%2C4%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF680%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%20%D0%BE%D1%85%D0%BB%D0%B0%D0%B6%D0%B4%D1%91%D0%BD%D0%BD%D0%B0%D1%8F%0A%D0%9A%D0%B0%D1%80%D0%B5%D0%BB%D0%B8%D1%8F%2C%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%201%2C2%E2%80%931%2C4%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF680%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+            </div>
+          </section>
+
           <section class="catalog-category" id="category-frozen-fish" data-category="frozen-fish" aria-labelledby="category-title-frozen-fish">
             <div class="catalog-category-header">
               <h3 id="category-title-frozen-fish">Свежемороженая рыба</h3>
-              <p class="catalog-category-count">35 позиций</p>
+              <p class="catalog-category-count">36 позиций</p>
             </div>
             <div class="catalog-product-grid">
               <article class="catalog-product" id="product-frozen-fish-001" tabindex="-1" data-product-id="frozen-fish-001" data-search-text="Свежемороженая рыба Барабуля Черноморская, Севастополь и Керченский пролив Непотрошёная" data-product-name="Барабуля" data-product-category="frozen-fish">
@@ -1164,19 +1209,19 @@
                   </div>
                 </details>
               </article>
-              <article class="catalog-product" id="product-frozen-fish-017" tabindex="-1" data-product-id="frozen-fish-017" data-search-text="Свежемороженая рыба Тугунок Малосольный, замороженный" data-product-name="Тугунок" data-product-category="frozen-fish">
-                <div class="catalog-product-head"><h4>Тугунок</h4><strong>3 500 ₽/кг</strong></div>
-                <p>Малосольный, замороженный</p>
+              <article class="catalog-product" id="product-frozen-fish-017" tabindex="-1" data-product-id="frozen-fish-017" data-search-text="Свежемороженая рыба Тугунок Малосольный, замороженный; вылов и засол — август 2026, банка около 600 г" data-product-name="Тугунок" data-product-category="frozen-fish">
+                <div class="catalog-product-head"><h4>Тугунок</h4><strong>5 900 ₽/кг</strong></div>
+                <p>Малосольный, замороженный; вылов и засол — август 2026, банка около 600 г</p>
                 <div class="catalog-product-actions" hidden>
                   <button type="button" class="catalog-product-add" data-order-add value="frozen-fish-017"><span>В список заказа</span></button>
                   <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
-                  <button type="button" class="catalog-product-remove" data-order-remove value="frozen-fish-017" aria-label="Убрать из списка: Тугунок, Малосольный, замороженный, 3 500 ₽/кг" hidden>Убрать</button>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="frozen-fish-017" aria-label="Убрать из списка: Тугунок, Малосольный, замороженный; вылов и засол — август 2026, банка около 600 г, 5 900 ₽/кг" hidden>Убрать</button>
                 </div>
                 <details class="catalog-product-order">
-                  <summary id="order-frozen-fish-017">Уточнить наличие<span class="visually-hidden">: Тугунок, Малосольный, замороженный, 3 500 ₽/кг</span></summary>
+                  <summary id="order-frozen-fish-017">Уточнить наличие<span class="visually-hidden">: Тугунок, Малосольный, замороженный; вылов и засол — август 2026, банка около 600 г, 5 900 ₽/кг</span></summary>
                   <div class="catalog-product-order__channels">
-                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A2%D1%83%D0%B3%D1%83%D0%BD%D0%BE%D0%BA%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9%0A3%E2%80%AF500%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
-                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A2%D1%83%D0%B3%D1%83%D0%BD%D0%BE%D0%BA%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9%0A3%E2%80%AF500%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A2%D1%83%D0%B3%D1%83%D0%BD%D0%BE%D0%BA%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9%3B%20%D0%B2%D1%8B%D0%BB%D0%BE%D0%B2%20%D0%B8%C2%A0%D0%B7%D0%B0%D1%81%D0%BE%D0%BB%C2%A0%E2%80%94%20%D0%B0%D0%B2%D0%B3%D1%83%D1%81%D1%82%202026%2C%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20600%C2%A0%D0%B3%0A5%E2%80%AF900%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A2%D1%83%D0%B3%D1%83%D0%BD%D0%BE%D0%BA%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%2C%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9%3B%20%D0%B2%D1%8B%D0%BB%D0%BE%D0%B2%20%D0%B8%C2%A0%D0%B7%D0%B0%D1%81%D0%BE%D0%BB%C2%A0%E2%80%94%20%D0%B0%D0%B2%D0%B3%D1%83%D1%81%D1%82%202026%2C%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20600%C2%A0%D0%B3%0A5%E2%80%AF900%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                     <a href="tel:+79166751452">Позвонить</a>
                   </div>
                 </details>
@@ -1507,6 +1552,23 @@
                   </div>
                 </details>
               </article>
+              <article class="catalog-product" id="product-iran-trout" tabindex="-1" data-product-id="iran-trout" data-search-text="Свежемороженая рыба Форель радужная Иран; замороженная тушка без головы и внутренностей, 1,8–2,5 кг" data-product-name="Форель радужная" data-product-category="frozen-fish">
+                <div class="catalog-product-head"><h4>Форель радужная</h4><strong>1 680 ₽/кг</strong></div>
+                <p>Иран; замороженная тушка без головы и внутренностей, 1,8–2,5 кг</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="iran-trout"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="iran-trout" aria-label="Убрать из списка: Форель радужная, Иран; замороженная тушка без головы и внутренностей, 1,8–2,5 кг, 1 680 ₽/кг" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-iran-trout">Уточнить наличие<span class="visually-hidden">: Форель радужная, Иран; замороженная тушка без головы и внутренностей, 1,8–2,5 кг, 1 680 ₽/кг</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%20%D1%80%D0%B0%D0%B4%D1%83%D0%B6%D0%BD%D0%B0%D1%8F%0A%D0%98%D1%80%D0%B0%D0%BD%3B%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F%20%D1%82%D1%83%D1%88%D0%BA%D0%B0%20%D0%B1%D0%B5%D0%B7%C2%A0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D1%8B%20%D0%B8%C2%A0%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9%2C%201%2C8%E2%80%932%2C5%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF680%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%20%D1%80%D0%B0%D0%B4%D1%83%D0%B6%D0%BD%D0%B0%D1%8F%0A%D0%98%D1%80%D0%B0%D0%BD%3B%20%D0%B7%D0%B0%D0%BC%D0%BE%D1%80%D0%BE%D0%B6%D0%B5%D0%BD%D0%BD%D0%B0%D1%8F%20%D1%82%D1%83%D1%88%D0%BA%D0%B0%20%D0%B1%D0%B5%D0%B7%C2%A0%D0%B3%D0%BE%D0%BB%D0%BE%D0%B2%D1%8B%20%D0%B8%C2%A0%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B5%D0%B9%2C%201%2C8%E2%80%932%2C5%C2%A0%D0%BA%D0%B3%0A1%E2%80%AF680%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
             </div>
           </section>
 
@@ -1768,7 +1830,7 @@
           <section class="catalog-category" id="category-prepared-fish" data-category="prepared-fish" aria-labelledby="category-title-prepared-fish">
             <div class="catalog-category-header">
               <h3 id="category-title-prepared-fish">Слабосоленая и копченая рыба</h3>
-              <p class="catalog-category-count">13 позиций</p>
+              <p class="catalog-category-count">20 позиций</p>
             </div>
             <div class="catalog-product-grid">
               <article class="catalog-product" id="product-caspian-herring" tabindex="-1" data-product-id="caspian-herring" data-search-text="рыба Каспийский залом Малосольный, вес одной рыбы около 1 кг" data-product-name="Каспийский залом" data-product-category="prepared-fish">
@@ -1888,6 +1950,125 @@
                   <div class="catalog-product-order__channels">
                     <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A3%E2%80%AF400%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
                     <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%BE%D1%80%D0%B5%D0%BB%D1%8C%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A3%E2%80%AF400%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-smoked-trout-fillet-skinless" tabindex="-1" data-product-id="smoked-trout-fillet-skinless" data-search-text="рыба Филе форели холодного копчения без кожи Упаковка около 200 г" data-product-name="Филе форели холодного копчения без кожи" data-product-category="prepared-fish">
+                <div class="catalog-product-head"><h4>Филе форели холодного копчения без кожи</h4><strong>4 420 ₽/кг</strong></div>
+                <p>Упаковка около 200 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="smoked-trout-fillet-skinless"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="smoked-trout-fillet-skinless" aria-label="Убрать из списка: Филе форели холодного копчения без кожи, Упаковка около 200 г, 4 420 ₽/кг" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-smoked-trout-fillet-skinless">Уточнить наличие<span class="visually-hidden">: Филе форели холодного копчения без кожи, Упаковка около 200 г, 4 420 ₽/кг</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B8%D0%BB%D0%B5%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B1%D0%B5%D0%B7%C2%A0%D0%BA%D0%BE%D0%B6%D0%B8%0A%D0%A3%D0%BF%D0%B0%D0%BA%D0%BE%D0%B2%D0%BA%D0%B0%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20200%C2%A0%D0%B3%0A4%E2%80%AF420%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B8%D0%BB%D0%B5%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%B1%D0%B5%D0%B7%C2%A0%D0%BA%D0%BE%D0%B6%D0%B8%0A%D0%A3%D0%BF%D0%B0%D0%BA%D0%BE%D0%B2%D0%BA%D0%B0%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20200%C2%A0%D0%B3%0A4%E2%80%AF420%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-smoked-trout-fillet-skin" tabindex="-1" data-product-id="smoked-trout-fillet-skin" data-search-text="рыба Филе форели холодного копчения на коже Филе около 350 г" data-product-name="Филе форели холодного копчения на коже" data-product-category="prepared-fish">
+                <div class="catalog-product-head"><h4>Филе форели холодного копчения на коже</h4><strong>3 600 ₽/кг</strong></div>
+                <p>Филе около 350 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="smoked-trout-fillet-skin"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="smoked-trout-fillet-skin" aria-label="Убрать из списка: Филе форели холодного копчения на коже, Филе около 350 г, 3 600 ₽/кг" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-smoked-trout-fillet-skin">Уточнить наличие<span class="visually-hidden">: Филе форели холодного копчения на коже, Филе около 350 г, 3 600 ₽/кг</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B8%D0%BB%D0%B5%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%BD%D0%B0%C2%A0%D0%BA%D0%BE%D0%B6%D0%B5%0A%D0%A4%D0%B8%D0%BB%D0%B5%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20350%C2%A0%D0%B3%0A3%E2%80%AF600%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B8%D0%BB%D0%B5%20%D1%84%D0%BE%D1%80%D0%B5%D0%BB%D0%B8%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%20%D0%BD%D0%B0%C2%A0%D0%BA%D0%BE%D0%B6%D0%B5%0A%D0%A4%D0%B8%D0%BB%D0%B5%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20350%C2%A0%D0%B3%0A3%E2%80%AF600%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-smoked-vendace" tabindex="-1" data-product-id="smoked-vendace" data-search-text="рыба Ряпушка холодного копчения Вес одной рыбы 100–150 г" data-product-name="Ряпушка холодного копчения" data-product-category="prepared-fish">
+                <div class="catalog-product-head"><h4>Ряпушка холодного копчения</h4><strong>2 500 ₽/кг</strong></div>
+                <p>Вес одной рыбы 100–150 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="smoked-vendace"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="smoked-vendace" aria-label="Убрать из списка: Ряпушка холодного копчения, Вес одной рыбы 100–150 г, 2 500 ₽/кг" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-smoked-vendace">Уточнить наличие<span class="visually-hidden">: Ряпушка холодного копчения, Вес одной рыбы 100–150 г, 2 500 ₽/кг</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D1%8F%D0%BF%D1%83%D1%88%D0%BA%D0%B0%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A%D0%92%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20100%E2%80%93150%C2%A0%D0%B3%0A2%E2%80%AF500%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D1%8F%D0%BF%D1%83%D1%88%D0%BA%D0%B0%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A%D0%92%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20100%E2%80%93150%C2%A0%D0%B3%0A2%E2%80%AF500%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-smoked-goby" tabindex="-1" data-product-id="smoked-goby" data-search-text="рыба Черноморский бычок холодного копчения Вес одной рыбы 10–15 г" data-product-name="Черноморский бычок холодного копчения" data-product-category="prepared-fish">
+                <div class="catalog-product-head"><h4>Черноморский бычок холодного копчения</h4><strong>2 490 ₽/кг</strong></div>
+                <p>Вес одной рыбы 10–15 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="smoked-goby"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="smoked-goby" aria-label="Убрать из списка: Черноморский бычок холодного копчения, Вес одной рыбы 10–15 г, 2 490 ₽/кг" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-smoked-goby">Уточнить наличие<span class="visually-hidden">: Черноморский бычок холодного копчения, Вес одной рыбы 10–15 г, 2 490 ₽/кг</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%BE%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B1%D1%8B%D1%87%D0%BE%D0%BA%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A%D0%92%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%2010%E2%80%9315%C2%A0%D0%B3%0A2%E2%80%AF490%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A7%D0%B5%D1%80%D0%BD%D0%BE%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%B8%D0%B9%20%D0%B1%D1%8B%D1%87%D0%BE%D0%BA%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A%D0%92%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%2010%E2%80%9315%C2%A0%D0%B3%0A2%E2%80%AF490%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-smoked-roe-flounder" tabindex="-1" data-product-id="smoked-roe-flounder" data-search-text="рыба Икряная камбала холодного копчения Вес одной рыбы около 300 г" data-product-name="Икряная камбала холодного копчения" data-product-category="prepared-fish">
+                <div class="catalog-product-head"><h4>Икряная камбала холодного копчения</h4><strong>1 800 ₽/кг</strong></div>
+                <p>Вес одной рыбы около 300 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="smoked-roe-flounder"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="smoked-roe-flounder" aria-label="Убрать из списка: Икряная камбала холодного копчения, Вес одной рыбы около 300 г, 1 800 ₽/кг" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-smoked-roe-flounder">Уточнить наличие<span class="visually-hidden">: Икряная камбала холодного копчения, Вес одной рыбы около 300 г, 1 800 ₽/кг</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D1%8F%D0%BD%D0%B0%D1%8F%20%D0%BA%D0%B0%D0%BC%D0%B1%D0%B0%D0%BB%D0%B0%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A%D0%92%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20300%C2%A0%D0%B3%0A1%E2%80%AF800%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%98%D0%BA%D1%80%D1%8F%D0%BD%D0%B0%D1%8F%20%D0%BA%D0%B0%D0%BC%D0%B1%D0%B0%D0%BB%D0%B0%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A%D0%92%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20300%C2%A0%D0%B3%0A1%E2%80%AF800%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-danish-herring-fillet" tabindex="-1" data-product-id="danish-herring-fillet" data-search-text="рыба Филе сельди холодного копчения «По-Датски» Две половинки малосольного филе; вес одной рыбы около 100 г" data-product-name="Филе сельди холодного копчения «По-Датски»" data-product-category="prepared-fish">
+                <div class="catalog-product-head"><h4>Филе сельди холодного копчения «По-Датски»</h4><strong>1 800 ₽/кг</strong></div>
+                <p>Две половинки малосольного филе; вес одной рыбы около 100 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="danish-herring-fillet"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="danish-herring-fillet" aria-label="Убрать из списка: Филе сельди холодного копчения «По-Датски», Две половинки малосольного филе; вес одной рыбы около 100 г, 1 800 ₽/кг" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-danish-herring-fillet">Уточнить наличие<span class="visually-hidden">: Филе сельди холодного копчения «По-Датски», Две половинки малосольного филе; вес одной рыбы около 100 г, 1 800 ₽/кг</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B8%D0%BB%D0%B5%20%D1%81%D0%B5%D0%BB%D1%8C%D0%B4%D0%B8%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%20%C2%AB%D0%9F%D0%BE-%D0%94%D0%B0%D1%82%D1%81%D0%BA%D0%B8%C2%BB%0A%D0%94%D0%B2%D0%B5%20%D0%BF%D0%BE%D0%BB%D0%BE%D0%B2%D0%B8%D0%BD%D0%BA%D0%B8%20%D0%BC%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE%20%D1%84%D0%B8%D0%BB%D0%B5%3B%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20100%C2%A0%D0%B3%0A1%E2%80%AF800%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A4%D0%B8%D0%BB%D0%B5%20%D1%81%D0%B5%D0%BB%D1%8C%D0%B4%D0%B8%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%20%C2%AB%D0%9F%D0%BE-%D0%94%D0%B0%D1%82%D1%81%D0%BA%D0%B8%C2%BB%0A%D0%94%D0%B2%D0%B5%20%D0%BF%D0%BE%D0%BB%D0%BE%D0%B2%D0%B8%D0%BD%D0%BA%D0%B8%20%D0%BC%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%BE%D0%B3%D0%BE%20%D1%84%D0%B8%D0%BB%D0%B5%3B%20%D0%B2%D0%B5%D1%81%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9%20%D1%80%D1%8B%D0%B1%D1%8B%20%D0%BE%D0%BA%D0%BE%D0%BB%D0%BE%20100%C2%A0%D0%B3%0A1%E2%80%AF800%C2%A0%E2%82%BD%2F%D0%BA%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-salted-red-mullet" tabindex="-1" data-product-id="salted-red-mullet" data-search-text="рыба Малосольная черноморская барабуля Бескостное филе, разделанное вручную; банка 330 г" data-product-name="Малосольная черноморская барабуля" data-product-category="prepared-fish">
+                <div class="catalog-product-head"><h4>Малосольная черноморская барабуля</h4><strong>999 ₽ за 330 г</strong></div>
+                <p>Бескостное филе, разделанное вручную; банка 330 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="salted-red-mullet"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="salted-red-mullet" aria-label="Убрать из списка: Малосольная черноморская барабуля, Бескостное филе, разделанное вручную; банка 330 г, 999 ₽ за 330 г" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-salted-red-mullet">Уточнить наличие<span class="visually-hidden">: Малосольная черноморская барабуля, Бескостное филе, разделанное вручную; банка 330 г, 999 ₽ за 330 г</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%20%D1%87%D0%B5%D1%80%D0%BD%D0%BE%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%B0%D1%8F%20%D0%B1%D0%B0%D1%80%D0%B0%D0%B1%D1%83%D0%BB%D1%8F%0A%D0%91%D0%B5%D1%81%D0%BA%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%84%D0%B8%D0%BB%D0%B5%2C%20%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%D1%80%D1%83%D1%87%D0%BD%D1%83%D1%8E%3B%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20330%C2%A0%D0%B3%0A999%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0330%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9C%D0%B0%D0%BB%D0%BE%D1%81%D0%BE%D0%BB%D1%8C%D0%BD%D0%B0%D1%8F%20%D1%87%D0%B5%D1%80%D0%BD%D0%BE%D0%BC%D0%BE%D1%80%D1%81%D0%BA%D0%B0%D1%8F%20%D0%B1%D0%B0%D1%80%D0%B0%D0%B1%D1%83%D0%BB%D1%8F%0A%D0%91%D0%B5%D1%81%D0%BA%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%84%D0%B8%D0%BB%D0%B5%2C%20%D1%80%D0%B0%D0%B7%D0%B4%D0%B5%D0%BB%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5%20%D0%B2%D1%80%D1%83%D1%87%D0%BD%D1%83%D1%8E%3B%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20330%C2%A0%D0%B3%0A999%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0330%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
                     <a href="tel:+79166751452">Позвонить</a>
                   </div>
                 </details>
@@ -2085,7 +2266,7 @@
           <section class="catalog-category" id="category-canned" data-category="canned" aria-labelledby="category-title-canned">
             <div class="catalog-category-header">
               <h3 id="category-title-canned">Консервы и бульон</h3>
-              <p class="catalog-category-count">13 позиций</p>
+              <p class="catalog-category-count">18 позиций</p>
             </div>
             <div class="catalog-product-grid">
               <article class="catalog-product" id="product-other-005" tabindex="-1" data-product-id="other-005" data-search-text="консервы Печень трески ж. б. Сделано в море" data-product-name="Печень трески ж. б." data-product-category="canned" data-previous-category="other">
@@ -2158,6 +2339,92 @@
                   </div>
                 </details>
                 <div class="catalog-product-advice"><span>Олег советует</span><blockquote cite="../recipes/701/">Печень трески «по-мурмански» от лучшего производителя — АО «Архангельский траловый флот».</blockquote><a class="catalog-advice-link" href="../recipes/701/">Рулетики с печенью трески<span class="catalog-advice-photo" aria-hidden="true"><img src="../assets/journal-701-480.webp" srcset="../assets/journal-701-480.webp 480w, ../assets/journal-701-600.webp 600w" sizes="240px" width="600" height="800" loading="lazy" decoding="async" alt="" /></span></a></div>
+              </article>
+              <article class="catalog-product" id="product-eel-rillettes" tabindex="-1" data-product-id="eel-rillettes" data-search-text="консервы Риеты и паштеты из копченого балтийского угря Банка 80 г, восемь вкусов" data-product-name="Риеты и паштеты из копченого балтийского угря" data-product-category="canned">
+                <div class="catalog-product-head"><h4>Риеты и паштеты из копченого балтийского угря</h4><strong>649 ₽ за 80 г</strong></div>
+                <p>Банка 80 г, восемь вкусов</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="eel-rillettes"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="eel-rillettes" aria-label="Убрать из списка: Риеты и паштеты из копченого балтийского угря, Банка 80 г, восемь вкусов, 649 ₽ за 80 г" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-eel-rillettes">Уточнить наличие<span class="visually-hidden">: Риеты и паштеты из копченого балтийского угря, Банка 80 г, восемь вкусов, 649 ₽ за 80 г</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D0%B8%D0%B5%D1%82%D1%8B%20%D0%B8%C2%A0%D0%BF%D0%B0%D1%88%D1%82%D0%B5%D1%82%D1%8B%20%D0%B8%D0%B7%C2%A0%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%B1%D0%B0%D0%BB%D1%82%D0%B8%D0%B9%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%20%D1%83%D0%B3%D1%80%D1%8F%0A%D0%91%D0%B0%D0%BD%D0%BA%D0%B0%2080%C2%A0%D0%B3%2C%20%D0%B2%D0%BE%D1%81%D0%B5%D0%BC%D1%8C%20%D0%B2%D0%BA%D1%83%D1%81%D0%BE%D0%B2%0A649%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A080%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A0%D0%B8%D0%B5%D1%82%D1%8B%20%D0%B8%C2%A0%D0%BF%D0%B0%D1%88%D1%82%D0%B5%D1%82%D1%8B%20%D0%B8%D0%B7%C2%A0%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%B1%D0%B0%D0%BB%D1%82%D0%B8%D0%B9%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%20%D1%83%D0%B3%D1%80%D1%8F%0A%D0%91%D0%B0%D0%BD%D0%BA%D0%B0%2080%C2%A0%D0%B3%2C%20%D0%B2%D0%BE%D1%81%D0%B5%D0%BC%D1%8C%20%D0%B2%D0%BA%D1%83%D1%81%D0%BE%D0%B2%0A649%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A080%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-chicken-liver-pate" tabindex="-1" data-product-id="chicken-liver-pate" data-search-text="консервы Паштет из куриной печени Из охлаждённой куриной печени; банка 190 г" data-product-name="Паштет из куриной печени" data-product-category="canned">
+                <div class="catalog-product-head"><h4>Паштет из куриной печени</h4><strong>390 ₽ за 190 г</strong></div>
+                <p>Из охлаждённой куриной печени; банка 190 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="chicken-liver-pate"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="chicken-liver-pate" aria-label="Убрать из списка: Паштет из куриной печени, Из охлаждённой куриной печени; банка 190 г, 390 ₽ за 190 г" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-chicken-liver-pate">Уточнить наличие<span class="visually-hidden">: Паштет из куриной печени, Из охлаждённой куриной печени; банка 190 г, 390 ₽ за 190 г</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B0%D1%88%D1%82%D0%B5%D1%82%20%D0%B8%D0%B7%C2%A0%D0%BA%D1%83%D1%80%D0%B8%D0%BD%D0%BE%D0%B9%20%D0%BF%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%0A%D0%98%D0%B7%C2%A0%D0%BE%D1%85%D0%BB%D0%B0%D0%B6%D0%B4%D1%91%D0%BD%D0%BD%D0%BE%D0%B9%20%D0%BA%D1%83%D1%80%D0%B8%D0%BD%D0%BE%D0%B9%20%D0%BF%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%3B%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20190%C2%A0%D0%B3%0A390%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0190%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%9F%D0%B0%D1%88%D1%82%D0%B5%D1%82%20%D0%B8%D0%B7%C2%A0%D0%BA%D1%83%D1%80%D0%B8%D0%BD%D0%BE%D0%B9%20%D0%BF%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%0A%D0%98%D0%B7%C2%A0%D0%BE%D1%85%D0%BB%D0%B0%D0%B6%D0%B4%D1%91%D0%BD%D0%BD%D0%BE%D0%B9%20%D0%BA%D1%83%D1%80%D0%B8%D0%BD%D0%BE%D0%B9%20%D0%BF%D0%B5%D1%87%D0%B5%D0%BD%D0%B8%3B%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20190%C2%A0%D0%B3%0A390%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0190%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-fish-soup" tabindex="-1" data-product-id="fish-soup" data-search-text="консервы Уха Все виды, кроме осетровой; банка 500 г" data-product-name="Уха" data-product-category="canned">
+                <div class="catalog-product-head"><h4>Уха</h4><strong>499 ₽ за 500 г</strong></div>
+                <p>Все виды, кроме осетровой; банка 500 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="fish-soup"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="fish-soup" aria-label="Убрать из списка: Уха, Все виды, кроме осетровой; банка 500 г, 499 ₽ за 500 г" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-fish-soup">Уточнить наличие<span class="visually-hidden">: Уха, Все виды, кроме осетровой; банка 500 г, 499 ₽ за 500 г</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A3%D1%85%D0%B0%0A%D0%92%D1%81%D0%B5%20%D0%B2%D0%B8%D0%B4%D1%8B%2C%20%D0%BA%D1%80%D0%BE%D0%BC%D0%B5%20%D0%BE%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%BE%D0%B9%3B%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20500%C2%A0%D0%B3%0A499%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A3%D1%85%D0%B0%0A%D0%92%D1%81%D0%B5%20%D0%B2%D0%B8%D0%B4%D1%8B%2C%20%D0%BA%D1%80%D0%BE%D0%BC%D0%B5%20%D0%BE%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%BE%D0%B9%3B%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%20500%C2%A0%D0%B3%0A499%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-sturgeon-soup" tabindex="-1" data-product-id="sturgeon-soup" data-search-text="консервы Уха осетровая Банка 500 г" data-product-name="Уха осетровая" data-product-category="canned">
+                <div class="catalog-product-head"><h4>Уха осетровая</h4><strong>799 ₽ за 500 г</strong></div>
+                <p>Банка 500 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="sturgeon-soup"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="sturgeon-soup" aria-label="Убрать из списка: Уха осетровая, Банка 500 г, 799 ₽ за 500 г" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-sturgeon-soup">Уточнить наличие<span class="visually-hidden">: Уха осетровая, Банка 500 г, 799 ₽ за 500 г</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A3%D1%85%D0%B0%20%D0%BE%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%0A%D0%91%D0%B0%D0%BD%D0%BA%D0%B0%20500%C2%A0%D0%B3%0A799%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%A3%D1%85%D0%B0%20%D0%BE%D1%81%D0%B5%D1%82%D1%80%D0%BE%D0%B2%D0%B0%D1%8F%0A%D0%91%D0%B0%D0%BD%D0%BA%D0%B0%20500%C2%A0%D0%B3%0A799%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A0500%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+              </article>
+              <article class="catalog-product" id="product-tunisian-anchovies" tabindex="-1" data-product-id="tunisian-anchovies" data-search-text="консервы Анчоусы Тунис, банка 80 г" data-product-name="Анчоусы" data-product-category="canned">
+                <div class="catalog-product-head"><h4>Анчоусы</h4><strong>650 ₽ за 80 г</strong></div>
+                <p>Тунис, банка 80 г</p>
+                <div class="catalog-product-actions" hidden>
+                  <button type="button" class="catalog-product-add" data-order-add value="tunisian-anchovies"><span>В список заказа</span></button>
+                  <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
+                  <button type="button" class="catalog-product-remove" data-order-remove value="tunisian-anchovies" aria-label="Убрать из списка: Анчоусы, Тунис, банка 80 г, 650 ₽ за 80 г" hidden>Убрать</button>
+                </div>
+                <details class="catalog-product-order">
+                  <summary id="order-tunisian-anchovies">Уточнить наличие<span class="visually-hidden">: Анчоусы, Тунис, банка 80 г, 650 ₽ за 80 г</span></summary>
+                  <div class="catalog-product-order__channels">
+                    <a href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%90%D0%BD%D1%87%D0%BE%D1%83%D1%81%D1%8B%0A%D0%A2%D1%83%D0%BD%D0%B8%D1%81%2C%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%2080%C2%A0%D0%B3%0A650%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A080%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;Телеграме</a>
+                    <a href="https://wa.me/79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%3A%0A%D0%90%D0%BD%D1%87%D0%BE%D1%83%D1%81%D1%8B%0A%D0%A2%D1%83%D0%BD%D0%B8%D1%81%2C%20%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0%2080%C2%A0%D0%B3%0A650%C2%A0%E2%82%BD%20%D0%B7%D0%B0%C2%A080%C2%A0%D0%B3%0A%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B5.">В&nbsp;WhatsApp</a>
+                    <a href="tel:+79166751452">Позвонить</a>
+                  </div>
+                </details>
+                <div class="catalog-product-advice"><span>Олег советует</span><a class="catalog-advice-link" href="../recipes/664/">Предельно простая паста<span class="catalog-advice-photo" aria-hidden="true"><img src="../assets/journal-664-480.webp" srcset="../assets/journal-664-480.webp 480w, ../assets/journal-664-800.webp 800w" sizes="240px" width="800" height="789" loading="lazy" decoding="async" alt="" /></span></a></div>
               </article>
               <article class="catalog-product" id="product-other-008" tabindex="-1" data-product-id="other-008" data-search-text="консервы Ряпушка копченая в масле" data-product-name="Ряпушка копченая в масле" data-product-category="canned" data-previous-category="other">
                 <div class="catalog-product-head"><h4>Ряпушка копченая в масле</h4><strong>860 ₽ за 350 г</strong></div>

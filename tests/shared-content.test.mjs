@@ -33,7 +33,7 @@ test("one journal edit propagates to all views without shortening its prose", ()
     assert.ok(html.includes(changed.image));
   }
   const archive = renderJournal([changed], "article");
-  for (const line of changed.body.split("\n").filter(line => !isSocialTagRow(line))) assert.ok(archive.includes(line));
+  for (const line of changed.body.split("\n").filter(line => !isSocialTagRow(line) && !line.includes('class="journal-source-signature"'))) assert.ok(archive.includes(line));
   assert.ok(decodeURIComponent(archive).includes(changed.product));
 });
 

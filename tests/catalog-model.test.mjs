@@ -21,7 +21,7 @@ const findProducts = (query) => catalog.flatMap((category) => category.items
 test("customers find stocked products using everyday names and inflected words", () => {
   assert.equal(findProducts("креветки").length, 5);
   assert.equal(findProducts("кальмары").length, 3);
-  assert.deepEqual(findProducts("селёдка"), ["Сельдь слабосоленая"]);
+  assert.deepEqual(findProducts("селёдка"), ["Филе сельди холодного копчения «По-Датски»", "Сельдь слабосоленая"]);
   assert.deepEqual(findProducts("лосось"), ["Филе лосося", "Стейк лосося", "Лосось слабосоленый"]);
   assert.deepEqual(findProducts("треска"), findProducts("трески"));
   assert.deepEqual(findProducts("СЕВЕРНЫЕ, креветки"), ["Креветка северная в/м"]);
@@ -42,10 +42,11 @@ test("preparation terms describe the actual product, not its mixed category", ()
 test("search keeps partial words and combines terms without mixing different products", () => {
   assert.equal(findProducts("крев").length, 5);
   assert.equal(findProducts("креветки треска").length, 0);
-  assert.equal(findProducts("сельдь филе").length, 0);
+  assert.deepEqual(findProducts("сельдь филе"), ["Филе сельди холодного копчения «По-Датски»"]);
+  assert.equal(findProducts("сельдь треска").length, 0);
   assert.equal(findProducts("несуществующая рыба").length, 0);
   assert.equal(findProducts("***").length, 0);
-  assert.equal(findProducts("").length, 117);
+  assert.equal(findProducts("").length, 132);
   assert.equal(matchesSearch("Лосось слабосоленый", "форель"), false);
 });
 
@@ -89,7 +90,7 @@ test("a moved product keeps saved orders and does not inherit unrelated preparat
   assert.deepEqual(restoreOrderKeys(["other|Фарш форели|Высшего качества|/0,5 кг", fishMince.id], catalog), [fishMince.id]);
   assert.deepEqual(findProducts("фарш"), ["Фарш форели"]);
   assert.deepEqual(findProducts("бульон"), ["Бульон из форели"]);
-  assert.equal(findProducts("консервы").length, 12);
+  assert.equal(findProducts("консервы").length, 17);
   assert.ok(catalog.find(category => category.slug === "seafood").items.some(product => product.id === "other-025"));
   assert.ok(catalog.find(category => category.slug === "grocery").items.some(product => product.name === "Рис"));
   assert.ok(catalog.find(category => category.slug === "accessories").items.every(product => product.quantityUnit === "piece"));

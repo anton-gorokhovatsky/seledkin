@@ -5628,21 +5628,22 @@ a.site-menu__brand {
   }
   [data-desktop-editorial] .source-hero__journal-stack {
     position: relative;
-    display: block;
+    display: grid;
     padding: 0;
   }
   [data-desktop-editorial] .source-hero__journal-card {
-    position: absolute;
-    inset: 0 0 auto;
-    width: auto;
+    position: relative;
+    inset: auto;
+    width: 100%;
+    align-self: stretch;
   }
   [data-desktop-editorial] .source-hero__journal-card[data-stack-position="0"] {
     position: relative;
     inset: auto;
   }
-  [data-desktop-editorial] .source-hero__journal-card[aria-hidden="true"] figcaption { display: none; }
+  [data-desktop-editorial] .source-hero__journal-card[aria-hidden="true"] figcaption { visibility: hidden; }
   [data-desktop-editorial] .source-hero__proof img {
-    aspect-ratio: var(--hero-journal-photo-ratio, 800 / 771);
+    aspect-ratio: 1;
     object-position: left top;
   }
   [data-desktop-editorial] .source-hero__proof figcaption { margin-top: 1.25rem; gap: .5rem; }
@@ -5664,19 +5665,35 @@ a.site-menu__brand {
     margin-top: 0;
   }
   [data-desktop-editorial] .source-hero__journal-next-slot { margin-left: 0; }
+  .hero-journal-products { display: grid; }
   .hero-journal-product {
     display: flex;
+    grid-area: 1 / 1;
     flex-wrap: wrap;
     align-items: center;
     gap: .5rem 1rem;
   }
-  .hero-journal-product__price {
-    flex: 1 1 auto;
-    color: var(--on-image);
-    font: 400 var(--text-body)/1.4 var(--sans);
-    text-underline-offset: .2em;
+  .hero-journal-products > .hero-journal-product[hidden] { display: flex; visibility: hidden; }
+  .hero-journal-product__toggle {
+    display: block;
+    max-width: 100%;
+    margin-left: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
   }
-  .hero-journal-product__toggle { max-width: 100%; margin-left: 0; }
+  .hero-journal-product__amount { white-space: nowrap; }
+  .hero-journal-product__toggle svg { display: inline-block; margin-left: .55rem; vertical-align: -.15em; }
+  .hero-journal-product__toggle:focus-visible { text-decoration-thickness: .12em; }
+  @media (hover: hover) and (pointer: fine) {
+    .hero-journal-product__toggle:hover { text-decoration-thickness: .12em; }
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-journal-product__toggle svg { transition: transform var(--feedback-duration) var(--ease-state); }
+      .hero-journal-product__toggle:hover svg { transform: translateX(.2rem); }
+    }
+  }
   .hero-journal-product__choices:popover-open {
     position: fixed;
     inset: auto;
@@ -5701,6 +5718,14 @@ a.site-menu__brand {
   }
   .hero-journal-product__choices::backdrop { background: transparent; }
   .hero-journal-product__choices > a { flex: 1 1 auto; }
+  .hero-journal-product__choices > .hero-journal-product__catalog {
+    display: flex;
+    min-height: 2.75rem;
+    flex-basis: 100%;
+    align-items: center;
+    color: inherit;
+    text-underline-offset: .2em;
+  }
   .hero-journal-product__draft, .hero-journal-product__status { flex-basis: 100%; margin: 0; }
   .hero-journal-product__draft { display: grid; gap: .5rem; }
   .hero-journal-product__draft textarea {

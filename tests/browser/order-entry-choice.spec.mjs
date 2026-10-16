@@ -11,18 +11,21 @@ test("desktop journal orders the pictured catalog product and clears the previou
   const journal = page.locator("[data-hero-journal]");
   const roll = journal.locator('[data-hero-journal-product="702"]');
   await expect(roll).toBeVisible();
+  expect(await roll.locator(".hero-journal-product__toggle").textContent()).toBe("Заказать по\u00a03\u202f740\u00a0₽/кг");
+  await expect(roll.locator(".hero-journal-product__amount svg")).toBeVisible();
   expect(new URL(await roll.locator('[data-hero-order-telegram]').getAttribute('href')).searchParams.get('text')).toMatch(/Рулет\s+из\s+брюшков\s+осетра[\s\S]*3\s*740\s*₽\/кг/);
   await journal.locator("[data-hero-journal-next]").click();
   const caviar = journal.locator('[data-hero-journal-product="700"]');
-  const order = caviar.getByRole("button", { name: "Заказать икру форели", exact: true });
+  const order = caviar.getByRole("button", { name: /Заказать по.*Икра форели/ });
   await order.press("Enter");
   const choices = caviar.getByRole("group", { name: "Заказать икру форели", exact: true });
   await expect(choices.getByRole("link").first()).toBeFocused();
-  for (const link of await choices.getByRole("link").all()) {
+  for (const link of await choices.locator("[data-hero-order-telegram], [data-hero-order-whatsapp]").all()) {
     const draft = new URL(await link.getAttribute("href")).searchParams.get("text");
     expect(draft).toContain("Икра форели");
     expect(draft).toMatch(/4\s*990\s*₽ за\s*250\s*г/);
   }
+  await expect(choices.getByRole("link", { name: "Икра форели в каталоге", exact: true })).toHaveAttribute("href", /product=trout-roe/);
   await choices.getByRole("link").first().click();
   const draft = choices.getByRole("textbox", { name: "Текст для сообщения" });
   await expect(draft).toHaveValue(/Икра форели/);
@@ -32,7 +35,10 @@ test("desktop journal orders the pictured catalog product and clears the previou
   await expect(choices).toBeHidden();
   await expect(order).toBeFocused();
   await journal.locator("[data-hero-journal-next]").click();
-  await expect(journal.locator("[data-hero-journal-product]:visible")).toHaveCount(0);
+  const trout = journal.locator('[data-hero-journal-product="699"]');
+  await expect(trout).toBeVisible();
+  await expect(trout.locator(".hero-journal-product__toggle")).toHaveText("Заказать по\u00a01\u202f680\u00a0₽/кг");
+  expect(new URL(await trout.locator('[data-hero-order-telegram]').getAttribute("href")).searchParams.get("text")).toMatch(/Форель\s+охлаждённая[\s\S]*1\s*680\s*₽\/кг/);
   await journal.locator("[data-hero-journal-previous]").click();
   await order.click();
   await expect(draft).toBeHidden();
@@ -41,7 +47,7 @@ test("desktop journal orders the pictured catalog product and clears the previou
   await journal.locator("[data-hero-journal-next]").click();
   await journal.locator("[data-hero-journal-next]").click();
   const herring = journal.locator('[data-hero-journal-product="698"]');
-  await herring.getByRole("button", { name: "Заказать каспийский залом", exact: true }).click();
+  await herring.getByRole("button", { name: /Заказать по.*Каспийский залом/ }).click();
   const whatsapp = herring.getByRole("link", { name: "В WhatsApp", exact: true });
   const herringDraft = new URL(await whatsapp.getAttribute("href")).searchParams.get("text");
   expect(herringDraft).toContain("Каспийский залом");
@@ -61,7 +67,7 @@ test("mobile order keeps the pictured product through selection and messenger ha
   await expect(order).toHaveAttribute("open", "");
   await page.keyboard.press(testInfo.project.name === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab");
   await expect(order.getByRole("link").first()).toBeFocused();
-  const products = ["Каспийский залом", "Икра форели", "Стейк лосося", "Форель холодного копчения", "Скумбрия горячего копчения"];
+  const products = ["Каспийский залом", "Икра форели", "Стейк лосося", "Филе форели холодного копчения без кожи", "Скумбрия горячего копчения"];
   for (const name of products) {
     await expect(page.locator(".afisha__name")).toHaveText(name);
     const price = await page.locator(".afisha__price").textContent();
@@ -70,7 +76,7 @@ test("mobile order keeps the pictured product through selection and messenger ha
       await expect(link).toBeVisible();
       const url = new URL(await link.getAttribute("href"));
       expect(url.hostname).toBe(host);
-      expect(url.searchParams.get("text")).toContain(name);
+      expect(url.searchParams.get("text").replace(/\s+/gu, " ")).toContain(name);
       expect(url.searchParams.get("text")).toContain(price);
       expect(url.searchParams.get("text")).not.toMatch(/(?:Вес|Количество):/);
     }

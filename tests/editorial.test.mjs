@@ -1,4 +1,5 @@
-import { editorialPath, recipeForEntry } from "../scripts/recipe-content.mjs";
+import { editorialPath, recipeForEntry, recipes, resolveProduct } from "../scripts/recipe-content.mjs";
+import { renderHeroJournalProducts } from "../scripts/site-content.mjs";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
@@ -93,5 +94,28 @@ test("catalog prices agree with the five unambiguous September source updates", 
     ["Скумбрия холодного копчения", "1640 ₽/кг"],
   ]) {
     assert.equal(products.find(product => product.name === name)?.price, price, name);
+  }
+});
+
+test("selling publications include a sourced catalog position and recipes never silently omit their product", () => {
+  const products = catalog.flatMap(category => category.items);
+  for (const entry of ids.filter(entry => !recipeForEntry(entry.id))) {
+    const source = entry.source?.url ?? `https://t.me/kapitanseledkin/${entry.id}`;
+    const sourced = products.filter(product => product.source === source);
+    // Repeat deliveries may use the existing exact product selected by the hero.
+    const selected = renderHeroJournalProducts([entry]).includes(`data-journal-id="${entry.id}"`);
+    assert.ok(sourced.length || selected, `Add the missing product to the catalog before publishing ${entry.id}: ${entry.title}`);
+    for (const product of sourced) {
+      assert.ok(product.quantityUnit, `Missing selling unit: ${product.id}`);
+      assert.match(catalogPrice(product.price), /\d.*₽/, `Missing confirmed price: ${product.id}`);
+    }
+  }
+  for (const recipe of recipes) {
+    if (recipe.products.length) {
+      for (const selection of recipe.products) assert.ok(resolveProduct(selection).product.price);
+    } else {
+      const entry = ids.find(entry => entry.id === recipe.id);
+      assert.ok(entry.date < "2026-01-01" && recipe.catalogGap?.trim(), `Add the recipe's missing catalog product: ${recipe.id}`);
+    }
   }
 });

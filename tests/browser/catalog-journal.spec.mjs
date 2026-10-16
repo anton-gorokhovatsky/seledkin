@@ -27,7 +27,7 @@ test("an empty category search can broaden without losing the query or browser h
   await expect(broaden).toBeVisible();
   await page.locator("[data-catalog-reset]").click();
   await expect(search).toHaveValue("");
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(117);
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(132);
   await search.fill("такойрыбынет");
   await expect(page.locator("[data-catalog-empty]")).toBeVisible();
   await expect(broaden).toBeHidden();
@@ -78,22 +78,22 @@ test("catalog separates dated journal matches from current price rows @catalog",
     await search.fill(query);
     await expect(page.locator(".catalog-product:visible")).toHaveCount(count);
   }
-  await search.fill("риет");
+  await search.fill("эталонная");
   await expect(page.locator(".catalog-product:visible")).toHaveCount(0);
   await expect(page.locator("[data-catalog-empty]")).toBeHidden();
   await expect(page.locator("[data-journal-result]:visible")).toHaveCount(1);
   await expect(page.locator("[data-catalog-count]")).toHaveText("В каталоге нет совпадений · Из журнала: 1");
-  await expect(page.locator("[data-journal-result]:visible time")).toHaveAttribute("datetime", "2026-09-27");
+  await expect(page.locator("[data-journal-result]:visible time")).toHaveAttribute("datetime", "2026-10-01");
   await page.locator("[data-journal-result]:visible a").click();
-  await expect(page).toHaveURL(/journal\/697\/$/);
-  await expect(page.locator(".ship-log-entry__body")).toContainText("Восемь разных вкусов");
+  await expect(page).toHaveURL(/journal\/699\/$/);
+  await expect(page.locator(".ship-log-entry__body")).toContainText("Килограмм, как и раньше");
   await page.goBack();
-  await expect(search).toHaveValue("риет");
+  await expect(search).toHaveValue("эталонная");
   await search.fill("такойрыбынет");
   await expect(page.locator("[data-catalog-empty]")).toBeVisible();
   await expect(page.locator("[data-catalog-journal]")).toBeHidden();
   await page.locator("[data-catalog-reset]").click();
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(117);
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(132);
   await expect(page.locator("[data-catalog-journal]")).toBeHidden();
 });
 
@@ -183,12 +183,12 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
   await page.evaluate(() => document.addEventListener("click", event => { if(event.target.closest('a[href^="https://t.me"],a[href^="https://wa.me"]')) event.preventDefault(); }));
   await page.locator('.catalog-product:visible a[href^="https://t.me"]').click();
   await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "order_click")[0]?.[3])).toMatchObject({channel:"telegram",context:"catalog",product:"Филе тунца"});
-  await search.fill("риет");
+  await search.fill("эталонная");
   await search.blur();
   await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "catalog_search_empty").length)).toBe(1);
   const calls = await page.evaluate(() => window.goalCalls.filter(call => call[1] === "reachGoal"));
   expect(calls.filter(call => call[2] === "catalog_search")).toHaveLength(2);
-  expect(JSON.stringify(calls)).not.toContain("риет");
+  expect(JSON.stringify(calls)).not.toContain("эталонная");
   expect(calls.find(call => call[2] === "catalog_search_empty")[3]).toMatchObject({schema:2,products:0,journal:1,total_products:0,result:"journal_only"});
   await page.getByRole("link",{name:"Телеграм-канал",exact:true}).click();
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "order_click").length)).toBe(1);

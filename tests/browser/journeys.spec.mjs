@@ -31,9 +31,9 @@ test("prices and product-specific order links survive unavailable JavaScript @ca
     const page = await context.newPage();
     if (mode === "failed-module") await page.route("**/catalog/catalog.js*", (route) => route.abort());
     await page.goto(`${baseURL}catalog/`);
-    await expect(page.locator(".catalog-product")).toHaveCount(117);
+    await expect(page.locator(".catalog-product")).toHaveCount(132);
     await expect(page.locator("[data-catalog-controls]")).toBeHidden();
-    await expect(page.locator("[data-catalog-count]")).toHaveText("117 позиций");
+    await expect(page.locator("[data-catalog-count]")).toHaveText("132 позиции");
     const product = page.locator(".catalog-product").first();
     await product.locator("summary").click();
     await expect(product.locator(".catalog-product-order__channels").getByRole("link")).toHaveCount(3);
@@ -71,7 +71,7 @@ test("search, category, shared URL and browser history retain the same selection
   await page.goForward();
   await expect(count).toHaveText("0 позиций");
   await page.locator("[data-catalog-reset]").click();
-  await expect(count).toHaveText("117 позиций");
+  await expect(count).toHaveText("132 позиции");
   await search.fill("морепродукты");
   await expect(count).toHaveText("18 позиций");
   await search.fill("НЕСУЩЕСТВУЮЩИЙ ТОВАР");
@@ -143,6 +143,11 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
       continue;
     }
     await expect(journal).toBeVisible();
+    const firstLayout = await page.evaluate(() => ({
+      navY: document.querySelector('.source-hero__journal-controls').getBoundingClientRect().top + scrollY,
+      widths: [...document.querySelectorAll('[data-hero-journal-card]')].map(card => card.offsetWidth),
+    }));
+    expect(Math.max(...firstLayout.widths) - Math.min(...firstLayout.widths)).toBeLessThanOrEqual(1);
     const counter = page.locator("[data-hero-journal-counter]");
     const center = await counter.evaluate(e => { const r = e.getBoundingClientRect(); return r.x + r.width / 2; });
     const arrowCenter = await page.locator('[data-hero-journal-next] svg').evaluate(e => { const r = e.getBoundingClientRect(); return r.x + r.width / 2; });
@@ -184,6 +189,7 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
       expect(right.x + right.width).toBeLessThanOrEqual(row.x + row.width + 1);
       expect(row.x).toBeCloseTo(photo.x, 0);
       expect(row.width).toBeCloseTo(photo.width, 0);
+      expect(row.y + await page.evaluate(() => scrollY)).toBeCloseTo(firstLayout.navY, 0);
       if (product) {
         expect(product.x).toBeCloseTo(photo.x, 0);
         expect(product.width).toBeCloseTo(photo.width, 0);
@@ -220,6 +226,23 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
     await expect(counter).toHaveText("5 из 5");
     await noOverflow(page);
     await page.screenshot({ path: testInfo.outputPath(`hero-${width}-${height}-journal.png`) });
+    for (let previous = 0; previous < 4; previous++) await page.locator('[data-hero-journal-previous]').click();
+    await expect(counter).toHaveText('1 из 5');
+    expect(await page.locator('[data-hero-journal-card]').evaluateAll(cards => cards.map(card => card.offsetWidth))).toEqual(firstLayout.widths);
+    expect(await page.locator('.source-hero__journal-controls').evaluate(element => element.getBoundingClientRect().top + scrollY)).toBeCloseTo(firstLayout.navY, 0);
+    await page.screenshot({ path: testInfo.outputPath(`hero-${width}-${height}-returned.png`) });
+    const orderAction = page.locator('[data-hero-journal-product="702"] > button');
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    const orderGeometry = element => {
+      const rect = element.getBoundingClientRect();
+      return { width: rect.width, height: rect.height, x: rect.x, y: rect.y + scrollY };
+    };
+    const orderBounds = await orderAction.evaluate(orderGeometry);
+    await orderAction.hover();
+    await orderAction.evaluate(element => Promise.allSettled(element.getAnimations({ subtree: true }).map(animation => animation.finished)));
+    expect(await orderAction.evaluate(orderGeometry)).toEqual(orderBounds);
+    await page.screenshot({ path: testInfo.outputPath('hero-order-hover.png') });
+    for (let next = 0; next < 4; next++) await page.locator('[data-hero-journal-next]').click();
     const allEntries = page.locator("[data-hero-journal-all]");
     await allEntries.scrollIntoViewIfNeeded();
     // Focus and scrollIntoView can start native smooth scrolling in WebKit.
@@ -371,8 +394,8 @@ test("320px reflow, enlarged text, custom spacing and contrast retain controls",
 test("a photographed product opens its own catalog position, price and order @afisha", async ({ page }) => {
   await page.goto("");
   const frame = page.locator(".afisha__frame");
-  const expected = ["Каспийский залом", "Икра форели", "Стейк лосося", "Форель холодного копчения", "Скумбрия горячего копчения"];
-  const orderNames = ["каспийский залом", "икру форели", "стейк лосося", "форель холодного копчения", "скумбрию горячего копчения"];
+  const expected = ["Каспийский залом", "Икра форели", "Стейк лосося", "Филе форели холодного копчения без кожи", "Скумбрия горячего копчения"];
+  const orderNames = ["каспийский залом", "икру форели", "стейк лосося", "филе форели без кожи", "скумбрию горячего копчения"];
   const destinations = [];
   for (let i = 0; i < expected.length; i++) {
     await expect(page.locator(".afisha__count")).toHaveText(`${i + 1}/5`);

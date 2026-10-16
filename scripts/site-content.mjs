@@ -230,7 +230,7 @@ ${prints}
 function journalBody(entry) {
   // Social hashtag rows are not site navigation. The archived source remains
   // unchanged; inline hashtags keep their words without the social prefix.
-  const body = (recipeForEntry(entry.id) ? entry.body.replace(/<p class="journal-source-signature">[\s\S]*?<\/p>/g, "") : entry.body).replace(/<p\b[^>]*>([\s\S]*?)<\/p>/g, (paragraph, content) => {
+  const body = entry.body.replace(/<p class="journal-source-signature">[\s\S]*?<\/p>/g, "").replace(/<p\b[^>]*>([\s\S]*?)<\/p>/g, (paragraph, content) => {
     const visible = plain(content.replace(/<[^>]*>/g, "")).trim();
     return /^(?:#[\p{L}\p{N}_]+\s*)+$/u.test(visible) ? "" : paragraph;
   }).split(/(<[^>]*>)/g).map(part => part.startsWith("<") ? part
@@ -261,12 +261,14 @@ function journalTitle(value) {
 const heroJournalProducts = {
   702: ["prepared-fish-012", "рулет из брюшков осетра"],
   700: ["trout-roe", "икру форели"],
+  699: ["chilled-trout", "охлаждённую форель"],
   698: ["caspian-herring", "каспийский залом"],
+  697: ["eel-rillettes", "риеты и паштеты из угря"],
   696: ["caspian-herring", "каспийский залом"],
 };
 
 export function renderHeroJournalProducts(list) {
-  return list.flatMap((entry, index) => {
+  const products = list.flatMap((entry, index) => {
     const selection = heroJournalProducts[entry.id];
     if (!selection) return [];
     const [productId, orderName] = selection;
@@ -274,17 +276,21 @@ export function renderHeroJournalProducts(list) {
     if (!product) throw new Error(`Missing hero journal product: ${productId}`);
     const links = orderLinks(product);
     const panelId = `hero-journal-order-${entry.id}`;
-    return [`            <div class="hero-journal-product" data-hero-journal-product="${entry.id}" data-journal-id="${entry.id}"${index ? " hidden" : ""}>
-              <a class="hero-journal-product__price" href="${escape(productHref(product, "", "hero-journal"))}" aria-label="${text(`${product.name} в каталоге: ${catalogPrice(product.price)}`)}">${escape(catalogPrice(product.price))}</a>
-              <button class="source-button source-button--hero-secondary hero-journal-product__toggle" type="button" popovertarget="${panelId}" aria-expanded="false"><span class="source-button__label">${text(`Заказать ${orderName}`)}</span></button>
+    const price = escape(catalogPrice(product.price));
+    const orderLabel = text(`Заказать по ${catalogPrice(product.price)}`);
+    const orderMarkup = orderLabel.replace(price, `<span class="hero-journal-product__amount">${price}${harpoon}</span>`);
+    return [`            <div class="hero-journal-product" data-hero-journal-product="${entry.id}" data-journal-id="${entry.id}"${index ? ' hidden inert aria-hidden="true"' : ""}>
+              <button class="source-hero__journal-link hero-journal-product__toggle" type="button" popovertarget="${panelId}" aria-label="${text(`Заказать по ${catalogPrice(product.price)}. ${product.name}`)}" aria-expanded="false"><span>${orderMarkup}</span></button>
               <div class="hero-journal-product__choices" id="${panelId}" popover="auto" role="group" aria-label="${text(`Заказать ${orderName}`)}">
                 <a class="source-button source-button--primary" href="${escape(links.telegram)}" data-hero-order-telegram><span class="source-button__label">В Телеграме</span></a>
-                <a class="source-button source-button--primary" href="${escape(links.whatsapp)}"><span class="source-button__label">В WhatsApp</span></a>
+                <a class="source-button source-button--primary" href="${escape(links.whatsapp)}" data-hero-order-whatsapp><span class="source-button__label">В WhatsApp</span></a>
+                <a class="hero-journal-product__catalog" href="${escape(productHref(product, "", "hero-journal"))}">${text(`${product.name} в каталоге`)}</a>
                 <label class="hero-journal-product__draft" hidden><span>Текст для сообщения</span><textarea readonly rows="6"></textarea></label>
                 <p class="hero-journal-product__status" role="status"></p>
               </div>
             </div>`];
   }).join("\n");
+  return `<div class="hero-journal-products">\n${products}\n</div>`;
 }
 
 export function renderJournal(list, view) {
@@ -578,6 +584,7 @@ export function renderAssortmentMedia() {
   const shots = [
     { category: "caviar", ...entries.find(entry => entry.id === 681), caption: "Икра дикого кижуча" },
     { category: "seafood", ...recipeEntry(recipes.find(r => r.id === 412)), caption: "Северные креветки" },
+    { category: "chilled-fish", ...entries.find(entry => entry.id === 699), caption: "Охлаждённая форель из Карелии" },
     // Oleg's frozen catch after defrosting: https://t.me/kapitanseledkin/679.
     { category: "frozen-fish", image: "journal-679.jpg", alt: "Мурманская пятнистая камбала после размораживания на деревянной доске рядом с ножом", caption: "Мурманская пятнистая камбала" },
     { category: "fillet", image: "gallery-small-1.jpg", alt: "Коробка филе трески судовой заморозки", caption: "Филе трески судовой заморозки" },

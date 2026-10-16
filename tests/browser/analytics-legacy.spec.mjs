@@ -130,14 +130,14 @@ test("old categories reach current prices and preserve the search and service ma
   await expect(page.locator(".catalog-product:visible")).toContainText("Минтай");
 });
 
-test("legacy routing also works without JavaScript and does not load an unconditional tracking pixel", async ({ browser }) => {
+test("legacy routing also works without JavaScript and does not load an unconditional tracking pixel", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   const requests = [];
   page.on("request", request => { if (request.url().includes("mc.yandex.ru")) requests.push(request.url()); });
-  await page.goto("http://127.0.0.1:4173/collection/");
-  await expect(page).toHaveURL("http://127.0.0.1:4173/catalog/");
-  await expect(page.locator(".catalog-product")).toHaveCount(117);
+  await page.goto(new URL("collection/", baseURL).href);
+  await expect(page).toHaveURL(new URL("catalog/", baseURL).href);
+  await expect(page.locator(".catalog-product")).toHaveCount(132);
   expect(requests).toEqual([]);
   await context.close();
 });

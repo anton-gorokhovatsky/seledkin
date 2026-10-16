@@ -40,7 +40,7 @@ test("updated search and journal counters keep their number and noun together", 
   await page.locator("[data-catalog-search]").fill("нерка");
   await expect(page.locator("[data-catalog-count]")).toHaveText("2 позиции");
   expect(await page.locator("[data-catalog-count]").textContent()).toBe("2\u00a0позиции");
-  await page.locator("[data-catalog-search]").fill("риет");
+  await page.locator("[data-catalog-search]").fill("эталонная");
   await expect(page.locator("[data-catalog-count]")).toHaveText("В каталоге нет совпадений · Из журнала: 1");
   expect(await page.locator("[data-catalog-count]").textContent()).toContain("Из\u00a0журнала: 1");
   await page.setViewportSize({ width: 1440, height: 900 });
