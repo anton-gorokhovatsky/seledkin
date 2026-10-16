@@ -34,7 +34,7 @@ test("customers find stocked products using everyday names and inflected words",
 
 test("preparation terms describe the actual product, not its mixed category", () => {
   assert.deepEqual(findProducts("слабосоленая"), ["Форель слабосоленая", "Лосось слабосоленый", "Сельдь слабосоленая"]);
-  assert.deepEqual(findProducts("горячего копчения"), ["Осетр горячего копчения", "Скумбрия горячего копчения"]);
+  assert.deepEqual(findProducts("горячего копчения"), ["Осетр горячего копчения", "Скумбрия горячего копчения", "Рулет из брюшков осетра"]);
   assert.deepEqual(findProducts("креветка без головы"), ["Креветка тигровая б/г"]);
   assert.deepEqual(findProducts("вареные креветки"), ["Креветка северная в/м"]);
 });

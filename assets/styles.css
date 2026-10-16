@@ -5620,6 +5620,7 @@ a.site-menu__brand {
   .source-hero__journal-link svg { width: 1.75rem; height: auto; }
   [data-desktop-editorial] .source-hero__journal {
     height: auto;
+    padding-right: 1.15rem;
     grid-template-rows: auto auto auto;
     align-self: start;
     row-gap: 1rem;
@@ -5628,11 +5629,11 @@ a.site-menu__brand {
   [data-desktop-editorial] .source-hero__journal-stack {
     position: relative;
     display: block;
-    padding-bottom: 0;
+    padding: 0;
   }
   [data-desktop-editorial] .source-hero__journal-card {
     position: absolute;
-    inset: 0 1.15rem auto 0;
+    inset: 0 0 auto;
     width: auto;
   }
   [data-desktop-editorial] .source-hero__journal-card[data-stack-position="0"] {
@@ -5656,7 +5657,7 @@ a.site-menu__brand {
     font-weight: 400;
     line-height: 1.2;
   }
-  [data-desktop-editorial] .source-hero__journal-navigation { margin-right: 1.15rem; }
+  [data-desktop-editorial] .source-hero__journal-navigation { margin-right: 0; }
   [data-desktop-editorial] .source-hero__journal[data-ready] .source-hero__journal-controls {
     display: grid;
     grid-template-columns: minmax(min-content, 1fr) auto minmax(min-content, 1fr);
@@ -5670,11 +5671,12 @@ a.site-menu__brand {
     gap: .5rem 1rem;
   }
   .hero-journal-product__price {
+    flex: 1 1 auto;
     color: var(--on-image);
     font: 400 var(--text-body)/1.4 var(--sans);
     text-underline-offset: .2em;
   }
-  .hero-journal-product__toggle { margin-left: auto; }
+  .hero-journal-product__toggle { max-width: 100%; margin-left: 0; }
   .hero-journal-product__choices:popover-open {
     position: fixed;
     inset: auto;

@@ -152,13 +152,17 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
       await active.locator("img").evaluate(image => image.decode());
       await active.evaluate(element => Promise.allSettled(element.getAnimations({ subtree: true }).map(animation => animation.finished)));
       // Read one layout frame: lazy media or scrolling must not mix coordinates.
-      const { box, right, row, icons } = await page.evaluate(() => {
+      const { box, right, row, icons, photo, product, orderActions } = await page.evaluate(() => {
         const rect = (selector) => document.querySelector(selector).getBoundingClientRect().toJSON();
+        const order = document.querySelector(".hero-journal-product:not([hidden])");
         return {
           box: rect("[data-hero-journal-counter]"),
           right: rect('[data-hero-journal-next]:not([hidden]), [data-hero-journal-all]:not([hidden])'),
           icons: [...document.querySelectorAll(".source-hero__journal-navigation svg")].map(el => el.getBoundingClientRect().toJSON()).filter(r => r.width > 0),
           row: rect(".source-hero__journal-controls"),
+          photo: rect('[data-hero-journal-card][data-stack-position="0"] img'),
+          product: order?.getBoundingClientRect().toJSON(),
+          orderActions: order ? [...order.querySelectorAll(":scope > a, :scope > button")].map(el => el.getBoundingClientRect().toJSON()) : [],
         };
       });
       if (index === 5) {
@@ -178,6 +182,16 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
       // Translated DOMRects can report 43.99997 for a 44px target on Linux.
       expect(Math.round(right.height * 1000) / 1000).toBeGreaterThanOrEqual(44);
       expect(right.x + right.width).toBeLessThanOrEqual(row.x + row.width + 1);
+      expect(row.x).toBeCloseTo(photo.x, 0);
+      expect(row.width).toBeCloseTo(photo.width, 0);
+      if (product) {
+        expect(product.x).toBeCloseTo(photo.x, 0);
+        expect(product.width).toBeCloseTo(photo.width, 0);
+        for (const action of orderActions) {
+          expect(action.x).toBeGreaterThanOrEqual(photo.x - 1);
+          expect(action.x + action.width).toBeLessThanOrEqual(photo.x + photo.width + 1);
+        }
+      }
       if (width < 980) {
         const photo = await active.locator("img").boundingBox();
         const caption = await active.locator("figcaption").boundingBox();
