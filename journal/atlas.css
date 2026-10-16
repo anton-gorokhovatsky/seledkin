@@ -49,7 +49,7 @@
   margin: .5rem 0;
   font: 400 var(--atlas-heading-size) / 1.1 var(--serif);
   letter-spacing: -.018em;
-  overflow-wrap: normal;
+  overflow-wrap: anywhere;
   hyphens: manual;
 }
 .atlas-record__read {

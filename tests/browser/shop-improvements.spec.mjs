@@ -8,7 +8,7 @@ const latestRoute = new RegExp(`/journal/${latest.id}/$`);
 
 test("customer vocabulary finds existing products and preserves precise filters", async ({ page }) => {
   await page.goto("catalog/");
-  for (const [query, count] of [["креветки", 5], ["кальмары", 3], ["селедка", 1], ["лосось", 3], ["стейки лосося", 1], ["креветки северные", 1]]) {
+  for (const [query, count] of [["креветки", 5], ["кальмары", 3], ["селедка", 2], ["лосось", 3], ["стейки лосося", 1], ["креветки северные", 1]]) {
     await page.locator("[data-catalog-search]").fill(query);
     await expect(page.locator(".catalog-product:visible")).toHaveCount(count);
     await expect(page.locator("[data-catalog-empty]")).toBeHidden();

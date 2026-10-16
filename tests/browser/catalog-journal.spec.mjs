@@ -116,13 +116,21 @@ test("the photoatlas leads to a compact older archive and complete, accessible s
     await page.evaluate(() => document.fonts.ready);
     const overflow = await page.evaluate(() => ({
       excess: document.documentElement.scrollWidth - innerWidth,
+      textOverflow: [...document.querySelectorAll('main *')].flatMap(element => [...element.childNodes].filter(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim()).flatMap(node => {
+        const range = document.createRange(); range.selectNodeContents(node);
+        return [...range.getClientRects()].filter(rect => rect.right > innerWidth + 1).map(rect => ({ tag: element.tagName, cls: element.className, text: node.textContent.slice(0, 100), right: rect.right }));
+      })),
       elements: [...document.querySelectorAll('main *')].filter(el => {
         const r = el.getBoundingClientRect(); return r.width > 0 && r.right > innerWidth + 1;
       }).map(el => ({ tag: el.tagName, cls: el.className, text: el.textContent.slice(0, 90) })),
     }));
-    expect(overflow.excess, JSON.stringify(overflow.elements)).toBeLessThanOrEqual(1);
+    expect(overflow.excess, JSON.stringify({ width, enlarged, elements: overflow.elements, text: overflow.textOverflow })).toBeLessThanOrEqual(1);
     if (width === 1440 || width === 390) {
       await page.screenshot({ path: testInfo.outputPath(`journal-${width}.png`) });
+    }
+    if (enlarged) {
+      await page.locator('.atlas-record h2').first().scrollIntoViewIfNeeded();
+      await page.screenshot({ path: testInfo.outputPath('journal-320-enlarged.png') });
     }
     for (const photo of await page.locator(".atlas-record img").all()) {
       await photo.scrollIntoViewIfNeeded();
