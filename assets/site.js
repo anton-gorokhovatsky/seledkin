@@ -29,6 +29,8 @@ const menuClose = menu?.querySelector("[data-menu-close]");
 const menuPanel = menu?.querySelector(".site-menu__panel");
 const menuServiceScroll = menu?.querySelector(".site-menu__service-inner");
 const inertBeforeMenu = new Map();
+let menuIsOpen = false;
+let menuAnimations = [];
 const map = document.querySelector("[data-map]");
 const mapFrame = map?.querySelector("iframe");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -105,10 +107,71 @@ function setPageInert(value) {
   if (!value) inertBeforeMenu.clear();
 }
 
-function openMenu() {
-  if (!menuButton || !menu || !menuClose) return;
+function cancelMenuAnimations() {
+  for (const animation of menuAnimations) {
+    animation.onfinish = null;
+    animation.cancel();
+  }
+  menuAnimations = [];
+}
 
+function finishMenuMotion() {
+  cancelMenuAnimations();
+  if (!menuIsOpen && menu) menu.hidden = true;
+  syncMenuSeaVideo();
+}
+
+function menuButtonClip() {
+  const { top, right, bottom, left, height } = menuButton.getBoundingClientRect();
+  return `inset(${top}px ${innerWidth - right}px ${innerHeight - bottom}px ${left}px round ${height / 2}px)`;
+}
+
+function revealMenu(open, origin, { instant = false } = {}) {
+  const full = "inset(0px 0px 0px 0px round 0px)";
+  const interrupted = menuAnimations.length > 0;
+  const surface = getComputedStyle(menu);
+  const clip = surface.clipPath === "none" ? full : surface.clipPath;
+  const opacity = interrupted ? surface.opacity : open ? 0 : 1;
+  const groups = [...menu.querySelectorAll(".site-menu__routes > *, .site-menu__service-inner")]
+    .map(element => ({ element, opacity: interrupted ? getComputedStyle(element).opacity : open ? 0 : 1 }));
+  // Sample the current frame before cancelling, so repeated clicks reverse in place.
+  cancelMenuAnimations();
   menu.hidden = false;
+  if (instant || !menu.animate) {
+    finishMenuMotion();
+    return;
+  }
+
+  const tokens = getComputedStyle(document.documentElement);
+  const duration = parseFloat(tokens.getPropertyValue(open ? "--reveal-duration" : "--feedback-duration"));
+  const easing = tokens.getPropertyValue(open ? "--ease-enter" : "--ease-exit").trim();
+  const reduced = reducedMotion.matches;
+  const frames = reduced
+    ? [{ opacity }, { opacity: open ? 1 : 0 }]
+    : [{ clipPath: interrupted ? clip : open ? origin : full }, { clipPath: open ? full : origin }];
+  const animation = menu.animate(frames, {
+    duration: reduced ? duration / 3 : duration, easing, fill: "both",
+  });
+  menuAnimations.push(animation);
+  if (!reduced) {
+    for (const { element, opacity: from } of groups) {
+      const delay = open && !interrupted ? duration / (element === menuServiceScroll ? 4 : 6) : 0;
+      menuAnimations.push(element.animate([{ opacity: from }, { opacity: open ? 1 : 0 }], {
+        duration: duration - delay, delay, easing, fill: "both",
+      }));
+    }
+  }
+  animation.onfinish = finishMenuMotion;
+}
+
+function openMenu() {
+  if (!menuButton || !menu || !menuClose || menuIsOpen) return;
+
+  const origin = menuButtonClip();
+  menuIsOpen = true;
+  menu.hidden = false;
+  menu.inert = false;
+  menu.removeAttribute("aria-hidden");
   if (menuPanel instanceof HTMLElement) menuPanel.scrollTop = 0;
   if (menuServiceScroll instanceof HTMLElement) menuServiceScroll.scrollTop = 0;
   menuButton.setAttribute("aria-expanded", "true");
@@ -116,22 +179,27 @@ function openMenu() {
   document.body.classList.add("menu-open");
   setPageInert(true);
   menuClose.focus({ preventScroll: true });
+  revealMenu(true, origin, { instant: document.documentElement.dataset.inputModality === "keyboard" });
   syncMenuSeaVideo();
 }
 
-function closeMenu({ returnFocus = false } = {}) {
+function closeMenu({ returnFocus = false, instant = false } = {}) {
   if (!menuButton || !menu) return;
 
+  menuIsOpen = false;
   setPageInert(false);
-  menu.hidden = true;
+  menu.inert = true;
+  menu.setAttribute("aria-hidden", "true");
   menuButton.hidden = false;
   menuButton.setAttribute("aria-expanded", "false");
   document.body.classList.remove("menu-open");
-  syncMenuSeaVideo();
 
   if (returnFocus) {
     menuButton.focus({ preventScroll: true });
   }
+  revealMenu(false, menuButtonClip(), {
+    instant: instant || document.documentElement.dataset.inputModality === "keyboard",
+  });
 }
 
 if (menuButton && menu && menuClose) {
@@ -149,12 +217,12 @@ if (menuButton && menu && menuClose) {
       : null;
 
     if (link) {
-      closeMenu();
+      closeMenu({ instant: true });
     }
   });
 
   document.addEventListener("keydown", (event) => {
-    if (menu.hidden) return;
+    if (!menuIsOpen) return;
 
     if (event.key === "Escape") {
       event.preventDefault();
@@ -163,6 +231,7 @@ if (menuButton && menu && menuClose) {
     }
 
     if (event.key !== "Tab") return;
+    finishMenuMotion();
 
     const items = focusableMenuItems();
     if (!items.length) return;
@@ -176,8 +245,11 @@ if (menuButton && menu && menuClose) {
 
   // Keep focus in the active dialog even if a script tries to focus its background.
   document.addEventListener("focusin", (event) => {
-    if (!menu.hidden && !menu.contains(event.target)) menuClose.focus({ preventScroll: true });
+    if (menuIsOpen && !menu.contains(event.target)) menuClose.focus({ preventScroll: true });
   });
+
+  window.addEventListener("resize", () => { if (menuAnimations.length) finishMenuMotion(); });
+  reducedMotion.addEventListener("change", () => { if (menuAnimations.length) finishMenuMotion(); });
 
   // The source navigation also works if this module (or one of its imports) fails.
   // Hide it only after the modal handlers have been installed successfully.

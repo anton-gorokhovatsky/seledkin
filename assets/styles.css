@@ -98,6 +98,7 @@
   --feedback-duration: 160ms;
   --reveal-duration: 220ms;
   --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ease-state: cubic-bezier(0.4, 0, 0.2, 1);
   --text-reading: 1.125rem;
   --text-body: 1.0625rem;
