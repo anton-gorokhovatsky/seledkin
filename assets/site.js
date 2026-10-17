@@ -28,6 +28,12 @@ const menu = document.querySelector("[data-menu]");
 const menuClose = menu?.querySelector("[data-menu-close]");
 const menuPanel = menu?.querySelector(".site-menu__panel");
 const menuServiceScroll = menu?.querySelector(".site-menu__service-inner");
+const menuVeil = menu ? document.createElement("div") : null;
+if (menuVeil) {
+  menuVeil.className = "site-menu__veil";
+  menuVeil.setAttribute("aria-hidden", "true");
+  menu.insertBefore(menuVeil, menuPanel);
+}
 const inertBeforeMenu = new Map();
 let menuIsOpen = false;
 let menuAnimations = [];
@@ -121,44 +127,44 @@ function finishMenuMotion() {
   syncMenuSeaVideo();
 }
 
-function menuButtonClip() {
-  const { top, right, bottom, left, height } = menuButton.getBoundingClientRect();
-  return `inset(${top}px ${innerWidth - right}px ${innerHeight - bottom}px ${left}px round ${height / 2}px)`;
-}
-
-function revealMenu(open, origin, { instant = false } = {}) {
-  const full = "inset(0px 0px 0px 0px round 0px)";
+function revealMenu(open, { instant = false } = {}) {
   const interrupted = menuAnimations.length > 0;
-  const surface = getComputedStyle(menu);
-  const clip = surface.clipPath === "none" ? full : surface.clipPath;
-  const opacity = interrupted ? surface.opacity : open ? 0 : 1;
+  const opacity = interrupted ? getComputedStyle(menuPanel).opacity : open ? 0 : 1;
+  const veilOpacity = interrupted ? getComputedStyle(menuVeil).opacity : open ? 0 : 1;
   const groups = [...menu.querySelectorAll(".site-menu__routes > *, .site-menu__service-inner")]
-    .map(element => ({ element, opacity: interrupted ? getComputedStyle(element).opacity : open ? 0 : 1 }));
+    .map(element => ({
+      element,
+      opacity: interrupted ? getComputedStyle(element).opacity : open ? 0 : 1,
+      transform: interrupted ? getComputedStyle(element).transform : `translateY(${open ? 12 : 0}px)`,
+    }));
   // Sample the current frame before cancelling, so repeated clicks reverse in place.
   cancelMenuAnimations();
   menu.hidden = false;
-  if (instant || !menu.animate) {
+  if (instant || !menuPanel?.animate) {
     finishMenuMotion();
     return;
   }
 
   const tokens = getComputedStyle(document.documentElement);
-  const duration = parseFloat(tokens.getPropertyValue(open ? "--reveal-duration" : "--feedback-duration"));
-  const easing = tokens.getPropertyValue(open ? "--ease-enter" : "--ease-exit").trim();
+  const duration = parseFloat(tokens.getPropertyValue(open ? "--menu-reveal-duration" : "--menu-dismiss-duration"));
+  const easing = tokens.getPropertyValue(open ? "--ease-state" : "--ease-exit").trim();
   const reduced = reducedMotion.matches;
-  const frames = reduced
-    ? [{ opacity }, { opacity: open ? 1 : 0 }]
-    : [{ clipPath: interrupted ? clip : open ? origin : full }, { clipPath: open ? full : origin }];
-  const animation = menu.animate(frames, {
-    duration: reduced ? duration / 3 : duration, easing, fill: "both",
+  const animation = menuPanel.animate([{ opacity }, { opacity: open ? 1 : 0 }], {
+    duration: reduced ? 60 : duration, easing, fill: "both",
   });
   menuAnimations.push(animation);
+  // Let the sea cover the previous page before the menu copy becomes legible.
+  // The two texts otherwise compete during a long, transparent crossfade.
+  menuAnimations.push(menuVeil.animate([{ opacity: veilOpacity }, { opacity: open ? 1 : 0 }], {
+    duration: reduced ? 60 : open ? duration / 2 : duration, easing, fill: "both",
+  }));
   if (!reduced) {
-    for (const { element, opacity: from } of groups) {
-      const delay = open && !interrupted ? duration / (element === menuServiceScroll ? 4 : 6) : 0;
-      menuAnimations.push(element.animate([{ opacity: from }, { opacity: open ? 1 : 0 }], {
-        duration: duration - delay, delay, easing, fill: "both",
-      }));
+    for (const { element, opacity: from, transform } of groups) {
+      const delay = open && !interrupted ? duration / (element === menuServiceScroll ? 5 : 7) : 0;
+      menuAnimations.push(element.animate([
+        { opacity: from, transform },
+        { opacity: open ? 1 : 0, transform: `translateY(${open ? 0 : 8}px)` },
+      ], { duration: duration - delay, delay, easing, fill: "both" }));
     }
   }
   animation.onfinish = finishMenuMotion;
@@ -167,7 +173,6 @@ function revealMenu(open, origin, { instant = false } = {}) {
 function openMenu() {
   if (!menuButton || !menu || !menuClose || menuIsOpen) return;
 
-  const origin = menuButtonClip();
   menuIsOpen = true;
   menu.hidden = false;
   menu.inert = false;
@@ -176,10 +181,11 @@ function openMenu() {
   if (menuServiceScroll instanceof HTMLElement) menuServiceScroll.scrollTop = 0;
   menuButton.setAttribute("aria-expanded", "true");
   menuButton.hidden = true;
+  menuClose.hidden = false;
   document.body.classList.add("menu-open");
   setPageInert(true);
   menuClose.focus({ preventScroll: true });
-  revealMenu(true, origin, { instant: document.documentElement.dataset.inputModality === "keyboard" });
+  revealMenu(true, { instant: document.documentElement.dataset.inputModality === "keyboard" });
   syncMenuSeaVideo();
 }
 
@@ -191,13 +197,14 @@ function closeMenu({ returnFocus = false, instant = false } = {}) {
   menu.inert = true;
   menu.setAttribute("aria-hidden", "true");
   menuButton.hidden = false;
+  menuClose.hidden = true;
   menuButton.setAttribute("aria-expanded", "false");
   document.body.classList.remove("menu-open");
 
   if (returnFocus) {
     menuButton.focus({ preventScroll: true });
   }
-  revealMenu(false, menuButtonClip(), {
+  revealMenu(false, {
     instant: instant || document.documentElement.dataset.inputModality === "keyboard",
   });
 }
@@ -231,7 +238,7 @@ if (menuButton && menu && menuClose) {
     }
 
     if (event.key !== "Tab") return;
-    finishMenuMotion();
+    if (menuAnimations.length) finishMenuMotion();
 
     const items = focusableMenuItems();
     if (!items.length) return;

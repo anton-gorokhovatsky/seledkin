@@ -100,6 +100,8 @@
   --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ease-state: cubic-bezier(0.4, 0, 0.2, 1);
+  --menu-reveal-duration: 420ms;
+  --menu-dismiss-duration: 240ms;
   --text-reading: 1.125rem;
   --text-body: 1.0625rem;
   --text-catalog: 1rem;
@@ -2674,7 +2676,14 @@ a.source-brand {
   z-index: 90;
   inset: 0;
   overflow: hidden;
-  background: var(--surface-water);
+  background: transparent;
+}
+
+.site-menu__veil {
+  position: absolute;
+  inset: 0;
+  background: var(--footer) var(--hero-sea-static-image) center / cover no-repeat;
+  pointer-events: none;
 }
 
 .site-menu__panel {
@@ -2686,6 +2695,9 @@ a.source-brand {
   overflow-y: auto;
   overscroll-behavior: contain;
   scroll-padding-block: 1rem;
+  /* Keep one compositing/backdrop boundary throughout the fade. Removing it
+     at the final frame makes the nested glass layers visibly change. */
+  will-change: opacity;
 }
 
 .site-menu__masthead {
