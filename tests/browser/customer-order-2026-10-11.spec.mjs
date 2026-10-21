@@ -1,21 +1,25 @@
 import { test, expect } from "@playwright/test";
 
-test("a loose product accepts weight and never reuses an old package count @catalog", async ({ page }) => {
+test("retired packages cannot change a saved order and loose products accept weight at a portion price @catalog", async ({ page }) => {
   await page.addInitScript(() => {
     if (!localStorage.getItem("seledkin-order-item:other-017")) {
       localStorage.setItem("seledkin-order-format", "2");
       localStorage.setItem("seledkin-order-item:other-017", JSON.stringify({ amount: "2", addedAt: 1 }));
     }
   });
-  await page.goto("catalog/?product=other-017&audit=order-unit");
+  await page.goto("catalog/?product=anchovy-fillet-in-oil&audit=order-unit");
   const list = page.locator("#order-list");
-  const weight = list.getByRole("textbox", { name: /^Вес.*Перец халапеньо/ });
+  await expect(list.locator("li")).toHaveCount(0);
+  await page.locator('#product-anchovy-fillet-in-oil [data-order-add]').click();
+  const weight = list.getByRole("textbox", { name: /^Вес.*Филе анчоуса/ });
   await expect(weight).toHaveValue("");
-  await weight.fill("0,25");
+  await weight.fill("0,1");
   await page.reload();
-  await expect(weight).toHaveValue("0,25");
+  await expect(weight).toHaveValue("0,1");
   const draft = new URL(await list.getByRole("link", { name: "Открыть список в WhatsApp" }).getAttribute("href")).searchParams.get("text");
-  expect(draft).toContain("Вес: 0,25 кг");
+  expect(draft).toContain("Вес: 0,1 кг");
+  expect(draft).toContain("1 500 ₽ за 100 г");
+  expect(draft).not.toContain("Перец халапеньо");
   expect(draft).not.toContain("Количество:");
 });
 

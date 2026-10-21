@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { catalog } from "../assets/catalog-data.js";
+import { catalog, inventory } from "../assets/catalog-data.js";
 import { catalogPrice, productLabel, productDescription, orderLinks, positionCount, productNotes, productSearchText, productKey } from "../assets/catalog-model.js";
 import { typographText } from "../assets/typography.js";
 import { recipeContent, productRecipeLinks, matchesProduct, editorialPath } from "./recipe-content.mjs";
@@ -15,7 +15,7 @@ const journal = JSON.parse(readFileSync(new URL("../content/journal.json", impor
 const guidance = JSON.parse(readFileSync(new URL("../content/catalog-guidance.json", import.meta.url), "utf8"));
 const details = JSON.parse(readFileSync(new URL("../content/catalog-details.json", import.meta.url), "utf8"));
 const normalize = value => value.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/gu, " ").trim();
-const productIds = new Set(catalog.flatMap(category => category.items.map(product => product.id)));
+const productIds = new Set(inventory.flatMap(category => category.items.map(product => product.id)));
 const detailsByProduct = new Map();
 for (const item of details.products) {
   if (!productIds.has(item.product) || detailsByProduct.has(item.product)) throw new Error(`Invalid details product: ${item.product}`);
@@ -110,7 +110,7 @@ const filters = categories.map((category) => `
                     <button type="button" data-category="${category.slug}" aria-pressed="${category.slug === "all"}">${text(category.shortLabel)}</button>`).join("");
 const options = categories.map((category) => `
                     <option value="${category.slug}">${text(category.shortLabel)}</option>`).join("");
-let result = original.replace(/(data-catalog-count>\s*)[\d\s\u00a0]+позиций/, `$1${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))}`);
+let result = original.replace(/(data-catalog-count>\s*)[\d\s\u00a0]+позици(?:я|и|й)/, `$1${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))}`);
 for (const [key, content] of Object.entries({ products,
   filters: filters + '\n                    <button type="button" data-category="other" data-legacy-category aria-pressed="false" hidden>Прежние «Новинки и прочее»</button>',
   options: options + '\n                    <option value="other" data-legacy-category hidden>Прежние «Новинки и прочее»</option>',

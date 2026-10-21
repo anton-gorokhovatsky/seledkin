@@ -1,3 +1,4 @@
+import { catalogSize } from "../helpers/catalog.mjs";
 import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
@@ -53,7 +54,7 @@ test("a missing nested URL retains the catalog route and images without JavaScri
   const catalog = page.getByRole("link", { name: "Открыть каталог", exact: true });
   expect(await catalog.evaluate(link => link.href)).toBe(new URL("catalog/", baseURL).href);
   await catalog.click();
-  await expect(page.locator(".catalog-product")).toHaveCount(132);
+  await expect(page.locator(".catalog-product")).toHaveCount(catalogSize);
   await context.close();
 });
 

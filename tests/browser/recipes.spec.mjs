@@ -172,7 +172,7 @@ test("a buyer can cook the right shrimp variant and return to its current price 
   await page.locator(".recipe-current").getByRole("link", { name: "Креветка патагонская", exact: true }).click();
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await expect(page.locator(".catalog-product:visible")).toContainText("Глубоководная, очищенная");
-  await expect(page.locator(".catalog-product:visible strong")).toHaveText("2 990 ₽/кг");
+  await expect(page.locator(".catalog-product:visible strong")).toHaveText("2 900 ₽/кг");
 });
 
 test("desktop category photographs respond to pointer and keyboard while a touch opens the catalog directly", async ({ page, browser, baseURL }, testInfo) => {
@@ -213,7 +213,7 @@ test("desktop category photographs respond to pointer and keyboard while a touch
   await phone.goto(`${baseURL}?audit=recipes#assortment`);
   await phone.locator('.assortment-directory__link[href$="category-seafood"]').tap();
   await expect(phone).toHaveURL(/catalog\/#category-seafood$/);
-  await expect(phone.locator("[data-catalog-count]")).toHaveText("18 позиций");
+  await expect(phone.locator("[data-catalog-count]")).toHaveText("22 позиции");
   await touch.close();
 });
 

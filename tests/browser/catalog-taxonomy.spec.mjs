@@ -1,3 +1,4 @@
+import { categorySize, legacyCatalogSize } from "../helpers/catalog.mjs";
 import { test, expect } from "@playwright/test";
 
 test("a buyer can use an old category link and keep moved products in the saved order @catalog", async ({ page }) => {
@@ -11,25 +12,25 @@ test("a buyer can use an old category link and keep moved products in the saved 
   await page.goto("catalog/?category=other&audit=taxonomy");
   const products = page.locator(".catalog-product:visible");
   const list = page.locator("#order-list");
-  await expect(products).toHaveCount(27);
+  await expect(products).toHaveCount(legacyCatalogSize);
   await expect(page.locator('[data-category="other"]')).toHaveAttribute("aria-pressed", "true");
   await expect(list.locator("li")).toHaveCount(2);
   await expect(list.getByRole("textbox", { name: /^Количество.*Фарш форели/ })).toHaveValue("1");
   await expect(list.getByRole("textbox", { name: /^Количество.*Мясо краба/ })).toHaveValue("2");
   const categories = page.locator("[data-catalog-filters]");
-  for (const [name, count] of [["Бакалея", 11], ["Вяленая рыба", 4], ["Консервы и бульон", 18], ["Кухонные принадлежности", 1]]) {
+  for (const [name, count] of [["Бакалея", categorySize("grocery")], ["Вяленая рыба", categorySize("dried-fish")], ["Консервы и бульон", categorySize("canned")], ["Кухонные принадлежности", categorySize("accessories")]]) {
     await categories.getByRole("button", { name, exact: true }).press("Enter");
     await expect(products).toHaveCount(count);
     await expect(page.locator('[data-category="other"]')).toBeHidden();
   }
   await categories.getByRole("button", { name: "Весь ассортимент", exact: true }).press("Enter");
-  await page.getByRole("searchbox").fill("фарш");
+  await page.getByRole("searchbox").fill("фарш форели");
   await expect(products).toHaveCount(1);
   await expect(products.locator("h4")).toHaveText("Фарш форели");
   await page.goto("catalog/?product=other-016&audit=taxonomy#product-other-016");
   await expect(page.locator("[data-catalog-select]")).toHaveValue("fillet");
   await expect(products).toHaveCount(1);
-  await expect(products.locator("strong")).toHaveText("750 ₽ за 500 г");
+  await expect(products.locator("strong")).toHaveText("872 ₽ за 500 г");
   await expect(list.getByRole("textbox", { name: /^Количество.*Фарш форели/ })).toHaveValue("1");
   const draft = new URL(await list.getByRole("link", { name: "Открыть список в WhatsApp" }).getAttribute("href")).searchParams.get("text");
   expect(draft).toContain("Фарш форели");
@@ -44,10 +45,10 @@ test("catalog category selection and the expanded PBG description reflow without
     await page.goto("catalog/?category=grocery&audit=taxonomy-reflow");
     await expect(page.locator("[data-catalog-select]")).toHaveValue("grocery");
     await page.locator("[data-catalog-select]").selectOption("accessories");
-    await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
-    await expect(page.locator(".catalog-product:visible h4")).toHaveText("Пинцет для удаления рыбных костей");
+    await expect(page.locator(".catalog-product:visible")).toHaveCount(categorySize("accessories"));
+    await expect(page.getByRole("heading", { name: "Пинцет для удаления рыбных костей", exact: true })).toBeVisible();
     await page.locator("[data-catalog-select]").selectOption("prepared-fish");
-    for (const id of ["smoked-mackerel", "prepared-fish-006", "prepared-fish-011"]) {
+    for (const id of ["smoked-mackerel", "prepared-fish-011"]) {
       const description = page.locator(`#product-${id} > p`).filter({ hasText: "Потрошёная рыба без головы" });
       await expect(description).toHaveCount(1);
       await expect(page.locator(`#product-${id} > p`).filter({ hasText: "ПБГ" })).toHaveCount(0);
@@ -58,7 +59,7 @@ test("catalog category selection and the expanded PBG description reflow without
     await page.screenshot({ path: testInfo.outputPath(`pbg-320-${theme}.png`) });
     await page.addStyleTag({ content: "html { font-size: 200% !important; } * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-bottom: 2em !important; }" });
     await page.locator("[data-catalog-select]").selectOption("grocery");
-    await expect(page.locator(".catalog-product:visible")).toHaveCount(11);
+    await expect(page.locator(".catalog-product:visible")).toHaveCount(categorySize("grocery"));
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   }
 });
@@ -87,6 +88,11 @@ test("early Facebook advice keeps its source, photograph and current product rou
     await page.screenshot({ path: testInfo.outputPath(`${story.id}-320-${theme}.png`) });
     await page.addStyleTag({ content: "html { font-size: 200% !important; } * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-bottom: 2em !important; }" });
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    if (story.product === "prepared-fish-009") {
+      await expect(page.locator(".recipe-current")).toHaveCount(0);
+      await expect(page.locator(".ship-log-entry__body")).toBeVisible();
+      continue;
+    }
     await page.locator(`.recipe-current a[href*="product=${story.product}"]`).press("Enter");
     await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
     await expect(page.locator(".catalog-product:visible strong")).toHaveText(story.price);

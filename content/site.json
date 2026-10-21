@@ -23,7 +23,7 @@
     { "category": "frozen-fish", "name": "Нерка" },
     { "category": "fillet", "name": "Филе трески" },
     { "category": "steaks", "name": "Стейк лосося" },
-    { "category": "prepared-fish", "name": "Сельдь слабосоленая" }
+    { "category": "prepared-fish", "name": "Скумбрия холодного копчения" }
   ],
   "routes": [
     { "href": "catalog/", "label": "Продукты и цены" },

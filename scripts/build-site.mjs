@@ -42,7 +42,7 @@ for (const [path, page, root] of pages) {
       ? `${start}${content}${end}` : `${start}\n${content}\n${end}`);
   }
   if (page === "home") {
-    result = result.replace(/(?:\d+[\s\u00a0]+разделов · )?[\d\s\u00a0]+позиций(?: в[\s\u00a0]+полном каталоге)?/, `${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))} в полном каталоге`);
+    result = result.replace(/(?:\d+[\s\u00a0]+разделов · )?[\d\s\u00a0]+позици(?:я|и|й)(?: в[\s\u00a0]+полном каталоге)?/, `${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))} в полном каталоге`);
     for (const category of catalog) {
       const pattern = new RegExp(`(href="catalog/#category-${category.slug}"[\\s\\S]*?class="assortment-directory__meta">)[^<]+`);
       result = result.replace(pattern, `$1${positionCount(category.items.length)}`);

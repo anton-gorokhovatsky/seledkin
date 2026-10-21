@@ -60,19 +60,23 @@ test("readable storage with blocked writes does not erase the in-memory list", (
 });
 
 test("a changed sale unit preserves the item without interpreting old pieces as kilograms", () => {
+  // Keep the historical migration regression independent of today's package.
+  const looseProduct = { id: "loose-pepper", name: "Перец", price: "299 ₽/0,250 кг", quantityUnit: "kg", previousQuantityUnit: "pack" };
+  const fixtureCatalog = [{ slug: "grocery", items: [looseProduct] }];
+  const fixtureProducts = new Map([[looseProduct.id, looseProduct]]);
   for (const atomic of [false, true]) {
     const saved = storage();
     if (atomic) {
       saved.setItem("seledkin-order-format", "2");
-      saved.setItem(orderStoragePrefix + "other-017", JSON.stringify({ amount: "2", addedAt: 1 }));
+      saved.setItem(orderStoragePrefix + looseProduct.id, JSON.stringify({ amount: "2", addedAt: 1 }));
     } else {
-      saved.setItem("seledkin-order-list", JSON.stringify(["other-017"]));
-      saved.setItem("seledkin-order-amounts", JSON.stringify({ "other-017": "2" }));
+      saved.setItem("seledkin-order-list", JSON.stringify([looseProduct.id]));
+      saved.setItem("seledkin-order-amounts", JSON.stringify({ [looseProduct.id]: "2" }));
     }
-    const store = createOrderStore(products, catalog, () => saved);
-    assert.deepEqual([...store.read().selected], ["other-017"]);
-    assert.equal(store.read().amounts.has("other-017"), false);
-    store.set("other-017", "0,25");
-    assert.equal(createOrderStore(products, catalog, () => saved).read().amounts.get("other-017"), "0,25");
+    const store = createOrderStore(fixtureProducts, fixtureCatalog, () => saved);
+    assert.deepEqual([...store.read().selected], [looseProduct.id]);
+    assert.equal(store.read().amounts.has(looseProduct.id), false);
+    store.set(looseProduct.id, "0,25");
+    assert.equal(createOrderStore(fixtureProducts, fixtureCatalog, () => saved).read().amounts.get(looseProduct.id), "0,25");
   }
 });

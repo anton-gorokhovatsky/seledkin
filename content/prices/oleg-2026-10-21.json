@@ -1,0 +1,1190 @@
+{
+  "source": "content/prices/oleg-2026-10-21.txt",
+  "received": "2026-10-21",
+  "rows": [
+    {
+      "nameLine": 1,
+      "priceLine": 2,
+      "name": "Черная икра",
+      "rawPrice": "6000 ₽/0,05 кг",
+      "product": "caviar-001",
+      "price": "6000 ₽/0,05 кг"
+    },
+    {
+      "nameLine": 4,
+      "priceLine": 5,
+      "name": "Черная икра",
+      "rawPrice": "15000 ₽/0,125 кг",
+      "product": "caviar-002",
+      "price": "15000 ₽/0,125 кг"
+    },
+    {
+      "nameLine": 7,
+      "priceLine": 8,
+      "name": "Черная икра",
+      "rawPrice": "30000₽/0,250 кг",
+      "product": "caviar-003",
+      "price": "30000 ₽/0,250 кг"
+    },
+    {
+      "nameLine": 10,
+      "priceLine": 11,
+      "name": "Черная икра",
+      "rawPrice": "60000 ₽/0,500 кг",
+      "product": "caviar-004",
+      "price": "60000 ₽/0,500 кг"
+    },
+    {
+      "nameLine": 13,
+      "priceLine": 14,
+      "name": "Икра муксуна",
+      "rawPrice": "4200 ₽/0,230 кг",
+      "product": "muksun-roe-230",
+      "price": "4200 ₽/0,230 кг"
+    },
+    {
+      "nameLine": 16,
+      "priceLine": 17,
+      "name": "Икра щуки, с.б.",
+      "rawPrice": "1800₽/0.112кг",
+      "product": "pike-roe-112",
+      "price": "1800 ₽/0,112 кг"
+    },
+    {
+      "nameLine": 19,
+      "priceLine": 20,
+      "name": "Красная икра",
+      "rawPrice": "4990₽/0,250 кг",
+      "product": "caviar-005",
+      "price": "4990 ₽/0,250 кг"
+    },
+    {
+      "nameLine": 22,
+      "priceLine": 23,
+      "name": "Икра горбуши",
+      "rawPrice": "2500 ₽/0,125 кг",
+      "product": "pink-salmon-roe-125",
+      "price": "2500 ₽/0,125 кг"
+    },
+    {
+      "nameLine": 25,
+      "priceLine": 26,
+      "name": "Икра Масаго, 0.5кг",
+      "rawPrice": "999₽",
+      "product": "masago-roe-500",
+      "price": "999 ₽/0,5 кг"
+    },
+    {
+      "nameLine": 28,
+      "priceLine": 29,
+      "name": "Гребешок с/м, крупный",
+      "rawPrice": "5990₽/кг",
+      "product": "scallop-large-sakhalin",
+      "price": "5990 ₽/кг"
+    },
+    {
+      "nameLine": 31,
+      "priceLine": 32,
+      "name": "Гребешок с/м, мелкий",
+      "rawPrice": "4335₽/кг",
+      "product": "seafood-020",
+      "price": "4335 ₽/кг"
+    },
+    {
+      "nameLine": 34,
+      "priceLine": 35,
+      "name": "Боттарга",
+      "rawPrice": "19000₽/1кг",
+      "product": "bottarga",
+      "price": "19000 ₽/кг"
+    },
+    {
+      "nameLine": 37,
+      "priceLine": 38,
+      "name": "Клешни краба в/м",
+      "rawPrice": "6500₽/кг",
+      "product": "seafood-001",
+      "price": "6500 ₽/кг"
+    },
+    {
+      "nameLine": 40,
+      "priceLine": 41,
+      "name": "Мясо краба, первая фаланга в/м",
+      "rawPrice": "14000 ₽/кг",
+      "product": "seafood-002",
+      "price": "14000 ₽/кг"
+    },
+    {
+      "nameLine": 43,
+      "priceLine": 44,
+      "name": "Мясо краба, салатное",
+      "rawPrice": "7200 ₽/кг",
+      "product": "seafood-003",
+      "price": "7200 ₽/кг"
+    },
+    {
+      "nameLine": 46,
+      "priceLine": 47,
+      "name": "Мясо краба стригуна (опилио)",
+      "rawPrice": "7200 ₽/кг",
+      "product": "opilio-crab-meat",
+      "price": "7200 ₽/кг"
+    },
+    {
+      "nameLine": 48,
+      "priceLine": 49,
+      "name": "Осьминоги молодые",
+      "rawPrice": "1600 ₽/кг",
+      "product": "seafood-018",
+      "price": "1600 ₽/кг"
+    },
+    {
+      "nameLine": 51,
+      "priceLine": 52,
+      "name": "Морскои‌ коктеи‌ль",
+      "rawPrice": "990 ₽/кг",
+      "product": "seafood-007",
+      "price": "990 ₽/кг"
+    },
+    {
+      "nameLine": 54,
+      "priceLine": 55,
+      "name": "Мидии вм в створках",
+      "rawPrice": "1190 ₽/кг",
+      "product": "seafood-008",
+      "price": "1190 ₽/кг"
+    },
+    {
+      "nameLine": 57,
+      "priceLine": 58,
+      "name": "Мясо мидии‌",
+      "rawPrice": "1360₽/кг",
+      "product": "seafood-009",
+      "price": "1360 ₽/кг"
+    },
+    {
+      "nameLine": 60,
+      "priceLine": 61,
+      "name": "Филе командорского кальмара",
+      "rawPrice": "1750 ₽/кг",
+      "product": "seafood-010",
+      "price": "1750 ₽/кг"
+    },
+    {
+      "nameLine": 63,
+      "priceLine": 64,
+      "name": "Кальмар командорскии‌",
+      "rawPrice": "665 ₽/кг",
+      "product": "seafood-011",
+      "price": "665 ₽/кг"
+    },
+    {
+      "nameLine": 65,
+      "priceLine": 66,
+      "name": "Креветка патагонская",
+      "rawPrice": "1640 ₽/кг",
+      "product": "seafood-013",
+      "price": "1640 ₽/кг"
+    },
+    {
+      "nameLine": 68,
+      "priceLine": 69,
+      "name": "Креветка патагонская",
+      "rawPrice": "2900 ₽/кг",
+      "product": "seafood-014",
+      "price": "2900 ₽/кг"
+    },
+    {
+      "nameLine": 71,
+      "priceLine": 72,
+      "name": "Креветка черная тигровая",
+      "rawPrice": "6000₽/кг",
+      "product": "black-tiger-shrimp",
+      "price": "6000 ₽/кг"
+    },
+    {
+      "nameLine": 74,
+      "priceLine": 75,
+      "name": "Креветка северная вм",
+      "rawPrice": "2400 ₽/кг",
+      "product": "seafood-015",
+      "price": "2400 ₽/кг"
+    },
+    {
+      "nameLine": 77,
+      "priceLine": 78,
+      "name": "Креветка тигровая мясо на хвосте",
+      "rawPrice": "2300 ₽/кг",
+      "product": "tiger-shrimp-tail-meat",
+      "price": "2300 ₽/кг"
+    },
+    {
+      "nameLine": 80,
+      "priceLine": 81,
+      "name": "Креветка тигровая очищеная на подложке весовая",
+      "rawPrice": "3990₽/кг",
+      "product": "seafood-017",
+      "price": "3990 ₽/кг"
+    },
+    {
+      "nameLine": 82,
+      "priceLine": 83,
+      "name": "Барабуля",
+      "rawPrice": "2050₽/кг",
+      "product": "frozen-fish-001",
+      "price": "2050 ₽/кг"
+    },
+    {
+      "nameLine": 85,
+      "priceLine": 86,
+      "name": "Муксун",
+      "rawPrice": "2200 ₽/кг",
+      "product": "frozen-fish-003",
+      "price": "2200 ₽/кг"
+    },
+    {
+      "nameLine": 88,
+      "priceLine": 89,
+      "name": "Нельма (кусок или стеи‌к)",
+      "rawPrice": "4600 ₽/кг",
+      "product": "frozen-fish-004",
+      "price": "4600 ₽/кг"
+    },
+    {
+      "nameLine": 91,
+      "priceLine": 92,
+      "name": "Чир",
+      "rawPrice": "2200 ₽/кг",
+      "product": "frozen-fish-005",
+      "price": "2200 ₽/кг"
+    },
+    {
+      "nameLine": 94,
+      "priceLine": 95,
+      "name": "Пелядь",
+      "rawPrice": "1300 ₽/кг",
+      "product": "frozen-fish-006",
+      "price": "1300 ₽/кг"
+    },
+    {
+      "nameLine": 97,
+      "priceLine": 98,
+      "name": "Горбуша",
+      "rawPrice": "₽/кг",
+      "product": "frozen-fish-008",
+      "price": null
+    },
+    {
+      "nameLine": 100,
+      "priceLine": 101,
+      "name": "Палтус",
+      "rawPrice": "2200 ₽/кг",
+      "product": "frozen-fish-009",
+      "price": "2200 ₽/кг"
+    },
+    {
+      "nameLine": 103,
+      "priceLine": 104,
+      "name": "Минтай",
+      "rawPrice": "467 ₽/кг",
+      "product": "frozen-fish-011",
+      "price": "467 ₽/кг"
+    },
+    {
+      "nameLine": 106,
+      "priceLine": 107,
+      "name": "Хек, без головы",
+      "rawPrice": "799₽/кг",
+      "product": "frozen-fish-031",
+      "price": "799 ₽/кг"
+    },
+    {
+      "nameLine": 109,
+      "priceLine": 110,
+      "name": "Судак",
+      "rawPrice": "799 ₽/кг",
+      "product": "frozen-fish-012",
+      "price": "799 ₽/кг"
+    },
+    {
+      "nameLine": 112,
+      "priceLine": 113,
+      "name": "Окунь",
+      "rawPrice": "910₽/кг",
+      "product": "frozen-fish-013",
+      "price": "910 ₽/кг"
+    },
+    {
+      "nameLine": 115,
+      "priceLine": 116,
+      "name": "Омуль",
+      "rawPrice": "2200 ₽/кг",
+      "product": "frozen-fish-019",
+      "price": "2200 ₽/кг"
+    },
+    {
+      "nameLine": 118,
+      "priceLine": 119,
+      "name": "Нельма",
+      "rawPrice": "2200 ₽/кг",
+      "product": "frozen-fish-020",
+      "price": "2200 ₽/кг"
+    },
+    {
+      "nameLine": 121,
+      "priceLine": 122,
+      "name": "Нельма 4-5 кг",
+      "rawPrice": "₽/кг",
+      "product": "nelma-large",
+      "price": null
+    },
+    {
+      "nameLine": 123,
+      "priceLine": 124,
+      "name": "Нельма (голова+хвост)",
+      "rawPrice": "₽/кг",
+      "product": "frozen-fish-021",
+      "price": null
+    },
+    {
+      "nameLine": 126,
+      "priceLine": 127,
+      "name": "Сиг",
+      "rawPrice": "1300 ₽/кг",
+      "product": "frozen-fish-022",
+      "price": "1300 ₽/кг"
+    },
+    {
+      "nameLine": 129,
+      "priceLine": 130,
+      "name": "Кижуч",
+      "rawPrice": "₽/кг",
+      "product": "frozen-fish-023",
+      "price": null
+    },
+    {
+      "nameLine": 132,
+      "priceLine": 133,
+      "name": "Голец",
+      "rawPrice": "1455 ₽/кг",
+      "product": "frozen-fish-024",
+      "price": "1455 ₽/кг"
+    },
+    {
+      "nameLine": 135,
+      "priceLine": 136,
+      "name": "Треска",
+      "rawPrice": "1165 ₽/кг",
+      "product": "frozen-fish-025",
+      "price": "1165 ₽/кг"
+    },
+    {
+      "nameLine": 137,
+      "priceLine": 138,
+      "name": "Треска чёрная",
+      "rawPrice": "2800₽/кг",
+      "product": "frozen-fish-030",
+      "price": "2800 ₽/кг"
+    },
+    {
+      "nameLine": 140,
+      "priceLine": 141,
+      "name": "Камбала",
+      "rawPrice": "990 ₽/кг",
+      "product": "frozen-fish-026",
+      "price": "990 ₽/кг"
+    },
+    {
+      "nameLine": 143,
+      "priceLine": 144,
+      "name": "Горбуша",
+      "rawPrice": "₽/кг",
+      "product": "frozen-fish-027",
+      "price": null
+    },
+    {
+      "nameLine": 146,
+      "priceLine": 147,
+      "name": "Скумбрия",
+      "rawPrice": "₽/кг",
+      "product": "frozen-fish-028",
+      "price": null
+    },
+    {
+      "nameLine": 149,
+      "priceLine": 150,
+      "name": "Ледяная",
+      "rawPrice": "2100 ₽/кг",
+      "product": "frozen-fish-029",
+      "price": "2100 ₽/кг"
+    },
+    {
+      "nameLine": 152,
+      "priceLine": 153,
+      "name": "Сибас",
+      "rawPrice": "1630₽/кг",
+      "product": "frozen-fish-032",
+      "price": "1630 ₽/кг"
+    },
+    {
+      "nameLine": 155,
+      "priceLine": 156,
+      "name": "Дорадо",
+      "rawPrice": "1630₽/кг",
+      "product": "frozen-fish-033",
+      "price": "1630 ₽/кг"
+    },
+    {
+      "nameLine": 158,
+      "priceLine": 159,
+      "name": "Корюшка чукотская , с/м",
+      "rawPrice": "2990₽/кг",
+      "product": "chukotka-smelt-frozen",
+      "price": "2990 ₽/кг"
+    },
+    {
+      "nameLine": 160,
+      "priceLine": 161,
+      "name": "Филе трески",
+      "rawPrice": "2490 ₽/кг",
+      "product": "fillet-001",
+      "price": "2490 ₽/кг"
+    },
+    {
+      "nameLine": 163,
+      "priceLine": 164,
+      "name": "Филе хека",
+      "rawPrice": "1060 ₽/кг",
+      "product": "fillet-002",
+      "price": "1060 ₽/кг"
+    },
+    {
+      "nameLine": 166,
+      "priceLine": 167,
+      "name": "Филе судака",
+      "rawPrice": "1400 ₽/кг",
+      "product": "fillet-003",
+      "price": "1400 ₽/кг"
+    },
+    {
+      "nameLine": 169,
+      "priceLine": 170,
+      "name": "Филе лосося",
+      "rawPrice": "3900 ₽/кг",
+      "product": "fillet-004",
+      "price": "3900 ₽/кг"
+    },
+    {
+      "nameLine": 172,
+      "priceLine": 173,
+      "name": "Филе форели",
+      "rawPrice": "3200₽/кг",
+      "product": "trout-fillet-karelia",
+      "price": "3200 ₽/кг"
+    },
+    {
+      "nameLine": 175,
+      "priceLine": 176,
+      "name": "Филе окуня",
+      "rawPrice": "1165 ₽/кг",
+      "product": "fillet-005",
+      "price": "1165 ₽/кг"
+    },
+    {
+      "nameLine": 178,
+      "priceLine": 179,
+      "name": "Филе тунца",
+      "rawPrice": "2800 ₽/кг",
+      "product": "fillet-006",
+      "price": "2800 ₽/кг"
+    },
+    {
+      "nameLine": 181,
+      "priceLine": 182,
+      "name": "Стеи‌к лосося",
+      "rawPrice": "2990 ₽/кг",
+      "product": "salmon-steak",
+      "price": "2990 ₽/кг"
+    },
+    {
+      "nameLine": 184,
+      "priceLine": 185,
+      "name": "Стейк сазана",
+      "rawPrice": "₽/кг",
+      "product": "carp-steak",
+      "price": null
+    },
+    {
+      "nameLine": 187,
+      "priceLine": 188,
+      "name": "Стеи‌к белуги",
+      "rawPrice": "4300 ₽/кг",
+      "product": "steaks-002",
+      "price": "4300 ₽/кг"
+    },
+    {
+      "nameLine": 190,
+      "priceLine": 191,
+      "name": "Стеи‌к нельмы",
+      "rawPrice": "4600 ₽/кг",
+      "product": "steaks-004",
+      "price": "4600 ₽/кг"
+    },
+    {
+      "nameLine": 193,
+      "priceLine": 194,
+      "name": "Стеи‌к палтуса",
+      "rawPrice": "2990 ₽/кг",
+      "product": "steaks-005",
+      "price": "2990 ₽/кг"
+    },
+    {
+      "nameLine": 196,
+      "priceLine": 197,
+      "name": "Форель слабосоленая, филе",
+      "rawPrice": "3400 ₽/ кг",
+      "product": "prepared-fish-002",
+      "price": "3400 ₽/кг"
+    },
+    {
+      "nameLine": 198,
+      "priceLine": 199,
+      "name": "Форель горячего копчения",
+      "rawPrice": "1900 ₽/кг",
+      "product": "hot-smoked-trout",
+      "price": "1900 ₽/кг"
+    },
+    {
+      "nameLine": 200,
+      "priceLine": 201,
+      "name": "Нерка слабосоленая",
+      "rawPrice": "₽/0,1 кг",
+      "product": "salted-sockeye-100",
+      "price": null
+    },
+    {
+      "nameLine": 202,
+      "priceLine": 203,
+      "name": "Омуль холодного копчения",
+      "rawPrice": "₽/кг",
+      "product": "prepared-fish-003",
+      "price": null
+    },
+    {
+      "nameLine": 205,
+      "priceLine": 206,
+      "name": "Осетр горячего копчения",
+      "rawPrice": "6900₽/кг",
+      "product": "prepared-fish-004",
+      "price": "6900 ₽/кг"
+    },
+    {
+      "nameLine": 208,
+      "priceLine": 209,
+      "name": "Скумбрия горячего копчения",
+      "rawPrice": "1650 ₽/кг",
+      "product": "smoked-mackerel",
+      "price": "1650 ₽/кг"
+    },
+    {
+      "nameLine": 211,
+      "priceLine": 212,
+      "name": "Палтус холодного копчения",
+      "rawPrice": "₽/кг",
+      "product": "prepared-fish-006",
+      "price": null
+    },
+    {
+      "nameLine": 214,
+      "priceLine": 215,
+      "name": "Форель холодного копчения",
+      "rawPrice": "3990 ₽/кг",
+      "product": "smoked-trout",
+      "price": "3990 ₽/кг"
+    },
+    {
+      "nameLine": 216,
+      "priceLine": 217,
+      "name": "Филе форели подкопченая, нарезка",
+      "rawPrice": "4760₽/кг",
+      "product": "lightly-smoked-trout-slices",
+      "price": "4760 ₽/кг"
+    },
+    {
+      "nameLine": 218,
+      "priceLine": 219,
+      "name": "Лосось слабосоленый",
+      "rawPrice": "3990 ₽/ кг",
+      "product": "prepared-fish-008",
+      "price": "3990 ₽/кг"
+    },
+    {
+      "nameLine": 220,
+      "priceLine": 221,
+      "name": "Сельдь слабосоленая",
+      "rawPrice": "₽/кг",
+      "product": "prepared-fish-009",
+      "price": null
+    },
+    {
+      "nameLine": 223,
+      "priceLine": 224,
+      "name": "Муксун холодного копчения",
+      "rawPrice": "2650 ₽/кг",
+      "product": "prepared-fish-010",
+      "price": "2650 ₽/кг"
+    },
+    {
+      "nameLine": 226,
+      "priceLine": 227,
+      "name": "Скумбрия холодного копчения",
+      "rawPrice": "1800 ₽/кг",
+      "product": "prepared-fish-011",
+      "price": "1800 ₽/кг"
+    },
+    {
+      "nameLine": 229,
+      "priceLine": 230,
+      "name": "Корюшка",
+      "rawPrice": "6000 ₽/кг",
+      "product": "other-001",
+      "price": "6000 ₽/кг"
+    },
+    {
+      "nameLine": 232,
+      "priceLine": 233,
+      "name": "Корюшка чукотская, вяленая",
+      "rawPrice": "6000₽/кг",
+      "product": "chukotka-smelt-dried",
+      "price": "6000 ₽/кг"
+    },
+    {
+      "nameLine": 234,
+      "priceLine": 235,
+      "name": "Чехонь",
+      "rawPrice": "1600 ₽/кг",
+      "product": "sabrefish-dried",
+      "price": "1600 ₽/кг"
+    },
+    {
+      "nameLine": 237,
+      "priceLine": 238,
+      "name": "Камбала, икряная, холодного копчения",
+      "rawPrice": "1800₽/кг",
+      "product": "smoked-roe-flounder",
+      "price": "1800 ₽/кг"
+    },
+    {
+      "nameLine": 240,
+      "priceLine": 241,
+      "name": "Камбала , икряная, б/кожи",
+      "rawPrice": "2500₽/кг",
+      "product": "roe-flounder-dried-skinless",
+      "price": "2500 ₽/кг"
+    },
+    {
+      "nameLine": 243,
+      "priceLine": 244,
+      "name": "Лещ",
+      "rawPrice": "₽/кг",
+      "product": "other-002",
+      "price": null
+    },
+    {
+      "nameLine": 246,
+      "priceLine": 247,
+      "name": "Корюшка",
+      "rawPrice": "5900 ₽/кг",
+      "product": "other-003",
+      "price": "5900 ₽/кг"
+    },
+    {
+      "nameLine": 249,
+      "priceLine": 250,
+      "name": "Вобла",
+      "rawPrice": "2500 ₽/кг",
+      "product": "vobla-dried",
+      "price": "2500 ₽/кг"
+    },
+    {
+      "nameLine": 252,
+      "priceLine": 253,
+      "name": "Камбала ерш",
+      "rawPrice": "₽/кг",
+      "product": "other-004",
+      "price": null
+    },
+    {
+      "nameLine": 256,
+      "priceLine": 257,
+      "name": "Печень трески ж. б.",
+      "rawPrice": "1490₽/0,23 кг",
+      "product": "cod-liver-tin-230",
+      "price": "1490 ₽/0,23 кг"
+    },
+    {
+      "nameLine": 259,
+      "priceLine": 260,
+      "name": "Печень трески , паштетом",
+      "rawPrice": "860₽/0.230кг",
+      "product": "cod-liver-murmansk-230",
+      "price": "860 ₽/0,230 кг"
+    },
+    {
+      "nameLine": 261,
+      "priceLine": 262,
+      "name": "Анчоусы филе, ст.б.",
+      "rawPrice": "650₽/0.08кг",
+      "product": "tunisian-anchovies",
+      "price": "650 ₽/0,08 кг"
+    },
+    {
+      "nameLine": 264,
+      "priceLine": 265,
+      "name": "Филе анчоуса в масле, весовой",
+      "rawPrice": "1500₽/0.1кг",
+      "product": "anchovy-fillet-in-oil",
+      "price": "1500 ₽/0,1 кг"
+    },
+    {
+      "nameLine": 266,
+      "priceLine": 267,
+      "name": "Шпроты в масле, ж.б.",
+      "rawPrice": "230₽/0.175кг",
+      "product": "other-010",
+      "price": "230 ₽/0,175 кг"
+    },
+    {
+      "nameLine": 268,
+      "priceLine": 269,
+      "name": "Томаты вяленые с солью, уп",
+      "rawPrice": "310₽/0.1кг",
+      "product": "sun-dried-tomatoes-100",
+      "price": "310 ₽/0,1 кг"
+    },
+    {
+      "nameLine": 271,
+      "priceLine": 272,
+      "name": "Мясо краба ст. б.",
+      "rawPrice": "₽/0,48 кг",
+      "product": "other-009",
+      "price": null
+    },
+    {
+      "nameLine": 274,
+      "priceLine": 275,
+      "name": "Тунец в масле",
+      "rawPrice": "300 ₽/0,185 кг",
+      "product": "tuna-in-oil-185",
+      "price": "300 ₽/0,185 кг"
+    },
+    {
+      "nameLine": 277,
+      "priceLine": 278,
+      "name": "Сайра с добавлением масла",
+      "rawPrice": "₽/0,25 кг",
+      "product": "saury-in-oil-250",
+      "price": null
+    },
+    {
+      "nameLine": 280,
+      "priceLine": 281,
+      "name": "Нерка натуральная",
+      "rawPrice": "₽/0,227 кг",
+      "product": "sockeye-natural-227",
+      "price": null
+    },
+    {
+      "nameLine": 283,
+      "priceLine": 284,
+      "name": "Бычки в томате",
+      "rawPrice": "₽/0,24 кг",
+      "product": "goby-in-tomato-240",
+      "price": null
+    },
+    {
+      "nameLine": 286,
+      "priceLine": 287,
+      "name": "Печень трески ст. б.",
+      "rawPrice": "₽/0,5 кг",
+      "product": "other-006",
+      "price": null
+    },
+    {
+      "nameLine": 289,
+      "priceLine": 290,
+      "name": "Мясо краба премиум ст. б.",
+      "rawPrice": "9350 ₽/0,630 кг",
+      "product": "premium-crab-630",
+      "price": "9350 ₽/0,630 кг"
+    },
+    {
+      "nameLine": 291,
+      "priceLine": 292,
+      "name": "Мясо краба премиум ст.б",
+      "rawPrice": "5900₽/0.370",
+      "product": "seafood-005",
+      "price": "5900 ₽/0,370 кг"
+    },
+    {
+      "nameLine": 293,
+      "priceLine": 294,
+      "name": "Мясо краба премиум ст.б",
+      "rawPrice": "2800₽/0.220кг",
+      "product": "seafood-004",
+      "price": "2800 ₽/0,220 кг"
+    },
+    {
+      "nameLine": 296,
+      "priceLine": 297,
+      "name": "Тунец в собств. соку",
+      "rawPrice": "300 ₽/0,185 кг",
+      "product": "tuna-in-juice-185",
+      "price": "300 ₽/0,185 кг"
+    },
+    {
+      "nameLine": 299,
+      "priceLine": 300,
+      "name": "Навага обжаренная в масле",
+      "rawPrice": "390₽/0.240кг",
+      "product": "navaga-in-oil-240",
+      "price": "390 ₽/0,240 кг"
+    },
+    {
+      "nameLine": 301,
+      "priceLine": 302,
+      "name": "Тунец натуральный ст.б",
+      "rawPrice": "500₽/0.2кг",
+      "product": "tuna-natural-200",
+      "price": "500 ₽/0,2 кг"
+    },
+    {
+      "nameLine": 304,
+      "priceLine": 305,
+      "name": "Тугун солено-мороженный в заливке,",
+      "rawPrice": "5900₽/кг",
+      "product": "frozen-fish-017",
+      "price": "5900 ₽/кг"
+    },
+    {
+      "nameLine": 306,
+      "priceLine": 307,
+      "name": "Щука с вином и черносливом в том.соусе, ж.б.",
+      "rawPrice": "599₽/0.170кг",
+      "product": "pike-wine-prunes-170",
+      "price": "599 ₽/0,170 кг"
+    },
+    {
+      "nameLine": 309,
+      "priceLine": 310,
+      "name": "Шпроты в масле",
+      "rawPrice": "230₽/0.175кг",
+      "product": "other-010",
+      "price": "230 ₽/0,175 кг",
+      "duplicateOf": 267
+    },
+    {
+      "nameLine": 311,
+      "priceLine": 312,
+      "name": "Угорь копченый (риет, паштет) в асс. ст.б",
+      "rawPrice": "649₽/0.08кг",
+      "product": "eel-rillettes",
+      "price": "649 ₽/0,08 кг"
+    },
+    {
+      "nameLine": 313,
+      "priceLine": 314,
+      "name": "Языки трески в собст.соку, ст.б",
+      "rawPrice": "590₽/0.2кг",
+      "product": "cod-tongues-in-juice-200",
+      "price": "590 ₽/0,2 кг"
+    },
+    {
+      "nameLine": 316,
+      "priceLine": 317,
+      "name": "Филе угря жаренное в соусе унаги мороженое, весовой",
+      "rawPrice": "3100₽/кг",
+      "product": "eel-unagi-frozen",
+      "price": "3100 ₽/кг"
+    },
+    {
+      "nameLine": 321,
+      "priceLine": 322,
+      "name": "Чернила каракатицы",
+      "rawPrice": "940 ₽/0,025 кг",
+      "product": "cuttlefish-ink-25",
+      "price": "940 ₽/0,025 кг"
+    },
+    {
+      "nameLine": 324,
+      "priceLine": 325,
+      "name": "Масло авокадо рафинированое, 1л",
+      "rawPrice": "1990₽",
+      "product": "avocado-oil-1l",
+      "price": "1990 ₽/1 л"
+    },
+    {
+      "nameLine": 327,
+      "priceLine": 328,
+      "name": "Рис",
+      "rawPrice": "750 ₽/кг",
+      "product": "other-014",
+      "price": "750 ₽/кг"
+    },
+    {
+      "nameLine": 330,
+      "priceLine": 331,
+      "name": "Соус соевыи‌",
+      "rawPrice": "440 ₽/0,9 литра",
+      "product": "other-015",
+      "price": "440 ₽/0,9 л"
+    },
+    {
+      "nameLine": 333,
+      "priceLine": 334,
+      "name": "Фарш форели",
+      "rawPrice": "872 ₽/0,5 кг",
+      "product": "other-016",
+      "price": "872 ₽/0,5 кг"
+    },
+    {
+      "nameLine": 336,
+      "priceLine": 337,
+      "name": "Суповой набор: форель, нерка, нельма, голец, омуль, муксун",
+      "rawPrice": "450₽/кг",
+      "product": "fish-soup-set",
+      "price": "450 ₽/кг"
+    },
+    {
+      "nameLine": 338,
+      "priceLine": 339,
+      "name": "Суповой набор осетровый",
+      "rawPrice": "600₽/кг",
+      "product": "sturgeon-soup-set",
+      "price": "600 ₽/кг"
+    },
+    {
+      "nameLine": 340,
+      "priceLine": 341,
+      "name": "Суп тыквенный с морепродуктами",
+      "rawPrice": "299₽/0.33кг",
+      "product": "pumpkin-seafood-soup-330",
+      "price": "299 ₽/0,33 кг"
+    },
+    {
+      "nameLine": 342,
+      "priceLine": 343,
+      "name": "Котлеты из фарша филе куриного бедра",
+      "rawPrice": "1400₽/кг",
+      "product": "chicken-thigh-cutlets",
+      "price": "1400 ₽/кг"
+    },
+    {
+      "nameLine": 344,
+      "priceLine": 345,
+      "name": "Перец халапеньо",
+      "rawPrice": "299 ₽/0,220 кг",
+      "product": "jalapeno-220",
+      "price": "299 ₽/0,220 кг"
+    },
+    {
+      "nameLine": 347,
+      "priceLine": 348,
+      "name": "Соль гималайская, хлопья",
+      "rawPrice": "450₽/0.08кг",
+      "product": "himalayan-salt-80",
+      "price": "450 ₽/0,08 кг"
+    },
+    {
+      "nameLine": 349,
+      "priceLine": 350,
+      "name": "Майонез",
+      "rawPrice": "299 ₽/0,250 кг",
+      "product": "mayonnaise-250",
+      "price": "299 ₽/0,250 кг"
+    },
+    {
+      "nameLine": 353,
+      "priceLine": 354,
+      "name": "Салат чука, весовой",
+      "rawPrice": "950₽/кг",
+      "product": "chuka-salad",
+      "price": "950 ₽/кг"
+    },
+    {
+      "nameLine": 355,
+      "priceLine": 356,
+      "name": "Соус \" Шрирача\"",
+      "rawPrice": "290₽/0.230кг",
+      "product": "sriracha-230",
+      "price": "290 ₽/0,230 кг"
+    },
+    {
+      "nameLine": 358,
+      "priceLine": 359,
+      "name": "Рыбный соус",
+      "rawPrice": "258₽/0.240кг",
+      "product": "fish-sauce-240",
+      "price": "258 ₽/0,240 кг"
+    },
+    {
+      "nameLine": 360,
+      "priceLine": 361,
+      "name": "Уксус бальзамический из Модены",
+      "rawPrice": "399₽/0,5 литра",
+      "product": "modena-balsamic-vinegar-500",
+      "price": "399 ₽/0,5 л"
+    },
+    {
+      "nameLine": 363,
+      "priceLine": 364,
+      "name": "Соевый соус",
+      "rawPrice": "440₽/0.5литра",
+      "product": "soy-sauce-500",
+      "price": "440 ₽/0,5 л"
+    },
+    {
+      "nameLine": 365,
+      "priceLine": 366,
+      "name": "Соус чили сладкий",
+      "rawPrice": "258р/0.35 кг",
+      "product": "sweet-chili-sauce-350",
+      "price": "258 ₽/0,35 кг"
+    },
+    {
+      "nameLine": 367,
+      "priceLine": 368,
+      "name": "Кунжутное масло",
+      "rawPrice": "399 ₽/0,1литра",
+      "product": "sesame-oil-100",
+      "price": "399 ₽/0,1 л"
+    },
+    {
+      "nameLine": 370,
+      "priceLine": 371,
+      "name": "Масло оливковое, Extra,  ст.б",
+      "rawPrice": "800₽/0.5л",
+      "product": "extra-olive-oil-500",
+      "price": "800 ₽/0,5 л"
+    },
+    {
+      "nameLine": 374,
+      "priceLine": 375,
+      "name": "Соус песто с трюфелем",
+      "rawPrice": "690 ₽/0,180 кг",
+      "product": "truffle-pesto-180",
+      "price": "690 ₽/0,180 кг"
+    },
+    {
+      "nameLine": 377,
+      "priceLine": 378,
+      "name": "Оливки консервированнве б/косточки, уп",
+      "rawPrice": "490₽/0.1кг",
+      "product": "pitted-olives-100",
+      "price": "490 ₽/0,1 кг"
+    },
+    {
+      "nameLine": 379,
+      "priceLine": 380,
+      "name": "Заливное из филе судака на осетровом бульоне",
+      "rawPrice": "390₽/0.3кг",
+      "product": "zander-aspic-300",
+      "price": "390 ₽/0,3 кг"
+    },
+    {
+      "nameLine": 381,
+      "priceLine": 382,
+      "name": "Перец кампотский, черный, зеленый,ст.б",
+      "rawPrice": "590₽/0.04кг",
+      "product": "kampot-pepper-40",
+      "price": "590 ₽/0,04 кг"
+    },
+    {
+      "nameLine": 384,
+      "priceLine": 385,
+      "name": "Тушенка из оленины",
+      "rawPrice": "599 ₽/0,290 кг",
+      "product": "other-022",
+      "price": "599 ₽/0,290 кг"
+    },
+    {
+      "nameLine": 387,
+      "priceLine": 388,
+      "name": "Бульон из осетра",
+      "rawPrice": "300 ₽/0.45кг",
+      "product": "sturgeon-broth-450",
+      "price": "300 ₽/0,45 кг"
+    },
+    {
+      "nameLine": 390,
+      "priceLine": 391,
+      "name": "Вонголе в/м",
+      "rawPrice": "470 ₽/0,5 кг",
+      "product": "other-025",
+      "price": "470 ₽/0,5 кг"
+    },
+    {
+      "nameLine": 392,
+      "priceLine": 393,
+      "name": "Чаи‌ цеи‌лонскии‌",
+      "rawPrice": "350 ₽/0,1 кг",
+      "product": "other-026",
+      "price": "350 ₽/0,1 кг"
+    },
+    {
+      "nameLine": 394,
+      "priceLine": 395,
+      "name": "Нож португалия, IVO, 12см",
+      "rawPrice": "2300₽/шт",
+      "product": "ivo-knife-12cm",
+      "price": "2300 ₽/шт"
+    },
+    {
+      "nameLine": 396,
+      "priceLine": 397,
+      "name": "Пинцет для рыбы, Португалия",
+      "rawPrice": "1400₽",
+      "product": "other-027",
+      "price": "1400 ₽"
+    }
+  ],
+  "retiredPackages": [
+    {
+      "product": "caviar-009",
+      "replacement": "pike-roe-112"
+    },
+    {
+      "product": "caviar-008",
+      "replacement": "pink-salmon-roe-125"
+    },
+    {
+      "product": "other-005",
+      "replacement": "cod-liver-tin-230"
+    },
+    {
+      "product": "other-017",
+      "replacement": "jalapeno-220"
+    },
+    {
+      "product": "other-019",
+      "replacement": "mayonnaise-250"
+    },
+    {
+      "product": "other-021",
+      "replacement": "sesame-oil-100"
+    }
+  ],
+  "notes": [
+    "The repeated 175 g sprats row is one product, not a second SKU.",
+    "The incomplete extra 590 ₽/ line follows the complete Kampot pepper price; it is not another product.",
+    "The 0.370 crab portion retains the already confirmed 370 g package.",
+    "The malformed mayonnaise-based sauce line is held for the owner to confirm."
+  ],
+  "pending": [
+    {
+      "product": "other-024",
+      "line": 352,
+      "raw": "Соус острый для морепродуктов на основе майонез250%/0.25кг"
+    }
+  ]
+}

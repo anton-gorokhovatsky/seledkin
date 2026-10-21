@@ -1,3 +1,4 @@
+import { catalogSize } from "../helpers/catalog.mjs";
 import { test, expect } from "@playwright/test";
 
 test("each modal owns initial focus, every Tab stop and its close action @navigation", async ({ page }) => {
@@ -54,7 +55,7 @@ for (const mode of ["no-js", "failed-module"]) {
         await expect(navigation.getByRole("link")).toHaveCount(6);
         await navigation.getByRole("link", { name: "Продукты и цены" }).click();
         await expect(page).toHaveURL(new URL("catalog/", baseURL).href);
-        await expect(page.locator(".catalog-product")).toHaveCount(132);
+        await expect(page.locator(".catalog-product")).toHaveCount(catalogSize);
         await page.waitForLoadState("load");
         await page.evaluate(() => document.fonts.ready);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

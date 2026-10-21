@@ -1,3 +1,4 @@
+import { catalogSize } from "../helpers/catalog.mjs";
 import { test, expect } from "@playwright/test";
 import { legacyRoutes } from "../../scripts/legacy-routes.mjs";
 
@@ -137,7 +138,7 @@ test("legacy routing also works without JavaScript and does not load an uncondit
   page.on("request", request => { if (request.url().includes("mc.yandex.ru")) requests.push(request.url()); });
   await page.goto(new URL("collection/", baseURL).href);
   await expect(page).toHaveURL(new URL("catalog/", baseURL).href);
-  await expect(page.locator(".catalog-product")).toHaveCount(132);
+  await expect(page.locator(".catalog-product")).toHaveCount(catalogSize);
   expect(requests).toEqual([]);
   await context.close();
 });

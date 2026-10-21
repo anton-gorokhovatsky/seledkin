@@ -4,21 +4,27 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { typographText } from "../assets/typography.js";
 import { audioFragmentHref, audioTime } from "../scripts/oleg-content.mjs";
+import { catalog } from "../assets/catalog-data.js";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 const guidance = JSON.parse(read("content/catalog-guidance.json"));
 const sources = JSON.parse(read("content/oleg-sources.json"));
 const html = read("catalog/index.html");
 const normalized = value => value.replace(/<[^>]*>/g, " ").replace(/\s+/gu, " ").trim();
+const published = new Set(catalog.flatMap(category => category.items.map(product => product.id)));
 
 test("catalog guidance keeps Oleg's words beside the matching product and complete source", () => {
   for (const tip of guidance) {
     const article = html.match(new RegExp(`<article[^>]*id="product-${tip.product}"[\\s\\S]*?</article>`))?.[0];
-    assert.ok(article, `Missing product ${tip.product}`);
     const source = tip.source && sources.textSources.find(source => source.id === tip.source);
     const path = source ? `content/sources/${source.sourceFile}` : `content/journal/${tip.entry}.html`;
     const href = (source?.url ?? `../${editorialPath(tip.entry)}`).replaceAll("&", "&amp;");
     assert.ok(normalized(read(path)).includes(normalized(tip.quote)), `Altered quotation ${tip.entry ?? tip.source}`);
+    if (!published.has(tip.product)) {
+      assert.equal(article, undefined, `Unlisted product must not have a selling card: ${tip.product}`);
+      continue;
+    }
+    assert.ok(article, `Missing product ${tip.product}`);
     assert.ok(article.includes(`<blockquote cite="${href}"`));
     assert.ok(article.includes(`>${typographText(tip.quote)}</blockquote>`));
     if (source) assert.ok(article.includes(`data-source-date="${source.date}"`));
@@ -37,6 +43,7 @@ test("audio excerpts retain their selected words and time without mixing packagi
       assert.ok(read("about/index.html").includes(`href="${href}"`));
       for (const id of chapter.products) {
         const article = html.match(new RegExp(`<article[^>]*id="product-${id}"[\\s\\S]*?</article>`))?.[0];
+        if (!published.has(id)) { assert.equal(article, undefined); continue; }
         if (chapter.catalog === false) assert.ok(!article.includes(`data-audio-chapter="${chapter.id}"`));
         if (article.includes(`data-audio-chapter="${chapter.id}"`)) {
           const quoteHref = audioFragmentHref(audio, { start: chapter.quoteStart });
@@ -68,7 +75,7 @@ test("catalog advice serves the advice and on-site reading without source footno
 });
 
 test("preparation descriptions are expanded once instead of repeated as notes", () => {
-  for (const id of ["smoked-mackerel", "prepared-fish-006", "prepared-fish-011"]) {
+  for (const id of ["smoked-mackerel", "prepared-fish-011"]) {
     const article = html.match(new RegExp(`<article[^>]*id="product-${id}"[\\s\\S]*?</article>`))[0];
     assert.equal((article.match(/<p>Потрошёная рыба без головы<\/p>/g) ?? []).length, 1);
     assert.doesNotMatch(article, /<p>ПБГ/);

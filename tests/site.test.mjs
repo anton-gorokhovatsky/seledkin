@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
+import { positionCount } from "../assets/catalog-model.js";
 import {
   effectiveTheme,
   millisecondsUntilThemeShift,
@@ -176,28 +177,17 @@ test("home assortment links to its selected categories while the full catalog re
 
   assert.match(section, /id="assortment"/);
   assert.match(section, /id="assortment-title">Что продаём<\/h2>/);
-  assert.match(section, /132 позиции в полном каталоге/);
+  assert.ok(section.includes(`${positionCount(catalog.reduce((sum, category) => sum + category.items.length, 0))} в полном каталоге`.replaceAll(" ", " ")));
   assert.doesNotMatch(section, />Весь каталог<\/span>/);
 
-  for (const [slug, label, count] of [
-    ["caviar", "Икра", 10],
-    ["seafood", "Морепродукты", 18],
-    ["chilled-fish", "Охлаждённая рыба", 1],
-    ["frozen-fish", "Свежемороженая рыба", 36],
-    ["fillet", "Филе и фарш", 8],
-    ["steaks", "Рыбные стейки", 5],
-    ["prepared-fish", "Слабосоленая и копченая рыба", 20],
-    ["dried-fish", "Вяленая рыба", 4],
-    ["canned", "Консервы и бульон", 18],
-    ["grocery", "Бакалея", 11],
-  ]) {
-    assert.match(section, new RegExp(`href="catalog\\/#category-${slug}"`));
-    assert.match(section, new RegExp(`>${label}<\\/span>`));
-    assert.match(section, new RegExp(`>${count} ${count === 1 ? "позиция" : count < 5 ? "позиции" : "позиций"}<\\/span>`));
+  for (const { slug, label, items } of catalog.filter(category => category.showOnHome !== false)) {
+    assert.ok(section.includes(`href="catalog/#category-${slug}"`));
+    assert.ok(section.includes(`>${typographText(label)}</span>`.replaceAll(" ", " ")));
+    assert.ok(section.includes(`>${positionCount(items.length)}</span>`.replaceAll(" ", " ")));
   }
 
-  assert.equal((section.match(/catalog\/#category-/g) ?? []).length, 10);
-  assert.equal((section.match(/class="assortment-directory__link"/g) ?? []).length, 10);
+  assert.equal((section.match(/catalog\/#category-/g) ?? []).length, catalog.filter(category => category.showOnHome !== false).length);
+  assert.equal((section.match(/class="assortment-directory__link"/g) ?? []).length, catalog.filter(category => category.showOnHome !== false).length);
   assert.doesNotMatch(section, /category-accessories|assortment-tweezers/);
   assert.ok(catalogPage.includes('id="product-other-027"'));
   assert.doesNotMatch(section, /WhatsApp|Телеграм|opening-gallery|caviar-title/);
@@ -925,35 +915,19 @@ test("menu and footer channels use one precise local SVG set with Telegram first
   );
 });
 
-test("the complete catalog has stable categories and 132 priced items", () => {
-  assert.equal(catalog.length, 11);
-  assert.equal(
-    catalog.reduce((total, category) => total + category.items.length, 0),
-    132,
-  );
-  assert.deepEqual(
-    catalog.map((category) => [category.slug, category.items.length]),
-    [
-      ["caviar", 10],
-      ["seafood", 18],
-      ["chilled-fish", 1],
-      ["frozen-fish", 36],
-      ["fillet", 8],
-      ["steaks", 5],
-      ["prepared-fish", 20],
-      ["dried-fish", 4],
-      ["canned", 18],
-      ["grocery", 11],
-      ["accessories", 1],
-    ],
-  );
-
+test("the complete catalog keeps stable categories and publishes only confirmed prices", () => {
+  assert.equal(catalog.length, 12);
+  assert.deepEqual(catalog.map(category => category.slug), [
+    "caviar", "seafood", "chilled-fish", "frozen-fish", "fillet", "steaks",
+    "prepared-fish", "dried-fish", "canned", "prepared-meals", "grocery", "accessories",
+  ]);
   for (const category of catalog) {
     assert.ok(category.label);
     assert.ok(category.shortLabel);
+    assert.ok(category.items.length > 0);
     for (const product of category.items) {
       assert.ok(product.name);
-      assert.match(product.price, /₽/);
+      assert.match(product.price, /^\d.*₽/u);
     }
   }
 });

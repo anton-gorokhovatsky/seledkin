@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { catalog } from "../assets/catalog-data.js";
+import { inventory } from "../assets/catalog-data.js";
 import { productHref } from "../assets/catalog-model.js";
 
 export const recipeContent = JSON.parse(readFileSync(new URL("../content/recipes.json", import.meta.url), "utf8"));
@@ -28,12 +28,19 @@ for (const recipe of recipes) {
 }
 
 export function resolveProduct(selection) {
-  const category = catalog.find(item => item.slug === selection.category);
+  const category = inventory.find(item => item.slug === selection.category);
   const matches = category?.items.filter(item => item.name === selection.name
     && (!selection.description || item.description === selection.description)) ?? [];
+  const published = matches.filter(item => item.price !== null);
+  const candidates = published.length ? published : matches;
   // A recipe for the peeled shrimp must not silently pick the unpeeled variant.
-  if (matches.length !== 1) throw new Error(`Ambiguous or missing recipe product: ${JSON.stringify(selection)}`);
-  return { category, product: matches[0] };
+  if (candidates.length !== 1) throw new Error(`Ambiguous or missing recipe product: ${JSON.stringify(selection)}`);
+  return { category, product: candidates[0] };
+}
+
+// A missing price withdraws the sale, not the dated recipe or its exact match.
+export function currentSelections(selections) {
+  return selections.filter(selection => resolveProduct(selection).product.price !== null);
 }
 
 export function matchesProduct(selection, category, product) {
@@ -46,7 +53,9 @@ export function productRecipeLinks(category, product) {
 }
 
 export function productCatalogHref(selection, root = "", source = "") {
-  return productHref(resolveProduct(selection).product, root, source);
+  const { product } = resolveProduct(selection);
+  if (product.price === null) throw new Error(`Unlisted product has no current catalog link: ${product.id}`);
+  return productHref(product, root, source);
 }
 
 for (const selection of [...recipes.flatMap(recipe => recipe.products),

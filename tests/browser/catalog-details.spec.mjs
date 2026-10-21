@@ -1,5 +1,33 @@
 import { test, expect } from "@playwright/test";
 
+test("the owner price list keeps new packages exact and unpriced products out of the catalog @catalog", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("catalog/?category=caviar&audit=owner-prices");
+  const roe = page.locator("#product-pink-salmon-roe-125");
+  await expect(roe.locator("strong")).toHaveText("2 500 ₽ за 125 г");
+  await expect(page.locator("#product-pike-roe-112 strong")).toHaveText("1 800 ₽ за 112 г");
+  await expect(page.locator("#product-caviar-008, #product-caviar-009, #product-frozen-fish-008")).toHaveCount(0);
+  await roe.locator("summary").click();
+  for (const link of await roe.locator('.catalog-product-order__channels a:not([href^="tel:"])').all()) {
+    const draft = new URL(await link.getAttribute("href")).searchParams.get("text");
+    expect(draft).toContain("Икра горбуши");
+    expect(draft).toContain("2 500 ₽ за 125 г");
+    expect(draft).not.toContain("140");
+  }
+  await roe.locator("summary").click();
+  await page.locator("#product-muksun-roe-230").scrollIntoViewIfNeeded();
+  await page.screenshot({ path: testInfo.outputPath("owner-prices-caviar-1440.png") });
+  await page.setViewportSize({ width: 320, height: 1000 });
+  await page.goto("catalog/?category=prepared-meals&audit=owner-prices-reflow");
+  await page.addStyleTag({ content: `html { font-size: 200% !important; }
+    * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; }
+    p { margin-bottom: 2em !important; }` });
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(6);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  await page.locator("#product-zander-aspic-300").scrollIntoViewIfNeeded();
+  await page.screenshot({ path: testInfo.outputPath("owner-prices-meals-320-text-200.png") });
+});
+
 test("a short desktop catalog shows a first product, price and order action before scrolling @catalog", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("catalog/");
@@ -59,6 +87,6 @@ test("product facts remain legible beside prices and advice through catalog refl
   await expect(list.getByRole("textbox", { name: /Вес.*Филе трески/ })).toBeVisible();
   const draft = new URL(await list.getByRole("link", { name: "Открыть список в WhatsApp" }).getAttribute("href")).searchParams.get("text");
   expect(draft).toContain("Филе трески");
-  expect(draft).toContain("2 480 ₽/кг");
+  expect(draft).toContain("2 490 ₽/кг");
   expect(draft).not.toContain("ккал");
 });

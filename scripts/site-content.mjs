@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { countNoun, typographText } from "../assets/typography.js";
-import { catalog } from "../assets/catalog-data.js";
+import { catalog, inventory } from "../assets/catalog-data.js";
 import { catalogPrice, productNotes, productDescription, orderLinks, productHref, positionCount } from "../assets/catalog-model.js";
-import { recipeContent, recipes, recipeOpening, recipeIngredients, resolveProduct, productCatalogHref, productRecipeLinks, recipeForEntry, editorialPath } from "./recipe-content.mjs";
+import { recipeContent, recipes, recipeOpening, recipeIngredients, resolveProduct, currentSelections, productCatalogHref, productRecipeLinks, recipeForEntry, editorialPath } from "./recipe-content.mjs";
 import { olegSources, audioTime, audioFragmentHref } from "./oleg-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
@@ -184,7 +184,8 @@ export function image(entry, root, sizes, deferred = false, hero = false) {
 }
 
 export function renderMobileHero() {
-  const photos = JSON.parse(read("content/mobile-hero.json"));
+  const photos = JSON.parse(read("content/mobile-hero.json"))
+    .filter(photo => currentSelections([photo.product]).length);
   const arrow = '<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon"></use></svg>';
   const prints = photos.map((photo, i) => {
     const { product } = resolveProduct(photo.product);
@@ -273,7 +274,10 @@ export function renderHeroJournalProducts(list) {
     if (!selection) return [];
     const [productId, orderName] = selection;
     const product = catalog.flatMap(category => category.items).find(item => item.id === productId);
-    if (!product) throw new Error(`Missing hero journal product: ${productId}`);
+    if (!product) {
+      if (inventory.some(category => category.items.some(item => item.id === productId && item.price === null))) return [];
+      throw new Error(`Missing hero journal product: ${productId}`);
+    }
     const links = orderLinks(product);
     const panelId = `hero-journal-order-${entry.id}`;
     const price = escape(catalogPrice(product.price));
@@ -435,6 +439,7 @@ const recipeEntry = recipe => {
 
 function currentProduct(selection, root, heading = "h3", includeRecipe = true) {
   const { category, product } = resolveProduct(selection);
+  if (product.price === null) return "";
   const related = includeRecipe ? productRecipeLinks(category, product).find(recipe => recipe.kind === "recipe") : null;
   return `<article class="meal-product">
       <${heading}><a href="${escape(productCatalogHref(selection, root))}">${text(product.name)}</a></${heading}>
@@ -445,6 +450,7 @@ function currentProduct(selection, root, heading = "h3", includeRecipe = true) {
 }
 
 function currentCatalogContext(products, label, headingId) {
+  products = currentSelections(products);
   if (!products.length) return "";
   return `<section class="recipe-current" aria-labelledby="${headingId}">
     <header><p class="page-intro__eyebrow">${label}</p><h2 id="${headingId}">В каталоге лавки</h2></header>
@@ -472,6 +478,7 @@ function renderEditorialContext(entry) {
 }
 
 function recipeEditorialItem(recipe) {
+  recipe = { ...recipe, products: currentSelections(recipe.products) };
   const item = recipeContent.editorial.find(item => item.id === recipe.id) ?? {};
   const entry = recipeEntry(recipe);
   const excerpt = recipe.excerpt ?? [item.excerpt];
@@ -563,10 +570,10 @@ export function renderRecipesPage() {
       for (const paragraph of excerpt) {
         if (!normalized(entry.body).includes(normalized(paragraph))) throw new Error(`Recipe excerpt differs from Oleg's source: ${recipe.id}`);
       }
-      const buying = recipe.products.length ? recipe.products.map(selection => {
+      const buying = currentSelections(recipe.products).map(selection => {
         const { product } = resolveProduct(selection);
         return `<a class="recipe-record-product" data-recipe-id="${recipe.id}" href="${escape(productCatalogHref(selection, "../"))}"><span>${text(product.name)} в каталоге</span><span class="recipe-record-product__price">${escape(catalogPrice(product.price)).replace("/", "<wbr>/")}${harpoon}</span></a>`;
-      }).join("") : "";
+      }).join("");
       return `<article class="recipe-record"${recipe.id === 453 ? ' id="advice"' : ""} data-recipe-material="${recipe.id}" data-ingredient-group="${recipe.ingredient}" data-kind="${recipe.kind}"${featuredIds.has(recipe.id) ? ' data-featured hidden' : ""} aria-labelledby="recipe-title-${recipe.id}">
         <a class="recipe-record-photo" href="${recipe.id}/" aria-label="${recipe.kind === "advice" ? "Читать совет" : "Читать рецепт"}: ${text(recipe.title)}">${image(entry, "../", "(max-width: 46rem) calc(100vw - 36px), (max-width: 1440px) 42vw, 580px")}</a>
         <div class="recipe-record-copy"><p class="recipe-record-meta">${recipe.kind === "advice" ? "Совет" : "Рецепт"} Олега · <time datetime="${entry.date}">${date(entry)}</time></p>

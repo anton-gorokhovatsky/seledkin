@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { catalog } from "../assets/catalog-data.js";
 import { matchesSearch, productSearchText, catalogPrice } from "../assets/catalog-model.js";
-import { recipes, recipeOpening, recipeContent, resolveProduct, productRecipeLinks, productCatalogHref } from "../scripts/recipe-content.mjs";
+import { recipes, recipeOpening, recipeContent, resolveProduct, currentSelections, productRecipeLinks, productCatalogHref } from "../scripts/recipe-content.mjs";
 import { entries, renderRecipesPage, renderRecipeHome } from "../scripts/site-content.mjs";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
@@ -96,7 +96,7 @@ test("recipes point to the right product variant and use live catalog prices", (
   for (const recipe of recipes) {
     assert.ok(entries.some(entry => entry.id === recipe.id));
     assert.ok(page.includes(`href="${recipe.id}/"`));
-    for (const selection of recipe.products) {
+    for (const selection of currentSelections(recipe.products)) {
       const { category, product } = resolveProduct(selection);
       assert.ok(productRecipeLinks(category, product).includes(recipe));
       const url = new URL(productCatalogHref(selection), "https://ks.fish/");
@@ -133,7 +133,7 @@ test("dinner collections and the fresh caviar price share catalog facts", () => 
   const page = renderRecipesPage();
   for (const collection of recipeContent.collections) {
     assert.ok(page.includes(`id="${collection.slug}"`));
-    for (const selection of collection.products) assert.ok(page.includes(catalogPrice(resolveProduct(selection).product.price)));
+    for (const selection of currentSelections(collection.products)) assert.ok(page.includes(catalogPrice(resolveProduct(selection).product.price)));
   }
   const trout = catalog.find(category => category.slug === "caviar").items.find(product => product.name === "Икра форели");
   assert.equal(trout.price, "4990 ₽/0,250 кг");

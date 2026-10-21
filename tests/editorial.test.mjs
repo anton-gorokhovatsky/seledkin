@@ -84,14 +84,14 @@ test("journal updates preserve each dated author paragraph and source outside ap
   }
 });
 
-test("catalog prices agree with the five unambiguous September source updates", () => {
+test("the latest owner price list supersedes dated September prices without changing the author text", () => {
   const products = catalog.flatMap(category => category.items);
   for (const [name, price] of [
     ["Чир", "2200 ₽/кг"],
-    ["Филе трески", "2480 ₽/кг"],
+    ["Филе трески", "2490 ₽/кг"],
     ["Стейк лосося", "2990 ₽/кг"],
-    ["Скумбрия горячего копчения", "1640 ₽/кг"],
-    ["Скумбрия холодного копчения", "1640 ₽/кг"],
+    ["Скумбрия горячего копчения", "1650 ₽/кг"],
+    ["Скумбрия холодного копчения", "1800 ₽/кг"],
   ]) {
     assert.equal(products.find(product => product.name === name)?.price, price, name);
   }
@@ -122,7 +122,10 @@ test("selling publications expose their sourced catalog position and current pri
 test("recipes never silently omit their product", () => {
   for (const recipe of recipes) {
     if (recipe.products.length) {
-      for (const selection of recipe.products) assert.ok(resolveProduct(selection).product.price);
+      for (const selection of recipe.products) {
+        const { product } = resolveProduct(selection);
+        assert.ok(product.price || product.unlistedReason === "no-price", `Unknown product or unexplained omission: ${recipe.id}`);
+      }
     } else {
       const entry = ids.find(entry => entry.id === recipe.id);
       assert.ok(entry.date < "2026-01-01" && recipe.catalogGap?.trim(), `Add the recipe's missing catalog product: ${recipe.id}`);

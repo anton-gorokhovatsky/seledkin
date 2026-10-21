@@ -19,34 +19,34 @@ const findProducts = (query) => catalog.flatMap((category) => category.items
   )).map((product) => product.name));
 
 test("customers find stocked products using everyday names and inflected words", () => {
-  assert.equal(findProducts("креветки").length, 5);
+  assert.equal(findProducts("креветки").length, 7);
   assert.equal(findProducts("кальмары").length, 3);
-  assert.deepEqual(findProducts("селёдка"), ["Филе сельди холодного копчения «По-Датски»", "Сельдь слабосоленая"]);
+  assert.deepEqual(findProducts("селёдка"), ["Филе сельди холодного копчения «По-Датски»"]);
   assert.deepEqual(findProducts("лосось"), ["Филе лосося", "Стейк лосося", "Лосось слабосоленый"]);
   assert.deepEqual(findProducts("треска"), findProducts("трески"));
   assert.deepEqual(findProducts("СЕВЕРНЫЕ, креветки"), ["Креветка северная в/м"]);
   assert.deepEqual(findProducts("филе лосось"), ["Филе лосося"]);
   assert.equal(findProducts("командорские кальмары").length, 2);
-  assert.deepEqual(findProducts("тунец"), ["Филе тунца"]);
-  assert.deepEqual(findProducts("щука"), ["Икра щуки"]);
+  assert.deepEqual(findProducts("тунец"), ["Филе тунца", "Тунец в масле", "Тунец в собственном соку", "Тунец натуральный ст. б."]);
+  assert.deepEqual(findProducts("щука"), ["Икра щуки", "Щука с вином и черносливом в томатном соусе"]);
   assert.deepEqual(findProducts("осетр"), findProducts("осетра"));
 });
 
 test("preparation terms describe the actual product, not its mixed category", () => {
-  assert.deepEqual(findProducts("слабосоленая"), ["Форель слабосоленая", "Лосось слабосоленый", "Сельдь слабосоленая"]);
-  assert.deepEqual(findProducts("горячего копчения"), ["Осетр горячего копчения", "Скумбрия горячего копчения", "Рулет из брюшков осетра"]);
+  assert.deepEqual(findProducts("слабосоленая"), ["Форель слабосоленая", "Лосось слабосоленый"]);
+  assert.deepEqual(findProducts("горячего копчения"), ["Осетр горячего копчения", "Скумбрия горячего копчения", "Рулет из брюшков осетра", "Форель горячего копчения"]);
   assert.deepEqual(findProducts("креветка без головы"), ["Креветка тигровая б/г"]);
   assert.deepEqual(findProducts("вареные креветки"), ["Креветка северная в/м"]);
 });
 
 test("search keeps partial words and combines terms without mixing different products", () => {
-  assert.equal(findProducts("крев").length, 5);
+  assert.equal(findProducts("крев").length, 7);
   assert.equal(findProducts("креветки треска").length, 0);
   assert.deepEqual(findProducts("сельдь филе"), ["Филе сельди холодного копчения «По-Датски»"]);
   assert.equal(findProducts("сельдь треска").length, 0);
   assert.equal(findProducts("несуществующая рыба").length, 0);
   assert.equal(findProducts("***").length, 0);
-  assert.equal(findProducts("").length, 132);
+  assert.equal(findProducts("").length, catalog.reduce((total, category) => total + category.items.length, 0));
   assert.equal(matchesSearch("Лосось слабосоленый", "форель"), false);
 });
 
@@ -88,9 +88,8 @@ test("abbreviation notes appear only for confirmed preparation terms", () => {
 test("a moved product keeps saved orders and does not inherit unrelated preparation search terms", () => {
   const fishMince = catalog.find(category => category.slug === "fillet").items.find(product => product.id === "other-016");
   assert.deepEqual(restoreOrderKeys(["other|Фарш форели|Высшего качества|/0,5 кг", fishMince.id], catalog), [fishMince.id]);
-  assert.deepEqual(findProducts("фарш"), ["Фарш форели"]);
-  assert.deepEqual(findProducts("бульон"), ["Бульон из форели"]);
-  assert.equal(findProducts("консервы").length, 17);
+  assert.deepEqual(findProducts("фарш форели"), ["Фарш форели"]);
+  assert.deepEqual(findProducts("бульон из форели"), ["Бульон из форели"]);
   assert.ok(catalog.find(category => category.slug === "seafood").items.some(product => product.id === "other-025"));
   assert.ok(catalog.find(category => category.slug === "grocery").items.some(product => product.name === "Рис"));
   assert.ok(catalog.find(category => category.slug === "accessories").items.every(product => product.quantityUnit === "piece"));
@@ -161,8 +160,8 @@ test("sale units are explicit and independent of how a price is written", () => 
     assert.ok(["kg", "pack", "piece"].includes(product.quantityUnit), product.id);
     assert.equal(orderUnit({ ...product, price: "Другая запись цены" }).whole, orderUnit(product).whole);
   }
-  const pepper = catalog.flatMap(category => category.items).find(product => product.id === "other-017");
-  assert.equal(orderUnit(pepper).label, "Вес, кг");
-  assert.equal(orderAmount("0,25", pepper), "0,25");
-  assert.match(orderText({ ...pepper, amount: "0,25" }), /Вес: 0,25 кг/);
+  const anchovies = catalog.flatMap(category => category.items).find(product => product.id === "anchovy-fillet-in-oil");
+  assert.equal(orderUnit(anchovies).label, "Вес, кг");
+  assert.equal(orderAmount("0,1", anchovies), "0,1");
+  assert.match(orderText({ ...anchovies, amount: "0,1" }), /Вес: 0,1 кг/);
 });

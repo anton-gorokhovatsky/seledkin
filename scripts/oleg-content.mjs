@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
-import { catalog } from "../assets/catalog-data.js";
+import { inventory } from "../assets/catalog-data.js";
 
 export const olegSources = JSON.parse(readFileSync(new URL("../content/oleg-sources.json", import.meta.url), "utf8"));
-const products = new Set(catalog.flatMap(category => category.items.map(product => product.id)));
+const products = new Set(inventory.flatMap(category => category.items.map(product => product.id)));
 const chapters = new Set();
 
 for (const audio of olegSources.audio) {
