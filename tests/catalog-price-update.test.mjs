@@ -49,6 +49,14 @@ test("every price row in Oleg's supplied list is accounted for once, including e
     assert.equal(source[row.line - 1], row.raw);
     assert.equal(all.get(row.product).price, null, "A malformed price must not become an invented selling price");
   }
+  for (const row of update.clarifications) {
+    assert.equal(source[row.line - 1], row.raw);
+    assert.equal(row.confirmedBy, "user");
+    assert.equal(listed.get(row.product).price, row.price);
+    for (const link of Object.values(orderLinks(listed.get(row.product)))) {
+      assert.ok(new URL(link).searchParams.get("text").includes(catalogPrice(row.price)));
+    }
+  }
 });
 
 test("different packages keep different IDs and cannot replace a saved order by name", () => {
@@ -66,6 +74,7 @@ test("different packages keep different IDs and cannot replace a saved order by 
     ["anchovy-fillet-in-oil", "1500 ₽/0,1 кг", "kg"],
     ["soy-sauce-500", "440 ₽/0,5 л", "pack"],
     ["other-015", "440 ₽/0,9 л", "pack"],
+    ["other-024", "250 ₽/0,250 кг", "pack"],
   ]) {
     assert.equal(listed.get(id).price, price);
     assert.equal(listed.get(id).quantityUnit, unit);

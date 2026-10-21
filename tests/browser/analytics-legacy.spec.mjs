@@ -28,10 +28,10 @@ test("typing is not a failed search, and broadening records a successful recover
   await search.press("Enter");
   await expect.poll(() => page.evaluate(() => window.goalCalls.find(call => call[2] === "catalog_search_empty")?.[3].result)).toBe("other_category");
   await page.getByRole("button", { name: "Искать во всём каталоге" }).press("Enter");
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(5);
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(7);
   const recovery = await page.evaluate(() => window.goalCalls.filter(call => call[2] === "catalog_search_recovered"));
   expect(recovery).toHaveLength(1);
-  expect(recovery[0][3]).toMatchObject({ method: "category", previous_result: "other_category", products: 5, trigger: "broaden" });
+  expect(recovery[0][3]).toMatchObject({ method: "category", previous_result: "other_category", products: 7, trigger: "broaden" });
   expect(JSON.stringify(recovery)).not.toContain("креветки");
   await search.fill("такойрыбынет");
   await search.press("Enter");
@@ -113,7 +113,7 @@ test("automated public visits cannot start the vendor counter @analytics", async
   await page.getByRole("searchbox", { name: "Найти товар" }).fill("тунец");
   await page.getByRole("searchbox", { name: "Найти товар" }).press("Enter");
   expect(requests).toEqual([]);
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(4);
 });
 
 test("old categories reach current prices and preserve the search and service markers", async ({ page, baseURL }) => {

@@ -162,7 +162,9 @@ test("catalog advice stays readable in both watches with 320px reflow and enlarg
   for (const theme of ["light", "dark"]) {
     await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
     await page.goto("catalog/?audit=catalog-guidance");
-    await expect(page.locator(".catalog-product-advice blockquote")).toHaveCount(35);
+    // Quotes for withdrawn products stay in source data; current packages keep
+    // the applicable guidance without restoring products with blank prices.
+    await expect(page.locator(".catalog-product-advice blockquote")).toHaveCount(32);
     await page.locator("#product-fillet-001").scrollIntoViewIfNeeded();
     await page.evaluate(() => document.fonts.ready);
     await page.screenshot({ path: testInfo.outputPath(`catalog-guidance-320-${theme}.png`) });

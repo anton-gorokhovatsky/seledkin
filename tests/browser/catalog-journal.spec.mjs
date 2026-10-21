@@ -104,7 +104,7 @@ test("homepage prices continue to the exact package and delivery terms stay besi
 test("catalog separates dated journal matches from current price rows @catalog", async ({ page }) => {
   await page.goto("catalog/");
   const search = page.getByRole("searchbox", { name: "Найти товар" });
-  for (const [query, count] of [["тунец", 1], ["щука", 1], ["слабосоленая", 3]]) {
+  for (const [query, count] of [["тунец", 4], ["щука", 2], ["слабосоленая", 2]]) {
     await search.fill(query);
     await expect(page.locator(".catalog-product:visible")).toHaveCount(count);
   }
@@ -213,7 +213,7 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
   await page.goto("https://ks.fish/catalog/");
   await expect.poll(() => page.evaluate(() => Array.isArray(window.goalCalls))).toBe(true);
   const search = page.locator("[data-catalog-search]");
-  await search.fill("тунец");
+  await search.fill("филе тунца");
   await search.press("Enter");
   await expect.poll(() => page.evaluate(() => window.goalCalls.filter(call => call[2] === "catalog_search").length)).toBe(1);
   await page.locator(".catalog-product:visible summary").click();
@@ -244,7 +244,7 @@ test("analytics reports intent once, ignores social reading, and excludes arbitr
 test("blocking analytics leaves shopping and navigation usable @analytics", async ({ page }) => {
   await page.route("**/assets/analytics.js*", route => route.abort());
   await page.goto("catalog/");
-  await page.locator("[data-catalog-search]").fill("щука");
+  await page.locator("[data-catalog-search]").fill("икра щуки");
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await page.locator(".catalog-product:visible summary").click();
   await expect(page.locator('.catalog-product:visible a[href^="https://t.me"]')).toBeVisible();

@@ -15,7 +15,7 @@ test("the order shortcut keeps its label, count and harpoon together on narrow s
   await page.setViewportSize({ width: 320, height: 844 });
   await page.addInitScript(() => localStorage.setItem("seledkin-order-list", JSON.stringify([
     "caviar-001", "caviar-002", "caviar-003", "caviar-004", "caviar-005", "trout-roe",
-    "caviar-007", "caviar-008", "caviar-009", "seafood-001", "seafood-002",
+    "caviar-007", "pink-salmon-roe-125", "pike-roe-112", "seafood-001", "seafood-002",
   ])));
   await page.goto("catalog/?audit=order-shortcut");
   const shortcut = page.getByRole("link", { name: "К списку заказа · 11 позиций" });
@@ -81,7 +81,7 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
   await list.getByRole("textbox", { name: /Количество.*15\s000/ }).fill("1");
   const shortcut = page.getByRole("link", { name: "К списку заказа · 2 позиции" });
   await expect(list.getByRole("textbox", { name: /Количество.*6\s000/ })).toHaveValue("2");
-  await page.getByRole("searchbox").fill("тунец");
+  await page.getByRole("searchbox").fill("филе тунца");
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await page.reload();
   await expect(list.getByRole("textbox", { name: /Количество.*6\s000/ })).toHaveValue("2");
@@ -125,36 +125,36 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
 });
 
 test("same-name fish retain their origin in the list, accessible controls and draft @catalog", async ({ page }) => {
-  await page.goto("catalog/?q=горбуша&audit=order-origins");
+  await page.goto("catalog/?q=корюшка&category=frozen-fish&audit=order-origins");
   await page.evaluate(() => document.fonts.ready);
-  const kamchatka = page.getByRole("button", { name: /^В список заказа: Горбуша, Камчатка/ });
-  const sakhalin = page.getByRole("button", { name: /^В список заказа: Горбуша, Сахалин/ });
-  await kamchatka.press("Enter");
-  await expect(page.getByRole("button", { name: /^Открыть список заказа: Горбуша, Камчатка/ })).toHaveAttribute("data-selected", "true");
+  const sakhalin = page.locator("#product-frozen-fish-010 [data-order-add]");
+  const petersburg = page.locator("#product-frozen-fish-015 [data-order-add]");
+  await sakhalin.press("Enter");
+  await expect(page.getByRole("button", { name: /^Открыть список заказа: Корюшка, Сахалин/ })).toHaveAttribute("data-selected", "true");
   // Linux WebKit can finish its focus scroll between mouse down and up.
   // Establish focus first, then keep the actual pointer activation and result.
-  await sakhalin.focus();
-  await expect(sakhalin).toBeFocused();
+  await petersburg.focus();
+  await expect(petersburg).toBeFocused();
   // Let WebKit finish native focus scrolling and the scheduled focus clearance
   // before pointer down/up; the subsequent click must still add the second fish.
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-  await sakhalin.click();
+  await petersburg.click();
   const list = page.locator("#order-list");
   await expect(list.locator("li")).toHaveCount(2);
-  await expect(list.locator("li").nth(0)).toContainText("Камчатка");
-  await expect(list.locator("li").nth(1)).toContainText("Сахалин");
-  await list.getByRole("textbox", { name: /^Вес, кг: Горбуша, Камчатка/ }).fill("0,5");
-  await list.getByRole("textbox", { name: /^Вес, кг: Горбуша, Сахалин/ }).fill("1");
+  await expect(list.locator("li").nth(0)).toContainText("Сахалин");
+  await expect(list.locator("li").nth(1)).toContainText("Санкт-Петербург");
+  await list.getByRole("textbox", { name: /^Вес, кг: Корюшка, Сахалин/ }).fill("0,5");
+  await list.getByRole("textbox", { name: /^Вес, кг: Корюшка, Санкт-Петербург/ }).fill("1");
   await page.reload();
-  await expect(list.getByRole("textbox", { name: /^Вес, кг: Горбуша, Камчатка/ })).toHaveValue("0,5");
-  await expect(list.getByRole("textbox", { name: /^Вес, кг: Горбуша, Сахалин/ })).toHaveValue("1");
+  await expect(list.getByRole("textbox", { name: /^Вес, кг: Корюшка, Сахалин/ })).toHaveValue("0,5");
+  await expect(list.getByRole("textbox", { name: /^Вес, кг: Корюшка, Санкт-Петербург/ })).toHaveValue("1");
   const draft = new URL(await list.getByRole("link", { name: "Открыть список в WhatsApp" }).getAttribute("href")).searchParams.get("text");
-  expect(draft).toContain("Камчатка");
   expect(draft).toContain("Сахалин");
-  await list.getByRole("button", { name: /^Убрать из списка: Горбуша, Камчатка/ }).press("Enter");
+  expect(draft).toContain("Санкт-Петербург");
+  await list.getByRole("button", { name: /^Убрать из списка: Корюшка, Сахалин/ }).press("Enter");
   await expect(list.locator("li")).toHaveCount(1);
-  await expect(list.locator("li")).toContainText("Сахалин");
-  await expect(list.getByRole("button", { name: /^Убрать из списка: Горбуша, Сахалин/ })).toBeFocused();
+  await expect(list.locator("li")).toContainText("Санкт-Петербург");
+  await expect(list.getByRole("button", { name: /^Убрать из списка: Корюшка, Санкт-Петербург/ })).toBeFocused();
 });
 
 test("two catalog tabs share products and amounts without losing an active field @catalog", async ({ page, context }, testInfo) => {
@@ -216,7 +216,7 @@ test("blocked storage leaves the order list usable during a visit @catalog", asy
   await page.addInitScript(() => {
     Object.defineProperty(window, "localStorage", { get() { throw new Error("Storage blocked"); } });
   });
-  await page.goto("catalog/?q=тунец&audit=order-list");
+  await page.goto("catalog/?q=филе+тунца&audit=order-list");
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await page.locator(".catalog-product:visible").locator("[data-order-add]").click();
   await page.locator("#order-list").scrollIntoViewIfNeeded();
@@ -230,7 +230,7 @@ test("desktop handoff copies the full list before opening Telegram @catalog", as
   await page.exposeFunction("captureCopiedOrder", text => { copiedOrder = text; });
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.addInitScript(() => {
-    localStorage.setItem("seledkin-order-list", JSON.stringify(["caviar-001", "caviar-004", "caviar-009", "seafood-002", "frozen-fish-004", "other-004"]));
+    localStorage.setItem("seledkin-order-list", JSON.stringify(["caviar-001", "caviar-004", "pike-roe-112", "seafood-002", "frozen-fish-004", "other-003"]));
     localStorage.setItem("seledkin-order-amounts", JSON.stringify({"caviar-001":"2", "seafood-002":"0,5"}));
     Object.defineProperty(navigator, "clipboard", { value: { async writeText(text) { await window.captureCopiedOrder(text); } } });
   });
@@ -245,7 +245,8 @@ test("desktop handoff copies the full list before opening Telegram @catalog", as
   expect(copiedOrder).toBe(expected);
   expect(expected).toContain("Количество: 2 шт.");
   expect(expected).toContain("Вес: 0,5 кг");
-  expect(expected).toContain("Камбала-ерш");
+  expect(expected).toContain("Корюшка");
+  expect(expected).toContain("Сахалин");
 });
 
 test("denied copying leaves the draft selectable and invalid weight blocks handoff @catalog", async ({ page }) => {

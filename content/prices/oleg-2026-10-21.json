@@ -1178,13 +1178,18 @@
     "The repeated 175 g sprats row is one product, not a second SKU.",
     "The incomplete extra 590 ₽/ line follows the complete Kampot pepper price; it is not another product.",
     "The 0.370 crab portion retains the already confirmed 370 g package.",
-    "The malformed mayonnaise-based sauce line is held for the owner to confirm."
+    "Products absent from this list retain their existing prices, as confirmed by the user on 2026-10-21.",
+    "The user confirmed the malformed mayonnaise-based sauce line as 250 RUB for 250 g on 2026-10-21."
   ],
-  "pending": [
+  "pending": [],
+  "clarifications": [
     {
       "product": "other-024",
       "line": 352,
-      "raw": "Соус острый для морепродуктов на основе майонез250%/0.25кг"
+      "raw": "Соус острый для морепродуктов на основе майонез250%/0.25кг",
+      "price": "250 ₽/0,250 кг",
+      "confirmedBy": "user",
+      "confirmedOn": "2026-10-21"
     }
   ]
 }

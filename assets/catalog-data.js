@@ -251,7 +251,7 @@ export const inventory = [
       item("other-019", "pack", "Майонез", null, "Домашний, настоящий", {"previousCategory":"other","previousPrice":"299 ₽/0,3 кг","unlistedReason":"replaced-package","replacement":"mayonnaise-250"}),
       item("other-020", "pack", "Уксус", "365 ₽/0,5 л", "Рисовый, темный, Южная Корея", {"previousCategory":"other"}),
       item("other-021", "pack", "Кунжутное масло", null, "Южная Корея", {"previousCategory":"other","previousPrice":"1180 ₽/0,320 л","unlistedReason":"replaced-package","replacement":"sesame-oil-100"}),
-      item("other-024", "pack", "Соус для рыбы и морепродуктов", null, null, {"previousCategory":"other","previousPrice":"250 ₽/0,250 кг","unlistedReason":"unconfirmed-price","priceSource":{"file":"content/prices/oleg-2026-10-21.txt","line":352}}),
+      item("other-024", "pack", "Соус для рыбы и морепродуктов", "250 ₽/0,250 кг", null, {"previousCategory":"other","priceSource":{"file":"content/prices/oleg-2026-10-21.txt","line":352}}),
       item("other-026", "pack", "Чай цейлонский", "350 ₽/0,1 кг", null, {"previousCategory":"other","priceSource":{"file":"content/prices/oleg-2026-10-21.txt","line":393}}),
       item("sun-dried-tomatoes-100", "pack", "Томаты вяленые с солью", "310 ₽/0,1 кг", "Турция", {"introduced":"2026-10-21","priceSource":{"file":"content/prices/oleg-2026-10-21.txt","line":269}}),
       item("cuttlefish-ink-25", "pack", "Чернила каракатицы", "940 ₽/0,025 кг", "Тунис", {"introduced":"2026-10-21","priceSource":{"file":"content/prices/oleg-2026-10-21.txt","line":322}}),

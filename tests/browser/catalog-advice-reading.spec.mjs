@@ -4,7 +4,7 @@ test("a buyer reads the full roe guide on site and advice space follows its cont
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("catalog/?category=caviar&audit=advice-reading");
   const longNote = page.locator("#product-caviar-007 .catalog-product-advice");
-  const shortNote = page.locator("#product-caviar-009 .catalog-product-advice");
+  const shortNote = page.locator("#product-pike-roe-112 .catalog-product-advice");
   const note = locator => locator.evaluate(element => {
     const style = getComputedStyle(element);
     return { height: element.clientHeight, border: parseFloat(style.borderInlineStartWidth), background: style.backgroundColor };
