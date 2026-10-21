@@ -79,7 +79,7 @@ const products = catalog.map((category) => `
   }
   return `
               <article class="catalog-product" id="product-${escape(product.id)}" tabindex="-1" data-product-id="${escape(product.id)}" data-search-text="${escape(keywords)}" data-product-name="${escape(product.name)}" data-product-category="${category.slug}"${product.previousCategory ? ` data-previous-category="${product.previousCategory}"` : ""}>
-                <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description ? `
+                <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description && !detail?.descriptionCoveredByFacts ? `
                 <p>${text(productDescription(product))}</p>` : ""}${notes ? `
                 <p>${escape(notes)}</p>` : ""}${facts ? `
                 <p class="catalog-product-facts">${text(facts)}</p>` : ""}${detail?.kcalPer100g !== undefined ? `

@@ -10,6 +10,36 @@ const routes = [
   ["О нас", "about/", "main h1"],
 ];
 
+test("mobile inner pages have a direct, keyboard-accessible home link beside the menu @navigation", async ({ page, baseURL }, testInfo) => {
+  for (const [width, path, enlarged] of [[390, "catalog/"], [390, "journal/702/"], [320, "recipes/"], [320, "about/"], [320, "recipes/", true]]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto(path);
+    if (enlarged) await page.addStyleTag({ content: "html { font-size:200% !important; } * { line-height:1.5 !important; letter-spacing:.12em !important; word-spacing:.16em !important; } p { margin-bottom:2em !important; }" });
+    await page.evaluate(() => document.fonts.ready);
+    // WebKit balances the enlarged headings on the next rendered frames.
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const home = page.locator(".source-header").getByRole("link", { name: /на главную/ });
+    await expect(home).toBeInViewport({ ratio: 1 });
+    const bounds = await home.boundingBox();
+    const menu = await page.getByRole("button", { name: "Открыть меню", exact: true }).boundingBox();
+    expect(bounds.width).toBeGreaterThanOrEqual(44);
+    expect(bounds.height).toBeGreaterThanOrEqual(44);
+    expect(bounds.x + bounds.width).toBeLessThan(menu.x);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+    expect(overflow, `${width}px ${path}, enlarged: ${Boolean(enlarged)}`).toBeLessThanOrEqual(1);
+    if (enlarged) {
+      await page.locator('#recipe-title-382').scrollIntoViewIfNeeded();
+      await page.screenshot({ path: testInfo.outputPath("recipe-enlarged-spacing.png") });
+    }
+    await home.focus();
+    await expect(home).toBeFocused();
+    if (path === "catalog/") await page.screenshot({ path: testInfo.outputPath("mobile-inner-header.png") });
+    await home.press("Enter");
+    await expect(page).toHaveURL(baseURL);
+    await expect(page.locator("[data-menu]")).toBeHidden();
+  }
+});
+
 test("a missing nested URL retains the catalog route and images without JavaScript on the custom domain", async ({ browser, baseURL }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   await context.route("https://mc.yandex.ru/**", route => route.abort());

@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
-import { catalogPrice, matchesSearch, productSearchText } from "../assets/catalog-model.js";
+import { catalogPrice, matchesSearch, productHref, productSearchText } from "../assets/catalog-model.js";
 import { isSocialTagRow } from "./helpers/editorial-prose.mjs";
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 const [home, about, archive, originals] = await Promise.all([
@@ -97,7 +97,7 @@ test("catalog prices agree with the five unambiguous September source updates", 
   }
 });
 
-test("selling publications include a sourced catalog position and recipes never silently omit their product", () => {
+test("selling publications expose their sourced catalog position and current price on the published page", async () => {
   const products = catalog.flatMap(category => category.items);
   for (const entry of ids.filter(entry => !recipeForEntry(entry.id))) {
     const source = entry.source?.url ?? `https://t.me/kapitanseledkin/${entry.id}`;
@@ -105,11 +105,21 @@ test("selling publications include a sourced catalog position and recipes never 
     // Repeat deliveries may use the existing exact product selected by the hero.
     const selected = renderHeroJournalProducts([entry]).includes(`data-journal-id="${entry.id}"`);
     assert.ok(sourced.length || selected, `Add the missing product to the catalog before publishing ${entry.id}: ${entry.title}`);
+    const page = await read(`${editorialPath(entry.id)}index.html`);
+    const context = page.match(/<section class="recipe-current"[\s\S]*?<\/section>/)?.[0];
+    assert.ok(context, `No route from publication ${entry.id} to its current catalog product`);
     for (const product of sourced) {
       assert.ok(product.quantityUnit, `Missing selling unit: ${product.id}`);
       assert.match(catalogPrice(product.price), /\d.*₽/, `Missing confirmed price: ${product.id}`);
+      assert.ok(context.includes(`href="${productHref(product, "../../")}"`), `Missing exact catalog link in ${entry.id}: ${product.id}`);
+      assert.ok(plain(context).includes(plain(catalogPrice(product.price))), `Missing current price in ${entry.id}: ${product.id}`);
     }
   }
+  const repeat = await read("journal/698/index.html");
+  assert.ok(repeat.includes('href="../../catalog/?product=caspian-herring#product-caspian-herring"'));
+});
+
+test("recipes never silently omit their product", () => {
   for (const recipe of recipes) {
     if (recipe.products.length) {
       for (const selection of recipe.products) assert.ok(resolveProduct(selection).product.price);

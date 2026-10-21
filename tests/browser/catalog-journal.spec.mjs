@@ -5,6 +5,35 @@ import { readFileSync } from "node:fs";
 
 const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8")).filter(entry => !recipeForEntry(entry.id));
 
+test("a selling journal story leads to its exact current product and order list @catalog @journal", async ({ page }, testInfo) => {
+  await page.goto("journal/702/");
+  const current = page.getByRole("region", { name: "В каталоге лавки", exact: true });
+  await expect(current.locator("strong")).toHaveText("3 740 ₽/кг");
+  const product = current.getByRole("link", { name: "Рулет из брюшков осетра", exact: true });
+  await current.scrollIntoViewIfNeeded();
+  await product.focus();
+  await expect(product).toBeFocused();
+  await page.screenshot({ path: testInfo.outputPath("journal-current-product.png") });
+  await product.press("Enter");
+  await expect(page).toHaveURL(/catalog\/\?product=prepared-fish-012#product-prepared-fish-012$/);
+  const row = page.locator("#product-prepared-fish-012");
+  await expect(row.getByRole("heading")).toBeInViewport();
+  await expect(row.locator("strong")).toHaveText("3 740 ₽/кг");
+  await expect(row.locator(".catalog-product-facts")).toHaveText("Горячего копчения · Упаковка 250–350 г");
+  await row.getByRole("button", { name: /^В список заказа:/ }).press("Enter");
+  const list = page.locator("#order-list");
+  await expect(list.getByRole("textbox", { name: /Вес.*Рулет из брюшков осетра/ })).toBeVisible();
+  const draft = new URL(await list.getByRole("link", { name: "Открыть список в WhatsApp" }).getAttribute("href")).searchParams.get("text");
+  expect(draft).toMatch(/Рулет из\s+брюшков осетра/);
+  expect(draft).toContain("3 740 ₽/кг");
+  await page.goBack();
+  await expect(current).toBeVisible();
+  for (const [id, target] of [[697, "eel-rillettes"], [698, "caspian-herring"]]) {
+    await page.goto(`journal/${id}/`);
+    await expect(page.locator(`.recipe-current a[href="../../catalog/?product=${target}#product-${target}"]`)).toBeVisible();
+  }
+});
+
 test("an empty category search can broaden without losing the query or browser history @catalog", async ({ page }, testInfo) => {
   await page.goto("catalog/");
   const search = page.getByRole("searchbox", { name: "Найти товар" });

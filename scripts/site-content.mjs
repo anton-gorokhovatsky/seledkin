@@ -415,7 +415,7 @@ export function renderJournalPage(entry) {
   }).join("\n");
   return template("journal-page", {
     theme: renderTheme(section), analytics: renderAnalytics("../../"), menu: renderMenu(section, "../../"), footer: renderFooter(section, "../../"),
-    article: renderJournal([entry], "article") + renderRecipeContext(entry), neighbors,
+    article: renderJournal([entry], "article") + renderEditorialContext(entry), neighbors,
     sectionLabel: recipe ? "Рецепты и советы" : "Судовой журнал",
     backLabel: recipe ? "Все рецепты и советы" : "Все записи журнала",
     neighborsLabel: recipe ? "Другие рецепты и советы" : "Другие записи журнала",
@@ -444,17 +444,30 @@ function currentProduct(selection, root, heading = "h3", includeRecipe = true) {
     </article>`;
 }
 
-function renderRecipeContext(entry) {
+function currentCatalogContext(products, label, headingId) {
+  if (!products.length) return "";
+  return `<section class="recipe-current" aria-labelledby="${headingId}">
+    <header><p class="page-intro__eyebrow">${label}</p><h2 id="${headingId}">В каталоге лавки</h2></header>
+    <div class="meal-products">${products.map(selection => currentProduct(selection, "../../", "h3", false)).join("\n")}</div>
+  </section>`;
+}
+
+function renderEditorialContext(entry) {
   const recipe = recipes.find(item => item.id === entry.id);
-  if (!recipe) return "";
+  if (!recipe) {
+    const source = entry.source?.url ?? `https://t.me/kapitanseledkin/${entry.id}`;
+    const repeatedProduct = heroJournalProducts[entry.id]?.[0];
+    const products = catalog.flatMap(category => category.items
+      .filter(product => product.source === source || product.id === repeatedProduct)
+      .map(product => ({ category: category.slug, name: product.name, description: product.description })));
+    return currentCatalogContext(products, "Из этой записи", "journal-current-title");
+  }
   const sequence = recipe.sequence?.map(shot => `<figure class="recipe-sequence">
     ${image(shot, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 640px")}
     <figcaption>${text(shot.caption)}</figcaption>
   </figure>`).join("\n") ?? "";
-  const current = recipe.products.length ? `<section class="recipe-current" aria-labelledby="recipe-current-title">
-    <header><p class="page-intro__eyebrow">${recipe.kind === "recipe" ? "Для этого рецепта" : "В рассказе Олега"}</p><h2 id="recipe-current-title">В каталоге лавки</h2></header>
-    <div class="meal-products">${recipe.products.map(selection => currentProduct(selection, "../../", "h3", false)).join("\n")}</div>
-  </section>` : "";
+  const current = currentCatalogContext(recipe.products,
+    recipe.kind === "recipe" ? "Для этого рецепта" : "В рассказе Олега", "recipe-current-title");
   return `\n${sequence}${recipe.videoSource ? `<p class="recipe-video-source"><a class="editorial-link" href="${recipe.videoSource}">Смотреть авторское видео в Телеграме${harpoon}</a></p>` : ""}${current}`;
 }
 

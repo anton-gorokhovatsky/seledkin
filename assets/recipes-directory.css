@@ -23,7 +23,7 @@
 .recipe-record-story { display: block; min-height: 44px; color: var(--ink); text-decoration: none; }
 .recipe-record-photo img { display: block; width: 100%; height: auto; }
 .recipe-record-photo { display: block; min-height: 44px; }
-.recipe-record h3 { margin: 0; font: 400 clamp(2.5rem, 1.4rem + 2.7vw, 4rem) / 1.08 var(--serif); text-wrap: balance; }
+.recipe-record h3 { margin: 0; font: 400 clamp(2.5rem, 1.4rem + 2.7vw, 4rem) / 1.08 var(--serif); text-wrap: balance; overflow-wrap: anywhere; }
 .recipe-record-story:is(:hover, :focus-visible) h3 { color: var(--text-link); }
 .recipe-record-excerpt { max-width: 46ch; margin-top: 1.75rem; }
 .recipe-record-excerpt p { margin: 0 0 .85rem; text-wrap: pretty; }
@@ -45,6 +45,8 @@
   .recipe-filter-status { margin-top: .5rem; }
 }
 @media (width <= 28rem) {
+  /* A discretionary hyphen must not push an enlarged bound phrase past the edge. */
+  .recipe-record h3 { hyphens: none; }
   .recipe-record-product__price { flex-wrap: wrap; }
   .recipe-record-read svg { width: 1.5rem; }
 }

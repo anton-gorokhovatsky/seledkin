@@ -52,4 +52,9 @@ test("only selected preparation facts reach the matching product and its search 
   for (const id of ["other-025", "seafood-008"]) assert.match(article(id), /Подлежит тепловой обработке/);
   assert.doesNotMatch(article("other-019"), /catalog-product-(?:facts|ingredients)/);
   assert.match(article("other-016"), /Состав: Радужная форель/);
+  const roll = article("prepared-fish-012");
+  const visibleParagraphs = [...roll.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(match => match[1]);
+  assert.equal(visibleParagraphs.filter(text => /Горячего\s+копчения/.test(text)).length, 1);
+  assert.equal(visibleParagraphs.filter(text => /Упаковка\s+250–350\s+г/.test(text)).length, 1);
+  assert.doesNotMatch(visibleParagraphs.join(" "), /около\s+300\s+г/);
 });

@@ -1,5 +1,31 @@
 import { test, expect } from "@playwright/test";
 
+test("a short desktop catalog shows a first product, price and order action before scrolling @catalog", async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto("catalog/");
+  await page.getByRole("button", { name: "Открыть меню", exact: true }).click();
+  await page.getByRole("radio", { name: "Дневная", exact: true }).check();
+  await page.keyboard.press("Escape");
+  for (const width of [1024, 1280, 1366, 1440]) {
+    await page.setViewportSize({ width, height: 720 });
+    await page.evaluate(() => document.fonts.ready);
+    const first = page.locator(".catalog-product:visible").first();
+    await expect(first.getByRole("heading")).toBeInViewport({ ratio: 1 });
+    await expect(first.locator("strong")).toBeInViewport({ ratio: 1 });
+    const order = first.getByRole("button", { name: /^В список заказа:/ });
+    await expect(order).toBeInViewport({ ratio: 1 });
+    const action = await order.boundingBox();
+    expect(action.y + action.height).toBeLessThanOrEqual(704);
+    expect(await page.evaluate(() => scrollY)).toBe(0);
+    if (width === 1280) await page.screenshot({ path: testInfo.outputPath("catalog-1280-720.png") });
+  }
+  await page.getByRole("combobox", { name: "Категория", exact: true }).selectOption("chilled-fish");
+  await expect(page.locator(".catalog-product:visible")).toContainText(["Форель"]);
+  await page.getByRole("searchbox", { name: "Найти товар" }).fill("форель");
+  await expect(page.locator("#product-chilled-trout")).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+});
+
 test("product facts remain legible beside prices and advice through catalog reflow @catalog", async ({ page }, testInfo) => {
   for (const [width, category] of [[1440, "fillet"], [980, "fillet"], [390, "fillet"], [320, "fillet"], [320, "seafood"], [320, "frozen-fish"]]) {
     await page.setViewportSize({ width, height: 1000 });
