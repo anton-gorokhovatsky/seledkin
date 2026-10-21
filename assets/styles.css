@@ -3303,6 +3303,12 @@ a.site-menu__brand {
   line-height: 1.35;
 }
 
+@media (min-width: 61.25rem) {
+  .catalog-page .catalog-product h4 {
+    font-size: 1.1875rem;
+  }
+}
+
 .catalog-product strong {
   flex: 0 0 auto;
   order: 2;
