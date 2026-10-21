@@ -3305,7 +3305,7 @@ a.site-menu__brand {
 
 @media (min-width: 61.25rem) {
   .catalog-page .catalog-product h4 {
-    font-size: 1.1875rem;
+    font-size: var(--text-reading);
   }
 }
 
