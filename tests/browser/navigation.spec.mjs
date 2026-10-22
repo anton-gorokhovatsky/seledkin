@@ -11,6 +11,27 @@ const routes = [
   ["О нас", "about/", "main h1"],
 ];
 
+test('404 numeric artwork fits its column with a wider fallback serif @navigation', async ({page}, testInfo) => {
+  await page.route('**/qa-reflow-serif.ttf', async route => route.fulfill({
+    contentType:'font/ttf',
+    body:await readFile(new URL('../fixtures/fonts/DejaVuSerif.ttf',import.meta.url)),
+  }));
+  for (const width of [1440,980,737,390,320]) {
+    await page.setViewportSize({width,height:900});
+    await page.goto('404.html');
+    await page.addStyleTag({content:'@font-face {font-family:"QA Reflow Serif";src:url("/qa-reflow-serif.ttf")} .not-found-art__code {font-family:"QA Reflow Serif",serif}'});
+    await page.evaluate(()=>document.fonts.ready);
+    const artwork=await page.locator('.not-found-art').evaluate(el=>{
+      const range=document.createRange();range.selectNodeContents(el.querySelector('.not-found-art__code'));
+      return {frame:el.getBoundingClientRect().toJSON(),text:range.getBoundingClientRect().toJSON(),overflow:document.documentElement.scrollWidth-innerWidth};
+    });
+    expect(artwork.text.left,`${width}px left`).toBeGreaterThanOrEqual(artwork.frame.left-1);
+    expect(artwork.text.right,`${width}px right`).toBeLessThanOrEqual(artwork.frame.right+1);
+    expect(artwork.overflow,`${width}px scroll`).toBeLessThanOrEqual(1);
+    if(width===1440) await page.screenshot({path:testInfo.outputPath('404-wide-fallback.png')});
+  }
+});
+
 test("mobile inner pages have a direct, keyboard-accessible home link beside the menu @navigation", async ({ page, baseURL }, testInfo) => {
   for (const [width, path, enlarged] of [[390, "catalog/"], [390, "journal/702/"], [320, "recipes/"], [320, "about/"], [320, "recipes/", true]]) {
     await page.setViewportSize({ width, height: 844 });

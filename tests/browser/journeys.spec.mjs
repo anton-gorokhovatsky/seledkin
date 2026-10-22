@@ -179,7 +179,13 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
         await expect(page.locator("[data-hero-journal-next]")).toBeEnabled();
       }
       expect(icons).toHaveLength(2);
-      expect(icons[1].width).toBeCloseTo(icons[0].width, 1);
+      if (index < 5) expect(icons[1].width).toBeCloseTo(icons[0].width, 1);
+      else {
+        // The final link has a visible label; its arrow follows that text.
+        // The previous control remains an unlabelled navigation icon.
+        const labelSize = await page.locator('[data-hero-journal-all]').evaluate(el => parseFloat(getComputedStyle(el).fontSize));
+        expect(icons[1].width).toBeCloseTo(labelSize * 1.4, 1);
+      }
       expect(icons[1].x + icons[1].width / 2).toBeCloseTo(arrowCenter, 0);
       expect(box.x + box.width / 2).toBeCloseTo(center, 0);
       expect(right.x).toBeGreaterThanOrEqual(box.x + box.width + 4);

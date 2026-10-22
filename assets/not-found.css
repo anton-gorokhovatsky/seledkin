@@ -37,6 +37,7 @@
 .not-found-redesign .not-found-source__actions { justify-content: start; gap: 1rem 1.75rem; align-items: center; }
 .not-found-home { gap: 0.75rem; }
 .not-found-art {
+  container-type: inline-size;
   position: relative;
   min-width: 0;
   padding-top: 15%;
@@ -45,7 +46,7 @@
 }
 .not-found-art__code {
   display: block;
-  font: 400 clamp(12rem, 29vw, 27rem) / 0.95 var(--serif);
+  font: 400 clamp(1rem, 58cqi, 27rem) / 0.95 var(--serif);
   letter-spacing: -0.075em;
   text-align: center;
 }
@@ -69,7 +70,7 @@
     padding-block: 1.5rem 3rem;
   }
   .not-found-art { order: -1; width: min(100%, 28rem); justify-self: center; padding-top: 2.5rem; }
-  .not-found-art__code { font-size: clamp(5rem, 43vw, 20rem); }
+  .not-found-art__code { font-size: clamp(1rem, 47cqi, 20rem); }
   .not-found-art__shoal { width: 94%; left: 3%; }
   .not-found-copy { max-width: 32rem; }
   .not-found-redesign h1 { max-width: 100%; }
@@ -77,7 +78,7 @@
 @media (width <= 24rem) {
   .not-found-masthead .not-found-source__brand { width: 6.75rem; }
   .not-found-masthead { gap: 0.5rem; }
-  .not-found-art__code { font-size: clamp(4rem, 40vw, 20rem); }
+  .not-found-art__code { font-size: clamp(1rem, 44cqi, 20rem); }
 }
 @media (forced-colors: active) {
   .not-found-art__code { color: CanvasText; }

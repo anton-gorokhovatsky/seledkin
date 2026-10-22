@@ -1606,7 +1606,7 @@ a.source-brand {
 .watch-catch__caption {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: first baseline;
+  align-items: start;
   gap: 1rem;
   font-size: clamp(1.6rem, 1.3rem + 0.7vw, 2rem);
   font-family: var(--serif);
@@ -1618,6 +1618,7 @@ a.source-brand {
   text-wrap: balance;
 }
 .watch-catch__item svg { color: var(--text-link); }
+.watch-catch__caption > svg { align-self: start; }
 /* Every photo-and-copy composition starts at the visible cap edge.
    This includes large stories and the footer as well as short editorial rows. */
 .watch-catch__name,

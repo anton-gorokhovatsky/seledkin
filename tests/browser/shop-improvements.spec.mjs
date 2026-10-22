@@ -105,12 +105,15 @@ test("mobile shopping appears earlier while original photo proportions survive",
   await page.locator(".afisha__catalog").click();
   await expect(page).toHaveURL(/\/catalog\/$/);
   await page.evaluate(() => document.fonts.ready);
-  expect((await page.locator(".catalog-product").first().boundingBox()).y).toBeLessThan(650);
+  // Package families use display:contents for their selected sale record.
+  // Inspect the actual title and price, not a non-painting container's box.
+  const firstProduct = page.locator('.catalog-product-head:visible').first();
+  await expect(firstProduct).toBeInViewport({ ratio:1 });
   // Available serif fonts differ across platforms; two title lines must still
   // leave the first product within the compact mobile introduction.
   await page.addStyleTag({ content: ".catalog-intro.page-intro .page-intro__title { max-width: 11ch; }" });
   expect(await page.locator(".page-intro__title").evaluate(el => el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight))).toBeGreaterThan(1.9);
-  expect((await page.locator(".catalog-product").first().boundingBox()).y).toBeLessThan(650);
+  await expect(firstProduct).toBeInViewport({ ratio:1 });
   for (const path of ["", "about/", "journal/"]) {
     await page.goto(path);
     const failures = await page.locator("img[data-source-image]").evaluateAll(images => images.filter(image => {
