@@ -9,7 +9,7 @@ on:
         description: Automatic scope, selected recipes/journal checks, or the full suite
         type: choice
         default: auto
-        options: [auto, editorial, full, audio-map-2026-10-22]
+        options: [auto, editorial, full]
 
 permissions:
   contents: read
@@ -58,13 +58,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           CHECKS: ${{ inputs.checks }}
         run: |
-          if [ "$CHECKS" = "audio-map-2026-10-22" ]; then
-            VERIFIED_SOURCE_SHA=bf71f645a7899bc9ebd8ed5602b8dc7def9a5ae2
-            test "$(git rev-parse HEAD^)" = "$VERIFIED_SOURCE_SHA"
-            test "$(git diff --name-only "$VERIFIED_SOURCE_SHA" HEAD)" = ".github/workflows/pages.yml"
-            printf 'scope=checked\nbrowser_required=false\nbrowser_grep=\ntypography_pages=[]\n' >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
           BASE_SHA=$(node scripts/published-base.mjs)
           if [ -n "$BASE_SHA" ] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags --depth=1 origin "$BASE_SHA" || true
