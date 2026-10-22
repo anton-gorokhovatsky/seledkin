@@ -12,7 +12,8 @@ const [home, about, archive, originals] = await Promise.all([
   read("tests/fixtures/editorial-paragraphs.json").then(JSON.parse),
 ]);
 const ids = JSON.parse(await read("content/journal.json"));
-const journal = (await Promise.all(ids.map(entry => read(`${editorialPath(entry.id)}index.html`)))).join("\n");
+const journalPages = await Promise.all(ids.map(entry => read(`${editorialPath(entry.id)}index.html`)));
+const journal = journalPages.join("\n");
 const plain = text => text.replace(/<[^>]*>/g, "")
   .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code))).replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '\"')
   .replace(/&shy;|\u00ad/g, "")
@@ -52,12 +53,16 @@ test("all homepage price examples agree with the current catalog", () => {
 test("all journal entries retain their source and a draft about that exact product", () => {
   assert.doesNotMatch(archive, /atlas-record__number/);
   assert.doesNotMatch(journal, /Запись №/);
-  const entries = [...journal.matchAll(/<article\s+class="ship-log-entry[\s\S]*?<\/article>/g)].map(match => match[0]);
-  assert.equal(entries.length, ids.length);
-  entries.forEach((entry, index) => {
+  assert.equal([...journal.matchAll(/<article\s+class="ship-log-entry\b/g)].length, ids.length);
+  // A current-product article now belongs inside the story. Matching the
+  // first closing article tag would cut off the story's inquiry link.
+  journalPages.forEach((entry, index) => {
     const { id, product, source } = ids[index];
     const original = source?.url ?? `https://t.me/kapitanseledkin/${id}`;
-    const inquiry = entry.match(/href="(https:\/\/t\.me\/\+79166751452\?text=[^"]+)"/)[1];
+    assert.ok(entry.includes(`id="journal-entry-${id}"`));
+    const inquiries = [...entry.matchAll(/href="(https:\/\/t\.me\/\+79166751452\?text=[^"]+)"/g)];
+    assert.equal(inquiries.length, 1, `One product inquiry on publication ${id}`);
+    const inquiry = inquiries[0][1];
     const draft = new URL(inquiry).searchParams.get("text");
     assert.ok(draft.includes(product));
     assert.ok(draft.includes(original));
