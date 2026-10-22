@@ -155,3 +155,42 @@ test("the assortment photo starts with the first category and remains within its
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
   }
 });
+
+test("category transition marks follow the counter scale beside short and long names @recipes", async ({ page }, testInfo) => {
+  for (const [width, theme, enlarged] of [[1440, 'light', false], [390, 'light', false], [320, 'dark', false], [320, 'dark', true]]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.addInitScript(theme => localStorage.setItem('seledkin-theme', theme), theme);
+    await page.goto('?audit=category-marks');
+    if (enlarged) await page.addStyleTag({ content: 'html { font-size: 200% !important; }' });
+    await page.evaluate(() => document.fonts.ready);
+    const links = page.locator('.assortment-directory__link');
+    for (const link of await links.all()) {
+      const geometry = await link.evaluate(el => {
+        const meta = el.querySelector('.assortment-directory__meta');
+        const icon = el.querySelector('svg');
+        const range = document.createRange(); range.selectNodeContents(meta.firstChild);
+        const text = range.getBoundingClientRect(), mark = icon.getBoundingClientRect();
+        return { font: parseFloat(getComputedStyle(meta).fontSize), mark: mark.width, gap: mark.left - text.right, height: el.getBoundingClientRect().height };
+      });
+      expect(geometry.mark).toBeGreaterThan(geometry.font);
+      expect(geometry.mark).toBeLessThan(geometry.font * 1.6);
+      expect(geometry.gap).toBeGreaterThan(0);
+      expect(geometry.gap).toBeLessThan(geometry.font);
+      expect(geometry.height).toBeGreaterThanOrEqual(44);
+    }
+    const long = links.filter({ hasText: 'Готовые блюда и полуфабрикаты' });
+    await long.focus();
+    await expect(long).toBeFocused();
+    await expect(long).toBeInViewport();
+    expect(await long.evaluate(el => getComputedStyle(el).outlineStyle)).not.toBe('none');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    await page.screenshot({ path: testInfo.outputPath(`category-marks-${width}-${theme}-${enlarged}.png`) });
+    if (width === 1440) {
+      await links.first().hover();
+      await expect(page.locator('[data-assortment-photo="caviar"]')).toBeVisible();
+      await page.screenshot({ path: testInfo.outputPath('category-marks-hover.png') });
+    }
+  }
+  await page.locator('.assortment-directory__link[href$="category-fillet"]').press('Enter');
+  await expect(page).toHaveURL(/catalog\/.*#category-fillet$/);
+});

@@ -654,21 +654,26 @@ export function renderAssortmentDirectory() {
   return catalog.filter(category => category.showOnHome !== false).map(category => `                <li>
                   <a class="assortment-directory__link" href="catalog/#category-${category.slug}">
                     <span class="assortment-directory__label">${text(category.label)}</span>
-                    <span class="assortment-directory__meta">${positionCount(groupCatalogProducts(category.items).length)}</span>
-                    <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon" /></svg>
+                    <span class="assortment-directory__meta">${positionCount(groupCatalogProducts(category.items).length)}<svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon" /></svg></span>
                   </a>
                 </li>`).join("\n");
 }
 
 export function renderAudioLibrary() {
-  return `<div class="founder-source__library" aria-labelledby="oleg-audio-title">
-            <h3 id="oleg-audio-title">Олег о рыбе и морепродуктах</h3>
-            <p class="source-caption">Архив программы «Провиант» на радио «Говорит Москва». Записи опубликованы на SoundCloud в январе 2021 года; цены и сообщения о поставках относятся ко времени эфиров.</p>
+  return `<section class="founder-source__library source-shell" aria-labelledby="oleg-audio-title">
+            <header class="founder-source__library-header">
+              <h3 id="oleg-audio-title">Архив радиоэфиров</h3>
+              <p>Олег о рыбе и морепродуктах в программе «Провиант» на радио «Говорит Москва».</p>
+              <p class="source-caption">Записи опубликованы на SoundCloud в январе 2021 года. Цены и сообщения о поставках относятся ко времени эфиров.</p>
+            </header>
             <ul>${olegSources.audio.map(audio => `<li id="audio-${audio.id}">
-                <h4><a class="founder-source__source-link" href="${escape(audio.url)}">${text(audio.label)}</a></h4>
-                <p class="source-caption">${text(`${Math.floor(audio.durationSeconds / 60)} мин ${audio.durationSeconds % 60} с`)}</p>
-                <p>${text(audio.summary)}</p>
-                <div class="founder-source__chapters">${audio.chapters.map(chapter => `<a class="founder-source__source-link" href="${escape(audioFragmentHref(audio, chapter))}"><span>${text(chapter.label)}</span><span class="source-caption">${audioTime(chapter.start)}</span></a>`).join("\n                  ")}</div>
+                <div class="founder-source__episode">
+                  <h4><a class="founder-source__source-link" href="${escape(audio.url)}">${text(audio.label)}</a></h4>
+                  <p class="source-caption">${text(`${Math.floor(audio.durationSeconds / 60)} мин ${audio.durationSeconds % 60} с`)}</p>
+                  <p>${text(audio.summary)}</p>
+                </div>
+                <div class="founder-source__chapters" aria-label="Темы эфира «${escape(audio.label)}»">${audio.chapters.map(chapter => `<a class="founder-source__source-link" href="${escape(audioFragmentHref(audio, chapter))}"><span>${text(chapter.label)}</span><span class="source-caption">${audioTime(chapter.start)}</span></a>`).join("\n                  ")}</div>
               </li>`).join("\n              ")}</ul>
-          </div>`;
+            <p class="founder-source__channels">Другие записи с Олегом — на <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">YouTube</a> и <a href="https://soundcloud.com/kapitanseledkin">SoundCloud</a>.</p>
+          </section>`;
 }

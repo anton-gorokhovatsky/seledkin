@@ -289,7 +289,7 @@ svg[viewBox="0 0 32 18"] {
   flex: none;
 }
 :is(.editorial-link, .recipe-card__read,
-    .assortment-directory__link, .journal-story__direction, .recipe-jump a,
+    .assortment-directory__meta, .journal-story__direction, .recipe-jump a,
     .recipe-record-product__price, .recipe-editorial-product__link, .atlas-record__read, .source-hero__journal-link,
     .source-hero__journal-control--all, .afisha__actions a) > svg[viewBox="0 0 32 18"] {
   position: relative;
@@ -1042,8 +1042,8 @@ a.source-brand {
   font-size: clamp(1.75rem, 2.25vw, 2.5rem);
   display: grid;
   min-height: 4.75rem;
-  grid-template-areas: "label meta icon";
-  grid-template-columns: minmax(0, 1fr) max-content auto;
+  grid-template-areas: "label meta";
+  grid-template-columns: minmax(0, 1fr) max-content;
   align-items: first baseline;
   padding: 0.75rem 0.75rem 0.75rem 0.7rem;
   margin-left: -0.7rem;
@@ -1072,6 +1072,9 @@ a.source-brand {
 
 .assortment-directory__meta {
   grid-area: meta;
+  display: inline-flex;
+  align-items: first baseline;
+  gap: .5em;
   color: var(--muted);
   font-size: var(--text-meta);
   font-family: var(--sans);
@@ -1080,7 +1083,6 @@ a.source-brand {
 }
 
 .assortment-directory__link svg {
-  grid-area: icon;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -1265,10 +1267,19 @@ a.source-brand {
 .founder-source__sources {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1.5rem var(--about-column-gap);
-  margin-top: clamp(2rem, 4vw, 3rem);
-  font-size: var(--text-reading);
+  gap: 2rem var(--about-column-gap);
+  margin-top: var(--section-gap);
+  font-size: var(--text-body);
 }
+
+.founder-source__sources h3,
+.founder-source__library h3 {
+  margin: 0;
+  font: 400 var(--about-chapter-title-size) / 1.1 var(--serif);
+  text-wrap: balance;
+}
+
+.founder-source__sources h3 { grid-column: 1 / -1; }
 
 .founder-source__source {
   display: grid;
@@ -1277,20 +1288,23 @@ a.source-brand {
   min-width: 0;
 }
 
-.founder-source__sources p {
+.founder-source__sources p,
+.founder-source__library p {
   margin: 0;
   line-height: 1.5;
   text-wrap: pretty;
 }
 
-.founder-source__source .source-caption {
+.founder-source__source .source-caption,
+.founder-source__library .source-caption {
   color: var(--muted);
   font-size: var(--text-meta);
+  font-weight: 400;
 }
 
 .founder-source__source-link {
   display: flex;
-  align-items: center;
+  align-items: first baseline;
   width: fit-content;
   max-width: 100%;
   min-height: 2.75rem;
@@ -1298,36 +1312,45 @@ a.source-brand {
   font-weight: 600;
 }
 
-.founder-source__channels {
-  grid-column: 1 / -1;
-  color: var(--muted);
+.founder-source__source > .founder-source__source-link {
+  font-size: var(--text-reading);
 }
 
 .founder-source__library {
-  grid-column: 1 / -1;
+  margin-top: var(--section-gap);
+  font-size: var(--text-body);
 }
 
-.founder-source__library h3 {
-  margin: 0 0 .5rem;
-  font: 600 var(--text-reading) / 1.4 var(--sans);
+.founder-source__library-header {
+  display: grid;
+  gap: 1rem;
+  max-width: 42rem;
 }
 
 .founder-source__library ul {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-  gap: 2rem var(--about-column-gap);
+  gap: 2.5rem;
   padding: 0;
-  margin: .75rem 0 0;
+  margin: 2.5rem 0 0;
   list-style: none;
 }
 
-.founder-source__library li { min-width: 0; }
-.founder-source__library h4 { margin: 0; font: 600 var(--text-body) / 1.4 var(--sans); }
-.founder-source__library li > p { margin: .5rem 0; }
-.founder-source__library .source-caption { color: var(--muted); font-size: var(--text-meta); font-weight: 400; }
-.founder-source__chapters { display: flex; flex-direction: column; gap: .25rem; }
-.founder-source__chapters a { justify-content: space-between; gap: .75rem; width: 100%; color: var(--text-link); font: 500 var(--text-interface) / 1.45 var(--sans); }
+.founder-source__library li {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: .75rem var(--about-column-gap);
+  min-width: 0;
+}
+
+.founder-source__episode { min-width: 0; max-width: 36rem; }
+.founder-source__library h4 { margin: 0; font: 600 var(--text-reading) / 1.4 var(--sans); }
+.founder-source__episode > p + p { margin-top: .75rem; }
+.founder-source__chapters { display: flex; flex-direction: column; gap: .25rem; min-width: 0; }
+.founder-source__chapters a { justify-content: space-between; gap: 1rem; width: 100%; color: var(--text-link); font: 400 var(--text-interface) / 1.5 var(--sans); }
 .founder-source__chapters .source-caption { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.founder-source__library .founder-source__channels { margin-top: 2.5rem; color: var(--muted); font-size: var(--text-interface); }
+.founder-source__channels a { display: inline-flex; align-items: center; min-height: 2.75rem; }
 
 .about-overview__reasons-header {
   margin-bottom: clamp(2.5rem, 4vw, 4rem);
@@ -1418,6 +1441,7 @@ a.source-brand {
   .about-overview > .source-shell,
   .founder-source__inner,
   .founder-source__sources,
+  .founder-source__library li,
   .about-overview__chapter,
   .founder-source__closing {
     grid-template-columns: minmax(0, 1fr);
@@ -4344,9 +4368,9 @@ a.site-menu__brand {
   .assortment-directory__link {
     min-height: 4.25rem;
     grid-template-areas:
-      "label icon"
-      "meta icon";
-    grid-template-columns: minmax(0, 1fr) auto;
+      "label"
+      "meta";
+    grid-template-columns: minmax(0, 1fr);
     row-gap: 0.35rem;
   }
 

@@ -183,7 +183,7 @@ test("home assortment links to its selected categories while the full catalog re
   for (const { slug, label, items } of catalog.filter(category => category.showOnHome !== false)) {
     assert.ok(section.includes(`href="catalog/#category-${slug}"`));
     assert.ok(section.includes(`>${typographText(label)}</span>`.replaceAll(" ", " ")));
-    assert.ok(section.includes(`>${positionCount(groupCatalogProducts(items).length)}</span>`.replaceAll(" ", " ")));
+    assert.ok(section.includes(`class="assortment-directory__meta">${positionCount(groupCatalogProducts(items).length)}<svg `.replaceAll(" ", " ")));
   }
 
   assert.equal((section.match(/catalog\/#category-/g) ?? []).length, catalog.filter(category => category.showOnHome !== false).length);
