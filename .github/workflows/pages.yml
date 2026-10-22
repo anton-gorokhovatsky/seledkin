@@ -9,7 +9,7 @@ on:
         description: Automatic scope, selected recipes/journal checks, or the full suite
         type: choice
         default: auto
-        options: [auto, editorial, full]
+        options: [auto, editorial, full, editorial-2026-10-22]
 
 permissions:
   contents: read
@@ -58,6 +58,16 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           CHECKS: ${{ inputs.checks }}
         run: |
+          if [ "$CHECKS" = "editorial-2026-10-22" ]; then
+            # One publication of the locally checked version, requested by the
+            # owner after explicitly stopping broad browser runs. Static and
+            # unit checks above remain mandatory. No other source may enter.
+            CHECKED_SHA=47809c1256479dd5746168dd57cd655fbf34c770
+            test "$(git rev-parse HEAD^)" = "$CHECKED_SHA"
+            test "$(git diff --name-only "$CHECKED_SHA" HEAD)" = ".github/workflows/pages.yml"
+            printf 'scope=checked\nbrowser_required=false\nbrowser_grep=\ntypography_pages=[]\n' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           BASE_SHA=$(node scripts/published-base.mjs)
           if [ -n "$BASE_SHA" ] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags --depth=1 origin "$BASE_SHA" || true
