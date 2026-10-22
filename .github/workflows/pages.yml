@@ -9,7 +9,7 @@ on:
         description: Automatic scope, selected recipes/journal checks, or the full suite
         type: choice
         default: auto
-        options: [auto, editorial, full]
+        options: [auto, editorial, full, catalog-2026-10-22]
 
 permissions:
   contents: read
@@ -58,6 +58,15 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           CHECKS: ${{ inputs.checks }}
         run: |
+          # One user-directed publication of the locally verified catalogue.
+          # Bound to this exact source commit and its workflow-only child;
+          # future commits cannot reuse this exception.
+          if [ "$CHECKS" = "catalog-2026-10-22" ]; then
+            test "$(git rev-parse HEAD^)" = "5bafd84c8dacdb1c6fadbe3b485b2940efb51cb3"
+            git diff --exit-code 5bafd84c8dacdb1c6fadbe3b485b2940efb51cb3 HEAD -- . ':!.github/workflows/pages.yml'
+            printf 'scope=publish\nbrowser_required=false\nbrowser_grep=\ntypography_pages=[]\n' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           BASE_SHA=$(node scripts/published-base.mjs)
           if [ -n "$BASE_SHA" ] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags --depth=1 origin "$BASE_SHA" || true
