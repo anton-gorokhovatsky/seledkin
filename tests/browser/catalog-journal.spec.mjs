@@ -8,7 +8,7 @@ const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", im
 
 test("a selling journal story leads to its exact current product and order list @catalog @journal", async ({ page }, testInfo) => {
   await page.goto("journal/702/");
-  const current = page.getByRole("region", { name: "В каталоге лавки", exact: true });
+  const current = page.getByRole("region", { name: "Из этой записи", exact: true });
   await expect(current.locator("strong")).toHaveText("3 740 ₽/кг");
   const product = current.getByRole("link", { name: "Рулет из брюшков осетра", exact: true });
   await current.scrollIntoViewIfNeeded();
