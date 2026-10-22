@@ -28,9 +28,24 @@ async function expectMetroWithStation(locator, additionalStation = true) {
   if (additionalStation) expect(layout.text).toContain('Метро «Вавиловская». Можно также дойти от метро «Университет».');
   expect(Math.abs(layout.metroLine - layout.stationLine)).toBeLessThan(1);
   expect(layout.contentWidth).toBeLessThanOrEqual(layout.width);
+  if (additionalStation) {
+    const word = await locator.locator(".metro-route").evaluate(element => {
+      const node = element.firstChild;
+      const text = node.textContent;
+      const start = text.indexOf("Университет");
+      const top = offset => {
+        const range = document.createRange();
+        range.setStart(node, start + offset); range.setEnd(node, start + offset + 1);
+        return range.getBoundingClientRect().top;
+      };
+      return { text, first:top(0), last:top("Университет".length - 1) };
+    });
+    expect(word.text).not.toContain("\u00ad");
+    expect(Math.abs(word.first - word.last)).toBeLessThan(1);
+  }
 }
 
-test("metro stays with the station at narrow widths and enlarged text", async ({ page, browser }) => {
+test("metro stays with the station at narrow widths and enlarged text", async ({ page, browser }, testInfo) => {
   for (const [width, mode] of [[1440, "normal"], [980, "normal"], [390, "normal"], [320, "normal"], [320, "text"], [320, "spacing"]]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("");
@@ -39,6 +54,10 @@ test("metro stays with the station at narrow widths and enlarged text", async ({
     await page.evaluate(() => document.fonts.ready);
     await expectMetroWithStation(page.locator(".contacts-source__details p").first());
     await expectMetroWithStation(page.locator(".source-footer__visit p"));
+    if (mode === "normal" && [1440, 390].includes(width)) {
+      await page.locator(".source-footer__visit").scrollIntoViewIfNeeded();
+      await page.screenshot({ path:testInfo.outputPath(`metro-route-${width}.png`) });
+    }
     await page.locator("[data-menu-toggle]").click();
     await expectMetroWithStation(page.locator(".site-menu__service address"));
   }

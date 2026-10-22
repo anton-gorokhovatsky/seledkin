@@ -21,7 +21,7 @@ test("curated details retain source rows and bind existing products without repl
   }
   assert.equal((html.match(/class="catalog-product"/g) ?? []).length, products.length);
   for (const product of products) {
-    assert.ok(article(product.id).includes(`<h4>${typographText(product.name)}</h4>`));
+    assert.ok(article(product.id).includes(`<h4><span class="catalog-product-name">${typographText(product.name)}</span></h4>`));
     assert.ok(article(product.id).includes(`<strong>${catalogPrice(product.price)}</strong>`));
   }
 });

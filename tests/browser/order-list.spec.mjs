@@ -1,4 +1,4 @@
-import { catalogSize } from "../helpers/catalog.mjs";
+import { catalogVisibleSize } from "../helpers/catalog.mjs";
 import { test, expect } from "@playwright/test";
 import { createRequire } from "node:module";
 import { stubStoreMap } from "./map-fixture.mjs";
@@ -67,14 +67,14 @@ test("the order shortcut keeps its label, count and harpoon together on narrow s
 
 test("a buyer builds one order with distinct packages, filters, persistence and keyboard removal @catalog", async ({ page }, testInfo) => {
   await page.goto("catalog/?q=черная+икра&audit=order-list");
-  const products = page.locator(".catalog-product:visible");
-  const first = products.filter({ hasText: "6 000" }).locator("[data-order-add]");
-  const second = products.filter({ hasText: "15 000" }).locator("[data-order-add]");
+  const first = page.locator("#product-caviar-001 [data-order-add]");
+  const second = page.locator("#product-caviar-002 [data-order-add]");
   await first.press("Space");
+  await page.locator('label[for="package-caviar-002"]').click();
   await second.click();
   await expect(page.getByRole("link", { name: "К списку заказа · 2 позиции" })).toBeVisible();
   const list = page.locator("#order-list");
-  await first.press("Enter");
+  await second.press("Enter");
   await expect(list).toBeFocused();
   await expect(list.locator("li")).toHaveCount(2);
   await list.getByRole("textbox", { name: /Количество.*6\s000/ }).fill("2");
@@ -207,7 +207,10 @@ test("an existing saved order migrates to current product IDs @catalog", async (
   ])));
   await page.goto("catalog/?q=черная+икра&audit=order-list");
   await expect(page.getByRole("link", { name: "К списку заказа · 2 позиции" })).toBeVisible();
-  await expect(page.locator(".catalog-product:visible").locator("[data-order-add][data-selected=\"true\"]")).toHaveCount(2);
+  await expect(page.locator(".catalog-product [data-order-add][data-selected=\"true\"]")).toHaveCount(2);
+  await expect(page.locator(".catalog-product:visible [data-order-add][data-selected=\"true\"]")).toHaveCount(1);
+  await page.locator('label[for="package-caviar-002"]').click();
+  await expect(page.locator("#product-caviar-002 [data-order-add]")).toHaveAttribute("data-selected", "true");
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seledkin-order-list")))).toEqual(["caviar-001", "caviar-002"]);
   await expect(page.locator("#order-list").getByRole("list")).toContainText("15 000 ₽ за 125 г");
 });
@@ -317,15 +320,15 @@ test("a homepage price opens its exact package and keeps normal catalog navigati
   await page.locator(".price-preview").getByRole("link", { name: "Чёрная икра" }).click();
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
   await expect(page.locator("#product-caviar-001")).toContainText("6 000 ₽ за 50 г");
-  await expect(page.locator("#product-caviar-001")).toBeFocused();
+  await expect(page.locator('[data-product-family="black-caviar"]')).toBeFocused();
   // Anchor scrolling in WebKit can move the pointer target between press and
   // release. This history scenario uses the keyboard; reset clicks are covered
   // by catalog-journal.spec.mjs.
   await page.getByRole("button", { name: "Весь каталог", exact: true }).press("Enter");
-  await expect(page.locator(".catalog-product:visible")).toHaveCount(catalogSize);
+  await expect(page.locator(".catalog-product:visible")).toHaveCount(catalogVisibleSize);
   await page.goBack();
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
-  await expect(page.locator("#product-caviar-001")).toBeFocused();
+  await expect(page.locator('[data-product-family="black-caviar"]')).toBeFocused();
 });
 
 test("contacts retain the address and map action with 200 percent text @contacts", async ({ page }, testInfo) => {

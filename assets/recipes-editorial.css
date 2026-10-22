@@ -7,7 +7,7 @@
 .recipes-intro__copy p:last-child { margin-bottom: 0; color: var(--ink); font-size: inherit; }
 .recipes-page .recipe-jump { gap: 0.5rem 2rem; }
 .recipes-page .recipe-jump a { gap: 0.5rem; text-decoration: none; }
-.recipes-page .recipe-jump svg { width: 1.4rem; height: auto; flex: none; transform: rotate(90deg); }
+.recipes-page .recipe-jump svg { transform: rotate(90deg); }
 .recipes-page .recipe-jump a:is(:hover, :focus-visible) { text-decoration: underline; }
 .recipe-directory--editorial { margin-top: 0; }
 .recipe-directory--editorial > .recipe-section-heading { margin-top: var(--recipe-space); }

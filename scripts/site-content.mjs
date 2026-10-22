@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { countNoun, typographText } from "../assets/typography.js";
 import { catalog, inventory } from "../assets/catalog-data.js";
-import { catalogPrice, productNotes, productDescription, orderLinks, productHref, positionCount } from "../assets/catalog-model.js";
+import { catalogPrice, productNotes, productDescription, orderLinks, productHref, positionCount, groupCatalogProducts } from "../assets/catalog-model.js";
 import { recipeContent, recipes, recipeOpening, recipeIngredients, resolveProduct, currentSelections, productCatalogHref, productRecipeLinks, recipeForEntry, editorialPath } from "./recipe-content.mjs";
 import { olegSources, audioTime, audioFragmentHref } from "./oleg-content.mjs";
 
@@ -60,7 +60,7 @@ export function renderPricePreview() {
     const notes = productNotes(product);
     return `              <article class="catalog-product">
                 <div class="catalog-product-head">
-                  <h4><a href="${escape(productHref(product))}">${text(selection.label ?? product.name)}</a></h4><strong>${escape(catalogPrice(product.price))}</strong>
+                  <h4><a href="${escape(productHref(product))}"><span class="catalog-product-name">${text(selection.label ?? product.name)}</span></a></h4><strong>${escape(catalogPrice(product.price))}</strong>
                 </div>
                 <p>${text(selection.description ?? productDescription(product))}</p>${notes ? `
                 <p>${escape(notes)}</p>` : ""}
@@ -102,7 +102,7 @@ export function renderAboutPreview(root = "", shell = true) {
 }
 
 const street = `${site.address.city}, ${site.address.street}`;
-const metroDirections = `Метро ${site.address.metro}. Можно также дойти от метро ${site.address.additionalMetro}.`;
+const metroDirections = `Метро ${site.address.metro}. Можно также дойти <span class="metro-route">от метро ${site.address.additionalMetro}.</span>`;
 export const contactAddress = `${street}. ${metroDirections}`;
 
 function routeLinks(page, root, numbered) {
@@ -625,7 +625,7 @@ export function renderAssortmentDirectory() {
   return catalog.filter(category => category.showOnHome !== false).map(category => `                <li>
                   <a class="assortment-directory__link" href="catalog/#category-${category.slug}">
                     <span class="assortment-directory__label">${text(category.label)}</span>
-                    <span class="assortment-directory__meta">${positionCount(category.items.length)}</span>
+                    <span class="assortment-directory__meta">${positionCount(groupCatalogProducts(category.items).length)}</span>
                     <svg class="harpoon-mark" viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon" /></svg>
                   </a>
                 </li>`).join("\n");

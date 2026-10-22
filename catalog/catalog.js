@@ -33,6 +33,10 @@ const categories = [...list.querySelectorAll(".catalog-category")].map((section)
   slug: section.dataset.category,
   count: section.querySelector(".catalog-category-count"),
   products: [...section.querySelectorAll(".catalog-product")],
+  groups: [...section.querySelector(".catalog-product-grid").children].map(element => ({
+    element,
+    products: element.matches(".catalog-product") ? [element] : [...element.querySelectorAll(".catalog-product")],
+  })),
 }));
 let activeCategory = "all";
 let query = "";
@@ -48,18 +52,29 @@ function reportSearch(trigger) {
 
 function readUrl() {
   const url = new URL(location.href);
+  for (const [group, id] of Object.entries(history.state?.catalogPackages ?? {})) {
+    const choice = document.getElementById(`package-${id}`);
+    if (choice?.closest("[data-product-family]")?.dataset.productFamily === group) choice.checked = true;
+  }
   const category = url.searchParams.get("category") ?? url.hash.replace(/^#category-/, "");
   // An old shared URL still opens its original 27 products, now under
   // meaningful headings. It is no longer a category in the new directory.
   activeCategory = category === "other" || categories.some(({ slug }) => slug === category) ? category : "all";
   query = url.searchParams.get("q")?.trim() ?? "";
-  activeProduct = url.searchParams.get("product") ?? "";
+  activeProduct = url.searchParams.get("product") ?? (/^#(?:product|order)-/.test(url.hash) ? url.hash.replace(/^#(?:product|order)-/, "") : "");
   const categoryOfProduct = categories.find(category => category.products.some(product => product.dataset.productId === activeProduct));
   if (categoryOfProduct) {
+    const choice = document.getElementById(`package-${activeProduct}`);
+    if (choice) choice.checked = true;
     activeCategory = categoryOfProduct.slug;
     query = categoryOfProduct.products.find(product => product.dataset.productId === activeProduct).dataset.productName;
   } else activeProduct = "";
   search.value = query;
+}
+
+function packageState() {
+  return { ...history.state, catalogPackages: Object.fromEntries([...list.querySelectorAll("[data-package-choice]:checked")]
+    .map(choice => [choice.closest("[data-product-family]").dataset.productFamily, choice.value])) };
 }
 
 function writeUrl(replace = false) {
@@ -70,7 +85,7 @@ function writeUrl(replace = false) {
   activeCategory === "all" ? url.searchParams.delete("category") : url.searchParams.set("category", activeCategory);
   if (/^#(?:category|product|order)-/.test(url.hash)) url.hash = "";
   if (url.href !== location.href) {
-    history[replace ? "replaceState" : "pushState"](null, "", url);
+    history[replace ? "replaceState" : "pushState"](packageState(), "", url);
   }
 }
 
@@ -80,13 +95,22 @@ function render(animate = false) {
   let totalProducts = 0;
   for (const category of categories) {
     let categoryCount = 0;
-    for (const product of category.products) {
-      const matches = activeProduct ? product.dataset.productId === activeProduct : matchesSearch(product.dataset.searchText, query);
-      if (matches) totalProducts += 1;
+    for (const group of category.groups) {
+      const matching = group.products.filter(product => activeProduct
+        ? product.dataset.productId === activeProduct : matchesSearch(product.dataset.searchText, query));
+      if (matching.length) totalProducts += 1;
       const inCategory = activeCategory === "all" || activeCategory === category.slug
-        || (activeCategory === "other" && product.dataset.previousCategory === "other");
-      product.hidden = !inCategory || !matches;
-      if (!product.hidden) categoryCount += 1;
+        || (activeCategory === "other" && group.products.some(product => product.dataset.previousCategory === "other"));
+      const visible = inCategory && matching.length > 0;
+      group.element.hidden = !visible;
+      for (const product of group.products) product.hidden = !visible;
+      if (visible) {
+        categoryCount += 1;
+        const checked = group.element.querySelector("[data-package-choice]:checked");
+        if (checked && !matching.some(product => product.dataset.productId === checked.value)) {
+          document.getElementById(`package-${matching[0].dataset.productId}`).checked = true;
+        }
+      }
     }
     category.section.hidden = categoryCount === 0;
     category.count.textContent = positionCount(categoryCount);
@@ -120,7 +144,25 @@ function render(animate = false) {
     button.setAttribute("aria-pressed", String(button.dataset.category === activeCategory));
   });
   if (animate) revealChange([list, empty.hidden ? null : empty]);
+  history.replaceState(packageState(), "", location.href);
 }
+
+list.addEventListener("change", event => {
+  const choice = event.target.closest("[data-package-choice]");
+  if (!choice) return;
+  closeAdvicePreview();
+  const family = choice.closest("[data-product-family]");
+  const selected = document.getElementById(`product-${choice.value}`);
+  const expanded = [...family.querySelectorAll("details")].some(details => details.open);
+  for (const details of family.querySelectorAll("details")) details.open = details.closest(".catalog-product") === selected && expanded;
+  const url = new URL(location.href);
+  if (activeProduct && family.querySelector(`[data-product-id="${CSS.escape(activeProduct)}"]`)) {
+    activeProduct = choice.value;
+    url.searchParams.set("product", activeProduct);
+    if (/^#(?:product|order)-/.test(url.hash)) url.hash = url.hash.replace(/^(#(?:product|order)-).+/, `$1${activeProduct}`);
+  }
+  history.replaceState(packageState(), "", url);
+});
 
 filters.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-category]");
@@ -170,10 +212,11 @@ function restore() {
     const product = document.getElementById(`product-${targetId}`);
     if (!product || product.hidden || targetId !== activeProduct) return;
     const summary = product.querySelector("summary");
+    const focusTarget = product.closest("[data-product-family]") ?? product;
     const ordering = location.hash === `#order-${targetId}`;
     if (ordering) summary.parentElement.open = true;
-    product.scrollIntoView({ block: "start", behavior: "instant" });
-    (ordering ? summary : product).focus({ preventScroll: true });
+    focusTarget.scrollIntoView({ block: "start", behavior: "instant" });
+    (ordering ? summary : focusTarget).focus({ preventScroll: true });
   });
 }
 window.addEventListener("popstate", restore);
@@ -194,7 +237,7 @@ function setupAdvicePreviews() {
     const panel = link.querySelector(".catalog-advice-photo");
     const anchor = link.getBoundingClientRect();
     const photo = panel.getBoundingClientRect();
-    const product = link.closest(".catalog-product").getBoundingClientRect();
+    const product = (link.closest("[data-product-family]") ?? link.closest(".catalog-product")).getBoundingClientRect();
     const right = product.right + 16;
     const leftOfProduct = product.left - photo.width - 16;
     const beside = right + photo.width <= innerWidth - 12 || leftOfProduct >= 12;

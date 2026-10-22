@@ -29,11 +29,9 @@
 .recipe-record-excerpt p { margin: 0 0 .85rem; text-wrap: pretty; }
 .recipe-record-excerpt p:last-child { margin-bottom: 0; }
 .recipe-record-read { margin-top: 1.25rem; }
-.recipe-record-read svg, .recipe-record-product svg { width: 2rem; height: 1.125rem; flex: none; }
 .recipe-record-products { display: grid; justify-items: start; gap: .5rem; margin-top: 1.25rem; }
 .recipe-record-product { display: flex; align-items: baseline; flex-wrap: wrap; gap: .2rem 1rem; min-height: 44px; padding-block: .3rem; color: var(--text-link); text-decoration: none; font-size: var(--text-interface); font-weight: 400; }
-.recipe-record-product__price { display: inline-flex; align-items: center; gap: .65rem; color: var(--muted); }
-.recipe-record-product__price svg { margin-top: .15rem; width: 1.5rem; }
+.recipe-record-product__price { display: inline-flex; align-items: first baseline; gap: .65rem; color: var(--muted); }
 .recipe-record-product:hover > span:first-child { color: var(--text-link); }
 @media (hover: hover) { .recipe-record-product:hover > span:first-child { text-decoration: underline; text-underline-offset: .2em; } }
 @media (width <= 46rem) {
@@ -48,6 +46,5 @@
   /* A discretionary hyphen must not push an enlarged bound phrase past the edge. */
   .recipe-record h3 { hyphens: none; }
   .recipe-record-product__price { flex-wrap: wrap; }
-  .recipe-record-read svg { width: 1.5rem; }
 }
 @media (forced-colors: active) { .recipe-ingredients button[aria-pressed="true"] { outline: 2px solid Highlight; } }

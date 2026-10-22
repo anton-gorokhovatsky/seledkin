@@ -36,7 +36,6 @@
 .not-found-description { max-width: 35ch; color: var(--muted); margin-bottom: 2rem; }
 .not-found-redesign .not-found-source__actions { justify-content: start; gap: 1rem 1.75rem; align-items: center; }
 .not-found-home { gap: 0.75rem; }
-.not-found-home svg { width: 1.75rem; height: auto; }
 .not-found-art {
   position: relative;
   min-width: 0;

@@ -17,6 +17,9 @@
   --button-height: 2.75rem;
   --button-padding-block: 0.75rem;
   --button-padding-inline: 1rem;
+  --harpoon-inline-size: 1.4em;
+  --harpoon-control-size: 1.5rem;
+  --harpoon-baseline-drop: calc((var(--harpoon-inline-size) * .5625 - 1ex) / 2);
   --footer: #073d55;
   --footer-surface: #0b6a84;
   --footer-glow: rgb(126 211 228 / 18%);
@@ -276,6 +279,22 @@ svg {
 
 img {
   max-width: 100%;
+}
+
+/* Text arrows share one ratio and sit at the optical centre of the font's
+   x-height. Icon-only navigation uses one fixed size inside its hit area. */
+svg[viewBox="0 0 32 18"] {
+  width: var(--harpoon-inline-size);
+  height: auto;
+  flex: none;
+}
+:is(.editorial-link, .recipe-card__read, .watch-catch__caption,
+    .assortment-directory__link, .journal-story__direction, .recipe-jump a,
+    .recipe-record-product__price, .atlas-record__read, .source-hero__journal-link,
+    .source-hero__journal-control--all, .afisha__actions a) > svg[viewBox="0 0 32 18"] {
+  position: relative;
+  top: var(--harpoon-baseline-drop);
+  align-self: first baseline;
 }
 
 button,
@@ -692,7 +711,7 @@ a.source-brand {
 
 .source-hero__journal {
   --journal-control-size: 2.75rem;
-  --journal-icon-size: 1.4rem;
+  --journal-icon-size: var(--harpoon-control-size);
   display: grid;
   width: 100%;
   height: 100%;
@@ -820,6 +839,8 @@ a.source-brand {
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
+  align-content: center;
+  align-items: first baseline;
 }
 
 [data-hero-journal-previous] svg {
@@ -846,6 +867,7 @@ a.source-brand {
   stroke-linejoin: round;
   stroke-width: 1.6;
 }
+.source-hero__journal-control--all svg { width: var(--harpoon-inline-size); }
 
 .source-hero__journal-status {
   margin: 0;
@@ -1016,11 +1038,13 @@ a.source-brand {
 }
 
 .assortment-directory__link {
+  font-family: var(--serif);
+  font-size: clamp(1.75rem, 2.25vw, 2.5rem);
   display: grid;
   min-height: 4.75rem;
   grid-template-areas: "label meta icon";
   grid-template-columns: minmax(0, 1fr) max-content auto;
-  align-items: last baseline;
+  align-items: first baseline;
   padding: 0.75rem 0.75rem 0.75rem 0.7rem;
   margin-left: -0.7rem;
   column-gap: clamp(0.85rem, 2vw, 1.5rem);
@@ -1032,7 +1056,7 @@ a.source-brand {
 .assortment-directory__label {
   grid-area: label;
   font-family: var(--serif);
-  font-size: clamp(1.75rem, 2.25vw, 2.5rem);
+  font-size: inherit;
   font-weight: 400;
   line-height: 1.04;
   text-decoration: underline;
@@ -1050,12 +1074,12 @@ a.source-brand {
   grid-area: meta;
   color: var(--muted);
   font-size: var(--text-meta);
+  font-family: var(--sans);
   white-space: nowrap;
   transition: color 180ms ease-out;
 }
 
 .assortment-directory__link svg {
-  width: 1.6rem;
   grid-area: icon;
   fill: none;
   stroke: currentColor;
@@ -1454,11 +1478,8 @@ a.source-brand {
 }
 
 .price-preview .catalog-product h4 a {
-  display: inline-flex;
-  min-height: 2.75rem;
-  align-items: center;
-  margin-block: -0.5rem;
-  padding-block: 0.5rem;
+  display: inline;
+  padding-block: .75rem;
   color: var(--text-link);
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
@@ -1498,7 +1519,7 @@ a.source-brand {
 }
 .editorial-link {
   display: inline-flex;
-  align-items: last baseline;
+  align-items: first baseline;
   gap: 0.8rem;
   min-height: 44px;
   max-width: 100%;
@@ -1512,8 +1533,6 @@ a.source-brand {
 .recipe-card__read svg,
 .watch-catch__item svg {
   flex: none;
-  width: 1.8rem;
-  height: auto;
 }
 .editorial-link:is(:hover, :focus-visible),
 .recipe-card:is(:hover, :focus-visible) .recipe-card__read,
@@ -1587,16 +1606,18 @@ a.source-brand {
 .watch-catch__caption {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  align-items: start;
+  align-items: first baseline;
   gap: 1rem;
+  font-size: clamp(1.6rem, 1.3rem + 0.7vw, 2rem);
+  font-family: var(--serif);
 }
 .watch-catch__name {
   font-family: var(--serif);
-  font-size: clamp(1.6rem, 1.3rem + 0.7vw, 2rem);
+  font-size: inherit;
   line-height: 1.15;
   text-wrap: balance;
 }
-.watch-catch__item svg { align-self: start; color: var(--text-link); }
+.watch-catch__item svg { color: var(--text-link); }
 /* Every photo-and-copy composition starts at the visible cap edge.
    This includes large stories and the footer as well as short editorial rows. */
 .watch-catch__name,
@@ -1735,7 +1756,7 @@ a.source-brand {
 }
 .recipe-jump a {
   display: inline-flex;
-  align-items: center;
+  align-items: first baseline;
   min-height: 44px;
   color: var(--text-link);
   text-underline-offset: 0.2em;
@@ -1763,7 +1784,7 @@ a.source-brand {
 .recipe-card img { margin-bottom: 1.25rem; }
 .recipe-card .recipe-meta { margin-bottom: 0.5rem; }
 .recipe-card h3 { margin: 0; font-size: clamp(1.7rem, 1.25rem + 1.1vw, 2.5rem); font-weight: 400; line-height: 1.12; }
-.recipe-card__read { display: inline-flex; align-items: center; gap: 0.75rem; min-height: 44px; margin-top: 0.5rem; color: var(--text-link); font-size: var(--text-interface); }
+.recipe-card__read { display: inline-flex; align-items: first baseline; gap: 0.75rem; min-height: 44px; margin-top: 0.5rem; color: var(--text-link); font-size: var(--text-interface); }
 .meal-collection {
   display: grid;
   grid-template-columns: minmax(0, 0.75fr) minmax(0, 2.25fr);
@@ -3206,6 +3227,13 @@ a.site-menu__brand {
   outline-offset: 4px;
 }
 
+.metro-route {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: top;
+  hyphens: none;
+}
+
 .catalog-results {
   padding: 1rem 0 3rem;
 }
@@ -3270,6 +3298,7 @@ a.site-menu__brand {
 }
 
 .catalog-product {
+  container: product / inline-size;
   position: relative;
   display: block;
   min-width: 0;
@@ -3277,21 +3306,102 @@ a.site-menu__brand {
   padding: 1.1rem 0;
 }
 
-.catalog-product-head {
-  display: flex;
+.catalog-product-family-container {
+  container: product / inline-size;
   min-width: 0;
-  align-items: baseline;
+}
+
+.catalog-product-family {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  gap: 0 .35rem;
+  min-width: 0;
+  margin: 0;
+  padding: 1.1rem 0;
+  border: 0;
+  scroll-margin-top: 6rem;
+}
+
+.catalog-product-family[hidden] { display: none; }
+.catalog-product-family:focus { outline: none; }
+.catalog-product-variant { display: contents; }
+.catalog-product-variant > input:not(:checked) ~ .catalog-product { display: none; }
+.catalog-product-variant > input:checked ~ .catalog-product:not([hidden]) { display: contents; }
+.catalog-product-family .catalog-product { container: none; }
+.catalog-product-family .catalog-product > * { flex-basis: 100%; min-width: 0; }
+.catalog-product-family .catalog-product-head { order: 0; }
+.catalog-product-family .catalog-product > p { order: 1; }
+.catalog-product-family .catalog-product-controls { order: 3; }
+.catalog-product-family .catalog-product-advice { order: 5; }
+
+.catalog-product-family__caption {
+  display: inline-flex;
+  order: 2;
+  align-items: center;
+  color: var(--muted);
+  font: 400 var(--text-interface) / 1.3 var(--sans);
+}
+
+.catalog-product-family__option {
+  display: inline-flex;
+  order: 2;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: .5rem .25rem;
+  color: var(--muted);
+  font: 400 var(--text-interface) / 1.3 var(--sans);
+  cursor: pointer;
+}
+
+.catalog-product-family__option:hover { color: var(--ink); }
+.catalog-product-variant > input:checked + .catalog-product-family__option {
+  color: var(--ink);
+  font-weight: 600;
+}
+.catalog-product-variant > input:checked + .catalog-product-family__option > span {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: .2em;
+}
+
+.catalog-product-variant > input:focus-visible + .catalog-product-family__option,
+:root[data-input-modality="keyboard"] .catalog-product-variant > input:focus + .catalog-product-family__option {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.catalog-product-head {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+  align-items: first baseline;
   gap: 0.65rem;
+  font-size: var(--text-catalog);
 }
 
 .catalog-product-head::after {
-  min-width: 1.25rem;
-  flex: 1 1 auto;
-  order: 1;
+  position: absolute;
+  inset-inline: 0;
+  top: .85em;
   border-bottom: 1px dotted var(--muted);
   content: "";
   opacity: 0.55;
-  transform: translateY(-0.22em);
+  pointer-events: none;
+}
+
+/* The inline name covers only its real line fragments, so a wrapped title
+   leaves the leader beside the first line rather than its widest text box. */
+.catalog-product-name {
+  position: relative;
+  z-index: 1;
+  background: var(--paper);
+  box-shadow: .65rem 0 0 var(--paper);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 .catalog-product :is(h3, h4) {
@@ -3304,17 +3414,42 @@ a.site-menu__brand {
 }
 
 @media (min-width: 61.25rem) {
-  .catalog-page .catalog-product h4 {
+  .catalog-page .catalog-product h4,
+  .catalog-page .catalog-product-head {
     font-size: var(--text-reading);
   }
 }
 
 .catalog-product strong {
+  position: relative;
+  z-index: 1;
   flex: 0 0 auto;
   order: 2;
   font-size: var(--text-catalog);
   white-space: nowrap;
+  background: var(--paper);
+  box-shadow: -.65rem 0 0 var(--paper);
 }
+
+/* When the product column becomes narrow relative to the reader's type size,
+   give the price its own line and remove a leader that has nothing to join. */
+@container product (max-width: 12rem) {
+  .catalog-product-head { grid-template-columns: minmax(0, 1fr); gap: .35rem; }
+  .catalog-product-head::after { content: none; }
+  .catalog-product strong { justify-self: start; box-shadow: none; }
+}
+
+.catalog-product-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: .25rem 1rem;
+  margin-top: .5rem;
+}
+.catalog-product-controls .catalog-product-actions { margin-top: 0; }
+.catalog-product-controls .catalog-product-order { flex: 1 1 10rem; min-width: 0; margin-top: 0; }
+.catalog-product-controls .catalog-product-order summary { line-height: 1.3; }
+.catalog-product-controls :is(button, summary) { scroll-margin-block: .5rem; }
 
 .catalog-product p {
   margin: 0.35rem 0 0;
@@ -3331,8 +3466,8 @@ a.site-menu__brand {
 .catalog-product-order summary {
   width: fit-content;
   min-height: 2.75rem;
-  display: flex;
-  align-items: center;
+  display: block;
+  align-content: center;
   padding: 0.4rem 0.15rem;
   color: var(--text-link);
   font-weight: 600;
@@ -3347,6 +3482,15 @@ a.site-menu__brand {
   display: none;
 
 }
+.catalog-product-order summary::after {
+  content: "+";
+  display: inline-block;
+  margin-inline-start: .35em;
+  font-weight: 400;
+  line-height: 1;
+  transform: translateY(.05em);
+}
+.catalog-product-order[open] summary::after { content: "−"; }
 .catalog-product-order summary:hover {
   color: var(--ink);
 }
@@ -4196,8 +4340,10 @@ a.site-menu__brand {
     row-gap: 0.35rem;
   }
 
-  .assortment-directory__label {
+  .assortment-directory__link {
     font-size: clamp(1.75rem, 8.8vw, 2.2rem);
+  }
+  .assortment-directory__label {
     overflow-wrap: anywhere;
   }
 
@@ -5022,7 +5168,7 @@ a.site-menu__brand {
   .catalog-result-line { min-height: 2rem; }
   .catalog-category:first-child { padding-top: .5rem; }
   .catalog-category:first-child .catalog-category-header { margin-bottom: 1rem; }
-  .catalog-category:first-child .catalog-product { padding-top: 0; }
+  .catalog-category:first-child :is(.catalog-product, .catalog-product-family) { padding-top: 0; }
   .catalog-filter-field { display: none; }
   .catalog-select { display: grid; }
 }
@@ -5199,15 +5345,10 @@ a.site-menu__brand {
 }
 .journal-story__direction {
   display: flex;
-  align-items: center;
+  align-items: first baseline;
   gap: 0.65rem;
   color: var(--text-link);
   font: 400 var(--text-meta) / 1.5 var(--sans);
-}
-.journal-story__direction svg {
-  flex: 0 0 2rem;
-  width: 2rem;
-  height: 1.125rem;
 }
 .journal-story__neighbor-title {
   text-wrap: balance;
@@ -5310,9 +5451,9 @@ a.site-menu__brand {
   .afisha__change[hidden] { display: none; }
   .afisha__status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   .afisha__count { font-variant-numeric: tabular-nums; }
-  .afisha__change svg { width: 24px; height: auto; }
+  .afisha__change svg { width: var(--harpoon-control-size); }
   .afisha__actions { display: grid; gap: .2rem; }
-  .afisha__actions a { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-width: 0; min-height: 44px; color: inherit; text-decoration: none; }
+  .afisha__actions a { display: flex; align-items: first baseline; justify-content: space-between; gap: 1rem; min-width: 0; min-height: 44px; color: inherit; text-decoration: none; }
   .afisha__actions a > span { min-width: 0; }
   .afisha__catalog { padding: .6rem 0; font: 400 clamp(1.65rem, 1.15rem + 2vw, 2rem)/1.15 var(--serif); }
   .afisha__order { grid-column: 1 / -1; min-width: 0; font: 500 .9rem/1.4 var(--sans); }
@@ -5327,25 +5468,12 @@ a.site-menu__brand {
   .afisha__order-draft { display: grid; gap: .5rem; margin-block: .5rem; font: 400 .75rem/1.5 var(--sans); }
   .afisha__order-draft[hidden] { display: none; }
   .afisha__order-draft textarea { width: 100%; min-width: 0; padding: .5rem; border: 1px solid currentColor; border-radius: 0; background: transparent; color: inherit; font: inherit; }
-  .afisha__actions svg { flex: 0 0 32px; width: 32px; height: auto; }
   .afisha a:focus-visible, .afisha button:focus-visible, .afisha summary:focus-visible, .afisha textarea:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
   :root[data-input-modality="pointer"] .afisha :is(a, button):focus-visible { outline: none; }
   /* A hash destination is reading context, not an interactive control. */
   .catalog-product[tabindex="-1"]:focus { outline: none; }
   .catalog-product-order summary,
   .catalog-product-order__channels a { text-decoration: none; }
-  .catalog-product-order summary::after {
-    content: "+";
-    display: grid;
-    place-items: center;
-    flex: 0 0 1em;
-    width: 1em;
-    height: 1em;
-    margin-inline-start: .5rem;
-    line-height: 1;
-    font-weight: 400;
-  }
-  .catalog-product-order[open] summary::after { content: "−"; }
   :root[data-input-modality="pointer"] .catalog-product-order :is(summary, a):focus-visible { outline: none; }
   @container afisha (max-width: 16rem) {
     .afisha .afisha__title { hyphens: manual; }
@@ -5399,13 +5527,13 @@ a.site-menu__brand {
 .catalog-product-add:hover { border-color: var(--ink); }
 .catalog-product-remove { min-height: 44px; border: 0; padding: .5rem 0; background: none; color: var(--text-link); font: 400 var(--text-interface) / 1.3 var(--sans); cursor: pointer; }
 .catalog-product-added { color: var(--muted); font-size: var(--text-meta); }
-.catalog-product-actions + .catalog-product-order { margin-top: .25rem; }
+.catalog-product-actions + .catalog-product-order { margin-top: 0; }
 .catalog-product-actions + .catalog-product-order summary { color: var(--muted); font-weight: 400; text-decoration: none; }
 .catalog-product-actions + .catalog-product-order summary:hover { color: var(--ink); }
 .catalog-order-shortcut { position: fixed; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 60; display: inline-grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: min(.75rem, 12px); width: max-content; max-width: calc(100% - 32px); border: 1px solid var(--jelly-glass-border); border-radius: 3rem; background: var(--jelly-glass-surface); box-shadow: var(--jelly-glass-shadow); backdrop-filter: var(--jelly-glass-filter); -webkit-backdrop-filter: var(--jelly-glass-filter); transform: translateX(-50%); color: var(--ink); font-size: var(--text-interface); line-height: 1.25; text-decoration: none; }
 .catalog-order-shortcut__label { min-width: 0; font-weight: 500; text-wrap: balance; }
 .catalog-order-shortcut__count { display: inline-grid; place-items: center; flex: none; min-width: 1.75rem; min-height: 1.75rem; padding: .2rem .4rem; border-radius: 2rem; background: var(--ink); color: var(--paper); font-size: .875em; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.2; }
-.catalog-order-shortcut svg { width: min(2rem, 32px); height: min(1.125rem, 18px); fill: currentColor; }
+.catalog-order-shortcut svg { width: var(--harpoon-control-size); fill: currentColor; }
 .catalog-order-list { list-style: none; margin: 1rem 0; padding: 0; text-align: left; }
 .catalog-order-list li { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: .6rem; padding: 1rem 0; }
 .catalog-order-item__header { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: .5rem 1rem; }
@@ -5667,14 +5795,13 @@ a.site-menu__brand {
   .source-hero__journal-link {
     display: inline-flex;
     min-height: 2.75rem;
-    align-items: center;
+    align-items: first baseline;
     gap: .65rem;
     color: var(--on-image);
     font: 400 var(--text-body)/1.4 var(--sans);
     text-decoration: underline;
     text-underline-offset: .2em;
   }
-  .source-hero__journal-link svg { width: 1.75rem; height: auto; }
   [data-desktop-editorial] .source-hero__journal {
     height: auto;
     padding-right: 1.15rem;
@@ -5742,7 +5869,7 @@ a.site-menu__brand {
     text-align: left;
   }
   .hero-journal-product__amount { white-space: nowrap; }
-  .hero-journal-product__toggle svg { display: inline-block; margin-left: .55rem; vertical-align: -.15em; }
+  .hero-journal-product__toggle svg { display: inline-block; margin-left: .55rem; top: 0; vertical-align: calc(-1 * var(--harpoon-baseline-drop)); }
   .hero-journal-product__toggle:focus-visible { text-decoration-thickness: .12em; }
   @media (hover: hover) and (pointer: fine) {
     .hero-journal-product__toggle:hover { text-decoration-thickness: .12em; }

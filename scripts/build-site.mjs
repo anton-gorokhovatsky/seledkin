@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { entries, journalEntries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderHeroJournalProducts, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
 import { editorialPath, recipeForEntry } from "./recipe-content.mjs";
 import { catalog } from "../assets/catalog-data.js";
-import { positionCount } from "../assets/catalog-model.js";
+import { positionCount, catalogPositionCount, groupCatalogProducts } from "../assets/catalog-model.js";
 import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
@@ -42,10 +42,10 @@ for (const [path, page, root] of pages) {
       ? `${start}${content}${end}` : `${start}\n${content}\n${end}`);
   }
   if (page === "home") {
-    result = result.replace(/(?:\d+[\s\u00a0]+разделов · )?[\d\s\u00a0]+позици(?:я|и|й)(?: в[\s\u00a0]+полном каталоге)?/, `${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))} в полном каталоге`);
+    result = result.replace(/(?:\d+[\s\u00a0]+разделов · )?[\d\s\u00a0]+позици(?:я|и|й)(?: в[\s\u00a0]+полном каталоге)?/, `${positionCount(catalogPositionCount(catalog))} в полном каталоге`);
     for (const category of catalog) {
       const pattern = new RegExp(`(href="catalog/#category-${category.slug}"[\\s\\S]*?class="assortment-directory__meta">)[^<]+`);
-      result = result.replace(pattern, `$1${positionCount(category.items.length)}`);
+      result = result.replace(pattern, `$1${positionCount(groupCatalogProducts(category.items).length)}`);
     }
   }
   if (page === "home") result = result.replace(/(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/, (_, start, source, end) => {

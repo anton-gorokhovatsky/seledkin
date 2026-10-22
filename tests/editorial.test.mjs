@@ -36,7 +36,7 @@ test("every original editorial paragraph survives on its published page", () => 
 
 test("all homepage price examples agree with the current catalog", () => {
   const preview = home.match(/<section class="price-preview"[\s\S]*?<\/section>/)?.[0] ?? '';
-  const products = [...preview.matchAll(/<h4><a href="([^"]+)">([^<]+)<\/a><\/h4><strong>([^<]+)<\/strong>/g)];
+  const products = [...preview.matchAll(/<h4><a href="([^"]+)"><span class="catalog-product-name">([^<]+)<\/span><\/a><\/h4><strong>([^<]+)<\/strong>/g)];
   assert.equal(products.length, 6);
   const comparable = value => plain(value).replaceAll('ё', 'е');
   for (const [, href, name, price] of products) {

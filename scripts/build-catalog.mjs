@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { catalog, inventory } from "../assets/catalog-data.js";
-import { catalogPrice, productLabel, productDescription, orderLinks, positionCount, productNotes, productSearchText, productKey } from "../assets/catalog-model.js";
+import { catalogPrice, productLabel, productDescription, orderLinks, positionCount, productNotes, productSearchText, productKey, groupCatalogProducts, catalogPositionCount, packageLabel } from "../assets/catalog-model.js";
 import { typographText } from "../assets/typography.js";
 import { recipeContent, productRecipeLinks, matchesProduct, editorialPath } from "./recipe-content.mjs";
 import { olegSources as sources, audioFragmentHref } from "./oleg-content.mjs";
@@ -48,17 +48,11 @@ function adviceLink(href, title, photo) {
   return `<a class="catalog-advice-link" href="${escape(href)}">${text(title)}<span class="catalog-advice-photo" aria-hidden="true"><img src="../assets/${escape(variants[0].file)}" srcset="${variants.map(item => `../assets/${escape(item.file)} ${item.width}w`).join(", ")}" sizes="240px" width="${width}" height="${height}" loading="lazy" decoding="async" alt="" /></span></a>`;
 }
 
-const products = catalog.map((category) => `
-          <section class="catalog-category" id="category-${category.slug}" data-category="${category.slug}" aria-labelledby="category-title-${category.slug}">
-            <div class="catalog-category-header">
-              <h3 id="category-title-${category.slug}">${text(category.label)}</h3>
-              <p class="catalog-category-count">${positionCount(category.items.length)}</p>
-            </div>
-            <div class="catalog-product-grid">${category.items.map((product) => {
+function renderProduct(product, category) {
   const links = orderLinks(product);
   const detail = detailsByProduct.get(product.id);
   const facts = [detail?.form, detail?.size].filter(Boolean).join(" · ");
-  const keywords = [productSearchText(category, product), facts, detail?.ingredients, detail?.handling].filter(Boolean).join(" ");
+  const keywords = [productSearchText(category, product), facts, detail?.ingredients, detail?.handling, product.variantGroup && packageLabel(product)].filter(Boolean).join(" ");
   const notes = productNotes(product);
   const tip = guidance.find(item => item.product === product.id);
   const source = tip && journal.find(entry => entry.id === tip.entry);
@@ -79,13 +73,14 @@ const products = catalog.map((category) => `
   }
   return `
               <article class="catalog-product" id="product-${escape(product.id)}" tabindex="-1" data-product-id="${escape(product.id)}" data-search-text="${escape(keywords)}" data-product-name="${escape(product.name)}" data-product-category="${category.slug}"${product.previousCategory ? ` data-previous-category="${product.previousCategory}"` : ""}>
-                <div class="catalog-product-head"><h4>${text(product.name)}</h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description && !detail?.descriptionCoveredByFacts ? `
+                <div class="catalog-product-head"><h4><span class="catalog-product-name">${text(product.name)}</span></h4><strong>${escape(catalogPrice(product.price))}</strong></div>${product.description && !detail?.descriptionCoveredByFacts ? `
                 <p>${text(productDescription(product))}</p>` : ""}${notes ? `
                 <p>${escape(notes)}</p>` : ""}${facts ? `
                 <p class="catalog-product-facts">${text(facts)}</p>` : ""}${detail?.kcalPer100g !== undefined ? `
                 <p class="catalog-product-calories">${text(`${new Intl.NumberFormat("ru-RU").format(detail.kcalPer100g)}\u00a0ккал на 100 г`)}</p>` : ""}${detail?.ingredients ? `
                 <p class="catalog-product-ingredients">${text(`Состав: ${detail.ingredients}`)}</p>` : ""}${detail?.handling ? `
                 <p class="catalog-product-handling">${text(detail.handling)}</p>` : ""}
+                <div class="catalog-product-controls">
                 <div class="catalog-product-actions" hidden>
                   <button type="button" class="catalog-product-add" data-order-add value="${escape(productKey(category, product))}"><span>В список заказа</span></button>
                   <span class="catalog-product-added" data-order-added aria-hidden="true" hidden>Добавлено</span>
@@ -98,10 +93,39 @@ const products = catalog.map((category) => `
                     <a href="${escape(links.whatsapp)}">В&nbsp;WhatsApp</a>
                     <a href="tel:+79166751452">Позвонить</a>
                   </div>
-                </details>${tip || audioNote || advice.length ? `
+                </details>
+                </div>${tip || audioNote || advice.length ? `
                 <div class="catalog-product-advice"><span>${audioNote?.chapter.catalogLabel ?? (tip || related.length ? "Олег советует" : "Олег рассказывает")}</span>${tip ? `<blockquote cite="${escape(externalSource?.url ?? `../${editorialPath(tip.entry)}`)}"${externalSource ? ` data-source-date="${externalSource.date}"` : ""}>${text(tip.quote)}</blockquote>` : audioNote?.chapter.catalogQuote ? `<blockquote class="catalog-audio-quote" cite="${escape(audioFragmentHref(audioNote.audio, { start: audioNote.chapter.quoteStart }))}" data-audio-chapter="${escape(audioNote.chapter.id)}">${text(audioNote.chapter.catalogQuote)}</blockquote>` : ""}${advice.join("\n                  ")}</div>` : ""}
               </article>`;
-}).join("")}
+}
+
+function renderGroup(group, category) {
+  if (group.length === 1) return renderProduct(group[0], category);
+  const first = group[0];
+  if (group.some(product => product.name !== first.name || product.quantityUnit !== "pack")
+      || new Set(group.map(packageLabel)).size !== group.length) {
+    throw new Error(`Incompatible package group: ${first.variantGroup}`);
+  }
+  return `
+            <div class="catalog-product-family-container">
+              <fieldset class="catalog-product-family" data-product-family="${escape(first.variantGroup)}" tabindex="-1">
+                <legend class="visually-hidden">${text(first.name)} — фасовка</legend>
+                <span class="catalog-product-family__caption" aria-hidden="true">Фасовка</span>${group.map((product, index) => `
+                <div class="catalog-product-variant">
+                  <input class="visually-hidden" type="radio" name="package-${escape(first.variantGroup)}" id="package-${escape(product.id)}" value="${escape(product.id)}" data-package-choice aria-controls="product-${escape(product.id)}" aria-label="${escape(`${packageLabel(product)} — ${catalogPrice(product.price).split(/\sза\s/u)[0]}`)}"${index === 0 ? " checked" : ""} />
+                  <label class="catalog-product-family__option" for="package-${escape(product.id)}"><span>${text(packageLabel(product))}</span></label>${renderProduct(product, category)}
+                </div>`).join("")}
+              </fieldset>
+            </div>`;
+}
+
+const products = catalog.map((category) => `
+          <section class="catalog-category" id="category-${category.slug}" data-category="${category.slug}" aria-labelledby="category-title-${category.slug}">
+            <div class="catalog-category-header">
+              <h3 id="category-title-${category.slug}">${text(category.label)}</h3>
+              <p class="catalog-category-count">${positionCount(groupCatalogProducts(category.items).length)}</p>
+            </div>
+            <div class="catalog-product-grid">${groupCatalogProducts(category.items).map(group => renderGroup(group, category)).join("")}
             </div>
           </section>`).join("\n");
 
@@ -110,7 +134,7 @@ const filters = categories.map((category) => `
                     <button type="button" data-category="${category.slug}" aria-pressed="${category.slug === "all"}">${text(category.shortLabel)}</button>`).join("");
 const options = categories.map((category) => `
                     <option value="${category.slug}">${text(category.shortLabel)}</option>`).join("");
-let result = original.replace(/(data-catalog-count>\s*)[\d\s\u00a0]+позици(?:я|и|й)/, `$1${positionCount(catalog.reduce((sum, c) => sum + c.items.length, 0))}`);
+let result = original.replace(/(data-catalog-count>\s*)[\d\s\u00a0]+позици(?:я|и|й)/, `$1${positionCount(catalogPositionCount(catalog))}`);
 for (const [key, content] of Object.entries({ products,
   filters: filters + '\n                    <button type="button" data-category="other" data-legacy-category aria-pressed="false" hidden>Прежние «Новинки и прочее»</button>',
   options: options + '\n                    <option value="other" data-legacy-category hidden>Прежние «Новинки и прочее»</option>',

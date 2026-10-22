@@ -5,6 +5,28 @@ export function normalizeSearch(value) {
     .replace(/[\s\u00a0\u202f]+/gu, " ").trim();
 }
 
+// A curated product family may contain several sale packages. The individual
+// IDs remain the source of prices, direct links, saved orders and quantities.
+export function groupCatalogProducts(products) {
+  const groups = new Map();
+  for (const product of products) {
+    const key = product.variantGroup ?? product.id;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(product);
+  }
+  return [...groups.values()];
+}
+
+export function catalogPositionCount(categories) {
+  return categories.reduce((total, category) => total + groupCatalogProducts(category.items).length, 0);
+}
+
+export function packageLabel(product) {
+  const label = catalogPrice(product.price).match(/за[\s\u00a0]+(.+)$/u)?.[1];
+  if (product.quantityUnit !== "pack" || !label) throw new Error(`Missing package size: ${product.id}`);
+  return label;
+}
+
 // Equivalent words from the shop's vocabulary; distinct fish stay distinct.
 const searchForms = new Map([
   ["креветка", "креветки", "креветку", "креветок", "креветкой", "креветками"],

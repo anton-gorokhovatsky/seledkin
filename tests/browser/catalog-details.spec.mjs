@@ -28,7 +28,7 @@ test("the owner price list keeps new packages exact and unpriced products out of
   await page.screenshot({ path: testInfo.outputPath("owner-prices-meals-320-text-200.png") });
 });
 
-test("a short desktop catalog shows a first product, price and order action before scrolling @catalog", async ({ page }, testInfo) => {
+test("a short desktop shows a first product and keeps package choice separate from its actions @catalog", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.goto("catalog/");
   await page.getByRole("button", { name: "Открыть меню", exact: true }).click();
@@ -41,11 +41,20 @@ test("a short desktop catalog shows a first product, price and order action befo
     await expect(first.getByRole("heading")).toBeInViewport({ ratio: 1 });
     await expect(first.locator("strong")).toBeInViewport({ ratio: 1 });
     const order = first.getByRole("button", { name: /^В список заказа:/ });
-    await expect(order).toBeInViewport({ ratio: 1 });
+    // The package selector has its own row. On a low viewport the controls
+    // remain reachable by normal scrolling, without crowding the selector.
+    const family = page.locator('[data-product-family="black-caviar"]');
+    const lastWeight = await family.locator("label").last().boundingBox();
     const action = await order.boundingBox();
-    expect(action.y + action.height).toBeLessThanOrEqual(704);
+    expect(action.y).toBeGreaterThanOrEqual(lastWeight.y + lastWeight.height);
+    expect(action.height).toBeGreaterThanOrEqual(44);
     expect(await page.evaluate(() => scrollY)).toBe(0);
-    if (width === 1280) await page.screenshot({ path: testInfo.outputPath("catalog-1280-720.png") });
+    if (width === 1280) {
+      await order.focus();
+      await expect(order).toBeInViewport({ ratio: 1 });
+      await page.screenshot({ path: testInfo.outputPath("catalog-1280-720.png") });
+      await page.evaluate(() => scrollTo(0, 0));
+    }
   }
   await page.getByRole("combobox", { name: "Категория", exact: true }).selectOption("chilled-fish");
   await expect(page.locator(".catalog-product:visible")).toContainText(["Форель"]);

@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { catalog } from "../assets/catalog-data.js";
-import { positionCount } from "../assets/catalog-model.js";
+import { positionCount, catalogPositionCount, groupCatalogProducts } from "../assets/catalog-model.js";
 import {
   effectiveTheme,
   millisecondsUntilThemeShift,
@@ -177,13 +177,13 @@ test("home assortment links to its selected categories while the full catalog re
 
   assert.match(section, /id="assortment"/);
   assert.match(section, /id="assortment-title">Что продаём<\/h2>/);
-  assert.ok(section.includes(`${positionCount(catalog.reduce((sum, category) => sum + category.items.length, 0))} в полном каталоге`.replaceAll(" ", " ")));
+  assert.ok(section.includes(`${positionCount(catalogPositionCount(catalog))} в полном каталоге`.replaceAll(" ", " ")));
   assert.doesNotMatch(section, />Весь каталог<\/span>/);
 
   for (const { slug, label, items } of catalog.filter(category => category.showOnHome !== false)) {
     assert.ok(section.includes(`href="catalog/#category-${slug}"`));
     assert.ok(section.includes(`>${typographText(label)}</span>`.replaceAll(" ", " ")));
-    assert.ok(section.includes(`>${positionCount(items.length)}</span>`.replaceAll(" ", " ")));
+    assert.ok(section.includes(`>${positionCount(groupCatalogProducts(items).length)}</span>`.replaceAll(" ", " ")));
   }
 
   assert.equal((section.match(/catalog\/#category-/g) ?? []).length, catalog.filter(category => category.showOnHome !== false).length);
@@ -242,7 +242,7 @@ test("home exposes the core customer jobs", () => {
   assert.match(home, /метро «Вавиловская»/);
   const contacts =
     home.match(/<section class="contacts-source"[\s\S]*?<\/section>/)?.[0] ?? "";
-  assert.match(contacts, /Метро «Вавиловская»\. Можно также дойти от метро «Университет»\./);
+  assert.match(contacts.replace(/<[^>]+>/g, ""), /Метро «Вавиловская»\. Можно также дойти от метро «Университет»\./);
   assert.match(contacts, /Ежедневно с 11:00 до 20:00/);
   assert.doesNotMatch(home + styles, /source-hero__down/);
 });
@@ -797,7 +797,7 @@ test("the footer ends both customer journeys with a useful, human invitation", (
     const footerMarkup =
       page.match(/<footer class="source-footer"[\s\S]*?<\/footer>/)?.[0] ?? "";
     assert.doesNotMatch(footerMarkup, /Ежедневно с 11:00 до 20:00/);
-    assert.match(footerMarkup, /Метро «Вавиловская»\. Можно также дойти от метро «Университет»\./);
+    assert.match(footerMarkup.replace(/<[^>]+>/g, ""), /Метро «Вавиловская»\. Можно также дойти от метро «Университет»\./);
     assert.match(page, /class="source-footer__portrait"/);
     assert.match(page, /salmon-cat\.jpg/);
     for (const label of ["Телеграм-канал", "YouTube", "SoundCloud"]) {

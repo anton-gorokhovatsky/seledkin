@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { catalogPrice, matchesSearch, orderLinks, orderText, orderUnit, orderAmount, productHref, positionCount, productKey, legacyProductKey, restoreOrderKeys, productNotes, productDescription, productSearchText } from "../assets/catalog-model.js";
+import { catalogPrice, matchesSearch, orderLinks, orderText, orderUnit, orderAmount, productHref, positionCount, productKey, legacyProductKey, restoreOrderKeys, productNotes, productDescription, productSearchText, groupCatalogProducts, catalogPositionCount, packageLabel } from "../assets/catalog-model.js";
 import { catalog } from "../assets/catalog-data.js";
 
 test("search accepts category terms, reversed words, ё and whitespace", () => {
@@ -17,6 +17,25 @@ const findProducts = (query) => catalog.flatMap((category) => category.items
     productSearchText(category, product),
     query,
   )).map((product) => product.name));
+
+test("curated package families preserve every sale identity and leave different products separate", () => {
+  const families = catalog.flatMap(category => groupCatalogProducts(category.items));
+  const allProducts = catalog.flatMap(category => category.items);
+  assert.equal(catalogPositionCount(catalog), 160);
+  assert.equal(families.flat().length, allProducts.length);
+  assert.deepEqual(families.flat().map(product => product.id).sort(), allProducts.map(product => product.id).sort());
+  assert.deepEqual(families.filter(group => group.length > 1).map(group => group.map(product => [product.id, packageLabel(product)])), [
+    [["caviar-001", "50 г"], ["caviar-002", "125 г"], ["caviar-003", "250 г"], ["caviar-004", "500 г"]],
+    [["seafood-004", "220 г"], ["seafood-005", "370 г"], ["premium-crab-630", "630 г"]],
+  ]);
+  for (const group of families.filter(group => group.length > 1)) {
+    assert.equal(new Set(group.map(product => product.name)).size, 1);
+    assert.equal(new Set(group.map(product => product.description)).size, 1);
+    assert.equal(new Set(group.map(product => product.id)).size, group.length);
+  }
+  const sameName = [{ id: "one", name: "Корюшка" }, { id: "two", name: "Корюшка" }];
+  assert.equal(groupCatalogProducts(sameName).length, 2);
+});
 
 test("customers find stocked products using everyday names and inflected words", () => {
   assert.equal(findProducts("креветки").length, 7);

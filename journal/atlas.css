@@ -54,14 +54,13 @@
 }
 .atlas-record__read {
   display: inline-flex;
-  align-items: center;
+  align-items: first baseline;
   gap: 1rem;
   min-height: 44px;
   margin-top: .25rem;
   color: var(--text-link);
   font: 500 var(--text-interface) / 1.5 var(--sans);
 }
-.atlas-record__read svg { width: 2rem; height: 1.125rem; flex: 0 0 auto; }
 .journal-atlas .atlas-record > a:is(:hover, :focus-visible) h2 { color: var(--text-link); text-decoration: none; }
 .atlas-record > a:is(:hover, :focus-visible) .atlas-record__read { text-decoration: underline; text-underline-offset: .2em; }
 .journal-atlas__earlier { margin-top: var(--section-gap); scroll-margin-top: 6rem; }
