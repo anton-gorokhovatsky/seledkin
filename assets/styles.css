@@ -19,7 +19,7 @@
   --button-padding-inline: 1rem;
   --harpoon-inline-size: 1.4em;
   --harpoon-control-size: 1.5rem;
-  --harpoon-baseline-drop: calc((var(--harpoon-inline-size) * .5625 - 1ex) / 2);
+  --harpoon-baseline-drop: calc((var(--harpoon-inline-size) * .5625 - 1cap) / 2);
   --footer: #073d55;
   --footer-surface: #0b6a84;
   --footer-glow: rgb(126 211 228 / 18%);
@@ -281,14 +281,14 @@ img {
   max-width: 100%;
 }
 
-/* Text arrows share one ratio and sit at the optical centre of the font's
-   x-height. Icon-only navigation uses one fixed size inside its hit area. */
+/* The shaft meets the centre of the first line's capital letters. The tail
+   stays below that axis. Icon-only navigation keeps its fixed control size. */
 svg[viewBox="0 0 32 18"] {
   width: var(--harpoon-inline-size);
   height: auto;
   flex: none;
 }
-:is(.editorial-link, .recipe-card__read, .watch-catch__caption,
+:is(.editorial-link, .recipe-card__read,
     .assortment-directory__link, .journal-story__direction, .recipe-jump a,
     .recipe-record-product__price, .recipe-editorial-product__link, .atlas-record__read, .source-hero__journal-link,
     .source-hero__journal-control--all, .afisha__actions a) > svg[viewBox="0 0 32 18"] {
@@ -1618,7 +1618,13 @@ a.source-brand {
   text-wrap: balance;
 }
 .watch-catch__item svg { color: var(--text-link); }
-.watch-catch__caption > svg { align-self: start; }
+/* The caption starts at its trimmed cap edge, so use the same cap metric
+   from that edge instead of the baseline used by ordinary inline links. */
+.watch-catch__caption > svg {
+  position: relative;
+  align-self: start;
+  top: calc(-1 * var(--harpoon-baseline-drop));
+}
 /* Every photo-and-copy composition starts at the visible cap edge.
    This includes large stories and the footer as well as short editorial rows. */
 .watch-catch__name,

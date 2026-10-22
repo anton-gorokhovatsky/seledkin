@@ -89,11 +89,14 @@ test("internal sections and the three reasons retain their shared heading levels
 
 // A zero-height inline probe measures the actual text baseline. Wrapping the
 // final text node preserves the anonymous flex item used by editorial links.
-async function textBaseline(locator) {
-  return locator.evaluate(el => {
+async function textBaseline(locator, firstLine = false) {
+  return locator.evaluate((el, firstLine) => {
     const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
     let text, node;
-    while ((node = walker.nextNode())) if (node.textContent.trim()) text = node;
+    while ((node = walker.nextNode())) if (node.textContent.trim()) {
+      text = node;
+      if (firstLine) break;
+    }
     if (!text) throw new Error("No visible text for baseline measurement");
     const wrapper = document.createElement("span");
     const probe = document.createElement("span");
@@ -101,12 +104,39 @@ async function textBaseline(locator) {
     text.replaceWith(wrapper);
     // A probe after the source's trailing newline can create an empty last
     // line in WebKit. Measure after the final visible character instead.
-    wrapper.append(document.createTextNode(text.textContent.trimEnd()), probe);
+    if (firstLine) wrapper.append(probe, document.createTextNode(text.textContent.trimStart()));
+    else wrapper.append(document.createTextNode(text.textContent.trimEnd()), probe);
     const baseline = probe.getBoundingClientRect().top;
     wrapper.replaceWith(text);
     return baseline;
-  });
+  }, firstLine);
 }
+
+test("the harpoon shaft meets the capital-letter centre on the first text line @typography", async ({ page }) => {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const [route, selectors] of [
+      ["", [".watch-catch__header > a", ".watch-catch__caption"]],
+      ["recipes/", [".recipe-editorial-product__link"]],
+    ]) {
+      await page.goto(route);
+      await page.evaluate(() => document.fonts.ready);
+      for (const selector of selectors) {
+        const link = page.locator(selector).first();
+        await link.scrollIntoViewIfNeeded();
+        const baseline = await textBaseline(link, true);
+        const ink = await link.evaluate(el => {
+          const css = getComputedStyle(el), context = document.createElement("canvas").getContext("2d");
+          context.font = `${css.fontStyle} ${css.fontWeight} ${css.fontSize} ${css.fontFamily}`;
+          const cap = context.measureText("I").actualBoundingBoxAscent;
+          const box = el.querySelector('svg[viewBox="0 0 32 18"]').getBoundingClientRect();
+          return { cap, shaft: box.top + box.height / 2 };
+        });
+        expect(Math.abs(ink.shaft - baseline + ink.cap / 2), `${width}px ${selector}`).toBeLessThan(0.75);
+      }
+    }
+  }
+});
 
 test("entry captions and actions meet the title's final text line @recipes @journal", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
@@ -185,7 +215,9 @@ test("button labels use the same optical centre in every page and open menu", as
           expect(label.missing).toBe(false);
           expect(label.centreError).toBeLessThan(0.7);
           expect(label.offset).toBeGreaterThan(0);
-          expect(label.height).toBeGreaterThanOrEqual(44);
+          // WebKit can report 43.999969 for a 44px box at a long-page offset.
+          // Normalise floating-point coordinates, not the hit-area requirement.
+          expect(Math.round(label.height * 1000) / 1000).toBeGreaterThanOrEqual(44);
           expect(label.clipped).toBe(false);
         }
       }
