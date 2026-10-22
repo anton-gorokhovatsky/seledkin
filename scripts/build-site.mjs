@@ -23,7 +23,7 @@ for (const [path, page, root] of pages) {
     "delivery-terms": renderDelivery("waybill"),
     "delivery-actions": renderDeliveryActions(),
     "price-preview": renderPricePreview(),
-    "about-preview": renderAboutPreview(),
+    "about-preview": renderAboutPreview("", true, true),
     "recipe-home": renderRecipeHome(), "assortment-media": renderAssortmentMedia(),
     "assortment-directory": renderAssortmentDirectory(),
     "mobile-hero": renderMobileHero(),

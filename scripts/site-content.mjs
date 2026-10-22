@@ -91,14 +91,22 @@ function contactActions({ phone = true, phoneName = false, classes = "", catalog
 export const renderDeliveryActions = () => contactActions({ phoneName: true, classes: "delivery-source__order" });
 export const renderCatalogOrderActions = () => contactActions({ phone: false, catalogOrder: true });
 
-export function renderAboutPreview(root = "", shell = true) {
-  return template("about-preview", {
+export function renderAboutPreview(root = "", shell = true, excerpt = false) {
+  let html = template("about-preview", {
     root, shell: shell ? "source-shell " : "",
     action: template("button", {
       href: `${root}about/`, label: "О лавке и капитане", variant: "outline",
       classes: "", attributes: "", labelAttributes: "",
     }),
   });
+  if (excerpt) {
+    // The home page quotes the final paragraph; the complete story stays inside.
+    const paragraphs = html.match(/^[ \t]*<p>[\s\S]*?<\/p>\n/gm);
+    for (const paragraph of paragraphs.slice(0, -1)) html = html.replace(paragraph, "");
+    html = html.replace(paragraphs.at(-1), paragraphs.at(-1).replace(/(<p>\s*)/, "$1«…"));
+    html = html.replace("Как появилась лавка", "Олег о лавке");
+  }
+  return html;
 }
 
 const street = `${site.address.city}, ${site.address.street}`;
