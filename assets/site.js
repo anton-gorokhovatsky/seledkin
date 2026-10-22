@@ -81,6 +81,17 @@ document.addEventListener(
   { capture: true, passive: true },
 );
 
+// In WebKit, native mouse focus can scroll an ingredient link away between
+// press and release near the viewport edge. Keep the same native link under
+// the pointer; keyboard focus and modified navigation retain their defaults.
+document.addEventListener("mousedown", event => {
+  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+  const link = event.target.closest(".recipe-current .meal-product a[href]");
+  if (!link) return;
+  event.preventDefault();
+  link.focus({ preventScroll: true });
+});
+
 function focusableMenuItems() {
   if (!menu) return [];
 

@@ -25,7 +25,12 @@ test("a recipe belongs to recipes, keeps its old links and returns to its exact 
   await page.getByRole("link", { name: "Все рецепты и советы", exact: true }).click();
   await expect(page).toHaveURL(/\/recipes\/$/);
   await page.getByRole("heading", { name: "Рулетики с печенью трески", exact: true }).getByRole("link").click();
-  await page.locator(".recipe-current").getByRole("link", { name: "Печень трески по-мурмански", exact: true }).click();
+  const ingredient = page.locator(".recipe-current").getByRole("link", { name: "Печень трески по-мурмански", exact: true });
+  // Exercise the real WebKit defect: native focus used to scroll this link
+  // between mouse press and release when it was near the viewport's bottom.
+  await ingredient.evaluate(link => window.scrollTo({ top:link.getBoundingClientRect().bottom + scrollY - innerHeight, behavior:"instant" }));
+  await ingredient.click();
+  await expect(page).toHaveURL(/\/catalog\/\?product=cod-liver-murmansk-230#product-cod-liver-murmansk-230$/);
   const product = page.locator(".catalog-product:visible");
   await expect(product).toHaveCount(1);
   await expect(product).toHaveAttribute("data-product-id", "cod-liver-murmansk-230");
