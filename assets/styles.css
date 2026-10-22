@@ -290,7 +290,7 @@ svg[viewBox="0 0 32 18"] {
 }
 :is(.editorial-link, .recipe-card__read, .watch-catch__caption,
     .assortment-directory__link, .journal-story__direction, .recipe-jump a,
-    .recipe-record-product__price, .atlas-record__read, .source-hero__journal-link,
+    .recipe-record-product__price, .recipe-editorial-product__link, .atlas-record__read, .source-hero__journal-link,
     .source-hero__journal-control--all, .afisha__actions a) > svg[viewBox="0 0 32 18"] {
   position: relative;
   top: var(--harpoon-baseline-drop);
@@ -1794,8 +1794,7 @@ a.source-brand {
   border-top: 1px solid var(--line);
   scroll-margin-top: 1.5rem;
 }
-.meal-collection > header h3,
-.recipe-current h2 { margin: 0 0 1rem; font-size: clamp(1.9rem, 1.4rem + 1vw, 2.8rem); font-weight: 400; line-height: 1.1; }
+.meal-collection > header h3 { margin: 0 0 1rem; font-size: clamp(1.9rem, 1.4rem + 1vw, 2.8rem); font-weight: 400; line-height: 1.1; }
 .meal-collection > header p { margin: 0; color: var(--muted); }
 .meal-products { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 2rem; }
 .meal-product { min-width: 0; }
@@ -1807,7 +1806,11 @@ a.source-brand {
 .journal-story__back { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
 .recipe-sequence { width: min(100%, 40rem); margin: clamp(2.5rem, 5vw, 4rem) 0; }
 .recipe-sequence figcaption { margin-top: 0.75rem; }
-.recipe-current { margin-top: 2.5rem; padding-top: 2.5rem; border-top: 1px solid var(--line); }
+.recipe-current { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); }
+.journal-story .recipe-current > h2 { margin: 0 0 .5rem; color: var(--muted); font: 400 var(--text-meta) / 1.5 var(--sans); }
+.recipe-current .meal-product h3 { margin-bottom: .25rem; }
+.recipe-current .meal-product p { margin-bottom: .5rem; }
+.recipe-current .meal-product strong { margin-bottom: 0; }
 .recipe-current .meal-products { width: min(100%, 40rem); }
 @media (max-width: 61.1875rem) {
   .assortment-overview { --shop-columns: minmax(0, 1fr); --shop-column-gap: 2rem; }
@@ -5280,6 +5283,12 @@ a.site-menu__brand {
 .journal-story > img {
   border: 0;
 }
+.ship-log-entry.journal-story--scenes { grid-template-columns: minmax(0, 1fr); }
+.journal-story__scene { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1fr); gap: var(--journal-column-gap); align-items: start; }
+.journal-story__scene figure { margin: 0; }
+.journal-story__scene img { display: block; width: 100%; height: auto; }
+.journal-story__scene figcaption { margin-top: .75rem; color: var(--muted); font-size: var(--text-meta); }
+.journal-story__scene .journal-story__scene-title { margin: 0 0 1.5rem; font-weight: 400; text-box: trim-start cap alphabetic; }
 .journal-story:has(+ .recipe-sequence) {
   padding-bottom: 0;
 }
@@ -5366,6 +5375,8 @@ a.site-menu__brand {
   .ship-log-entry.journal-story {
     grid-template-columns: minmax(0, 1fr);
   }
+  .journal-story__scene { grid-template-columns: minmax(0, 1fr); }
+  .journal-story__scene figure { width: min(100%, 38rem); margin-inline: auto; }
   .journal-story > img {
     width: min(100%, 38rem);
     max-width: 38rem;

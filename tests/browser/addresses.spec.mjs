@@ -76,7 +76,9 @@ test("editorial introductions keep metro with its station, including without Jav
     const context = await browser.newContext({ javaScriptEnabled, viewport: { width: 390, height: 900 } });
     await context.route("https://mc.yandex.ru/**", route => route.abort());
     const page = await context.newPage();
-    for (const [route, selector] of [["", ".about-preview__copy p"], ["about/", ".about-overview__introduction p"]]) {
+    // The home preview now explains Oleg's selection; the address introduction
+    // remains on the about page and keeps its metro wrapping contract.
+    for (const [route, selector] of [["about/", ".about-overview__introduction p"]]) {
       await page.goto(new URL(route, baseURL).href);
       const introduction = page.locator(selector).filter({ hasText: "небольшой магазин" });
       for (const [width, mode] of [[390, "normal"], [320, "normal"], [320, "text"], [320, "spacing"]]) {

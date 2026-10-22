@@ -96,21 +96,29 @@ test("equal order channels keep the same appearance in delivery, catalog, menu a
   }
 });
 
-test("recipe sequence photographs share one column and a short gap @journal", async ({ page }, testInfo) => {
+test("cod's two scenes keep full photographs beside their own author text @journal", async ({ page }, testInfo) => {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
     await page.goto("recipes/692/?audit=recipe-sequence");
     const geometry = await page.evaluate(() => {
-      const first = document.querySelector(".journal-story > img").getBoundingClientRect();
-      const second = document.querySelector(".recipe-sequence img").getBoundingClientRect();
-      return { width: first.width - second.width, left: first.left - second.left, gap: second.top - first.bottom };
+      const scenes = [...document.querySelectorAll(".journal-story__scene")];
+      const photos = scenes.map(scene => scene.querySelector("img").getBoundingClientRect());
+      return { width: photos[0].width - photos[1].width, left: photos[0].left - photos[1].left,
+        text: scenes.map(scene => scene.querySelector(".ship-log-entry__body").textContent),
+        pictures: scenes.map(scene => { const img = scene.querySelector("img"); return { fit: getComputedStyle(img).objectFit, ratio: img.width / img.height, original: img.naturalWidth / img.naturalHeight }; }),
+        grouped: scenes.map((scene, i) => { const copy = scene.querySelector(".ship-log-entry__content").getBoundingClientRect(); return innerWidth > 980 ? Math.abs(copy.top - photos[i].top) < 2 : copy.top > photos[i].bottom; }) };
     });
     expect(Math.abs(geometry.width)).toBeLessThan(1);
     expect(Math.abs(geometry.left)).toBeLessThan(1);
-    // On a narrow screen the author text belongs between the photos.
-    if (width > 980) expect(geometry.gap).toBeLessThan(33);
-    expect(await page.locator(".recipe-sequence img").evaluate(image => getComputedStyle(image).objectFit)).not.toBe("cover");
-    if (width === 1440) await page.locator(".recipe-sequence").screenshot({ path: testInfo.outputPath("recipe-sequence-1440.png") });
+    expect(geometry.text[0]).toContain("судовой заморозки");
+    expect(geometry.text[1]).toContain("Просто немного прогреть");
+    expect(geometry.grouped).toEqual([true, true]);
+    for (const picture of geometry.pictures) {
+      expect(picture.fit).not.toBe("cover");
+      expect(picture.ratio).toBeCloseTo(picture.original, 2);
+    }
+    expect(await page.locator(".journal-story__scene").last().locator(".recipe-current").count()).toBe(1);
+    if (width === 1440) await page.locator(".journal-story__scene").first().screenshot({ path: testInfo.outputPath("cod-source-1440.png") });
   }
 });
 

@@ -61,12 +61,18 @@
           "name": "Филе трески"
         }
       ],
-      "sequence": [
+      "scenes": [
         {
+          "title": "Судовая заморозка",
+          "paragraphs": 2,
           "image": "gallery-small-1.jpg",
           "alt": "Коробка филе трески с надписью Frozen At Sea",
           "caption": "Филе трески судовой заморозки — фотография из архива лавки",
           "source": "https://ks.fish/about/"
+        },
+        {
+          "title": "На сковороде",
+          "paragraphs": 2
         }
       ],
       "ingredient": "fish"

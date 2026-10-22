@@ -335,21 +335,46 @@ export function renderJournal(list, view) {
     const kind = recipe ? (recipe.kind === "recipe" ? "Рецепт" : "Совет") : "Судовой журнал";
     const inquiry = `Здравствуйте! Подскажите, пожалуйста, есть ли в наличии:\n${entry.product}\n${recipe ? "Из материала Олега" : "Увидел(а) в Судовом журнале"}: ${source}`;
     const telegram = !entry.source || entry.source.name === "Телеграм";
-    return `            <article class="ship-log-entry journal-story" data-journal-id="${id}" id="journal-entry-${id}" tabindex="-1">
+    const archiveNote = entry.source?.excerpt
+      ? `<p class="recipe-archive-note">Рецепт из авторской публикации Олега. <a href="${escape(source)}">Полный текст в ${text(entry.source.name)}</a>.</p>`
+      : recipe ? `<p class="recipe-archive-note">Цены и условия в авторском тексте относятся к дате публикации. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>` : "";
+    const actions = `<div class="ship-log-entry__actions">
+      <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}"><span class="source-button__label">Спросить о наличии<span class="visually-hidden"> в Телеграме: ${text(entry.product)}</span></span></a>
+    </div>`;
+    const reading = (body, { first = true, last = true, heading = "" } = {}) => `<div class="ship-log-entry__content">
+      ${first && entry.imageCaption ? `<p class="source-caption">${text(entry.imageCaption)}</p>` : ""}${heading}${first ? archiveNote : ""}
+      <div class="ship-log-entry__body">${body}</div>
+      ${last ? renderCurrentCatalogContext(entry) + actions : ""}
+    </div>`;
+    const body = journalBody(entry);
+    let story;
+    if (recipe?.scenes) {
+      const paragraphs = body.match(/<p\b[^>]*>[\s\S]*?<\/p>/g) ?? [];
+      if (body.replace(/<p\b[^>]*>[\s\S]*?<\/p>/g, "").trim()
+        || recipe.scenes.reduce((sum, scene) => sum + scene.paragraphs, 0) !== paragraphs.length) {
+        throw new Error(`Story scenes must retain the full author text: ${id}`);
+      }
+      let cursor = 0;
+      story = recipe.scenes.map((scene, index) => {
+        const shot = scene.image ? scene : entry;
+        const sectionBody = paragraphs.slice(cursor, cursor += scene.paragraphs).join("\n");
+        return `<section class="journal-story__scene" aria-labelledby="story-${id}-scene-${index}">
+          <figure>${image(shot, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, index === 0)}${scene.caption ? `<figcaption>${text(scene.caption)}</figcaption>` : ""}</figure>
+          ${reading(sectionBody, { first: index === 0, last: index === recipe.scenes.length - 1,
+            heading: `<h2 class="journal-story__scene-title" id="story-${id}-scene-${index}">${text(scene.title)}</h2>` })}
+        </section>`;
+      }).join("\n");
+    } else {
+      story = `${image(entry, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, true)}
+        ${reading(body)}`;
+    }
+    return `            <article class="ship-log-entry journal-story${recipe?.scenes ? " journal-story--scenes" : ""}" data-journal-id="${id}" id="journal-entry-${id}" tabindex="-1">
               <header class="journal-story__header page-intro">
                 <p class="page-intro__eyebrow">${kind} · Олег Гугунава</p>
                 <h1 class="page-intro__title">${journalTitle(title)}</h1>
                 <p class="ship-log-entry__meta"><time datetime="${entry.date}">${date(entry)}</time> <a class="ship-log-entry__source" href="${escape(source)}">${telegram ? '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../../assets/social-icons.svg#telegram"></use></svg>' : ""}<span>${telegram ? "Из телеграм-канала" : `Из ${text(entry.source.name)}`}</span></a></p>
               </header>
-              ${image(entry, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 42vw", false, true)}
-              <div class="ship-log-entry__content">
-${entry.imageCaption ? `                <p class="source-caption">${text(entry.imageCaption)}</p>\n` : ""}${entry.source?.excerpt ? `                <p class="recipe-archive-note">Рецепт из авторской публикации Олега. <a href="${escape(source)}">Полный текст в ${text(entry.source.name)}</a>.</p>\n` : recipes.some(recipe => recipe.id === id) ? `                <p class="recipe-archive-note">Цены и условия в авторском тексте относятся к дате публикации. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>\n` : ""}                <div class="ship-log-entry__body">
-${journalBody(entry)}
-                </div>
-                <div class="ship-log-entry__actions">
-                  <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}"><span class="source-button__label">Спросить о наличии<span class="visually-hidden"> в Телеграме: ${text(entry.product)}</span></span></a>
-                </div>
-              </div>
+              ${story}
             </article>`;
   }).join(view === "archive" ? "\n\n" : "\n");
 }
@@ -453,12 +478,12 @@ function currentCatalogContext(products, label, headingId) {
   products = currentSelections(products);
   if (!products.length) return "";
   return `<section class="recipe-current" aria-labelledby="${headingId}">
-    <header><p class="page-intro__eyebrow">${label}</p><h2 id="${headingId}">В каталоге лавки</h2></header>
+    <h2 id="${headingId}">${label}</h2>
     <div class="meal-products">${products.map(selection => currentProduct(selection, "../../", "h3", false)).join("\n")}</div>
   </section>`;
 }
 
-function renderEditorialContext(entry) {
+function renderCurrentCatalogContext(entry) {
   const recipe = recipes.find(item => item.id === entry.id);
   if (!recipe) {
     const source = entry.source?.url ?? `https://t.me/kapitanseledkin/${entry.id}`;
@@ -468,13 +493,18 @@ function renderEditorialContext(entry) {
       .map(product => ({ category: category.slug, name: product.name, description: product.description })));
     return currentCatalogContext(products, "Из этой записи", "journal-current-title");
   }
+  return currentCatalogContext(recipe.products,
+    recipe.kind === "recipe" ? "Для этого рецепта" : "В рассказе Олега", "recipe-current-title");
+}
+
+function renderEditorialContext(entry) {
+  const recipe = recipeForEntry(entry.id);
+  if (!recipe) return "";
   const sequence = recipe.sequence?.map(shot => `<figure class="recipe-sequence">
     ${image(shot, "../../", "(max-width: 61.1875rem) calc(100vw - 36px), 640px")}
     <figcaption>${text(shot.caption)}</figcaption>
   </figure>`).join("\n") ?? "";
-  const current = currentCatalogContext(recipe.products,
-    recipe.kind === "recipe" ? "Для этого рецепта" : "В рассказе Олега", "recipe-current-title");
-  return `\n${sequence}${recipe.videoSource ? `<p class="recipe-video-source"><a class="editorial-link" href="${recipe.videoSource}">Смотреть авторское видео в Телеграме${harpoon}</a></p>` : ""}${current}`;
+  return `\n${sequence}${recipe.videoSource ? `<p class="recipe-video-source"><a class="editorial-link" href="${recipe.videoSource}">Смотреть авторское видео в Телеграме${harpoon}</a></p>` : ""}`;
 }
 
 function recipeEditorialItem(recipe) {
@@ -529,8 +559,8 @@ function renderRecipeEditorial(root) {
   const meta = item => `<p class="recipe-meta">${item.recipe.kind === "advice" ? "Совет" : "Рецепт"} Олега · <time datetime="${item.entry.date}">${date(item.entry)}</time></p>`;
   const title = item => `<h2 id="recipe-editorial-${item.id}"><a href="${root}recipes/${item.id}/">${item.noun && item.ending ? `${text(item.noun)} <em>${text(item.ending)}</em>` : text(item.recipe.title)}</a></h2>`;
   const photoLink = (item, photo) => `<a class="recipe-editorial-photo-link" href="${root}recipes/${item.id}/" aria-label="Читать ${kind(item)}: ${text(item.recipe.title)}">${photo}</a>`;
-  const actions = item => `<div class="recipe-editorial-actions"><a class="editorial-link" href="${root}recipes/${item.id}/" aria-label="Читать ${kind(item)}: ${text(item.recipe.title)}">Читать ${kind(item)}${harpoon}</a>${item.recipe.products.map((selection, index) => `<a class="editorial-link recipe-editorial-actions__catalog" data-recipe-id="${item.id}" href="${escape(productCatalogHref(selection, root))}">${text(item.products[index].name)} в каталоге${harpoon}</a>`).join("")}</div>`;
-  const product = item => item.products.map(product => `<div class="recipe-editorial-product"><div><p class="recipe-editorial-product__label">${item.recipe.kind === "advice" ? "В совете Олега" : "Для этого рецепта"}</p><p class="recipe-editorial-product__name">${text(product.name)}</p>${product.description ? `<p class="recipe-editorial-product__origin">${text(product.description)}</p>` : ""}</div><strong>${escape(catalogPrice(product.price)).replace("/", "<wbr>/")}</strong></div>`).join("");
+  const actions = item => `<div class="recipe-editorial-actions"><a class="editorial-link" href="${root}recipes/${item.id}/" aria-label="Читать ${kind(item)}: ${text(item.recipe.title)}">Читать ${kind(item)}${harpoon}</a></div>`;
+  const product = item => item.products.map((product, index) => `<div class="recipe-editorial-product"><p class="recipe-editorial-product__label">${item.recipe.kind === "advice" ? "В совете Олега" : "Для этого рецепта"}</p><div class="recipe-editorial-product__head"><p class="recipe-editorial-product__name"><a class="recipe-editorial-product__link" data-recipe-id="${item.id}" href="${escape(productCatalogHref(item.recipe.products[index], root))}">${text(product.name)}${harpoon}</a></p><strong>${escape(catalogPrice(product.price)).replace("/", "<wbr>/")}</strong></div>${product.description ? `<p class="recipe-editorial-product__origin">${text(product.description)}</p>` : ""}</div>`).join("");
   const pull = item => item.pull ? `<blockquote class="recipe-editorial-pull"><p>«${text(item.pull)}»</p></blockquote>` : "";
   const excerpt = item => item.excerpt.map(paragraph => `<p>${text(paragraph)}</p>`).join("");
   const [lead, ...pair] = selected;
@@ -538,8 +568,7 @@ function renderRecipeEditorial(root) {
     <article class="recipe-feature recipe-editorial-lead" data-recipe-feature="${lead.id}" data-ingredient-group="${lead.recipe.ingredient}" aria-labelledby="recipe-editorial-${lead.id}">
       <div class="recipe-editorial-lead__heading">${meta(lead)}${title(lead)}${pull(lead)}</div>
       <figure class="recipe-feature__photo recipe-editorial-lead__photo">${photoLink(lead, image(lead.entry, root, "(max-width: 46rem) calc(100vw - 36px), 58vw", false, true))}<figcaption>Фотография Олега к ${lead.recipe.kind === "advice" ? "совету" : "рецепту"}</figcaption></figure>
-      <div class="recipe-editorial-lead__note">${excerpt(lead)}${actions(lead)}</div>
-      ${lead.products.length ? `<div class="recipe-editorial-lead__product">${product(lead)}</div>` : ""}
+      <div class="recipe-editorial-lead__note">${excerpt(lead)}${product(lead)}${actions(lead)}</div>
     </article>
     <div class="recipe-editorial-pair">${pair.map(item => `<article class="recipe-editorial-story" data-recipe-feature="${item.id}" data-ingredient-group="${item.recipe.ingredient}" aria-labelledby="recipe-editorial-${item.id}">
       <figure>${photoLink(item, image(item.entry, root, "(max-width: 46rem) calc(100vw - 36px), 46vw"))}</figure>

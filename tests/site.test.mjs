@@ -522,9 +522,10 @@ test("home prioritizes shopping before its editorial story and keeps local image
     "source-hero",
     "assortment-overview",
     "price-preview",
+    "about-preview",
+    "watch-catch",
     "delivery-source",
     "contacts-source",
-    "about-preview",
     "journal-preview",
     "source-footer",
   ];
