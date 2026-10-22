@@ -47,14 +47,18 @@
   font-weight: 600;
 }
 
-.store-map-marker::before {
-  width: 0.75rem;
-  height: 0.75rem;
+.store-map-marker img {
+  display: block;
+  width: 32px;
+  height: 32px;
   flex: 0 0 auto;
-  border: 2px solid var(--blue-deep);
   border-radius: 50%;
-  background: var(--map-fallback);
-  content: "";
+}
+
+.store-map-marker span {
+  max-width: 18ch;
+  white-space: normal;
+  text-wrap: balance;
 }
 
 .store-map-metro {
@@ -161,6 +165,4 @@
   }
 
   .store-map-marker, .store-map-metro { text-shadow: none; }
-
-  .store-map-marker::before { border-color: CanvasText; }
 }

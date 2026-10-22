@@ -101,11 +101,16 @@ async function initialize() {
     const marker = document.createElement("div");
     marker.className = "store-map-marker";
     marker.setAttribute("aria-hidden", "true");
+    const portrait = document.createElement("img");
+    portrait.src = "apple-touch-icon.png";
+    portrait.alt = "";
+    portrait.width = 32;
+    portrait.height = 32;
     const label = document.createElement("span");
-    label.textContent = "Рыбная лавка";
-    marker.append(label);
-    // Anchor the centre of the shop's ring to its actual coordinates.
-    new window.mapboxgl.Marker({ element: marker, anchor: "left", offset: [-6, 0] })
+    label.textContent = "Рыбная лавка капитана Селёдкина";
+    marker.append(portrait, label);
+    // The centre of Losos marks the same verified shop coordinates.
+    new window.mapboxgl.Marker({ element: marker, anchor: "left", offset: [-16, 0] })
       .setLngLat(storeLocation).addTo(map);
     for (const [name, exit, location] of [
       ["Вавиловская", 3, nearestMetroLocation],
