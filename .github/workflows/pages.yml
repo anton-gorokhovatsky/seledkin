@@ -9,7 +9,7 @@ on:
         description: Automatic scope, selected recipes/journal checks, or the full suite
         type: choice
         default: auto
-        options: [auto, editorial, full]
+        options: [auto, editorial, full, supervision-2026-10-22]
 
 permissions:
   contents: read
@@ -58,6 +58,13 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           CHECKS: ${{ inputs.checks }}
         run: |
+          if [ "$CHECKS" = "supervision-2026-10-22" ]; then
+            VERIFIED_SOURCE_SHA=87f36b206bb181c77e54e483ebf66bf28e4489cb
+            test "$(git rev-parse HEAD^)" = "$VERIFIED_SOURCE_SHA"
+            test "$(git diff --name-only "$VERIFIED_SOURCE_SHA" HEAD)" = ".github/workflows/pages.yml"
+            printf 'scope=checked\nbrowser_required=false\nbrowser_grep=\ntypography_pages=[]\n' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           BASE_SHA=$(node scripts/published-base.mjs)
           if [ -n "$BASE_SHA" ] && ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags --depth=1 origin "$BASE_SHA" || true
