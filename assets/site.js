@@ -86,7 +86,7 @@ document.addEventListener(
 // the pointer; keyboard focus and modified navigation retain their defaults.
 document.addEventListener("mousedown", event => {
   if (event.button !== 0 || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
-  const link = event.target.closest(".recipe-current .meal-product a[href]");
+  const link = event.target.closest(".recipe-current .meal-product a[href], .price-preview a[href]");
   if (!link) return;
   event.preventDefault();
   link.focus({ preventScroll: true });

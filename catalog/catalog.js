@@ -221,6 +221,12 @@ function restore() {
 }
 window.addEventListener("popstate", restore);
 window.addEventListener("hashchange", restore);
+// Native fragment focus can follow the initial module render. Restore the
+// visible family once loading finishes, unless the visitor has moved elsewhere.
+window.addEventListener("load", () => {
+  const active = document.activeElement;
+  if (active === document.body || active?.closest(".catalog-product-family, .catalog-product")) restore();
+}, { once: true });
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "hidden" && document.activeElement === search) reportSearch("leave");
 });
