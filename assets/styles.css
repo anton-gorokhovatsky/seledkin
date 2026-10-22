@@ -1347,8 +1347,26 @@ a.source-brand {
 .founder-source__library h4 { margin: 0; font: 600 var(--text-reading) / 1.4 var(--sans); }
 .founder-source__episode > p + p { margin-top: .75rem; }
 .founder-source__chapters { display: flex; flex-direction: column; gap: .25rem; min-width: 0; }
-.founder-source__chapters a { justify-content: space-between; gap: 1rem; width: 100%; color: var(--text-link); font: 400 var(--text-interface) / 1.5 var(--sans); }
-.founder-source__chapters .source-caption { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.founder-source__chapters a {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) auto;
+  align-items: first baseline;
+  align-content: center;
+  gap: .65rem;
+  width: 100%;
+  color: var(--text-link);
+  font: 400 var(--text-interface) / 1.5 var(--sans);
+}
+.founder-source__chapters a::after {
+  grid-area: 1 / 2;
+  align-self: start;
+  margin-top: .85em;
+  border-bottom: 1px dotted var(--muted);
+  content: "";
+  opacity: .55;
+  pointer-events: none;
+}
+.founder-source__chapters .source-caption { grid-column: 3; grid-row: 1; font-variant-numeric: tabular-nums; }
 .founder-source__library .founder-source__channels { margin-top: 2.5rem; color: var(--muted); font-size: var(--text-interface); }
 .founder-source__channels a { display: inline-flex; align-items: center; min-height: 2.75rem; }
 

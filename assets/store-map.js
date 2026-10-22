@@ -64,13 +64,13 @@ async function updateTheme() {
 }
 
 function fitNeighborhood() {
-  // Include both metro exits, with room for labels to the right of each point.
+  // Start with the shop and the nearest metro exit; leave room for their labels.
   map.fitBounds([
-    [universityMetroLocation[0], nearestMetroLocation[1]],
-    [nearestMetroLocation[0], universityMetroLocation[1]],
+    [storeLocation[0], nearestMetroLocation[1]],
+    [nearestMetroLocation[0], storeLocation[1]],
   ], {
     padding: { top: 44, right: 140, bottom: 60, left: 28 },
-    maxZoom: 16.25, duration: 0,
+    maxZoom: 15, duration: 0,
   });
 }
 
@@ -80,7 +80,7 @@ async function initialize() {
   try {
     const style = await getStyle(theme);
     map = new window.mapboxgl.Map({
-      container, accessToken: mapAccessToken, style, center: storeLocation, zoom: 15.5,
+      container, accessToken: mapAccessToken, style, center: storeLocation, zoom: 15,
       minZoom: 12, maxZoom: 19, interactive: true, scrollZoom: false, cooperativeGestures: true,
       dragRotate: false, pitchWithRotate: false, touchPitch: false,
       attributionControl: false, fadeDuration: 0, projection: "mercator",
