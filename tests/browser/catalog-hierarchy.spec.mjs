@@ -76,3 +76,20 @@ test("harpoons scale with adjacent text across pages and retain usable control t
     }
   }
 });
+
+test("the first assortment category retains the same reading rhythm as its peers @catalog", async ({ page }, testInfo) => {
+  for (const width of [1024, 1440, 1920, 390]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto('?audit=assortment-rhythm');
+    await page.evaluate(() => document.fonts.ready);
+    const labels = await page.locator('.assortment-directory__label').evaluateAll(nodes => nodes.slice(0, 3).map(node => {
+      const range = document.createRange(); range.selectNodeContents(node);
+      const rect = range.getClientRects()[0];
+      return { text: node.textContent, top: rect.top };
+    }));
+    const firstStep = labels[1].top - labels[0].top;
+    const nextStep = labels[2].top - labels[1].top;
+    expect(Math.abs(firstStep - nextStep), `${width}px ${JSON.stringify(labels)}`).toBeLessThan(1);
+    await testInfo.attach(`assortment-rhythm-${width}`, { body: JSON.stringify({ firstStep, nextStep }), contentType: 'application/json' });
+  }
+});

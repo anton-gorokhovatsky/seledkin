@@ -4,6 +4,7 @@ const port = Number(process.env.PLAYWRIGHT_PORT || 4173);
 
 export default defineConfig({
   testDir: "./tests/browser",
+  globalSetup: "./tests/browser/setup.mjs",
   timeout: 45000,
   expect: { timeout: 8000 },
   fullyParallel: true,

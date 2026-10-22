@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { once } from "node:events";
-import { createSiteServer } from "../scripts/serve-site.mjs";
+import setup from "./browser/setup.mjs";
+import { createSiteServer, offlineMapPolicy } from "../scripts/serve-site.mjs";
 
 test("the static server handles parallel assets, directories, HEAD and media ranges", async () => {
   const server = await createSiteServer(".");
@@ -15,6 +16,10 @@ test("the static server handles parallel assets, directories, HEAD and media ran
       assert.match(response.headers.get("content-type"), /text\/css/);
       assert.ok((await response.text()).includes("source-footer"));
     }
+    const map = await fetch(`${origin}/assets/store-map.html?v=test`);
+    assert.equal(map.headers.get("content-security-policy"), offlineMapPolicy);
+    assert.equal((await fetch(origin)).headers.get("content-security-policy"), null);
+    await setup({ projects: [{ use: { baseURL: origin } }] });
     const redirect = await fetch(`${origin}/catalog?q=рыба`, { redirect: "manual" });
     assert.equal(redirect.status, 301);
     assert.equal(redirect.headers.get("location"), "/catalog/?q=%D1%80%D1%8B%D0%B1%D0%B0");
@@ -28,5 +33,17 @@ test("the static server handles parallel assets, directories, HEAD and media ran
     assert.equal((await fetch(`${origin}/assets/hero-sea.mp4`, { headers: { Range: "bytes=999999999-" } })).status, 416);
     assert.equal((await fetch(`${origin}/missing.html`)).status, 404);
     assert.equal((await fetch(`${origin}/%2e%2e%2fpackage.json`)).status, 403);
+  } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+});
+
+test("a deliberate live map preview does not change the published map document", async () => {
+  const server = await createSiteServer(".", { liveMaps: true });
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  try {
+    const response = await fetch(`http://127.0.0.1:${server.address().port}/assets/store-map.html`);
+    assert.equal(response.headers.get("content-security-policy"), null);
+    assert.match(await response.text(), /api\.mapbox\.com/);
+    await assert.rejects(setup({ projects: [{ use: { baseURL: `http://127.0.0.1:${server.address().port}/` } }] }), /offline-map site server/);
   } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
 });
