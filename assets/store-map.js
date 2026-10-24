@@ -11,6 +11,8 @@ const styleCache = new Map();
 let map;
 let revision = 0;
 let ready = false;
+let userView = false;
+const labels = [];
 
 function notify(type) {
   if (embedded) window.parent.postMessage({ type }, location.origin);
@@ -63,13 +65,34 @@ async function updateTheme() {
   } catch { if (current === revision) showUnavailable(); }
 }
 
-function fitNeighborhood() {
+function neighborhoodPadding() {
+  const shop = labels[0], metro = labels[1];
+  const raised = metro.element.offsetWidth - metro.icon.offsetWidth / 2 + 12 > 140;
+  root.classList.toggle("map-labels-raised", raised);
+  const extents = labels.map(label => {
+    const box = label.element.getBoundingClientRect(), icon = label.icon.getBoundingClientRect();
+    const left = icon.left + icon.width / 2 - box.left;
+    const top = icon.top + icon.height / 2 - box.top;
+    label.marker.setOffset([-left, box.height / 2 - top]);
+    return { left, top, right: box.width - left, bottom: box.height - top };
+  });
+  if (!raised) return { top: 44, right: 140, bottom: 60, left: 28 };
+  // Large labels face into the space between the shop and the metro exit.
+  return {
+    top: Math.max(44, Math.ceil(extents[0].top + 12)),
+    right: Math.max(28, Math.ceil(extents[1].right + 12)),
+    bottom: Math.max(60, Math.ceil(extents[1].bottom + 12)),
+    left: Math.max(28, Math.ceil(extents[0].left + 12)),
+  };
+}
+
+function fitNeighborhood(padding = neighborhoodPadding()) {
   // Start with the shop and the nearest metro exit; leave room for their labels.
   map.fitBounds([
     [storeLocation[0], nearestMetroLocation[1]],
     [nearestMetroLocation[0], storeLocation[1]],
   ], {
-    padding: { top: 44, right: 140, bottom: 60, left: 28 },
+    padding,
     maxZoom: 15, duration: 0,
   });
 }
@@ -110,8 +133,9 @@ async function initialize() {
     label.textContent = "Рыбная лавка капитана Селёдкина";
     marker.append(portrait, label);
     // The centre of Losos marks the same verified shop coordinates.
-    new window.mapboxgl.Marker({ element: marker, anchor: "left", offset: [-16, 0] })
+    const shopMarker = new window.mapboxgl.Marker({ element: marker, anchor: "left", offset: [-16, 0] })
       .setLngLat(storeLocation).addTo(map);
+    labels.push({ element: marker, icon: portrait, marker: shopMarker });
     for (const [name, exit, location] of [
       ["Вавиловская", 3, nearestMetroLocation],
       ["Университет", 2, universityMetroLocation],
@@ -131,8 +155,9 @@ async function initialize() {
       metroLabel.append(metroExit);
       metro.append(metroLogo, metroLabel);
       // The centre of the M, rather than the label, marks the entrance.
-      new window.mapboxgl.Marker({ element: metro, anchor: "left", offset: [-10, 0] })
+      const metroMarker = new window.mapboxgl.Marker({ element: metro, anchor: "left", offset: [-10, 0] })
         .setLngLat(location).addTo(map);
+      labels.push({ element: metro, icon: metroLogo, marker: metroMarker });
     }
     fitNeighborhood();
     prepareMapControls();
@@ -146,7 +171,17 @@ async function initialize() {
     });
     map.on("style.load", prepareMapControls);
     map.on("error", () => { if (!ready) showUnavailable(); });
-    new ResizeObserver(() => { map.resize(); fitNeighborhood(); }).observe(container);
+    map.on("movestart", event => {
+      if (event.originalEvent && event.originalEvent.type !== "resize") userView = true;
+    });
+    const observer = new ResizeObserver(() => {
+      const padding = neighborhoodPadding();
+      map.resize();
+      if (!userView) fitNeighborhood(padding);
+    });
+    observer.observe(container);
+    for (const { element } of labels) observer.observe(element);
+    window.addEventListener("pagehide", () => observer.disconnect(), { once: true });
     sourceDocument.addEventListener("seledkin:themechange", updateTheme);
   } catch { showUnavailable(); }
 }

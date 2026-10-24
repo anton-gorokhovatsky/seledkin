@@ -116,6 +116,12 @@ test("the audio topics remain accessible beside the interview and podcast @journ
       await page.screenshot({ path: testInfo.outputPath(`audio-library-${width}-${theme}.png`) });
     }
     await page.addStyleTag({ content: "html { font-size: 200% !important; } * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-bottom: 2em !important; }" });
+    for (const time of await library.locator(".founder-source__chapters .source-caption").all()) {
+      const size = await time.evaluate(el => ({ height: el.getBoundingClientRect().height, line: parseFloat(getComputedStyle(el).lineHeight) }));
+      expect(size.height, "The timestamp must stay on one line at 200% with user spacing").toBeLessThanOrEqual(size.line + 1);
+    }
+    await library.locator(".founder-source__chapters a").first().focus();
+    await page.screenshot({ path: testInfo.outputPath(`audio-time-320-text200-${theme}.png`) });
     await library.getByRole("link", { name: "Камчатские деликатесы", exact: true }).focus();
     await expect(library.getByRole("link", { name: "Камчатские деликатесы", exact: true })).toBeInViewport();
     const overflow = await page.evaluate(() => ({ excess: document.documentElement.scrollWidth - innerWidth, items: [...document.querySelectorAll('main *')].filter(el => el.getBoundingClientRect().right > innerWidth + 1).map(el => ({ tag: el.tagName, class: el.className, text: el.textContent.slice(0, 90) })).slice(0, 12) }));

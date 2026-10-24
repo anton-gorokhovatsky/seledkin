@@ -56,10 +56,13 @@
 }
 
 .store-map-marker span {
-  max-width: 18ch;
+  max-width: min(18ch, calc(100vw - 3rem));
   white-space: normal;
   text-wrap: balance;
 }
+
+.map-labels-raised .store-map-marker { flex-direction: column-reverse; align-items: center; gap: .5rem; }
+.map-labels-raised .store-map-metro { flex-direction: row-reverse; }
 
 .store-map-metro {
   gap: 0.45rem;
