@@ -1,6 +1,19 @@
 import { categorySize, legacyCatalogSize } from "../helpers/catalog.mjs";
 import { test, expect } from "@playwright/test";
 
+async function waitForStableViewport(link) {
+  let previous = "", stableSamples = 0;
+  await expect.poll(async () => {
+    const position = await link.evaluate(element => {
+      const { x, y, width, height } = element.getBoundingClientRect();
+      return JSON.stringify([scrollX, scrollY, x, y, width, height]);
+    });
+    stableSamples = position === previous ? stableSamples + 1 : 0;
+    previous = position;
+    return stableSamples;
+  }, { intervals: [50] }).toBeGreaterThanOrEqual(3);
+}
+
 test("a buyer can use an old category link and keep moved products in the saved order @catalog", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.addInitScript(() => {
@@ -120,7 +133,11 @@ test("the audio topics remain accessible beside the interview and podcast @journ
       const size = await time.evaluate(el => ({ height: el.getBoundingClientRect().height, line: parseFloat(getComputedStyle(el).lineHeight) }));
       expect(size.height, "The timestamp must stay on one line at 200% with user spacing").toBeLessThanOrEqual(size.line + 1);
     }
-    await library.locator(".founder-source__chapters a").first().focus();
+    const firstChapter = library.locator(".founder-source__chapters a").first();
+    await firstChapter.focus();
+    await expect(firstChapter).toBeFocused();
+    await expect(firstChapter).toBeInViewport();
+    await waitForStableViewport(firstChapter);
     await page.screenshot({ path: testInfo.outputPath(`audio-time-320-text200-${theme}.png`) });
     await library.getByRole("link", { name: "Камчатские деликатесы", exact: true }).focus();
     await expect(library.getByRole("link", { name: "Камчатские деликатесы", exact: true })).toBeInViewport();
@@ -192,7 +209,12 @@ test("category transition marks follow the counter scale beside short and long n
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
     await page.screenshot({ path: testInfo.outputPath(`category-marks-${width}-${theme}-${enlarged}.png`) });
     if (width === 1440) {
-      await links.first().hover();
+      const first = links.first();
+      // Finish the viewport setup before testing pointer selection after focus.
+      await first.evaluate(link => link.scrollIntoView({ block: "center", behavior: "instant" }));
+      await waitForStableViewport(first);
+      await first.hover();
+      await expect.poll(() => first.evaluate(link => link.matches(":hover"))).toBe(true);
       await expect(page.locator('[data-assortment-photo="caviar"]')).toBeVisible();
       await page.screenshot({ path: testInfo.outputPath('category-marks-hover.png') });
     }
