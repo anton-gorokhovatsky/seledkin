@@ -1,0 +1,39 @@
+name: Publish the frozen reviewed post 703
+
+on: workflow_dispatch
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: reviewed-post-703
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: f1e148240157e0578ab02a0288bd9132b461fb41
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Prepare the existing public map token
+        env:
+          MAPBOX_PUBLIC_TOKEN: ${{ secrets.MAPBOX_PUBLIC_TOKEN }}
+        run: node scripts/build-map-token.mjs --require-token
+      - name: Package the frozen reviewed site
+        run: node scripts/package-site.mjs
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Publish
+        id: deployment
+        uses: actions/deploy-pages@v4
