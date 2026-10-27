@@ -9,6 +9,13 @@ test("desktop journal orders the pictured catalog product and clears the previou
   });
   await page.goto("?audit=order-entry");
   const journal = page.locator("[data-hero-journal]");
+  const vendace = journal.locator('[data-hero-journal-product="703"]');
+  await expect(vendace).toBeVisible();
+  await expect(vendace.locator(".hero-journal-product__toggle")).toHaveText("Заказать по\u00a02\u202f500\u00a0₽/кг");
+  for (const link of await vendace.locator("[data-hero-order-telegram], [data-hero-order-whatsapp]").all()) {
+    expect(new URL(await link.getAttribute("href")).searchParams.get("text")).toMatch(/Ряпушка\s+холодного\s+копчения[\s\S]*2\s*500\s*₽\/кг/);
+  }
+  await journal.locator("[data-hero-journal-next]").click();
   const roll = journal.locator('[data-hero-journal-product="702"]');
   await expect(roll).toBeVisible();
   expect(await roll.locator(".hero-journal-product__toggle").textContent()).toBe("Заказать по\u00a03\u202f740\u00a0₽/кг");
@@ -30,7 +37,7 @@ test("desktop journal orders the pictured catalog product and clears the previou
   const draft = choices.getByRole("textbox", { name: "Текст для сообщения" });
   await expect(draft).toHaveValue(/Икра форели/);
   await draft.press("ArrowRight");
-  await expect(journal.locator("[data-hero-journal-counter]")).toHaveText(/2\s*из\s*5/);
+  await expect(journal.locator("[data-hero-journal-counter]")).toHaveText(/3\s*из\s*5/);
   await page.keyboard.press("Escape");
   await expect(choices).toBeHidden();
   await expect(order).toBeFocused();

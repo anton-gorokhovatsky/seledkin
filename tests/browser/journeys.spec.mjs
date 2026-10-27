@@ -238,7 +238,7 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
     expect(await page.locator('[data-hero-journal-card]').evaluateAll(cards => cards.map(card => card.offsetWidth))).toEqual(firstLayout.widths);
     expect(await page.locator('.source-hero__journal-controls').evaluate(element => element.getBoundingClientRect().top + scrollY)).toBeCloseTo(firstLayout.navY, 0);
     await page.screenshot({ path: testInfo.outputPath(`hero-${width}-${height}-returned.png`) });
-    const orderAction = page.locator('[data-hero-journal-product="702"] > button');
+    const orderAction = page.locator('[data-hero-journal-product]:not([hidden]) > button');
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
     const orderGeometry = element => {
       const rect = element.getBoundingClientRect();

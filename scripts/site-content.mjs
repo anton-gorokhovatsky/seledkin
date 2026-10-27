@@ -268,6 +268,7 @@ function journalTitle(value) {
 // Editorial matches to current catalog positions; historical post prices are
 // never used as selling prices. Stories without an exact match stay editorial.
 const heroJournalProducts = {
+  703: ["smoked-vendace", "ряпушку холодного копчения"],
   702: ["prepared-fish-012", "рулет из брюшков осетра"],
   700: ["trout-roe", "икру форели"],
   699: ["chilled-trout", "охлаждённую форель"],

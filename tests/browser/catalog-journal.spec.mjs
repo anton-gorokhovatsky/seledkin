@@ -33,6 +33,20 @@ test("a selling journal story leads to its exact current product and order list 
     await page.goto(`journal/${id}/`);
     await expect(page.locator(`.recipe-current a[href="../../catalog/?product=${target}#product-${target}"]`)).toBeVisible();
   }
+  await page.goto("journal/703/");
+  const vendace = page.getByRole("region", { name: "Из этой записи", exact: true });
+  await expect(vendace.locator("strong")).toHaveText("2 500 ₽/кг");
+  await vendace.getByRole("link", { name: "Ряпушка холодного копчения", exact: true }).press("Enter");
+  await expect(page).toHaveURL(/catalog\/\?product=smoked-vendace#product-smoked-vendace$/);
+  const vendaceRow = page.locator("#product-smoked-vendace");
+  await expect(vendaceRow.getByRole("heading")).toBeInViewport();
+  await expect(vendaceRow.locator("strong")).toHaveText("2 500 ₽/кг");
+  await vendaceRow.getByRole("button", { name: /^В список заказа:/ }).press("Enter");
+  for (const name of ["Скопировать и открыть Телеграм", "Открыть список в WhatsApp"]) {
+    const draft = new URL(await list.getByRole("link", { name, exact: true }).getAttribute("href")).searchParams.get("text");
+    expect(draft).toMatch(/Ряпушка\s+холодного\s+копчения/);
+    expect(draft).toContain("2 500 ₽/кг");
+  }
 });
 
 test("an empty category search can broaden without losing the query or browser history @catalog", async ({ page }, testInfo) => {

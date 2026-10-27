@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Ряпушка холодного копчения. Запись Олега Гугунавы от 27 октября 2026. Рыбная лавка капитана Селедкина."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="article" />
+    <meta property="article:published_time" content="2026-10-27" />
+    <meta name="author" content="Олег Гугунава" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content="Рыбная лавка капитана Селедкина" />
+    <meta property="og:title" content="Ряпушка холодного копчения — Рыбная лавка капитана Селедкина" />
+    <meta property="og:description" content="Ряпушка холодного копчения. Запись Олега Гугунавы от 27 октября 2026. Рыбная лавка капитана Селедкина." />
+    <meta property="og:url" content="https://ks.fish/journal/703/" />
+    <meta property="og:image" content="https://ks.fish/assets/journal-703.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="554" />
+    <meta property="og:image:height" content="800" />
+    <meta property="og:image:alt" content="Золотистая ряпушка холодного копчения на белом подносе среди зелёной травы" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ряпушка холодного копчения — Рыбная лавка капитана Селедкина" />
+    <meta name="twitter:description" content="Ряпушка холодного копчения. Запись Олега Гугунавы от 27 октября 2026. Рыбная лавка капитана Селедкина." />
+    <meta name="twitter:image" content="https://ks.fish/assets/journal-703.jpg" />
+    <meta name="twitter:image:alt" content="Золотистая ряпушка холодного копчения на белом подносе среди зелёной травы" />
+    <link rel="canonical" href="https://ks.fish/journal/703/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+        <script>
+      (() => {
+        document.documentElement.classList.add("js");
+        let explicitTheme = null;
+        try {
+          const stored = localStorage.getItem("seledkin-theme");
+          if (stored === "light" || stored === "dark") explicitTheme = stored;
+        } catch {}
+        let scheduleTheme = null;
+        try {
+          const schedule = {"timeZone":"Europe/Moscow","open":"11:00","close":"20:00"};
+          const parts = new Intl.DateTimeFormat("en-GB", {
+            timeZone: schedule.timeZone,
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23",
+          })
+            .formatToParts(new Date());
+          const hour = Number(parts.find(({ type }) => type === "hour")?.value);
+          const minute = Number(parts.find(({ type }) => type === "minute")?.value);
+          const minutes = time => Number(time.slice(0, 2)) * 60 + Number(time.slice(3));
+          if (Number.isFinite(hour) && Number.isFinite(minute)) {
+            const now = (hour % 24) * 60 + minute;
+            scheduleTheme = now >= minutes(schedule.open) && now < minutes(schedule.close) ? "light" : "dark";
+          }
+        } catch {}
+        const theme =
+          explicitTheme ??
+          scheduleTheme ??
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        const isDark = theme === "dark";
+        document.documentElement.dataset.theme = theme;
+        if (explicitTheme) {
+          document.documentElement.dataset.themeSource = "explicit";
+        }
+        document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+        document.querySelector('meta[name="theme-color"]').content = isDark
+          ? "#0e202b"
+          : "#ffffff";
+      })();
+    </script>
+        <script type="module" src="../../assets/analytics.js"></script>
+    <link rel="icon" href="../../assets/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="../../assets/favicon-16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png" />
+    <link rel="stylesheet" href="../../assets/styles.css" />
+    <script type="module" src="../../assets/site.js"></script>
+    <script type="module" src="../../assets/interface-motion.js"></script>
+    <title>Ряпушка холодного копчения — Рыбная лавка капитана Селедкина</title>
+  </head>
+  <body class="journal-page journal-story-page">
+    <a class="skip-link" href="#main">Перейти к записи</a>
+
+    <header class="source-header" id="top">
+      <div class="source-header__bar">
+        <a class="source-brand brand-jelly brand-jelly--page" href="../../" aria-label="Рыбная лавка капитана Селедкина — на главную">
+          <img
+            src="../../assets/logo-redrawn-sea.svg"
+            data-theme-logo
+            data-logo-light="../../assets/logo-redrawn-sea.svg"
+            data-logo-dark="../../assets/logo-redrawn-sea.svg"
+            alt="Рыбная лавка капитана Селедкина"
+            width="3600"
+            height="1784"
+          />
+        </a>
+      </div>
+    </header>
+
+        <a class="floating-menu" href="#site-navigation-fallback" aria-label="Перейти к меню сайта" data-menu-fallback-link>
+      <span class="floating-menu__mark" aria-hidden="true"></span>
+      <span class="floating-menu__label">Меню</span>
+    </a>
+    <button
+      class="floating-menu"
+      type="button"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      aria-label="Открыть меню"
+      data-menu-toggle
+      hidden
+    >
+      <span class="floating-menu__mark" aria-hidden="true"></span>
+      <span class="floating-menu__label">Меню</span>
+    </button>
+
+    <div
+      class="site-menu"
+      id="primary-navigation"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="menu-title"
+      data-menu
+      hidden
+    >
+      <button class="floating-menu" type="button" aria-label="Закрыть меню" data-menu-close>
+        <span class="floating-menu__mark" aria-hidden="true"></span>
+        <span class="floating-menu__label">Закрыть</span>
+      </button>
+      <div class="site-menu__panel">
+        <header class="site-menu__masthead">
+          <a class="site-menu__brand brand-jelly brand-jelly--panel" href="../../">
+            <img
+              src="../../assets/logo-redrawn-sea.svg"
+              data-theme-logo
+              data-logo-light="../../assets/logo-redrawn-sea.svg"
+              data-logo-dark="../../assets/logo-redrawn-sea.svg"
+              alt="Рыбная лавка капитана Селедкина"
+              width="3600"
+              height="1784"
+            />
+          </a>
+        </header>
+
+        <div class="site-menu__layout">
+          <video
+            class="site-menu__service-video"
+            data-poster-light="../../assets/hero-sea-poster.webp"
+            data-poster-dark="../../assets/hero-sea-night-poster.webp"
+            data-theme-video
+            data-menu-sea-video
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-hidden="true"
+            tabindex="-1"
+          >
+            <source
+              data-src-light="../../assets/hero-sea-web.mp4"
+              data-src-dark="../../assets/hero-sea-night-web.mp4"
+              data-theme-video-source
+              type="video/mp4"
+            />
+          </video>
+          <section class="site-menu__routes">
+            <p class="site-menu__kicker">По сайту</p>
+            <h2 id="menu-title">Куда держим курс?</h2>
+            <nav aria-label="Меню сайта">
+              <a href="../../catalog/">
+                <span aria-hidden="true">01</span>
+                <span>Продукты и цены</span>
+              </a>
+              <a href="../../#delivery">
+                <span aria-hidden="true">02</span>
+                <span>Доставка</span>
+              </a>
+              <a href="../../#contacts">
+                <span aria-hidden="true">03</span>
+                <span>Контакты</span>
+              </a>
+              <a href="../../recipes/">
+                <span aria-hidden="true">04</span>
+                <span>Рецепты и советы</span>
+              </a>
+              <a href="../../journal/" aria-current="page">
+                <span aria-hidden="true">05</span>
+                <span>Судовой журнал</span>
+              </a>
+              <a href="../../about/">
+                <span aria-hidden="true">06</span>
+                <span>О нас</span>
+              </a>
+            </nav>
+          </section>
+
+          <section class="site-menu__service" aria-labelledby="menu-service-title">
+            <div class="site-menu__service-inner">
+              <div class="store-hours">
+                <h3 id="menu-service-title">Ежедневно с&nbsp;11:00 до&nbsp;20:00</h3>
+                <p class="store-status" data-store-status hidden></p>
+              </div>
+              <address>
+                Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1<br />
+                Метро «Вави&shy;ловская». Можно также дойти <span class="metro-route">от метро «Университет».</span>
+              </address>
+              <div class="site-menu__actions">
+<a class="source-button source-button--secondary" href="tel:+79166751452" aria-label="Позвонить в лавку: +7 916 675‑14‑52"><span class="source-button__label">Позвонить</span></a>
+<a class="source-button source-button--primary" href="https://t.me/+79166751452"><span class="source-button__label">Заказать в Телеграме</span></a>
+<a class="source-button source-button--primary" href="https://wa.me/79166751452"><span class="source-button__label">Заказать в WhatsApp</span></a>
+              </div>
+              <div class="site-menu__networks">
+                <a class="site-menu__channel" href="https://t.me/kapitanseledkin">
+                  <svg class="site-menu__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <use href="../../assets/social-icons.svg#telegram"></use>
+                  </svg>
+                  <span class="site-menu__channel-copy">
+                    <strong>Телеграм-канал</strong>
+                    <span>Судовой журнал капитана</span>
+                  </span>
+                </a>
+                <nav class="site-menu__socials" aria-label="Другие площадки лавки">
+                  <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <use href="../../assets/social-icons.svg#youtube"></use>
+                    </svg>
+                    <span>YouTube</span>
+                  </a>
+                  <a href="https://soundcloud.com/kapitanseledkin">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <use href="../../assets/social-icons.svg#soundcloud"></use>
+                    </svg>
+                    <span>SoundCloud</span>
+                  </a>
+                </nav>
+              </div>
+              <div class="site-menu__preferences" role="group" aria-label="Настройки страницы">
+                <fieldset class="theme-choice">
+                  <legend>Вахта</legend>
+                  <div class="theme-choice__options">
+                    <label><input type="radio" name="watch" value="auto" data-theme-choice checked /><span>Авто</span></label>
+                    <label><input type="radio" name="watch" value="light" data-theme-choice /><span>Дневная</span></label>
+                    <label><input type="radio" name="watch" value="dark" data-theme-choice /><span>Ночная</span></label>
+                  </div>
+                </fieldset>
+                <button class="sea-motion-toggle" type="button" data-sea-toggle hidden>Остановить движение</button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <main id="main" tabindex="-1" class="journal-story-main source-shell">
+      <nav class="journal-story__back" aria-label="Судовой журнал"><a href="../">Все записи журнала</a></nav>
+            <article class="ship-log-entry journal-story" data-journal-id="703" id="journal-entry-703" tabindex="-1">
+              <header class="journal-story__header page-intro">
+                <p class="page-intro__eyebrow">Судовой журнал · Олег Гугунава</p>
+                <h1 class="page-intro__title">Ряпушка холодного коп­чения</h1>
+                <p class="ship-log-entry__meta"><time datetime="2026-10-27">27 октября 2026</time> <a class="ship-log-entry__source" href="https://t.me/kapitanseledkin/703"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../../assets/social-icons.svg#telegram"></use></svg><span>Из телеграм-канала</span></a></p>
+              </header>
+              <img src="../../assets/journal-703-480.webp" srcset="../../assets/journal-703-480.webp 480w, ../../assets/journal-703-554.webp 554w" sizes="(max-width: 61.1875rem) calc(100vw - 36px), 42vw" data-source-image="../../assets/journal-703.jpg" decoding="async" alt="Золотистая ряпушка холодного копчения на белом подносе среди зелёной травы" width="554" height="800" fetchpriority="high" />
+        <div class="ship-log-entry__content">
+
+      <div class="ship-log-entry__body">                  <p>Ряпушка холодного копчения. Килограмм стоит 2 500 ₽. Вес одной рыбы около 100 г. Коптили сегодня ночью. Малосольная, жирненькая, очень нежная. Захотите сделать подарок хорошему человеку, дайте нам знать заранее — завакуумируем!</p></div>
+      <section class="recipe-current" aria-labelledby="journal-current-title">
+    <h2 id="journal-current-title">Из этой записи</h2>
+    <div class="meal-products"><article class="meal-product">
+      <h3><a href="../../catalog/?product=smoked-vendace#product-smoked-vendace">Ряпушка холодного копчения</a></h3>
+      <p>Вес одной рыбы 100–150 г</p>
+      <strong>2 500 ₽/кг</strong>
+
+    </article></div>
+  </section><div class="ship-log-entry__actions">
+      <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9F%D0%BE%D0%B4%D1%81%D0%BA%D0%B0%D0%B6%D0%B8%D1%82%D0%B5%2C%20%D0%BF%D0%BE%D0%B6%D0%B0%D0%BB%D1%83%D0%B9%D1%81%D1%82%D0%B0%2C%20%D0%B5%D1%81%D1%82%D1%8C%20%D0%BB%D0%B8%20%D0%B2%20%D0%BD%D0%B0%D0%BB%D0%B8%D1%87%D0%B8%D0%B8%3A%0A%D0%A0%D1%8F%D0%BF%D1%83%D1%88%D0%BA%D0%B0%20%D1%85%D0%BE%D0%BB%D0%BE%D0%B4%D0%BD%D0%BE%D0%B3%D0%BE%20%D0%BA%D0%BE%D0%BF%D1%87%D0%B5%D0%BD%D0%B8%D1%8F%0A%D0%A3%D0%B2%D0%B8%D0%B4%D0%B5%D0%BB(%D0%B0)%20%D0%B2%20%D0%A1%D1%83%D0%B4%D0%BE%D0%B2%D0%BE%D0%BC%20%D0%B6%D1%83%D1%80%D0%BD%D0%B0%D0%BB%D0%B5%3A%20https%3A%2F%2Ft.me%2Fkapitanseledkin%2F703"><span class="source-button__label">Спросить о наличии<span class="visually-hidden"> в Телеграме: Ряпушка холодного копчения</span></span></a>
+    </div>
+    </div>
+            </article>
+      <nav class="journal-story__next" aria-label="Другие записи журнала"><a href="../702/" rel="prev"><span class="journal-story__direction"><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg>Предыдущая запись</span><span class="journal-story__neighbor-title">Рулет из брюшков осетра горячего копчения</span></a></nav>
+    </main>
+
+        <nav class="site-navigation-fallback source-shell" id="site-navigation-fallback" aria-label="Разделы сайта" tabindex="-1" data-menu-fallback>
+      <a href="../../catalog/">Продукты и цены</a>
+      <a href="../../#delivery">Доставка</a>
+      <a href="../../#contacts">Контакты</a>
+      <a href="../../recipes/">Рецепты и советы</a>
+      <a href="../../journal/" aria-current="page">Судовой журнал</a>
+      <a href="../../about/">О нас</a>
+    </nav>
+    <footer class="source-footer" aria-labelledby="footer-title">
+      <div class="source-footer__content source-shell">
+        <figure class="source-footer__portrait">
+          <img
+            src="../../assets/salmon-cat-480.webp"
+                srcset="../../assets/salmon-cat-480.webp 480w, ../../assets/salmon-cat-960.webp 960w"
+                sizes="(max-width: 61.1875rem) calc(100vw - 36px), 600px"
+                data-source-image="../../assets/salmon-cat.jpg"
+                decoding="async"
+            alt="Кот Лосось греется на солнце с закрытыми глазами"
+            width="1536"
+            height="2048"
+            loading="lazy"
+          />
+          <figcaption>Лосось принимает солнечную ванну между вахтами.</figcaption>
+        </figure>
+
+        <div class="source-footer__details">
+          <header class="source-footer__heading">
+            <p class="source-footer__kicker">До встречи на Вавиловской</p>
+            <h2 id="footer-title">Лосось на вахте — заходите в лавку</h2>
+          </header>
+          <p class="source-footer__lead">
+            <span class="source-footer__hours">Каждый день с 11:00 до 20:00.</span>
+            Можно приехать за рыбой и деликатесами или заказать доставку.
+          </p>
+          <p class="store-status" data-store-status hidden></p>
+          <div class="source-footer__visit">
+            <p><span class="source-footer__address">Москва, ул.&nbsp;Строителей, д.&nbsp;7, корп.&nbsp;1.</span> <span class="source-footer__directions">Метро «Вави&shy;ловская». Можно также дойти <span class="metro-route">от метро «Университет».</span></span></p>
+          </div>
+          <div class="source-footer__actions" aria-label="Связаться с лавкой">
+<a class="source-button source-button--secondary source-button--footer-contact" href="tel:+79166751452"><span class="source-button__label">Позвонить</span></a>
+<a class="source-button source-button--primary source-button--footer-contact" href="https://t.me/+79166751452"><span class="source-button__label">Заказать в Телеграме</span></a>
+<a class="source-button source-button--primary source-button--footer-contact" href="https://wa.me/79166751452"><span class="source-button__label">Заказать в WhatsApp</span></a>
+          </div>
+        </div>
+
+        <div class="source-footer__postscript">
+          <p>
+            P. S.: а ещё мы публикуем советы по приготовлению и обработке
+            рыбы, все наши новости, в т. ч. об ассортименте, в наших
+            социальных сетях. <strong>Подписывайтесь!</strong>
+          </p>
+          <nav class="source-footer__channels" aria-label="Социальные сети и каналы лавки">
+            <a class="source-footer__channel--primary" href="https://t.me/kapitanseledkin">
+              <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <use href="../../assets/social-icons.svg#telegram"></use>
+              </svg>
+              <span>Телеграм-канал</span>
+            </a>
+            <a href="https://www.youtube.com/channel/UCPc0ClmcBq3GXT2FAmMQy7A/videos">
+              <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <use href="../../assets/social-icons.svg#youtube"></use>
+              </svg>
+              <span>YouTube</span>
+            </a>
+            <a href="https://soundcloud.com/kapitanseledkin">
+              <svg class="source-footer__channel-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <use href="../../assets/social-icons.svg#soundcloud"></use>
+              </svg>
+              <span>SoundCloud</span>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <div class="source-footer__base source-shell">
+        <div class="source-footer__legal">
+          <small>© «Рыбная лавка капитана Селедкина», 2026</small>
+        </div>
+        <div class="source-footer__utilities">
+          <ag-signature class="source-footer__credit" role-label="Дизайн и разработка" theme="dark" controls="external">
+            <a href="https://gorokhovatsky.tech/" rel="author">Антон Гороховатский — Дизайн и разработка</a>
+          </ag-signature>
+        </div>
+      </div>
+      <script type="module" src="../../assets/author-signature.js"></script>
+    </footer>
+
+  </body>
+</html>
