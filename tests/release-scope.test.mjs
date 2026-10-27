@@ -2,9 +2,9 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { classifyRelease, readReleaseChanges, scopedBrowserTags, selectReleaseChecks } from "../scripts/release-scope.mjs";
 
-test("manual editorial selection runs recipe and journal journeys without weakening automatic scope", () => {
+test("manual editorial selection cannot override content-only boundaries", () => {
   const changes = [{ path: "recipes/701/index.html", after: "<h1>Рецепт</h1>" }];
-  assert.deepEqual(selectReleaseChecks(changes, "editorial"), { scope: "scoped", grep: "@recipes|@journal" });
+  assert.deepEqual(selectReleaseChecks(changes, "editorial"), { scope: "full", grep: "" });
   assert.deepEqual(selectReleaseChecks(changes), { scope: "full", grep: "" });
   assert.deepEqual(selectReleaseChecks(changes, "full"), { scope: "full", grep: "" });
   assert.deepEqual(selectReleaseChecks(null), { scope: "full", grep: "" });
@@ -102,14 +102,14 @@ const journalUpdate = () => [
   { path: "assets/journal-700.jpg" },
   { path: "assets/journal-700-480.webp" },
   { path: "assets/media-variants.json", before: '[{"file":"hero.mp4"}]', after: '[{"file":"hero.mp4"},{"file":"journal-700-480.webp"}]' },
-  ...Object.entries({ "index.html": ["journal-hero", "journal-preview"], "catalog/index.html": ["journal-search"], "journal/index.html": ["journal-archive"] })
+  ...Object.entries({ "index.html": ["journal-hero", "journal-hero-products", "journal-preview"], "catalog/index.html": ["journal-search"], "journal/index.html": ["journal-archive"] })
     .map(([path, names]) => ({ path, before: `<main>${names.map(name => region(name, "old")).join("")}</main>`, after: `<main>${names.map(name => region(name, "new")).join("")}</main>` })),
   { path: "sitemap.xml", before: '<urlset><url><loc>https://ks.fish/</loc></url></urlset>', after: '<urlset><url><loc>https://ks.fish/</loc></url><url><loc>https://ks.fish/journal/700/</loc></url></urlset>' },
 ];
 
 test("a journal publication and its generated previews use the focused browser suite", () => {
-  assert.equal(classifyRelease(journalUpdate()), "journal");
-  assert.equal(classifyRelease([...journalUpdate(), { path: "tests/fixtures/journal-november-2026.json" }, { path: "README.md" }]), "journal");
+  assert.equal(classifyRelease(journalUpdate()), "editorial");
+  assert.equal(classifyRelease([...journalUpdate(), { path: "tests/fixtures/journal-november-2026.json" }, { path: "README.md" }]), "editorial");
 });
 
 test("journal updates cannot hide changes to layout, templates, runtime or other media", () => {

@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       checks:
-        description: Automatic scope, selected recipes/journal checks, or the full suite
+        description: Automatic scope, editorial rehearsal without publishing, or full checks
         type: choice
         default: auto
         options: [auto, editorial, full]
@@ -23,9 +23,10 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       scope: ${{ steps.scope.outputs.scope }}
+      publish_required: ${{ steps.scope.outputs.publish_required }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,16 +43,6 @@ jobs:
         with:
           node-version: 22
 
-      - name: Check static project
-        env:
-          MAPBOX_PUBLIC_TOKEN: ${{ secrets.MAPBOX_PUBLIC_TOKEN }}
-        run: |
-          node scripts/build-map-token.mjs --require-token
-          pnpm run lint
-
-      - name: Test
-        run: pnpm run test
-
       - name: Choose checks for published changes
         id: scope
         env:
@@ -63,24 +54,55 @@ jobs:
             git fetch --no-tags --depth=1 origin "$BASE_SHA" || true
           fi
           node scripts/release-scope.mjs "$BASE_SHA" "$CHECKS"
+          echo "base_sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare public map token
+        env:
+          MAPBOX_PUBLIC_TOKEN: ${{ secrets.MAPBOX_PUBLIC_TOKEN }}
+        run: node scripts/build-map-token.mjs --require-token
+
+      - name: Check static project
+        if: steps.scope.outputs.scope != 'editorial' && steps.scope.outputs.scope != 'editorial-check'
+        run: pnpm run lint
+
+      - name: Test
+        if: steps.scope.outputs.scope != 'editorial' && steps.scope.outputs.scope != 'editorial-check'
+        run: pnpm run test
+
+      - name: Verify only the selected editorial material
+        if: contains(fromJSON('["editorial","editorial-check"]'), steps.scope.outputs.scope)
+        env:
+          EDITORIAL_IDS: ${{ steps.scope.outputs.editorial_ids }}
+          EDITORIAL_BASE: ${{ steps.scope.outputs.base_sha }}
+        run: |
+          node scripts/build-site.mjs --check
+          node scripts/build-catalog.mjs --check
+          node scripts/build-media.mjs --check
+          node scripts/check-editorial-release.mjs "$EDITORIAL_BASE"
+
+      - name: Test editorial release boundaries during rehearsal
+        if: steps.scope.outputs.scope == 'editorial-check'
+        run: node --test tests/editorial-release.test.mjs tests/release-scope.test.mjs
 
       - name: Package static files
         if: steps.scope.outputs.scope != 'none'
         run: pnpm run package:site
 
       - name: Install browser test dependencies
+        timeout-minutes: 3
         if: steps.scope.outputs.browser_required == 'true'
         run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Reuse installed browsers
-        if: steps.scope.outputs.browser_required == 'true'
+        if: steps.scope.outputs.browser_required == 'true' && steps.scope.outputs.scope != 'editorial' && steps.scope.outputs.scope != 'editorial-check'
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install browsers
-        if: steps.scope.outputs.browser_required == 'true'
+        timeout-minutes: 6
+        if: steps.scope.outputs.browser_required == 'true' && steps.scope.outputs.scope != 'editorial' && steps.scope.outputs.scope != 'editorial-check'
         run: |
           # The Azure Ubuntu mirror was exceptionally slow in the release job.
           for seledkin_ubuntu_source in /etc/apt/sources.list /etc/apt/sources.list.d/*.sources /etc/apt/sources.list.d/*.list; do
@@ -90,7 +112,7 @@ jobs:
           pnpm exec playwright install --with-deps chromium webkit
 
       - name: Verify customer journeys in Chromium and WebKit
-        if: steps.scope.outputs.browser_required == 'true'
+        if: steps.scope.outputs.browser_required == 'true' && steps.scope.outputs.scope != 'editorial' && steps.scope.outputs.scope != 'editorial-check'
         env:
           RELEASE_SCOPE: ${{ steps.scope.outputs.scope }}
           TYPOGRAPHY_PAGES: ${{ steps.scope.outputs.typography_pages }}
@@ -98,15 +120,23 @@ jobs:
           PLAYWRIGHT_SITE_DIR: _site
           PLAYWRIGHT_WORKERS: 2
         run: |
-          if [ "$RELEASE_SCOPE" = "journal" ]; then
-            pnpm exec playwright test --grep @journal
-          elif [ "$RELEASE_SCOPE" = "typography" ]; then
+          if [ "$RELEASE_SCOPE" = "typography" ]; then
             pnpm exec playwright test --grep @typography
           elif [ "$RELEASE_SCOPE" = "scoped" ]; then
             pnpm exec playwright test --grep "$BROWSER_GREP"
           else
             pnpm run test:browser
           fi
+
+      - name: Verify the selected post using preinstalled Chrome
+        if: contains(fromJSON('["editorial","editorial-check"]'), steps.scope.outputs.scope)
+        timeout-minutes: 2
+        env:
+          EDITORIAL_IDS: ${{ steps.scope.outputs.editorial_ids }}
+          PLAYWRIGHT_SITE_DIR: _site
+        run: |
+          google-chrome --version
+          pnpm exec playwright test --config=playwright.editorial.config.mjs
 
       - name: Keep browser evidence
         if: always() && steps.scope.outputs.browser_required == 'true'
@@ -117,13 +147,13 @@ jobs:
           retention-days: 14
 
       - name: Upload Pages artifact
-        if: steps.scope.outputs.scope != 'none'
+        if: steps.scope.outputs.publish_required == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
   deploy:
-    if: needs.build.outputs.scope != 'none'
+    if: needs.build.outputs.publish_required == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

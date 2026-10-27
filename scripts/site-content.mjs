@@ -267,21 +267,11 @@ function journalTitle(value) {
 
 // Editorial matches to current catalog positions; historical post prices are
 // never used as selling prices. Stories without an exact match stay editorial.
-const heroJournalProducts = {
-  703: ["smoked-vendace", "ряпушку холодного копчения"],
-  702: ["prepared-fish-012", "рулет из брюшков осетра"],
-  700: ["trout-roe", "икру форели"],
-  699: ["chilled-trout", "охлаждённую форель"],
-  698: ["caspian-herring", "каспийский залом"],
-  697: ["eel-rillettes", "риеты и паштеты из угря"],
-  696: ["caspian-herring", "каспийский залом"],
-};
-
 export function renderHeroJournalProducts(list) {
   const products = list.flatMap((entry, index) => {
-    const selection = heroJournalProducts[entry.id];
-    if (!selection) return [];
-    const [productId, orderName] = selection;
+    if (!entry.heroOrderName) return [];
+    const productId = entry.catalogProductIds?.[0];
+    const orderName = entry.heroOrderName;
     const product = catalog.flatMap(category => category.items).find(item => item.id === productId);
     if (!product) {
       if (inventory.some(category => category.items.some(item => item.id === productId && item.price === null))) return [];
@@ -496,9 +486,8 @@ function renderCurrentCatalogContext(entry) {
   const recipe = recipes.find(item => item.id === entry.id);
   if (!recipe) {
     const source = entry.source?.url ?? `https://t.me/kapitanseledkin/${entry.id}`;
-    const repeatedProduct = heroJournalProducts[entry.id]?.[0];
     const products = catalog.flatMap(category => category.items
-      .filter(product => product.source === source || product.id === repeatedProduct)
+      .filter(product => entry.catalogProductIds?.includes(product.id) || product.source === source)
       .map(product => ({ category: category.slug, name: product.name, description: product.description })));
     return currentCatalogContext(products, "Из этой записи", "journal-current-title");
   }

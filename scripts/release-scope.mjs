@@ -1,53 +1,13 @@
 import { execFileSync } from "node:child_process";
-import { appendFileSync } from "node:fs";
+import { appendFileSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { editorialOnly, editorialReleaseIds } from "./editorial-release.mjs";
 
 // Generated public files are checked separately by pnpm lint. Changes to their
 // sources cannot use a shorter gate when the generated result changes structure.
-const tooling = /^(?:(?:tests|scripts|templates|content|docs|\.github)\/|[^/]+\.md$)/;
+const tooling = /^(?:(?:tests|scripts|templates|content|docs|\.github)\/|playwright(?:\.editorial)?\.config\.mjs$|[^/]+\.md$)/;
 const activeContent = /<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi;
-const journalPhoto = /^journal-\d+(?:-\d+)?\.(?:jpg|jpeg|png|webp)$/;
-const journalSource = /^content\/journal(?:\.json|\/\d+\.html)$/;
-const journalRegions = {
-  "index.html": ["journal-hero", "journal-preview"],
-  "catalog/index.html": ["journal-search"],
-  "journal/index.html": ["journal-archive"],
-};
-
-function journalOnly(changes) {
-  if (!changes.some(({ path }) => journalSource.test(path))) return false;
-  return changes.every(({ path, before, after }) => {
-    if (/^(?:tests\/|docs\/|[^/]+\.md$)/.test(path)) return true;
-    // Scripts and templates deliberately do not enter this allowlist. Generated
-    // pages must also pass the existing generator consistency check in CI.
-    if (journalSource.test(path)) return after != null && !/<(?:script|style|iframe|object)\b|\bon\w+\s*=/i.test(after);
-    if (path.startsWith("assets/") && journalPhoto.test(path.slice(7))) return true;
-    if (/^journal\/\d+\/index\.html$/.test(path)) return after != null;
-    if (path === "assets/media-variants.json") {
-      try {
-        const otherMedia = value => JSON.stringify(JSON.parse(value).filter(item => !journalPhoto.test(item.file)));
-        return otherMedia(before) === otherMedia(after);
-      } catch { return false; }
-    }
-    if (path === "sitemap.xml") {
-      const articles = /\s*<url>\s*<loc>https:\/\/ks\.fish\/journal\/\d+\/<\/loc>\s*<\/url>/g;
-      return before != null && after != null && before.replace(articles, "") === after.replace(articles, "");
-    }
-    if (!journalRegions[path] || before == null || after == null) return false;
-    const strip = html => {
-      for (const region of journalRegions[path]) {
-        const pattern = new RegExp(`<!-- shared:${region}:start -->[\\s\\S]*?<!-- shared:${region}:end -->`, "g");
-        if ([...html.matchAll(pattern)].length !== 1) return null;
-        html = html.replace(pattern, `<!-- ${region} -->`);
-      }
-      return html;
-    };
-    const outside = strip(before);
-    return outside != null && outside === strip(after);
-  });
-}
-
 function onlyAnchorTargets(before, after) {
   if (before == null || after == null) return false;
   if (JSON.stringify(before.match(activeContent)) !== JSON.stringify(after.match(activeContent))) return false;
@@ -264,7 +224,7 @@ export function classifyRelease(changes) {
   if (!changes) return "full";
   const published = changes.filter(({ path }) => !tooling.test(path));
   if (!published.length) return "none";
-  if (journalOnly(changes)) return "journal";
+  if (editorialOnly(changes)) return "editorial";
   if (published.every(({ path, before, after }) => path.endsWith(".html") && onlyTypography(before, after))) return "typography";
   if (published.every(({ path, before, after }) => path.endsWith(".html") && onlyAnchorTargets(before, after))) return "links";
   const tags = scopedBrowserTags(changes);
@@ -287,18 +247,22 @@ export function readReleaseChanges(base) {
 }
 
 export function selectReleaseChecks(changes, requested = "auto") {
-  // A deliberate manual choice for an approved editorial release. Automatic
-  // classification remains conservative for unknown changes and missing bases.
-  if (requested === "editorial") return { scope: "scoped", grep: "@recipes|@journal" };
+  // A manual editorial request never widens the collected test set or bypasses
+  // content-only boundaries. Mixed/runtime changes retain their normal scope.
   const scope = requested === "full" ? "full" : classifyRelease(changes);
+  if (requested === "editorial" && scope === "none") return { scope: "editorial-check", grep: "" };
   return { scope, grep: scope === "scoped" ? scopedBrowserTags(changes).join("|") : "" };
 }
+
+export const shouldPublish = (scope, requested = "auto") => requested !== "editorial" && !["none", "editorial-check"].includes(scope);
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const changes = readReleaseChanges(process.argv[2]);
   const { scope, grep } = selectReleaseChecks(changes, process.argv[3]);
   const pages = scope === "typography" ? changes.filter(({ path }) => !tooling.test(path)).map(({ path }) => path) : [];
-  const output = `scope=${scope}\nbrowser_required=${["full", "journal", "typography", "scoped"].includes(scope)}\nbrowser_grep=${grep}\ntypography_pages=${JSON.stringify(pages)}\n`;
+  const ids = scope === "editorial" ? editorialReleaseIds(changes)
+    : scope === "editorial-check" ? [String(JSON.parse(readFileSync(new URL("../content/journal.json", import.meta.url), "utf8"))[0].id)] : [];
+  const output = `editorial_ids=${JSON.stringify(ids)}\nscope=${scope}\npublish_required=${shouldPublish(scope, process.argv[3])}\nbrowser_required=${["full", "editorial", "editorial-check", "typography", "scoped"].includes(scope)}\nbrowser_grep=${grep}\ntypography_pages=${JSON.stringify(pages)}\n`;
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, output);
   process.stdout.write(output);
 }

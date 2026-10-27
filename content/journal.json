@@ -6,7 +6,11 @@
     "product": "Ряпушка холодного копчения",
     "alt": "Золотистая ряпушка холодного копчения на белом подносе среди зелёной травы",
     "image": "journal-703.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "smoked-vendace"
+    ],
+    "heroOrderName": "ряпушку холодного копчения"
   },
   {
     "id": 702,
@@ -15,7 +19,11 @@
     "product": "Рулет из брюшков осетра горячего копчения, упаковка около 300 г",
     "alt": "Ломтики рулета из брюшков осетра горячего копчения в прозрачной вакуумной упаковке",
     "image": "journal-702.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "prepared-fish-012"
+    ],
+    "heroOrderName": "рулет из брюшков осетра"
   },
   {
     "id": 701,
@@ -33,7 +41,11 @@
     "product": "Икра форели, банка 250 г",
     "alt": "Красная икра форели в открытой банке",
     "image": "journal-700.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "trout-roe"
+    ],
+    "heroOrderName": "икру форели"
   },
   {
     "id": 699,
@@ -42,7 +54,11 @@
     "product": "Охлажденная форель из Карелии",
     "alt": "Голова и серебристый бок форели в тёмную крапинку на розовом фоне",
     "image": "journal-699.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "chilled-trout"
+    ],
+    "heroOrderName": "охлаждённую форель"
   },
   {
     "id": 698,
@@ -51,7 +67,11 @@
     "product": "Малосольный каспийский залом, целая рыба",
     "alt": "Ломтики каспийского залома с серебристой кожей на белой тарелке",
     "image": "journal-698.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "caspian-herring"
+    ],
+    "heroOrderName": "каспийский залом"
   },
   {
     "id": 697,
@@ -60,7 +80,11 @@
     "product": "Риеты и паштеты из копченого балтийского угря, банка 80 г",
     "alt": "Банки риета из копчёного угря; на передней банке этикетка «Со сладким перцем»",
     "image": "journal-697.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "eel-rillettes"
+    ],
+    "heroOrderName": "риеты и паштеты из угря"
   },
   {
     "id": 696,
@@ -69,7 +93,11 @@
     "product": "Малосольный каспийский залом",
     "alt": "Каспийский залом целиком на белой тарелке, хвост и голова выступают за её края",
     "image": "journal-696.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "caspian-herring"
+    ],
+    "heroOrderName": "каспийский залом"
   },
   {
     "id": 695,
@@ -78,7 +106,10 @@
     "product": "Филе форели холодного копчения без кожи",
     "alt": "Нарезанное филе форели холодного копчения без кожи на чёрном подносе",
     "image": "journal-695.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "smoked-trout-fillet-skinless"
+    ]
   },
   {
     "id": 694,
@@ -87,7 +118,10 @@
     "product": "Ряпушка холодного копчения",
     "alt": "Ряпушка холодного копчения с&nbsp;золотистой кожей, уложенная в&nbsp;коробку",
     "image": "journal-694.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "smoked-vendace"
+    ]
   },
   {
     "id": 693,
@@ -96,7 +130,10 @@
     "product": "Стейк чилийского лосося",
     "alt": "Стейки чилийского лосося на&nbsp;металлическом подносе",
     "image": "journal-693.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "salmon-steak"
+    ]
   },
   {
     "id": 692,
@@ -114,7 +151,10 @@
     "product": "Радужная форель из Ирана",
     "alt": "Срез радужной форели: розовое мясо и&nbsp;серебристая кожа в&nbsp;тёмную крапинку",
     "image": "journal-691.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "iran-trout"
+    ]
   },
   {
     "id": 690,
@@ -123,7 +163,11 @@
     "product": "Скумбрия холодного и горячего копчения",
     "alt": "Копчёная скумбрия с&nbsp;серебристой и&nbsp;золотистой кожей в&nbsp;коробке",
     "image": "journal-690.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "smoked-mackerel",
+      "prepared-fish-011"
+    ]
   },
   {
     "id": 689,
@@ -132,7 +176,10 @@
     "product": "Чир из Якутии",
     "alt": "Чир целиком на&nbsp;металлической поверхности рядом с&nbsp;ножом",
     "image": "journal-689.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "frozen-fish-005"
+    ]
   },
   {
     "id": 688,
@@ -141,7 +188,10 @@
     "product": "Паштет из охлажденной куриной печени, банка 190 г",
     "alt": "Паштет из&nbsp;куриной печени на&nbsp;ломтике хлеба",
     "image": "journal-688.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "chicken-liver-pate"
+    ]
   },
   {
     "id": 687,
@@ -150,7 +200,11 @@
     "product": "Уха, банка 500 г",
     "alt": "Банки донской, тройной, царской, таёжной и&nbsp;осетровой ухи на&nbsp;полке",
     "image": "journal-687.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "fish-soup",
+      "sturgeon-soup"
+    ]
   },
   {
     "id": 686,
@@ -159,7 +213,10 @@
     "product": "Черноморский бычок холодного копчения",
     "alt": "Черноморские бычки холодного копчения золотистого цвета",
     "image": "journal-686.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "smoked-goby"
+    ]
   },
   {
     "id": 685,
@@ -168,7 +225,10 @@
     "product": "Филе форели холодного копчения на коже",
     "alt": "Филе форели холодного копчения, нарезанное поперёк, на&nbsp;розовом фоне",
     "image": "journal-685.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "smoked-trout-fillet-skin"
+    ]
   },
   {
     "id": 684,
@@ -177,7 +237,10 @@
     "product": "Икряная камбала холодного копчения",
     "alt": "Икряная камбала холодного копчения на ярко-розовом фоне",
     "image": "journal-684.jpg",
-    "archiveImageWidth": 600
+    "archiveImageWidth": 600,
+    "catalogProductIds": [
+      "smoked-roe-flounder"
+    ]
   },
   {
     "id": 683,
@@ -186,7 +249,10 @@
     "product": "Филе сельди холодного копчения «По-Датски»",
     "alt": "Филе сельди холодного копчения, перевязанное цветной нитью",
     "image": "journal-683.jpg",
-    "archiveImageWidth": 600
+    "archiveImageWidth": 600,
+    "catalogProductIds": [
+      "danish-herring-fillet"
+    ]
   },
   {
     "id": 682,
@@ -195,7 +261,10 @@
     "product": "Царский малосольный тугунок",
     "alt": "Малосольный тугунок в овальном блюде на ярко-жёлтом фоне",
     "image": "journal-682.jpg",
-    "archiveImageWidth": 600
+    "archiveImageWidth": 600,
+    "catalogProductIds": [
+      "frozen-fish-017"
+    ]
   },
   {
     "id": 681,
@@ -204,7 +273,10 @@
     "product": "Икра дикого кижуча, банка 250 г",
     "alt": "Красная икра дикого кижуча на ложке крупным планом",
     "image": "journal-681.jpg",
-    "archiveImageWidth": 600
+    "archiveImageWidth": 600,
+    "catalogProductIds": [
+      "coho-roe-2026"
+    ]
   },
   {
     "id": 680,
@@ -213,7 +285,10 @@
     "product": "Малосольная черноморская барабуля, бескостное филе, банка 330 г",
     "alt": "Два филе черноморской барабули на тарелке и рюмка на столе",
     "image": "journal-680.jpg",
-    "archiveImageWidth": 600
+    "archiveImageWidth": 600,
+    "catalogProductIds": [
+      "salted-red-mullet"
+    ]
   },
   {
     "id": 664,

@@ -1,5 +1,4 @@
 import { editorialPath, recipeForEntry, recipes, resolveProduct } from "../scripts/recipe-content.mjs";
-import { renderHeroJournalProducts } from "../scripts/site-content.mjs";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
@@ -108,7 +107,7 @@ test("selling publications expose their sourced catalog position and current pri
     const source = entry.source?.url ?? `https://t.me/kapitanseledkin/${entry.id}`;
     const sourced = products.filter(product => product.source === source);
     // Repeat deliveries may use the existing exact product selected by the hero.
-    const selected = renderHeroJournalProducts([entry]).includes(`data-journal-id="${entry.id}"`);
+    const selected = entry.catalogProductIds?.some(id => products.some(product => product.id === id));
     assert.ok(sourced.length || selected, `Add the missing product to the catalog before publishing ${entry.id}: ${entry.title}`);
     const page = await read(`${editorialPath(entry.id)}index.html`);
     const context = page.match(/<section class="recipe-current"[\s\S]*?<\/section>/)?.[0];

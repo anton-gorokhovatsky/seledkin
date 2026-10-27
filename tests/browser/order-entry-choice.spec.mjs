@@ -1,6 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { catalog } from "../../assets/catalog-data.js";
+import { catalogPrice } from "../../assets/catalog-model.js";
+import { recipeForEntry } from "../../scripts/recipe-content.mjs";
+const currentJournal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8")).filter(entry => !recipeForEntry(entry.id)).slice(0, 5);
 
-test("desktop journal orders the pictured catalog product and clears the previous draft @catalog", async ({ page }) => {
+test("desktop journal orders the pictured catalog product and clears the previous draft @catalog", async ({ page })=>{
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "clipboard", { configurable: true, value: {
@@ -9,60 +14,57 @@ test("desktop journal orders the pictured catalog product and clears the previou
   });
   await page.goto("?audit=order-entry");
   const journal = page.locator("[data-hero-journal]");
-  const vendace = journal.locator('[data-hero-journal-product="703"]');
-  await expect(vendace).toBeVisible();
-  await expect(vendace.locator(".hero-journal-product__toggle")).toHaveText("Заказать по\u00a02\u202f500\u00a0₽/кг");
-  for (const link of await vendace.locator("[data-hero-order-telegram], [data-hero-order-whatsapp]").all()) {
-    expect(new URL(await link.getAttribute("href")).searchParams.get("text")).toMatch(/Ряпушка\s+холодного\s+копчения[\s\S]*2\s*500\s*₽\/кг/);
+  const plain = text => text.replace(/\s+/gu, " ").trim();
+  for (const [index, entry] of currentJournal.entries()) {
+    if (index) await journal.locator("[data-hero-journal-next]").click();
+    const group = journal.locator(`[data-hero-journal-product="${entry.id}"]`);
+    const product = catalog.flatMap(category => category.items).find(product => product.id === entry.catalogProductIds[0]);
+    await expect(group).toBeVisible();
+    const order = group.locator(".hero-journal-product__toggle");
+    await expect(order).toHaveText(`Заказать по ${catalogPrice(product.price)}`);
+    await expect(group.locator(".hero-journal-product__amount svg")).toBeVisible();
+    let expectedWhatsApp;
+    for (const link of await group.locator("[data-hero-order-telegram], [data-hero-order-whatsapp]").all()) {
+      const url = new URL(await link.getAttribute("href"));
+      const draft = url.searchParams.get("text");
+      if (url.hostname === "wa.me") expectedWhatsApp = draft;
+      expect(plain(draft)).toContain(plain(product.name));
+      expect(plain(draft)).toContain(plain(catalogPrice(product.price)));
+    }
+    if (index === 1) {
+      await order.press("Enter");
+      const choices = group.getByRole("group", { name: `Заказать ${entry.heroOrderName}`, exact: true });
+      await expect(choices.getByRole("link", { name: `${product.name} в каталоге`, exact: true })).toHaveAttribute("href", new RegExp(`product=${product.id}`));
+      await expect(choices.getByRole("link").first()).toBeFocused();
+      await choices.getByRole("link").first().click();
+      const draft = choices.getByRole("textbox", { name: "Текст для сообщения" });
+      expect(plain(await draft.inputValue())).toContain(plain(product.name));
+      await draft.press("ArrowRight");
+      await expect(journal.locator("[data-hero-journal-counter]")).toHaveText(`${index + 1} из ${currentJournal.length}`);
+      await page.keyboard.press("Escape");
+      await expect(choices).toBeHidden();
+      await expect(order).toBeFocused();
+      await journal.locator("[data-hero-journal-next]").click();
+      await journal.locator("[data-hero-journal-previous]").click();
+      await order.click();
+      await expect(draft).toBeHidden();
+      await expect(choices.locator("[role=status]")).toBeEmpty();
+      await page.keyboard.press("Escape");
+    }
+    if (index === currentJournal.length - 1) {
+      await order.click();
+      const whatsapp = group.getByRole("link", { name: "В WhatsApp", exact: true });
+      await page.route("https://wa.me/**", route => route.fulfill({ body: "Messenger handoff" }));
+      await whatsapp.click();
+      await expect(page).toHaveURL(/^https:\/\/wa\.me\/79166751452\?text=/);
+      const actualDraft = new URL(page.url()).searchParams.get("text");
+      expect(actualDraft).toBe(expectedWhatsApp);
+      expect(plain(actualDraft)).toContain(plain(product.name));
+      expect(plain(actualDraft)).toContain(plain(catalogPrice(product.price)));
+      const previous = catalog.flatMap(category => category.items).find(product => product.id === currentJournal[index - 1].catalogProductIds[0]);
+      if (!product.name.includes(previous.name)) expect(plain(actualDraft)).not.toContain(plain(previous.name));
+    }
   }
-  await journal.locator("[data-hero-journal-next]").click();
-  const roll = journal.locator('[data-hero-journal-product="702"]');
-  await expect(roll).toBeVisible();
-  expect(await roll.locator(".hero-journal-product__toggle").textContent()).toBe("Заказать по\u00a03\u202f740\u00a0₽/кг");
-  await expect(roll.locator(".hero-journal-product__amount svg")).toBeVisible();
-  expect(new URL(await roll.locator('[data-hero-order-telegram]').getAttribute('href')).searchParams.get('text')).toMatch(/Рулет\s+из\s+брюшков\s+осетра[\s\S]*3\s*740\s*₽\/кг/);
-  await journal.locator("[data-hero-journal-next]").click();
-  const caviar = journal.locator('[data-hero-journal-product="700"]');
-  const order = caviar.getByRole("button", { name: /Заказать по.*Икра форели/ });
-  await order.press("Enter");
-  const choices = caviar.getByRole("group", { name: "Заказать икру форели", exact: true });
-  await expect(choices.getByRole("link").first()).toBeFocused();
-  for (const link of await choices.locator("[data-hero-order-telegram], [data-hero-order-whatsapp]").all()) {
-    const draft = new URL(await link.getAttribute("href")).searchParams.get("text");
-    expect(draft).toContain("Икра форели");
-    expect(draft).toMatch(/4\s*990\s*₽ за\s*250\s*г/);
-  }
-  await expect(choices.getByRole("link", { name: "Икра форели в каталоге", exact: true })).toHaveAttribute("href", /product=trout-roe/);
-  await choices.getByRole("link").first().click();
-  const draft = choices.getByRole("textbox", { name: "Текст для сообщения" });
-  await expect(draft).toHaveValue(/Икра форели/);
-  await draft.press("ArrowRight");
-  await expect(journal.locator("[data-hero-journal-counter]")).toHaveText(/3\s*из\s*5/);
-  await page.keyboard.press("Escape");
-  await expect(choices).toBeHidden();
-  await expect(order).toBeFocused();
-  await journal.locator("[data-hero-journal-next]").click();
-  const trout = journal.locator('[data-hero-journal-product="699"]');
-  await expect(trout).toBeVisible();
-  await expect(trout.locator(".hero-journal-product__toggle")).toHaveText("Заказать по\u00a01\u202f680\u00a0₽/кг");
-  expect(new URL(await trout.locator('[data-hero-order-telegram]').getAttribute("href")).searchParams.get("text")).toMatch(/Форель\s+охлаждённая[\s\S]*1\s*680\s*₽\/кг/);
-  await journal.locator("[data-hero-journal-previous]").click();
-  await order.click();
-  await expect(draft).toBeHidden();
-  await expect(choices.locator("[role=status]")).toBeEmpty();
-  await page.keyboard.press("Escape");
-  await journal.locator("[data-hero-journal-next]").click();
-  await journal.locator("[data-hero-journal-next]").click();
-  const herring = journal.locator('[data-hero-journal-product="698"]');
-  await herring.getByRole("button", { name: /Заказать по.*Каспийский залом/ }).click();
-  const whatsapp = herring.getByRole("link", { name: "В WhatsApp", exact: true });
-  const herringDraft = new URL(await whatsapp.getAttribute("href")).searchParams.get("text");
-  expect(herringDraft).toContain("Каспийский залом");
-  expect(herringDraft).toMatch(/1\s*600\s*₽\/кг/);
-  expect(herringDraft).not.toContain("Икра форели");
-  await page.route("https://wa.me/**", route => route.fulfill({ contentType: "text/html", body: "Messenger destination" }));
-  await whatsapp.click();
-  await expect(page).toHaveURL(/^https:\/\/wa\.me\/79166751452\?text=/);
 });
 
 test("mobile order keeps the pictured product through selection and messenger handoff @afisha", async ({ page, browser, baseURL }, testInfo) => {
