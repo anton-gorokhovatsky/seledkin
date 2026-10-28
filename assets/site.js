@@ -293,18 +293,36 @@ if (
   let pointerStart = null;
   let blockNextClick = false;
   const syncProduct = setupHeroJournalOrders(heroJournal);
+  const desktopJournal = window.matchMedia("(min-width: 61.1876rem)");
+
+  const prepareJournalImage = (card) => {
+    const image = card?.querySelector("img[data-full-src]");
+    if (!image) return;
+    image.srcset = image.dataset.fullSrcset;
+    image.src = image.dataset.fullSrc;
+    delete image.dataset.fullSrc;
+    delete image.dataset.fullSrcset;
+  };
+
+  const prepareJournalNeighbours = () => {
+    if (!desktopJournal.matches) return;
+    // Full-size neighbours make the focus transition independent of the
+    // 32-pixel loading placeholder; the mobile afisha keeps its own loading.
+    for (let offset = 1; offset <= 2; offset++) {
+      prepareJournalImage(heroJournalCards[(currentIndex + offset) % heroJournalCards.length]);
+    }
+  };
+  desktopJournal.addEventListener("change", prepareJournalNeighbours);
 
   const syncJournal = () => {
-    heroJournal.dataset.ready = "";
     heroJournalPrevious.hidden = false;
     if (heroJournalCounter) heroJournalCounter.closest("p").hidden = false;
-    const image = heroJournalCards[currentIndex]?.querySelector("img[data-full-src]");
-    if (image) {
-      image.srcset = image.dataset.fullSrcset;
-      image.src = image.dataset.fullSrc;
-      delete image.dataset.fullSrc;
-      delete image.dataset.fullSrcset;
-    }
+    prepareJournalImage(heroJournalCards[currentIndex]);
+    prepareJournalNeighbours();
+    const image = heroJournalCards[currentIndex].querySelector("img");
+    const ratio = Number(image.getAttribute("width")) / Number(image.getAttribute("height"));
+    heroJournalStack.style.setProperty("--journal-clip-right", `${(1 - Math.min(1, ratio)) * 100}%`);
+    heroJournalStack.style.setProperty("--journal-clip-bottom", `${(1 - Math.min(1, 1 / ratio)) * 100}%`);
     heroJournalCards.forEach((card, index) => {
       const active = index === currentIndex;
       const stackPosition =
@@ -339,6 +357,13 @@ if (
         ": " +
         titles[currentIndex] +
         (hasNext ? "" : ". Последняя выбранная запись. Справа можно открыть весь Судовой журнал."));
+    }
+    if (!heroJournal.hasAttribute("data-ready")) {
+      // Resolve the initial silhouette while rear sheets are still hidden and
+      // transitions are off. Enabling them in that same style update flashes
+      // the previous full-square fallback, especially after a delayed module.
+      heroJournalStack.getBoundingClientRect();
+      heroJournal.dataset.ready = "";
     }
   };
 

@@ -712,6 +712,8 @@ a.source-brand {
 .source-hero__journal {
   --journal-control-size: 2.75rem;
   --journal-icon-size: var(--harpoon-control-size);
+  --journal-focus-duration: 280ms;
+  --journal-focus-blur: 0.45rem;
   display: grid;
   width: 100%;
   height: 100%;
@@ -733,8 +735,32 @@ a.source-brand {
   grid-area: 1 / 1;
   transform-origin: 50% 85%;
   transition:
-    opacity 220ms ease-out,
-    transform 280ms var(--ease);
+    opacity var(--reveal-duration) var(--ease-enter),
+    transform var(--journal-focus-duration) var(--ease-state);
+}
+
+/* The selected photograph defines the stack's silhouette. Filtering stays
+   inside each sheet, so a portrait cannot expose a square of blurred pixels. */
+.source-hero__journal .source-hero__journal-card img {
+  clip-path: inset(0);
+  filter: blur(0) brightness(1);
+  transition: none;
+}
+
+.source-hero__journal[data-ready] .source-hero__journal-card img {
+  transition:
+    transform var(--feedback-duration) var(--ease),
+    clip-path var(--journal-focus-duration) var(--ease-state),
+    filter var(--journal-focus-duration) var(--ease-state);
+}
+
+.source-hero__journal-card:not([data-stack-position="0"]) img {
+  clip-path: inset(0 var(--journal-clip-right, 0%) var(--journal-clip-bottom, 0%) 0);
+  filter: blur(var(--journal-focus-blur)) brightness(0.72);
+}
+
+.source-hero__journal:not([data-ready]) .source-hero__journal-card:not([data-stack-position="0"]) {
+  visibility: hidden;
 }
 
 .source-hero__journal-card[data-stack-position="0"] {
