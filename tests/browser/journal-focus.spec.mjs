@@ -6,6 +6,8 @@ const settle = page => page.locator('[data-hero-journal-stack]').evaluate(async 
   await Promise.allSettled(stack.getAnimations({ subtree: true }).map(animation => animation.finished));
 });
 
+test.describe("journal photograph focus @hero-journal", () => {
+
 test("a delayed module reveals the portrait mask without a first-frame square", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -60,7 +62,7 @@ test("a portrait bounds the rear sheets, and every selected photograph stays com
       expect(result.right).toBeCloseTo(result.expectedRight, 3);
       expect(result.bottom).toBeCloseTo(result.expectedBottom, 3);
       expect(result.fit).toBe("contain");
-      expect(result.filter).toBe("blur(0px) brightness(1)");
+      expect(result.filter).toBe("none");
       expect(result.clip).toBe("inset(0px)");
       for (const rear of result.rear) {
         expect(rear.width).toBeGreaterThan(32);
@@ -95,7 +97,7 @@ test("focus transitions can reverse immediately and respect reduced motion", asy
   await page.locator('[data-hero-journal-next]').click();
   expect(parseFloat(await activeCard(page).locator("img").evaluate(image => getComputedStyle(image).transitionDuration))).toBeLessThan(0.001);
   await settle(page);
-  expect(await activeCard(page).locator("img").evaluate(image => getComputedStyle(image).filter)).toBe("blur(0px) brightness(1)");
+  expect(await activeCard(page).locator("img").evaluate(image => getComputedStyle(image).filter)).toBe("none");
 });
 
 test("without JavaScript the first full photograph has no exposed placeholders", async ({ browser, baseURL }) => {
@@ -107,4 +109,6 @@ test("without JavaScript the first full photograph has no exposed placeholders",
   for (const card of await placeholders.all()) await expect(card).toBeHidden();
   await expect(activeCard(page)).toHaveAttribute("href", /^journal\/\d+\/$/);
   await context.close();
+});
+
 });

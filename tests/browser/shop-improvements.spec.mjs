@@ -96,7 +96,7 @@ test("journal previews keep whole photographs, aligned desktop reading lines and
   }
 });
 
-test("mobile shopping appears earlier while original photo proportions survive", async ({ page }) => {
+test("mobile shopping appears earlier while original photo proportions survive @hero-journal", async ({ page }) => {
   await page.goto("");
   await page.evaluate(() => document.fonts.ready);
   // The shopping entry stays in the mobile afisha even as later stories grow.
@@ -117,6 +117,9 @@ test("mobile shopping appears earlier while original photo proportions survive",
   for (const path of ["", "about/", "journal/"]) {
     await page.goto(path);
     const failures = await page.locator("img[data-source-image]").evaluateAll(images => images.filter(image => {
+      // Only the known rear-sheet previews may be softened. The selected
+      // photograph and every ordinary author photograph retain their source.
+      if (image.closest('[data-hero-journal-card][aria-hidden="true"]')) return false;
       const style = getComputedStyle(image);
       return style.objectFit === "cover" || style.filter !== "none";
     }).map(image => image.dataset.sourceImage));
@@ -180,7 +183,7 @@ test("the sea can be paused, stops offscreen, and respects the saved choice acro
   await context.close();
 });
 
-test("reduced motion downloads no sea video and the journal loads full images on demand", async ({ page }) => {
+test("reduced motion downloads no sea video and the journal prepares only two neighbours @hero-journal", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.emulateMedia({ reducedMotion: "reduce" });
   const requests = [];
@@ -190,7 +193,11 @@ test("reduced motion downloads no sea video and the journal loads full images on
   expect(requests.filter(url => /\.mp4(?:$|\?)/.test(url))).toEqual([]);
   await expect(page.locator(".source-hero > [data-sea-toggle]")).toBeHidden();
   const pending = page.locator("[data-hero-journal-card] img[data-full-src]");
-  await expect(pending).toHaveCount(4);
+  await expect(pending).toHaveCount(2);
+  for (const position of [0, 1, 2]) {
+    const image = page.locator(`[data-hero-journal-card][data-stack-position="${position}"] img`);
+    await expect.poll(() => image.evaluate(image => image.complete && image.naturalWidth > 32)).toBe(true);
+  }
   for (let index = 2; index <= 5; index++) {
     await page.locator("[data-hero-journal-next]").click();
     const activeImage = page.locator('[data-hero-journal-card][data-stack-position="0"] img');

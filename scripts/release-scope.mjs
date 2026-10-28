@@ -86,6 +86,47 @@ function onlyProductTargets(before, after) {
 // Local resource versions belong to publication assembly. Removing a former
 // manual version does not change the module or page's customer behaviour.
 const resourceVersions = value => value?.replace(/(["'`])([\w./-]+\.(?:css|js)|[\w./-]*store-map\.html)\?v=[\w.-]+(?=\1)/g, "$1$2");
+
+// A known, guarded component in the shared entry module. Stop at its first
+// balanced closing brace, never at a later textual marker: code after the
+// guard must not inherit the component's shorter browser gate.
+function withoutHeroJournal(source) {
+  const header = "\nif (\n  heroJournal instanceof HTMLElement &&\n  heroJournalStack instanceof HTMLElement &&\n  heroJournalCards.length > 0 &&\n  heroJournalPrevious instanceof HTMLButtonElement &&\n  heroJournalNext instanceof HTMLButtonElement &&\n  heroJournalAll instanceof HTMLAnchorElement\n) {";
+  const start = source.indexOf(header);
+  if (start < 0 || source.indexOf(header, start + 1) >= 0) return null;
+  // This is a known component, not a general JavaScript parser. Preserve
+  // offsets while masking only its existing regex, division and templates.
+  // Unknown slash/template syntax below retains the full gate.
+  const spans = ['/\\s+/g', '`${(1 - Math.min(1, ratio)) * 100}%`',
+    '`${(1 - Math.min(1, 1 / ratio)) * 100}%`',
+    'Number(image.getAttribute("width")) / Number(image.getAttribute("height"))'];
+  const masked = spans.reduce((text, span) => text.replaceAll(span, 'x'.repeat(span.length)), source);
+  let depth = 1, quote = "", comment = "";
+  for (let end = start + header.length; end < source.length; end++) {
+    const char = masked[end], next = masked[end + 1];
+    if (comment === "line") { if (char === "\n") comment = ""; continue; }
+    if (comment === "block") { if (char === "*" && next === "/") { comment = ""; end++; } continue; }
+    if (quote) { if (char === "\\") end++; else if (char === quote) quote = ""; continue; }
+    if (char === "/" && next === "/") { comment = "line"; end++; continue; }
+    if (char === "/" && next === "*") { comment = "block"; end++; continue; }
+    if (char === "/" || char === "`" || char === "\\") return null;
+    if (char === '"' || char === "'") { quote = char; continue; }
+    if (char === "{") depth++;
+    if (char === "}" && --depth === 0) {
+      const tail = source.slice(end + 1);
+      if (!tail.startsWith("\n\nif (mapFrame instanceof HTMLIFrameElement) {")) return null;
+      return source.slice(0, start) + "\nHERO_JOURNAL_COMPONENT\n" + tail;
+    }
+  }
+  return null;
+}
+
+function onlyHeroJournal(before, after) {
+  if (before == null || after == null) return false;
+  const outside = withoutHeroJournal(resourceVersions(before));
+  return outside != null && outside === withoutHeroJournal(resourceVersions(after));
+}
+
 const componentScripts = {
   "assets/author-signature.js": ["@signature"],
   "assets/catalog-data.js": ["@catalog", "@afisha", "@recipes"],
@@ -172,6 +213,7 @@ function cssTags(before, after, recipeSheet = false) {
           : /^\s*\.contacts-source(?=[\s_.#[:]|$)/.test(selector) ? "@contacts"
           : /^\s*\.catalog-(?:[\w-]+)(?=[\s.#[:]|$)/.test(selector) ? "@catalog"
           : /^\s*\.(?:journal-historical|recipe-archive-note)(?=[\s_.#[:]|$)/.test(selector) ? "@journal"
+          : /^\s*\.source-hero__journal(?=[\s_.#[:\-]|$)/.test(selector) && !/[+~]|:has\(/.test(selector) ? "@hero-journal"
           : /^\s*\.afisha(?=[\s_.#[:]|$)/.test(selector) ? "@afisha" : null;
         if (!tag) return null;
         tags.add(tag);
@@ -203,6 +245,8 @@ export function scopedBrowserTags(changes) {
       componentScripts[path].forEach(tag => tags.add(tag));
     } else if (path === "assets/site.js" && before != null && resourceVersions(before) === resourceVersions(after)) {
       continue;
+    } else if (path === "assets/site.js" && onlyHeroJournal(before, after)) {
+      tags.add("@hero-journal");
     } else if (path.endsWith(".html") && before != null && after != null) {
       const oldHtml = resourceVersions(before), newHtml = resourceVersions(after);
       if (oldHtml === newHtml) continue;

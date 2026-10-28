@@ -5,7 +5,7 @@ import { catalogPrice } from "../../assets/catalog-model.js";
 import { recipeForEntry } from "../../scripts/recipe-content.mjs";
 const currentJournal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8")).filter(entry => !recipeForEntry(entry.id)).slice(0, 5);
 
-test("desktop journal orders the pictured catalog product and clears the previous draft @catalog", async ({ page })=>{
+test("desktop journal orders the pictured catalog product and clears the previous draft @catalog @hero-journal", async ({ page })=>{
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "clipboard", { configurable: true, value: {

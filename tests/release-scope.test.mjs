@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { classifyRelease, readReleaseChanges, scopedBrowserTags, selectReleaseChecks } from "../scripts/release-scope.mjs";
+import { readFileSync } from "node:fs";
 
 test("manual editorial selection cannot override content-only boundaries", () => {
   const changes = [{ path: "recipes/701/index.html", after: "<h1>Рецепт</h1>" }];
@@ -263,4 +264,45 @@ test("exact catalog links and gallery destinations select the catalog journey wi
   for (const changed of [exactHome.replace("Цена", "Другая цена"), exactHome.replace("#product-caviar-001", "#other"), exactHome.replaceAll("catalog/?", "journal/?")]) {
     assert.equal(classifyRelease([{ path: "index.html", before: home, after: changed }]), "full");
   }
+});
+
+const heroRuntime = readFileSync(new URL('../assets/site.js', import.meta.url), 'utf8');
+const changedHeroRuntime = heroRuntime.replace('let currentIndex = 0;', 'let currentIndex = 1;');
+
+test("only the guarded desktop journal and its own CSS select the journal focus journeys", () => {
+  const changes = [
+    { path: 'assets/site.js', before: heroRuntime, after: changedHeroRuntime },
+    { path: 'assets/styles.css', before: '.source-hero__journal-card img { filter: none; }',
+      after: '@media (prefers-reduced-motion: reduce) { .source-hero__journal-card img { transition: none; } }' },
+  ];
+  assert.equal(classifyRelease(changes), 'scoped');
+  assert.deepEqual(scopedBrowserTags(changes), ['@hero-journal']);
+  assert.equal(selectReleaseChecks(changes, 'full').scope, 'full');
+});
+
+test("journal focus scope rejects a changed guard, escaped code, duplicates and missing boundaries", () => {
+  for (const after of [
+    changedHeroRuntime.replace('heroJournal instanceof HTMLElement &&', 'true &&'),
+    changedHeroRuntime.replace('let currentIndex = 1;', '}\nmenuGlobalSideEffect();\nif (true) {\nlet currentIndex = 1;'),
+    changedHeroRuntime.replace('const titles = heroJournalCards.map((card) =>',
+      'const braceOpen = /{/;\n}\nconsole.log("escaped guard");\nif (true) {\nconst braceClose = /}/;\nconst titles = heroJournalCards.map((card) =>'),
+    changedHeroRuntime.replace('let currentIndex = 1;', 'const nested = `a${`b`}`; let currentIndex = 1;'),
+    changedHeroRuntime.replace('if (mapFrame instanceof HTMLIFrameElement)', 'if (true)'),
+    changedHeroRuntime + '\nmenuGlobalSideEffect();',
+    changedHeroRuntime.replace('const keyboardNavigationKeys = new Set([', 'const keyboardNavigationKeys = new Set(["Other",'),
+    changedHeroRuntime + changedHeroRuntime,
+  ]) {
+    assert.equal(classifyRelease([{ path: 'assets/site.js', before: heroRuntime, after }]), 'full');
+  }
+});
+
+test("journal focus CSS cannot reach siblings, global tokens, other components or unknown runtime", () => {
+  for (const selector of [':root', '.source-hero', '.source-hero__journal + .catalog-product',
+    '.source-hero__journal ~ footer', '.source-hero__journal:has(+ .catalog-product)', '.floating-menu']) {
+    assert.equal(classifyRelease([{ path: 'assets/styles.css', before: '', after: `${selector} { color: red; }` }]), 'full', selector);
+  }
+  assert.equal(classifyRelease([
+    { path: 'assets/site.js', before: heroRuntime, after: changedHeroRuntime },
+    { path: 'assets/theme.js', before: 'oldTheme()', after: 'changedTheme()' },
+  ]), 'full');
 });

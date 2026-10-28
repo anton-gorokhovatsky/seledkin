@@ -743,7 +743,7 @@ a.source-brand {
    inside each sheet, so a portrait cannot expose a square of blurred pixels. */
 .source-hero__journal .source-hero__journal-card img {
   clip-path: inset(0);
-  filter: blur(0) brightness(1);
+  filter: none;
   transition: none;
 }
 
@@ -761,6 +761,13 @@ a.source-brand {
 
 .source-hero__journal:not([data-ready]) .source-hero__journal-card:not([data-stack-position="0"]) {
   visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .source-hero__journal-card,
+  .source-hero__journal .source-hero__journal-card img {
+    transition: none !important;
+  }
 }
 
 .source-hero__journal-card[data-stack-position="0"] {

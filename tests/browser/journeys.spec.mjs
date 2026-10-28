@@ -124,7 +124,7 @@ test("contact anchor is clear of the menu; Escape only closes the top interactio
   await expect(zoom).not.toHaveAttribute("tabindex", "-1");
 });
 
-test("the mobile afisha leads directly to shopping and desktop journal controls remain stable @afisha", async ({ page }, testInfo) => {
+test("the mobile afisha leads directly to shopping and desktop journal controls remain stable @afisha @hero-journal", async ({ page }, testInfo) => {
   for (const [width, height] of [[320, 568], [390, 664], [390, 844], [1440, 900]]) {
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.setViewportSize({ width, height });
@@ -283,7 +283,7 @@ test("the full journal remains directly available without JavaScript", async ({ 
   await context.close();
 });
 
-test("the desktop journal action reflows with enlarged text and custom spacing", async ({ page }) => {
+test("the desktop journal action reflows with enlarged text and custom spacing @hero-journal", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   for (const content of [
     'html { font-size: 200% !important; }',
