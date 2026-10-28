@@ -112,12 +112,12 @@ async function textBaseline(locator, firstLine = false) {
   }, firstLine);
 }
 
-test("the harpoon shaft meets the capital-letter centre on the first text line @typography", async ({ page }) => {
+test("the harpoon shaft meets the capital-letter centre on the first text line @typography @recipes", async ({ page }) => {
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
     for (const [route, selectors] of [
       ["", [".watch-catch__header > a", ".watch-catch__caption"]],
-      ["recipes/", [".recipe-editorial-product__link"]],
+      ["recipes/", [".recipe-editorial-product__link .recipe-record-product__price"]],
     ]) {
       await page.goto(route);
       await page.evaluate(() => document.fonts.ready);

@@ -13,6 +13,9 @@ test("recipe product rows connect names to canonical prices and reflow without o
       const label = link.querySelector('.recipe-record-product__label'), price = link.querySelector('.recipe-record-product__price');
       const box = link.getBoundingClientRect(), nameBox = label.getBoundingClientRect(), priceBox = price.getBoundingClientRect();
       return { href: link.href, name: label.textContent.trim(), price: price.textContent.trim(),
+        featured: link.matches('.recipe-editorial-product__link'),
+        font: getComputedStyle(link).fontSize, nameFont: getComputedStyle(label).fontSize,
+        arrowWithPrice: price.contains(link.querySelector('svg')),
         leader: getComputedStyle(link, '::before').content, border: getComputedStyle(link, '::before').borderBottomStyle,
         stacked: priceBox.top >= nameBox.bottom - 1, height: box.height,
         overflow: Math.max(nameBox.right, priceBox.right) - box.right };
@@ -25,6 +28,11 @@ test("recipe product rows connect names to canonical prices and reflow without o
       expect(row.price.replace(/\s/g, '')).toBe(catalogPrice(product.price).replace(/\s/g, ''));
       expect(row.height).toBeGreaterThanOrEqual(44);
       expect(row.overflow).toBeLessThanOrEqual(1);
+      if (row.featured) {
+        expect(row.font).toBe(row.nameFont);
+        expect(row.arrowWithPrice).toBe(true);
+        if (width <= 390) expect(row.stacked).toBe(true);
+      }
       if (row.stacked) expect(row.leader).toBe('none');
       else expect(row.border).toBe('dotted');
     }

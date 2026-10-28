@@ -41,11 +41,18 @@
 .recipe-editorial-lead__photo figcaption { margin-top: 0.75rem; color: var(--muted); font-size: var(--text-meta); }
 .recipe-editorial-lead__note > p { max-width: 37ch; margin: 0 0 1.25rem; }
 .recipe-editorial-product { padding-block: 1rem; }
-.recipe-editorial-product__head { display: flex; align-items: first baseline; flex-wrap: wrap; gap: .25rem 1.5rem; }
+.recipe-editorial-product__head { container: recipe-products / inline-size; }
 .recipe-editorial-product p { margin: 0; }
 .recipe-editorial-product__label { margin-bottom: 0.35rem !important; color: var(--muted); font-size: var(--text-meta); }
-.recipe-editorial-product__name { flex: 1 1 12rem; min-width: 0; font-size: var(--text-reading); font-weight: 500; }
-.recipe-editorial-product__link { display: inline-flex; align-items: first baseline; gap: .65rem; min-height: 44px; color: var(--text-link); text-underline-offset: .2em; }
+.recipe-editorial-product__name { min-width: 0; font-size: var(--text-reading); font-weight: 500; }
+.recipe-editorial-product .recipe-editorial-product__link { font-size: var(--text-reading); font-weight: 500; }
+.recipe-editorial-product__link .recipe-record-product__name { text-decoration: underline; text-underline-offset: .2em; }
+.recipe-editorial-product__link .recipe-record-product__price { color: var(--ink); }
+@container recipe-products (max-width: 24em) {
+  .recipe-editorial-product .recipe-editorial-product__link { grid-template-columns: minmax(0, 1fr); gap: .35rem; }
+  .recipe-editorial-product .recipe-editorial-product__link::before { content: none; }
+  .recipe-editorial-product__link .recipe-record-product__price { justify-self: start; flex-wrap: wrap; box-shadow: none; }
+}
 .recipe-editorial-product__origin { max-width: 25ch; margin-top: 0.35rem !important; color: var(--muted); font-size: var(--text-meta); }
 .recipe-editorial-product strong { font-size: var(--text-reading); font-weight: 500; line-height: 1.4; }
 .recipe-editorial-actions { display: grid; gap: 0; justify-content: start; }
