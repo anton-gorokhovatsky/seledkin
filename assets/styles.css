@@ -1604,6 +1604,7 @@ a.source-brand {
   align-items: first baseline;
 }
 .editorial-link {
+  justify-content: start;
   gap: 0.8rem;
   min-height: 44px;
   max-width: 100%;

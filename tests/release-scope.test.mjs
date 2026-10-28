@@ -306,3 +306,15 @@ test("journal focus CSS cannot reach siblings, global tokens, other components o
     { path: 'assets/theme.js', before: 'oldTheme()', after: 'changedTheme()' },
   ]), 'full');
 });
+
+test('only editorial-link start alignment selects its existing consumer check', () => {
+  const before = '.editorial-link {\n gap: .8rem;\n min-height: 44px;\n}';
+  const after = before.replace(' gap:', ' justify-content: start;\n gap:');
+  const changes = [{ path: 'assets/styles.css', before, after }];
+  assert.equal(classifyRelease(changes), 'scoped');
+  assert.deepEqual(scopedBrowserTags(changes), ['@editorial-links']);
+  for (const changed of [after.replace('44px', '20px'), after.replace('start', 'end'),
+    after.replace('.editorial-link', '.editorial-link + main'), after + ':root { color: red; }']) {
+    assert.equal(classifyRelease([{ path: 'assets/styles.css', before, after: changed }]), 'full');
+  }
+});

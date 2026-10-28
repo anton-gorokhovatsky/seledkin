@@ -1,4 +1,37 @@
 import { test, expect } from "@playwright/test";
+import { catalog } from "../../assets/catalog-data.js";
+import { catalogPrice } from "../../assets/catalog-model.js";
+
+test("recipe product rows connect names to canonical prices and reflow without orphan leaders @recipes", async ({ page }, testInfo) => {
+  for (const [width, theme, enlarged] of [[1440, "light", false], [390, "dark", false], [320, "dark", true]]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
+    await page.goto("recipes/?audit=product-leaders");
+    if (enlarged) await page.addStyleTag({ content: "html { font-size: 200% !important; } * { line-height:1.5 !important; letter-spacing:.12em !important; word-spacing:.16em !important; } p { margin-bottom:2em !important; }" });
+    await page.evaluate(() => document.fonts.ready);
+    const rows = await page.locator('.recipe-record-product:visible').evaluateAll(links => links.map(link => {
+      const label = link.querySelector('.recipe-record-product__label'), price = link.querySelector('.recipe-record-product__price');
+      const box = link.getBoundingClientRect(), nameBox = label.getBoundingClientRect(), priceBox = price.getBoundingClientRect();
+      return { href: link.href, name: label.textContent.trim(), price: price.textContent.trim(),
+        leader: getComputedStyle(link, '::before').content, border: getComputedStyle(link, '::before').borderBottomStyle,
+        stacked: priceBox.top >= nameBox.bottom - 1, height: box.height,
+        overflow: Math.max(nameBox.right, priceBox.right) - box.right };
+    }));
+    expect(rows.length).toBeGreaterThan(4);
+    for (const row of rows) {
+      expect(row.name).not.toMatch(/в\s+каталоге/);
+      const product = catalog.flatMap(group => group.items).find(product => product.id === new URL(row.href).searchParams.get('product'));
+      expect(product, row.href).toBeTruthy();
+      expect(row.price.replace(/\s/g, '')).toBe(catalogPrice(product.price).replace(/\s/g, ''));
+      expect(row.height).toBeGreaterThanOrEqual(44);
+      expect(row.overflow).toBeLessThanOrEqual(1);
+      if (row.stacked) expect(row.leader).toBe('none');
+      else expect(row.border).toBe('dotted');
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    await page.locator('[data-recipe-material="619"] .recipe-record-products').screenshot({ path: testInfo.outputPath(`products-${width}-${theme}.png`) });
+  }
+});
 
 test("a recipe belongs to recipes, keeps its old links and returns to its exact ingredient @recipes @journal", async ({ page, browser, baseURL }, testInfo) => {
   for (const [theme, width] of [["light", 1440], ["dark", 390], ["light", 320]]) {

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('action labels stay vertically centred in their touch targets across the site', async ({ page }, testInfo) => {
+test('action labels stay vertically centred and editorial harpoons stay beside their text @editorial-links', async ({ page }, testInfo) => {
   const evidence = [];
   for (const width of [1440, 1024, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 });
@@ -19,10 +19,15 @@ test('action labels stay vertically centred in their touch targets across the si
           boxes.push(...range.getClientRects());
         }
         const top = Math.min(...boxes.map(b => b.top)), bottom = Math.max(...boxes.map(b => b.bottom));
+        const firstLine = boxes.filter(b => Math.abs(b.top - top) < 2);
+        const singleLine = boxes.every(b => Math.abs(b.top - top) < 2);
+        const arrow = el.matches('.editorial-link') && el.querySelector('svg[viewBox="0 0 32 18"]');
         return { label: el.textContent.trim().replace(/\s+/g, ' '), height: box.height,
           offset: (top + bottom) / 2 - (box.top + box.bottom) / 2,
           clipped: top < box.top - 1 || bottom > box.bottom + 1,
-          lineHeight: parseFloat(css.lineHeight) };
+          lineHeight: parseFloat(css.lineHeight),
+          arrowGap: arrow && singleLine ? arrow.getBoundingClientRect().left - Math.max(...firstLine.map(b => b.right)) : null,
+          intendedGap: parseFloat(css.columnGap) };
       }));
       for (const reading of readings) {
         expect(reading.height, `${width} ${route} ${reading.label}`).toBeGreaterThanOrEqual(44);
@@ -30,6 +35,10 @@ test('action labels stay vertically centred in their touch targets across the si
         // their optical asymmetry, but not the former 10px top-pinned line.
         expect(Math.abs(reading.offset), `${width} ${route} ${reading.label}`).toBeLessThan(4);
         expect(reading.clipped, `${width} ${route} ${reading.label}`).toBe(false);
+        if (reading.arrowGap != null) {
+          expect(reading.arrowGap, `${width} ${route} ${reading.label}`).toBeGreaterThanOrEqual(0);
+          expect(reading.arrowGap, `${width} ${route} ${reading.label}`).toBeLessThanOrEqual(reading.intendedGap + 4);
+        }
       }
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth), `${width} ${route}`).toBeLessThanOrEqual(1);
       if (!route && width >= 1024) {

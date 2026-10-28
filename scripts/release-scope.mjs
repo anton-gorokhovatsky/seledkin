@@ -199,6 +199,15 @@ function onlyMenuEndPadding(before, after, selector) {
   return withoutEndPadding(before) === withoutEndPadding(after);
 }
 
+function onlyEditorialLinkAlignment(before, after, selector) {
+  if (selector.trim() !== '.editorial-link' || !before || !after) return false;
+  if ([...after.body.matchAll(/(^|[;\n])\s*justify-content\s*:\s*start\s*;/g)].length !== 1) return false;
+  const withoutAlignment = rule => rule.body
+    .replace(/(^|[;\n])\s*justify-content\s*:[^;{}]+;/g, '$1')
+    .split('\n').map(line => line.trim()).filter(Boolean).join('\n');
+  return withoutAlignment(before) === withoutAlignment(after);
+}
+
 function cssTags(before, after, recipeSheet = false) {
   try {
     const oldRules = cssRules(before), newRules = cssRules(after), tags = new Set();
@@ -206,6 +215,7 @@ function cssTags(before, after, recipeSheet = false) {
       if (oldRules.get(key)?.body === newRules.get(key)?.body) continue;
       for (const selector of (newRules.get(key) ?? oldRules.get(key)).selector.split(",")) {
         const tag = onlyMenuEndPadding(oldRules.get(key), newRules.get(key), selector) ? "@navigation"
+          : onlyEditorialLinkAlignment(oldRules.get(key), newRules.get(key), selector) ? "@editorial-links"
           : /^\s*\.delivery-waybill__price(?:\s+span)?\s*$/.test(selector) ? "@delivery"
           : /^\s*\.source-footer__(?:base|credit|legal)(?=[\s>.#[:]|$)/.test(selector) ? "@signature"
           : /^\s*\.source-footer__(?:content|details|portrait|postscript|channels)(?=[\s>.#[:]|$)/.test(selector) ? "@footer"

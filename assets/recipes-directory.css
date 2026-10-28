@@ -29,9 +29,17 @@
 .recipe-record-excerpt p { margin: 0 0 .85rem; text-wrap: pretty; }
 .recipe-record-excerpt p:last-child { margin-bottom: 0; }
 .recipe-record-read { margin-top: 1.25rem; }
-.recipe-record-products { display: grid; justify-items: start; gap: .5rem; margin-top: 1.25rem; }
-.recipe-record-product { display: flex; align-items: baseline; flex-wrap: wrap; gap: .2rem 1rem; min-height: 44px; padding-block: .3rem; color: var(--text-link); text-decoration: none; font-size: var(--text-interface); font-weight: 400; }
-.recipe-record-product__price { display: inline-flex; align-items: first baseline; gap: .65rem; color: var(--muted); }
+.recipe-record-products { container: recipe-products / inline-size; display: grid; gap: .5rem; margin-top: 1.25rem; }
+.recipe-record-product { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: first baseline; gap: .2rem .65rem; min-width: 0; min-height: 44px; padding-block: .3rem; color: var(--text-link); text-decoration: none; font-size: var(--text-interface); font-weight: 400; }
+.recipe-record-product::before { position: absolute; inset-inline: 0; top: calc(.3rem + .85em); border-bottom: 1px dotted var(--muted); content: ""; opacity: .55; pointer-events: none; }
+.recipe-record-product__label { position: relative; z-index: 1; min-width: 0; }
+.recipe-record-product__name { background: var(--paper); box-shadow: .65rem 0 0 var(--paper); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.recipe-record-product__price { position: relative; z-index: 1; display: inline-flex; align-items: first baseline; gap: .65rem; max-width: 100%; background: var(--paper); box-shadow: -.65rem 0 0 var(--paper); color: var(--muted); }
+@container recipe-products (max-width: 16em) {
+  .recipe-record-product { grid-template-columns: minmax(0, 1fr); gap: .35rem; }
+  .recipe-record-product::before { content: none; }
+  .recipe-record-product__price { justify-self: start; flex-wrap: wrap; box-shadow: none; }
+}
 .recipe-record-product:hover > span:first-child { color: var(--text-link); }
 @media (hover: hover) { .recipe-record-product:hover > span:first-child { text-decoration: underline; text-underline-offset: .2em; } }
 @media (width <= 46rem) {
