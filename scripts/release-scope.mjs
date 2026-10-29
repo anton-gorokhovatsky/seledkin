@@ -35,6 +35,49 @@ function onlyTypography(before, after) {
   return normalize(before) === normalize(after);
 }
 
+// The accepted about-page change moves one literal archive after the three
+// reasons. Reconstruct its old boundaries; no copy, markup or other order may change.
+function onlyAboutStoryOrder(before, after) {
+  if (before == null || after == null) return false;
+  const boundaries = {
+    founder: '<section class="founder-source" aria-labelledby="founder-title">',
+    talks: '<nav class="founder-source__sources source-shell" aria-labelledby="oleg-interviews-title">',
+    audioStart: '<!-- shared:audio-library:start -->',
+    audioEnd: '<!-- shared:audio-library:end -->',
+    reasons: '<section class="about-overview__reasons source-section" aria-labelledby="about-reasons-title">',
+    closing: '<section class="about-closing source-section" aria-labelledby="about-principle">',
+  };
+  const locate = html => {
+    const positions = {};
+    for (const [name, boundary] of Object.entries(boundaries)) {
+      const at = html.indexOf(boundary);
+      if (at < 0 || at !== html.lastIndexOf(boundary)) return null;
+      positions[name] = at;
+    }
+    return positions;
+  };
+  const old = locate(before), next = locate(after);
+  const inOrder = (positions, names) => names.every((name, i) => !i || positions[names[i - 1]] < positions[name]);
+  if (!old || !next || !inOrder(old, ['founder', 'talks', 'audioStart', 'audioEnd', 'reasons', 'closing'])
+    || !inOrder(next, ['founder', 'reasons', 'talks', 'audioStart', 'audioEnd', 'closing'])) return false;
+  const end = positions => positions.audioEnd + boundaries.audioEnd.length;
+  const trimCut = html => html.replace(/[ \t\r\n]+$/, '');
+  const oldSeam = before.slice(end(old), old.reasons);
+  if (!/^[ \t\r\n]*<\/section>[ \t\r\n]*$/.test(oldSeam)) return false;
+  const nextStory = after.slice(0, next.reasons);
+  const nextClose = nextStory.match(/[ \t\r\n]*<\/section>[ \t\r\n]*$/);
+  if (!nextClose || trimCut(nextStory.slice(0, nextClose.index)) !== trimCut(before.slice(0, old.talks))) return false;
+  return before.slice(old.talks, end(old)) === after.slice(next.talks, end(next))
+    && trimCut(before.slice(old.reasons, old.closing)) === trimCut(after.slice(next.reasons, next.talks))
+    && /^[ \t\r\n]*$/.test(after.slice(end(next), next.closing))
+    && before.slice(old.closing) === after.slice(next.closing);
+}
+
+export function typographyReleasePages(changes) {
+  return (changes ?? []).filter(({ path, before, after }) => !tooling.test(path) && path.endsWith('.html')
+    && before !== after && onlyTypography(before, after)).map(({ path }) => path);
+}
+
 function onlyMenuRoutes(before, after) {
   const regions = [
     [/(<nav aria-label="Меню сайта">)([\s\S]*?)(<\/nav>)/g,
@@ -238,6 +281,14 @@ function cssTags(before, after, recipeSheet = false) {
 
 export function scopedBrowserTags(changes) {
   if (!changes) return null;
+  const aboutMoves = changes.filter(({ path, before, after }) => path === 'about/index.html' && onlyAboutStoryOrder(before, after));
+  if (aboutMoves.length) {
+    const published = changes.filter(({ path }) => !tooling.test(path));
+    if (aboutMoves.length !== 1 || published.filter(({ path }) => path === 'about/index.html').length !== 1) return null;
+    const others = published.filter(change => change !== aboutMoves[0]);
+    if (!others.every(({ path, before, after }) => path.endsWith('.html') && onlyTypography(before, after))) return null;
+    return typographyReleasePages(others).length ? ['@about-story', '@typography'] : ['@about-story'];
+  }
   const tags = new Set();
   for (const { path, before, after } of changes) {
     if (tooling.test(path)) continue;
@@ -313,7 +364,8 @@ export const shouldPublish = (scope, requested = "auto") => requested !== "edito
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const changes = readReleaseChanges(process.argv[2]);
   const { scope, grep } = selectReleaseChecks(changes, process.argv[3]);
-  const pages = scope === "typography" ? changes.filter(({ path }) => !tooling.test(path)).map(({ path }) => path) : [];
+  const pages = scope === "typography" || (scope === "scoped" && grep.split("|").includes("@typography"))
+    ? typographyReleasePages(changes) : [];
   const ids = scope === "editorial" ? editorialReleaseIds(changes)
     : scope === "editorial-check" ? [String(JSON.parse(readFileSync(new URL("../content/journal.json", import.meta.url), "utf8"))[0].id)] : [];
   const output = `editorial_ids=${JSON.stringify(ids)}\nscope=${scope}\npublish_required=${shouldPublish(scope, process.argv[3])}\nbrowser_required=${["full", "editorial", "editorial-check", "typography", "scoped"].includes(scope)}\nbrowser_grep=${grep}\ntypography_pages=${JSON.stringify(pages)}\n`;

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { classifyRelease, readReleaseChanges, scopedBrowserTags, selectReleaseChecks } from "../scripts/release-scope.mjs";
+import { classifyRelease, readReleaseChanges, scopedBrowserTags, selectReleaseChecks, typographyReleasePages } from "../scripts/release-scope.mjs";
 import { readFileSync } from "node:fs";
 
 test("manual editorial selection cannot override content-only boundaries", () => {
@@ -30,6 +30,76 @@ test("the typographic gate cannot hide changes to words, attributes, code or CSS
   }
   assert.equal(classifyRelease([{ path: "recipes/index.html", before: original, after: original.replace("морепро", "морепро\u00ad") },
     { path: "assets/recipes-editorial.css" }]), "full");
+});
+
+const aboutStoryFixture = () => {
+  const head = '<html><head><link href="../assets/styles.css?v=same"></head><body><main>';
+  const story = '<section class="founder-source" aria-labelledby="founder-title"><div class="founder-source__inner source-shell"><h2 id="founder-title">Олег</h2><p>История лавки.</p></div>';
+  const archive = '<nav class="founder-source__sources source-shell" aria-labelledby="oleg-interviews-title"><h3 id="oleg-interviews-title">Разговоры с Олегом</h3><a href="https://example.com/interview">Полный разговор</a></nav>\n'
+    + '<!-- shared:audio-library:start --><section class="founder-source__library source-shell" aria-labelledby="oleg-audio-title"><h3 id="oleg-audio-title">Радиоархив</h3><img src="radio.webp" width="120" height="80" alt="Эфир"><ul><li id="audio-one"><a href="https://example.com/audio#t=1">О рыбе</a></li><li id="audio-two">Об икре</li></ul><script>const archive = true;</script></section><!-- shared:audio-library:end -->';
+  const reasons = '<section class="about-overview__reasons source-section" aria-labelledby="about-reasons-title"><h2 id="about-reasons-title">Три причины</h2><article>Первая причина</article><article>Вторая причина</article><article>Третья причина</article></section>';
+  const closing = '<section class="about-closing source-section" aria-labelledby="about-principle"><blockquote id="about-principle">Старая концовка</blockquote></section></main><footer>Контакты</footer></body></html>';
+  return { archive, reasons, closing,
+    before: `${head}${story}\n${archive}\n</section>\n\n${reasons}\n\n${closing}`,
+    after: `${head}${story}\n</section>\n\n${reasons}\n\n${archive}\n\n${closing}` };
+};
+
+const aboutStoryChange = after => {
+  const fixture = aboutStoryFixture();
+  return { path: 'about/index.html', before: fixture.before, after: after ?? fixture.after };
+};
+
+test('the accepted about order selects only its story check and preserves literal content', () => {
+  const change = aboutStoryChange();
+  assert.deepEqual(selectReleaseChecks([change]), { scope: 'scoped', grep: '@about-story' });
+  assert.deepEqual(scopedBrowserTags([change]), ['@about-story']);
+  assert.deepEqual(typographyReleasePages([change]), []);
+  const whitespace = change.after.replace('</div>\n</section>', '</div>\n\n    </section>')
+    .replace('\n<nav class=', '\n\n        <nav class=');
+  assert.deepEqual(scopedBrowserTags([aboutStoryChange(whitespace)]), ['@about-story']);
+  assert.equal(classifyRelease([{ path: 'about/index.html', before: change.after, after: change.before }]), 'full');
+  assert.deepEqual(selectReleaseChecks([change], 'full'), { scope: 'full', grep: '' });
+});
+
+test('about order combines only with typographic pages and reports those pages without about', () => {
+  const paths = ['index.html', 'recipes/index.html', 'journal/index.html', 'recipes/627/index.html',
+    'recipes/659/index.html', 'recipes/666/index.html', 'recipes/702/index.html'];
+  const copy = '<main><h1>Счастливой рыбалки</h1><a href="/catalog/">Цены</a></main>';
+  const typography = paths.map(path => ({ path, before: copy, after: copy.replace('Счастливой', 'Счаст\u00adливой') }));
+  const changes = [aboutStoryChange(), ...typography, { path: 'scripts/site-content.mjs' }, { path: 'tests/browser/about-story.spec.mjs' }];
+  assert.deepEqual(selectReleaseChecks(changes), { scope: 'scoped', grep: '@about-story|@typography' });
+  assert.deepEqual(typographyReleasePages(changes), paths);
+  assert.deepEqual(selectReleaseChecks(changes, 'editorial'), { scope: 'scoped', grep: '@about-story|@typography' });
+  const invalid = [copy.replace('рыбалки', 'готовки'), copy.replace('/catalog/', '/recipes/'),
+    copy.replace('h1>', 'h2>'), copy + '<p>Ещё текст</p>', null];
+  for (const after of invalid) assert.equal(classifyRelease([aboutStoryChange(), { ...typography[0], after }]), 'full');
+  assert.equal(classifyRelease([aboutStoryChange(), { path: 'new/index.html', after: copy }]), 'full');
+});
+
+test('about order never covers changed targets, copy, IDs, media, code, nested markup or neighbouring sections', () => {
+  const { after, archive, reasons, closing } = aboutStoryFixture();
+  const invalid = [after.replace('/interview', '/changed'), after.replace('Полный разговор', 'Новый разговор'),
+    after.replace('id="audio-one"', 'id="other"'), after.replace('radio.webp', 'other.webp'),
+    after.replace('width="120"', 'width="121"'), after.replace('archive = true', 'archive = false'),
+    after.replace('<ul>', '<ul style="display:none">'), after.replace('<li id="audio-one">', '<li id="audio-one"><em>'),
+    after.replace('История лавки.', 'Другая история.'), after.replace('Первая причина', 'Иная причина'),
+    after.replace('Старая концовка', 'Другая концовка'), after.replace('Контакты', 'Другие контакты'),
+    after.replace('styles.css?v=same', 'styles.css?v=changed'),
+    after.replace('\n\n' + closing, '\n<p>Extra HTML</p>\n' + closing),
+    after.replace(reasons, '<div>' + reasons + '</div>'),
+    after.replace(archive, archive + archive), after.replace(archive + '\n\n' + closing, closing + '\n' + archive),
+    after.replace('<article>Первая причина</article><article>Вторая причина</article>', '<article>Вторая причина</article><article>Первая причина</article>')];
+  for (const changed of invalid) assert.equal(classifyRelease([aboutStoryChange(changed)]), 'full');
+  assert.equal(classifyRelease([aboutStoryChange(), aboutStoryChange()]), 'full');
+});
+
+test('the about allowance cannot combine with even otherwise scoped runtime or style changes', () => {
+  for (const change of [
+    { path: 'assets/mobile-hero.js', before: 'old();', after: 'changed();' },
+    { path: 'assets/styles.css', before: '.catalog-order{gap:1rem}', after: '.catalog-order{gap:2rem}' },
+    { path: 'assets/new.webp', before: 'old', after: 'new' },
+    { path: 'catalog/index.html', before: '<main>Каталог</main>', after: '<main>Новый каталог</main>' },
+  ]) assert.equal(classifyRelease([aboutStoryChange(), change]), 'full');
 });
 
 test("a shared link destination uses the short gate even when generated on every page", () => {

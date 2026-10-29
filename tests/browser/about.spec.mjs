@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("the shop's story introduces its owner, keeps whole photographs and follows one reading order", async ({ page }) => {
+test("the shop's story introduces its owner, keeps whole photographs and follows one reading order @about-story", async ({ page }) => {
   for (const theme of ["light", "dark"]) {
     for (const [width, enlarged] of [[1440, false], [980, false], [390, false], [320, true]]) {
       await page.setViewportSize({ width, height: 900 });
@@ -24,7 +24,7 @@ test("the shop's story introduces its owner, keeps whole photographs and follows
           overflow: document.documentElement.scrollWidth > innerWidth,
         };
       });
-      expect(story.sections).toHaveLength(4);
+      expect(story.sections).toHaveLength(5);
       for (let i = 1; i < story.sections.length; i += 1) {
         expect(story.sections[i].y).toBeGreaterThanOrEqual(story.sections[i - 1].bottom);
       }
