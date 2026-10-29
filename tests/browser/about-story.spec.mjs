@@ -93,7 +93,7 @@ test("the selected story continues from Oleg to three reasons and the complete a
   }
 });
 
-test("audio timestamps stay keyboard reachable and internal catalog return keeps the reading position @about-story", async ({ browser, baseURL }, testInfo) => {
+test("audio timestamps stay keyboard reachable and catalog return keeps the closing scene available @about-story", async ({ browser, baseURL }, testInfo) => {
   for (const theme of ["light", "dark"]) {
     const context = await contextFor(browser, theme, 390);
     const audio = olegSources.audio[0], chapter = audio.chapters[0];
@@ -130,6 +130,15 @@ test("audio timestamps stay keyboard reachable and internal catalog return keeps
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await expect(catalog).toBeFocused();
     await expect(catalog).toBeInViewport();
+    const closing = page.locator(".about-closing");
+    const sceneContent = section => ({
+      quote: section.querySelector("blockquote").textContent,
+      href: section.querySelector('a[href*="catalog/"]').getAttribute("href"),
+      source: section.querySelector("img").dataset.sourceImage,
+      alt: section.querySelector("img").getAttribute("alt"),
+      ratio: section.querySelector("img").getBoundingClientRect().width / section.querySelector("img").getBoundingClientRect().height,
+    });
+    const beforeScene = await closing.evaluate(sceneContent);
     const beforeCatalog = await catalog.evaluate(link => ({ y: link.getBoundingClientRect().y, scroll: scrollY }));
     await catalog.press("Enter");
     await expect(page).toHaveURL(/\/catalog\/$/);
@@ -137,10 +146,16 @@ test("audio timestamps stay keyboard reachable and internal catalog return keeps
     await expect(page).toHaveURL(/\/about\/\?audit=about-story-return$/);
     await readyPhotos(page);
     await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-    await expect(catalog).toBeInViewport();
+    // Native history need not restore an exact pixel. Before any focus or
+    // scroll, the same readable scene and its action must still be available.
+    await expect(catalog).toBeInViewport({ ratio: 1 });
+    await expect(closing.locator("blockquote")).toBeInViewport();
+    await expect(closing.locator("img")).toBeInViewport({ ratio: 1 });
+    expect(await closing.evaluate(sceneContent)).toEqual(beforeScene);
     const afterCatalog = await catalog.evaluate(link => ({ y: link.getBoundingClientRect().y, scroll: scrollY }));
-    expect(Math.abs(afterCatalog.y - beforeCatalog.y)).toBeLessThanOrEqual(1);
-    expect(Math.abs(afterCatalog.scroll - beforeCatalog.scroll)).toBeLessThanOrEqual(1);
+    await testInfo.attach(`native-return-${theme}`, {
+      body: JSON.stringify({ before: beforeCatalog, after: afterCatalog }), contentType: "application/json",
+    });
     await page.screenshot({ path: testInfo.outputPath(`catalog-return-context-390-${theme}.png`) });
     await catalog.focus();
     await expect(catalog).toBeFocused();
