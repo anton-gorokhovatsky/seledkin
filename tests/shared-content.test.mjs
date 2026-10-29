@@ -3,8 +3,51 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
-import { entries, journalEntries, renderJournal, renderMenu, renderFooter, renderTheme, renderJournalPage } from "../scripts/site-content.mjs";
+import { entries, journalEntries, homeJournalEntries, mobileHomeEntries, selectHomeEntries, resolveHomeProduct, renderMobileHero, renderJournal, renderMenu, renderFooter, renderTheme, renderJournalPage } from "../scripts/site-content.mjs";
+import { checkHomePreviews } from "../scripts/check-editorial-release.mjs";
 import { isSocialTagRow } from "./helpers/editorial-prose.mjs";
+
+test("every approved mobile candidate resolves to a current exact product and its source photo", () => {
+  for (const entry of entries.filter(entry => entry.mobileHero.eligible)) {
+    const { product } = resolveHomeProduct(entry);
+    const html = renderMobileHero([entry]);
+    assert.ok(product.price, String(entry.id));
+    assert.ok(html.includes(`data-product-id="${product.id}"`), String(entry.id));
+    assert.ok(html.includes(`data-source-image="assets/${entry.image}"`), String(entry.id));
+  }
+  const mixed = entries.find(entry => entry.catalogProductIds?.length > 1);
+  assert.throws(() => resolveHomeProduct({ ...mixed, mobileHero: { eligible: true }, heroOrderName: "товар" }), /needs a current product/);
+  const explicit = { ...mixed, mobileHero: { eligible: true, productId: mixed.catalogProductIds[1] }, heroOrderName: "товар" };
+  assert.equal(resolveHomeProduct(explicit).product.id, mixed.catalogProductIds[1]);
+});
+
+test("both committed homepages use fresh source records according to their explicit scenarios", () => {
+  assert.deepEqual(homeJournalEntries.map(entry => entry.id), journalEntries.slice(0, 5).map(entry => entry.id));
+  assert.deepEqual(mobileHomeEntries.map(entry => entry.id), entries.filter(entry => entry.mobileHero.eligible).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5).map(entry => entry.id));
+  const recipeEntry = entries.find(entry => recipeForEntry(entry.id));
+  const promoted = selectHomeEntries(entries.map(entry => entry === recipeEntry ? { ...entry, date: "2099-01-01", mobileHero: { eligible: true, reason: "A suitable product photograph within a recipe" } } : entry));
+  assert.equal(promoted.mobile[0].id, recipeEntry.id);
+  assert.ok(!promoted.desktop.some(entry => entry.id === recipeEntry.id));
+  const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+  checkHomePreviews(html);
+  const [first] = mobileHomeEntries;
+  const stale = html.replace(`data-journal-id="${first.id}"`, 'data-journal-id="stale-mobile-record"');
+  assert.throws(() => checkHomePreviews(stale), /Mobile homepage selection is stale/);
+  const oldPhoto = html.replace(/(<!-- shared:mobile-hero:start -->[\s\S]*?data-source-image=")[^"]+/, '$1assets/stale-photo.jpg');
+  assert.throws(() => checkHomePreviews(oldPhoto), /Mobile photo differs/);
+  const future = { ...first, id: 99999 };
+  assert.match(renderMobileHero([future]), /data-journal-id="99999"/);
+  assert.match(renderJournal([future], "hero"), /data-entry-id="99999"/);
+  assert.throws(() => renderMobileHero([{ ...future, catalogProductIds: [] }]), /needs a current product/);
+  const desktopOnly = { ...future, date: "2099-01-01", mobileHero: { eligible: false, reason: "A shop story without a single product photograph" } };
+  const selected = selectHomeEntries([desktopOnly, ...entries]);
+  assert.equal(selected.desktop[0].id, future.id);
+  assert.equal(selected.mobile[0].id, first.id);
+  assert.throws(() => selectHomeEntries([{ ...future, mobileHero: undefined }]), /Review mobile homepage suitability/);
+  const story = renderJournal([{ ...desktopOnly, editorialOnly: true, product: undefined, catalogProductIds: [], body: "<p>История лавки.</p>" }], "article");
+  assert.ok(story.includes("Написать Олегу"));
+  assert.ok(!story.includes("undefined"));
+});
 
 test("committed shared regions are current and building twice is unnecessary", () => {
   // The check regenerates every shared region in memory and compares exact bytes.

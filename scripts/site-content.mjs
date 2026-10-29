@@ -26,6 +26,32 @@ export const entries = JSON.parse(read("content/journal.json")).map(entry => ({
 }));
 
 export const journalEntries = entries.filter(entry => !recipeForEntry(entry.id));
+// One source, two intentional scenarios: journal stories on desktop and the
+// newest explicitly approved product photographs on mobile, including recipes.
+export function selectHomeEntries(list) {
+  const newest = [...list].sort((a, b) => b.date.localeCompare(a.date));
+  for (const entry of newest) {
+    if (typeof entry.mobileHero?.eligible !== "boolean" || !entry.mobileHero.reason?.trim()) {
+      throw new Error(`Review mobile homepage suitability for publication ${entry.id}`);
+    }
+    if (entry.editorialOnly && entry.mobileHero.eligible) throw new Error(`A non-product story cannot enter the mobile product gallery: ${entry.id}`);
+  }
+  return { desktop: newest.filter(entry => !recipeForEntry(entry.id)).slice(0, 5),
+    mobile: newest.filter(entry => entry.mobileHero.eligible).slice(0, 5) };
+}
+export const { desktop: homeJournalEntries, mobile: mobileHomeEntries } = selectHomeEntries(entries);
+
+export function resolveHomeProduct(entry) {
+  const recipe = recipeForEntry(entry.id);
+  const ids = recipe ? recipe.products.map(selection => resolveProduct(selection).product.id) : entry.catalogProductIds ?? [];
+  const id = entry.mobileHero?.productId ?? (ids.length === 1 ? ids[0] : null);
+  const category = catalog.find(category => category.items.some(product => product.id === id));
+  const product = category?.items.find(product => product.id === id);
+  if (!id || !ids.includes(id) || !product?.price || !entry.heroOrderName?.trim()) {
+    throw new Error(`Homepage publication ${entry.id} needs a current product and order caption`);
+  }
+  return { product, category: category.slug };
+}
 
 const escape = value => String(value).replaceAll("&", "&amp;").replaceAll('"', "&quot;")
   .replaceAll("<", "&lt;").replaceAll(">", "&gt;");
@@ -191,14 +217,17 @@ export function image(entry, root, sizes, deferred = false, hero = false) {
   return `<img ${attrs} sizes="${sizes}" data-source-image="${source}" decoding="async" alt="${entry.alt}" width="${width}" height="${height}"${hero ? (deferred ? "" : ' fetchpriority="high"') : ' loading="lazy"'} />`;
 }
 
-export function renderMobileHero() {
-  const photos = JSON.parse(read("content/mobile-hero.json"))
-    .filter(photo => currentSelections([photo.product]).length);
+export function renderMobileHero(list = mobileHomeEntries) {
+  const photos = list.map(entry => {
+    const { product, category } = resolveHomeProduct(entry);
+    return { ...entry, item: product, category, orderName: entry.heroOrderName };
+  });
+  if (!photos.length) throw new Error("Homepage product selection is empty");
   const arrow = '<svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><use href="#icon-harpoon"></use></svg>';
   const prints = photos.map((photo, i) => {
-    const { product } = resolveProduct(photo.product);
+    const product = photo.item;
     if (!product.id) throw new Error(`Hero product needs a stable anchor: ${product.name}`);
-    const href = productCatalogHref(photo.product, "", "afisha");
+    const href = productHref(product, "", "afisha");
     const links = orderLinks(product);
     if (!photo.orderName) throw new Error(`Hero product needs an order label: ${product.name}`);
     const variants = media.filter(item => item.source === photo.image && item.width > 32);
@@ -209,22 +238,22 @@ export function renderMobileHero() {
       const srcset = img.match(/srcset="([^"]+)"/)[1];
       img = `<picture><source media="(max-width: 61.1875rem)" srcset="${srcset}">${img.replace(/ srcset="[^"]+"/, "").replace(/src="[^"]+"/, `src="assets/${photo.image.replace(/\.jpg$/, "-32.webp")}"`)}</picture>`;
     }
-    return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-caption="${text(product.name)}" data-category="${photo.product.category}" data-product-id="${product.id}" data-source="https://t.me/kapitanseledkin/${photo.id}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}" data-order-label="${text(`Заказать ${photo.orderName}`)}" data-telegram="${escape(links.telegram)}" data-whatsapp="${escape(links.whatsapp)}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
+    return `              <span class="afisha__print" style="--photo-ratio: ${width} / ${height}" data-position="${i}" data-journal-id="${photo.id}" data-caption="${text(product.name)}" data-category="${photo.category}" data-product-id="${product.id}" data-source="${escape(photo.source?.url ?? `https://t.me/kapitanseledkin/${photo.id}`)}" data-href="${escape(href)}" data-price="${escape(catalogPrice(product.price))}" data-order-label="${text(`Заказать ${photo.orderName}`)}" data-telegram="${escape(links.telegram)}" data-whatsapp="${escape(links.whatsapp)}"${i ? ' hidden aria-hidden="true"' : ""}>${img}</span>`;
   }).join("\n");
-  const first = resolveProduct(photos[0].product).product;
-  const firstHref = productCatalogHref(photos[0].product, "", "afisha");
+  const first = photos[0].item;
+  const firstHref = productHref(first, "", "afisha");
   const firstOrder = orderLinks(first);
   // Overlapping hidden variants reserve the real maximum at every text size and width.
   const captionSizes = photos.map(photo => {
-    const { product } = resolveProduct(photo.product);
+    const product = photo.item;
     return `<span class="afisha__caption-size" aria-hidden="true"><span>${text(product.name)}</span><span>${escape(catalogPrice(product.price))}</span></span>`;
   }).join("");
   const orderSizes = photos.map(photo => `<span class="afisha__order-label-size" aria-hidden="true">${text(`Заказать ${photo.orderName}`)}</span>`).join("");
-  return `          <div class="afisha" data-product-name="${text(first.name)}" data-product-category="${photos[0].product.category}" data-product-id="${first.id}" data-photo-index="1">
+  return `          <div class="afisha" data-product-name="${text(first.name)}" data-product-category="${photos[0].category}" data-product-id="${first.id}" data-photo-index="1">
             <div class="afisha__brand brand-jelly brand-jelly--sea"><img src="assets/logo-redrawn-sea.svg" alt="Рыбная лавка капитана Селедкина" width="3600" height="1784"></div>
             <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каж&shy;дый день,</em> море&shy;про&shy;дукты и&nbsp;рыб&shy;ные дели&shy;ка&shy;тесы в&nbsp;Мос&shy;кве</p>
             <figure class="afisha__gallery">
-              <a class="afisha__frame" href="${escape(firstHref)}" aria-label="Открыть ${text(photos[0].caption)} в каталоге">
+              <a class="afisha__frame" href="${escape(firstHref)}" aria-label="Открыть ${text(first.name)} в каталоге">
 ${prints}
               </a>
               <figcaption>
@@ -368,13 +397,14 @@ export function renderJournal(list, view) {
     const source = entry.source?.url ?? `https://t.me/kapitanseledkin/${id}`;
     const recipe = recipeForEntry(id);
     const kind = recipe ? (recipe.kind === "recipe" ? "Рецепт" : "Совет") : "Судовой журнал";
-    const inquiry = `Здравствуйте! Подскажите, пожалуйста, есть ли в наличии:\n${entry.product}\n${recipe ? "Из материала Олега" : "Увидел(а) в Судовом журнале"}: ${source}`;
+    const inquiry = entry.editorialOnly ? `Здравствуйте! Пишу по поводу записи Олега: ${source}`
+      : `Здравствуйте! Подскажите, пожалуйста, есть ли в наличии:\n${entry.product}\n${recipe ? "Из материала Олега" : "Увидел(а) в Судовом журнале"}: ${source}`;
     const telegram = !entry.source || entry.source.name === "Телеграм";
     const archiveNote = entry.source?.excerpt
       ? `<p class="recipe-archive-note">Рецепт из авторской публикации Олега. <a href="${escape(source)}">Полный текст в ${text(entry.source.name)}</a>.</p>`
       : recipe ? `<p class="recipe-archive-note">Цены и условия в авторском тексте относятся к дате публикации. Действующие цены — <a href="../../catalog/">в каталоге</a>.</p>` : "";
     const actions = `<div class="ship-log-entry__actions">
-      <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}"><span class="source-button__label">Спросить о наличии<span class="visually-hidden"> в Телеграме: ${text(entry.product)}</span></span></a>
+      <a class="source-button source-button--telegram" href="https://t.me/+79166751452?text=${encodeURIComponent(plain(inquiry))}"><span class="source-button__label">${entry.editorialOnly ? "Написать Олегу в Телеграме" : `Спросить о наличии<span class="visually-hidden"> в Телеграме: ${text(entry.product)}</span>`}</span></a>
     </div>`;
     const reading = (body, { first = true, last = true, heading = "" } = {}) => `<div class="ship-log-entry__content">
       ${first && entry.imageCaption ? `<p class="source-caption">${text(entry.imageCaption)}</p>` : ""}${heading}${first ? archiveNote : ""}

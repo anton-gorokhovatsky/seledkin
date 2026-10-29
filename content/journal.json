@@ -10,7 +10,11 @@
     "catalogProductIds": [
       "smoked-vendace"
     ],
-    "heroOrderName": "ряпушку холодного копчения"
+    "heroOrderName": "ряпушку холодного копчения",
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    }
   },
   {
     "id": 702,
@@ -23,7 +27,11 @@
     "catalogProductIds": [
       "prepared-fish-012"
     ],
-    "heroOrderName": "рулет из брюшков осетра"
+    "heroOrderName": "рулет из брюшков осетра",
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    }
   },
   {
     "id": 701,
@@ -32,7 +40,12 @@
     "product": "Печень трески по-мурмански, АО «Архангельский траловый флот», банка 230 г",
     "alt": "Жёлтые банки печени трески «по-мурмански» Архангельского тралового флота в коробке",
     "image": "journal-701.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "Конкретные консервы на фото, точная банка 230 г и действующая цена; рецепт не мешает товарному сценарию."
+    },
+    "heroOrderName": "печень трески по-мурмански"
   },
   {
     "id": 700,
@@ -45,7 +58,11 @@
     "catalogProductIds": [
       "trout-roe"
     ],
-    "heroOrderName": "икру форели"
+    "heroOrderName": "икру форели",
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    }
   },
   {
     "id": 699,
@@ -58,7 +75,11 @@
     "catalogProductIds": [
       "chilled-trout"
     ],
-    "heroOrderName": "охлаждённую форель"
+    "heroOrderName": "охлаждённую форель",
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    }
   },
   {
     "id": 698,
@@ -71,7 +92,11 @@
     "catalogProductIds": [
       "caspian-herring"
     ],
-    "heroOrderName": "каспийский залом"
+    "heroOrderName": "каспийский залом",
+    "mobileHero": {
+      "eligible": true,
+      "reason": "Олег объясняет, что целая рыба показана после разделки; ссылка ведёт к целому залому."
+    }
   },
   {
     "id": 697,
@@ -84,7 +109,11 @@
     "catalogProductIds": [
       "eel-rillettes"
     ],
-    "heroOrderName": "риеты и паштеты из угря"
+    "heroOrderName": "риеты и паштеты из угря",
+    "mobileHero": {
+      "eligible": true,
+      "reason": "Одна каноническая линейка риетов и паштетов, одинаковые фасовка и цена; отдельный вкус не обещается."
+    }
   },
   {
     "id": 696,
@@ -97,7 +126,11 @@
     "catalogProductIds": [
       "caspian-herring"
     ],
-    "heroOrderName": "каспийский залом"
+    "heroOrderName": "каспийский залом",
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    }
   },
   {
     "id": 695,
@@ -109,7 +142,12 @@
     "archiveImageWidth": 200,
     "catalogProductIds": [
       "smoked-trout-fillet-skinless"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "филе форели холодного копчения без кожи"
   },
   {
     "id": 694,
@@ -121,7 +159,12 @@
     "archiveImageWidth": 200,
     "catalogProductIds": [
       "smoked-vendace"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "ряпушку холодного копчения"
   },
   {
     "id": 693,
@@ -133,7 +176,12 @@
     "archiveImageWidth": 200,
     "catalogProductIds": [
       "salmon-steak"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "стейк лосося"
   },
   {
     "id": 692,
@@ -142,7 +190,12 @@
     "product": "Филе трески судовой заморозки",
     "alt": "Кусочки филе трески, подрумяненные на&nbsp;сковороде",
     "image": "journal-692.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "Олег связывает показанный пример приготовления с одним продаваемым филе трески; фото не изображает замороженный продукт."
+    },
+    "heroOrderName": "филе трески"
   },
   {
     "id": 691,
@@ -154,7 +207,12 @@
     "archiveImageWidth": 200,
     "catalogProductIds": [
       "iran-trout"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "радужную форель из Ирана"
   },
   {
     "id": 690,
@@ -167,7 +225,11 @@
     "catalogProductIds": [
       "smoked-mackerel",
       "prepared-fish-011"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": false,
+      "reason": "Два способа копчения на одном фото, разные позиции и действующие цены."
+    }
   },
   {
     "id": 689,
@@ -179,7 +241,12 @@
     "archiveImageWidth": 200,
     "catalogProductIds": [
       "frozen-fish-005"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "Олег прямо указывает, что на фото чир; его точная позиция и цена известны."
+    },
+    "heroOrderName": "чира"
   },
   {
     "id": 688,
@@ -191,7 +258,12 @@
     "archiveImageWidth": 200,
     "catalogProductIds": [
       "chicken-liver-pate"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "паштет из куриной печени"
   },
   {
     "id": 687,
@@ -204,7 +276,11 @@
     "catalogProductIds": [
       "fish-soup",
       "sturgeon-soup"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": false,
+      "reason": "Несколько видов ухи и две цены; фото не обозначает одну товарную позицию."
+    }
   },
   {
     "id": 686,
@@ -216,7 +292,12 @@
     "archiveImageWidth": 200,
     "catalogProductIds": [
       "smoked-goby"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "черноморского бычка холодного копчения"
   },
   {
     "id": 685,
@@ -228,7 +309,12 @@
     "archiveImageWidth": 200,
     "catalogProductIds": [
       "smoked-trout-fillet-skin"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "филе форели холодного копчения на коже"
   },
   {
     "id": 684,
@@ -240,7 +326,12 @@
     "archiveImageWidth": 600,
     "catalogProductIds": [
       "smoked-roe-flounder"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "икряную камбалу холодного копчения"
   },
   {
     "id": 683,
@@ -252,7 +343,12 @@
     "archiveImageWidth": 600,
     "catalogProductIds": [
       "danish-herring-fillet"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "филе сельди «По-Датски»"
   },
   {
     "id": 682,
@@ -264,7 +360,12 @@
     "archiveImageWidth": 600,
     "catalogProductIds": [
       "frozen-fish-017"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "тугунка"
   },
   {
     "id": 681,
@@ -276,7 +377,12 @@
     "archiveImageWidth": 600,
     "catalogProductIds": [
       "coho-roe-2026"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "икру дикого кижуча"
   },
   {
     "id": 680,
@@ -288,7 +394,12 @@
     "archiveImageWidth": 600,
     "catalogProductIds": [
       "salted-red-mullet"
-    ]
+    ],
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "малосольную барабулю"
   },
   {
     "id": 664,
@@ -297,7 +408,12 @@
     "product": "Анчоусы из Туниса",
     "alt": "Банки анчоусов с красными крышками",
     "image": "journal-664.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "анчоусы"
   },
   {
     "id": 627,
@@ -306,7 +422,12 @@
     "product": "Щучья икра",
     "alt": "Банки щучьей икры с жёлтыми крышками",
     "image": "journal-627.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "икру щуки"
   },
   {
     "id": 619,
@@ -320,7 +441,11 @@
       "name": "Телеграм",
       "url": "https://t.me/kapitanseledkin/619"
     },
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": false,
+      "reason": "Обзор нескольких видов и фасовок икры с разными ценами."
+    }
   },
   {
     "id": 608,
@@ -329,7 +454,12 @@
     "product": "Аргентинский хек, тушка",
     "alt": "Тушки хека, проложенные голубой плёнкой; кадр из авторского видео",
     "image": "journal-608.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "хека"
   },
   {
     "id": 588,
@@ -338,7 +468,11 @@
     "product": "Синекорый палтус",
     "alt": "Палтус с белым мясом и тёмной кожей на разделочной доске",
     "image": "journal-588.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": false,
+      "reason": "Сравниваются целый палтус и стейки с разными ценами; нужна история выбора."
+    }
   },
   {
     "id": 574,
@@ -347,7 +481,12 @@
     "product": "Мясо чилийских мидий",
     "alt": "Очищенное мясо мидий в коробке",
     "image": "journal-574.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "мясо мидий"
   },
   {
     "id": 556,
@@ -356,7 +495,12 @@
     "product": "Филе судака",
     "alt": "Филе судака в руке на фоне деревьев",
     "image": "journal-556.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "филе судака"
   },
   {
     "id": 464,
@@ -365,7 +509,12 @@
     "product": "Очищенная патагонская креветка",
     "alt": "Очищенные патагонские креветки",
     "image": "journal-464.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "патагонские креветки"
   },
   {
     "id": 453,
@@ -374,7 +523,12 @@
     "product": "Мурманская камбала",
     "alt": "Камбала с отделённым филе и нож на зелёной доске",
     "image": "journal-453.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "камбалу"
   },
   {
     "id": 423,
@@ -383,7 +537,11 @@
     "product": "Северная креветка в/м с икрой",
     "alt": "Креветочная икра на белой тарелке",
     "image": "journal-423.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": false,
+      "reason": "На фото готовые фаршированные яйца, а в каталоге продаётся креветка для рецепта."
+    }
   },
   {
     "id": 412,
@@ -392,7 +550,12 @@
     "product": "Северная креветка в/м",
     "alt": "Варёно-мороженые северные креветки в коробке",
     "image": "journal-412.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "северную креветку"
   },
   {
     "id": 382,
@@ -401,7 +564,11 @@
     "product": "Камбала белобрюшка",
     "alt": "Камбала белобрюшка целиком на жёлтом фоне",
     "image": "journal-382.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": false,
+      "reason": "Для архивной камбалы белобрюшки нет подтверждённой точной действующей позиции."
+    }
   },
   {
     "id": 378,
@@ -410,7 +577,12 @@
     "product": "Филе тунца AAA",
     "alt": "Красное филе тунца, нарезанное поперёк",
     "image": "journal-378.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "филе тунца"
   },
   {
     "id": 377,
@@ -419,7 +591,11 @@
     "product": "Осьминог, Марокко",
     "alt": "Осьминог с чесноком в кастрюле",
     "image": "journal-377.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": false,
+      "reason": "На фото готовое блюдо в кастрюле; товар каталога — осьминог для приготовления."
+    }
   },
   {
     "id": 375,
@@ -428,7 +604,12 @@
     "product": "Стейк синекорого палтуса",
     "alt": "Белое филе рыбы в ладони на зелёном фоне",
     "image": "journal-375.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "стейк палтуса"
   },
   {
     "id": 360,
@@ -437,7 +618,11 @@
     "product": "Питерская корюшка",
     "alt": "Четыре этапа жарки корюшки «солнышком» на авторском снимке",
     "image": "journal-360.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": false,
+      "reason": "Коллаж этапов приготовления, а не одна товарная фотография."
+    }
   },
   {
     "id": 150,
@@ -446,7 +631,11 @@
     "product": "Горбуша-серебряночка",
     "alt": "Куски горбуши с серебристой кожей на разделочной доске",
     "image": "journal-150.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": false,
+      "reason": "У исторической горбуши нет действующей цены каталога."
+    }
   },
   {
     "id": 138,
@@ -455,7 +644,12 @@
     "product": "Мясо чилийских мидий",
     "alt": "Мясо мидий в синем лотке",
     "image": "journal-138.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "мясо мидий"
   },
   {
     "id": 120,
@@ -464,7 +658,12 @@
     "product": "Филе аргентинского хека",
     "alt": "Филе хека на белой тарелке",
     "image": "journal-120.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "филе хека"
   },
   {
     "id": 73,
@@ -473,7 +672,12 @@
     "product": "Северная креветка в/м",
     "alt": "Крупный план северных креветок с икрой",
     "image": "journal-73.jpg",
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": true,
+      "reason": "На фото узнаваемый товар из одной точной действующей позиции каталога."
+    },
+    "heroOrderName": "северную креветку"
   },
   {
     "id": "facebook-2021-12-14-mussels",
@@ -487,7 +691,11 @@
       "url": "https://www.facebook.com/kapitanseledkin/posts/pfbid02PPp7m7HDbdAjLgjcMANfDeHmo1vVT9rQpi7CG8vor8PSJzbSvyLkSXDHNmi1bTYal",
       "excerpt": true
     },
-    "archiveImageWidth": 200
+    "archiveImageWidth": 200,
+    "mobileHero": {
+      "eligible": false,
+      "reason": "Архив Facebook с несколькими ингредиентами; не товарный анонс телеграм-канала."
+    }
   },
   {
     "id": "facebook-2018-12-15-nerka",
@@ -499,6 +707,10 @@
     "source": {
       "name": "Facebook",
       "url": "https://www.facebook.com/photo?fbid=2199877076729662&set=a.608909054589732"
+    },
+    "mobileHero": {
+      "eligible": false,
+      "reason": "Архив Facebook и коллаж этапов обработки; остаётся советом в своём разделе."
     }
   },
   {
@@ -511,6 +723,10 @@
     "source": {
       "name": "Facebook",
       "url": "https://www.facebook.com/kapitanseledkin/posts/pfbid034L4Pxe3ranCyHypBRotLGXUHxFxvyq3wC5i3VtRLJGvpa9N5SroDQSYr1EB4mGEdl"
+    },
+    "mobileHero": {
+      "eligible": false,
+      "reason": "Архив Facebook без действующей цены точной позиции."
     }
   }
 ]

@@ -10,8 +10,8 @@ const publication = () => [
   { path: "content/journal.json", before: '[{"id":702}]', after: '[{"id":703,"catalogProductIds":["smoked-vendace"],"heroOrderName":"ряпушку"},{"id":702}]' },
   { path: "content/journal/703.html", after: "<p>Ряпушка</p>" },
   { path: "journal/703/index.html", after: "<h1>Ряпушка</h1>" },
-  { path: "index.html", before: ["journal-hero", "journal-hero-products", "journal-preview"].map(name => region(name, "old")).join(""),
-    after: ["journal-hero", "journal-hero-products", "journal-preview"].map(name => region(name, "new")).join("") },
+  { path: "index.html", before: ["journal-hero", "journal-hero-products", "journal-preview", "mobile-hero"].map(name => region(name, "old")).join(""),
+    after: ["journal-hero", "journal-hero-products", "journal-preview", "mobile-hero"].map(name => region(name, "new")).join("") },
 ];
 
 test("a post including its order block selects only its publication ID", () => {

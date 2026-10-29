@@ -3,6 +3,8 @@ import { test, expect } from "@playwright/test";
 import { createRequire } from "node:module";
 import { readFile } from "node:fs/promises";
 import { stubStoreMap } from "./map-fixture.mjs";
+import { mobileHomeEntries, resolveHomeProduct } from "../../scripts/site-content.mjs";
+const afishaProducts = mobileHomeEntries.map(entry => resolveHomeProduct(entry).product);
 const require = createRequire(import.meta.url);
 
 async function noOverflow(page, scenario = "") {
@@ -134,7 +136,7 @@ test("the mobile afisha leads directly to shopping and desktop journal controls 
     if (width < 980) {
       await expect(journal).toBeHidden();
       await expect(page.locator(".afisha")).toBeVisible();
-      await expect(page.locator(".afisha__frame")).toHaveAttribute("href", /#product-caspian-herring$/);
+      await expect(page.locator(".afisha__frame")).toHaveAttribute("href", new RegExp(`#product-${afishaProducts[0].id}$`));
       await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", "catalog/");
       const boundary = await page.locator(".source-hero").evaluate(e => e.getBoundingClientRect().bottom);
       expect((await page.locator("#assortment").boundingBox()).y).toBeCloseTo(boundary, 0);
@@ -401,8 +403,8 @@ test("320px reflow, enlarged text, custom spacing and contrast retain controls",
 test("a photographed product opens its own catalog position, price and order @afisha", async ({ page }) => {
   await page.goto("");
   const frame = page.locator(".afisha__frame");
-  const expected = ["Каспийский залом", "Икра форели", "Стейк лосося", "Филе форели холодного копчения без кожи", "Скумбрия горячего копчения"];
-  const orderNames = ["каспийский залом", "икру форели", "стейк лосося", "филе форели без кожи", "скумбрию горячего копчения"];
+  const expected = afishaProducts.map(product => product.name);
+  const orderNames = mobileHomeEntries.map(entry => entry.heroOrderName);
   const destinations = [];
   for (let i = 0; i < expected.length; i++) {
     await expect(page.locator(".afisha__count")).toHaveText(`${i + 1}/5`);

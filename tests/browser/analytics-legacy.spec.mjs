@@ -1,6 +1,8 @@
 import { catalogSize } from "../helpers/catalog.mjs";
 import { test, expect } from "@playwright/test";
 import { legacyRoutes } from "../../scripts/legacy-routes.mjs";
+import { mobileHomeEntries, resolveHomeProduct } from "../../scripts/site-content.mjs";
+import { typographText } from "../../assets/typography.js";
 
 async function publicFixture(page, baseURL, ordinary = true) {
   if (ordinary) await page.addInitScript(() => Object.defineProperty(navigator, "webdriver", { get: () => false }));
@@ -67,22 +69,23 @@ test("recipe product choices and exact catalog transitions are measured without 
 });
 
 test("afisha records the photographed product through catalog and order list @analytics", async ({ page, baseURL }) => {
+  const { product, category } = resolveHomeProduct(mobileHomeEntries[1]);
   await publicFixture(page, baseURL);
   await page.goto("https://ks.fish/");
   await expect.poll(() => page.evaluate(() => Array.isArray(window.goalCalls))).toBe(true);
   await page.locator(".afisha__change").click();
   await expect.poll(() => page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")?.[3].action)).toBe("preview");
-  expect(await page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")[3])).toMatchObject({context:"afisha",product:"Икра форели",method:"button",photo:2});
+  expect(await page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")[3])).toMatchObject({context:"afisha",product:typographText(product.name),product_id:product.id,method:"button",photo:2});
   await page.evaluate(() => document.addEventListener("click", event => { if (event.target.closest(".afisha__frame")) event.preventDefault(); }));
   const href = await page.locator(".afisha__frame").getAttribute("href");
   await page.locator(".afisha__frame").click();
-  expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").at(-1)[3])).toMatchObject({context:"afisha",action:"open_catalog",product:"Икра форели",photo:2});
+  expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select").at(-1)[3])).toMatchObject({context:"afisha",action:"open_catalog",product:typographText(product.name),product_id:product.id,photo:2});
   await page.goto(new URL(href, page.url()).href);
   await page.locator(".catalog-product:visible summary").click();
   await expect.poll(() => page.evaluate(() => window.goalCalls.find(call => call[2] === "product_select")?.[3].source)).toBe("afisha");
   await page.locator(".catalog-product:visible").locator("[data-order-add]").click();
   expect(await page.evaluate(() => window.goalCalls.filter(call => call[2] === "product_select" && call[3].action === "list_start").map(call => call[3]))).toEqual([
-    {context:"order_list", action:"list_start", product_id:"trout-roe", category:"caviar", count:1, source:"afisha"},
+    {context:"order_list", action:"list_start", product_id:product.id, category, count:1, source:"afisha"},
   ]);
   await page.locator("#order-list").scrollIntoViewIfNeeded();
   await page.evaluate(() => document.addEventListener("click", event => { if (event.target.closest('#order-list a[href^="https://wa.me"]')) event.preventDefault(); }));

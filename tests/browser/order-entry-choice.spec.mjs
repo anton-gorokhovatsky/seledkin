@@ -1,9 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { readFileSync } from "node:fs";
 import { catalog } from "../../assets/catalog-data.js";
 import { catalogPrice } from "../../assets/catalog-model.js";
-import { recipeForEntry } from "../../scripts/recipe-content.mjs";
-const currentJournal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8")).filter(entry => !recipeForEntry(entry.id)).slice(0, 5);
+import { homeJournalEntries as currentJournal, mobileHomeEntries, resolveHomeProduct } from "../../scripts/site-content.mjs";
+const currentProducts = mobileHomeEntries.map(entry => resolveHomeProduct(entry).product);
 
 test("desktop journal orders the pictured catalog product and clears the previous draft @catalog @hero-journal", async ({ page })=>{
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -76,7 +75,7 @@ test("mobile order keeps the pictured product through selection and messenger ha
   await expect(order).toHaveAttribute("open", "");
   await page.keyboard.press(testInfo.project.name === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab");
   await expect(order.getByRole("link").first()).toBeFocused();
-  const products = ["Каспийский залом", "Икра форели", "Стейк лосося", "Филе форели холодного копчения без кожи", "Скумбрия горячего копчения"];
+  const products = currentProducts.map(product => product.name);
   for (const name of products) {
     await expect(page.locator(".afisha__name")).toHaveText(name);
     const price = await page.locator(".afisha__price").textContent();
@@ -98,7 +97,7 @@ test("mobile order keeps the pictured product through selection and messenger ha
   await page.route("https://wa.me/**", route => route.fulfill({ contentType: "text/html", body: "Messenger destination" }));
   await order.locator(".afisha__order-whatsapp").click();
   await expect(page).toHaveURL(/^https:\/\/wa\.me\/79166751452\?text=/);
-  expect(new URL(page.url()).searchParams.get("text")).toContain("Стейк лосося");
+  expect(new URL(page.url()).searchParams.get("text")).toContain(products[2]);
 
   const fallback = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const plain = await fallback.newPage();
@@ -106,7 +105,7 @@ test("mobile order keeps the pictured product through selection and messenger ha
   await plain.locator(".afisha__order summary").click();
   for (const link of await plain.locator(".afisha__order a").all()) {
     await expect(link).toBeVisible();
-    expect(new URL(await link.getAttribute("href")).searchParams.get("text")).toContain("Каспийский залом");
+    expect(new URL(await link.getAttribute("href")).searchParams.get("text")).toContain(products[0]);
   }
   await fallback.close();
 });
@@ -124,7 +123,7 @@ test("afisha Telegram copying recovers and never keeps the previous photograph's
   await page.goto("?audit=order-entry");
   await page.locator(".afisha__order summary").press("Enter");
   await page.locator(".afisha__order-telegram").click();
-  await expect(page.getByRole("textbox", { name: "Текст для сообщения" })).toHaveValue(/Каспийский залом/);
+  await expect(page.getByRole("textbox", { name: "Текст для сообщения" })).toHaveValue(new RegExp(currentProducts[0].name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/gu, "\\s+")));
   await expect(page.locator(".afisha__order-status")).toContainText("Автоматическое копирование недоступно");
   await page.locator(".afisha__change").click();
   await expect(page.getByRole("textbox", { name: "Текст для сообщения" })).toBeHidden();
@@ -134,8 +133,9 @@ test("afisha Telegram copying recovers and never keeps the previous photograph's
   await page.locator(".afisha__order-telegram").click();
   await expect(page).toHaveURL(/^https:\/\/t\.me\/\+79166751452\?text=/);
   expect(copied).toHaveLength(1);
-  expect(copied[0]).toContain("Икра форели");
-  expect(copied[0]).not.toContain("Каспийский залом");
+  const plain = text => text.replace(/\s+/gu, " ");
+  expect(plain(copied[0])).toContain(plain(currentProducts[1].name));
+  if (!currentProducts[1].name.includes(currentProducts[0].name)) expect(plain(copied[0])).not.toContain(plain(currentProducts[0].name));
 });
 
 test("afisha order stays with its photo and remains readable at 320px with enlarged text @afisha", async ({ page }) => {

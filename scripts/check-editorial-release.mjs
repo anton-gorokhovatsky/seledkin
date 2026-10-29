@@ -3,7 +3,8 @@ import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { catalog, inventory } from "../assets/catalog-data.js";
-import { catalogPrice, productHref } from "../assets/catalog-model.js";
+import { catalogPrice, productHref, orderLinks } from "../assets/catalog-model.js";
+import { homeJournalEntries, mobileHomeEntries, resolveHomeProduct } from "./site-content.mjs";
 import { recipeForEntry, resolveProduct, editorialPath } from "./recipe-content.mjs";
 import { readReleaseChanges } from "./release-scope.mjs";
 import { catalogDataChanges, editorialReleaseIds } from "./editorial-release.mjs";
@@ -15,6 +16,28 @@ export const editorialText = text => text.replace(/<[^>]*>/g, "")
   .replace(/&shy;|\u00ad/g, "").replace(/(\d)[ \u00a0\u202f](?=\d{3}(?:\D|$))/g, "$1")
   .replace(/(?<=\d)–(?=\d)/g, "-").replace(/(\d)[ \u00a0\u202f]+%/g, "$1%")
   .replace(/[\s\u00a0\u202f]+/gu, " ").trim();
+
+export function checkHomePreviews(html, selection = { desktop: homeJournalEntries, mobile: mobileHomeEntries }) {
+  const region = name => html.match(new RegExp(`<!-- shared:${name}:start -->([\\s\\S]*?)<!-- shared:${name}:end -->`))?.[1] ?? "";
+  const desktop = region("journal-hero"), mobile = region("mobile-hero");
+  const ids = (source, attribute) => [...source.matchAll(new RegExp(`${attribute}="([^"]+)"`, "g"))].map(match => match[1]);
+  assert.deepEqual(ids(desktop, "data-entry-id"), selection.desktop.map(entry => String(entry.id)), "Desktop homepage selection is stale");
+  assert.deepEqual(ids(mobile, "data-journal-id"), selection.mobile.map(entry => String(entry.id)), "Mobile homepage selection is stale");
+  const escaped = value => value.replaceAll("&", "&amp;").replaceAll('"', "&quot;");
+  for (const entry of selection.desktop) {
+    const story = desktop.match(new RegExp(`<a[^>]*data-entry-id="${entry.id}"[\\s\\S]*?</a>`))?.[0] ?? "";
+    assert.ok(story.includes(`data-source-image="assets/${entry.image}"`), `Desktop photo differs: ${entry.id}`);
+  }
+  for (const entry of selection.mobile) {
+    const card = mobile.match(new RegExp(`<span class="afisha__print"[^>]*data-journal-id="${entry.id}"[^>]*>[\\s\\S]*?</span>`))?.[0] ?? "";
+    assert.ok(card.includes(`data-source-image="assets/${entry.image}"`), `Mobile photo differs: ${entry.id}`);
+    const { product } = resolveHomeProduct(entry);
+    const links = orderLinks(product);
+    for (const [name, value] of Object.entries({ "product-id": product.id, price: catalogPrice(product.price), href: productHref(product, "", "afisha"), telegram: links.telegram, whatsapp: links.whatsapp })) {
+      assert.ok(card.includes(`data-${name}="${escaped(value)}"`), `Mobile ${name} differs: ${entry.id}`);
+    }
+  }
+}
 
 export function checkEditorialRelease(ids, changes = []) {
   assert.ok(ids.length, "No publication IDs selected");
@@ -65,9 +88,18 @@ export function checkEditorialRelease(ids, changes = []) {
       assert.ok(!journal[index + 1] || entry.date >= journal[index + 1].date, `Journal dates are out of order after ${id}`);
     }
     const selected = recipe ? recipe.products.map(selection => resolveProduct(selection).product.id) : entry.catalogProductIds;
+    const inHero = homeJournalEntries.some(item => String(item.id) === id);
+    const inMobile = mobileHomeEntries.some(item => String(item.id) === id);
+    if (inHero || inMobile) {
+      checkHomePreviews(read("index.html"));
+    }
+    if (entry.editorialOnly === true) {
+      assert.ok(!recipe && !entry.mobileHero.eligible && !selected?.length && !entry.product,
+        `A non-product story must be explicitly desktop-only and have no selling product: ${id}`);
+      continue;
+    }
     assert.ok(selected?.length, `Link the publication to its exact catalog product: ${id}`);
-    const inHero = entries.filter(item => !recipeForEntry(item.id)).slice(0, 5).some(item => String(item.id) === id);
-    if (!recipe && inHero) assert.ok(entry.heroOrderName?.trim(), `Add the order caption to publication data: ${id}`);
+    if (entry.mobileHero.eligible) resolveHomeProduct(entry);
     for (const productId of selected) {
       const product = products.find(product => product.id === productId);
       assert.ok(product?.price && product.quantityUnit, `Missing current price or exact product ${id}: ${productId}`);

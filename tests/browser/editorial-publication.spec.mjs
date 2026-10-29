@@ -1,8 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { catalog } from "../../assets/catalog-data.js";
-import { catalogPrice } from "../../assets/catalog-model.js";
+import { catalogPrice, productHref } from "../../assets/catalog-model.js";
 import { editorialPath, recipeForEntry, resolveProduct } from "../../scripts/recipe-content.mjs";
+import { mobileHomeEntries, resolveHomeProduct } from "../../scripts/site-content.mjs";
 
 const entries = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8"));
 const ids = JSON.parse(process.env.EDITORIAL_IDS || JSON.stringify([entries[0].id])).map(String);
@@ -43,7 +44,48 @@ for (const entry of publications) {
       expect(target.height).toBeGreaterThanOrEqual(44);
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
       await page.screenshot({ path: testInfo.outputPath(`post-${entry.id}-${width}.png`) });
-      if (width !== 1440) return;
+      if (width !== 1440) {
+        const index = mobileHomeEntries.findIndex(item => item.id === entry.id);
+        if (index < 0) return;
+        const { product } = resolveHomeProduct(entry);
+        await page.goto("?audit=editorial-mobile-preview");
+        if (enlarged) await page.addStyleTag({ content: "html{font-size:200% !important} *{line-height:1.5 !important;letter-spacing:.12em !important;word-spacing:.16em !important} p{margin-bottom:2em !important}" });
+        await page.evaluate(async () => {
+          const frame = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+          await frame(); await document.fonts.ready; await frame();
+        });
+        await expect(page.locator(".afisha__change")).toBeVisible();
+        for (let step = 0; step < index; step += 1) await page.locator(".afisha__frame").press("ArrowRight");
+        const current = page.locator('.afisha__print[data-position="0"]');
+        await expect(current).toHaveAttribute("data-journal-id", String(entry.id));
+        await expect(current).toHaveAttribute("data-product-id", product.id);
+        const image = current.locator("img");
+        expect(new URL(await image.getAttribute("data-source-image"), page.url()).pathname).toBe(`/assets/${entry.image}`);
+        await image.evaluate(image => image.decode());
+        await expect(image).toHaveCSS("object-fit", "contain");
+        await expect(page.locator(".afisha__name")).toHaveText(product.name);
+        await expect(page.locator(".afisha__price")).toHaveText(catalogPrice(product.price));
+        expect(new URL(await page.locator(".afisha__frame").getAttribute("href"), page.url()).href).toBe(new URL(productHref(product, "", "afisha"), page.url()).href);
+        await page.locator(".afisha__order summary").press("Enter");
+        const channels = page.locator(".afisha__order-channels a");
+        await expect(channels).toHaveCount(2);
+        for (const channel of await channels.all()) {
+          const draft = new URL(await channel.getAttribute("href")).searchParams.get("text");
+          expect(plain(draft)).toContain(plain(product.name));
+          expect(plain(draft)).toContain(plain(catalogPrice(product.price)));
+        }
+        const frame = page.locator(".afisha__frame");
+        await frame.focus();
+        await expect(frame).toBeFocused();
+        await expect(frame).toBeInViewport();
+        expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+        await page.screenshot({ path: testInfo.outputPath(`mobile-preview-${entry.id}-${width}.png`) });
+        if (!enlarged) {
+          await frame.press("Enter");
+          await expect(page.locator(`#product-${product.id}`).getByRole("heading")).toBeInViewport();
+        }
+        return;
+      }
 
       // Only this publication's preview and product path, never a shared tag set.
       await page.goto("?audit=editorial-preview");
@@ -54,6 +96,7 @@ for (const entry of publications) {
       }
       await preview.press("Enter");
       await expect(page).toHaveURL(new RegExp(`/${route}$`));
+      if (entry.editorialOnly) return;
       const selected = recipeForEntry(entry.id)?.products.map(selection => resolveProduct(selection).product.id) ?? entry.catalogProductIds;
       const product = catalog.flatMap(category => category.items).find(product => product.id === selected[0]);
       await page.locator(`.recipe-current a[href*="product=${product.id}#"]`).press("Enter");
@@ -76,6 +119,16 @@ for (const entry of publications) {
     expect(plain(await page.locator("h1").innerText())).toBe(plain(entry.title));
     await expect(page.locator(".ship-log-entry__body > p").first()).toBeVisible();
     await expect(page.locator(".ship-log-entry__actions a")).toHaveAttribute("href", /https:\/\/t\.me\//);
+    if (mobileHomeEntries[0].id === entry.id) {
+      const { product } = resolveHomeProduct(entry);
+      await page.goto(`${baseURL}?audit=editorial-mobile-static`);
+      await expect(page.locator('.afisha__print[data-position="0"]')).toHaveAttribute("data-journal-id", String(entry.id));
+      expect(new URL(await page.locator(".afisha__frame").getAttribute("href"), page.url()).pathname).toBe("/catalog/");
+      await page.locator(".afisha__order summary").click();
+      for (const channel of await page.locator(".afisha__order-channels a").all()) {
+        expect(plain(new URL(await channel.getAttribute("href")).searchParams.get("text"))).toContain(plain(product.name));
+      }
+    }
     await context.close();
   });
 }

@@ -5575,11 +5575,11 @@ a.site-menu__brand {
   .afisha__order { grid-column: 1 / -1; min-width: 0; font: 500 .9rem/1.4 var(--sans); }
   .afisha__order summary { display: flex; align-items: center; gap: .5rem; min-height: 44px; padding-block: .3rem; list-style: none; cursor: pointer; }
   .afisha__order-label-wrap { display: grid; min-width: 0; }
-  .afisha__order-label, .afisha__order-label-size { display: flex; grid-area: 1 / 1; align-items: center; gap: .5rem; min-width: 0; }
+  .afisha__order-label, .afisha__order-label-size { display: block; grid-area: 1 / 1; min-width: 0; }
   .afisha__order-label-size { visibility: hidden; pointer-events: none; user-select: none; }
   .afisha__order summary::-webkit-details-marker { display: none; }
-  .afisha__order-label::after, .afisha__order-label-size::after { content: "+"; flex: 0 0 1em; text-align: center; font-weight: 400; }
-  .afisha__order[open] .afisha__order-label::after, .afisha__order[open] .afisha__order-label-size::after { content: "−"; }
+  .afisha__order-label::after, .afisha__order-label-size::after { content: "\00a0+"; margin-inline-start: .25em; white-space: pre; font-weight: 400; }
+  .afisha__order[open] .afisha__order-label::after, .afisha__order[open] .afisha__order-label-size::after { content: "\00a0−"; }
   .afisha__order-channels { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; }
   .afisha__order-channels a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: underline; text-underline-offset: .2em; }
   .afisha__order-status { margin: .5rem 0 0; font: 400 .75rem/1.5 var(--sans); }

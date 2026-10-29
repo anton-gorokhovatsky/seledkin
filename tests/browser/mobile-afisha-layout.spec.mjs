@@ -83,25 +83,44 @@ test("afisha keeps its disclosure sign and counter with their labels without rep
     if (index) for (let step = 0; step < index; step += 1) await page.locator(".afisha__change").press("Enter");
     const gap = await page.locator(".afisha__order-label").evaluate(label => {
       const range = document.createRange();
-      range.selectNodeContents(label);
-      const before = range.getBoundingClientRect();
-      const expected = parseFloat(getComputedStyle(label).columnGap);
-      // A zero-width probe precedes ::after; its negative trailing margin keeps the original layout.
+      range.selectNodeContents(label.firstChild);
+      const before = [...range.getClientRects()].filter(rect => rect.width > 0);
+      const pseudo = getComputedStyle(label, "::after");
+      const content = pseudo.content;
+      // Temporarily materialize the inline pseudo-element to measure its last
+      // glyph. Original text rectangles must stay identical during the probe.
       const probe = document.createElement("span");
       probe.setAttribute("aria-hidden", "true");
-      probe.style.cssText = `flex:none;width:0;height:0;min-width:0;padding:0;border:0;margin:0 ${-expected}px 0 0`;
+      probe.textContent = content.slice(1, -1);
+      for (const property of ["display", "fontFamily", "fontSize", "fontWeight", "fontStyle", "lineHeight", "whiteSpace", "marginInlineStart", "letterSpacing", "wordSpacing"]) probe.style[property] = pseudo[property];
+      const canvas = document.createElement("canvas").getContext("2d");
+      canvas.font = pseudo.font;
+      const expected = parseFloat(pseudo.marginInlineStart) + canvas.measureText("\u00a0").width + (parseFloat(pseudo.letterSpacing) || 0) + (parseFloat(pseudo.wordSpacing) || 0);
+      const style = document.createElement("style");
+      style.textContent = '.afisha__order-label[data-inline-probe]::after { content: none !important; }';
+      document.head.append(style);
+      label.dataset.inlineProbe = "";
       label.append(probe);
-      const text = range.getBoundingClientRect();
-      const actual = probe.getBoundingClientRect().left - text.right;
+      const after = [...range.getClientRects()].filter(rect => rect.width > 0);
+      const last = after.at(-1);
+      const glyph = document.createRange();
+      glyph.setStart(probe.firstChild, probe.textContent.length - 1);
+      glyph.setEnd(probe.firstChild, probe.textContent.length);
+      const sign = glyph.getBoundingClientRect();
+      const actual = sign.left - last.right;
       probe.remove();
-      return { expected, actual, textMoved: Math.abs(text.width - before.width),
-        content: getComputedStyle(label, "::after").content,
+      delete label.dataset.inlineProbe;
+      style.remove();
+      return { expected, actual, lineDelta: Math.abs(sign.top - last.top),
+        textMoved: before.length !== after.length ? Infinity : Math.max(...before.map((rect, i) => Math.max(Math.abs(rect.width - after[i].width), Math.abs(rect.top - after[i].top)))),
+        content,
         detachedContent: getComputedStyle(label.closest("summary"), "::after").content };
     });
     expect(gap.textMoved).toBeLessThanOrEqual(1);
     expect(gap.actual).toBeGreaterThanOrEqual(0);
     expect(Math.abs(gap.actual - gap.expected)).toBeLessThanOrEqual(1);
-    expect(gap.content).toBe('"+"');
+    expect(gap.lineDelta).toBeLessThanOrEqual(1);
+    expect(gap.content).toBe('"\u00a0+"');
     expect(gap.detachedContent).toBe("none");
   }
   await page.locator(".afisha__frame").press("ArrowRight");

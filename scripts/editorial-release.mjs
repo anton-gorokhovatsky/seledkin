@@ -120,7 +120,7 @@ export function editorialOnly(changes) {
       }
       if (path === "recipes/index.html") return recipeChange && before != null && after != null;
       const regions = {
-        "index.html": ["journal-hero", "journal-hero-products", "journal-preview", ...(recipeChange ? ["recipe-home"] : []), ...(catalogChange ? ["price-preview", "assortment-directory"] : [])],
+        "index.html": ["journal-hero", "journal-hero-products", "journal-preview", "mobile-hero", ...(recipeChange ? ["recipe-home"] : []), ...(catalogChange ? ["price-preview", "assortment-directory"] : [])],
         "catalog/index.html": ["journal-search"],
         "journal/index.html": ["journal-archive"],
       }[path];

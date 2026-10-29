@@ -1,12 +1,12 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, journalEntries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderHeroJournalProducts, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, journalEntries, homeJournalEntries, mobileHomeEntries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderHeroJournalProducts, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
 import { editorialPath, recipeForEntry } from "./recipe-content.mjs";
 import { catalog } from "../assets/catalog-data.js";
 import { positionCount, catalogPositionCount, groupCatalogProducts } from "../assets/catalog-model.js";
 import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
-const hero = journalEntries.slice(0, 5);
+const hero = homeJournalEntries;
 const preview = journalEntries.slice(0, 3);
 const pages = [["index.html", "home", ""], ["catalog/index.html", "catalog", "../"],
   ["about/index.html", "about", "../"], ["journal/index.html", "journal", "../"], ["404.html", "404", ""]];
@@ -26,7 +26,7 @@ for (const [path, page, root] of pages) {
     "about-preview": renderAboutPreview("", true, true),
     "recipe-home": renderRecipeHome(), "assortment-media": renderAssortmentMedia(),
     "assortment-directory": renderAssortmentDirectory(),
-    "mobile-hero": renderMobileHero(),
+    "mobile-hero": renderMobileHero(mobileHomeEntries),
   });
   if (page === "journal") regions["journal-archive"] = renderJournalAtlas(journalEntries);
   if (page === "about") regions["audio-library"] = renderAudioLibrary();
