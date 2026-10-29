@@ -5,6 +5,8 @@ import { stubStoreMap } from "./map-fixture.mjs";
 
 const require = createRequire(import.meta.url);
 async function auditOrderList(page) {
+  // WebKit can expose old theme colors until the next rendered frame.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
   expect(await page.evaluate(async () => (await axe.run("#order-list", {
     runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] },
@@ -40,10 +42,13 @@ test("the order shortcut keeps its label, count and harpoon together on narrow s
   const enlarged = await shortcut.boundingBox();
   const enlargedParts = await shortcut.evaluate(el => {
     const label = el.querySelector(".catalog-order-shortcut__label"), count = el.querySelector(".catalog-order-shortcut__count"), arrow = el.querySelector("svg");
-    return { label: label.getBoundingClientRect().toJSON(), count: count.getBoundingClientRect().toJSON(), arrow: arrow.getBoundingClientRect().toJSON(), lineHeight: parseFloat(getComputedStyle(label).lineHeight) };
+    const range = document.createRange(); range.selectNodeContents(label);
+    return { label: label.getBoundingClientRect().toJSON(), glyphs: [...range.getClientRects()].map(rect => rect.toJSON()), count: count.getBoundingClientRect().toJSON(), arrow: arrow.getBoundingClientRect().toJSON(), lineHeight: parseFloat(getComputedStyle(label).lineHeight) };
   });
   expect(enlargedParts.label.height).toBeLessThanOrEqual(enlargedParts.lineHeight * 2 + 1);
-  expect(enlargedParts.label.right).toBeLessThan(enlargedParts.count.left);
+  for (const line of enlargedParts.glyphs) {
+    expect(line.bottom <= enlargedParts.count.top || line.right < enlargedParts.count.left).toBe(true);
+  }
   expect(enlargedParts.count.right).toBeLessThan(enlargedParts.arrow.left);
   expect(enlarged.x + enlarged.width).toBeLessThanOrEqual(320);
   const heading = await page.locator("main h1").evaluate(el => {
@@ -65,6 +70,126 @@ test("the order shortcut keeps its label, count and harpoon together on narrow s
   await expect(page.locator("#order-list")).toBeFocused();
 });
 
+test("the order shortcut keeps scroll position when it receives keyboard focus @catalog", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.addInitScript(() => localStorage.setItem("seledkin-order-list", JSON.stringify(["caviar-001"])));
+  await page.goto("catalog/?audit=order-shortcut-own-focus");
+  const shortcut = page.locator(".catalog-order-shortcut");
+  await expect(shortcut).toBeVisible();
+  await page.keyboard.press("Tab");
+  const beforeFocus = await page.evaluate(() => scrollY);
+  await shortcut.focus();
+  await expect(shortcut).toBeFocused();
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(resolve)))));
+  expect(await page.evaluate(() => scrollY)).toBe(beforeFocus);
+  // A completed scroll must not treat the floating control as its own obstruction.
+  await page.evaluate(() => {
+    document.dispatchEvent(new Event("scrollend"));
+    return new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
+  expect(await page.evaluate(() => scrollY)).toBe(beforeFocus);
+});
+
+for (const [width, height, theme, count] of [[320, 568, "light", 4], [320, 568, "dark", 11],
+  [390, 844, "dark", 4], [390, 844, "light", 11]]) {
+  test(`selected order controls reflow at ${width}px with ${count} items and user spacing @catalog`, async ({ page }, testInfo) => {
+    const productIds = ["caviar-001", "caviar-002", "caviar-003", "caviar-004", "caviar-005", "trout-roe",
+      "caviar-007", "pink-salmon-roe-125", "pike-roe-112", "seafood-001", "seafood-002"];
+    await page.addInitScript(({ ids, theme }) => {
+      localStorage.setItem("seledkin-order-list", JSON.stringify(ids));
+      localStorage.setItem("seledkin-theme", theme);
+    }, { ids: productIds.slice(0, count), theme });
+    await page.setViewportSize({ width, height });
+    await page.emulateMedia({ reducedMotion: count === 4 ? "no-preference" : "reduce" });
+    await page.goto(`catalog/?audit=order-reflow-${width}-${count}`);
+    const shortcut = page.locator(".catalog-order-shortcut");
+    await expect(shortcut).toBeVisible();
+    await expect(shortcut.locator(".catalog-order-shortcut__count")).toHaveText(String(count));
+    await page.addStyleTag({ content: `
+      html { font-size: 200% !important; }
+      * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; }
+      p { margin-bottom: 2em !important; }
+    ` });
+    await page.evaluate(() => document.fonts.ready);
+    const layout = await shortcut.evaluate(node => {
+      const range = document.createRange(); range.selectNodeContents(node.querySelector(".catalog-order-shortcut__label"));
+      return { bounds: node.getBoundingClientRect().toJSON(), lines: [...range.getClientRects()].map(rect => rect.toJSON()),
+        count: node.querySelector(".catalog-order-shortcut__count").getBoundingClientRect().toJSON(),
+        arrow: node.querySelector("svg").getBoundingClientRect().toJSON() };
+    });
+    expect(layout.bounds.left).toBeGreaterThanOrEqual(0);
+    expect(layout.bounds.right).toBeLessThanOrEqual(width);
+    for (const line of layout.lines) {
+      expect(line.left).toBeGreaterThanOrEqual(layout.bounds.left);
+      expect(line.right).toBeLessThanOrEqual(layout.bounds.right);
+      expect(line.bottom <= layout.count.top || line.right < layout.count.left).toBe(true);
+    }
+    expect(layout.count.right).toBeLessThan(layout.arrow.left);
+    expect(Math.abs((layout.count.top + layout.count.bottom) / 2 - (layout.arrow.top + layout.arrow.bottom) / 2)).toBeLessThan(1);
+    await page.screenshot({ path: testInfo.outputPath(`order-shortcut-${width}-${theme}-spacing-${count}.png`) });
+    // Reach the lower product controls through the actual keyboard sequence.
+    const summary = page.locator("#product-caviar-001 summary");
+    await page.locator('label[for="package-caviar-001"]').click();
+    await page.keyboard.press("Tab");
+    await page.locator("#product-caviar-001 [data-order-add]").focus();
+    for (let step = 0; step < 12 && !await summary.evaluate(node => node === document.activeElement); step++) {
+      await page.keyboard.press("Tab");
+    }
+    await expect(summary).toBeFocused();
+    const expectClearFocus = async control => {
+      await expect.poll(async () => {
+        const target = await control.boundingBox(), floating = await shortcut.boundingBox();
+        return target.y >= 0 && target.y + target.height <= floating.y;
+      }).toBe(true);
+    };
+    await expectClearFocus(summary);
+    await page.keyboard.press("Shift+Tab");
+    // Safari's native reverse tab order can include the package radio. Test
+    // the actual focused control (or its visible label), not Chromium's order.
+    const previous = await page.evaluate(() => ({ id: document.activeElement.id,
+      package: document.activeElement.matches("[data-package-choice]") }));
+    const previousControl = previous.package ? page.locator(`label[for="${previous.id}"]`) : page.locator(":focus");
+    await expect(previousControl).toBeVisible();
+    await expectClearFocus(previousControl);
+    await page.keyboard.press("Tab");
+    await expect(summary).toBeFocused();
+    await expectClearFocus(summary);
+    await summary.press("Enter");
+    const firstChannel = page.locator("#product-caviar-001 .catalog-product-order__channels a").first();
+    await firstChannel.focus();
+    await expectClearFocus(firstChannel);
+    // A pointer target must stay put between mousedown and click.
+    await summary.scrollIntoViewIfNeeded();
+    const beforePointer = await summary.boundingBox();
+    await page.mouse.move(beforePointer.x + beforePointer.width / 2, beforePointer.y + beforePointer.height / 2);
+    await page.mouse.down();
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const afterPointer = await summary.boundingBox();
+    expect(Math.abs(afterPointer.y - beforePointer.y)).toBeLessThan(1);
+    await page.mouse.up();
+    await shortcut.press("Enter");
+    await expect(page.locator("#order-list")).toBeFocused();
+    await expect(shortcut).toBeHidden();
+    const actions = page.locator(".catalog-order-actions");
+    await actions.scrollIntoViewIfNeeded();
+    const bounds = await actions.locator("a.source-button, [data-order-copy-button]").evaluateAll(nodes => nodes.map(node => {
+      const range = document.createRange(); range.selectNodeContents(node);
+      const style = getComputedStyle(node);
+      return { box: node.getBoundingClientRect().toJSON(), padding: parseFloat(style.paddingInlineStart), text: [...range.getClientRects()].filter(rect => rect.width).map(rect => rect.toJSON()) };
+    }));
+    for (const control of bounds) {
+      expect(control.box.left).toBeGreaterThanOrEqual(0);
+      expect(control.box.right).toBeLessThanOrEqual(width);
+      expect(control.box.height).toBeGreaterThanOrEqual(44);
+      for (const line of control.text) {
+        expect(line.left).toBeGreaterThanOrEqual(control.box.left + control.padding - 1);
+        expect(line.right).toBeLessThanOrEqual(control.box.right - control.padding + 1);
+      }
+    }
+    await actions.screenshot({ path: testInfo.outputPath(`order-actions-${width}-${theme}-spacing-${count}.png`) });
+  });
+}
+
 test("a buyer builds one order with distinct packages, filters, persistence and keyboard removal @catalog", async ({ page }, testInfo) => {
   await page.goto("catalog/?q=черная+икра&audit=order-list");
   const first = page.locator("#product-caviar-001 [data-order-add]");
@@ -72,14 +197,18 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
   await first.press("Space");
   await page.locator('label[for="package-caviar-002"]').click();
   await second.click();
-  await expect(page.getByRole("link", { name: "К списку заказа · 2 позиции" })).toBeVisible();
   const list = page.locator("#order-list");
+  const shortcut = page.getByRole("link", { name: "К списку заказа · 2 позиции" });
+  // The shortcut is unnecessary when the selected list already intersects the viewport.
+  await expect.poll(async () => await shortcut.isVisible() || await list.evaluate(node => {
+    const bounds = node.getBoundingClientRect();
+    return bounds.top < innerHeight && bounds.bottom > 0;
+  })).toBe(true);
   await second.press("Enter");
   await expect(list).toBeFocused();
   await expect(list.locator("li")).toHaveCount(2);
   await list.getByRole("textbox", { name: /Количество.*6\s000/ }).fill("2");
   await list.getByRole("textbox", { name: /Количество.*15\s000/ }).fill("1");
-  const shortcut = page.getByRole("link", { name: "К списку заказа · 2 позиции" });
   await expect(list.getByRole("textbox", { name: /Количество.*6\s000/ })).toHaveValue("2");
   await page.getByRole("searchbox").fill("филе тунца");
   await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
@@ -89,7 +218,12 @@ test("a buyer builds one order with distinct packages, filters, persistence and 
   await expect(page.locator("#order-list").getByRole("heading", { name: "Список заказа" })).toBeVisible();
   await expect(page.locator("#order-list").getByRole("link", { name: "Скопировать и открыть Телеграм" })).toBeVisible();
   await page.getByRole("searchbox").fill("");
-  await shortcut.press("Enter");
+  // Return through the visible control, or directly through the already visible list.
+  if (await shortcut.isVisible()) await shortcut.press("Enter");
+  else {
+    await expect(list).toBeInViewport();
+    await list.focus();
+  }
   await expect(list).toBeFocused();
   await expect(list.getByRole("list")).toContainText("6 000 ₽ за 50 г");
   await expect(list.getByRole("list")).toContainText("15 000 ₽ за 125 г");

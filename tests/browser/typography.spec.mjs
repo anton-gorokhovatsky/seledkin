@@ -1,5 +1,54 @@
 import { test, expect } from "@playwright/test";
 
+test("editorial headings keep words legible at 320px with enlarged text and spacing @recipes @journal", async ({ page }) => {
+  const routes = ["recipes/", "recipes/701/", "recipes/619/", "recipes/423/", "journal/703/", "journal/680/", "journal/699/"];
+  for (const route of routes) {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.goto(`${route}?audit=editorial-heading-reflow`);
+    await page.evaluate(() => document.fonts.ready);
+    const heading = page.locator("h1");
+    const original = await heading.textContent();
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 800 });
+      for (const marker of await heading.locator(".page-intro__word-break").all()) {
+        await expect(marker).toHaveCSS("display", "none");
+      }
+    }
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page.addStyleTag({ content: `html { font-size: 200% !important; }
+      * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; }
+      p { margin-bottom: 2em !important; }` });
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    expect(await heading.textContent()).toBe(original);
+    const fractures = await heading.evaluate(element => {
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+      const broken = [];
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        for (const match of node.textContent.matchAll(/[\p{L}\u00ad]+/gu)) {
+          const letters = [...match[0].matchAll(/\p{L}/gu)];
+          const characterBox = index => {
+            const range = document.createRange();
+            range.setStart(node, match.index + index);
+            range.setEnd(node, match.index + index + 1);
+            // After a soft hyphen, Chromium may also include its preceding
+            // line's hyphen rectangle. The final rectangle is the letter.
+            return [...range.getClientRects()].filter(rect => rect.width > 0).at(-1);
+          };
+          for (let index = 1; index < letters.length; index += 1) {
+            const before = letters[index - 1].index, after = letters[index].index;
+            if (match[0].slice(before + 1, after).includes("\u00ad")) continue;
+            if (characterBox(after).y > characterBox(before).y + 5) broken.push(match[0]);
+          }
+        }
+      }
+      return broken;
+    });
+    expect(fractures, route).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  }
+});
+
 test("typography crosses inline links without changing links, code or user input", async ({ page }) => {
   await page.goto("404.html");
   const result = await page.evaluate(async () => {

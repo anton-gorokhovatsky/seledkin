@@ -214,17 +214,23 @@ export function renderMobileHero() {
   const first = resolveProduct(photos[0].product).product;
   const firstHref = productCatalogHref(photos[0].product, "", "afisha");
   const firstOrder = orderLinks(first);
+  // Overlapping hidden variants reserve the real maximum at every text size and width.
+  const captionSizes = photos.map(photo => {
+    const { product } = resolveProduct(photo.product);
+    return `<span class="afisha__caption-size" aria-hidden="true"><span>${text(product.name)}</span><span>${escape(catalogPrice(product.price))}</span></span>`;
+  }).join("");
+  const orderSizes = photos.map(photo => `<span class="afisha__order-label-size" aria-hidden="true">${text(`Заказать ${photo.orderName}`)}</span>`).join("");
   return `          <div class="afisha" data-product-name="${text(first.name)}" data-product-category="${photos[0].product.category}" data-product-id="${first.id}" data-photo-index="1">
             <div class="afisha__brand brand-jelly brand-jelly--sea"><img src="assets/logo-redrawn-sea.svg" alt="Рыбная лавка капитана Селедкина" width="3600" height="1784"></div>
-            <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каж&shy;дый день,</em> море&shy;про&shy;дукты и&nbsp;рыбные дели&shy;ка&shy;тесы в&nbsp;Москве</p>
+            <p class="afisha__title">Каче&shy;ствен&shy;ная рыба <em>на&nbsp;каж&shy;дый день,</em> море&shy;про&shy;дукты и&nbsp;рыб&shy;ные дели&shy;ка&shy;тесы в&nbsp;Мос&shy;кве</p>
             <figure class="afisha__gallery">
               <a class="afisha__frame" href="${escape(firstHref)}" aria-label="Открыть ${text(photos[0].caption)} в каталоге">
 ${prints}
               </a>
               <figcaption>
-                <div class="afisha__caption"><span class="afisha__name">${text(first.name)}</span><span class="afisha__price">${escape(catalogPrice(first.price))}</span></div><button class="afisha__change" type="button" hidden><span>Ещё из лавки</span><span class="afisha__count" aria-hidden="true">1/${photos.length}</span>${arrow}</button>
+                <div class="afisha__caption"><span class="afisha__caption-current"><span class="afisha__name">${text(first.name)}</span><span class="afisha__price">${escape(catalogPrice(first.price))}</span></span>${captionSizes}</div><button class="afisha__change" type="button" hidden><span>Ещё из лавки</span><span class="afisha__change-position" aria-hidden="true"><span class="afisha__count">1/${photos.length}</span>${arrow}</span></button>
                 <details class="afisha__order">
-                  <summary><span class="afisha__order-label">${text(`Заказать ${photos[0].orderName}`)}</span></summary>
+                  <summary><span class="afisha__order-label-wrap"><span class="afisha__order-label">${text(`Заказать ${photos[0].orderName}`)}</span>${orderSizes}</span></summary>
                   <div class="afisha__order-channels"><a class="afisha__order-telegram" href="${escape(firstOrder.telegram)}">В Телеграме</a><a class="afisha__order-whatsapp" href="${escape(firstOrder.whatsapp)}">В WhatsApp</a></div>
                 </details>
               </figcaption>
@@ -255,14 +261,44 @@ function journalBody(entry) {
 
 function journalTitle(value) {
   const hyphens = {
-    Охлажденная: "Ох\u00adлаж\u00adденная", эталонная: "эта\u00adлонная", Карелии: "Ка\u00adре\u00adлии",
-    малосольного: "мало\u00adсоль\u00adного", каспийского: "кас\u00adпий\u00adского", паштеты: "паш\u00adтеты",
-    копченого: "коп\u00adче\u00adного", балтийского: "бал\u00adтий\u00adского", Диаметр: "Диа\u00adметр",
-    тарелки: "та\u00adрелки", сантиметров: "сан\u00adти\u00adмет\u00adров",
-    Рулетики: "Ру\u00adле\u00adти\u00adки", печенью: "пе\u00adченью",
-    брюшков: "брюш\u00adков", осетра: "осет\u00adра", горячего: "горя\u00adчего", копчения: "коп\u00adчения",
+    Охлажденная: "Ох\u00adлаж\u00adден\u00adная", эталонная: "эта\u00adлон\u00adная", Карелии: "Ка\u00adре\u00adлии",
+    малосольного: "ма\u00adло\u00adсоль\u00adно\u00adго", каспийского: "кас\u00adпий\u00adско\u00adго", паштеты: "паш\u00adте\u00adты",
+    копченого: "коп\u00adче\u00adно\u00adго", балтийского: "бал\u00adтий\u00adско\u00adго", Диаметр: "Диа\u00adметр",
+    тарелки: "та\u00adрел\u00adки", сантиметров: "сан\u00adти\u00adмет\u00adров",
+    Рулетики: "Ру\u00adле\u00adти\u00adки", печенью: "пе\u00adче\u00adнью",
+    брюшков: "брю\u00adшков", осетра: "осет\u00adра", горячего: "го\u00adря\u00adче\u00adго", копчения: "коп\u00adче\u00adния",
+    Ряпушка: "Ря\u00adпуш\u00adка", ряпушка: "ря\u00adпуш\u00adка", холодного: "хо\u00adлод\u00adно\u00adго",
+    трески: "трес\u00adки", Первая: "Пер\u00adвая", форели: "фо\u00adре\u00adли", форель: "фо\u00adрель",
+    новый: "но\u00adвый", залома: "за\u00adло\u00adма", Риеты: "Рие\u00adты",
+    Нежнейшая: "Неж\u00adней\u00adшая", Нежнейший: "Неж\u00adней\u00adший", Напилили: "На\u00adпи\u00adли\u00adли",
+    крупного: "круп\u00adно\u00adго", чилийского: "чи\u00adлий\u00adско\u00adго", лосося: "ло\u00adсо\u00adся",
+    судовой: "су\u00adдо\u00adвой", заморозки: "за\u00adмо\u00adроз\u00adки", Радужная: "Ра\u00adдуж\u00adная", Ирана: "Ира\u00adна",
+    Скумбрия: "Скум\u00adбрия", Получили: "По\u00adлу\u00adчи\u00adли", якутскую: "якут\u00adскую",
+    паштет: "паш\u00adтет", охлажденной: "ох\u00adлаж\u00adден\u00adной", куриной: "ку\u00adри\u00adной", печени: "пе\u00adче\u00adни",
+    нужно: "нуж\u00adно", Черноморский: "Чер\u00adно\u00adмор\u00adский", бычок: "бы\u00adчок", коже: "ко\u00adже",
+    Икряная: "Ик\u00adря\u00adная", камбала: "кам\u00adба\u00adла", Селёдкине: "Се\u00adлёд\u00adки\u00adне",
+    новинка: "но\u00adвин\u00adка", сельди: "сель\u00adди", Датски: "Дат\u00adски",
+    царского: "цар\u00adско\u00adго", тугунка: "ту\u00adгун\u00adка", дикого: "ди\u00adко\u00adго", кижуча: "ки\u00adжу\u00adча", сезона: "се\u00adзо\u00adна",
+    малосольная: "ма\u00adло\u00adсоль\u00adная", черноморская: "чер\u00adно\u00adмор\u00adская", барабуля: "ба\u00adра\u00adбу\u00adля",
+    Предельно: "Пре\u00adдель\u00adно", простая: "прос\u00adтая", Командир: "Ко\u00adман\u00adдир", счастливой: "счас\u00adтли\u00adвой", Щуки: "Щу\u00adки",
+    выбирать: "вы\u00adби\u00adрать", красную: "крас\u00adную", Почему: "По\u00adче\u00adму", важна: "важ\u00adна", упаковка: "упа\u00adков\u00adка",
+    выбрать: "вы\u00adбрать", палтуса: "пал\u00adту\u00adса", Мидии: "Ми\u00adдии", рисом: "ри\u00adсом", судака: "су\u00adда\u00adка",
+    Патагонские: "Па\u00adта\u00adгон\u00adские", креветки: "кре\u00adвет\u00adки", чесноком: "чес\u00adно\u00adком", разделать: "раз\u00adде\u00adлать", камбалу: "кам\u00adба\u00adлу",
+    Перепелиные: "Пе\u00adре\u00adпе\u00adли\u00adные", креветочной: "кре\u00adве\u00adточ\u00adной", икрой: "ик\u00adрой",
+    Дымос: "Ды\u00adмос", Креветос: "Кре\u00adве\u00adтос", Камбала: "Кам\u00adба\u00adла", белобрюшка: "бе\u00adло\u00adбрю\u00adшка", сковороде: "ско\u00adво\u00adро\u00adде",
+    Тунец: "Ту\u00adнец", васаби: "ва\u00adса\u00adби", Осьминог: "Ось\u00adми\u00adног", секретов: "сек\u00adре\u00adтов", Стейки: "Стей\u00adки",
+    Корюшка: "Ко\u00adрюш\u00adка", солнышком: "сол\u00adныш\u00adком", Горбуша: "Гор\u00adбу\u00adша", винном: "вин\u00adном", томатном: "то\u00adмат\u00adном",
+    подать: "по\u00adдать", северную: "се\u00adвер\u00adную", креветку: "кре\u00adвет\u00adку", вчера: "вче\u00adра",
+    Нерка: "Нер\u00adка", серебряночка: "се\u00adреб\u00adря\u00adноч\u00adка", селедке: "се\u00adлед\u00adке", блины: "бли\u00adны", нужны: "нуж\u00adны",
   };
-  return text(Object.entries(hyphens).reduce((title, [word, hyphenated]) => title.replaceAll(word, hyphenated), value));
+  return text(value.replace(/\p{L}+/gu, word => hyphens[word] ?? word));
+}
+
+function pageTitle(value) {
+  // Only very narrow title measures expose these breaks. Ordinary headings
+  // retain the typographic ties; enlarged text can move a whole word instead
+  // of cutting its first syllable after a bound preposition.
+  return journalTitle(value).replaceAll("\u00a0", '\u00a0<wbr class="page-intro__word-break">');
 }
 
 // Editorial matches to current catalog positions; historical post prices are
@@ -370,7 +406,7 @@ export function renderJournal(list, view) {
     return `            <article class="ship-log-entry journal-story${recipe?.scenes ? " journal-story--scenes" : ""}" data-journal-id="${id}" id="journal-entry-${id}" tabindex="-1">
               <header class="journal-story__header page-intro">
                 <p class="page-intro__eyebrow">${kind} · Олег Гугунава</p>
-                <h1 class="page-intro__title">${journalTitle(title)}</h1>
+                <h1 class="page-intro__title">${pageTitle(title)}</h1>
                 <p class="ship-log-entry__meta"><time datetime="${entry.date}">${date(entry)}</time> <a class="ship-log-entry__source" href="${escape(source)}">${telegram ? '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="../../assets/social-icons.svg#telegram"></use></svg>' : ""}<span>${telegram ? "Из телеграм-канала" : `Из ${text(entry.source.name)}`}</span></a></p>
               </header>
               ${story}
@@ -533,8 +569,7 @@ function recipeFeature(root, heading = "h3") {
 }
 
 function recipeTitle(title) {
-  const wordBreaks = { "секретов": "секре­тов", "сковороде": "ско­во­ро­де", "томатном": "то­мат­ном", "Осьминог": "Ось­ми­ног", "Патагонские": "Пата­гон­ские", "Перепелиные": "Пере­пе­ли­ные", "креветочной": "кре­ве­точной", "креветки": "кре­вет­ки", "креветку": "кре­вет­ку", "белобрюшка": "бело­брюш­ка", "Командир": "Коман­дир", "счастливой": "счаст­ливой", "Предельно": "Пре­дель­но", "упаковка": "упа­ков­ка", "разделать": "раз­делать" };
-  return Object.entries(wordBreaks).reduce((result, [word, hyphenated]) => result.replaceAll(word, hyphenated), text(title));
+  return journalTitle(title);
 }
 
 export function renderRecipeHome() {

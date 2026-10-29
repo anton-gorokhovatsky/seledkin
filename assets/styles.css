@@ -5368,6 +5368,16 @@ a.site-menu__brand {
 .journal-story__header .page-intro__title {
   max-width: 24ch;
 }
+.journal-story__header .page-intro__title,
+.recipes-intro .page-intro__title {
+  container: editorial-heading / inline-size;
+}
+.page-intro__word-break { display: none; }
+/* Keep ordinary short-word ties. At a critically narrow measure, prefer
+   moving the following word to cutting an unhyphenatable first syllable. */
+@container editorial-heading (max-width: 4.5em) {
+  .page-intro__word-break { display: inline; }
+}
 .journal-story__header .ship-log-entry__meta {
   margin: 1.5rem 0 0;
 }
@@ -5546,13 +5556,16 @@ a.site-menu__brand {
   .afisha__print[data-position="2"] { z-index: 1; transform: translate(-50%, -50%) rotate(-6deg); }
   .afisha__print[hidden] { display: none; }
   .afisha__frame img { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: contain; filter: none; }
-  .afisha__gallery figcaption { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: .25rem 1rem; margin-top: .35rem; font: 400 .75rem/1.4 var(--sans); }
-  .afisha__caption { display: grid; align-content: start; min-width: 0; gap: .1rem; }
-  .afisha__name { font: italic 400 1.05rem/1.25 var(--serif); }
-  .afisha__price { font: 400 .75rem/1.4 var(--sans); }
+  .afisha__gallery figcaption { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-auto-rows: max-content; align-items: start; gap: .25rem 1rem; margin-top: .35rem; font: 400 .75rem/1.4 var(--sans); }
+  .afisha__caption { display: grid; align-content: start; min-width: 0; }
+  .afisha__caption-current, .afisha__caption-size { display: grid; grid-area: 1 / 1; align-content: start; min-width: 0; gap: .1rem; }
+  .afisha__caption-size { visibility: hidden; pointer-events: none; user-select: none; }
+  .afisha__name, .afisha__caption-size > :first-child { font: italic 400 1.05rem/1.25 var(--serif); }
+  .afisha__price, .afisha__caption-size > :last-child { font: 400 .75rem/1.4 var(--sans); }
   .afisha__change { display: flex; align-items: baseline; gap: .65rem; min-height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: inherit; line-height: 1.75; }
   .afisha__change[hidden] { display: none; }
   .afisha__status { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .afisha__change-position { display: inline-flex; flex: none; align-items: baseline; gap: .65rem; }
   .afisha__count { font-variant-numeric: tabular-nums; }
   .afisha__change svg { width: var(--harpoon-control-size); }
   .afisha__actions { display: grid; gap: .2rem; }
@@ -5561,9 +5574,12 @@ a.site-menu__brand {
   .afisha__catalog { padding: .6rem 0; font: 400 clamp(1.65rem, 1.15rem + 2vw, 2rem)/1.15 var(--serif); }
   .afisha__order { grid-column: 1 / -1; min-width: 0; font: 500 .9rem/1.4 var(--sans); }
   .afisha__order summary { display: flex; align-items: center; gap: .5rem; min-height: 44px; padding-block: .3rem; list-style: none; cursor: pointer; }
+  .afisha__order-label-wrap { display: grid; min-width: 0; }
+  .afisha__order-label, .afisha__order-label-size { display: flex; grid-area: 1 / 1; align-items: center; gap: .5rem; min-width: 0; }
+  .afisha__order-label-size { visibility: hidden; pointer-events: none; user-select: none; }
   .afisha__order summary::-webkit-details-marker { display: none; }
-  .afisha__order summary::after { content: "+"; flex: 0 0 1em; text-align: center; font-weight: 400; }
-  .afisha__order[open] summary::after { content: "−"; }
+  .afisha__order-label::after, .afisha__order-label-size::after { content: "+"; flex: 0 0 1em; text-align: center; font-weight: 400; }
+  .afisha__order[open] .afisha__order-label::after, .afisha__order[open] .afisha__order-label-size::after { content: "−"; }
   .afisha__order-channels { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; }
   .afisha__order-channels a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-decoration: underline; text-underline-offset: .2em; }
   .afisha__order-status { margin: .5rem 0 0; font: 400 .75rem/1.5 var(--sans); }
@@ -5633,8 +5649,9 @@ a.site-menu__brand {
 .catalog-product-actions + .catalog-product-order { margin-top: 0; }
 .catalog-product-actions + .catalog-product-order summary { color: var(--muted); font-weight: 400; text-decoration: none; }
 .catalog-product-actions + .catalog-product-order summary:hover { color: var(--ink); }
-.catalog-order-shortcut { position: fixed; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 60; display: inline-grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: min(.75rem, 12px); width: max-content; max-width: calc(100% - 32px); border: 1px solid var(--jelly-glass-border); border-radius: 3rem; background: var(--jelly-glass-surface); box-shadow: var(--jelly-glass-shadow); backdrop-filter: var(--jelly-glass-filter); -webkit-backdrop-filter: var(--jelly-glass-filter); transform: translateX(-50%); color: var(--ink); font-size: var(--text-interface); line-height: 1.25; text-decoration: none; }
-.catalog-order-shortcut__label { min-width: 0; font-weight: 500; text-wrap: balance; }
+.catalog-order-shortcut { position: fixed; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom)); z-index: 60; display: inline-flex; flex-wrap: wrap; align-items: center; gap: min(.75rem, 12px); width: max-content; max-width: calc(100% - 32px); border: 1px solid var(--jelly-glass-border); border-radius: 3rem; background: var(--jelly-glass-surface); box-shadow: var(--jelly-glass-shadow); backdrop-filter: var(--jelly-glass-filter); -webkit-backdrop-filter: var(--jelly-glass-filter); transform: translateX(-50%); color: var(--ink); font-size: var(--text-interface); line-height: 1.25; text-decoration: none; }
+.catalog-order-shortcut__label { min-width: 0; max-width: 100%; flex: 1 1 auto; font-weight: 500; text-wrap: balance; }
+.catalog-order-shortcut__target { display: inline-flex; flex: none; align-items: center; gap: min(.75rem, 12px); margin-inline-start: auto; }
 .catalog-order-shortcut__count { display: inline-grid; place-items: center; flex: none; min-width: 1.75rem; min-height: 1.75rem; padding: .2rem .4rem; border-radius: 2rem; background: var(--ink); color: var(--paper); font-size: .875em; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .catalog-order-shortcut svg { width: var(--harpoon-control-size); fill: currentColor; }
 .catalog-order-list { list-style: none; margin: 1rem 0; padding: 0; text-align: left; }
@@ -5656,7 +5673,8 @@ a.site-menu__brand {
 .catalog-order-quantity small[hidden] { display: none; }
 .catalog-order[data-has-items="true"] .catalog-order-grid { grid-template-areas: "title title" "copy actions"; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: start; gap: 1.5rem clamp(2rem, 5vw, 5rem); }
 .catalog-order[data-has-items="true"] .catalog-order-copy { max-width: none; }
-.catalog-order[data-has-items="true"] .catalog-order-actions { display: grid; justify-self: stretch; align-self: start; gap: 1rem; }
+.catalog-order[data-has-items="true"] .catalog-order-actions { display: grid; grid-template-columns: minmax(0, 1fr); justify-self: stretch; align-self: start; gap: 1rem; }
+.catalog-order-actions .source-button__label { overflow-wrap: anywhere; }
 .catalog-order-next { max-width: 35ch; font-size: var(--text-interface); line-height: 1.6; }
 .catalog-order-next[hidden] { display: none; }
 .catalog-order-copy-button { order: 3; justify-self: start; min-height: 44px; padding: .5rem 0; border: 0; background: none; color: var(--text-link); font: inherit; font-size: var(--text-interface); cursor: pointer; }

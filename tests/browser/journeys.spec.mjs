@@ -411,7 +411,7 @@ test("a photographed product opens its own catalog position, price and order @af
     await expect(page.locator(".afisha__catalog")).toHaveText("Каталог и цены");
     const destinationUrl = new URL(href, page.url());
     expect(destinationUrl.hash).toBe(`#product-${destinationUrl.searchParams.get("product")}`);
-    await expect(page.locator(".afisha__order summary")).toHaveText(`Заказать ${orderNames[i]}`);
+    await expect(page.locator(".afisha__order-label")).toHaveText(`Заказать ${orderNames[i]}`);
     destinations.push({ href, price: await page.locator(".afisha__price").textContent(), name: expected[i] });
     await frame.press("ArrowRight");
   }

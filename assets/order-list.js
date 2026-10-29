@@ -33,25 +33,29 @@ export function setupOrderList() {
   shortcut.className = "catalog-order-shortcut";
   shortcut.href = "#order-list";
   shortcut.hidden = true;
-  shortcut.innerHTML = '<span class="catalog-order-shortcut__label">Список заказа</span><span class="catalog-order-shortcut__count" aria-hidden="true"></span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg>';
+  shortcut.innerHTML = '<span class="catalog-order-shortcut__label">Список заказа</span><span class="catalog-order-shortcut__target"><span class="catalog-order-shortcut__count" aria-hidden="true"></span><svg viewBox="0 0 32 18" aria-hidden="true" focusable="false"><path d="M23 9H8.5C4.6 9 2.5 10.8 2.5 13.2c0 2.1 1.7 3.4 3.7 2.6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" /><path d="M19.5 3 30 9l-10.5 6 3.1-6-3.1-6Z" fill="currentColor" /></svg></span>';
   toolbar.append(shortcut);
   const updateClearance = () => {
     const clearance = shortcut.hidden ? 0 : innerHeight - shortcut.getBoundingClientRect().top + 16;
     document.documentElement.style.scrollPaddingBottom = `${clearance}px`;
   };
   new ResizeObserver(updateClearance).observe(shortcut);
+  const clearFocusedControl = target => {
+    // Keyboard focus follows the rendered shortcut; pointer targets stay still
+    // until their click completes, including during native focus scrolling.
+    if (document.documentElement.dataset.inputModality === "pointer" || document.activeElement !== target || shortcut.hidden || shortcut.contains(target) || !target?.matches("a, button, input, select, textarea, summary")) return;
+    const bounds = target.getBoundingClientRect(), control = shortcut.getBoundingClientRect();
+    if (bounds.right > control.left && bounds.left < control.right && bounds.bottom > control.top && bounds.top < control.bottom) {
+      window.scrollBy({ top: bounds.bottom - control.top + 16, behavior: "instant" });
+    }
+  };
   document.addEventListener("focusin", event => {
-    // Keep a mouse/touch target still until its click completes. Keyboard
-    // focus still moves above the fixed order shortcut when it is obscured.
     if (document.documentElement.dataset.inputModality === "pointer") return;
-    if (shortcut.hidden || shortcut.contains(event.target) || !event.target.matches("a, button, input, select, textarea, summary")) return;
-    requestAnimationFrame(() => {
-      const target = event.target.getBoundingClientRect(), control = shortcut.getBoundingClientRect();
-      if (target.right > control.left && target.left < control.right && target.bottom > control.top && target.top < control.bottom) {
-        window.scrollBy({ top: target.bottom - control.top + 16, behavior: "instant" });
-      }
-    });
+    // Native focus scrolling can settle after the first frame.
+    requestAnimationFrame(() => requestAnimationFrame(() => clearFocusedControl(event.target)));
   });
+  // Safari can finish a native smooth focus scroll after both frames above.
+  document.addEventListener("scrollend", () => clearFocusedControl(document.activeElement));
   const status = document.createElement("p");
   status.className = "visually-hidden";
   status.setAttribute("role", "status");
