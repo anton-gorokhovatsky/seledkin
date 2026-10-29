@@ -124,6 +124,10 @@ test("audio timestamps stay keyboard reachable and internal catalog return keeps
     await page.screenshot({ path: testInfo.outputPath(`audio-refocus-390-${theme}.png`) });
     const catalog = page.locator(".about-closing").getByRole("link", { name: "Каталог и цены", exact: true });
     await catalog.focus();
+    // The preceding cross-origin Back created a fresh document. Settle the
+    // focused scene before this baseline, just as after the internal return.
+    await readyPhotos(page);
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     await expect(catalog).toBeFocused();
     await expect(catalog).toBeInViewport();
     const beforeCatalog = await catalog.evaluate(link => ({ y: link.getBoundingClientRect().y, scroll: scrollY }));
