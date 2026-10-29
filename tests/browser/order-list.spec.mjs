@@ -340,13 +340,21 @@ test("an existing saved order migrates to current product IDs @catalog", async (
     "removed-product",
   ])));
   await page.goto("catalog/?q=черная+икра&audit=order-list");
-  await expect(page.getByRole("link", { name: "К списку заказа · 2 позиции" })).toBeVisible();
+  const list = page.locator("#order-list");
   await expect(page.locator(".catalog-product [data-order-add][data-selected=\"true\"]")).toHaveCount(2);
-  await expect(page.locator(".catalog-product:visible [data-order-add][data-selected=\"true\"]")).toHaveCount(1);
+  await expect(page.locator(".catalog-product [data-order-add][data-selected=\"true\"]:visible")).toHaveCount(1);
+  // Migrating the canonical IDs and dropping the removed ID is independent of
+  // the optional shortcut, which hides when the order region intersects view.
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seledkin-order-list")))).toEqual(["caviar-001", "caviar-002"]);
+  await expect(list.locator("li")).toHaveCount(2);
+  await expect(list.getByRole("list")).toContainText("6 000 ₽ за 50 г");
+  await expect(list.getByRole("list")).toContainText("15 000 ₽ за 125 г");
+  await page.locator("#product-caviar-001 [data-order-add]").press("Enter");
+  await expect(list).toBeFocused();
+  await expect(list.getByRole("heading", { name: "Список заказа" })).toBeInViewport();
   await page.locator('label[for="package-caviar-002"]').click();
   await expect(page.locator("#product-caviar-002 [data-order-add]")).toHaveAttribute("data-selected", "true");
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem("seledkin-order-list")))).toEqual(["caviar-001", "caviar-002"]);
-  await expect(page.locator("#order-list").getByRole("list")).toContainText("15 000 ₽ за 125 г");
 });
 
 test("blocked storage leaves the order list usable during a visit @catalog", async ({ page }) => {

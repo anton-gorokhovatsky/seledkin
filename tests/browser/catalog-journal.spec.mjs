@@ -86,9 +86,17 @@ test("an empty category search can broaden without losing the query or browser h
     ["spacing", "* { line-height:1.5 !important; letter-spacing:.12em !important; word-spacing:.16em !important; } p { margin-bottom:2em !important; }"],
   ]) {
     const style = await page.addStyleTag({ content });
-    await page.evaluate(() => document.fonts.ready);
+    // Style injection can resolve before its new geometry and font demand are
+    // rendered. Focus must use the enlarged layout, not the previous frame.
+    await page.evaluate(async () => {
+      const frame = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      await frame();
+      await document.fonts.ready;
+      await frame();
+    });
     await search.focus();
     await broaden.focus();
+    await expect(broaden).toBeFocused();
     await expect(broaden).toBeInViewport();
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
     const bounds = await broaden.boundingBox();
