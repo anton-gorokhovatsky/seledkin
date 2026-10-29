@@ -5541,7 +5541,7 @@ a.site-menu__brand {
   .afisha__gallery { min-width: 0; width: 100%; margin: 0; }
   .afisha__frame { display: block; touch-action: pan-y pinch-zoom; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; position: relative; width: 100%; aspect-ratio: 5 / 4; isolation: isolate; clip-path: inset(-.25rem); user-select: none; -webkit-user-drag: none; }
   .afisha__frame[data-dragging="true"] { cursor: grabbing; }
-  .afisha__print, .afisha__remnant {
+  .afisha__print {
     position: absolute;
     top: 50%;
     left: 50%;
