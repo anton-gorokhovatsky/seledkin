@@ -130,7 +130,11 @@ test("cancelled pointer ownership and resizing recover without a stale gesture o
   await settled(page, 0);
   await bindings(page, 0);
   await drag(page, 1, { release: false });
+  await expect(frame(page)).toHaveAttribute("data-dragging", "true");
   await page.setViewportSize({ width: 430, height: 900 });
+  // setViewportSize can return before WebKit dispatches window.resize.
+  // Observe cancellation before releasing; otherwise this tests a completed swipe.
+  await expect(frame(page)).not.toHaveAttribute("data-dragging", "true");
   await page.mouse.up();
   await settled(page, 0);
   await bindings(page, 0);
