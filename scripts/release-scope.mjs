@@ -251,6 +251,12 @@ function onlyEditorialLinkAlignment(before, after, selector) {
   return withoutAlignment(before) === withoutAlignment(after);
 }
 
+function onlyRecipeCaptionWrapping(before, after, selector) {
+  return selector.trim() === '.watch-catch__name' && before && after
+    && before.body.includes('text-wrap: balance;')
+    && before.body.replace('text-wrap: balance;', 'text-wrap: wrap;') === after.body;
+}
+
 function cssTags(before, after, recipeSheet = false) {
   try {
     const oldRules = cssRules(before), newRules = cssRules(after), tags = new Set();
@@ -259,6 +265,7 @@ function cssTags(before, after, recipeSheet = false) {
       for (const selector of (newRules.get(key) ?? oldRules.get(key)).selector.split(",")) {
         const tag = onlyMenuEndPadding(oldRules.get(key), newRules.get(key), selector) ? "@navigation"
           : onlyEditorialLinkAlignment(oldRules.get(key), newRules.get(key), selector) ? "@editorial-links"
+          : onlyRecipeCaptionWrapping(oldRules.get(key), newRules.get(key), selector) ? "@recipes"
           : /^\s*\.delivery-waybill__price(?:\s+span)?\s*$/.test(selector) ? "@delivery"
           : /^\s*\.source-footer__(?:base|credit|legal)(?=[\s>.#[:]|$)/.test(selector) ? "@signature"
           : /^\s*\.source-footer__(?:content|details|portrait|postscript|channels)(?=[\s>.#[:]|$)/.test(selector) ? "@footer"
@@ -311,6 +318,7 @@ export function scopedBrowserTags(changes) {
     } else if (path.endsWith(".html") && before != null && after != null) {
       const oldHtml = resourceVersions(before), newHtml = resourceVersions(after);
       if (oldHtml === newHtml) continue;
+      if (onlyTypography(oldHtml, newHtml)) { tags.add("@typography"); continue; }
       if (onlyMenuRoutes(oldHtml, newHtml)) { tags.add("@navigation"); continue; }
       if (onlyProductTargets(oldHtml, newHtml)) { tags.add("@catalog"); continue; }
       if (onlyFooterLayout(oldHtml, newHtml)) { tags.add("@footer"); tags.add("@signature"); continue; }

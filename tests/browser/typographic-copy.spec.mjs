@@ -60,6 +60,28 @@ test("reviewed preview words avoid the awkward short endings at their real measu
   }
 });
 
+test("mobile editorial previews wrap complete words rather than optional syllables @typography", async ({ page }) => {
+  await page.setViewportSize({ width: 393, height: 852 });
+  await page.route(/mc\.yandex|api\.mapbox/, route => route.abort());
+  for (const [route, examples] of [
+    ["", [['.watch-catch__item a[href="recipes/692/"] .watch-catch__name', "сковороде"], ["#journal-preview-702", "копчения"], ["#journal-preview-702", "осетра"],
+      ['.watch-catch__item a[href="recipes/664/"] .watch-catch__name', "простая"],
+      ['.watch-catch__item a[href="recipes/664/"] .watch-catch__name', "Предельно"],
+      ['.watch-catch__item a[href="recipes/627/"] .watch-catch__name', "счастливой"]]],
+    ["journal/", [["#entry-title-703", "копчения"], ["#entry-title-702", "осетра"],
+      ["#entry-title-698", "малосольного"], ["#entry-title-698", "каспийского"],
+      ["#entry-title-697", "балтийского"], ["#entry-title-688", "куриной"]]],
+  ]) {
+    await page.goto(`${route}?audit=whole-preview-words`);
+    await page.evaluate(() => document.fonts.ready);
+    for (const [selector, word] of examples) {
+      const label = page.locator(selector);
+      expect(await label.evaluate(wordBreaks, word), `${route} ${word}`).toEqual([]);
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+  }
+});
+
 test("changed typographic copy preserves narrow reflow and enlarged text @typography", async ({ browser, baseURL }) => {
   test.skip(!pages.length, "Only used for a verified typographic-only release");
   test.setTimeout(90000);

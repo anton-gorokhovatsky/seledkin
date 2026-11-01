@@ -388,3 +388,18 @@ test('only editorial-link start alignment selects its existing consumer check', 
     assert.equal(classifyRelease([{ path: 'assets/styles.css', before, after: changed }]), 'full');
   }
 });
+
+
+test("whole-word caption wrapping combines its recipe check with exact typographic copy", () => {
+  const copy = { path: "index.html", before: '<main><h3>Простая паста</h3></main>',
+    after: '<main><h3>Прос\u00adтая паста</h3></main>' };
+  const css = { path: "assets/styles.css", before: '.watch-catch__name{font-size:inherit;text-wrap: balance;}',
+    after: '.watch-catch__name{font-size:inherit;text-wrap: wrap;}' };
+  assert.deepEqual(selectReleaseChecks([copy, css]), { scope: "scoped", grep: "@recipes|@typography" });
+  assert.deepEqual(typographyReleasePages([copy, css]), ["index.html"]);
+  for (const extra of [css.after.replace('inherit', '1rem'), css.after.replace('wrap;', 'pretty;')]) {
+    assert.equal(classifyRelease([copy, { ...css, after: extra }]), "full");
+  }
+  assert.equal(classifyRelease([{ ...copy, after: copy.after.replace('паста', 'рыба') }, css]), "full");
+  assert.equal(classifyRelease([copy, css, { path: "assets/unknown.js", after: "newRuntime()" }]), "full");
+});

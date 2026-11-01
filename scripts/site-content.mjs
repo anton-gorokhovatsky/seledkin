@@ -288,7 +288,16 @@ function journalBody(entry) {
   return lines.slice(0, historical).map(line => `                  ${line}`).join("\n");
 }
 
-function journalTitle(value) {
+function journalTitle(value, { hyphenate = false } = {}) {
+  // Preview titles wrap at spaces; discretionary syllable breaks are reserved
+  // for full page headings that also support enlarged-text reading measures.
+  // Keep only the emergency breaks needed by the compact recipe captions
+  // at 320px / 200% text, including the wider fallback serif. Compact recipe
+  // captions use ordinary wrapping so these breaks do not balance short lines.
+  if (!hyphenate) return text(value)
+    .replace(/(?<=на\u00a0)сковороде/gu, "ско\u00adво\u00adро\u00adде")
+    .replace(/Предельно/gu, "Пре\u00adдельно")
+    .replace(/счастливой/gu, "счастли\u00adвой");
   const hyphens = {
     Охлажденная: "Ох\u00adлаж\u00adден\u00adная", эталонная: "эта\u00adлон\u00adная", Карелии: "Ка\u00adре\u00adлии",
     малосольного: "ма\u00adло\u00adсоль\u00adно\u00adго", каспийского: "кас\u00adпий\u00adско\u00adго", паштеты: "паш\u00adте\u00adты",
@@ -327,7 +336,7 @@ function pageTitle(value) {
   // Only very narrow title measures expose these breaks. Ordinary headings
   // retain the typographic ties; enlarged text can move a whole word instead
   // of cutting its first syllable after a bound preposition.
-  return journalTitle(value).replaceAll("\u00a0", '\u00a0<wbr class="page-intro__word-break">');
+  return journalTitle(value, { hyphenate: true }).replaceAll("\u00a0", '\u00a0<wbr class="page-intro__word-break">');
 }
 
 // Editorial matches to current catalog positions; historical post prices are

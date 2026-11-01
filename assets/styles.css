@@ -1700,7 +1700,7 @@ a.source-brand {
   font-family: var(--serif);
   font-size: inherit;
   line-height: 1.15;
-  text-wrap: balance;
+  text-wrap: wrap;
 }
 .watch-catch__item svg { color: var(--text-link); }
 /* The caption starts at its trimmed cap edge, so use the same cap metric

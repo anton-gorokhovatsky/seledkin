@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
 test.beforeEach(async ({ context }) => {
-  await context.route("https://mc.yandex.ru/**", route => route.abort());
+  await context.route(/mc\.yandex|api\.mapbox/, route => route.abort());
 });
 
 test("delivery stays inside 320px with enlarged text and a wider fallback serif @typography", async ({ page }, testInfo) => {
@@ -14,11 +14,17 @@ test("delivery stays inside 320px with enlarged text and a wider fallback serif 
   await page.goto("?audit=delivery-fallback#delivery");
   // Linux's wider serif reproduced a 42px overflow that the Mac font hid.
   // The test fixture does not change the site's typography or shipped assets.
-  await page.addStyleTag({ content: `
+  // Avoid addStyleTag's unrelated CSP listener catching the map iframe's
+  // external stylesheet while inserting this permitted local test fixture.
+  await page.evaluate(css => {
+    const style = document.createElement("style");
+    style.textContent = css;
+    document.head.append(style);
+  }, `
     @font-face { font-family: "QA Reflow Serif"; src: url("/qa-reflow-serif.ttf"); }
     html { font-size: 200% !important; }
     .delivery-waybill h2, .watch-catch__name { font-family: "QA Reflow Serif", serif; }
-  ` });
+  `);
   await page.evaluate(() => document.fonts.ready);
   const heading = page.locator(".delivery-waybill h2");
   const lines = await heading.evaluate(node => {
@@ -67,15 +73,15 @@ test("the empty order and footer remain grouped at intermediate width and enlarg
   }
 });
 
-test("compact journal photos retain their full frame and recipe words never break without a hyphen @journal @typography", async ({ page }) => {
+test("compact journal photos retain their full frame and recipe previews preserve whole words @journal @typography", async ({ page }) => {
   await page.setViewportSize({ width: 638, height: 900 });
   await page.goto("?audit=compact-journal#journal");
   await page.evaluate(() => document.fonts.ready);
   const preview = page.locator(".journal-preview__entry img").first();
   const checkPhoto = async (photo, minimum) => {
     await photo.scrollIntoViewIfNeeded();
-    const frame = await photo.evaluate(async img => {
-      await img.decode();
+    await expect.poll(() => photo.evaluate(img => img.decode().then(() => img.complete && img.naturalWidth > 0, () => false))).toBe(true);
+    const frame = await photo.evaluate(img => {
       const box = img.getBoundingClientRect();
       return { width: box.width, ratio: box.width / box.height, original: img.naturalWidth / img.naturalHeight };
     });
@@ -84,7 +90,7 @@ test("compact journal photos retain their full frame and recipe words never brea
   };
   await checkPhoto(preview, 160);
   const name = page.locator('.watch-catch__name').filter({ hasText: "Филе трески" });
-  expect(await name.textContent()).toContain("ско\u00adво\u00adро\u00adде");
+  expect((await name.textContent()).replaceAll("\u00ad", "")).toContain("сковороде");
   expect(await name.evaluate(node => getComputedStyle(node).overflowWrap)).not.toBe("anywhere");
   expect(await page.locator('.afisha__title em').textContent()).toContain("каж\u00adдый");
   await page.goto("journal/?audit=compact-journal#journal-earlier");
