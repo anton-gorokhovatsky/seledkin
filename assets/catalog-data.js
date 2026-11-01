@@ -61,7 +61,7 @@ export const inventory = [
     label: "Охлаждённая рыба",
     shortLabel: "Охлаждённая рыба",
     items: [
-      item("chilled-trout", "kg", "Форель охлаждённая", "1680 ₽/кг", "Карелия, вес одной рыбы около 1,2–1,4 кг", {"source":"https://t.me/kapitanseledkin/699"}),
+      item("chilled-trout", "kg", "Форель охлаждённая", "1680 ₽/кг", "Карелия, потрошёная, вес одной рыбы около 2 кг", {"source":"https://t.me/kapitanseledkin/704"}),
     ],
   },
   {
