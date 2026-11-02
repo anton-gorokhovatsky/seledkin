@@ -50,3 +50,57 @@ test('action labels stay vertically centred and editorial harpoons stay beside t
   }
   await testInfo.attach('action-centering', { body: JSON.stringify(evidence, null, 2), contentType: 'application/json' });
 });
+
+
+test('homepage action group shares a visible axis after first load and text enlargement @hero-journal', async ({ page }, testInfo) => {
+  await page.route(/mc\.yandex|api\.mapbox/, route => route.abort());
+  const evidence = [];
+  for (const theme of ['light', 'dark']) {
+    await page.addInitScript(value => localStorage.setItem('seledkin-theme', value), theme);
+    for (const width of [1440, 1024]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.goto('?audit=hero-action-axis');
+      await page.evaluate(() => document.fonts.ready);
+      for (const enlarged of [false, true]) {
+        if (enlarged) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+        const readings = await page.locator('.source-hero__actions > a').evaluateAll(links => links.map(link => {
+          const label = link.querySelector('span'), css = getComputedStyle(label);
+          const range = document.createRange(); range.selectNodeContents(label);
+          const lines = [...range.getClientRects()].filter(rect => rect.width > 0);
+          const lineCount = new Set(lines.map(rect => Math.round(rect.top))).size;
+          const probe = document.createElement('span');
+          probe.style.cssText = 'display:inline-block;width:0;height:0;margin:0;padding:0;vertical-align:baseline';
+          label.prepend(probe);
+          const baseline = probe.getBoundingClientRect().top; probe.remove();
+          const canvas = document.createElement('canvas').getContext('2d');
+          canvas.font = `${css.fontStyle} ${css.fontWeight} ${css.fontSize} ${css.fontFamily}`;
+          const cap = canvas.measureText('I').actualBoundingBoxAscent;
+          const firstCapCentre = baseline - cap / 2;
+          const box = link.getBoundingClientRect(), arrow = link.querySelector('svg')?.getBoundingClientRect();
+          return { label: label.textContent, lineCount, firstCapCentre,
+            capCentre: firstCapCentre + (lineCount - 1) * parseFloat(css.lineHeight) / 2,
+            top: box.top, bottom: box.bottom, height: box.height, width: box.width,
+            centre: box.top + box.height / 2,
+            arrowAxis: arrow ? arrow.top + arrow.height / 2 : null,
+            clipped: lines.some(rect => rect.left < box.left - 1 || rect.right > box.right + 1) };
+        }));
+        for (const reading of readings) {
+          expect(reading.height).toBeGreaterThanOrEqual(44);
+          expect(reading.clipped, reading.label).toBe(false);
+        }
+        if (!enlarged) expect(readings[1].lineCount, `${theme} ${width}px journal first load`).toBe(1);
+        expect(Math.abs(readings[1].arrowAxis - readings[1].firstCapCentre), 'harpoon follows first capital line').toBeLessThan(.75);
+        if (Math.abs(readings[0].centre - readings[1].centre) < 2) {
+          expect(Math.abs(readings[0].capCentre - readings[1].capCentre), `${theme} ${width}px group axis`).toBeLessThan(.75);
+        } else expect(readings[1].top).toBeGreaterThanOrEqual(readings[0].bottom);
+        evidence.push({ theme, width, enlarged, readings });
+        if (width === 1440) await page.locator('.source-hero__actions').screenshot({ path: testInfo.outputPath(`${theme}-${enlarged ? 'text200' : 'normal'}.png`) });
+      }
+    }
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('?audit=hero-action-mobile');
+  await expect(page.locator('.source-hero__actions')).toBeHidden();
+  await expect(page.locator('.afisha__frame')).toBeVisible();
+  await testInfo.attach('visible-axis', { body: JSON.stringify(evidence, null, 2), contentType: 'application/json' });
+});

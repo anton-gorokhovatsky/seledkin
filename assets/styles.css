@@ -5930,6 +5930,21 @@ a.site-menu__brand {
     text-decoration: underline;
     text-underline-offset: .2em;
   }
+  /* Keep this pair on the button family's visible capital axis. Equal
+     leading centres the flex line without pinning its first baseline at top. */
+  .source-hero__journal-link:where(.source-hero__actions > a) {
+    display: inline-flex;
+    padding-block: max(0px, calc((var(--button-height) - 1lh) / 2));
+    transform: translateY(var(--control-label-offset));
+  }
+  @supports (text-box: trim-both cap alphabetic) and (padding-block: calc((1lh - 1cap) / 2)) {
+    .source-hero__journal-link:where(.source-hero__actions > a) > span {
+      display: block;
+      min-width: 0;
+      text-box: trim-both cap alphabetic;
+      padding-block: calc((1lh - 1cap) / 2);
+    }
+  }
   [data-desktop-editorial] .source-hero__journal {
     height: auto;
     padding-right: 1.15rem;
