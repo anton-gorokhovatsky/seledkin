@@ -702,6 +702,7 @@ a.source-brand {
 }
 
 .source-hero__actions {
+  --control-label-offset: -0.06em;
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -5930,11 +5931,15 @@ a.site-menu__brand {
     text-decoration: underline;
     text-underline-offset: .2em;
   }
-  /* Keep this pair on the button family's visible capital axis. Equal
-     leading centres the flex line without pinning its first baseline at top. */
+  /* Centre the visible lettering, including its lower strokes. Keep the
+     touch targets fixed while the journal label and harpoon move together. */
   .source-hero__journal-link:where(.source-hero__actions > a) {
+    --control-label-offset: -0.09em;
     display: inline-flex;
     padding-block: max(0px, calc((var(--button-height) - 1lh) / 2));
+  }
+  .source-hero__journal-link:where(.source-hero__actions > a) > span,
+  .source-hero__journal-link:where(.source-hero__actions > a) > svg {
     transform: translateY(var(--control-label-offset));
   }
   @supports (text-box: trim-both cap alphabetic) and (padding-block: calc((1lh - 1cap) / 2)) {

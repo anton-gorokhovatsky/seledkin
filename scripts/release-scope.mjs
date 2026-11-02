@@ -257,6 +257,15 @@ function onlyRecipeCaptionWrapping(before, after, selector) {
     && before.body.replace('text-wrap: balance;', 'text-wrap: wrap;') === after.body;
 }
 
+function onlyHeroActionLabelOffset(before, after, selector) {
+  if (selector.trim() !== '.source-hero__actions' || !before || !after) return false;
+  const offset = /(^|[;\n])\s*--control-label-offset\s*:\s*-?(?:\d+(?:\.\d+)?|\.\d+)em\s*;/g;
+  if ([...after.body.matchAll(offset)].length !== 1) return false;
+  const withoutOffset = rule => rule.body.replace(offset, '$1')
+    .split('\n').map(line => line.trim()).filter(Boolean).join('\n');
+  return withoutOffset(before) === withoutOffset(after);
+}
+
 function cssTags(before, after, recipeSheet = false) {
   try {
     const oldRules = cssRules(before), newRules = cssRules(after), tags = new Set();
@@ -266,6 +275,7 @@ function cssTags(before, after, recipeSheet = false) {
         const tag = onlyMenuEndPadding(oldRules.get(key), newRules.get(key), selector) ? "@navigation"
           : onlyEditorialLinkAlignment(oldRules.get(key), newRules.get(key), selector) ? "@editorial-links"
           : onlyRecipeCaptionWrapping(oldRules.get(key), newRules.get(key), selector) ? "@recipes"
+          : onlyHeroActionLabelOffset(oldRules.get(key), newRules.get(key), selector) ? "@hero-journal"
           : /^\s*\.delivery-waybill__price(?:\s+span)?\s*$/.test(selector) ? "@delivery"
           : /^\s*\.source-footer__(?:base|credit|legal)(?=[\s>.#[:]|$)/.test(selector) ? "@signature"
           : /^\s*\.source-footer__(?:content|details|portrait|postscript|channels)(?=[\s>.#[:]|$)/.test(selector) ? "@footer"

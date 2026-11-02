@@ -403,3 +403,15 @@ test("whole-word caption wrapping combines its recipe check with exact typograph
   assert.equal(classifyRelease([{ ...copy, after: copy.after.replace('паста', 'рыба') }, css]), "full");
   assert.equal(classifyRelease([copy, css, { path: "assets/unknown.js", after: "newRuntime()" }]), "full");
 });
+
+
+test('the homepage action optical offset keeps its exact component gate', () => {
+  const before = '.source-hero__actions{display:flex;align-items:center;gap:1rem}';
+  const after = '.source-hero__actions{--control-label-offset:-0.06em;display:flex;align-items:center;gap:1rem}';
+  const css = { path: 'assets/styles.css', before, after };
+  assert.deepEqual(selectReleaseChecks([css]), { scope: 'scoped', grep: '@hero-journal' });
+  for (const changed of [after.replace('center', 'start'), after.replace('gap:1rem', 'gap:2rem'),
+    after.replace('.source-hero__actions', ':root'), after.replace('-0.06em', 'var(--other)')]) {
+    assert.equal(classifyRelease([{ ...css, after: changed }]), 'full');
+  }
+});

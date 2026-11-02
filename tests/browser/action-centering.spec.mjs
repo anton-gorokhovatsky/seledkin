@@ -76,8 +76,12 @@ test('homepage action group shares a visible axis after first load and text enla
           canvas.font = `${css.fontStyle} ${css.fontWeight} ${css.fontSize} ${css.fontFamily}`;
           const cap = canvas.measureText('I').actualBoundingBoxAscent;
           const firstCapCentre = baseline - cap / 2;
+          const visibleText = css.textTransform === 'uppercase' ? label.textContent.toUpperCase() : label.textContent;
+          const ink = canvas.measureText(visibleText);
+          const inkCentre = baseline + (ink.actualBoundingBoxDescent - ink.actualBoundingBoxAscent) / 2
+            + (lineCount - 1) * parseFloat(css.lineHeight) / 2;
           const box = link.getBoundingClientRect(), arrow = link.querySelector('svg')?.getBoundingClientRect();
-          return { label: label.textContent, lineCount, firstCapCentre,
+          return { label: label.textContent, lineCount, firstCapCentre, inkCentre,
             capCentre: firstCapCentre + (lineCount - 1) * parseFloat(css.lineHeight) / 2,
             top: box.top, bottom: box.bottom, height: box.height, width: box.width,
             centre: box.top + box.height / 2,
@@ -90,8 +94,9 @@ test('homepage action group shares a visible axis after first load and text enla
         }
         if (!enlarged) expect(readings[1].lineCount, `${theme} ${width}px journal first load`).toBe(1);
         expect(Math.abs(readings[1].arrowAxis - readings[1].firstCapCentre), 'harpoon follows first capital line').toBeLessThan(.75);
-        if (Math.abs(readings[0].centre - readings[1].centre) < 2) {
-          expect(Math.abs(readings[0].capCentre - readings[1].capCentre), `${theme} ${width}px group axis`).toBeLessThan(.75);
+        expect(Math.abs(readings[0].inkCentre - readings[0].centre), 'catalog lettering is optically centred inside its button').toBeLessThan(.75);
+        if (Math.min(readings[0].bottom, readings[1].bottom) > Math.max(readings[0].top, readings[1].top)) {
+          expect(Math.abs(readings[0].inkCentre - readings[1].inkCentre), `${theme} ${width}px visible group axis`).toBeLessThan(.75);
         } else expect(readings[1].top).toBeGreaterThanOrEqual(readings[0].bottom);
         evidence.push({ theme, width, enlarged, readings });
         if (width === 1440) await page.locator('.source-hero__actions').screenshot({ path: testInfo.outputPath(`${theme}-${enlarged ? 'text200' : 'normal'}.png`) });
