@@ -258,10 +258,10 @@ function onlyRecipeCaptionWrapping(before, after, selector) {
 }
 
 function onlyHeroActionLabelOffset(before, after, selector) {
-  if (selector.trim() !== '.source-hero__actions' || !before || !after) return false;
+  if (selector.trim() !== '.source-hero__actions' || !after) return false;
   const offset = /(^|[;\n])\s*--control-label-offset\s*:\s*-?(?:\d+(?:\.\d+)?|\.\d+)em\s*;/g;
   if ([...after.body.matchAll(offset)].length !== 1) return false;
-  const withoutOffset = rule => rule.body.replace(offset, '$1')
+  const withoutOffset = rule => (rule?.body ?? '').replace(offset, '$1')
     .split('\n').map(line => line.trim()).filter(Boolean).join('\n');
   return withoutOffset(before) === withoutOffset(after);
 }

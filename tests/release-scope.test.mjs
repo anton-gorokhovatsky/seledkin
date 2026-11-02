@@ -410,6 +410,8 @@ test('the homepage action optical offset keeps its exact component gate', () => 
   const after = '.source-hero__actions{--control-label-offset:-0.06em;display:flex;align-items:center;gap:1rem}';
   const css = { path: 'assets/styles.css', before, after };
   assert.deepEqual(selectReleaseChecks([css]), { scope: 'scoped', grep: '@hero-journal' });
+  assert.deepEqual(selectReleaseChecks([{ ...css, before: '.kept{color:black}', after: '.kept{color:black}@supports(font:-apple-system-body){.source-hero__actions{--control-label-offset:-0.03em;}}' }]), { scope: 'scoped', grep: '@hero-journal' });
+  assert.equal(classifyRelease([{ ...css, before: undefined, after }]), 'full');
   for (const changed of [after.replace('center', 'start'), after.replace('gap:1rem', 'gap:2rem'),
     after.replace('.source-hero__actions', ':root'), after.replace('-0.06em', 'var(--other)')]) {
     assert.equal(classifyRelease([{ ...css, after: changed }]), 'full');

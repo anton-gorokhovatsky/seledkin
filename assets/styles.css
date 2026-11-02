@@ -702,7 +702,7 @@ a.source-brand {
 }
 
 .source-hero__actions {
-  --control-label-offset: -0.06em;
+  --control-label-offset: 0.08em;
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -5933,8 +5933,13 @@ a.site-menu__brand {
   }
   /* Centre the visible lettering, including its lower strokes. Keep the
      touch targets fixed while the journal label and harpoon move together. */
+  /* Golos capitals paint lower in WebKit; keep this compensation local. */
+  @supports (font: -apple-system-body) {
+    .source-hero__actions { --control-label-offset: -0.03em; }
+  }
   .source-hero__journal-link:where(.source-hero__actions > a) {
-    --control-label-offset: -0.09em;
+    --control-label-offset: -0.18em;
+    text-decoration-thickness: 1px;
     display: inline-flex;
     padding-block: max(0px, calc((var(--button-height) - 1lh) / 2));
   }
