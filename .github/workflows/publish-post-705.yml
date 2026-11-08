@@ -1,0 +1,58 @@
+name: Publish verified post 705
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: verified-post-705
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 2c174a7955510444d5b47ea864f7cf1d450a82a3
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Prepare the existing public map configuration
+        env:
+          MAPBOX_PUBLIC_TOKEN: ${{ secrets.MAPBOX_PUBLIC_TOKEN }}
+        run: node scripts/build-map-token.mjs --require-token
+      - name: Verify this publication and generated files
+        run: |
+          test "$(git rev-parse HEAD)" = "2c174a7955510444d5b47ea864f7cf1d450a82a3"
+          node scripts/build-site.mjs --check
+          node scripts/build-catalog.mjs --check
+          node scripts/build-media.mjs --check
+          node scripts/check-editorial-release.mjs 264d22540fe4cbc9ab026482696d99c8261ee471 --ids=705
+      - name: Package the exact verified site
+        run: pnpm run package:site
+      - name: Prepare the targeted browser check
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Check only post 705 in installed Chrome
+        timeout-minutes: 2
+        env:
+          EDITORIAL_IDS: '["705"]'
+          PLAYWRIGHT_SITE_DIR: _site
+        run: pnpm exec playwright test --config=playwright.editorial.config.mjs
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish the verified site
+        id: deployment
+        uses: actions/deploy-pages@v4
