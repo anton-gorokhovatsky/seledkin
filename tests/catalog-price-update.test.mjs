@@ -29,6 +29,15 @@ test("every price row in Oleg's supplied list is accounted for once, including e
     assert.equal(source[row.priceLine - 1].trim(), row.rawPrice);
     const product = all.get(row.product);
     assert.ok(product, `Unaccounted source product: ${row.name}`);
+    if (product.id === "prepared-fish-009") {
+      // The source list remains historical; post 705 supplies the later price.
+      assert.equal(row.price, null);
+      assert.equal(product.price, "990 ₽/кг");
+      assert.equal(product.source, "https://t.me/kapitanseledkin/705");
+      assert.match(read("content/journal/705.html"), /990[\s\u00a0]+₽/);
+      assert.ok(listed.has(product.id));
+      continue;
+    }
     assert.equal(product.price, row.price, `${row.name}: ${row.rawPrice}`);
     if (row.price === null) {
       assert.equal(product.unlistedReason, "no-price");
