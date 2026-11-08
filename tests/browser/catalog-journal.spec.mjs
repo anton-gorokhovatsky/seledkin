@@ -126,17 +126,18 @@ test("homepage prices continue to the exact package and delivery terms stay besi
 test("catalog separates dated journal matches from current price rows @catalog", async ({ page }) => {
   await page.goto("catalog/");
   const search = page.getByRole("searchbox", { name: "Найти товар" });
-  for (const [query, count] of [["тунец", 4], ["щука", 2], ["слабосоленая", 2]]) {
+  for (const [query, count] of [["тунец", 4], ["щука", 2], ["слабосоленая", 3]]) {
     await search.fill(query);
     await expect(page.locator(".catalog-product:visible")).toHaveCount(count);
   }
   await search.fill("эталонная");
   await expect(page.locator(".catalog-product:visible")).toHaveCount(0);
   await expect(page.locator("[data-catalog-empty]")).toBeHidden();
-  await expect(page.locator("[data-journal-result]:visible")).toHaveCount(1);
-  await expect(page.locator("[data-catalog-count]")).toHaveText("В каталоге нет совпадений · Из журнала: 1");
-  await expect(page.locator("[data-journal-result]:visible time")).toHaveAttribute("datetime", "2026-10-01");
-  await page.locator("[data-journal-result]:visible a").click();
+  await expect(page.locator("[data-journal-result]:visible")).toHaveCount(2);
+  await expect(page.locator("[data-catalog-count]")).toHaveText("В каталоге нет совпадений · Из журнала: 2");
+  const datedMatch = page.locator("#journal-entry-699:visible");
+  await expect(datedMatch.locator("time")).toHaveAttribute("datetime", "2026-10-01");
+  await datedMatch.locator("a").click();
   await expect(page).toHaveURL(/journal\/699\/$/);
   await expect(page.locator(".ship-log-entry__body")).toContainText("Килограмм, как и раньше");
   await page.goBack();

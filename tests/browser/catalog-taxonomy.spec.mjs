@@ -81,7 +81,7 @@ test("early Facebook advice keeps its source, photograph and current product rou
   test.setTimeout(90000);
   const stories = [
     { id: "facebook-2018-12-15-nerka", date: "2018-12-15", product: "frozen-fish-007", price: "1 820 ₽/кг" },
-    { id: "facebook-2018-02-16-herring", date: "2018-02-16", product: "prepared-fish-009", price: "699 ₽/кг" },
+    { id: "facebook-2018-02-16-herring", date: "2018-02-16", product: "prepared-fish-009", price: "990 ₽/кг" },
   ];
   for (const theme of ["light", "dark"]) for (const story of stories) {
     await page.addInitScript(theme => localStorage.setItem("seledkin-theme", theme), theme);
@@ -101,11 +101,6 @@ test("early Facebook advice keeps its source, photograph and current product rou
     await page.screenshot({ path: testInfo.outputPath(`${story.id}-320-${theme}.png`) });
     await page.addStyleTag({ content: "html { font-size: 200% !important; } * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-bottom: 2em !important; }" });
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
-    if (story.product === "prepared-fish-009") {
-      await expect(page.locator(".recipe-current")).toHaveCount(0);
-      await expect(page.locator(".ship-log-entry__body")).toBeVisible();
-      continue;
-    }
     await page.locator(`.recipe-current a[href*="product=${story.product}"]`).press("Enter");
     await expect(page.locator(".catalog-product:visible")).toHaveCount(1);
     await expect(page.locator(".catalog-product:visible strong")).toHaveText(story.price);

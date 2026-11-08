@@ -21,7 +21,7 @@ const findProducts = (query) => catalog.flatMap((category) => category.items
 test("curated package families preserve every sale identity and leave different products separate", () => {
   const families = catalog.flatMap(category => groupCatalogProducts(category.items));
   const allProducts = catalog.flatMap(category => category.items);
-  assert.equal(catalogPositionCount(catalog), 160);
+  assert.equal(catalogPositionCount(catalog), 161);
   assert.equal(families.flat().length, allProducts.length);
   assert.deepEqual(families.flat().map(product => product.id).sort(), allProducts.map(product => product.id).sort());
   assert.deepEqual(families.filter(group => group.length > 1).map(group => group.map(product => [product.id, packageLabel(product)])), [
@@ -40,7 +40,7 @@ test("curated package families preserve every sale identity and leave different 
 test("customers find stocked products using everyday names and inflected words", () => {
   assert.equal(findProducts("креветки").length, 7);
   assert.equal(findProducts("кальмары").length, 3);
-  assert.deepEqual(findProducts("селёдка"), ["Филе сельди холодного копчения «По-Датски»"]);
+  assert.deepEqual(findProducts("селёдка"), ["Филе сельди холодного копчения «По-Датски»", "Сельдь слабосоленая"]);
   assert.deepEqual(findProducts("лосось"), ["Филе лосося", "Стейк лосося", "Лосось слабосоленый"]);
   assert.deepEqual(findProducts("треска"), findProducts("трески"));
   assert.deepEqual(findProducts("СЕВЕРНЫЕ, креветки"), ["Креветка северная в/м"]);
@@ -52,7 +52,7 @@ test("customers find stocked products using everyday names and inflected words",
 });
 
 test("preparation terms describe the actual product, not its mixed category", () => {
-  assert.deepEqual(findProducts("слабосоленая"), ["Форель слабосоленая", "Лосось слабосоленый"]);
+  assert.deepEqual(findProducts("слабосоленая"), ["Форель слабосоленая", "Лосось слабосоленый", "Сельдь слабосоленая"]);
   assert.deepEqual(findProducts("горячего копчения"), ["Осетр горячего копчения", "Скумбрия горячего копчения", "Рулет из брюшков осетра", "Форель горячего копчения"]);
   assert.deepEqual(findProducts("креветка без головы"), ["Креветка тигровая б/г"]);
   assert.deepEqual(findProducts("вареные креветки"), ["Креветка северная в/м"]);

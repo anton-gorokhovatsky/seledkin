@@ -159,7 +159,7 @@ export const inventory = [
       item("danish-herring-fillet", "kg", "Филе сельди холодного копчения «По-Датски»", "1800 ₽/кг", "Две половинки малосольного филе; вес одной рыбы около 100 г", {"source":"https://t.me/kapitanseledkin/683"}),
       item("salted-red-mullet", "pack", "Малосольная черноморская барабуля", "999 ₽/0,330 кг", "Бескостное филе, разделанное вручную; банка 330 г", {"source":"https://t.me/kapitanseledkin/680"}),
       item("prepared-fish-008", "kg", "Лосось слабосоленый", "3990 ₽/кг", null, {"priceSource":{"file":"content/prices/oleg-2026-10-21.txt","line":219}}),
-      item("prepared-fish-009", "kg", "Сельдь слабосоленая", null, "Атлантическая. Солим сами, без консервантов и созревателей", {"priceSource":{"file":"content/prices/oleg-2026-10-21.txt","line":221},"unlistedReason":"no-price"}),
+      item("prepared-fish-009", "kg", "Сельдь слабосоленая", "990 ₽/кг", "Атлантическая, Фарерские острова. Солим сами, без консервантов, антиокислителей и созревателей", {"source":"https://t.me/kapitanseledkin/705"}),
       item("prepared-fish-010", "kg", "Муксун холодного копчения", "2650 ₽/кг", "Красноярск", {"priceSource":{"file":"content/prices/oleg-2026-10-21.txt","line":224}}),
       item("prepared-fish-011", "kg", "Скумбрия холодного копчения", "1800 ₽/кг", "ПБГ", {"source":"https://t.me/kapitanseledkin/690","priceSource":{"file":"content/prices/oleg-2026-10-21.txt","line":227}}),
       item("prepared-fish-012", "kg", "Рулет из брюшков осетра", "3740 ₽/кг", "Горячего копчения, упаковка около 300 г", {"source":"https://t.me/kapitanseledkin/702"}),
