@@ -219,6 +219,27 @@ function onlyFooterLayout(before, after) {
     && stable(oldRegions[0].replace(backLink, "")) === stable(newRegions[0]);
 }
 
+function homeBrowserTags(before, after) {
+  if (JSON.stringify(before.match(activeContent)) !== JSON.stringify(after.match(activeContent))) return null;
+  const tags = new Set();
+  for (const name of ["journal-hero", "journal-hero-products", "journal-preview", "mobile-hero"]) {
+    const start = `<!-- shared:${name}:start -->`, end = `<!-- shared:${name}:end -->`;
+    const pattern = new RegExp(`${start}([\\s\\S]*?)${end}\\n?`, "g");
+    const previous = [...before.matchAll(pattern)], current = [...after.matchAll(pattern)];
+    if (previous.length > 1 || current.length > 1) return null;
+    const removedOrder = name === "journal-hero-products" && previous.length === 1 && current.length === 0;
+    if (previous.length !== current.length && !removedOrder) return null;
+    if (previous[0]?.[0] === current[0]?.[0]) continue;
+    if ([...previous, ...current].some(([, body]) =>
+      /<!-- shared:|\son\w+\s*=|<(?:iframe|object|embed)\b/i.test(body))) return null;
+    const placeholder = removedOrder ? "" : `${start}${end}\n`;
+    before = before.replace(pattern, placeholder);
+    after = after.replace(pattern, placeholder);
+    tags.add(name === "mobile-hero" ? "@afisha" : "@hero-journal");
+  }
+  return before === after ? tags : null;
+}
+
 function cssRules(source, context = "", rules = new Map()) {
   if (source == null) throw new Error("Missing CSS comparison");
   source = source.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -300,7 +321,7 @@ function cssTags(before, after, recipeSheet = false) {
           : /^\s*\.contacts-source(?=[\s_.#[:]|$)/.test(selector) ? "@contacts"
           : /^\s*\.catalog-(?:[\w-]+)(?=[\s.#[:]|$)/.test(selector) ? "@catalog"
           : /^\s*\.(?:journal-historical|recipe-archive-note)(?=[\s_.#[:]|$)/.test(selector) ? "@journal"
-          : /^\s*\.source-hero__journal(?=[\s_.#[:\-]|$)/.test(selector) && !/[+~]|:has\(/.test(selector) ? "@hero-journal"
+          : /^\s*(?:\[data-desktop-editorial\]\s+)?\.source-hero__journal(?=[\s_.#[:\-]|$)/.test(selector) && !/[+~]|:has\(/.test(selector) ? "@hero-journal"
           : /^\s*\.afisha(?=[\s_.#[:]|$)/.test(selector) ? "@afisha" : null;
         if (!tag) return null;
         tags.add(tag);
@@ -349,11 +370,17 @@ export function scopedBrowserTags(changes) {
       if (onlyMenuRoutes(oldHtml, newHtml)) { tags.add("@navigation"); continue; }
       if (onlyProductTargets(oldHtml, newHtml)) { tags.add("@catalog"); continue; }
       if (onlyFooterLayout(oldHtml, newHtml)) { tags.add("@footer"); tags.add("@signature"); continue; }
-      const region = path === "index.html" ? /<!-- shared:mobile-hero:start -->[\s\S]*?<!-- shared:mobile-hero:end -->/
-        : ["catalog/index.html", "recipes/index.html"].includes(path) || /^journal\/\d+\/index\.html$/.test(path) ? /<main\b[^>]*>[\s\S]*?<\/main>/ : null;
+      if (path === "index.html") {
+        const affected = homeBrowserTags(oldHtml, newHtml);
+        if (!affected) return null;
+        affected.forEach(tag => tags.add(tag));
+        continue;
+      }
+      const region = ["catalog/index.html", "recipes/index.html"].includes(path) || /^journal\/\d+\/index\.html$/.test(path)
+        ? /<main\b[^>]*>[\s\S]*?<\/main>/ : null;
       if (!region || !region.test(oldHtml) || !region.test(newHtml)
         || oldHtml.replace(region, "COMPONENT") !== newHtml.replace(region, "COMPONENT")) return null;
-      tags.add(path === "index.html" ? "@afisha" : path === "catalog/index.html" ? "@catalog" : path === "recipes/index.html" ? "@recipes" : "@journal");
+      tags.add(path === "catalog/index.html" ? "@catalog" : path === "recipes/index.html" ? "@recipes" : "@journal");
     } else return null;
   }
   return [...tags].sort();

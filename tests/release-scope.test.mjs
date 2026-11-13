@@ -350,6 +350,28 @@ test("only the guarded desktop journal and its own CSS select the journal focus 
   assert.equal(selectReleaseChecks(changes, 'full').scope, 'full');
 });
 
+test("homepage journal and mobile selections run the affected browser journeys", () => {
+  const region = (name, body) => `<!-- shared:${name}:start -->${body}<!-- shared:${name}:end -->\n`;
+  const oldOrder = region("journal-hero-products", "<button>Заказать</button>");
+  const before = "<main>\n"
+    + region("journal-hero", "<a>Запись</a>") + oldOrder
+    + region("journal-preview", "<a>Запись</a>")
+    + region("mobile-hero", "<a>Снимок</a>") + "</main>";
+  const after = before.replace(oldOrder, "").replaceAll("Запись", "Форель").replace("Снимок", "Ряпушка");
+  const change = { path: "index.html", before, after };
+  const css = { path: "assets/styles.css", before: "[data-desktop-editorial] .source-hero__journal {grid-template-rows:auto auto auto}",
+    after: "[data-desktop-editorial] .source-hero__journal {grid-template-rows:auto auto}" };
+  assert.deepEqual(scopedBrowserTags([change, css]), ["@afisha", "@hero-journal"]);
+  for (const changed of [
+    after.replace("</main>", "<footer>Новый подвал</footer></main>"),
+    after.replace("Форель", "<script>init()</script>"),
+    after.replace("Форель", '<span onclick="init()">Форель</span>'),
+    after.replace("</main>", region("journal-hero", "<a>Дубль</a>") + "</main>"),
+  ]) {
+    assert.equal(classifyRelease([{ ...change, after: changed }]), "full");
+  }
+});
+
 test("journal focus scope rejects a changed guard, escaped code, duplicates and missing boundaries", () => {
   for (const after of [
     changedHeroRuntime.replace('heroJournal instanceof HTMLElement &&', 'true &&'),

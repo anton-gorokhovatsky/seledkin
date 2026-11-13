@@ -22,15 +22,28 @@ test("every approved mobile candidate resolves to a current exact product and it
 });
 
 test("both committed homepages use fresh source records according to their explicit scenarios", () => {
-  assert.deepEqual(homeJournalEntries.map(entry => entry.id), journalEntries.slice(0, 5).map(entry => entry.id));
-  assert.deepEqual(mobileHomeEntries.map(entry => entry.id), entries.filter(entry => entry.mobileHero.eligible).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5).map(entry => entry.id));
+  const desktopIds = homeJournalEntries.flatMap(entry => entry.catalogProductIds ?? []);
+  const mobileIds = mobileHomeEntries.map(entry => resolveHomeProduct(entry).product.id);
+  assert.equal(homeJournalEntries.length, 5);
+  assert.equal(mobileHomeEntries.length, 5);
+  assert.equal(new Set(desktopIds).size, desktopIds.length);
+  assert.equal(new Set(mobileIds).size, mobileIds.length);
+  const first = mobileHomeEntries[0];
+  const preferred = { ...first, id: 99997, date: "2099-01-01" };
+  const excluded = { ...preferred, id: 99998, date: "2099-01-02", homeJournal: false,
+    mobileHero: { eligible: false, reason: "A second photograph of the same product" } };
+  const distinct = selectHomeEntries([excluded, preferred, ...entries]);
+  for (const selection of [distinct.desktop, distinct.mobile]) {
+    assert.equal(selection.length, 5);
+    assert.equal(selection[0].id, preferred.id);
+    assert.ok(!selection.some(entry => entry.id === first.id || entry.id === excluded.id));
+  }
   const recipeEntry = entries.find(entry => recipeForEntry(entry.id));
   const promoted = selectHomeEntries(entries.map(entry => entry === recipeEntry ? { ...entry, date: "2099-01-01", mobileHero: { eligible: true, reason: "A suitable product photograph within a recipe" } } : entry));
   assert.equal(promoted.mobile[0].id, recipeEntry.id);
   assert.ok(!promoted.desktop.some(entry => entry.id === recipeEntry.id));
   const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   checkHomePreviews(html);
-  const [first] = mobileHomeEntries;
   const stale = html.replace(`data-journal-id="${first.id}"`, 'data-journal-id="stale-mobile-record"');
   assert.throws(() => checkHomePreviews(stale), /Mobile homepage selection is stale/);
   const oldPhoto = html.replace(/(<!-- shared:mobile-hero:start -->[\s\S]*?data-source-image=")[^"]+/, '$1assets/stale-photo.jpg');

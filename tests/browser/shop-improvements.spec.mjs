@@ -1,9 +1,12 @@
 import { recipeForEntry } from "../../scripts/recipe-content.mjs";
+import { homeJournalEntries } from "../../scripts/site-content.mjs";
 import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
 
 const journal = JSON.parse(readFileSync(new URL("../../content/journal.json", import.meta.url), "utf8")).filter(entry => !recipeForEntry(entry.id));
 const latest = journal[0];
+const featured = homeJournalEntries[0];
+const featuredRoute = new RegExp(`/journal/${featured.id}/$`);
 const latestRoute = new RegExp(`/journal/${latest.id}/$`);
 
 test("customer vocabulary finds existing products and preserves precise filters", async ({ page }) => {
@@ -18,16 +21,16 @@ test("customer vocabulary finds existing products and preserves precise filters"
   await expect(page.locator("[data-catalog-empty]")).toBeVisible();
 });
 
-test("the journal preview leads to its full story and a product-specific inquiry", { tag: "@journal" }, async ({ page }) => {
+test("the journal preview leads to its full story and a product-specific inquiry", { tag: ["@journal", "@hero-journal"] }, async ({ page }) => {
   await page.goto("");
   await page.locator(".journal-preview__entry").first().click();
-  await expect(page).toHaveURL(latestRoute);
-  const entry = page.locator(`#journal-entry-${latest.id}`);
+  await expect(page).toHaveURL(featuredRoute);
+  const entry = page.locator(`#journal-entry-${featured.id}`);
   const inquiry = entry.getByRole("link", { name: /Спросить о наличии/ });
   const url = new URL(await inquiry.getAttribute("href"));
-  expect(url.searchParams.get("text")).toContain(latest.product);
-  expect(url.searchParams.get("text")).toContain(`https://t.me/kapitanseledkin/${latest.id}`);
-  await expect(entry.getByRole("link", { name: "Из телеграм-канала" })).toHaveAttribute("href", `https://t.me/kapitanseledkin/${latest.id}`);
+  expect(url.searchParams.get("text")).toContain(featured.product);
+  expect(url.searchParams.get("text")).toContain(`https://t.me/kapitanseledkin/${featured.id}`);
+  await expect(entry.getByRole("link", { name: "Из телеграм-канала" })).toHaveAttribute("href", `https://t.me/kapitanseledkin/${featured.id}`);
   await page.goto("#journal-entry-680");
   await expect(page).toHaveURL(/journal\/680\/$/);
   await page.goto("#journal-entry-683");
@@ -54,7 +57,7 @@ test("complete editorial pages and inquiry links work without JavaScript", { tag
   await context.close();
 });
 
-test("journal previews keep whole photographs, aligned desktop reading lines and readable enlarged text", { tag: "@journal" }, async ({ page }) => {
+test("journal previews keep whole photographs, aligned desktop reading lines and readable enlarged text", { tag: ["@journal", "@hero-journal"] }, async ({ page }) => {
   for (const [width, enlarged] of [[1440, false], [390, false], [320, true]]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("");
@@ -92,7 +95,7 @@ test("journal previews keep whole photographs, aligned desktop reading lines and
     await entries.first().focus();
     await expect(entries.first()).toBeFocused();
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(latestRoute);
+    await expect(page).toHaveURL(featuredRoute);
   }
 });
 

@@ -26,8 +26,20 @@ export const entries = JSON.parse(read("content/journal.json")).map(entry => ({
 }));
 
 export const journalEntries = entries.filter(entry => !recipeForEntry(entry.id));
-// One source, two intentional scenarios: journal stories on desktop and the
-// newest explicitly approved product photographs on mobile, including recipes.
+function selectDistinctProducts(entries, productIds) {
+  const used = new Set();
+  const selected = [];
+  for (const entry of entries) {
+    const ids = productIds(entry);
+    if (ids.some(id => used.has(id))) continue;
+    ids.forEach(id => used.add(id));
+    selected.push(entry);
+    if (selected.length === 5) break;
+  }
+  return selected;
+}
+
+// The two homepage views select from the same archive and give each product one place.
 export function selectHomeEntries(list) {
   const newest = [...list].sort((a, b) => b.date.localeCompare(a.date));
   for (const entry of newest) {
@@ -36,8 +48,12 @@ export function selectHomeEntries(list) {
     }
     if (entry.editorialOnly && entry.mobileHero.eligible) throw new Error(`A non-product story cannot enter the mobile product gallery: ${entry.id}`);
   }
-  return { desktop: newest.filter(entry => !recipeForEntry(entry.id)).slice(0, 5),
-    mobile: newest.filter(entry => entry.mobileHero.eligible).slice(0, 5) };
+  const journal = newest.filter(entry => !recipeForEntry(entry.id) && entry.homeJournal !== false);
+  const photos = newest.filter(entry => entry.mobileHero.eligible);
+  return {
+    desktop: selectDistinctProducts(journal, entry => entry.catalogProductIds ?? []),
+    mobile: selectDistinctProducts(photos, entry => [resolveHomeProduct(entry).product.id]),
+  };
 }
 export const { desktop: homeJournalEntries, mobile: mobileHomeEntries } = selectHomeEntries(entries);
 
@@ -204,7 +220,7 @@ function date(entry, year = true) {
   return parts.filter(part => ["day", "month", "year"].includes(part.type)).map(part => part.value).join(" ");
 }
 
-export function image(entry, root, sizes, deferred = false, hero = false) {
+export function image(entry, root, sizes, deferred = false, hero = false, { journalStack = false } = {}) {
   const variants = media.filter(item => item.source === entry.image && item.width > 32).sort((a, b) => a.width - b.width);
   if (!variants.length) throw new Error(`No media variants for journal entry ${entry.id}`);
   const srcset = variants.map(item => `${root}assets/${item.file} ${item.width}w`).join(", ");
@@ -214,7 +230,8 @@ export function image(entry, root, sizes, deferred = false, hero = false) {
   const attrs = deferred
     ? `src="${media.find(item => item.source === entry.image && item.width === 32) ? source.replace(/\.jpg$/, "-32.webp") : "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E"}" data-full-src="${src}" data-full-srcset="${srcset}"`
     : `src="${src}" srcset="${srcset}"`;
-  return `<img ${attrs} sizes="${sizes}" data-source-image="${source}" decoding="async" alt="${entry.alt}" width="${width}" height="${height}"${hero ? (deferred ? "" : ' fetchpriority="high"') : ' loading="lazy"'} />`;
+  const layout = journalStack ? ` style="--journal-photo-empty-height: ${(1 - Math.min(1, height / width)) * 100}%"` : "";
+  return `<img ${attrs} sizes="${sizes}" data-source-image="${source}" decoding="async" alt="${entry.alt}" width="${width}" height="${height}"${layout}${hero ? (deferred ? "" : ' fetchpriority="high"') : ' loading="lazy"'} />`;
 }
 
 export function renderMobileHero(list = mobileHomeEntries) {
@@ -341,22 +358,23 @@ function pageTitle(value) {
 
 // Editorial matches to current catalog positions; historical post prices are
 // never used as selling prices. Stories without an exact match stay editorial.
-export function renderHeroJournalProducts(list) {
-  const products = list.flatMap((entry, index) => {
-    if (!entry.heroOrderName) return [];
-    const productId = entry.catalogProductIds?.[0];
-    const orderName = entry.heroOrderName;
-    const product = catalog.flatMap(category => category.items).find(item => item.id === productId);
-    if (!product) {
-      if (inventory.some(category => category.items.some(item => item.id === productId && item.price === null))) return [];
-      throw new Error(`Missing hero journal product: ${productId}`);
-    }
-    const links = orderLinks(product);
-    const panelId = `hero-journal-order-${entry.id}`;
-    const price = escape(catalogPrice(product.price));
-    const orderLabel = text(`Заказать по ${catalogPrice(product.price)}`);
-    const orderMarkup = orderLabel.replace(price, `<span class="hero-journal-product__amount">${price}${harpoon}</span>`);
-    return [`            <div class="hero-journal-product" data-hero-journal-product="${entry.id}" data-journal-id="${entry.id}"${index ? ' hidden inert aria-hidden="true"' : ""}>
+function renderHeroJournalProduct(entry, index) {
+  if (!entry.heroOrderName) return "";
+
+  const productId = entry.catalogProductIds?.[0];
+  const orderName = entry.heroOrderName;
+  const product = catalog.flatMap(category => category.items).find(item => item.id === productId);
+  if (!product) {
+    if (inventory.some(category => category.items.some(item => item.id === productId && item.price === null))) return "";
+    throw new Error(`Missing hero journal product: ${productId}`);
+  }
+  const links = orderLinks(product);
+  const panelId = `hero-journal-order-${entry.id}`;
+  const price = escape(catalogPrice(product.price));
+  const orderLabel = text(`Заказать по ${catalogPrice(product.price)}`);
+  const orderMarkup = orderLabel.replace(price, `<span class="hero-journal-product__amount">${price}${harpoon}</span>`);
+  return `          <div class="hero-journal-products">
+            <div class="hero-journal-product" data-hero-journal-product="${entry.id}" data-journal-id="${entry.id}"${index ? ' hidden inert aria-hidden="true"' : ""}>
               <button class="source-hero__journal-link hero-journal-product__toggle" type="button" popovertarget="${panelId}" aria-label="${text(`Заказать по ${catalogPrice(product.price)}. ${product.name}`)}" aria-expanded="false"><span>${orderMarkup}</span></button>
               <div class="hero-journal-product__choices" id="${panelId}" popover="auto" role="group" aria-label="${text(`Заказать ${orderName}`)}">
                 <a class="source-button source-button--primary" href="${escape(links.telegram)}" data-hero-order-telegram><span class="source-button__label">В Телеграме</span></a>
@@ -365,20 +383,22 @@ export function renderHeroJournalProducts(list) {
                 <label class="hero-journal-product__draft" hidden><span>Текст для сообщения</span><textarea readonly rows="6"></textarea></label>
                 <p class="hero-journal-product__status" role="status"></p>
               </div>
-            </div>`];
-  }).join("\n");
-  return `<div class="hero-journal-products">\n${products}\n</div>`;
+            </div>
+          </div>`;
 }
 
 export function renderJournal(list, view) {
   return list.map((entry, index) => {
     const { id, title } = entry;
-    if (view === "hero") return `              <a class="source-hero__proof source-hero__journal-card" href="journal/${id}/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: ${title}"${index ? ' aria-hidden="true" tabindex="-1"' : ""} data-hero-journal-card data-entry-id="${id}" data-stack-position="${index}">
+    if (view === "hero") return `            <div class="source-hero__journal-slide">
+              <a class="source-hero__proof source-hero__journal-card" href="journal/${id}/" aria-label="Перейти к&nbsp;записи в&nbsp;журнале: ${title}"${index ? ' aria-hidden="true" tabindex="-1"' : ""} data-hero-journal-card data-entry-id="${id}" data-stack-position="${index}">
                 <figure>
-                  ${image(entry, "", "(max-width: 61.1875rem) 1px, (max-width: 100rem) 30vw, 480px", index > 0, true)}
+                  ${image(entry, "", "(max-width: 61.1875rem) 1px, (max-width: 100rem) 30vw, 480px", index > 0, true, { journalStack: true })}
                   <figcaption><span class="source-hero__proof-meta">Судовой журнал · <time datetime="${entry.date}">${date(entry, false)}</time></span><strong>${journalTitle(title)}</strong></figcaption>
                 </figure>
-              </a>`;
+              </a>
+${renderHeroJournalProduct(entry, index)}
+            </div>`;
     if (view === "preview") return `            <a class="journal-preview__entry" href="journal/${id}/" aria-labelledby="journal-preview-${id}">
               <div class="journal-preview__media">
                 ${image(entry, "", "(max-width: 22rem) calc(100vw - 36px), (max-width: 61.1875rem) min(32vw, 224px), 368px")}

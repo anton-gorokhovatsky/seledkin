@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { entries, journalEntries, homeJournalEntries, mobileHomeEntries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderHeroJournalProducts, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
+import { entries, journalEntries, homeJournalEntries, mobileHomeEntries, renderMenu, renderFooter, renderTheme, renderAnalytics, renderJournal, renderJournalAtlas, renderJournalPage, renderDelivery, renderDeliveryActions, renderCatalogOrderActions, renderAboutPreview, renderPricePreview, renderRecipeHome, renderRecipesPage, renderAssortmentMedia, renderAssortmentDirectory, renderAudioLibrary, renderMobileHero, contactAddress, regularHours, store } from "./site-content.mjs";
 import { editorialPath, recipeForEntry } from "./recipe-content.mjs";
 import { catalog } from "../assets/catalog-data.js";
 import { positionCount, catalogPositionCount, groupCatalogProducts } from "../assets/catalog-model.js";
@@ -7,7 +7,7 @@ import { legacyRoutes, renderLegacyRoute } from "./legacy-routes.mjs";
 
 // These are explicit editorial selections, not a live or automatic channel feed.
 const hero = homeJournalEntries;
-const preview = journalEntries.slice(0, 3);
+const preview = hero.slice(0, 3);
 const pages = [["index.html", "home", ""], ["catalog/index.html", "catalog", "../"],
   ["about/index.html", "about", "../"], ["journal/index.html", "journal", "../"], ["404.html", "404", ""]];
 for (const [path, page, root] of pages) {
@@ -17,7 +17,6 @@ for (const [path, page, root] of pages) {
   if (page !== "404") Object.assign(regions, { menu: renderMenu(page, root), footer: renderFooter(page, root) });
   if (page === "home") Object.assign(regions, {
     "journal-hero": renderJournal(hero, "hero"), "journal-preview": renderJournal(preview, "preview"),
-    "journal-hero-products": renderHeroJournalProducts(hero),
     "contact-address": contactAddress,
     "contact-hours": regularHours,
     "delivery-terms": renderDelivery("waybill"),

@@ -5958,7 +5958,7 @@ a.site-menu__brand {
   [data-desktop-editorial] .source-hero__journal {
     height: auto;
     padding-right: 1.15rem;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto;
     align-self: start;
     row-gap: 1rem;
     overflow-anchor: none;
@@ -5968,6 +5968,24 @@ a.site-menu__brand {
     display: grid;
     padding: 0;
   }
+  .source-hero__journal-slide {
+    display: grid;
+    grid-area: 1 / 1;
+    align-self: start;
+    gap: .5rem;
+  }
+  /* The square image box gives the rear sheets a common clipping area.
+     Remove its unpainted lower portion from the caption's layout. */
+  .source-hero__journal-slide img {
+    margin-block-end: calc(-1 * var(--journal-photo-empty-height, 0%));
+    pointer-events: none;
+  }
+  .source-hero__journal-slide .hero-journal-products {
+    position: relative;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .source-hero__journal-slide .hero-journal-product:not([hidden]) { pointer-events: auto; }
   [data-desktop-editorial] .source-hero__journal-card {
     position: relative;
     inset: auto;

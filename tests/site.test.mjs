@@ -1,5 +1,5 @@
 import { editorialPath, recipeForEntry } from "../scripts/recipe-content.mjs";
-import { mobileHomeEntries, resolveHomeProduct } from "../scripts/site-content.mjs";
+import { homeJournalEntries, mobileHomeEntries, resolveHomeProduct } from "../scripts/site-content.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -241,7 +241,7 @@ test("home exposes the core customer jobs", () => {
   assert.equal(featuredUrl.hash, `#product-${product.id}`);
   assert.match(home, /id="delivery-order"[^>]*aria-label="Способы заказа"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
-  const latest = journalEntries.find(entry => !recipeForEntry(entry.id));
+  const latest = homeJournalEntries[0];
   assert.ok(hero.includes(`href="journal/${latest.id}/"`));
   assert.ok(hero.includes(`data-source-image="assets/${latest.image}"`));
   assert.ok(hero.includes(`datetime="${latest.date}"`));
@@ -267,7 +267,7 @@ test("the hero uses a manual, accessible journal stack without autoplay", () => 
     /Переключайте записи кнопками или клавишами со стрелками влево и вправо\./,
   );
   assert.equal((hero.match(/data-hero-journal-card/g) ?? []).length, 5);
-  for (const { id } of journalEntries.filter(entry => !recipeForEntry(entry.id)).slice(0, 5)) {
+  for (const { id } of homeJournalEntries) {
     assert.match(hero, new RegExp("href=\"journal/" + id + "/\""));
     assert.match(hero, new RegExp("assets/journal-" + id + "\\.jpg"));
   }

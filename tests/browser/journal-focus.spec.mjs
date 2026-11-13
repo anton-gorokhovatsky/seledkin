@@ -49,6 +49,8 @@ test("a portrait bounds the rear sheets, and every selected photograph stays com
         const styles = getComputedStyle(stack);
         const rear = [...stack.querySelectorAll('[data-stack-position="1"] img, [data-stack-position="2"] img')];
         return {
+          captionGap: active.closest("figure").querySelector("figcaption").getBoundingClientRect().top
+            - active.getBoundingClientRect().top - Math.min(active.clientHeight, active.clientWidth / ratio),
           right: parseFloat(styles.getPropertyValue("--journal-clip-right")),
           bottom: parseFloat(styles.getPropertyValue("--journal-clip-bottom")),
           expectedRight: (1 - Math.min(1, ratio)) * 100,
@@ -61,6 +63,10 @@ test("a portrait bounds the rear sheets, and every selected photograph stays com
       });
       expect(result.right).toBeCloseTo(result.expectedRight, 3);
       expect(result.bottom).toBeCloseTo(result.expectedBottom, 3);
+      // Measure the space from the painted photograph, including wide cards
+      // whose image box extends beyond the visible pixels.
+      expect(result.captionGap).toBeGreaterThanOrEqual(16);
+      expect(result.captionGap).toBeLessThanOrEqual(24);
       expect(result.fit).toBe("contain");
       expect(result.filter).toBe("none");
       expect(result.clip).toBe("inset(0px)");
