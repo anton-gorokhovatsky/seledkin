@@ -1,4 +1,5 @@
 import { editorialPath, recipeForEntry } from "../scripts/recipe-content.mjs";
+import { mobileHomeEntries, resolveHomeProduct } from "../scripts/site-content.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
@@ -228,8 +229,16 @@ test("home exposes the core customer jobs", () => {
   const hero = home.match(/<section class="source-hero"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(hero, /href="catalog\/"/);
   assert.match(hero, /href="journal\/"/);
-  assert.match(hero, /Заказать икру форели/);
-  assert.match(hero, /catalog\/\?product=trout-roe/);
+  const mobileFeatured = mobileHomeEntries[0];
+  const { product } = resolveHomeProduct(mobileFeatured);
+  const orderLabel = hero.match(/<span class="afisha__order-label">([^<]+)<\/span>/)?.[1];
+  assert.equal(orderLabel, typographText(`Заказать ${mobileFeatured.heroOrderName}`).replace(/\s/gu, " "));
+  const featuredHref = hero.match(/<a class="afisha__frame" href="([^"]+)"/)?.[1];
+  assert.ok(featuredHref, "The featured photograph links to its product");
+  const featuredUrl = new URL(featuredHref.replaceAll("&amp;", "&"), "https://ks.fish/");
+  assert.equal(featuredUrl.pathname, "/catalog/");
+  assert.equal(featuredUrl.searchParams.get("product"), product.id);
+  assert.equal(featuredUrl.hash, `#product-${product.id}`);
   assert.match(home, /id="delivery-order"[^>]*aria-label="Способы заказа"/);
   assert.match(hero, /class="[^"]*source-hero__proof/);
   const latest = journalEntries.find(entry => !recipeForEntry(entry.id));
