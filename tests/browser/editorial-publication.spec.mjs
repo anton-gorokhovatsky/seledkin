@@ -89,10 +89,10 @@ for (const entry of publications) {
 
       // Only this publication's preview and product path, never a shared tag set.
       await page.goto("?audit=editorial-preview");
-      let preview = page.locator(`main a[href="${route}"]:visible`).first();
+      let preview = page.getByRole("link").and(page.locator(`main a[href="${route}"]`)).first();
       if (!await preview.count()) {
         await page.goto(`${recipeForEntry(entry.id) ? "recipes" : "journal"}/?audit=editorial-preview`);
-        preview = page.locator(`main a[href="${entry.id}/"]:visible`).first();
+        preview = page.getByRole("link").and(page.locator(`main a[href="${entry.id}/"]`)).first();
       }
       await preview.press("Enter");
       await expect(page).toHaveURL(new RegExp(`/${route}$`));

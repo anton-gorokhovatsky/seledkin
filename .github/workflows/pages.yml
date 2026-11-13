@@ -62,11 +62,11 @@ jobs:
         run: node scripts/build-map-token.mjs --require-token
 
       - name: Check static project
-        if: steps.scope.outputs.scope != 'editorial' && steps.scope.outputs.scope != 'editorial-check'
+        if: steps.scope.outputs.code_checks_required == 'true'
         run: pnpm run lint
 
       - name: Test
-        if: steps.scope.outputs.scope != 'editorial' && steps.scope.outputs.scope != 'editorial-check'
+        if: steps.scope.outputs.code_checks_required == 'true'
         run: pnpm run test
 
       - name: Verify only the selected editorial material

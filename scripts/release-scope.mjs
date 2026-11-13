@@ -7,6 +7,23 @@ import { editorialOnly, editorialReleaseIds } from "./editorial-release.mjs";
 // Generated public files are checked separately by pnpm lint. Changes to their
 // sources cannot use a shorter gate when the generated result changes structure.
 const tooling = /^(?:(?:tests|scripts|templates|content|docs|\.github)\/|playwright(?:\.editorial)?\.config\.mjs$|[^/]+\.md$)/;
+const releaseScopeFile = "scripts/release-scope.mjs";
+const pagesWorkflowFile = ".github/workflows/pages.yml";
+const releaseCodeFiles = new Set([releaseScopeFile, pagesWorkflowFile]);
+const workflowFile = /^\.github\/workflows\/[^/]+\.ya?ml$/;
+
+function isReleaseMaintenance({ path, before, after }) {
+  if (path === releaseScopeFile) return true;
+  if (path !== pagesWorkflowFile) {
+    return workflowFile.test(path) && before != null && after === null;
+  }
+  // Allow the migration of the two lint/test guards. Other Pages edits
+  // can change the artifact or its checks and retain their normal scope.
+  const oldGuard = "if: steps.scope.outputs.scope != 'editorial' && steps.scope.outputs.scope != 'editorial-check'";
+  const newGuard = "if: steps.scope.outputs.code_checks_required == 'true'";
+  return typeof before === "string" && before.split(oldGuard).length === 3
+    && after === before.replaceAll(oldGuard, newGuard);
+}
 const activeContent = /<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi;
 function onlyAnchorTargets(before, after) {
   if (before == null || after == null) return false;
@@ -347,7 +364,9 @@ export function classifyRelease(changes) {
   if (!changes) return "full";
   const published = changes.filter(({ path }) => !tooling.test(path));
   if (!published.length) return "none";
-  if (editorialOnly(changes)) return "editorial";
+  // CI maintenance still runs code checks. Browser scope follows the site artifact.
+  const editorialChanges = changes.filter(change => !isReleaseMaintenance(change));
+  if (editorialOnly(editorialChanges)) return "editorial";
   if (published.every(({ path, before, after }) => path.endsWith(".html") && onlyTypography(before, after))) return "typography";
   if (published.every(({ path, before, after }) => path.endsWith(".html") && onlyAnchorTargets(before, after))) return "links";
   const tags = scopedBrowserTags(changes);
@@ -362,7 +381,7 @@ export function readReleaseChanges(base) {
     const content = (ref, path) => {
       try { return git(["show", `${ref}:${path}`]); } catch { return null; }
     };
-    return paths.map(path => ({ path, ...(/\.(?:html|json|xml|css|js)$/.test(path)
+    return paths.map(path => ({ path, ...(/\.(?:html|json|xml|css|js|ya?ml)$/.test(path)
       ? { before: content(base, path), after: content("HEAD", path) } : {}) }));
   } catch {
     return null;
@@ -386,7 +405,9 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     ? typographyReleasePages(changes) : [];
   const ids = scope === "editorial" ? editorialReleaseIds(changes)
     : scope === "editorial-check" ? [String(JSON.parse(readFileSync(new URL("../content/journal.json", import.meta.url), "utf8"))[0].id)] : [];
-  const output = `editorial_ids=${JSON.stringify(ids)}\nscope=${scope}\npublish_required=${shouldPublish(scope, process.argv[3])}\nbrowser_required=${["full", "editorial", "editorial-check", "typography", "scoped"].includes(scope)}\nbrowser_grep=${grep}\ntypography_pages=${JSON.stringify(pages)}\n`;
+  const codeChecksRequired = !["editorial", "editorial-check"].includes(scope)
+    || changes.some(change => releaseCodeFiles.has(change.path));
+  const output = `editorial_ids=${JSON.stringify(ids)}\nscope=${scope}\ncode_checks_required=${codeChecksRequired}\npublish_required=${shouldPublish(scope, process.argv[3])}\nbrowser_required=${["full", "editorial", "editorial-check", "typography", "scoped"].includes(scope)}\nbrowser_grep=${grep}\ntypography_pages=${JSON.stringify(pages)}\n`;
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, output);
   process.stdout.write(output);
 }

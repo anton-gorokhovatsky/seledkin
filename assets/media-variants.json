@@ -1719,5 +1719,59 @@
     "bytes": 376,
     "width": 32,
     "height": 35
+  },
+  {
+    "file": "journal-707-480.webp",
+    "source": "journal-707.jpg",
+    "sourceSha256": "03136d71a6247dca740669c70c7c73f022f2880878de2ece0d232983669192f3",
+    "sha256": "9db035660634df22aac3afb799a0792141820672d047b347c3cfb82262a40497",
+    "bytes": 55830,
+    "width": 480,
+    "height": 623
+  },
+  {
+    "file": "journal-707-616.webp",
+    "source": "journal-707.jpg",
+    "sourceSha256": "03136d71a6247dca740669c70c7c73f022f2880878de2ece0d232983669192f3",
+    "sha256": "2116ac5ab47b25c1d9b7e7074a1029226027f947f4c21fe4dd1fe690eeb6a813",
+    "bytes": 83798,
+    "width": 616,
+    "height": 800
+  },
+  {
+    "file": "journal-707-32.webp",
+    "source": "journal-707.jpg",
+    "sourceSha256": "03136d71a6247dca740669c70c7c73f022f2880878de2ece0d232983669192f3",
+    "sha256": "a7e1ba6e842b826b632a27ff0a0547881ef202039dbf1cdcc76a948e493022b9",
+    "bytes": 332,
+    "width": 32,
+    "height": 42
+  },
+  {
+    "file": "journal-706-480.webp",
+    "source": "journal-706.jpg",
+    "sourceSha256": "002783994aade64c51c48bdeeb9b0cf62bb83a7dac03bca9eebeb3a00fff12c4",
+    "sha256": "01013085b458baf587d5ba466dfa3ae5b4241ae3a4a324e889df376443031a70",
+    "bytes": 35146,
+    "width": 480,
+    "height": 343
+  },
+  {
+    "file": "journal-706-800.webp",
+    "source": "journal-706.jpg",
+    "sourceSha256": "002783994aade64c51c48bdeeb9b0cf62bb83a7dac03bca9eebeb3a00fff12c4",
+    "sha256": "1d23c3804f492a46fce57eb1d0428ab588f093c69c5d2d4afd19c8f88b3be3b4",
+    "bytes": 66152,
+    "width": 800,
+    "height": 571
+  },
+  {
+    "file": "journal-706-32.webp",
+    "source": "journal-706.jpg",
+    "sourceSha256": "002783994aade64c51c48bdeeb9b0cf62bb83a7dac03bca9eebeb3a00fff12c4",
+    "sha256": "728ae22b65131678d552003d28892a3aea31424bbc53edd052c28df90a49a5db",
+    "bytes": 382,
+    "width": 32,
+    "height": 23
   }
 ]

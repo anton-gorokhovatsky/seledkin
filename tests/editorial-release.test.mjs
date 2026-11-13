@@ -21,6 +21,29 @@ test("a post including its order block selects only its publication ID", () => {
   assert.deepEqual(selectReleaseChecks(publication(), "editorial"), { scope: "editorial", grep: "" });
 });
 
+test("release workflow cleanup and scope maintenance keep an editorial browser run", () => {
+  const cleanup = { path: ".github/workflows/publish-post-705.yml", before: "name: Post 705", after: null };
+  const scopeCode = { path: "scripts/release-scope.mjs" };
+  const oldGuard = "if: steps.scope.outputs.scope != 'editorial' && steps.scope.outputs.scope != 'editorial-check'";
+  const newGuard = "if: steps.scope.outputs.code_checks_required == 'true'";
+  const before = `- name: Check static project
+  ${oldGuard}
+  run: pnpm run lint
+- name: Test
+  ${oldGuard}
+  run: pnpm run test
+`;
+  const pagesWorkflow = { path: ".github/workflows/pages.yml", before, after: before.replaceAll(oldGuard, newGuard) };
+  const changes = [...publication(), cleanup, scopeCode, pagesWorkflow];
+  assert.equal(classifyRelease(changes), "editorial");
+  assert.deepEqual(editorialReleaseIds(changes), ["703"]);
+  assert.equal(classifyRelease([...changes, { path: "assets/site.js", before: "old", after: "new" }]), "full");
+  assert.equal(classifyRelease([...publication(), { ...cleanup, after: "name: Another run" }]), "full");
+  assert.equal(classifyRelease([...publication(), {
+    ...pagesWorkflow, after: pagesWorkflow.after.replace("pnpm run test", "pnpm run other")
+  }]), "full");
+});
+
 test("a recipe publication selects its own page and generated recipe previews", () => {
   const changes = publication();
   changes.push({ path: "content/recipes.json", before: '{"recipes":[],"editorial":[]}', after: '{"recipes":[{"id":703,"products":[]}],"editorial":[]}' },
