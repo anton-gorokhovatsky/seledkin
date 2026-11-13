@@ -410,7 +410,7 @@ test("a photographed product opens its own catalog position, price and order @af
     await expect(page.locator(".afisha__count")).toHaveText(`${i + 1}/5`);
     const href = await frame.getAttribute("href");
     await expect(page.locator(".afisha__catalog")).toHaveAttribute("href", "catalog/");
-    await expect(page.locator(".afisha__catalog")).toHaveText("Каталог и цены");
+    await expect(page.locator(".afisha__catalog")).toHaveText(/^Ката\u00ad?лог и\sцены$/u);
     const destinationUrl = new URL(href, page.url());
     expect(destinationUrl.hash).toBe(`#product-${destinationUrl.searchParams.get("product")}`);
     await expect(page.locator(".afisha__order-label")).toHaveText(`Заказать ${orderNames[i]}`);

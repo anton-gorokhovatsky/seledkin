@@ -356,8 +356,10 @@ test("homepage journal and mobile selections run the affected browser journeys",
   const before = "<main>\n"
     + region("journal-hero", "<a>Запись</a>") + oldOrder
     + region("journal-preview", "<a>Запись</a>")
-    + region("mobile-hero", "<a>Снимок</a>") + "</main>";
-  const after = before.replace(oldOrder, "").replaceAll("Запись", "Форель").replace("Снимок", "Ряпушка");
+    + region("mobile-hero", "<a>Снимок</a>")
+    + region("recipe-home", "<a>Командир счастливой «Щуки»</a>") + "</main>";
+  const after = before.replace(oldOrder, "").replaceAll("Запись", "Форель").replace("Снимок", "Ряпушка")
+    .replace("Командир", "Коман\u00adдир");
   const change = { path: "index.html", before, after };
   const css = { path: "assets/styles.css", before: "[data-desktop-editorial] .source-hero__journal {grid-template-rows:auto auto auto}",
     after: "[data-desktop-editorial] .source-hero__journal {grid-template-rows:auto auto}" };
@@ -366,6 +368,7 @@ test("homepage journal and mobile selections run the affected browser journeys",
     after.replace("</main>", "<footer>Новый подвал</footer></main>"),
     after.replace("Форель", "<script>init()</script>"),
     after.replace("Форель", '<span onclick="init()">Форель</span>'),
+    after.replace("Коман\u00adдир", "Капитан"),
     after.replace("</main>", region("journal-hero", "<a>Дубль</a>") + "</main>"),
   ]) {
     assert.equal(classifyRelease([{ ...change, after: changed }]), "full");

@@ -222,7 +222,7 @@ function onlyFooterLayout(before, after) {
 function homeBrowserTags(before, after) {
   if (JSON.stringify(before.match(activeContent)) !== JSON.stringify(after.match(activeContent))) return null;
   const tags = new Set();
-  for (const name of ["journal-hero", "journal-hero-products", "journal-preview", "mobile-hero"]) {
+  for (const name of ["journal-hero", "journal-hero-products", "journal-preview", "mobile-hero", "recipe-home"]) {
     const start = `<!-- shared:${name}:start -->`, end = `<!-- shared:${name}:end -->`;
     const pattern = new RegExp(`${start}([\\s\\S]*?)${end}\\n?`, "g");
     const previous = [...before.matchAll(pattern)], current = [...after.matchAll(pattern)];
@@ -230,6 +230,7 @@ function homeBrowserTags(before, after) {
     const removedOrder = name === "journal-hero-products" && previous.length === 1 && current.length === 0;
     if (previous.length !== current.length && !removedOrder) return null;
     if (previous[0]?.[0] === current[0]?.[0]) continue;
+    if (name === "recipe-home" && !onlyTypography(previous[0]?.[1], current[0]?.[1])) return null;
     if ([...previous, ...current].some(([, body]) =>
       /<!-- shared:|\son\w+\s*=|<(?:iframe|object|embed)\b/i.test(body))) return null;
     const placeholder = removedOrder ? "" : `${start}${end}\n`;

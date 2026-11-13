@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 const textSpacing = `html { font-size: 200% !important; }
   * { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; }
@@ -61,10 +62,28 @@ test("afisha captions keep the complete photo and controls still through all pro
     await rendered(page);
     await wholeCycle(page);
   }
+  await page.route("**/qa-reflow-serif.ttf", async route => route.fulfill({
+    body: await readFile(new URL("../fixtures/fonts/DejaVuSerif.ttf", import.meta.url)),
+    contentType: "font/ttf",
+  }));
+  await page.addStyleTag({ content: `
+    @font-face { font-family: "QA Reflow Serif"; src: url("/qa-reflow-serif.ttf"); }
+    :root { --serif: "QA Reflow Serif", serif; }
+  ` });
   await page.addStyleTag({ content: textSpacing });
+  await rendered(page);
+  await page.evaluate(() => document.fonts.ready);
   for (const width of [320, 390]) {
     await page.setViewportSize({ width, height: width === 320 ? 568 : 844 });
     await rendered(page);
+    const overlapsHarpoon = await page.locator(".afisha__catalog").evaluate(link => {
+      const text = document.createRange();
+      text.selectNodeContents(link.querySelector("span"));
+      const harpoon = link.querySelector("svg").getBoundingClientRect();
+      return [...text.getClientRects()].some(line =>
+        line.top < harpoon.bottom && line.bottom > harpoon.top && line.right > harpoon.left);
+    });
+    expect(overlapsHarpoon).toBe(false);
     await wholeCycle(page);
     await page.locator(".afisha__order summary").press("Enter");
     await wholeCycle(page);

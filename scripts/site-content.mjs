@@ -283,7 +283,7 @@ ${prints}
               <span class="afisha__status" role="status" aria-live="polite"></span>
             </figure>
             <nav class="afisha__actions" aria-label="Основные действия">
-              <a class="afisha__catalog" href="catalog/"><span>Каталог и цены</span>${arrow}</a>
+              <a class="afisha__catalog" href="catalog/"><span>Ката­лог и цены</span>${arrow}</a>
             </nav>
           </div>`;
 }
@@ -640,7 +640,8 @@ export function renderRecipeHome() {
   <ul class="watch-catch__list">${recipes.slice(1, 4).map(recipe => {
     const { id } = recipe;
     const entry = recipeEntry(recipe);
-    return `<li class="watch-catch__item"><a href="recipes/${id}/" aria-label="${text(recipe.title)}"><span class="watch-catch__photo">${image(entry, "", "(max-width: 1257px) 88px, (max-width: 1714px) 7vw, 120px")}</span><span class="watch-catch__caption"><span class="watch-catch__name">${recipeTitle(recipe.title)}</span>${harpoon}</span></a></li>`;
+    const title = recipeTitle(recipe.title).replace(/^Командир(?=\s)/u, "Коман\u00adдир");
+    return `<li class="watch-catch__item"><a href="recipes/${id}/" aria-label="${text(recipe.title)}"><span class="watch-catch__photo">${image(entry, "", "(max-width: 1257px) 88px, (max-width: 1714px) 7vw, 120px")}</span><span class="watch-catch__caption"><span class="watch-catch__name">${title}</span>${harpoon}</span></a></li>`;
   }).join("\n")}</ul>
   <p class="watch-catch__all"><a class="editorial-link" href="recipes/">Все рецепты и советы${harpoon}</a></p>`;
 }
