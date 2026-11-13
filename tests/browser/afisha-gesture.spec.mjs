@@ -242,31 +242,31 @@ test("backward drags keep the original photographs opaque through direction chan
 });
 
 test("a short previous flick never flashes or selects the next product between its two photographs @afisha", async ({ page }) => {
+  const startTime = Date.UTC(2026, 10, 13);
+  await page.clock.install({ time: startTime });
   await ready(page);
-  for (const start of [0, 1]) for (const pause of [0, 20]) {
+  await page.clock.pauseAt(startTime + 60_000);
+  for (const start of [0, 1]) for (const fast of [true, false]) {
     const steps = (start - await selected(page) + 5) % 5;
     for (let step = 0; step < steps; step++) await frame(page).press("ArrowRight");
+    await page.clock.runFor(1200);
     await settled(page, start);
     await beginPhotoAudit(page, [start, (start + 4) % 5]);
     const point = await grip(page);
     await page.mouse.move(point.x, point.y);
     await page.mouse.down();
-    if (!pause) {
-      await page.mouse.move(point.x + 44, point.y + 2, { steps: 2 });
-    } else for (const dx of [15, 30, 45, 60]) {
-      if (dx > 15) await page.waitForTimeout(pause);
+    // Drive real pointer events at known speeds independently of CI scheduling.
+    const sampleInterval = fast ? 10 : 40;
+    for (const dx of fast ? [22, 44] : [15, 30, 45, 60]) {
+      await page.clock.runFor(sampleInterval);
       await page.mouse.move(point.x + dx, point.y + 2);
     }
-    // No screenshot or remote inspection here: preserve the actual flick speed.
+    await page.clock.runFor(sampleInterval);
     await page.mouse.up();
-    if (!pause) await settled(page, (start + 4) % 5);
-    else {
-      // Remote event delivery can turn a small flick into a deliberate cancel.
-      // Both are valid; an unrelated middle product is never a valid outcome.
-      await expect(frame(page)).toHaveAttribute("data-phase", "rest");
-      expect([start, (start + 4) % 5]).toContain(await selected(page));
-    }
-    await bindings(page, await selected(page));
+    await page.clock.runFor(1200);
+    const target = fast ? (start + 4) % 5 : start;
+    await settled(page, target);
+    await bindings(page, target);
     await endPhotoAudit(page);
   }
 });
