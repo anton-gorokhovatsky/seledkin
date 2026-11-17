@@ -1773,5 +1773,32 @@
     "bytes": 382,
     "width": 32,
     "height": 23
+  },
+  {
+    "file": "journal-708-480.webp",
+    "source": "journal-708.jpg",
+    "sourceSha256": "45b519227e85bdd3fd7f7a0d3e108d06f59c3a9981b344c5fad110e700756dab",
+    "sha256": "3913f0be4301b1f845afdb41fccb429b8c325d0298e42616ea860a16cadc55f6",
+    "bytes": 53918,
+    "width": 480,
+    "height": 480
+  },
+  {
+    "file": "journal-708-800.webp",
+    "source": "journal-708.jpg",
+    "sourceSha256": "45b519227e85bdd3fd7f7a0d3e108d06f59c3a9981b344c5fad110e700756dab",
+    "sha256": "5ad3276b625e93f88c717e797c9bfdb4ada53c0a54c99dc5d2a8a1aae1865a13",
+    "bytes": 114048,
+    "width": 800,
+    "height": 800
+  },
+  {
+    "file": "journal-708-32.webp",
+    "source": "journal-708.jpg",
+    "sourceSha256": "45b519227e85bdd3fd7f7a0d3e108d06f59c3a9981b344c5fad110e700756dab",
+    "sha256": "5a6719acd7d3e5bd5db1580fb26f01ec1de777c6c01138db464f16b4c7fe46fc",
+    "bytes": 512,
+    "width": 32,
+    "height": 32
   }
 ]

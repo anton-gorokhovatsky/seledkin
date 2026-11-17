@@ -1,5 +1,24 @@
 [
   {
+    "id": 708,
+    "title": "Карельская ряпушка холодного копчения",
+    "alt": "Золотистая копчёная ряпушка крупным планом на синем фоне",
+    "product": "Карельская ряпушка холодного копчения",
+    "heroOrderName": "ряпушку холодного копчения",
+    "mobileHero": {
+      "eligible": true,
+      "productId": "smoked-vendace",
+      "reason": "На авторском снимке карельская ряпушка холодного копчения. Цена 2500 ₽/кг совпадает с каталогом. Каспийский залом упомянут в тексте."
+    },
+    "date": "2026-11-17",
+    "image": "journal-708.jpg",
+    "archiveImageWidth": 200,
+    "catalogProductIds": [
+      "smoked-vendace",
+      "caspian-herring"
+    ]
+  },
+  {
     "id": 707,
     "title": "Доклад о селёдке",
     "homeJournal": false,
